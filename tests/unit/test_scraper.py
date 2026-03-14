@@ -1,6 +1,5 @@
 """Unit tests for ETL scraper parse functions.
 
-Wave 0 stubs — these tests are skipped until src/etl/scraper.py is implemented in Plan 01-02.
 Tests operate against fixture HTML (no network calls).
 
 Requirements covered:
@@ -9,59 +8,146 @@ Requirements covered:
 - DATA-03: Ores scraped with name, stats, source
 """
 import pytest
+from bs4 import BeautifulSoup
 
 
-@pytest.mark.skip(reason="TODO Plan 01-02: implement src/etl/scraper.py and fixture HTML")
+# ---------------------------------------------------------------------------
+# Fixture HTML fragments
+# ---------------------------------------------------------------------------
+
+CHARACTER_HTML = """
+<table>
+  <tbody>
+    <tr class="character-row-entry"
+        data-name="Aldo"
+        data-element="Wind"
+        data-weapon="Sword"
+        data-type="Light"
+        data-personality="Straw Dummy,Cool">
+      <td>Aldo</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+GRASTA_ATTACK_HTML = """
+<table>
+  <tbody>
+    <tr class="grasta-row-entry"
+        data-name="Courageous Strike"
+        data-tier="2"
+        data-personality="Straw Dummy"
+        data-share="1">
+      <td>Attack/2</td>
+      <td>Courageous Strike</td>
+      <td>Straw Dummy</td>
+      <td>ATK+5%</td>
+      <td>Deal 150% damage</td>
+      <td>Drop</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+GRASTA_VC_HTML = """
+<table>
+  <tbody>
+    <tr class="grasta-row-entry"
+        data-name="Proof of Courage Aldo"
+        data-tier="3"
+        data-personality=""
+        data-share="0">
+      <td>VC/3</td>
+      <td>Proof of Courage</td>
+      <td>Character: Aldo</td>
+      <td>ATK+10%</td>
+      <td>Boost ATK of party</td>
+      <td>Another Dungeon</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+ORE_HTML = """
+<table>
+  <tbody>
+    <tr class="equip-row-entry">
+      <td></td>
+      <td>AF After Victory Ore</td>
+      <td>Restore AF Gauge by 10% on victory</td>
+      <td>Fog People Vendor (5000 Fog Medals)</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
+
 def test_parse_character():
-    """Parse a fixture character HTML row and verify all properties.
-
-    TODO: Load fixture HTML containing a tr.character-row-entry row.
-    Expected: CharacterRow with correct element, weapon, light_shadow, personalities.
-
-    Key validations:
-    - data-element maps to element field
-    - data-weapon maps to weapon field
-    - data-type maps to light_shadow field ("Light" or "Shadow")
-    - data-personality (comma-separated) maps to personalities list
-    - data-name maps to name field
-
-    Reference: 01-RESEARCH.md Wiki Audit Results — Characters Page
-    """
-    pass
+    """Parse a fixture character HTML row and verify all properties."""
+    from src.etl.scraper import parse_characters
+    soup = BeautifulSoup(CHARACTER_HTML, "html.parser")
+    rows = parse_characters(soup)
+    assert len(rows) == 1
+    char = rows[0]
+    assert char.name == "Aldo"
+    assert char.element == "Wind"
+    assert char.weapon == "Sword"
+    assert char.light_shadow == "Light"
+    assert "Straw Dummy" in char.personalities
+    assert "Cool" in char.personalities
 
 
-@pytest.mark.skip(reason="TODO Plan 01-02: implement src/etl/scraper.py and fixture HTML")
-def test_parse_grasta_categories():
-    """Parse all 5 grasta categories and verify correct column mapping.
-
-    TODO: Load fixture HTML for Attack, Life, Support, Special, VC categories.
-    Expected: GrastaRow instances with correct category, tier, stats, personality_req, is_shareable.
-
-    Key validations:
-    - All 5 categories (Attack, Life, Support, Special, VC) are parsed
-    - VC grastas use col[1] for name (NOT data-name which includes character name)
-    - stats comes from col[3] (NOT col[2] — master_scraper.py bug)
-    - personality_req comes from col[2] or data-personality
-    - VC grastas have personality_req=None (no REQUIRES_TRAIT edge)
-    - tier is read from data-tier (do NOT hard-code VC=4, wiki shows tier=3)
-
-    Reference: 01-RESEARCH.md Wiki Audit — Grasta Pages, Anti-Patterns
-    """
-    pass
+def test_parse_grasta_attack():
+    """Parse Attack grasta fixture and verify correct column mapping."""
+    from src.etl.scraper import parse_grastas
+    soup = BeautifulSoup(GRASTA_ATTACK_HTML, "html.parser")
+    rows = parse_grastas(soup, "Attack")
+    assert len(rows) == 1
+    g = rows[0]
+    assert g.name == "Courageous Strike"
+    assert g.category == "Attack"
+    assert g.tier == 2
+    assert g.stats == "ATK+5%"
+    assert g.personality_req == "Straw Dummy"
+    assert g.is_shareable is True
 
 
-@pytest.mark.skip(reason="TODO Plan 01-02: implement src/etl/scraper.py and fixture HTML")
+def test_parse_vc_grasta():
+    """Parse VC grasta fixture — name from col[1], tier from data-tier, personality_req=None."""
+    from src.etl.scraper import parse_vc_grastas
+    soup = BeautifulSoup(GRASTA_VC_HTML, "html.parser")
+    rows = parse_vc_grastas(soup)
+    assert len(rows) == 1
+    g = rows[0]
+    # VC grastas use col[1] text as name, not data-name (which contains "Proof of Courage Aldo")
+    assert g.name == "Proof of Courage"
+    assert g.category == "VC"
+    assert g.tier == 3  # from data-tier, NOT hard-coded
+    assert g.stats == "ATK+10%"  # from col[3]
+    assert g.personality_req is None  # never set for VC
+
+
+def test_parse_grasta_stats_from_col3():
+    """Verify stats comes from col[3], not col[2]."""
+    from src.etl.scraper import parse_grastas
+    soup = BeautifulSoup(GRASTA_ATTACK_HTML, "html.parser")
+    rows = parse_grastas(soup, "Attack")
+    # col[2] = "Straw Dummy" (personality_req), col[3] = "ATK+5%" (stats)
+    assert rows[0].stats == "ATK+5%"
+    assert rows[0].personality_req == "Straw Dummy"
+
+
 def test_parse_ores():
-    """Parse ore fixture HTML and verify all properties.
-
-    TODO: Load fixture HTML containing tr.equip-row-entry rows.
-    Expected: OreRow with name (col[1]), stats (col[2]), source (col[3]).
-
-    Key validations:
-    - col[1] = ore name (text or anchor tag text)
-    - col[2] = stats/effect description
-    - col[3] = source/drop location
-
-    Reference: 01-RESEARCH.md Wiki Audit — Ore Page
-    """
-    pass
+    """Parse ore fixture HTML and verify all properties."""
+    from src.etl.scraper import parse_ores
+    soup = BeautifulSoup(ORE_HTML, "html.parser")
+    rows = parse_ores(soup)
+    assert len(rows) == 1
+    ore = rows[0]
+    assert ore.name == "AF After Victory Ore"
+    assert "AF Gauge" in ore.stats
+    assert "Fog" in ore.source
