@@ -1,47 +1,143 @@
 """Unit tests for Pydantic ETL validation models.
 
-Wave 0 stubs — these tests are skipped until src/etl/models.py is implemented in Plan 01-02.
-
 Requirements covered:
 - DATA-02: Pydantic strict vs lenient mode validation
 """
 import pytest
+from unittest.mock import patch
+from pydantic import ValidationError
 
 
-@pytest.mark.skip(reason="TODO Plan 01-02: implement src/etl/models.py with CharacterRow")
 def test_character_strict_mode():
-    """Verify that an invalid CharacterRow raises ValidationError in strict mode.
-
-    TODO: Set ETL_MODE=strict (or monkeypatch constants.STRICT=True).
-    Pass a raw dict with an invalid/missing field to CharacterRow.model_validate().
-    Expected: pydantic.ValidationError is raised.
-
-    Reference: 01-RESEARCH.md Pattern 2 — Pydantic v2 ETL Models with ETL_MODE Toggle
-    """
-    pass
+    """Verify that an invalid CharacterRow raises ValidationError in strict mode."""
+    import src.etl.constants as constants
+    with patch.object(constants, 'STRICT', True):
+        from src.etl.models import CharacterRow
+        with pytest.raises((ValidationError, Exception)):
+            CharacterRow.model_validate({"name": None, "element": "Wind", "weapon": "Sword",
+                                         "light_shadow": "Light", "personalities": "Cool"})
 
 
-@pytest.mark.skip(reason="TODO Plan 01-02: implement src/etl/models.py with CharacterRow")
+def test_character_strict_mode_valid():
+    """Verify that a valid CharacterRow is constructed correctly in strict mode."""
+    from src.etl.models import CharacterRow
+    row = CharacterRow.model_validate({
+        "name": "Aldo",
+        "element": "Wind",
+        "weapon": "Sword",
+        "light_shadow": "Light",
+        "personalities": "Straw Dummy,Cool",
+    })
+    assert row.name == "Aldo"
+    assert row.element == "Wind"
+    assert row.weapon == "Sword"
+    assert row.light_shadow == "Light"
+    assert row.personalities == ["Straw Dummy", "Cool"]
+
+
+def test_character_personalities_list_passthrough():
+    """Verify that personalities already as a list are accepted."""
+    from src.etl.models import CharacterRow
+    row = CharacterRow.model_validate({
+        "name": "Aldo",
+        "element": "Wind",
+        "weapon": "Sword",
+        "light_shadow": "Light",
+        "personalities": ["Cool", "Wild"],
+    })
+    assert row.personalities == ["Cool", "Wild"]
+
+
 def test_character_lenient_mode():
-    """Verify that an invalid CharacterRow is skipped (returns None) in lenient mode.
+    """Verify that an invalid CharacterRow is skipped (returns None) in lenient mode."""
+    import src.etl.constants as constants
+    import src.etl.models as models_module
+    with patch.object(constants, 'STRICT', False):
+        with patch.object(models_module, 'STRICT', False):
+            from src.etl.models import parse_character
+            result = parse_character({"name": None, "element": "Wind", "weapon": "Sword",
+                                      "light_shadow": "Light", "personalities": "Cool"})
+            assert result is None
 
-    TODO: Set ETL_MODE=lenient (or monkeypatch constants.STRICT=False).
-    Pass a raw dict with an invalid/missing field to the parse_character() wrapper.
-    Expected: None is returned (no exception raised), warning printed to stdout.
 
-    Reference: 01-RESEARCH.md Pattern 2 — Pydantic v2 ETL Models with ETL_MODE Toggle
-    """
-    pass
-
-
-@pytest.mark.skip(reason="TODO Plan 01-02: implement src/etl/models.py with GrastaRow")
 def test_grasta_vc_no_personality_req():
-    """Verify that a VC GrastaRow has personality_req=None.
+    """Verify that a VC GrastaRow has personality_req=None."""
+    from src.etl.models import GrastaRow
+    row = GrastaRow.model_validate({
+        "name": "Proof of Courage",
+        "category": "VC",
+        "tier": "3",
+        "stats": "ATK+10%",
+        "personality_req": None,
+        "is_shareable": "0",
+    })
+    assert row.category == "VC"
+    assert row.personality_req is None
 
-    TODO: Create a raw dict representing a VC grasta row (category="VC", no data-personality).
-    Pass to GrastaRow.model_validate().
-    Expected: personality_req is None (not an empty string, not a "Character: ..." string).
 
-    Reference: 01-RESEARCH.md Pitfall 3 — VC Grastas Creating Spurious REQUIRES_TRAIT Edges
-    """
-    pass
+def test_grasta_vc_parse_forces_personality_none():
+    """parse_grasta forces personality_req=None for VC even if input has a value."""
+    from src.etl.models import parse_grasta
+    result = parse_grasta({
+        "name": "Proof of Courage",
+        "category": "VC",
+        "tier": 3,
+        "stats": "ATK+10%",
+        "personality_req": "Straw Dummy",
+        "is_shareable": False,
+    })
+    assert result is not None
+    assert result.personality_req is None
+
+
+def test_grasta_non_vc_with_personality_req():
+    """Non-VC grasta with personality_req retains it."""
+    from src.etl.models import GrastaRow
+    row = GrastaRow.model_validate({
+        "name": "Courageous Strike",
+        "category": "Attack",
+        "tier": 2,
+        "stats": "ATK+5%",
+        "personality_req": "Straw Dummy",
+        "is_shareable": True,
+    })
+    assert row.personality_req == "Straw Dummy"
+
+
+def test_grasta_tier_coercion():
+    """Verify tier is coerced to int from string."""
+    from src.etl.models import GrastaRow
+    row = GrastaRow.model_validate({
+        "name": "Test Grasta",
+        "category": "Life",
+        "tier": "2",
+        "stats": "HP+10%",
+        "is_shareable": "1",
+    })
+    assert row.tier == 2
+    assert row.is_shareable is True
+
+
+def test_ore_row_valid():
+    """Verify OreRow model_validate works with correct data."""
+    from src.etl.models import OreRow
+    row = OreRow.model_validate({
+        "name": "AF After Victory Ore",
+        "stats": "Restore AF Gauge by 10% on victory",
+        "source": "Fog People Vendor (5000 Fog Medals)",
+    })
+    assert row.name == "AF After Victory Ore"
+    assert "AF" in row.stats
+    assert "Fog" in row.source
+
+
+def test_parse_ore_valid():
+    """Verify parse_ore returns OreRow on valid data."""
+    from src.etl.models import parse_ore
+    result = parse_ore({
+        "name": "Speed Ore",
+        "stats": "SPD+5%",
+        "source": "Shop",
+    })
+    assert result is not None
+    assert result.name == "Speed Ore"
