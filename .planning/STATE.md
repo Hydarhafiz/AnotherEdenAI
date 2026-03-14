@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-stopped_at: Completed 01-02-PLAN.md — ETL pipeline (models, scraper, loader, run_etl)
-last_updated: "2026-03-14T15:21:14Z"
-last_activity: 2026-03-14 — Plan 01-02 complete; Pydantic ETL models, async scraper, Neo4j MERGE loader, 15 unit tests
+status: executing
+stopped_at: "Completed quick-1: Fix Grasta count assertion (assert_schema.py exits 0)"
+last_updated: "2026-03-14T16:27:12.065Z"
+last_activity: 2026-03-14 — Plan 01-02 complete; Pydantic ETL models, async wiki scraper, idempotent Neo4j loader, ETL orchestrator, 15 unit tests
 progress:
   total_phases: 5
   completed_phases: 0
@@ -68,6 +68,7 @@ Recent decisions affecting current work:
 - [01-02]: Grasta stats from col[3] not col[2] — col[2] is personality_req (anti-pattern from master_scraper.py avoided)
 - [01-02]: Ore nodes standalone — no ENHANCES edges; Ore application is dynamic Phase 2/3 agent decision
 - [01-02]: Tier always read from data-tier attribute — never hard-coded (VC tier=3, not 4)
+- [Phase quick]: Grasta EXPECTED_NODE_COUNTS minimum set to 460: Neo4j MERGE-by-name deduplicates 647 wiki rows to 489 unique nodes; floor=actual-20 rounded to nearest 10 (~4% buffer)
 
 ### Pending Todos
 
@@ -79,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-14T15:21:14Z
-Stopped at: Completed 01-02-PLAN.md — ETL pipeline (models, scraper, loader, run_etl)
-Resume file: .planning/phases/01-graph-foundation/01-03-PLAN.md
+Last session: 2026-03-14T16:27:12.063Z
+Stopped at: Completed quick-1: Fix Grasta count assertion (assert_schema.py exits 0)
+Resume file: None
