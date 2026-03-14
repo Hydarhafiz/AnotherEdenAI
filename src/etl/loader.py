@@ -131,7 +131,7 @@ SET g.category = row.category,
     # Load REQUIRES_TRAIT edges — gated: non-VC only, personality_req not null/empty
     cypher_edges = """
 UNWIND $rows AS row
-WHERE row.category <> 'VC' AND row.personality_req IS NOT NULL AND row.personality_req <> ''
+WITH row WHERE row.category <> 'VC' AND row.personality_req IS NOT NULL AND row.personality_req <> ''
 MATCH (g:Grasta {name: row.name})
 MERGE (t:Trait {name: row.personality_req})
 MERGE (g)-[:REQUIRES_TRAIT]->(t)
