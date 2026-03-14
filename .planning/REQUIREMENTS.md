@@ -7,20 +7,20 @@
 
 ### Data Pipeline
 
-- [ ] **DATA-01**: System scrapes character data (name, element, weapon, light_shadow, personalities) from anothereden.wiki
-- [ ] **DATA-02**: System scrapes Grasta data for all categories (Attack, Life, Support, Special, VC) including tier, stats, personality_req, is_shareable
-- [ ] **DATA-03**: System scrapes Ore data (name, category, stats, source)
-- [ ] **DATA-04**: ETL pipeline is idempotent — re-running safely overwrites stale data without creating duplicates
+- [x] **DATA-01**: System scrapes character data (name, element, weapon, light_shadow, personalities) from anothereden.wiki
+- [x] **DATA-02**: System scrapes Grasta data for all categories (Attack, Life, Support, Special, VC) including tier, stats, personality_req, is_shareable
+- [x] **DATA-03**: System scrapes Ore data (name, category, stats, source)
+- [x] **DATA-04**: ETL pipeline is idempotent — re-running safely overwrites stale data without creating duplicates
 - [x] **DATA-05**: Schema version is tracked as a constant in ETL; post-load assertion confirms expected node types exist after each run
 
 ### Graph Schema
 
-- [ ] **GRAPH-01**: Neo4j graph contains Character nodes with element, weapon, light_shadow, and name properties
-- [ ] **GRAPH-02**: Character nodes are linked to Trait nodes via HAS_TRAIT relationships
-- [ ] **GRAPH-03**: Neo4j graph contains Grasta nodes with is_shareable, personality_req, category, tier, and stats properties
-- [ ] **GRAPH-04**: Grasta shareability is modeled with explicit is_shareable property; activating_trait distinguishes equip from activation
-- [ ] **GRAPH-05**: Grasta nodes are linked to Trait nodes via REQUIRES_TRAIT relationships
-- [ ] **GRAPH-06**: Neo4j graph contains Ore nodes with stats and source properties; Ores are standalone nodes — no ENHANCES relationship (Ore application to Grasta is a dynamic player/AI decision handled by PLAN and ANALYZE agents, not a static graph edge)
+- [x] **GRAPH-01**: Neo4j graph contains Character nodes with element, weapon, light_shadow, and name properties
+- [x] **GRAPH-02**: Character nodes are linked to Trait nodes via HAS_TRAIT relationships
+- [x] **GRAPH-03**: Neo4j graph contains Grasta nodes with is_shareable, personality_req, category, tier, and stats properties
+- [x] **GRAPH-04**: Grasta shareability is modeled with explicit is_shareable property; activating_trait distinguishes equip from activation
+- [x] **GRAPH-05**: Grasta nodes are linked to Trait nodes via REQUIRES_TRAIT relationships
+- [x] **GRAPH-06**: Neo4j graph contains Ore nodes with stats and source properties; Ores are standalone nodes — no ENHANCES relationship (Ore application to Grasta is a dynamic player/AI decision handled by PLAN and ANALYZE agents, not a static graph edge)
 - [x] **GRAPH-07**: Graph schema is documented in SCHEMA.md as a versioned contract before any LLM prompts are written
 
 ### Agent Workflow
@@ -101,17 +101,17 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
-| DATA-04 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
+| DATA-03 | Phase 1 | Complete |
+| DATA-04 | Phase 1 | Complete |
 | DATA-05 | Phase 1 | Complete (01-01) |
-| GRAPH-01 | Phase 1 | Pending |
-| GRAPH-02 | Phase 1 | Pending |
-| GRAPH-03 | Phase 1 | Pending |
-| GRAPH-04 | Phase 1 | Pending |
-| GRAPH-05 | Phase 1 | Pending |
-| GRAPH-06 | Phase 1 | Pending |
+| GRAPH-01 | Phase 1 | Complete |
+| GRAPH-02 | Phase 1 | Complete |
+| GRAPH-03 | Phase 1 | Complete |
+| GRAPH-04 | Phase 1 | Complete |
+| GRAPH-05 | Phase 1 | Complete |
+| GRAPH-06 | Phase 1 | Complete |
 | GRAPH-07 | Phase 1 | Complete (01-01) |
 | AGENT-01 | Phase 2 | Pending |
 | AGENT-02 | Phase 2 | Pending |
