@@ -20,7 +20,7 @@
 - [ ] **GRAPH-03**: Neo4j graph contains Grasta nodes with is_shareable, personality_req, category, tier, and stats properties
 - [ ] **GRAPH-04**: Grasta shareability is modeled with explicit is_shareable property; activating_trait distinguishes equip from activation
 - [ ] **GRAPH-05**: Grasta nodes are linked to Trait nodes via REQUIRES_TRAIT relationships
-- [ ] **GRAPH-06**: Neo4j graph contains Ore nodes with stats and source properties; Ore linked to Character via ENHANCES
+- [ ] **GRAPH-06**: Neo4j graph contains Ore nodes with stats and source properties; Ore linked to Grasta via ENHANCES (Ores are smelted into Grastas to upgrade them — bare edge, no relationship properties)
 - [ ] **GRAPH-07**: Graph schema is documented in SCHEMA.md as a versioned contract before any LLM prompts are written
 
 ### Agent Workflow
