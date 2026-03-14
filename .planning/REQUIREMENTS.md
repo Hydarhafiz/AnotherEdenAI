@@ -11,7 +11,7 @@
 - [ ] **DATA-02**: System scrapes Grasta data for all categories (Attack, Life, Support, Special, VC) including tier, stats, personality_req, is_shareable
 - [ ] **DATA-03**: System scrapes Ore data (name, category, stats, source)
 - [ ] **DATA-04**: ETL pipeline is idempotent — re-running safely overwrites stale data without creating duplicates
-- [ ] **DATA-05**: Schema version is tracked as a constant in ETL; post-load assertion confirms expected node types exist after each run
+- [x] **DATA-05**: Schema version is tracked as a constant in ETL; post-load assertion confirms expected node types exist after each run
 
 ### Graph Schema
 
@@ -21,7 +21,7 @@
 - [ ] **GRAPH-04**: Grasta shareability is modeled with explicit is_shareable property; activating_trait distinguishes equip from activation
 - [ ] **GRAPH-05**: Grasta nodes are linked to Trait nodes via REQUIRES_TRAIT relationships
 - [ ] **GRAPH-06**: Neo4j graph contains Ore nodes with stats and source properties; Ores are standalone nodes — no ENHANCES relationship (Ore application to Grasta is a dynamic player/AI decision handled by PLAN and ANALYZE agents, not a static graph edge)
-- [ ] **GRAPH-07**: Graph schema is documented in SCHEMA.md as a versioned contract before any LLM prompts are written
+- [x] **GRAPH-07**: Graph schema is documented in SCHEMA.md as a versioned contract before any LLM prompts are written
 
 ### Agent Workflow
 
@@ -105,14 +105,14 @@
 | DATA-02 | Phase 1 | Pending |
 | DATA-03 | Phase 1 | Pending |
 | DATA-04 | Phase 1 | Pending |
-| DATA-05 | Phase 1 | Pending |
+| DATA-05 | Phase 1 | Complete (01-01) |
 | GRAPH-01 | Phase 1 | Pending |
 | GRAPH-02 | Phase 1 | Pending |
 | GRAPH-03 | Phase 1 | Pending |
 | GRAPH-04 | Phase 1 | Pending |
 | GRAPH-05 | Phase 1 | Pending |
 | GRAPH-06 | Phase 1 | Pending |
-| GRAPH-07 | Phase 1 | Pending |
+| GRAPH-07 | Phase 1 | Complete (01-01) |
 | AGENT-01 | Phase 2 | Pending |
 | AGENT-02 | Phase 2 | Pending |
 | AGENT-03 | Phase 2 | Pending |

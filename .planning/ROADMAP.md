@@ -28,7 +28,7 @@ Five phases, hard-sequenced by dependency. Phase 1 builds the Neo4j graph schema
 **Research flag**: anothereden.wiki page structure is unverified — Phase 1 planning must begin with a wiki audit (page layout, data completeness, rate limiting) before writing the scraper.
 
 Plans:
-- [ ] 01-01: Wiki audit and schema design — inspect anothereden.wiki page structure for Character, Grasta, and Ore data; define final node labels, properties, and relationship types; write SCHEMA.md v1 contract
+- [x] 01-01: Wiki audit and schema design — inspect anothereden.wiki page structure for Character, Grasta, and Ore data; define final node labels, properties, and relationship types; write SCHEMA.md v1 contract
 - [ ] 01-02: ETL scraper implementation — async httpx scraper for Character, Grasta, and Ore pages; Pydantic v2 models for ETL boundary validation; idempotent MERGE-based Neo4j loader
 - [ ] 01-03: Schema validation and assertions — schema version constant in ETL; post-load assertion query confirming expected node types; pytest tests confirming idempotency and known-good node properties
 
@@ -104,7 +104,7 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Graph Foundation | 0/3 | Not started | - |
+| 1. Graph Foundation | 1/3 | In progress | - |
 | 2. LangGraph Workflow (Stub Data) | 0/4 | Not started | - |
 | 3. Connect Workflow to Real Neo4j | 0/3 | Not started | - |
 | 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
