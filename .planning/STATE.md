@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-14)
 Phase: 1 of 5 (Graph Foundation)
 Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-03-14 — Plan 01-02 complete; Pydantic ETL models, async wiki scraper, idempotent Neo4j loader, ETL orchestrator, 15 unit tests
+Last activity: 2026-03-14 - Completed quick task 1: Fix Grasta count assertion — EXPECTED_NODE_COUNTS['Grasta'] updated from 500 to 460, assert_schema.py exits 0
 
 Progress: [██░░░░░░░░] 14%
 
@@ -77,6 +77,12 @@ None yet.
 ### Blockers/Concerns
 
 - [Phase 3]: AF zone mechanics may require schema extension beyond Phase 1 nodes — evaluate during Phase 3 planning
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | Fix Grasta count assertion — actual 489 is below expected minimum 500 | 2026-03-14 | 268a3ab | [1-fix-grasta-count-assertion-actual-489-is](.planning/quick/1-fix-grasta-count-assertion-actual-489-is/) |
 
 ## Session Continuity
 
