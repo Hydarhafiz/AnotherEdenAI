@@ -6,7 +6,7 @@ Five phases, hard-sequenced by dependency. Phase 1 builds the Neo4j graph schema
 
 ## Phases
 
-- [ ] **Phase 1: Graph Foundation** - Finalized, stable Neo4j schema and idempotent ETL pipeline before any LLM prompt is written
+- [x] **Phase 1: Graph Foundation** - Finalized, stable Neo4j schema and idempotent ETL pipeline before any LLM prompt is written (completed 2026-03-14)
 - [ ] **Phase 2: LangGraph Workflow (Stub Data)** - Full PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE state machine built and tested against mocked Neo4j
 - [ ] **Phase 3: Connect Workflow to Real Neo4j** - Swap mock responses for real Cypher; validate roster filtering and Grasta traversal against live graph data
 - [ ] **Phase 4: FastAPI + HTMX Web Layer** - Expose working pipeline via HTTP with SSE streaming progress UI
@@ -104,7 +104,7 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Graph Foundation | 2/3 | In Progress|  |
+| 1. Graph Foundation | 3/3 | Complete   | 2026-03-14 |
 | 2. LangGraph Workflow (Stub Data) | 0/4 | Not started | - |
 | 3. Connect Workflow to Real Neo4j | 0/3 | Not started | - |
 | 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
