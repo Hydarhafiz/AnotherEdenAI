@@ -14,9 +14,10 @@ Build the finalized, stable Neo4j graph schema and an idempotent ETL pipeline th
 ## Implementation Decisions
 
 ### Ore graph placement
-- Ore is smelted into Grasta (not equipped to Character) — relationship is `(Ore)-[:ENHANCES]->(Grasta)`
-- Bare edge, no relationship properties — Ore stats live on the Ore node itself
-- **This corrects a schema error in REQUIREMENTS.md GRAPH-06** (previously said Ore→Character; updated)
+- Ore nodes are **standalone entities** — no ENHANCES relationship in the graph
+- The decision of which Ore to apply to which Grasta is a **dynamic player/AI decision**, handled by PLAN and ANALYZE agents at query time (Phase 2/3), not a static graph edge
+- GRAPH-06 delivers Ore nodes with stats and source properties only
+- **This supersedes the earlier schema direction** (REQUIREMENTS.md GRAPH-06 updated accordingly)
 
 ### Scraper architecture
 - Reuse verified wiki selectors from `master_scraper.py` (CSS classes `character-row-entry`, `grasta-row-entry`, `equip-row-entry`, data attributes already confirmed working)
