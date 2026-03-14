@@ -51,7 +51,10 @@ async def loaded_db(async_driver):
         database_="neo4j",
     )
     count = records[0]["cnt"]
-    if count == 0:
+    # Require at least 100 characters to consider DB "loaded".
+    # Fixture data (e.g. from test_etl_idempotent) loads only 2 characters —
+    # that is not sufficient to consider the DB populated for integration tests.
+    if count < 100:
         from src.etl.run_etl import main as run_etl_main
         await run_etl_main(driver=async_driver)
     yield
