@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Completed quick-2: Fix 7 failing integration tests"
-last_updated: "2026-03-15T00:00:00Z"
-last_activity: 2026-03-15 — All 22 tests pass (15 unit + 7 integration); fixed session loop scope, added loaded_db fixture, rewrote idempotency test with static fixtures
+stopped_at: "Completed quick-3: Add APOC plugin to Neo4j Docker container"
+last_updated: "2026-03-14T16:50:58.554Z"
+last_activity: "2026-03-15 - Completed quick task 2: Fix 7 failing integration tests — all 22 tests pass"
 progress:
   total_phases: 5
   completed_phases: 0
@@ -73,6 +73,8 @@ Recent decisions affecting current work:
 - [quick-2]: loaded_db session fixture checks Character count >= 100 to distinguish real ETL data from idempotency test fixture data (2 static chars)
 - [quick-2]: test_etl_idempotent uses loader functions directly with static fixtures — no scraper needed for idempotency check, eliminates aiohttp loop conflict
 - [quick-2]: Aldo element is "None, Fire" per wiki — dual-element character; original test assertion "Wind" was wrong
+- [Phase quick-3]: NEO4J_PLUGINS=["apoc"] triggers auto-download on Neo4j 5.x container startup — no manual jar required
+- [Phase quick-3]: Both unrestricted and allowlist env vars required since Neo4j 4.x — without them APOC procedures blocked even if installed
 
 ### Pending Todos
 
@@ -91,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-15T00:00:00Z
-Stopped at: Completed quick-2: Fix 7 failing integration tests
+Last session: 2026-03-14T16:50:55.304Z
+Stopped at: Completed quick-3: Add APOC plugin to Neo4j Docker container
 Resume file: None
