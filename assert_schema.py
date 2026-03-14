@@ -16,7 +16,7 @@ import sys
 # Verify SCHEMA.md exists before attempting Neo4j connection
 schema_path = os.path.join(os.path.dirname(__file__), "SCHEMA.md")
 if not os.path.isfile(schema_path):
-    print("FAIL: SCHEMA.md not found — run ETL setup before asserting schema")
+    print("FAIL: SCHEMA.md missing")
     sys.exit(1)
 
 from neo4j import GraphDatabase

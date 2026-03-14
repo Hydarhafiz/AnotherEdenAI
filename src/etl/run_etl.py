@@ -26,11 +26,20 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-async def main() -> None:
-    """Run the full ETL pipeline: scrape → validate → load → report."""
+async def main(driver=None) -> None:
+    """Run the full ETL pipeline: scrape → validate → load → report.
+
+    Args:
+        driver: Optional pre-created AsyncGraphDatabase driver. If None, a new driver
+                is created and closed after the pipeline completes. When provided (e.g.,
+                in test context), the caller is responsible for closing the driver.
+    """
     print(f"Starting ETL — SCHEMA_VERSION={SCHEMA_VERSION} ETL_MODE={ETL_MODE}")
 
-    driver = AsyncGraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH)
+    _own_driver = driver is None
+    if _own_driver:
+        driver = AsyncGraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH)
+
     try:
         await driver.verify_connectivity()
         logger.info("Neo4j connection verified at %s", NEO4J_URI)
@@ -59,7 +68,8 @@ async def main() -> None:
         )
 
     finally:
-        await driver.close()
+        if _own_driver:
+            await driver.close()
 
 
 if __name__ == "__main__":

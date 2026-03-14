@@ -1,21 +1,34 @@
 """Integration tests for ETL pipeline idempotency.
 
-Wave 0 stubs — these tests are skipped until the full ETL pipeline is implemented in Plan 01-02/01-03.
 Requires a running Neo4j instance (docker compose up).
 
 Requirements covered:
 - DATA-04: ETL pipeline is idempotent (re-running produces identical node and relationship counts)
 """
 import pytest
+from src.etl.run_etl import main as run_etl_main
 
 
-@pytest.mark.skip(reason="TODO Plan 01-03: implement loader.py and full ETL pipeline")
-async def test_etl_idempotent(clean_db, async_driver):
+async def get_counts(driver):
+    """Return node counts per label and total relationship count."""
+    counts = {}
+    for label in ["Character", "Grasta", "Ore", "Trait"]:
+        records, _, _ = await driver.execute_query(
+            f"MATCH (n:{label}) RETURN count(n) AS cnt",
+            database_="neo4j",
+        )
+        counts[label] = records[0]["cnt"]
+    rel_records, _, _ = await driver.execute_query(
+        "MATCH ()-[r]->() RETURN count(r) AS cnt",
+        database_="neo4j",
+    )
+    counts["relationships"] = rel_records[0]["cnt"]
+    return counts
+
+
+@pytest.mark.integration
+async def test_etl_idempotent(async_driver, clean_db):
     """Run ETL twice and assert node and relationship counts are identical both runs.
-
-    TODO: Import and invoke the ETL entry point (e.g., src/etl/loader.run_etl()).
-    Run once, record (Character, Grasta, Ore, Trait) node counts and relationship counts.
-    Run again, compare counts — all must be identical.
 
     Expected behavior: MERGE statements with unique constraints prevent duplicate creation.
     If counts differ between runs, either MERGE is missing a constraint or CREATE is used instead.
@@ -23,4 +36,11 @@ async def test_etl_idempotent(clean_db, async_driver):
     Reference: 01-RESEARCH.md Pattern 3 — Neo4j UNWIND + MERGE Idempotent Loading
     Reference: 01-RESEARCH.md Pitfall 5 — Missing Constraints Cause Duplicate Nodes on Re-run
     """
-    pass
+    await run_etl_main(driver=async_driver)  # First run
+    counts_1 = await get_counts(async_driver)
+    await run_etl_main(driver=async_driver)  # Second run
+    counts_2 = await get_counts(async_driver)
+    assert counts_1 == counts_2, f"ETL not idempotent: {counts_1} != {counts_2}"
+    assert counts_1["Character"] >= 300
+    assert counts_1["Grasta"] >= 500
+    assert counts_1["Ore"] >= 50
