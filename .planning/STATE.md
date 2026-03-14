@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-14)
 Phase: 1 of 5 (Graph Foundation)
 Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-03-15 - Completed quick task 2: Fix 7 failing integration tests — all 22 tests pass
+Last activity: 2026-03-14 - Completed quick task 3: Add APOC plugin to Neo4j Docker container
 
 Progress: [██░░░░░░░░] 14%
 
@@ -90,6 +90,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 1 | Fix Grasta count assertion — actual 489 is below expected minimum 500 | 2026-03-14 | 268a3ab | [1-fix-grasta-count-assertion-actual-489-is](.planning/quick/1-fix-grasta-count-assertion-actual-489-is/) |
 | 2 | Fix 7 failing integration tests — session loop, loaded_db fixture, static idempotency fixtures | 2026-03-15 | 63ea99f | [2-fix-7-failing-integration-tests-test-ide](.planning/quick/2-fix-7-failing-integration-tests-test-ide/) |
+| 3 | Add APOC plugin to Neo4j Docker container so langchain_neo4j Neo4jGraph works | 2026-03-14 | f371f7f | [3-add-apoc-plugin-to-neo4j-docker-containe](.planning/quick/3-add-apoc-plugin-to-neo4j-docker-containe/) |
 
 ## Session Continuity
 
