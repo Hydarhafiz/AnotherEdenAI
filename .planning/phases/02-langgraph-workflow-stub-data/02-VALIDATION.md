@@ -38,16 +38,17 @@ created: 2026-03-15
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 2-01-01 | 01 | 1 | AGENT-07 | unit | `pytest tests/workflow/test_state.py -x` | ❌ Wave 0 | ⬜ pending |
-| 2-01-02 | 01 | 1 | AGENT-04, AGENT-05 | unit | `pytest tests/workflow/test_graph.py -x` | ❌ Wave 0 | ⬜ pending |
-| 2-02-01 | 02 | 2 | AGENT-01 | unit | `pytest tests/workflow/test_plan.py -x` | ❌ Wave 0 | ⬜ pending |
-| 2-02-02 | 02 | 2 | AGENT-02 | unit | `pytest tests/workflow/test_cypher.py -x` | ❌ Wave 0 | ⬜ pending |
-| 2-03-01 | 03 | 3 | AGENT-03 | unit | `pytest tests/workflow/test_validate.py -x` | ❌ Wave 0 | ⬜ pending |
-| 2-03-02 | 03 | 3 | AGENT-04, AGENT-05 | unit | `pytest tests/workflow/test_graph.py::test_single_retry tests/workflow/test_graph.py::test_retry_cap -x` | ❌ Wave 0 | ⬜ pending |
-| 2-04-01 | 04 | 4 | AGENT-06 | unit | `pytest tests/workflow/test_analyze.py tests/workflow/test_format.py -x` | ❌ Wave 0 | ⬜ pending |
-| 2-04-02 | 04 | 4 | AGENT-01–07 | unit | `pytest tests/workflow/ --tb=short` | ❌ Wave 0 | ⬜ pending |
+| 2-01-01 | 01 | 1 | AGENT-07 | unit | `pytest tests/workflow/test_state.py -x` | No Wave 0 | pending |
+| 2-01-02 | 01 | 1 | AGENT-04, AGENT-05 | unit | `pytest tests/workflow/test_graph.py -x` | No Wave 0 | pending |
+| 2-02-01 | 02 | 2 | AGENT-01 | unit | `pytest tests/workflow/test_plan.py -x` | No Wave 0 | pending |
+| 2-02-02 | 02 | 2 | AGENT-02 | unit | `pytest tests/workflow/test_cypher.py -x` | No Wave 0 | pending |
+| 2-03-01 | 03 | 3 | AGENT-03 | unit | `pytest tests/workflow/test_validate.py -x` | No Wave 0 | pending |
+| 2-03-01a | 03 | 3 | AGENT-03 | unit | `pytest tests/workflow/test_validate.py::test_validate_semantic_pass tests/workflow/test_validate.py::test_validate_semantic_fail -x` | No Wave 0 | pending |
+| 2-03-02 | 03 | 3 | AGENT-04, AGENT-05 | unit | `pytest tests/workflow/test_graph.py::test_single_retry tests/workflow/test_graph.py::test_retry_cap tests/workflow/test_graph.py::test_semantic_fail_triggers_retry -x` | No Wave 0 | pending |
+| 2-04-01 | 04 | 4 | AGENT-06 | unit | `pytest tests/workflow/test_analyze.py tests/workflow/test_format.py -x` | No Wave 0 | pending |
+| 2-04-02 | 04 | 4 | AGENT-01-07 | unit | `pytest tests/workflow/ --tb=short` | No Wave 0 | pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: pending / green / red / flaky*
 
 ---
 
@@ -56,10 +57,10 @@ created: 2026-03-15
 - [ ] `tests/workflow/__init__.py` — package marker
 - [ ] `tests/workflow/conftest.py` — `stub_driver`, `mock_llm` fixtures
 - [ ] `tests/workflow/test_state.py` — covers AGENT-07 (reducer behavior, key ownership)
-- [ ] `tests/workflow/test_graph.py` — covers AGENT-04, AGENT-05 (routing, retry cap)
+- [ ] `tests/workflow/test_graph.py` — covers AGENT-04, AGENT-05 (routing, retry cap, semantic fail retry)
 - [ ] `tests/workflow/test_plan.py` — covers AGENT-01
 - [ ] `tests/workflow/test_cypher.py` — covers AGENT-02
-- [ ] `tests/workflow/test_validate.py` — covers AGENT-03
+- [ ] `tests/workflow/test_validate.py` — covers AGENT-03 (deterministic gate + Haiku 4.6 semantic gate)
 - [ ] `tests/workflow/test_analyze.py` — covers AGENT-06 (analyze side)
 - [ ] `tests/workflow/test_format.py` — covers AGENT-06 (format side)
 - [ ] `src/workflow/__init__.py` — package marker
