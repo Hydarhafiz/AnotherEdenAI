@@ -28,11 +28,11 @@
 - [ ] **AGENT-01**: PLAN agent (Sonnet 4.6) receives user query + roster and decomposes into graph traversal sub-goals
 - [ ] **AGENT-02**: GENERATE_CYPHER agent (Sonnet 4.6) produces Cypher with full schema injected via Neo4jGraph.get_schema() and few-shot examples
 - [ ] **AGENT-03**: VALIDATE agent (Haiku 4.6) verifies Cypher syntax and confirms query returns non-empty results against game rules
-- [ ] **AGENT-04**: VALIDATE agent routes failed queries back to GENERATE_CYPHER with full error context for correction
-- [ ] **AGENT-05**: Retry loop is hard-capped at 3 attempts via conditional edge in WorkflowState; exceeding cap routes to graceful error
+- [x] **AGENT-04**: VALIDATE agent routes failed queries back to GENERATE_CYPHER with full error context for correction
+- [x] **AGENT-05**: Retry loop is hard-capped at 3 attempts via conditional edge in WorkflowState; exceeding cap routes to graceful error
 - [ ] **AGENT-06**: ANALYZE agent (Sonnet 4.6) synthesizes validated query results into final team recommendation
-- [ ] **AGENT-07**: WorkflowState is a TypedDict validated by Pydantic v2; each node returns only the keys it modifies (no shared mutation)
-- [ ] **AGENT-08**: `src/workflow/llm.py` provides a `get_llm(role)` factory returning a `BaseChatModel`; `LLM_PROVIDER=ollama` in `.env` returns an Ollama-backed model for local testing; `LLM_PROVIDER=anthropic` (default) returns `ChatAnthropic` with the appropriate Sonnet or Haiku model for the given role
+- [x] **AGENT-07**: WorkflowState is a TypedDict validated by Pydantic v2; each node returns only the keys it modifies (no shared mutation)
+- [x] **AGENT-08**: `src/workflow/llm.py` provides a `get_llm(role)` factory returning a `BaseChatModel`; `LLM_PROVIDER=ollama` in `.env` returns an Ollama-backed model for local testing; `LLM_PROVIDER=anthropic` (default) returns `ChatAnthropic` with the appropriate Sonnet or Haiku model for the given role
 
 ### Query Handling
 
@@ -123,11 +123,11 @@
 | AGENT-01 | Phase 2 | Pending |
 | AGENT-02 | Phase 2 | Pending |
 | AGENT-03 | Phase 2 | Pending |
-| AGENT-04 | Phase 2 | Pending |
-| AGENT-05 | Phase 2 | Pending |
+| AGENT-04 | Phase 2 | Complete |
+| AGENT-05 | Phase 2 | Complete |
 | AGENT-06 | Phase 2 | Pending |
-| AGENT-07 | Phase 2 | Pending |
-| AGENT-08 | Phase 2 | Pending |
+| AGENT-07 | Phase 2 | Complete |
+| AGENT-08 | Phase 2 | Complete |
 | QUERY-01 | Phase 3 | Pending |
 | QUERY-02 | Phase 3 | Pending |
 | QUERY-03 | Phase 3 | Pending |
