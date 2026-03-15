@@ -61,16 +61,23 @@ def test_validation_errors_reducer_is_annotated():
 def test_stub_nodes_return_only_owned_keys(sample_state):
     """Each node must return only its owned keys — no side effects.
 
-    LLM-backed nodes (plan, generate_cypher) are mocked to avoid live API calls.
+    LLM-backed nodes (plan, generate_cypher, validate) are mocked to avoid live API calls.
+    validate uses a mock driver that returns data so the success path is exercised.
     """
-    mock_driver = None  # validate stub handles None driver
+    mock_driver = MagicMock()
+    mock_driver.execute_query.return_value = ([{"name": "Aldo"}], None, None)
 
     # Mock LLM factory for nodes that call get_llm
     mock_llm = MagicMock()
     mock_llm.invoke.return_value = AIMessage(content="stub response")
 
+    # validate's Haiku mock returns PASS so the success path (db_results only) is taken
+    mock_validate_llm = MagicMock()
+    mock_validate_llm.invoke.return_value = AIMessage(content="PASS: Results match.")
+
     with patch("src.workflow.nodes.plan.get_llm", return_value=mock_llm), \
-         patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm):
+         patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm), \
+         patch("src.workflow.nodes.validate.get_llm", return_value=mock_validate_llm):
         cases = [
             (plan_node(sample_state),               {"plan_strategy"}),
             (generate_cypher_node(sample_state),    {"cypher_query"}),
