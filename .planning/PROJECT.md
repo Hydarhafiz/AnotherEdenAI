@@ -70,7 +70,8 @@ Another Eden playerbase struggling with:
 ## Constraints
 
 - **Tech Stack (Locked)**: Python, Neo4j, LangGraph, Sonnet 4.6, Haiku 4.6 — non-negotiable for portfolio demonstration
-- **Budget**: Strict API cost controls via retry caps (max 3 iterations on VALIDATE node) to prevent runaway Sonnet 4.6 billing
+- **Local LLM Testing**: `LLM_PROVIDER=ollama` env var routes all LLM calls through Ollama during development to protect API budget; `LLM_PROVIDER=anthropic` (default) uses the locked Sonnet/Haiku models for production and final validation
+- **Budget**: Strict API cost controls via retry caps (max 3 iterations on VALIDATE node) and Ollama-first local development to prevent runaway Sonnet 4.6 billing
 - **Timeline**: Flexible — phases must be atomic and resumable for async development
 - **Data Source**: anothereden.wiki (public wiki scraping)
 - **No Opus**: Explicitly excluding Opus 4.6 to prioritize latency and cost efficiency
@@ -85,6 +86,8 @@ Another Eden playerbase struggling with:
 | 3x retry cap on VALIDATE node | Hard stop to prevent runaway API costs on personal budget | — Pending |
 | Manual roster input (no OCR) | Complexity/scope reduction for v1, defer integration challenges | — Pending |
 | Focus on synergy matching only (defer stat optimization) | Atomic v1 scope, establish core pipeline before adding complexity | — Pending |
+| LLM provider abstraction via `src/workflow/llm.py` factory | `LLM_PROVIDER` env var toggles between Ollama (local dev) and Anthropic (production) — protects API budget and enables offline development | — Pending |
+| AWS App Runner / ECS Fargate deployment via GitHub Actions | MLOps portfolio project must include cloud deployment to demonstrate production-grade CI/CD; automated pipeline on merge to main | — Pending |
 
 ---
-*Last updated: 2026-03-14 after initialization*
+*Last updated: 2026-03-15 — added Ollama local testing and AWS deployment decisions*

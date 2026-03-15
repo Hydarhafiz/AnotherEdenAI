@@ -60,6 +60,16 @@ Build the complete PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE → FORMAT 
   ```
 - On graceful error path (retry cap exhausted): FORMAT returns `{"error": str, "frontline": [], "reserve": [], "synergy_explanation": ""}` — same schema, safe for web layer to render
 
+### LLM provider abstraction
+- `src/workflow/llm.py` provides `get_llm(role: str) -> BaseChatModel` factory (AGENT-08)
+- `LLM_PROVIDER=ollama` in `.env` returns `ChatOllama` (local testing, zero API cost)
+- `LLM_PROVIDER=anthropic` (default) returns `ChatAnthropic` with the correct model for the role:
+  - `role="planner"` or `role="cypher"` or `role="analyzer"` → `claude-sonnet-4-6`
+  - `role="validator"` → `claude-haiku-4-6-20251001` (cost/latency optimized)
+- All nodes call `get_llm(role=...)` — no node imports `ChatAnthropic` directly
+- Tests patch `src.workflow.llm.get_llm` (one patch point for all nodes)
+- `.env` file must include `LLM_PROVIDER` (defaulting to `anthropic` in `.env.example`)
+
 ### Module and file structure
 - All workflow code lives under `src/workflow/` (new directory this phase)
 - Layout:
@@ -68,16 +78,18 @@ Build the complete PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE → FORMAT 
     __init__.py
     state.py          # TypedDict definitions, Annotated reducers
     graph.py          # StateGraph wiring, conditional edges, compile()
+    llm.py            # get_llm(role) factory — BaseChatModel, LLM_PROVIDER toggle
     nodes/
       __init__.py
-      plan.py         # PLAN node — Sonnet 4.6
-      cypher.py       # GENERATE_CYPHER node — Sonnet 4.6
-      validate.py     # VALIDATE node — Haiku 4.6
-      analyze.py      # ANALYZE node — Sonnet 4.6
+      plan.py         # PLAN node — calls get_llm(role="planner")
+      cypher.py       # GENERATE_CYPHER node — calls get_llm(role="cypher")
+      validate.py     # VALIDATE node — calls get_llm(role="validator")
+      analyze.py      # ANALYZE node — calls get_llm(role="analyzer")
       format.py       # FORMAT node — no LLM (structured transformation)
   ```
 - One file per node — maximizes mockability and test isolation
 - `graph.py` imports from `nodes/` and from `state.py`; no circular dependencies
+- `llm.py` has no imports from within `src/workflow/` — it is a leaf module
 
 ### Claude's Discretion
 - Exact few-shot prompt examples injected into GENERATE_CYPHER (structure TBD by researcher)

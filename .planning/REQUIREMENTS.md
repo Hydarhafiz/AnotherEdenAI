@@ -32,6 +32,7 @@
 - [ ] **AGENT-05**: Retry loop is hard-capped at 3 attempts via conditional edge in WorkflowState; exceeding cap routes to graceful error
 - [ ] **AGENT-06**: ANALYZE agent (Sonnet 4.6) synthesizes validated query results into final team recommendation
 - [ ] **AGENT-07**: WorkflowState is a TypedDict validated by Pydantic v2; each node returns only the keys it modifies (no shared mutation)
+- [ ] **AGENT-08**: `src/workflow/llm.py` provides a `get_llm(role)` factory returning a `BaseChatModel`; `LLM_PROVIDER=ollama` in `.env` returns an Ollama-backed model for local testing; `LLM_PROVIDER=anthropic` (default) returns `ChatAnthropic` with the appropriate Sonnet or Haiku model for the given role
 
 ### Query Handling
 
@@ -55,6 +56,12 @@
 - [ ] **WEB-03**: Pipeline node completion status is streamed to UI via SSE (PLAN → CYPHER → VALIDATE → ANALYZE)
 - [ ] **WEB-04**: Neo4j driver is initialized as an app-level singleton with async connection pooling
 - [ ] **WEB-05**: Admin can trigger a full data refresh via POST /admin/refresh-data endpoint
+
+### Deployment
+
+- [ ] **DEPLOY-01**: GitHub Actions CI/CD pipeline builds a Docker image of the FastAPI + HTMX app and pushes to AWS on merge to main
+- [ ] **DEPLOY-02**: App is deployed to AWS App Runner or ECS Fargate with environment variables sourced from AWS Secrets Manager or Parameter Store
+- [ ] **DEPLOY-03**: Deployment is production-ready — health checks pass, service auto-restarts on failure, and a public URL is accessible after deploy
 
 ---
 
@@ -120,6 +127,7 @@
 | AGENT-05 | Phase 2 | Pending |
 | AGENT-06 | Phase 2 | Pending |
 | AGENT-07 | Phase 2 | Pending |
+| AGENT-08 | Phase 2 | Pending |
 | QUERY-01 | Phase 3 | Pending |
 | QUERY-02 | Phase 3 | Pending |
 | QUERY-03 | Phase 3 | Pending |
@@ -134,10 +142,13 @@
 | OUTPUT-03 | Phase 5 | Pending |
 | OUTPUT-04 | Phase 5 | Pending |
 | OUTPUT-05 | Phase 5 | Pending |
+| DEPLOY-01 | Phase 5 | Pending |
+| DEPLOY-02 | Phase 5 | Pending |
+| DEPLOY-03 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 32 total
-- Mapped to phases: 32
+- v1 requirements: 36 total
+- Mapped to phases: 36
 - Unmapped: 0 ✓
 
 ---

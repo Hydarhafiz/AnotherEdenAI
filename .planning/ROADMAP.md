@@ -35,13 +35,14 @@ Plans:
 ### Phase 2: LangGraph Workflow (Stub Data)
 **Goal**: Complete PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE → FORMAT pipeline is built, wired, and tested against mocked Neo4j — agent logic bugs are isolated from data bugs before any real graph is touched
 **Depends on**: Phase 1 (SCHEMA.md and `get_schema()` output required for prompt injection)
-**Requirements**: AGENT-01, AGENT-02, AGENT-03, AGENT-04, AGENT-05, AGENT-06, AGENT-07
+**Requirements**: AGENT-01, AGENT-02, AGENT-03, AGENT-04, AGENT-05, AGENT-06, AGENT-07, AGENT-08
 **Success Criteria** (what must be TRUE):
   1. A test query flows through all five nodes (PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE → FORMAT) against mocked Neo4j and returns a structured result with no unhandled exceptions
   2. When VALIDATE returns a failure, the workflow routes back to GENERATE_CYPHER with the full error message included in state, and the retry counter increments correctly
   3. When VALIDATE fails three consecutive times, the workflow routes to graceful error formatting instead of a fourth attempt — retry counter never exceeds 3
   4. WorkflowState is a TypedDict with Pydantic v2 validation; a node that attempts to write a key it does not own raises a validation error in tests
   5. `pytest` passes with all nodes mocked — no live LLM calls, no live Neo4j connections required to run the test suite
+  6. `src/workflow/llm.py` provides a `get_llm(role)` factory; setting `LLM_PROVIDER=ollama` in `.env` routes all LLM calls through Ollama for local budget-safe debugging
 
 Plans:
 - [ ] 02-01: WorkflowState and graph wiring — define WorkflowState TypedDict with Pydantic v2; wire StateGraph with all nodes and edges including the VALIDATE conditional edge with retry cap; no node logic yet, just the skeleton
@@ -82,20 +83,22 @@ Plans:
 - [ ] 04-03: UI polish and error display — validation retry progress rendered in UI ("attempt 2/3"); graceful error display when retry cap is exhausted; empty-result message when no matching teams found; smoke test with browser
 
 ### Phase 5: Integration, Polish, and Portfolio Hardening
-**Goal**: The system is end-to-end verified, all error paths are hardened, and a recruiter can clone the repo, run pytest, and get a passing suite cold — no local configuration knowledge required
+**Goal**: The system is end-to-end verified, all error paths are hardened, and the Dockerized app is deployed to AWS via GitHub Actions CI/CD — a recruiter can clone the repo, run pytest, and browse to a live public URL
 **Depends on**: Phase 4 (full stack running)
-**Requirements**: OUTPUT-01, OUTPUT-02, OUTPUT-03, OUTPUT-04, OUTPUT-05
+**Requirements**: OUTPUT-01, OUTPUT-02, OUTPUT-03, OUTPUT-04, OUTPUT-05, DEPLOY-01, DEPLOY-02, DEPLOY-03
 **Success Criteria** (what must be TRUE):
   1. Running `pytest --tb=short` on a clean clone (with env vars set per README) produces a passing suite with no manual setup beyond `uv sync` and env configuration
   2. A query that returns no perfect team match produces a response listing the top 3 closest alternatives with a brief explanation of each tradeoff — it does not return an error or empty page
   3. Every character in a returned lineup has a role annotation (e.g., "AF anchor", "off-element mule", "healer") alongside their name
   4. Every team recommendation includes source attribution — which Grasta plus which personality trait creates each synergy, with no assertion that cannot be traced back to a graph node
   5. End-to-end response time from query submission to recommendation display is measured and confirmed at or below 15 seconds under normal conditions
+  6. A GitHub Actions pipeline builds the Docker image and deploys to AWS App Runner (or ECS Fargate) on merge to main — a public URL is accessible after deploy with no manual intervention
 
 Plans:
 - [ ] 05-01: Output format hardening — enforce 4-frontline/2-reserve structure in FORMAT node; add per-character role annotations; add Grasta + personality source attribution to every synergy claim; add top-3 alternatives for empty/partial matches
 - [ ] 05-02: Full integration test suite — end-to-end pytest tests covering: happy path team recommendation, name normalization, empty-result graceful degradation, retry cap exhaustion, and /admin/refresh-data trigger; all tests runnable cold from README instructions
 - [ ] 05-03: Portfolio hardening — measure and log end-to-end latency; update README with `pytest --tb=short` instructions, env var list, and AuraDB Free setup steps; confirm recruiter cold-clone path works end to end
+- [ ] 05-04: AWS Serverless Deployment — write Dockerfile for FastAPI + HTMX app; write GitHub Actions CI/CD pipeline (build → push to ECR → deploy to AWS App Runner or ECS Fargate); configure env vars from AWS Secrets Manager or Parameter Store; verify public URL accessible after merge to main
 
 ## Progress
 
@@ -108,4 +111,4 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 | 2. LangGraph Workflow (Stub Data) | 0/4 | Not started | - |
 | 3. Connect Workflow to Real Neo4j | 0/3 | Not started | - |
 | 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
-| 5. Integration, Polish, and Portfolio Hardening | 0/3 | Not started | - |
+| 5. Integration, Polish, and Portfolio Hardening | 0/4 | Not started | - |
