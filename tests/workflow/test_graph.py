@@ -7,8 +7,17 @@ Covers AGENT-04, AGENT-05:
 - route_after_validate unit tests (all 3 branches)
 """
 import pytest
+from unittest.mock import MagicMock, patch
+from langchain_core.messages import AIMessage
 
 from src.workflow.graph import build_graph, route_after_validate
+
+
+def _mock_llm_factory(content="stub response"):
+    """Return a MagicMock LLM that returns a predictable AIMessage."""
+    llm = MagicMock()
+    llm.invoke.return_value = AIMessage(content=content)
+    return llm
 
 
 class TestRouteAfterValidate:
@@ -61,8 +70,11 @@ class TestGraphHappyPath:
     def test_full_graph_happy_path(self, stub_driver, sample_state):
         """With a driver that returns results, graph should complete to final_output."""
         # stub_driver returns ([{"name": "Aldo"}], None, None) by default
-        graph = build_graph(driver=stub_driver)
-        result = graph.invoke(sample_state)
+        # Patch get_llm for both PLAN and GENERATE_CYPHER to avoid live API calls
+        with patch("src.workflow.nodes.plan.get_llm", return_value=_mock_llm_factory("stub plan")), \
+             patch("src.workflow.nodes.cypher.get_llm", return_value=_mock_llm_factory("MATCH (n) RETURN n")):
+            graph = build_graph(driver=stub_driver)
+            result = graph.invoke(sample_state)
 
         assert "final_output" in result
         final = result["final_output"]
@@ -76,8 +88,10 @@ class TestGraphHappyPath:
             ([], None, None),               # first call — fail, trigger retry
             ([{"name": "Aldo"}], None, None),  # second call — success
         ]
-        graph = build_graph(driver=stub_driver)
-        result = graph.invoke(sample_state)
+        with patch("src.workflow.nodes.plan.get_llm", return_value=_mock_llm_factory("stub plan")), \
+             patch("src.workflow.nodes.cypher.get_llm", return_value=_mock_llm_factory("MATCH (n) RETURN n")):
+            graph = build_graph(driver=stub_driver)
+            result = graph.invoke(sample_state)
 
         assert result["retry_count"] == 1, (
             f"Expected retry_count=1, got {result['retry_count']}"
@@ -96,8 +110,10 @@ class TestGraphHappyPath:
     def test_retry_cap_exhausted_routes_to_format_error(self, stub_driver, sample_state):
         """Driver always returns empty: retry cap at 3 routes to format with error."""
         stub_driver.execute_query.return_value = ([], None, None)
-        graph = build_graph(driver=stub_driver)
-        result = graph.invoke(sample_state)
+        with patch("src.workflow.nodes.plan.get_llm", return_value=_mock_llm_factory("stub plan")), \
+             patch("src.workflow.nodes.cypher.get_llm", return_value=_mock_llm_factory("MATCH (n) RETURN n")):
+            graph = build_graph(driver=stub_driver)
+            result = graph.invoke(sample_state)
 
         assert result["retry_count"] == 3, (
             f"Expected retry_count=3 (cap), got {result['retry_count']}"

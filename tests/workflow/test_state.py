@@ -3,12 +3,14 @@
 Covers AGENT-07: State contract verification.
 - Correct number and names of keys
 - validation_errors uses operator.add reducer (Annotated)
-- Each stub node returns only its owned keys
+- Each node returns only its owned keys (LLM nodes are mocked)
 """
 import operator
 import typing
+from unittest.mock import MagicMock, patch
 
 import pytest
+from langchain_core.messages import AIMessage
 
 from src.workflow.state import WorkflowState
 from src.workflow.nodes.plan import plan_node
@@ -57,16 +59,25 @@ def test_validation_errors_reducer_is_annotated():
 
 
 def test_stub_nodes_return_only_owned_keys(sample_state):
-    """Each stub node must return only its owned keys — no side effects."""
+    """Each node must return only its owned keys — no side effects.
+
+    LLM-backed nodes (plan, generate_cypher) are mocked to avoid live API calls.
+    """
     mock_driver = None  # validate stub handles None driver
 
-    cases = [
-        (plan_node(sample_state),               {"plan_strategy"}),
-        (generate_cypher_node(sample_state),    {"cypher_query"}),
-        (validate_node(sample_state, mock_driver), {"db_results"}),
-        (analyze_node(sample_state),            {"analysis_result"}),
-        (format_node(sample_state),             {"final_output"}),
-    ]
+    # Mock LLM factory for nodes that call get_llm
+    mock_llm = MagicMock()
+    mock_llm.invoke.return_value = AIMessage(content="stub response")
+
+    with patch("src.workflow.nodes.plan.get_llm", return_value=mock_llm), \
+         patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm):
+        cases = [
+            (plan_node(sample_state),               {"plan_strategy"}),
+            (generate_cypher_node(sample_state),    {"cypher_query"}),
+            (validate_node(sample_state, mock_driver), {"db_results"}),
+            (analyze_node(sample_state),            {"analysis_result"}),
+            (format_node(sample_state),             {"final_output"}),
+        ]
 
     for result, expected_keys in cases:
         assert set(result.keys()) == expected_keys, (
