@@ -75,15 +75,32 @@ def test_stub_nodes_return_only_owned_keys(sample_state):
     mock_validate_llm = MagicMock()
     mock_validate_llm.invoke.return_value = AIMessage(content="PASS: Results match.")
 
+    import json
+
+    # analyze_node is a real LLM node — mock returns JSON the format_node can parse
+    analyze_json_response = json.dumps({
+        "frontline": [{"name": "Aldo", "role": "DPS", "grastas": []}],
+        "reserve": [],
+        "synergy_explanation": "stub",
+    })
+    mock_analyze_llm = MagicMock()
+    mock_analyze_llm.invoke.return_value = AIMessage(content=analyze_json_response)
+
+    # format_node needs a valid analysis_result to parse (happy path)
+    format_state = dict(sample_state)
+    format_state["analysis_result"] = analyze_json_response
+    format_state["db_results"] = [{"name": "Aldo"}]  # non-empty to avoid error path
+
     with patch("src.workflow.nodes.plan.get_llm", return_value=mock_llm), \
          patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm), \
-         patch("src.workflow.nodes.validate.get_llm", return_value=mock_validate_llm):
+         patch("src.workflow.nodes.validate.get_llm", return_value=mock_validate_llm), \
+         patch("src.workflow.nodes.analyze.get_llm", return_value=mock_analyze_llm):
         cases = [
             (plan_node(sample_state),               {"plan_strategy"}),
             (generate_cypher_node(sample_state),    {"cypher_query"}),
             (validate_node(sample_state, mock_driver), {"db_results"}),
             (analyze_node(sample_state),            {"analysis_result"}),
-            (format_node(sample_state),             {"final_output"}),
+            (format_node(format_state),             {"final_output"}),
         ]
 
     for result, expected_keys in cases:
