@@ -108,7 +108,7 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Graph Foundation | 3/3 | Complete   | 2026-03-14 |
-| 2. LangGraph Workflow (Stub Data) | 2/4 | In Progress|  |
+| 2. LangGraph Workflow (Stub Data) | 3/4 | In Progress|  |
 | 3. Connect Workflow to Real Neo4j | 0/3 | Not started | - |
 | 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
 | 5. Integration, Polish, and Portfolio Hardening | 0/4 | Not started | - |
