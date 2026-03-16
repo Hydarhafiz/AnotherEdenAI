@@ -5,7 +5,7 @@ milestone_name: milestone
 status: completed
 stopped_at: Completed 02-04-PLAN.md
 last_updated: "2026-03-16T06:06:49Z"
-last_activity: "2026-03-16 - Completed quick-4: get_llm() extended with openrouter/bedrock providers; 82/82 tests pass"
+last_activity: "2026-03-16 - Completed quick task 4: Update src/workflow/llm.py to support a 3-way LLM_PROVIDER switch (ollama, openrouter, bedrock)"
 progress:
   total_phases: 5
   completed_phases: 2
@@ -106,12 +106,12 @@ None yet.
 
 ### Quick Tasks Completed
 
-| # | Description | Date | Commit | Directory |
-|---|-------------|------|--------|-----------|
-| 1 | Fix Grasta count assertion — actual 489 is below expected minimum 500 | 2026-03-14 | 268a3ab | [1-fix-grasta-count-assertion-actual-489-is](.planning/quick/1-fix-grasta-count-assertion-actual-489-is/) |
-| 2 | Fix 7 failing integration tests — session loop, loaded_db fixture, static idempotency fixtures | 2026-03-15 | 63ea99f | [2-fix-7-failing-integration-tests-test-ide](.planning/quick/2-fix-7-failing-integration-tests-test-ide/) |
-| 3 | Add APOC plugin to Neo4j Docker container so langchain_neo4j Neo4jGraph works | 2026-03-14 | f371f7f | [3-add-apoc-plugin-to-neo4j-docker-containe](.planning/quick/3-add-apoc-plugin-to-neo4j-docker-containe/) |
-| 4 | Extend get_llm() with openrouter, bedrock, ollama providers; 8 new unit tests | 2026-03-16 | d8a300d | [4-update-src-workflow-llm-py-to-support-a-](.planning/quick/4-update-src-workflow-llm-py-to-support-a-/) |
+| # | Description | Date | Commit | Status | Directory |
+|---|-------------|------|--------|--------|-----------|
+| 1 | Fix Grasta count assertion — actual 489 is below expected minimum 500 | 2026-03-14 | 268a3ab | | [1-fix-grasta-count-assertion-actual-489-is](.planning/quick/1-fix-grasta-count-assertion-actual-489-is/) |
+| 2 | Fix 7 failing integration tests — session loop, loaded_db fixture, static idempotency fixtures | 2026-03-15 | 63ea99f | | [2-fix-7-failing-integration-tests-test-ide](.planning/quick/2-fix-7-failing-integration-tests-test-ide/) |
+| 3 | Add APOC plugin to Neo4j Docker container so langchain_neo4j Neo4jGraph works | 2026-03-14 | f371f7f | | [3-add-apoc-plugin-to-neo4j-docker-containe](.planning/quick/3-add-apoc-plugin-to-neo4j-docker-containe/) |
+| 4 | Extend get_llm() with openrouter, bedrock, ollama providers; 8 new unit tests | 2026-03-16 | d8a300d | Verified | [4-update-src-workflow-llm-py-to-support-a-](.planning/quick/4-update-src-workflow-llm-py-to-support-a-/) |
 
 ## Session Continuity
 
