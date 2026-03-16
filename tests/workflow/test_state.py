@@ -94,11 +94,16 @@ async def test_stub_nodes_return_only_owned_keys(sample_state):
     format_state["db_results"] = [{"name": "Aldo"}]  # non-empty to avoid error path
 
     with patch("src.workflow.nodes.plan.get_llm", return_value=mock_llm), \
+         patch("src.workflow.nodes.plan.normalize_roster",
+                new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
+         patch("src.workflow.nodes.plan.augment_with_f2p", return_value=["Aldo", "Ciel"]), \
          patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm), \
          patch("src.workflow.nodes.validate.get_llm", return_value=mock_validate_llm), \
          patch("src.workflow.nodes.analyze.get_llm", return_value=mock_analyze_llm):
+        # plan_node is now async and returns both plan_strategy and roster
+        plan_result = await plan_node(sample_state, mock_driver)
         cases = [
-            (plan_node(sample_state),                              {"plan_strategy"}),
+            (plan_result,                                          {"plan_strategy", "roster"}),
             (generate_cypher_node(sample_state),                   {"cypher_query"}),
             (await validate_node(sample_state, mock_driver),       {"db_results"}),
             (analyze_node(sample_state),                           {"analysis_result"}),

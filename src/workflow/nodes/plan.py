@@ -1,11 +1,16 @@
 """PLAN node — decomposes the user query into graph traversal sub-goals.
 
 Calls get_llm(role='planner') from src.workflow.llm.
-Returns only: {"plan_strategy": str}
+Returns: {"plan_strategy": str, "roster": list[str]}
+
+Roster is normalized (canonical graph names) and augmented with F2P characters
+before the LLM prompt is built.
 """
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from ..llm import get_llm
+from ..normalize import normalize_roster
+from ..f2p import augment_with_f2p
 from ..state import WorkflowState
 
 PLAN_SYSTEM_PROMPT = """You are a strategy planner for an AnotherEden character team-building assistant.
@@ -24,20 +29,30 @@ Output a structured breakdown of what graph data to retrieve to answer the quest
 Be concise and specific."""
 
 
-def plan_node(state: WorkflowState) -> dict:
+async def plan_node(state: WorkflowState, driver) -> dict:
     """Generate a traversal strategy for the user's team-building query.
 
-    Owned keys: plan_strategy
+    Normalizes player-supplied roster names to canonical graph names, augments
+    the roster with F2P characters, then calls the LLM planner.
+
+    Owned keys: plan_strategy, roster
 
     Args:
         state: Current WorkflowState containing user_query and roster.
+        driver: Async Neo4j driver for name normalization queries.
 
     Returns:
-        Dict containing only {"plan_strategy": str}.
+        Dict containing {"plan_strategy": str, "roster": list[str]} where
+        roster is the normalized + F2P-augmented canonical name list.
     """
+    # Step 1: normalize user-supplied names to canonical graph names
+    normalized = await normalize_roster(driver, state["roster"])
+    # Step 2: augment with F2P characters (deduped)
+    full_roster = augment_with_f2p(normalized)
+
     llm = get_llm(role="planner")
 
-    roster_str = ", ".join(state["roster"]) if state["roster"] else "no characters specified"
+    roster_str = ", ".join(full_roster) if full_roster else "no characters specified"
     human_content = (
         f"Query: {state['user_query']}\n"
         f"Available roster: {roster_str}"
@@ -49,4 +64,4 @@ def plan_node(state: WorkflowState) -> dict:
     ]
 
     response = llm.invoke(messages)
-    return {"plan_strategy": response.content}
+    return {"plan_strategy": response.content, "roster": full_roster}

@@ -65,7 +65,11 @@ def build_graph(driver=None):
     builder = StateGraph(WorkflowState)
 
     # --- Add nodes ---
-    builder.add_node("plan", plan_node)
+    # plan_node is async — use an async wrapper so LangGraph awaits it correctly.
+    async def _plan(s):
+        return await plan_node(s, driver)
+
+    builder.add_node("plan", _plan)
     builder.add_node("generate_cypher", generate_cypher_node)
     # validate_node is async — use an async wrapper so LangGraph awaits it correctly.
     async def _validate(s):
