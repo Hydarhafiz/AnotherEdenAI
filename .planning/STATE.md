@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 02-04-PLAN.md
-last_updated: "2026-03-16T06:06:49Z"
-last_activity: "2026-03-16 - Completed quick task 4: Update src/workflow/llm.py to support a 3-way LLM_PROVIDER switch (ollama, openrouter, bedrock)"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-03-16T07:02:42.326Z"
+last_activity: "2026-03-15 - Completed plan 01-03: 22/22 tests pass, assert_schema exits 0, SCHEMA.md verified"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 10
+  completed_plans: 8
   percent: 20
 ---
 
@@ -54,6 +54,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02-langgraph-workflow-stub-data P02 | 3 | 2 tasks | 6 files |
 | Phase 02 P03 | 15 | 2 tasks | 4 files |
 | Phase 02-langgraph-workflow-stub-data P04 | 4 | 2 tasks | 6 files |
+| Phase 03-connect-workflow-to-real-neo4j P01 | 7 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,9 @@ Recent decisions affecting current work:
 - [Phase 02-04]: FORMAT is LLM-free (pure Python) — deterministic and easily testable; error path produces same schema keys as success path for web layer compatibility
 - [quick-4]: Module-level imports for all four LLM provider classes — enables patch.object() testing without reload-inside-patch complexity
 - [quick-4]: OpenRouter uses ChatOpenAI with openai_api_base override — OpenRouter is OpenAI-compatible endpoint, no separate class needed
+- [Phase 03-01]: async def _validate() in graph.py — LangGraph lambda does NOT auto-resolve async coroutines; explicit async def wrapper is required
+- [Phase 03-01]: graph.ainvoke() replaces graph.invoke() in all graph tests — required once any node is async
+- [Phase 03-01]: stub_driver.execute_query is AsyncMock in conftest.py — Phase 2 sync MagicMock incompatible with async validate_node
 
 ### Pending Todos
 
@@ -115,6 +119,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T06:06:49Z
-Stopped at: Completed quick-4-PLAN.md
+Last session: 2026-03-16T07:02:42.324Z
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None

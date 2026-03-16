@@ -36,10 +36,10 @@
 
 ### Query Handling
 
-- [ ] **QUERY-01**: User can input owned character roster (manually, as text list or CSV)
-- [ ] **QUERY-02**: All recommendations are constrained to owned characters plus explicitly free-to-play units
+- [x] **QUERY-01**: User can input owned character roster (manually, as text list or CSV)
+- [x] **QUERY-02**: All recommendations are constrained to owned characters plus explicitly free-to-play units
 - [ ] **QUERY-03**: User can submit natural language team-building queries (e.g., "highest damage blunt-zone synergy")
-- [ ] **QUERY-04**: Character name input is normalized to canonical graph names before roster filtering
+- [x] **QUERY-04**: Character name input is normalized to canonical graph names before roster filtering
 
 ### Output
 
@@ -128,10 +128,10 @@
 | AGENT-06 | Phase 2 | Complete |
 | AGENT-07 | Phase 2 | Complete |
 | AGENT-08 | Phase 2 | Complete |
-| QUERY-01 | Phase 3 | Pending |
-| QUERY-02 | Phase 3 | Pending |
+| QUERY-01 | Phase 3 | Complete |
+| QUERY-02 | Phase 3 | Complete |
 | QUERY-03 | Phase 3 | Pending |
-| QUERY-04 | Phase 3 | Pending |
+| QUERY-04 | Phase 3 | Complete |
 | WEB-01 | Phase 4 | Pending |
 | WEB-02 | Phase 4 | Pending |
 | WEB-03 | Phase 4 | Pending |
