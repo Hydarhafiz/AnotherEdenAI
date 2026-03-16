@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-03-16T07:02:42.326Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-03-16T07:19:07.820Z"
 last_activity: "2026-03-15 - Completed plan 01-03: 22/22 tests pass, assert_schema exits 0, SCHEMA.md verified"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
   percent: 20
 ---
 
@@ -55,6 +55,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02 P03 | 15 | 2 tasks | 4 files |
 | Phase 02-langgraph-workflow-stub-data P04 | 4 | 2 tasks | 6 files |
 | Phase 03-connect-workflow-to-real-neo4j P01 | 7 | 2 tasks | 10 files |
+| Phase 03-connect-workflow-to-real-neo4j P02 | 14 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,9 @@ Recent decisions affecting current work:
 - [Phase 03-01]: async def _validate() in graph.py — LangGraph lambda does NOT auto-resolve async coroutines; explicit async def wrapper is required
 - [Phase 03-01]: graph.ainvoke() replaces graph.invoke() in all graph tests — required once any node is async
 - [Phase 03-01]: stub_driver.execute_query is AsyncMock in conftest.py — Phase 2 sync MagicMock incompatible with async validate_node
+- [Phase 03-02]: plan_node returns both plan_strategy AND roster — normalized+F2P roster flows to downstream nodes without re-normalizing
+- [Phase 03-02]: async def _plan(s) wrapper in graph.py — LangGraph requires explicit async wrapper for async nodes, same pattern as _validate
+- [Phase 03-02]: record.keys() for Neo4j Record key membership — Record.__contains__ checks values not keys; 'key in record' always False for string keys
 
 ### Pending Todos
 
@@ -119,6 +123,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T07:02:42.324Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-03-16T07:19:07.817Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
