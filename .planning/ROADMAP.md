@@ -62,10 +62,12 @@ Plans:
 
 **Research flag**: AF (Another Force) zone mechanics may require schema extension beyond Phase 1 nodes — the Phase 3 plan should evaluate whether ENHANCES or a new relationship type is needed for AF synergy queries.
 
+**Plans:** 3 plans
+
 Plans:
-- [ ] 03-01: Neo4j connection wiring and name normalization — replace mock Neo4j with live AsyncGraphDatabase driver; implement character name normalization in PLAN agent (canonical name lookup against graph); confirm roster filtering query returns only owned + F2P units
-- [ ] 03-02: Grasta synergy traversal validation — run known-good synergy queries against live graph; verify REQUIRES_TRAIT and HAS_TRAIT path traversal returns correct results; document any schema extensions needed for AF mechanics
-- [ ] 03-03: Integration test suite — pytest integration tests covering happy path, empty-roster edge case, name normalization, and known-good synergy pairs; measure end-to-end latency baseline against 15s SLO
+- [ ] 03-01-PLAN.md — normalize.py + f2p.py + async validate_node: create normalize_character_name() and augment_with_f2p() helpers; convert validate_node to async def; update test_validate.py to AsyncMock
+- [ ] 03-02-PLAN.md — plan_node roster normalization + CLI run.py + integration tests: wire normalize+F2P into plan_node; create run.py entry point; write test_query_pipeline.py covering QUERY-01 through QUERY-04
+- [ ] 03-03-PLAN.md — extended integration coverage + latency baseline + human verification: empty-roster edge case, end-to-end pipeline latency test, 3-archetype synergy coverage, OPT-03 SCHEMA.md annotation, human sign-off
 
 ### Phase 4: FastAPI + HTMX Web Layer
 **Goal**: The working pipeline is exposed via HTTP with a streaming progress UI — users can submit roster and query through a browser and see pipeline node status update in real time
