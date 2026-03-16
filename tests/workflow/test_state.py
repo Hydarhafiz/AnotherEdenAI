@@ -7,7 +7,7 @@ Covers AGENT-07: State contract verification.
 """
 import operator
 import typing
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from langchain_core.messages import AIMessage
@@ -58,14 +58,16 @@ def test_validation_errors_reducer_is_annotated():
     )
 
 
-def test_stub_nodes_return_only_owned_keys(sample_state):
+@pytest.mark.asyncio
+async def test_stub_nodes_return_only_owned_keys(sample_state):
     """Each node must return only its owned keys — no side effects.
 
     LLM-backed nodes (plan, generate_cypher, validate) are mocked to avoid live API calls.
-    validate uses a mock driver that returns data so the success path is exercised.
+    validate uses an AsyncMock driver that returns data so the success path is exercised.
+    validate_node is async (Phase 3) so this test is async and awaits it.
     """
     mock_driver = MagicMock()
-    mock_driver.execute_query.return_value = ([{"name": "Aldo"}], None, None)
+    mock_driver.execute_query = AsyncMock(return_value=([{"name": "Aldo"}], None, None))
 
     # Mock LLM factory for nodes that call get_llm
     mock_llm = MagicMock()
@@ -96,11 +98,11 @@ def test_stub_nodes_return_only_owned_keys(sample_state):
          patch("src.workflow.nodes.validate.get_llm", return_value=mock_validate_llm), \
          patch("src.workflow.nodes.analyze.get_llm", return_value=mock_analyze_llm):
         cases = [
-            (plan_node(sample_state),               {"plan_strategy"}),
-            (generate_cypher_node(sample_state),    {"cypher_query"}),
-            (validate_node(sample_state, mock_driver), {"db_results"}),
-            (analyze_node(sample_state),            {"analysis_result"}),
-            (format_node(format_state),             {"final_output"}),
+            (plan_node(sample_state),                              {"plan_strategy"}),
+            (generate_cypher_node(sample_state),                   {"cypher_query"}),
+            (await validate_node(sample_state, mock_driver),       {"db_results"}),
+            (analyze_node(sample_state),                           {"analysis_result"}),
+            (format_node(format_state),                            {"final_output"}),
         ]
 
     for result, expected_keys in cases:

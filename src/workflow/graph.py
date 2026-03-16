@@ -67,7 +67,11 @@ def build_graph(driver=None):
     # --- Add nodes ---
     builder.add_node("plan", plan_node)
     builder.add_node("generate_cypher", generate_cypher_node)
-    builder.add_node("validate", lambda s: validate_node(s, driver))
+    # validate_node is async — use an async wrapper so LangGraph awaits it correctly.
+    async def _validate(s):
+        return await validate_node(s, driver)
+
+    builder.add_node("validate", _validate)
     builder.add_node("analyze", analyze_node)
     builder.add_node("format", format_node)
 

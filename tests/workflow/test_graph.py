@@ -7,6 +7,8 @@ Covers AGENT-04, AGENT-05, AGENT-06, AGENT-07:
 - Semantic fail triggers retry just like driver failures
 - Full pipeline: no live LLM calls, no live Neo4j connections
 - route_after_validate unit tests (all 3 branches)
+
+Note: validate_node is async (Phase 3), so graph tests use ainvoke().
 """
 import pytest
 from unittest.mock import MagicMock, patch, call
@@ -75,9 +77,13 @@ class TestRouteAfterValidate:
 
 
 class TestGraphHappyPath:
-    """Graph invocation tests with mock LLMs and mock driver."""
+    """Graph invocation tests with mock LLMs and mock driver.
 
-    def test_full_graph_happy_path(self, stub_driver, sample_state):
+    All graph tests use ainvoke() because validate_node is async.
+    """
+
+    @pytest.mark.asyncio
+    async def test_full_graph_happy_path(self, stub_driver, sample_state):
         """Full pipeline with all 5 nodes: query flows through to structured team output.
 
         Mocks:
@@ -109,7 +115,7 @@ class TestGraphHappyPath:
              patch("src.workflow.nodes.analyze.get_llm",
                    return_value=_mock_llm_factory(_ANALYZE_RESPONSE)):
             graph = build_graph(driver=stub_driver)
-            result = graph.invoke(sample_state)
+            result = await graph.ainvoke(sample_state)
 
         assert "final_output" in result
         final = result["final_output"]
@@ -142,7 +148,8 @@ class TestGraphHappyPath:
             f"Expected empty validation_errors, got: {result['validation_errors']}"
         )
 
-    def test_single_retry_routes_back_to_generate_cypher(self, stub_driver, sample_state):
+    @pytest.mark.asyncio
+    async def test_single_retry_routes_back_to_generate_cypher(self, stub_driver, sample_state):
         """Driver fails once (empty result) then succeeds: retry_count=1, one error, team data.
 
         First validate: empty result -> retry
@@ -163,7 +170,7 @@ class TestGraphHappyPath:
              patch("src.workflow.nodes.analyze.get_llm",
                    return_value=_mock_llm_factory(_ANALYZE_RESPONSE)):
             graph = build_graph(driver=stub_driver)
-            result = graph.invoke(sample_state)
+            result = await graph.ainvoke(sample_state)
 
         assert result["retry_count"] == 1, (
             f"Expected retry_count=1, got {result['retry_count']}"
@@ -181,7 +188,8 @@ class TestGraphHappyPath:
             f"Expected no 'error' key on retry-then-success path. Got: {final.get('error')}"
         )
 
-    def test_retry_cap_exhausted_routes_to_format_error(self, stub_driver, sample_state):
+    @pytest.mark.asyncio
+    async def test_retry_cap_exhausted_routes_to_format_error(self, stub_driver, sample_state):
         """Driver always returns empty: retry cap at 3 routes to format with error.
 
         ANALYZE must never be called (retry cap goes directly to FORMAT).
@@ -198,7 +206,7 @@ class TestGraphHappyPath:
                    return_value=mock_validate_llm), \
              patch("src.workflow.nodes.analyze.get_llm") as mock_analyze_llm:
             graph = build_graph(driver=stub_driver)
-            result = graph.invoke(sample_state)
+            result = await graph.ainvoke(sample_state)
 
         # Haiku never called when Step 1 always fails (empty result)
         mock_validate_llm.invoke.assert_not_called()
@@ -227,7 +235,8 @@ class TestGraphHappyPath:
             f"Expected reserve=[] on cap-exhausted path. Got: {final['reserve']}"
         )
 
-    def test_semantic_fail_triggers_retry(self, stub_driver, sample_state):
+    @pytest.mark.asyncio
+    async def test_semantic_fail_triggers_retry(self, stub_driver, sample_state):
         """Semantic FAIL from Haiku triggers retry back to generate_cypher."""
         # Driver always returns data — Step 1 always passes
         stub_driver.execute_query.return_value = (
@@ -250,7 +259,7 @@ class TestGraphHappyPath:
              patch("src.workflow.nodes.analyze.get_llm",
                    return_value=_mock_llm_factory(_ANALYZE_RESPONSE)):
             graph = build_graph(driver=stub_driver)
-            result = graph.invoke(sample_state)
+            result = await graph.ainvoke(sample_state)
 
         assert result["retry_count"] == 1, (
             f"Expected retry_count=1, got {result['retry_count']}"
@@ -268,7 +277,8 @@ class TestGraphHappyPath:
             f"Expected no 'error' key in final_output after semantic retry success. Got: {final}"
         )
 
-    def test_full_pipeline_no_live_calls(self, stub_driver, sample_state):
+    @pytest.mark.asyncio
+    async def test_full_pipeline_no_live_calls(self, stub_driver, sample_state):
         """Smoke test: full pipeline runs without any live LLM or Neo4j calls.
 
         Confirms AGENT requirement: pytest passes with all nodes mocked —
@@ -287,7 +297,7 @@ class TestGraphHappyPath:
              patch("src.workflow.nodes.analyze.get_llm",
                    return_value=_mock_llm_factory(_ANALYZE_RESPONSE)) as mock_analyze:
             graph = build_graph(driver=stub_driver)
-            result = graph.invoke(sample_state)
+            result = await graph.ainvoke(sample_state)
 
         # Each LLM-using node called get_llm exactly once
         mock_plan.assert_called_once()

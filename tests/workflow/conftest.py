@@ -1,32 +1,34 @@
 """Shared pytest fixtures for workflow tests.
 
 Provides:
-    stub_driver: Function-scoped sync MagicMock simulating Neo4j driver.
+    stub_driver: Function-scoped MagicMock simulating Neo4j driver.
+                 execute_query is an AsyncMock (validate_node is now async).
     mock_llm: Function-scoped MagicMock simulating ChatAnthropic.
     sample_state: Function-scoped complete initial WorkflowState dict.
 
-Note: All fixtures are sync (no async). Phase 2 workflow tests do not require
-a real Neo4j connection — the driver is always a MagicMock.
+Note: stub_driver.execute_query is AsyncMock because validate_node is async
+(Phase 3 change). Tests that invoke the full graph must use graph.ainvoke().
 """
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 from langchain_core.messages import AIMessage
 
 
 @pytest.fixture
 def stub_driver():
-    """Function-scoped sync mock of a Neo4j driver.
+    """Function-scoped mock of a Neo4j async driver.
 
     Default behavior:
         driver.execute_query() returns ([{"name": "Aldo"}], None, None)
         — a non-empty result representing a successful query.
+        execute_query is an AsyncMock to match validate_node's async boundary.
 
     Override in tests:
         stub_driver.execute_query.return_value = ([], None, None)   # fail
         stub_driver.execute_query.side_effect = [...]               # sequence
     """
     driver = MagicMock()
-    driver.execute_query.return_value = ([{"name": "Aldo"}], None, None)
+    driver.execute_query = AsyncMock(return_value=([{"name": "Aldo"}], None, None))
     return driver
 
 

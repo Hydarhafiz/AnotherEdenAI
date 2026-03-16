@@ -14,6 +14,7 @@ Error message format (locked):
 
 The driver is injected via closure in graph.py:
     builder.add_node("validate", lambda s: validate_node(s, driver))
+    LangGraph resolves async coroutines natively in ainvoke — lambda unchanged.
 """
 import json
 
@@ -33,7 +34,7 @@ SEMANTIC_GATE_SYSTEM_PROMPT = (
 )
 
 
-def validate_node(state: WorkflowState, driver) -> dict:
+async def validate_node(state: WorkflowState, driver) -> dict:
     """Execute the Cypher query and validate the results via two-step hybrid gate.
 
     Owned keys written on failure: validation_errors (appended), retry_count.
@@ -41,7 +42,7 @@ def validate_node(state: WorkflowState, driver) -> dict:
 
     Args:
         state: Current WorkflowState.
-        driver: Neo4j driver instance (injected via closure from graph.py).
+        driver: Async Neo4j driver instance (injected via closure from graph.py).
 
     Returns:
         Dict with owned keys updated based on query outcome.
@@ -52,10 +53,14 @@ def validate_node(state: WorkflowState, driver) -> dict:
     retry_count = state.get("retry_count", 0)
 
     # ------------------------------------------------------------------
-    # Step 1: Deterministic — execute Cypher via driver
+    # Step 1: Deterministic — execute Cypher via async driver
     # ------------------------------------------------------------------
     try:
-        records, _, _ = driver.execute_query(cypher, database_="neo4j")
+        records, _, _ = await driver.execute_query(
+            cypher,
+            roster=state.get("roster", []),
+            database_="neo4j",
+        )
     except Exception as exc:
         error_msg = (
             f"Attempt {retry_count + 1}: Query failed due to Exception. "
