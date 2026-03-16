@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: completed
 stopped_at: Completed 02-04-PLAN.md
-last_updated: "2026-03-15T05:30:17.542Z"
-last_activity: "2026-03-15 - Completed plan 01-03: 22/22 tests pass, assert_schema exits 0, SCHEMA.md verified"
+last_updated: "2026-03-16T06:06:49Z"
+last_activity: "2026-03-16 - Completed quick-4: get_llm() extended with openrouter/bedrock providers; 82/82 tests pass"
 progress:
   total_phases: 5
   completed_phases: 2
@@ -93,6 +93,8 @@ Recent decisions affecting current work:
 - [Phase 02-03]: validate success returns only db_results key (AGENT-07 contract)
 - [Phase 02-04]: TeamOutput/CharacterSlot Pydantic v2 models live in format.py — FORMAT is the output boundary; web layer imports from there
 - [Phase 02-04]: FORMAT is LLM-free (pure Python) — deterministic and easily testable; error path produces same schema keys as success path for web layer compatibility
+- [quick-4]: Module-level imports for all four LLM provider classes — enables patch.object() testing without reload-inside-patch complexity
+- [quick-4]: OpenRouter uses ChatOpenAI with openai_api_base override — OpenRouter is OpenAI-compatible endpoint, no separate class needed
 
 ### Pending Todos
 
@@ -109,9 +111,10 @@ None yet.
 | 1 | Fix Grasta count assertion — actual 489 is below expected minimum 500 | 2026-03-14 | 268a3ab | [1-fix-grasta-count-assertion-actual-489-is](.planning/quick/1-fix-grasta-count-assertion-actual-489-is/) |
 | 2 | Fix 7 failing integration tests — session loop, loaded_db fixture, static idempotency fixtures | 2026-03-15 | 63ea99f | [2-fix-7-failing-integration-tests-test-ide](.planning/quick/2-fix-7-failing-integration-tests-test-ide/) |
 | 3 | Add APOC plugin to Neo4j Docker container so langchain_neo4j Neo4jGraph works | 2026-03-14 | f371f7f | [3-add-apoc-plugin-to-neo4j-docker-containe](.planning/quick/3-add-apoc-plugin-to-neo4j-docker-containe/) |
+| 4 | Extend get_llm() with openrouter, bedrock, ollama providers; 8 new unit tests | 2026-03-16 | d8a300d | [4-update-src-workflow-llm-py-to-support-a-](.planning/quick/4-update-src-workflow-llm-py-to-support-a-/) |
 
 ## Session Continuity
 
-Last session: 2026-03-15T05:26:15.823Z
-Stopped at: Completed 02-04-PLAN.md
+Last session: 2026-03-16T06:06:49Z
+Stopped at: Completed quick-4-PLAN.md
 Resume file: None
