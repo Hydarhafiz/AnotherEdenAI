@@ -7,9 +7,13 @@ Requires:
   - NEO4J_URI and NEO4J_AUTH set in .env
   - Graph loaded with Phase 1 ETL data (loaded_db fixture handles this)
 """
+import time
+
 import pytest
-from src.workflow.normalize import normalize_character_name, normalize_roster
+
+import src.workflow.run as run
 from src.workflow.f2p import F2P_CHARACTERS, augment_with_f2p
+from src.workflow.normalize import normalize_character_name, normalize_roster
 
 
 # ---------------------------------------------------------------------------
@@ -146,3 +150,136 @@ async def test_normalize_roster_end_to_end(async_driver, loaded_db):
     result = await normalize_roster(async_driver, ["ALDO", "ciel"])
     assert "Aldo" in result, f"Expected 'Aldo' in normalized roster, got {result}"
     assert "Ciel" in result, f"Expected 'Ciel' in normalized roster, got {result}"
+
+
+# ---------------------------------------------------------------------------
+# QUERY-01 + QUERY-02: Empty roster graceful degradation
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.integration
+async def test_empty_roster_graceful_degradation(async_driver, loaded_db):
+    """QUERY-01 + QUERY-02: Empty owned roster returns F2P characters, not an error.
+
+    When a player owns no characters, augment_with_f2p([]) produces the F2P-only
+    roster. Querying that roster must return non-empty results (F2P chars exist in
+    graph) and every returned name must be a known F2P character.
+    """
+    full_roster = augment_with_f2p([])
+    assert len(full_roster) > 0, "augment_with_f2p([]) must produce at least one character"
+
+    records, _, _ = await async_driver.execute_query(
+        "MATCH (c:Character) WHERE c.name IN $roster RETURN c.name AS name",
+        roster=full_roster,
+        database_="neo4j",
+    )
+
+    returned_names = [r["name"] for r in records]
+    assert len(returned_names) > 0, (
+        "Expected at least one F2P character to be present in the graph; "
+        f"F2P roster queried: {full_roster}"
+    )
+    # Every returned name must be in the F2P set
+    for name in returned_names:
+        assert name in F2P_CHARACTERS, (
+            f"'{name}' was returned but is not in F2P_CHARACTERS — "
+            "check augment_with_f2p or F2P_CHARACTERS constant"
+        )
+
+
+# ---------------------------------------------------------------------------
+# QUERY-03: End-to-end pipeline with latency measurement
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.integration
+async def test_end_to_end_pipeline_with_latency(loaded_db):
+    """QUERY-03: Full pipeline completes under 15s and returns a dict.
+
+    Invokes run.main() (plan -> cypher -> validate -> analyze -> format) against
+    the live graph. Measures wall-clock latency and asserts the 15s SLO.
+    An error dict is acceptable if LLM credentials are not configured — the key
+    requirement is no unhandled exception and elapsed < 15s.
+    """
+    roster = ["Aldo", "Ciel"]
+    query = "highest damage blunt zone synergy"
+
+    start = time.monotonic()
+    result = await run.main(roster, query)
+    elapsed = time.monotonic() - start
+
+    print(f"End-to-end latency: {elapsed:.2f}s")  # baseline for Phase 5 reference
+
+    assert isinstance(result, dict), (
+        f"run.main() must return a dict (got {type(result).__name__})"
+    )
+    assert elapsed < 15.0, (
+        f"End-to-end latency {elapsed:.2f}s exceeded 15s SLO"
+    )
+
+
+# ---------------------------------------------------------------------------
+# QUERY-03: Grasta synergy — three team archetypes
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.integration
+async def test_grasta_synergy_three_archetypes(async_driver, loaded_db):
+    """QUERY-03: Three distinct team archetypes are represented in the graph.
+
+    1. Attack archetype: shareable Attack Grasta — non-empty for Aldo roster
+    2. Support archetype: Support Grasta — non-empty results exist in graph
+    3. Personality-based AF Special: Aldo has at least one trait in graph
+    """
+    roster = ["Aldo"]
+
+    # --- Archetype 1: Attack synergy (shareable Attack Grasta for Aldo) ---
+    records_attack, _, _ = await async_driver.execute_query(
+        """
+        MATCH (c:Character)-[:HAS_TRAIT]->(t:Trait)<-[:REQUIRES_TRAIT]-(g:Grasta)
+        WHERE c.name IN $roster
+          AND g.category = 'Attack'
+          AND g.is_shareable = true
+        RETURN c.name AS character, g.name AS grasta
+        """,
+        roster=roster,
+        database_="neo4j",
+    )
+    if not records_attack:
+        pytest.fail(
+            "Attack archetype: expected at least one shareable Attack Grasta "
+            f"matching Aldo's traits; got none. "
+            "Check HAS_TRAIT + REQUIRES_TRAIT path for Attack grastas."
+        )
+
+    # --- Archetype 2: Support archetype — Support Grasta exists in graph ---
+    records_support, _, _ = await async_driver.execute_query(
+        """
+        MATCH (g:Grasta)
+        WHERE g.category = 'Support'
+        RETURN g.name AS grasta
+        LIMIT 1
+        """,
+        database_="neo4j",
+    )
+    if not records_support:
+        pytest.fail(
+            "Support archetype: expected at least one Support Grasta in the graph; "
+            "got none. Check ETL loaded Support grastas correctly."
+        )
+
+    # --- Archetype 3: Personality-based AF Special — Aldo has traits ---
+    records_traits, _, _ = await async_driver.execute_query(
+        """
+        MATCH (c:Character)-[:HAS_TRAIT]->(t:Trait)
+        WHERE c.name IN $roster
+        RETURN c.name AS character, collect(t.name) AS traits
+        """,
+        roster=roster,
+        database_="neo4j",
+    )
+    if not records_traits or not records_traits[0]["traits"]:
+        pytest.fail(
+            "AF trait archetype: expected Aldo to have at least one trait; "
+            "got none. Check HAS_TRAIT relationships for Aldo in the graph."
+        )

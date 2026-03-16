@@ -48,3 +48,15 @@ Gate: only created when category != "VC" AND personality_req is not None/empty.
 ## Schema Validation
 After ETL, `python assert_schema.py` must exit 0.
 `get_schema()` from langchain_neo4j.Neo4jGraph must match this document.
+
+## Future Extensions
+
+### OPT-03: AF Zone Mechanics (v2)
+<!-- TODO OPT-03 -->
+AF synergy in Phase 3 operates through existing HAS_TRAIT and REQUIRES_TRAIT paths.
+Zone types are not modeled as nodes. A v2 schema extension would add:
+- `(:Zone {type: "Fire"|"Wind"|"Water"|...})` node label
+- `(Character|Grasta)-[:SETS_ZONE]->(Zone)` relationship
+- `(Character)-[:BENEFITS_FROM_ZONE]->(Zone)` relationship
+This extension is deferred to OPT-03. Phase 3 recommendations use trait matching
+to infer AF zone synergies without explicit zone nodes.

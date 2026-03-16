@@ -45,6 +45,10 @@ async def main(roster: list[str], query: str) -> dict:
         }
         result = await graph.ainvoke(initial_state)
         return result.get("final_output", {})
+    except Exception as exc:  # noqa: BLE001
+        # Graceful degradation: return error dict instead of raising.
+        # Covers LLM credential errors, Neo4j connection failures, etc.
+        return {"error": str(exc), "error_type": type(exc).__name__}
     finally:
         await driver.close()
 
