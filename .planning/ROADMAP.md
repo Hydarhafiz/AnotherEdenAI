@@ -62,12 +62,13 @@ Plans:
 
 **Research flag**: AF (Another Force) zone mechanics may require schema extension beyond Phase 1 nodes — the Phase 3 plan should evaluate whether ENHANCES or a new relationship type is needed for AF synergy queries.
 
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 Plans:
 - [ ] 03-01-PLAN.md — normalize.py + f2p.py + async validate_node: create normalize_character_name() and augment_with_f2p() helpers; convert validate_node to async def; update test_validate.py to AsyncMock
 - [ ] 03-02-PLAN.md — plan_node roster normalization + CLI run.py + integration tests: wire normalize+F2P into plan_node; create run.py entry point; write test_query_pipeline.py covering QUERY-01 through QUERY-04
 - [ ] 03-03-PLAN.md — extended integration coverage + latency baseline + human verification: empty-roster edge case, end-to-end pipeline latency test, 3-archetype synergy coverage, OPT-03 SCHEMA.md annotation, human sign-off
+- [ ] 03-04-PLAN.md — gap closure: harden loaded_db fixture against wiki 403; skip test_known_nodes.py when DB unpopulated
 
 ### Phase 4: FastAPI + HTMX Web Layer
 **Goal**: The working pipeline is exposed via HTTP with a streaming progress UI — users can submit roster and query through a browser and see pipeline node status update in real time
@@ -111,6 +112,6 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Graph Foundation | 3/3 | Complete   | 2026-03-14 |
 | 2. LangGraph Workflow (Stub Data) | 3/4 | In Progress|  |
-| 3. Connect Workflow to Real Neo4j | 0/3 | Not started | - |
+| 3. Connect Workflow to Real Neo4j | 0/4 | Not started | - |
 | 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
 | 5. Integration, Polish, and Portfolio Hardening | 0/4 | Not started | - |
