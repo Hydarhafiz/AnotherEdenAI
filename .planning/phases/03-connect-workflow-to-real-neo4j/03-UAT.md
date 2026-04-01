@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 03-connect-workflow-to-real-neo4j
 source: 03-01-SUMMARY.md, 03-02-SUMMARY.md
 started: 2026-04-02T00:00:00Z
@@ -58,7 +58,14 @@ blocked: 0
   reason: "User reported: test_known_nodes.py errors during loaded_db fixture setup — ETL scraper hits anothereden.wiki/w/Grasta_Special and gets 403 Forbidden. Phase 3 integration suite (test_query_pipeline.py) itself passes 10/12 (2 skipped due to LLM rate limit)."
   severity: minor
   test: 7
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "loaded_db fixture in tests/conftest.py:57 triggers ETL when DB has < 100 characters. ETL's scrape_all() requests anothereden.wiki/w/Grasta_Special via httpx with User-Agent 'AnotherEdenAI-research-bot'. Wiki returns 403 (bot block or rate limit). Scraper has no retry/fallback and raises immediately. Only fires on cold DB; once DB is populated the fixture skips ETL."
+  artifacts:
+    - path: "tests/conftest.py"
+      issue: "loaded_db fixture runs full ETL when count < 100 — no guard for wiki unavailability"
+    - path: "src/etl/scraper.py"
+      issue: "fetch_page raises immediately on 403 with no retry or graceful skip"
+  missing:
+    - "Either: skip test_known_nodes when wiki is unreachable (pytest.mark with condition check)"
+    - "Or: add retry/backoff to fetch_page and fall back to cached fixture data on 403"
+    - "Or: pre-populate DB before running full test suite (documented in README)"
   debug_session: ""
