@@ -144,13 +144,16 @@ async def test_name_normalization_exact_match_preferred(async_driver, loaded_db)
 
 @pytest.mark.integration
 async def test_normalize_roster_end_to_end(async_driver, loaded_db):
-    """QUERY-04: normalize_roster resolves mixed-case inputs to canonical names.
+    """QUERY-04: normalize_roster resolves valid names and drops unknown ones.
 
-    'ALDO' and 'ciel' should both resolve to their canonical forms.
+    'ALDO' normalizes to canonical 'Aldo'. An unknown name is silently dropped.
+    Tests both case normalization and unresolvable-name filtering in one pass.
     """
-    result = await normalize_roster(async_driver, ["ALDO", "feinne"])
+    result = await normalize_roster(async_driver, ["ALDO", "NONEXISTENT_CHAR_XYZ"])
     assert "Aldo" in result, f"Expected 'Aldo' in normalized roster, got {result}"
-    assert "Feinne" in result, f"Expected 'Feinne' in normalized roster, got {result}"
+    assert "NONEXISTENT_CHAR_XYZ" not in result, (
+        f"Expected unknown character to be dropped from roster, got {result}"
+    )
 
 
 # ---------------------------------------------------------------------------
