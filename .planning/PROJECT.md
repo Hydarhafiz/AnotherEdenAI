@@ -12,26 +12,21 @@ Players receive mathematically sound team recommendations that strictly follow g
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ System scrapes character, Grasta, and personality data from anothereden.wiki — Phase 1
+- ✓ Scraped data is transformed and loaded into Neo4j graph database — Phase 1
+- ✓ Graph models character-personality-Grasta relationships and synergies — Phase 1
+- ✓ PLAN agent (Sonnet 4.6) breaks down user query into sub-goals — Phase 2
+- ✓ GENERATE_CYPHER agent (Sonnet 4.6) translates plan into Neo4j graph queries — Phase 2
+- ✓ VALIDATE agent (Haiku 4.6) verifies query syntax and game rule validity — Phase 2
+- ✓ VALIDATE agent triggers retry loop (max 3x) when queries fail — Phase 2
+- ✓ ANALYZE agent (Sonnet 4.6) synthesizes query results into final recommendation — Phase 2
+- ✓ System constrains recommendations to owned characters + F2P units — Phase 3
+- ✓ User can input their roster (owned characters) manually — Phase 3
 
 ### Active
 
-**Data Pipeline:**
-- [ ] System scrapes character, Grasta, and personality data from anothereden.wiki
-- [ ] Scraped data is transformed and loaded into Neo4j graph database
-- [ ] Graph models character-personality-Grasta relationships and synergies
-
 **User Interaction:**
-- [ ] User can input their roster (owned characters) manually
 - [ ] User can query team compositions in natural language
-- [ ] System constrains recommendations to owned characters + F2P units
-
-**Agentic Workflow:**
-- [ ] PLAN agent (Sonnet 4.6) breaks down user query into sub-goals
-- [ ] GENERATE_CYPHER agent (Sonnet 4.6) translates plan into Neo4j graph queries
-- [ ] VALIDATE agent (Haiku 4.6) verifies query syntax and game rule validity
-- [ ] VALIDATE agent triggers retry loop (max 3x) when queries fail
-- [ ] ANALYZE agent (Sonnet 4.6) synthesizes query results into final recommendation
 
 **Output:**
 - [ ] System returns 4-frontline/2-reserve lineup recommendations
@@ -90,4 +85,4 @@ Another Eden playerbase struggling with:
 | AWS App Runner / ECS Fargate deployment via GitHub Actions | MLOps portfolio project must include cloud deployment to demonstrate production-grade CI/CD; automated pipeline on merge to main | — Pending |
 
 ---
-*Last updated: 2026-03-15 — added Ollama local testing and AWS deployment decisions*
+*Last updated: 2026-04-19 after Phase 3 — validated data pipeline, agentic workflow, and roster filtering requirements*
