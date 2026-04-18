@@ -12,10 +12,21 @@ Requirements covered:
 - GRAPH-06: Ore node exists with stats and source (no ENHANCES relationship)
 """
 import pytest
+import pytest_asyncio
+
+from tests.conftest import db_has_characters
+
+
+@pytest_asyncio.fixture(scope="session", loop_scope="session")
+async def populated_db(async_driver, loaded_db):
+    """Ensure DB is actually populated; skip all tests in module if not."""
+    if not await db_has_characters(async_driver):
+        pytest.skip("Neo4j DB not populated — wiki may be unreachable")
+    yield
 
 
 @pytest.mark.integration
-async def test_character_properties(async_driver, loaded_db):
+async def test_character_properties(async_driver, populated_db):
     """Query Aldo and verify element, weapon, light_shadow properties.
 
     Reference: SCHEMA.md — Character node properties
@@ -32,7 +43,7 @@ async def test_character_properties(async_driver, loaded_db):
 
 
 @pytest.mark.integration
-async def test_character_traits(async_driver, loaded_db):
+async def test_character_traits(async_driver, populated_db):
     """Verify Aldo is linked to at least one Trait node via HAS_TRAIT.
 
     Reference: SCHEMA.md — (:Character)-[:HAS_TRAIT]->(:Trait)
@@ -45,7 +56,7 @@ async def test_character_traits(async_driver, loaded_db):
 
 
 @pytest.mark.integration
-async def test_grasta_properties(async_driver, loaded_db):
+async def test_grasta_properties(async_driver, populated_db):
     """Verify a shareable Grasta has all required properties.
 
     Reference: SCHEMA.md — Grasta node properties
@@ -63,7 +74,7 @@ async def test_grasta_properties(async_driver, loaded_db):
 
 
 @pytest.mark.integration
-async def test_grasta_requires_trait(async_driver, loaded_db):
+async def test_grasta_requires_trait(async_driver, populated_db):
     """Verify a non-VC Grasta with personality_req has a REQUIRES_TRAIT edge to a Trait node.
 
     Reference: SCHEMA.md — (:Grasta)-[:REQUIRES_TRAIT]->(:Trait)
@@ -81,7 +92,7 @@ async def test_grasta_requires_trait(async_driver, loaded_db):
 
 
 @pytest.mark.integration
-async def test_no_vc_requires_trait(async_driver, loaded_db):
+async def test_no_vc_requires_trait(async_driver, populated_db):
     """Verify VC Grastas have ZERO REQUIRES_TRAIT edges.
 
     Reference: 01-RESEARCH.md Pitfall 3 — VC Grastas must not have REQUIRES_TRAIT edges
@@ -94,7 +105,7 @@ async def test_no_vc_requires_trait(async_driver, loaded_db):
 
 
 @pytest.mark.integration
-async def test_ore_properties(async_driver, loaded_db):
+async def test_ore_properties(async_driver, populated_db):
     """Verify Ore nodes have stats and source properties (no ENHANCES relationship tested).
 
     Reference: SCHEMA.md — Ore is standalone; no ENHANCES relationship
