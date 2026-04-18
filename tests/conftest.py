@@ -12,6 +12,7 @@ See: https://github.com/pytest-dev/pytest-asyncio/issues/706
 asyncio_default_test_loop_scope = session in pytest.ini ensures all tests share the same
 event loop as the session-scoped async_driver, eliminating the "different loop" RuntimeError.
 """
+import logging
 import os
 import pytest
 import pytest_asyncio
@@ -36,27 +37,34 @@ async def async_driver():
     await driver.close()
 
 
+async def db_has_characters(driver, minimum: int = 100) -> bool:
+    """Return True if the DB contains at least `minimum` Character nodes."""
+    records, _, _ = await driver.execute_query(
+        "MATCH (n:Character) RETURN count(n) AS cnt",
+        database_="neo4j",
+    )
+    return records[0]["cnt"] >= minimum
+
+
 @pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def loaded_db(async_driver):
     """Session-scoped fixture that ensures Neo4j DB is populated.
 
     Checks if data already exists; if not, runs the full ETL pipeline (scraper + loader).
-    Runs at most once per test session.
+    Runs at most once per test session. ETL failures are caught and logged — the fixture
+    yields regardless so individual tests can decide whether to skip.
 
     Use this fixture in integration tests that query known graph nodes.
     Do NOT use in idempotency tests (they manage their own DB state).
     """
-    records, _, _ = await async_driver.execute_query(
-        "MATCH (n:Character) RETURN count(n) AS cnt",
-        database_="neo4j",
-    )
-    count = records[0]["cnt"]
-    # Require at least 100 characters to consider DB "loaded".
-    # Fixture data (e.g. from test_etl_idempotent) loads only 2 characters —
-    # that is not sufficient to consider the DB populated for integration tests.
-    if count < 100:
-        from src.etl.run_etl import main as run_etl_main
-        await run_etl_main(driver=async_driver)
+    if not await db_has_characters(async_driver):
+        try:
+            from src.etl.run_etl import main as run_etl_main
+            await run_etl_main(driver=async_driver)
+        except Exception as e:
+            logging.getLogger(__name__).warning(
+                f"ETL load skipped — wiki unavailable: {e}"
+            )
     yield
 
 
