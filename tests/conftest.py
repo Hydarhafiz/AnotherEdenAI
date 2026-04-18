@@ -57,14 +57,14 @@ async def loaded_db(async_driver):
     Use this fixture in integration tests that query known graph nodes.
     Do NOT use in idempotency tests (they manage their own DB state).
     """
-    if not await db_has_characters(async_driver):
-        try:
+    try:
+        if not await db_has_characters(async_driver):
             from src.etl.run_etl import main as run_etl_main
             await run_etl_main(driver=async_driver)
-        except Exception as e:
-            logging.getLogger(__name__).warning(
-                f"ETL load skipped — wiki unavailable: {e}"
-            )
+    except Exception as e:
+        logging.getLogger(__name__).warning(
+            "DB check or ETL failed — skipping load: %s", e
+        )
     yield
 
 
