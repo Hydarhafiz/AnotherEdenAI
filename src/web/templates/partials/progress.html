@@ -1,0 +1,16 @@
+<!-- Returned by POST /api/query. HTMX swaps this into #progress-container. -->
+<!-- sse-connect automatically opens GET /api/stream/{job_id} -->
+<div id="progress-container"
+     hx-ext="sse"
+     sse-connect="/api/stream/{{ job_id }}"
+     sse-close="done">
+  <p><strong>Pipeline running...</strong></p>
+  <div id="progress-status" sse-swap="node_status">
+    Starting...
+  </div>
+  <div id="result-area"
+       sse-swap="result"
+       hx-swap="outerHTML"
+       hx-target="#result-container">
+  </div>
+</div>

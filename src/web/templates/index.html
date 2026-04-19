@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnotherEden AI — Team Builder</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <script src="https://unpkg.com/htmx-ext-sse@2.2.4/sse.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <script src="/static/app.js" defer></script>
+  <style>
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .tab-btn { cursor: pointer; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .roster-list { max-height: 300px; overflow-y: auto; }
+    .roster-item label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .frontline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .reserve-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem; }
+    .char-card { border: 1px solid var(--pico-muted-border-color); border-radius: 0.5rem; padding: 1rem; text-align: center; }
+    .char-card .role { font-size: 0.85rem; color: var(--pico-muted-color); }
+    .char-card .grastas { font-size: 0.8rem; margin-top: 0.5rem; }
+    .synergy-box { margin-top: 1rem; padding: 1rem; background: var(--pico-card-background-color); border-radius: 0.5rem; }
+    #progress-status { min-height: 2rem; font-style: italic; }
+  </style>
+</head>
+<body>
+<main class="container">
+  <h1>AnotherEden AI — Team Builder</h1>
+
+  <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- Roster panel -->
+    <section>
+      <h2>Your Roster</h2>
+      <div class="tabs">
+        <button class="tab-btn" onclick="switchTab('characters')" id="tab-characters">Characters</button>
+        <button class="tab-btn" onclick="switchTab('grastas')" id="tab-grastas">Grastas</button>
+      </div>
+
+      <div id="panel-characters" class="tab-panel active">
+        <input type="search" id="character-search" placeholder="Search characters..." oninput="filterList('characters')">
+        <div class="roster-list" id="character-list">
+          <p aria-busy="true">Loading characters...</p>
+        </div>
+      </div>
+
+      <div id="panel-grastas" class="tab-panel">
+        <input type="search" id="grasta-search" placeholder="Search Grastas..." oninput="filterList('grastas')">
+        <div class="roster-list" id="grasta-list">
+          <p aria-busy="true">Loading Grastas...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Query panel -->
+    <section>
+      <h2>Ask a Question</h2>
+      <form id="query-form"
+            hx-post="/api/query"
+            hx-target="#progress-container"
+            hx-swap="innerHTML"
+            hx-ext="json-enc">
+        <input type="hidden" id="roster-payload" name="roster" value="[]">
+        <label for="query-input">Team building query</label>
+        <input type="text"
+               id="query-input"
+               name="query"
+               placeholder="e.g. best blunt-zone team for Water element dungeon"
+               required>
+        <button type="submit">Find Best Team</button>
+      </form>
+
+      <div id="progress-container" style="margin-top: 1.5rem;">
+        <!-- POST /api/query swaps progress.html fragment here -->
+      </div>
+
+      <div id="result-container" style="margin-top: 1rem;">
+        <!-- Final SSE result.html fragment lands here -->
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>
