@@ -151,3 +151,45 @@ def test_parse_ores():
     assert ore.name == "AF After Victory Ore"
     assert "AF Gauge" in ore.stats
     assert "Fog" in ore.source
+
+
+def test_parse_character_overrides():
+    """Manual weapon overrides are applied after model_validate.
+
+    Anabel ES and Mazrika have incorrect weapon data on the wiki.
+    WEAPON_OVERRIDES in models.py corrects them post-validation.
+    """
+    from src.etl.models import parse_character
+
+    # Anabel ES: wiki has wrong weapon; override sets Spear
+    anabel = parse_character({
+        "name": "Anabel ES",
+        "element": "Water",
+        "weapon": "",           # simulate missing/wrong wiki value
+        "light_shadow": "Light",
+        "personalities": "Cool",
+    })
+    assert anabel is not None
+    assert anabel.weapon == "Spear", f"Expected Spear, got {anabel.weapon!r}"
+
+    # Mazrika: wiki has wrong weapon; override sets Axe
+    mazrika = parse_character({
+        "name": "Mazrika",
+        "element": "Fire",
+        "weapon": "",           # simulate missing/wrong wiki value
+        "light_shadow": "Shadow",
+        "personalities": "Wild",
+    })
+    assert mazrika is not None
+    assert mazrika.weapon == "Axe", f"Expected Axe, got {mazrika.weapon!r}"
+
+    # Non-override character: weapon unchanged
+    aldo = parse_character({
+        "name": "Aldo",
+        "element": "Wind",
+        "weapon": "Sword",
+        "light_shadow": "Light",
+        "personalities": "Straw Dummy,Cool",
+    })
+    assert aldo is not None
+    assert aldo.weapon == "Sword"
