@@ -2,11 +2,13 @@
 from pathlib import Path
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.sse import EventSourceResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from ..dependencies import get_driver
+from ..streaming import pipeline_sse_generator
 
 router = APIRouter(prefix="/api")
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
@@ -54,4 +56,30 @@ async def post_query(body: QueryRequest, request: Request):
         request=request,
         name="partials/progress.html",
         context={"job_id": job_id},
+    )
+
+
+@router.get("/stream/{job_id}", response_class=EventSourceResponse)
+async def stream_job(job_id: str, request: Request, driver=Depends(get_driver)):
+    """SSE stream for a pending pipeline job.
+
+    Looks up job_id in app.state.jobs, runs the LangGraph pipeline via
+    pipeline_sse_generator(), streams events to the HTMX client.
+
+    Returns 404 if job_id is not found (e.g., already consumed or invalid UUID).
+    Deletes the job from app.state.jobs before streaming (single-use job store).
+    """
+    jobs = request.app.state.jobs
+    job_data = jobs.pop(job_id, None)
+    if job_data is None:
+        raise HTTPException(status_code=404, detail=f"Job {job_id!r} not found")
+
+    return EventSourceResponse(
+        pipeline_sse_generator(
+            query=job_data["query"],
+            roster=job_data["roster"],
+            driver=driver,
+            templates=templates,
+            request=request,
+        )
     )

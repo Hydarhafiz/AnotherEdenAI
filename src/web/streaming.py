@@ -24,6 +24,8 @@ from collections.abc import AsyncIterable
 from fastapi.sse import ServerSentEvent
 from fastapi.templating import Jinja2Templates
 
+from src.workflow.graph import build_graph
+
 logger = logging.getLogger(__name__)
 
 # Maps LangGraph add_node() string keys to user-facing display labels (per D-11)
@@ -61,8 +63,6 @@ async def pipeline_sse_generator(
         templates: Jinja2Templates instance from the route's templates variable.
         request:   FastAPI Request (used for is_disconnected() check).
     """
-    from src.workflow.graph import build_graph
-
     graph = build_graph(driver=driver)
     initial_state = {
         "user_query": query,
