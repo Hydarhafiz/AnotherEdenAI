@@ -1,0 +1,36 @@
+<!-- Team result card. Rendered server-side by streaming.py, sent as final SSE event. -->
+{% if result.get('error') %}
+<div class="error-card" role="alert">
+  <strong>No team found:</strong> {{ result.error }}
+</div>
+{% else %}
+<article>
+  <h3>Recommended Team</h3>
+  <div class="frontline-grid">
+    {% for char in result.frontline %}
+    <div class="char-card">
+      <strong>{{ char.name }}</strong>
+      <div class="role">{{ char.role }}</div>
+      {% if char.grastas %}
+      <div class="grastas">Grasta: {{ char.grastas | join(', ') }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if result.reserve %}
+  <div class="reserve-grid">
+    {% for char in result.reserve %}
+    <div class="char-card">
+      <strong>{{ char.name }}</strong>
+      <div class="role">{{ char.role }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if result.synergy_explanation %}
+  <div class="synergy-box">
+    <strong>Synergy:</strong> {{ result.synergy_explanation }}
+  </div>
+  {% endif %}
+</article>
+{% endif %}
