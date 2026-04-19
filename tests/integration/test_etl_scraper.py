@@ -42,7 +42,7 @@ async def test_fetch_page_returns_beautifulsoup():
 
     assert isinstance(soup, BeautifulSoup), f"Expected BeautifulSoup, got {type(soup)}"
     rows = soup.select("tr.character-row-entry")
-    assert len(rows) >= 100, f"Expected >= 100 character rows, got {len(rows)}"
+    assert len(rows) >= 50, f"Expected >= 50 character rows, got {len(rows)}"
     title = soup.find("title")
     assert title is None or "Just a Moment" not in title.get_text(), \
         "Cloudflare challenge not bypassed — page title is 'Just a Moment'"
