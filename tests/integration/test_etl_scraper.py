@@ -36,7 +36,7 @@ async def test_fetch_page_returns_beautifulsoup():
         headless=False,
     )
     try:
-        soup = await fetch_page(browser, "https://anothereden.wiki/w/Characters")
+        soup = await fetch_page(browser, "https://anothereden.wiki/w/Characters", "tr.character-row-entry")
     finally:
         browser.stop()
 
