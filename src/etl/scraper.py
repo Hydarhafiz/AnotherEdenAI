@@ -181,12 +181,10 @@ async def scrape_all() -> dict:
     """
     browser = await uc.start(
         browser_executable_path=CHROMIUM_PATH,
-        headless=True,
+        headless=False,  # non-headless required — Cloudflare detects headless fingerprint
         browser_args=[
-            "--no-sandbox",           # required in WSL2/Docker — kernel lacks user namespaces
+            "--no-sandbox",            # required in WSL2 — kernel lacks user namespaces
             "--disable-setuid-sandbox",
-            "--headless=new",
-            "--disable-gpu",
         ],
     )
     try:
