@@ -1,7 +1,8 @@
-"""Async httpx scraper for the AnotherEden wiki.
+"""Async nodriver scraper for the AnotherEden wiki.
 
-Fetches all 7 wiki pages concurrently using a single AsyncClient with
-Semaphore(5) to limit concurrent requests. Returns validated model instances.
+Fetches all 7 wiki pages sequentially using a single nodriver browser instance.
+Cloudflare Turnstile is bypassed because nodriver drives real Chrome via CDP —
+not detectable as a bot. Returns validated model instances.
 
 Critical column mappings (verified against live wiki — see 01-RESEARCH.md):
   Grasta (non-VC):
@@ -22,11 +23,10 @@ Critical column mappings (verified against live wiki — see 01-RESEARCH.md):
     col[2] = stats/effect description
     col[3] = source/location
 """
-import asyncio
 import logging
 from typing import Optional
 
-import httpx
+import nodriver as uc
 from bs4 import BeautifulSoup
 
 from .constants import WIKI_URLS, GRASTA_CATEGORIES
@@ -34,23 +34,42 @@ from .models import CharacterRow, GrastaRow, OreRow, parse_character, parse_gras
 
 logger = logging.getLogger(__name__)
 
-SEMAPHORE = asyncio.Semaphore(5)
-LIMITS = httpx.Limits(max_keepalive_connections=5, max_connections=10)
-HEADERS = {"User-Agent": "Mozilla/5.0 (AnotherEdenAI-research-bot)"}
-TIMEOUT = 15.0
+# Linux Chromium installed by Playwright. Do NOT use Windows Chrome from /mnt/c/...
+# WSL2 CDP communication fails with the Windows binary.
+CHROMIUM_PATH = "/home/shogunix/.cache/ms-playwright/chromium-1187/chrome-linux/chrome"
 
 
-async def fetch_page(client: httpx.AsyncClient, url: str) -> BeautifulSoup:
-    """Fetch a URL and return a parsed BeautifulSoup object.
+async def fetch_page(browser, url: str) -> BeautifulSoup:
+    """Navigate to url using the provided nodriver Browser and return parsed HTML.
 
-    Acquires SEMAPHORE before each request to honour the 5-connection limit.
-    Raises httpx.HTTPError on non-2xx responses.
+    Waits 2 seconds after navigation for Cloudflare JS challenge to auto-resolve.
+    If the page title is still "Just a Moment" (Turnstile blocking), raises RuntimeError
+    so the caller knows to add verify_cf() support.
+
+    Args:
+        browser: A nodriver Browser instance (from uc.start()).
+        url: The fully-qualified wiki URL to fetch.
+
+    Returns:
+        BeautifulSoup parsed from the live DOM after JS execution.
     """
-    async with SEMAPHORE:
-        response = await client.get(url, timeout=TIMEOUT)
-        response.raise_for_status()
-        return BeautifulSoup(response.text, "html.parser")
+    tab = await browser.get(url)
+    await tab.sleep(2)
+    html = await tab.get_content()
+    soup = BeautifulSoup(html, "html.parser")
+    title = soup.find("title")
+    if title and "Just a Moment" in title.get_text():
+        raise RuntimeError(
+            f"Cloudflare Turnstile blocked {url!r}. "
+            "Install opencv-python and add 'await tab.verify_cf()' to fetch_page()."
+        )
+    return soup
 
+
+# ---------------------------------------------------------------------------
+# Parse functions — UNCHANGED from original httpx implementation.
+# These operate on BeautifulSoup objects regardless of how the HTML was fetched.
+# ---------------------------------------------------------------------------
 
 def parse_characters(soup: BeautifulSoup) -> list[CharacterRow]:
     """Extract CharacterRow instances from a parsed Characters wiki page."""
@@ -149,26 +168,33 @@ def parse_ores(soup: BeautifulSoup) -> list[OreRow]:
 
 
 async def scrape_all() -> dict:
-    """Scrape all 7 wiki pages concurrently and return validated model instances.
+    """Scrape all 7 wiki pages sequentially using a single nodriver browser.
+
+    Opens one Chrome process, navigates to each URL in order, closes Chrome
+    when done. Sequential (not parallel) — nodriver's Browser is not designed
+    for concurrent CDP tab streams.
 
     Returns a dict with keys "characters", "grastas", "ores":
       - characters: list[CharacterRow]
       - grastas:    list[GrastaRow]  (all 5 categories combined)
       - ores:       list[OreRow]
     """
-    async with httpx.AsyncClient(limits=LIMITS, headers=HEADERS) as client:
-        # Fetch all pages concurrently
-        pages = await asyncio.gather(
-            fetch_page(client, WIKI_URLS["characters"]),
-            fetch_page(client, WIKI_URLS["grasta_attack"]),
-            fetch_page(client, WIKI_URLS["grasta_life"]),
-            fetch_page(client, WIKI_URLS["grasta_support"]),
-            fetch_page(client, WIKI_URLS["grasta_special"]),
-            fetch_page(client, WIKI_URLS["grasta_vc"]),
-            fetch_page(client, WIKI_URLS["grasta_ores"]),
-        )
-
-    char_soup, attack_soup, life_soup, support_soup, special_soup, vc_soup, ore_soup = pages
+    browser = await uc.start(
+        browser_executable_path=CHROMIUM_PATH,
+        headless=False,  # headless=True has known stability issues in nodriver
+        # DISPLAY=:0 is set in WSL2 — non-headless Chrome can render there.
+        # For CI/headless-only: use browser_args=["--headless=new"] instead.
+    )
+    try:
+        char_soup = await fetch_page(browser, WIKI_URLS["characters"])
+        attack_soup = await fetch_page(browser, WIKI_URLS["grasta_attack"])
+        life_soup = await fetch_page(browser, WIKI_URLS["grasta_life"])
+        support_soup = await fetch_page(browser, WIKI_URLS["grasta_support"])
+        special_soup = await fetch_page(browser, WIKI_URLS["grasta_special"])
+        vc_soup = await fetch_page(browser, WIKI_URLS["grasta_vc"])
+        ore_soup = await fetch_page(browser, WIKI_URLS["grasta_ores"])
+    finally:
+        browser.stop()
 
     characters = parse_characters(char_soup)
 
