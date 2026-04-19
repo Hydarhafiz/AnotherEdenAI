@@ -181,9 +181,13 @@ async def scrape_all() -> dict:
     """
     browser = await uc.start(
         browser_executable_path=CHROMIUM_PATH,
-        headless=False,  # headless=True has known stability issues in nodriver
-        # DISPLAY=:0 is set in WSL2 — non-headless Chrome can render there.
-        # For CI/headless-only: use browser_args=["--headless=new"] instead.
+        headless=True,
+        browser_args=[
+            "--no-sandbox",           # required in WSL2/Docker — kernel lacks user namespaces
+            "--disable-setuid-sandbox",
+            "--headless=new",
+            "--disable-gpu",
+        ],
     )
     try:
         char_soup = await fetch_page(browser, WIKI_URLS["characters"])
