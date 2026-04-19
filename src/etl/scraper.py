@@ -39,31 +39,37 @@ logger = logging.getLogger(__name__)
 CHROMIUM_PATH = "/home/shogunix/.cache/ms-playwright/chromium-1187/chrome-linux/chrome"
 
 
-async def fetch_page(browser, url: str) -> BeautifulSoup:
-    """Navigate to url using the provided nodriver Browser and return parsed HTML.
+async def fetch_page(browser, url: str, expected_selector: str) -> BeautifulSoup:
+    """Navigate to url and poll until expected_selector appears in the live DOM.
 
-    Waits 2 seconds after navigation for Cloudflare JS challenge to auto-resolve.
-    If the page title is still "Just a Moment" (Turnstile blocking), raises RuntimeError
-    so the caller knows to add verify_cf() support.
+    Cloudflare's JS challenge auto-resolves in ~2-5s for non-headless Chrome.
+    Wiki tables (Cargo macro) render async after the challenge clears. Polling
+    waits for both — static sleep would silently return 0 rows on a slow page.
 
-    Args:
-        browser: A nodriver Browser instance (from uc.start()).
-        url: The fully-qualified wiki URL to fetch.
-
-    Returns:
-        BeautifulSoup parsed from the live DOM after JS execution.
+    Raises RuntimeError after 10 polls (~18s total) if the selector never appears.
     """
+    logger.info("Fetching %s", url)
     tab = await browser.get(url)
-    await tab.sleep(2)
-    html = await tab.get_content()
-    soup = BeautifulSoup(html, "html.parser")
-    title = soup.find("title")
-    if title and "Just a Moment" in title.get_text():
-        raise RuntimeError(
-            f"Cloudflare Turnstile blocked {url!r}. "
-            "Install opencv-python and add 'await tab.verify_cf()' to fetch_page()."
-        )
-    return soup
+    await tab.sleep(3)  # initial window for CF challenge to auto-resolve
+
+    for attempt in range(10):
+        html = await tab.get_content()
+        soup = BeautifulSoup(html, "html.parser")
+        title = soup.find("title")
+        if title and "just a moment" in title.get_text().lower():
+            logger.debug("[%d/10] Cloudflare challenge pending on %s", attempt + 1, url)
+            await tab.sleep(2)
+            continue
+        if soup.select(expected_selector):
+            logger.info("Found %s on %s", expected_selector, url)
+            return soup
+        logger.debug("[%d/10] Waiting for tables to render on %s", attempt + 1, url)
+        await tab.sleep(1.5)
+
+    raise RuntimeError(
+        f"Timeout: '{expected_selector}' never appeared on {url!r}. "
+        "Cloudflare may be blocking, or the wiki table structure changed."
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -188,13 +194,13 @@ async def scrape_all() -> dict:
         ],
     )
     try:
-        char_soup = await fetch_page(browser, WIKI_URLS["characters"])
-        attack_soup = await fetch_page(browser, WIKI_URLS["grasta_attack"])
-        life_soup = await fetch_page(browser, WIKI_URLS["grasta_life"])
-        support_soup = await fetch_page(browser, WIKI_URLS["grasta_support"])
-        special_soup = await fetch_page(browser, WIKI_URLS["grasta_special"])
-        vc_soup = await fetch_page(browser, WIKI_URLS["grasta_vc"])
-        ore_soup = await fetch_page(browser, WIKI_URLS["grasta_ores"])
+        char_soup = await fetch_page(browser, WIKI_URLS["characters"], "tr.character-row-entry")
+        attack_soup = await fetch_page(browser, WIKI_URLS["grasta_attack"], "tr.grasta-row-entry")
+        life_soup = await fetch_page(browser, WIKI_URLS["grasta_life"], "tr.grasta-row-entry")
+        support_soup = await fetch_page(browser, WIKI_URLS["grasta_support"], "tr.grasta-row-entry")
+        special_soup = await fetch_page(browser, WIKI_URLS["grasta_special"], "tr.grasta-row-entry")
+        vc_soup = await fetch_page(browser, WIKI_URLS["grasta_vc"], "tr.grasta-row-entry")
+        ore_soup = await fetch_page(browser, WIKI_URLS["grasta_ores"], "tr.equip-row-entry")
     finally:
         browser.stop()
 
