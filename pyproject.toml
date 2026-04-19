@@ -17,6 +17,8 @@ dependencies = [
     "langchain-anthropic>=0.3",
     "langchain-ollama>=0.2",
     "langgraph>=1.0",
+    "fastapi[standard]>=0.136.0",
+    "aiofiles>=24.1",
 ]
 
 [project.optional-dependencies]
