@@ -9,6 +9,7 @@ description = "Mathematically optimal team recommendations for Another Eden cons
 requires-python = ">=3.11"
 dependencies = [
     "httpx>=0.27",
+    "nodriver>=0.48.1",
     "beautifulsoup4>=4.12",
     "pydantic>=2.8",
     "neo4j>=5.0",
