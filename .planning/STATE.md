@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Phase 3 complete, ready to plan Phase 4
+stopped_at: Phase 3.1 complete — nodriver scraper live, WEAPON_OVERRIDES added
 last_updated: "2026-04-19T00:00:00Z"
-last_activity: "2026-04-19 - Phase 3 complete: UAT verified (133 passed, 7 skipped), phase marked done, advancing to Phase 4"
+last_activity: "2026-04-19 - Phase 3.1 complete: httpx replaced with nodriver, 6 unit tests pass, integration stub created"
 progress:
   total_phases: 5
-  completed_phases: 3
-  total_plans: 11
-  completed_plans: 11
-  percent: 60
+  completed_phases: 4
+  total_plans: 12
+  completed_plans: 12
+  percent: 80
 ---
 
 # Project State
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 
 Phase: 4 of 5 (FastAPI + HTMX Web Layer) — Ready to plan
 Plan: Not started
-Status: Phase 3 complete — UAT verified, all 4 plans done
-Last activity: 2026-04-19 - Phase 3 complete: full suite 133 passed 7 skipped, UAT resolved, phase marked done
+Status: Phase 3.1 complete — httpx replaced with nodriver, WEAPON_OVERRIDES added, 6 unit tests pass
+Last activity: 2026-04-19 - Phase 3.1 complete: nodriver scraper live, integration stub created, TDD RED/GREEN cycle followed
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -107,6 +107,10 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 None yet.
+
+### Roadmap Evolution
+
+- Phase 3.1 inserted after Phase 3: Cloudflare Bypass — Replace httpx scraper with nodriver (URGENT)
 
 ### Blockers/Concerns
 

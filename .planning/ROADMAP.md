@@ -9,7 +9,7 @@ Five phases, hard-sequenced by dependency. Phase 1 builds the Neo4j graph schema
 - [x] **Phase 1: Graph Foundation** - Finalized, stable Neo4j schema and idempotent ETL pipeline before any LLM prompt is written (completed 2026-03-14)
 - [x] **Phase 2: LangGraph Workflow (Stub Data)** - Full PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE state machine built and tested against mocked Neo4j (completed 2026-03-15)
 - [x] **Phase 3: Connect Workflow to Real Neo4j** - Swap mock responses for real Cypher; validate roster filtering and Grasta traversal against live graph data (completed 2026-04-19)
-- [ ] **Phase 3.1: Cloudflare Bypass — Replace httpx scraper with nodriver** (INSERTED) - Replace fetch_page() with nodriver async headless browser; scrape all 7 wiki pages; add manual overrides for Anabel ES and Mazrika; confirm node counts
+- [x] **Phase 3.1: Cloudflare Bypass — Replace httpx scraper with nodriver** (INSERTED) - Replace fetch_page() with nodriver async headless browser; scrape all 7 wiki pages; add manual overrides for Anabel ES and Mazrika; confirm node counts (completed 2026-04-19)
 - [ ] **Phase 4: FastAPI + HTMX Web Layer** - Expose working pipeline via HTTP with SSE streaming progress UI
 - [ ] **Phase 5: Integration, Polish, and Portfolio Hardening** - End-to-end verified, error paths hardened, recruiter can clone and run pytest cold
 
@@ -82,7 +82,7 @@ Plans:
   4. Post-ETL node counts match EXPECTED_NODE_COUNTS in `constants.py` — assertion exits 0
 
 Plans:
-- [ ] 03.1-01: Replace fetch_page() with nodriver — implement async nodriver scraper; wire all 7 URL targets; confirm HTML extraction with Cloudflare bypass; no parser or loader changes
+- [x] 03.1-01: Replace fetch_page() with nodriver — implement async nodriver scraper; wire all 7 URL targets; confirm HTML extraction with Cloudflare bypass; no parser or loader changes
 
 ### Phase 4: FastAPI + HTMX Web Layer
 **Goal**: The working pipeline is exposed via HTTP with a streaming progress UI — users can submit roster and query through a browser and see pipeline node status update in real time
@@ -127,6 +127,6 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 | 1. Graph Foundation | 3/3 | Complete   | 2026-03-14 |
 | 2. LangGraph Workflow (Stub Data) | 4/4 | Complete | 2026-03-15 |
 | 3. Connect Workflow to Real Neo4j | 4/4 | Complete | 2026-04-19 |
-| 3.1. Cloudflare Bypass — nodriver (INSERTED) | 0/1 | Not started | - |
+| 3.1. Cloudflare Bypass — nodriver (INSERTED) | 1/1 | Complete | 2026-04-19 |
 | 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
 | 5. Integration, Polish, and Portfolio Hardening | 0/4 | Not started | - |
