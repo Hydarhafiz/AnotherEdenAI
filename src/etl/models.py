@@ -65,14 +65,27 @@ class OreRow(BaseModel):
 # Parse helpers with ETL_MODE toggle
 # ---------------------------------------------------------------------------
 
+# Manual overrides for characters with incorrect weapon data on the wiki.
+# Applied after CharacterRow.model_validate() using Pydantic v2 model_copy().
+# Keys must match the exact data-name attribute value from the wiki HTML.
+WEAPON_OVERRIDES: dict[str, str] = {
+    "Anabel ES": "Spear",
+    "Mazrika": "Axe",
+}
+
+
 def parse_character(raw: dict) -> Optional[CharacterRow]:
     """Validate a raw character dict into a CharacterRow.
 
     In strict mode (STRICT=True), raises ValidationError on invalid data.
     In lenient mode (STRICT=False), logs a warning and returns None.
+    Applies WEAPON_OVERRIDES after validation for characters with incorrect wiki data.
     """
     try:
-        return CharacterRow.model_validate(raw)
+        char = CharacterRow.model_validate(raw)
+        if char.name in WEAPON_OVERRIDES:
+            char = char.model_copy(update={"weapon": WEAPON_OVERRIDES[char.name]})
+        return char
     except Exception as exc:
         if STRICT:
             raise
