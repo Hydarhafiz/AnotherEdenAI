@@ -74,12 +74,15 @@ async def stream_job(job_id: str, request: Request, driver=Depends(get_driver)):
     if job_data is None:
         raise HTTPException(status_code=404, detail=f"Job {job_id!r} not found")
 
-    return EventSourceResponse(
-        pipeline_sse_generator(
-            query=job_data["query"],
-            roster=job_data["roster"],
-            driver=driver,
-            templates=templates,
-            request=request,
-        )
-    )
+    # ServerSentEvent must be yielded directly from the path operation so
+    # FastAPI's routing layer handles SSE wire encoding. Wrapping in
+    # EventSourceResponse(generator) tries to .encode() the dataclass as bytes
+    # and crashes silently after sending 200 OK headers.
+    async for event in pipeline_sse_generator(
+        query=job_data["query"],
+        roster=job_data["roster"],
+        driver=driver,
+        templates=templates,
+        request=request,
+    ):
+        yield event
