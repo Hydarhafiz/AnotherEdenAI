@@ -85,33 +85,33 @@ async def pipeline_sse_generator(
                 logger.info("Client disconnected during SSE stream — stopping pipeline")
                 break
 
-            if chunk.get("type") == "updates":
-                for node_name, state_update in chunk["data"].items():
-                    label = NODE_LABELS.get(node_name, node_name.upper())
+            # stream_mode="updates" yields {node_name: state_update} dicts directly
+            for node_name, state_update in chunk.items():
+                label = NODE_LABELS.get(node_name, node_name.upper())
 
-                    # Pitfall 7: retry_count in update is post-increment value.
-                    # attempt shown to user = retry_count + 1 for validate node.
-                    if node_name == "validate":
-                        retry_count = state_update.get("retry_count", 0)
-                        attempt = retry_count + 1
-                        max_attempts = 3
-                    else:
-                        attempt = 1
-                        max_attempts = 1
+                # Pitfall 7: retry_count in update is post-increment value.
+                # attempt shown to user = retry_count + 1 for validate node.
+                if node_name == "validate":
+                    retry_count = state_update.get("retry_count", 0)
+                    attempt = retry_count + 1
+                    max_attempts = 3
+                else:
+                    attempt = 1
+                    max_attempts = 1
 
-                    event_data = json.dumps({
-                        "event": "node_status",
-                        "node": label,
-                        "attempt": attempt,
-                        "max": max_attempts,
-                    })
+                event_data = json.dumps({
+                    "event": "node_status",
+                    "node": label,
+                    "attempt": attempt,
+                    "max": max_attempts,
+                })
 
-                    yield ServerSentEvent(data=event_data, event="node_status")
-                    logger.debug("SSE node_status: node=%s attempt=%d", label, attempt)
+                yield ServerSentEvent(data=event_data, event="node_status")
+                logger.debug("SSE node_status: node=%s attempt=%d", label, attempt)
 
-                    # Capture final_output from format node for result rendering
-                    if node_name == "format" and "final_output" in state_update:
-                        final_output = state_update["final_output"]
+                # Capture final_output from format node for result rendering
+                if node_name == "format" and "final_output" in state_update:
+                    final_output = state_update["final_output"]
 
     except Exception as exc:  # noqa: BLE001
         logger.exception("Pipeline error during SSE stream: %s", exc)

@@ -35,7 +35,7 @@ def _make_mock_graph_astream(*node_updates):
     """Return an async generator factory that yields the given {node_name: state_update} dicts."""
     async def mock_astream(*args, **kwargs):
         for node_name, state_update in node_updates:
-            yield {"type": "updates", "data": {node_name: state_update}}
+            yield {node_name: state_update}
 
     mock_graph = MagicMock()
     mock_graph.astream = mock_astream
