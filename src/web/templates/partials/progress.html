@@ -1,16 +1,75 @@
-<!-- Returned by POST /api/query. HTMX swaps this into #progress-container. -->
-<!-- sse-connect automatically opens GET /api/stream/{job_id} -->
+<!-- partials/progress.html — returned by POST /api/query -->
+<!-- HTMX opens SSE GET connection to /api/stream/{job_id} automatically. -->
+<!-- sse-close="done" tells the SSE extension to close when "done" event fires. -->
 <div id="progress-container"
      hx-ext="sse"
      sse-connect="/api/stream/{{ job_id }}"
      sse-close="done">
-  <p><strong>Pipeline running...</strong></p>
-  <div id="progress-status" sse-swap="node_status">
+
+  <p><strong>Running pipeline...</strong></p>
+
+  <!-- sse-swap="node_status" swaps this div's innerHTML on every node_status event. -->
+  <!-- The inline script intercepts htmx:sseMessage to format JSON as readable text. -->
+  <div id="progress-status" sse-swap="node_status" aria-live="polite">
     Starting...
   </div>
+
+  <!-- sse-swap="result" replaces result-area when final result event arrives. -->
   <div id="result-area"
        sse-swap="result"
        hx-swap="outerHTML"
        hx-target="#result-container">
   </div>
 </div>
+
+<script>
+/**
+ * Transform SSE node_status JSON events into readable progress text (D-13).
+ * HTMX normally swaps raw SSE data into the target element.
+ * We intercept htmx:sseMessage to parse JSON and render human-readable text.
+ */
+(function () {
+  const NODE_DESCRIPTIONS = {
+    "PLAN":     "Planning query strategy...",
+    "CYPHER":   "Generating Cypher query...",
+    "VALIDATE": "Validating query results...",
+    "ANALYZE":  "Analyzing team composition...",
+    "FORMAT":   "Formatting recommendations...",
+    "ERROR":    "Pipeline error — please retry.",
+  };
+
+  document.addEventListener("htmx:sseMessage", function (evt) {
+    // Only handle node_status events (ignore result and done)
+    if (evt.detail.type !== "node_status") return;
+
+    let payload;
+    try {
+      payload = JSON.parse(evt.detail.data);
+    } catch (e) {
+      return;  // Non-JSON data — let HTMX handle it normally
+    }
+
+    if (payload.event !== "node_status") return;
+
+    const node = payload.node || "UNKNOWN";
+    const attempt = payload.attempt || 1;
+    const max = payload.max || 1;
+
+    let text = NODE_DESCRIPTIONS[node] || (node + "...");
+
+    // D-13: "Validating... attempt 2/3" for VALIDATE retries
+    if (node === "VALIDATE" && attempt > 1) {
+      text = "Validating... attempt " + attempt + "/" + max;
+    }
+
+    // Update the progress-status div content directly
+    const statusDiv = document.getElementById("progress-status");
+    if (statusDiv) {
+      statusDiv.textContent = text;
+    }
+
+    // Prevent HTMX from swapping raw JSON into the div
+    evt.preventDefault();
+  });
+})();
+</script>

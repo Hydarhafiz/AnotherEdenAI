@@ -1,36 +1,50 @@
-<!-- Team result card. Rendered server-side by streaming.py, sent as final SSE event. -->
+<!-- Team result card — rendered by streaming.py, sent as final SSE event data. -->
+<!-- result dict has: frontline, reserve, synergy_explanation, error (None on success) -->
 {% if result.get('error') %}
-<div class="error-card" role="alert">
-  <strong>No team found:</strong> {{ result.error }}
-</div>
+  <!-- Error path: retry cap exhausted -->
+  {% include "partials/error.html" with context %}
+{% elif not result.get('frontline') %}
+  <!-- Empty path: pipeline ran but returned no team -->
+  {% include "partials/empty.html" with context %}
 {% else %}
-<article>
-  <h3>Recommended Team</h3>
-  <div class="frontline-grid">
-    {% for char in result.frontline %}
-    <div class="char-card">
-      <strong>{{ char.name }}</strong>
-      <div class="role">{{ char.role }}</div>
-      {% if char.grastas %}
-      <div class="grastas">Grasta: {{ char.grastas | join(', ') }}</div>
-      {% endif %}
+  <!-- Happy path: render 4-frontline / 2-reserve grid (D-16, D-17, D-18) -->
+  <article>
+    <header><h3>Recommended Team</h3></header>
+
+    <div class="frontline-grid">
+      {% for char in result.frontline %}
+      <div class="char-card">
+        <strong>{{ char.name }}</strong>
+        <div class="role">{{ char.role }}</div>
+        {% if char.grastas %}
+        <div class="grastas">
+          <small>Grasta: {{ char.grastas | join(', ') }}</small>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  {% if result.reserve %}
-  <div class="reserve-grid">
-    {% for char in result.reserve %}
-    <div class="char-card">
-      <strong>{{ char.name }}</strong>
-      <div class="role">{{ char.role }}</div>
+
+    {% if result.reserve %}
+    <div class="reserve-grid">
+      {% for char in result.reserve %}
+      <div class="char-card">
+        <strong>{{ char.name }}</strong>
+        <div class="role">{{ char.role }}</div>
+        {% if char.grastas %}
+        <div class="grastas">
+          <small>Grasta: {{ char.grastas | join(', ') }}</small>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-  {% if result.synergy_explanation %}
-  <div class="synergy-box">
-    <strong>Synergy:</strong> {{ result.synergy_explanation }}
-  </div>
-  {% endif %}
-</article>
+    {% endif %}
+
+    {% if result.synergy_explanation %}
+    <div class="synergy-box">
+      <strong>Synergy:</strong> {{ result.synergy_explanation }}
+    </div>
+    {% endif %}
+  </article>
 {% endif %}

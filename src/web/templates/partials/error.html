@@ -1,0 +1,13 @@
+<!-- partials/error.html — uses result dict passed from result.html include -->
+<!-- Rendered when result.error is set (retry cap exhausted or pipeline failure). -->
+<article role="alert" style="border-left: 4px solid #e74c3c; padding: 1rem;">
+  <header><strong>No recommendation found</strong></header>
+  <p>The AI could not generate a valid Cypher query after 3 attempts.</p>
+  {% if result.error %}
+  <details>
+    <summary>Error details</summary>
+    <pre style="font-size: 0.8rem; white-space: pre-wrap;">{{ result.error }}</pre>
+  </details>
+  {% endif %}
+  <p><small>Try rephrasing your query or adding more characters to your roster.</small></p>
+</article>
