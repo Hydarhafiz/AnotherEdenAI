@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 4 planned — Wave 1: FastAPI skeleton+tests, Wave 2: SSE streaming, Wave 3: UI polish+smoke test"
-stopped_at: Phase 3 complete, ready to plan Phase 4
-last_updated: "2026-04-21T15:20:25.844Z"
-last_activity: "2026-04-19 - Phase 3.1 complete: nodriver scraper live, integration stub created, TDD RED/GREEN cycle followed"
+status: "Phase 4 complete — all 3 plans done; browser smoke test passed; ready for Phase 5"
+stopped_at: Phase 4 complete, ready for Phase 5
+last_updated: "2026-04-21T16:30:00.000Z"
+last_activity: "2026-04-21 - 04-03 complete: browser smoke test passed (checks A-G), 3 bugs fixed, Phase 4 done"
 progress:
   total_phases: 6
   completed_phases: 5
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 
 ## Current Position
 
-Phase: 4 of 5 (FastAPI + HTMX Web Layer) — Task 1 complete, awaiting browser smoke test
-Plan: 04-03 executing — Wave 3: UI polish (Task 1 done, Task 2 checkpoint pending human-verify)
-Status: Stopped at Task 2 checkpoint:human-verify — browser smoke test required before 04-03 complete
-Last activity: 2026-04-21 - 04-03 Task 1: progress/error/empty partials complete (f6f7784); Jinja2 render check + 18 tests passing; waiting for browser smoke test
+Phase: 4 of 5 (FastAPI + HTMX Web Layer) — COMPLETE
+Plan: 04-03 complete — all tasks done, browser smoke test passed (checks A-G)
+Status: Phase 4 complete. Ready for Phase 5: Integration, Polish, and Portfolio Hardening.
+Last activity: 2026-04-21 - 04-03 complete: browser smoke test passed, 3 bugs fixed (json-enc 422, LangGraph chunk parsing, SSE yield pattern)
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -130,5 +130,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-21
-Stopped at: 04-03 Task 2 checkpoint:human-verify — browser smoke test required
-Resume file: .planning/phases/04-fastapi-htmx-web-layer/04-03-SUMMARY.md
+Stopped at: Phase 4 complete — all plans done, ready for Phase 5
+Resume file: None

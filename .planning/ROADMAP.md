@@ -10,7 +10,7 @@ Five phases, hard-sequenced by dependency. Phase 1 builds the Neo4j graph schema
 - [x] **Phase 2: LangGraph Workflow (Stub Data)** - Full PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE state machine built and tested against mocked Neo4j (completed 2026-03-15)
 - [x] **Phase 3: Connect Workflow to Real Neo4j** - Swap mock responses for real Cypher; validate roster filtering and Grasta traversal against live graph data (completed 2026-04-19)
 - [x] **Phase 3.1: Cloudflare Bypass — Replace httpx scraper with nodriver** (INSERTED) - Replace fetch_page() with nodriver async headless browser; scrape all 7 wiki pages; add manual overrides for Anabel ES and Mazrika; confirm node counts (completed 2026-04-19)
-- [ ] **Phase 4: FastAPI + HTMX Web Layer** - Expose working pipeline via HTTP with SSE streaming progress UI
+- [x] **Phase 4: FastAPI + HTMX Web Layer** - Expose working pipeline via HTTP with SSE streaming progress UI (completed 2026-04-21)
 - [ ] **Phase 5: Integration, Polish, and Portfolio Hardening** - End-to-end verified, error paths hardened, recruiter can clone and run pytest cold
 
 ## Phase Details
@@ -128,5 +128,5 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 | 2. LangGraph Workflow (Stub Data) | 4/4 | Complete | 2026-03-15 |
 | 3. Connect Workflow to Real Neo4j | 4/4 | Complete | 2026-04-19 |
 | 3.1. Cloudflare Bypass — nodriver (INSERTED) | 1/1 | Complete | 2026-04-19 |
-| 4. FastAPI + HTMX Web Layer | 0/3 | Not started | - |
+| 4. FastAPI + HTMX Web Layer | 3/3 | Complete | 2026-04-21 |
 | 5. Integration, Polish, and Portfolio Hardening | 0/4 | Not started | - |
