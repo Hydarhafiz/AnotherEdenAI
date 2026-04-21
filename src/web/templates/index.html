@@ -56,11 +56,7 @@
     <!-- Query panel -->
     <section>
       <h2>Ask a Question</h2>
-      <form id="query-form"
-            hx-post="/api/query"
-            hx-target="#progress-container"
-            hx-swap="innerHTML"
-            hx-ext="json-enc">
+      <form id="query-form">
         <input type="hidden" id="roster-payload" name="roster" value="[]">
         <label for="query-input">Team building query</label>
         <input type="text"

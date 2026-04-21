@@ -81,18 +81,33 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("grasta-list").innerHTML = "<p>Error loading Grastas.</p>";
     });
 
-  // Wire query form: intercept htmx:configRequest (fires BEFORE json-enc
-  // serialises parameters) to inject the roster as a parsed array.
-  // htmx:beforeRequest fires AFTER json-enc encodes — too late to fix types.
+  // Wire query form: use fetch() directly so the roster array reaches the
+  // FastAPI endpoint as a real JSON array (json-enc was serialising the hidden
+  // input's string value, not its parsed contents, causing 422 errors).
   const form = document.getElementById("query-form");
   if (form) {
-    form.addEventListener("htmx:configRequest", (evt) => {
+    form.addEventListener("submit", async (evt) => {
+      evt.preventDefault();
       updateRosterPayload();
+      const query = document.getElementById("query-input").value.trim();
+      if (!query) return;
+      const roster = loadRoster();
+      const container = document.getElementById("progress-container");
+      container.innerHTML = "<p aria-busy='true'>Submitting...</p>";
       try {
-        const rosterStr = document.getElementById("roster-payload").value;
-        evt.detail.parameters["roster"] = JSON.parse(rosterStr);
-      } catch (_) {
-        evt.detail.parameters["roster"] = [];
+        const resp = await fetch("/api/query", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, roster }),
+        });
+        if (!resp.ok) {
+          container.innerHTML = `<p style="color:red">Error ${resp.status}: ${resp.statusText}</p>`;
+          return;
+        }
+        container.innerHTML = await resp.text();
+        htmx.process(container);  // let HTMX activate SSE extension on swapped fragment
+      } catch (err) {
+        container.innerHTML = `<p style="color:red">Network error: ${err.message}</p>`;
       }
     });
   }
