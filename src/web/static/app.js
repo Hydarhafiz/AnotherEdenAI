@@ -81,10 +81,23 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("grasta-list").innerHTML = "<p>Error loading Grastas.</p>";
     });
 
-  // Wire query form to include current roster as JSON before POST
+  // Wire query form: update roster hidden field before HTMX serializes, then
+  // parse the JSON string back into an array so json-enc sends a real array
+  // (not a string) — prevents 422 from Pydantic's list[str] validation.
   const form = document.getElementById("query-form");
   if (form) {
-    form.addEventListener("htmx:beforeRequest", () => updateRosterPayload());
+    form.addEventListener("htmx:beforeRequest", (evt) => {
+      updateRosterPayload();
+      // json-enc encodes each field value as-is; override parameters so that
+      // roster is a parsed array rather than the raw JSON string stored in the
+      // hidden input's .value attribute.
+      try {
+        const rosterStr = document.getElementById("roster-payload").value;
+        evt.detail.parameters["roster"] = JSON.parse(rosterStr);
+      } catch (_) {
+        evt.detail.parameters["roster"] = [];
+      }
+    });
     form.addEventListener("submit", () => updateRosterPayload());
   }
 });
