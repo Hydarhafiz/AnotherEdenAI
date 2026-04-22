@@ -1,9 +1,10 @@
 ---
-status: complete
+status: resolved
 phase: 04-fastapi-htmx-web-layer
 source: [04-01-SUMMARY.md, 04-02-SUMMARY.md, 04-03-SUMMARY.md]
 started: 2026-04-22T13:58:28Z
-updated: 2026-04-22T14:00:00Z
+updated: 2026-04-22T19:00:00Z
+gap_closure: 04.1-gap-closure
 ---
 
 ## Current Test
@@ -73,7 +74,7 @@ blocked: 0
 ## Gaps
 
 - truth: "SSE node_status events should display as human-readable status text (e.g. 'Planning...', 'Generating Cypher...') in the progress div — not raw JSON"
-  status: failed
+  status: resolved
   reason: "User reported: progress div shows raw JSON for all pipeline nodes instead of formatted text"
   severity: minor
   test: 6
@@ -83,7 +84,7 @@ blocked: 0
   missing: []
 
 - truth: "Result card should consistently show 4-character frontline grid + 2-character reserve row on every successful pipeline run"
-  status: failed
+  status: resolved
   reason: "User reported: inconsistent lineup size — 6 characters (4+2) one run, 3 characters (2+1) another"
   severity: major
   test: 8
@@ -96,7 +97,7 @@ blocked: 0
     - Field(min_length=1, max_length=2) on TeamOutput.reserve
 
 - truth: "ADMIN_KEY must be documented in .env.example and README so users know it is required before testing the admin endpoint"
-  status: failed
+  status: resolved
   reason: "ADMIN_KEY env var is not present in .env and is not documented — user had to read source code to discover it"
   severity: minor
   test: 10
