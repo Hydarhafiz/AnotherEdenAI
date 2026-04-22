@@ -9,7 +9,7 @@
   <p><strong>Running pipeline...</strong></p>
 
   <!-- sse-swap="node_status" swaps this div's innerHTML on every node_status event. -->
-  <!-- The inline script intercepts htmx:sseMessage to format JSON as readable text. -->
+  <!-- The inline script intercepts htmx:sseBeforeMessage (pre-swap, cancellable) to format JSON as readable text. -->
   <div id="progress-status" sse-swap="node_status" aria-live="polite">
     Starting...
   </div>
@@ -38,7 +38,7 @@
     "ERROR":    "Pipeline error — please retry.",
   };
 
-  document.addEventListener("htmx:sseMessage", function (evt) {
+  document.addEventListener("htmx:sseBeforeMessage", function (evt) {
     // Only handle node_status events (ignore result and done)
     if (evt.detail.type !== "node_status") return;
 
