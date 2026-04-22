@@ -32,7 +32,8 @@ Output a JSON object with EXACTLY this structure:
 Rules:
 - ONLY use characters present in the db_results AND the player's roster
 - Assign meaningful roles: AF anchor, healer, DPS, support, buffer, debuffer
-- frontline typically has 3-4 characters; reserve has 1-2
+- frontline MUST contain exactly 4 characters (minimum 3 only if roster/db_results cannot supply 4)
+- reserve MUST contain exactly 2 characters (minimum 1 only if roster/db_results cannot supply 2)
 - Explain Grasta synergies specifically (e.g. "Fire T3 boosts AF damage by 30%")
 - Output ONLY the JSON object — no preamble, no markdown fences"""
 
