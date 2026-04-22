@@ -14,7 +14,7 @@ import json
 import re
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ValidationError
 
 from ..state import WorkflowState
 
@@ -30,14 +30,15 @@ class CharacterSlot(BaseModel):
 class TeamOutput(BaseModel):
     """Structured team recommendation output validated by Pydantic v2.
 
-    frontline: 3-4 characters in the main battle formation
-    reserve: 1-2 backup characters
+    frontline: EXACTLY 3-4 characters in the main battle formation
+    reserve: EXACTLY 1-2 backup characters
     synergy_explanation: human-readable explanation of grasta and role synergies
-    error: set on error path (retry cap exhausted), None on success path
+    error: set on error path (retry cap exhausted OR malformed/non-JSON LLM output),
+           None on success path
     """
 
-    frontline: list[CharacterSlot]
-    reserve: list[CharacterSlot]
+    frontline: list[CharacterSlot] = Field(min_length=3, max_length=4)
+    reserve: list[CharacterSlot] = Field(min_length=1, max_length=2)
     synergy_explanation: str
     error: Optional[str] = None
 
@@ -119,6 +120,18 @@ def format_node(state: WorkflowState) -> dict:
 
     # Happy path: parse and validate analysis_result
     analysis_result = state.get("analysis_result", "")
-    parsed = _extract_json(analysis_result)
-    validated = TeamOutput.model_validate(parsed)
+    try:
+        parsed = _extract_json(analysis_result)
+        validated = TeamOutput.model_validate(parsed)
+    except (ValidationError, ValueError):
+        # ValidationError: shape is wrong (e.g. 2 frontline instead of 3-4)
+        # ValueError: _extract_json could not find JSON in the LLM output
+        return {
+            "final_output": {
+                "frontline": [],
+                "reserve": [],
+                "synergy_explanation": "",
+                "error": "LLM returned malformed team structure — retry or check model",
+            }
+        }
     return {"final_output": validated.model_dump()}
