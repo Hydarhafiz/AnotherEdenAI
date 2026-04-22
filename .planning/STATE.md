@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 4 complete — all 3 plans done; browser smoke test passed; ready for Phase 5"
-stopped_at: Phase 4 complete, ready for Phase 5
-last_updated: "2026-04-21T16:30:00.000Z"
-last_activity: "2026-04-21 - 04-03 complete: browser smoke test passed (checks A-G), 3 bugs fixed, Phase 4 done"
+status: "Phase 4.1 gap closure complete — all 3 UAT gaps resolved, 26 format tests + 108 workflow tests pass; ready for Phase 5"
+stopped_at: Phase 4.1 gap closure complete, ready for Phase 5
+last_updated: "2026-04-22T19:00:00.000Z"
+last_activity: "2026-04-22 - 04.1-01 complete: SSE pre-swap fix, TeamOutput validators, ANALYZE prompt hardened, ADMIN_KEY documented"
 progress:
   total_phases: 6
   completed_phases: 5
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 
 ## Current Position
 
-Phase: 4 of 5 (FastAPI + HTMX Web Layer) — COMPLETE
-Plan: 04-03 complete — all tasks done, browser smoke test passed (checks A-G)
-Status: Phase 4 complete. Ready for Phase 5: Integration, Polish, and Portfolio Hardening.
-Last activity: 2026-04-21 - 04-03 complete: browser smoke test passed, 3 bugs fixed (json-enc 422, LangGraph chunk parsing, SSE yield pattern)
+Phase: 4.1 gap-closure — COMPLETE (all UAT gaps resolved)
+Plan: 04.1-01 complete — SSE event fix, TeamOutput validators, ANALYZE prompt, ADMIN_KEY docs
+Status: Phase 4 + gap-closure complete. Ready for Phase 5: Integration, Polish, and Portfolio Hardening.
+Last activity: 2026-04-22 - 04.1-01 complete: 3 UAT gaps closed, 26 format tests + 108 workflow tests passing
 
 Progress: [██████████] 100%
 
