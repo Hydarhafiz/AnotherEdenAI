@@ -74,24 +74,33 @@ blocked: 0
 
 - truth: "SSE node_status events should display as human-readable status text (e.g. 'Planning...', 'Generating Cypher...') in the progress div — not raw JSON"
   status: failed
-  reason: "User reported: progress div shows raw JSON like {\"event\": \"node_status\", \"node\": \"FORMAT\", \"attempt\": 1, \"max\": 1} for all pipeline nodes instead of formatted text"
+  reason: "User reported: progress div shows raw JSON for all pipeline nodes instead of formatted text"
   severity: minor
   test: 6
-  artifacts: []
+  root_cause: "htmx-ext-sse@2.2.4 fires htmx:sseMessage AFTER the DOM swap is already committed. progress.html listens on htmx:sseMessage and calls evt.preventDefault(), but the swap has already written raw JSON into the DOM — preventDefault() is a no-op. The cancellable hook is htmx:sseBeforeMessage (checked before swap). Fix: change event name on line 41 of progress.html from htmx:sseMessage to htmx:sseBeforeMessage."
+  artifacts:
+    - src/web/templates/partials/progress.html:41
   missing: []
 
 - truth: "Result card should consistently show 4-character frontline grid + 2-character reserve row on every successful pipeline run"
   status: failed
-  reason: "User reported: inconsistent lineup size — 6 characters (4+2) one run, 3 characters (2+1) another. Possibly LLM structured output unreliability (nvidia/nemotron-3-super-120b-a12b:free via OpenRouter) or FORMAT node not enforcing 4+2 structure. Needs investigation."
+  reason: "User reported: inconsistent lineup size — 6 characters (4+2) one run, 3 characters (2+1) another"
   severity: major
   test: 8
-  artifacts: []
-  missing: []
+  root_cause: "analyze.py prompt uses 'typically 3-4 characters' (advisory). TeamOutput Pydantic model in format.py defines frontline/reserve as list[CharacterSlot] with no min_length/max_length constraints — undersized LLM output passes model_validate() silently. Fix: add Field(min_length=3, max_length=4) to frontline and Field(min_length=1, max_length=2) to reserve in TeamOutput. Also harden analyze.py prompt from 'typically' to 'MUST contain exactly N characters'."
+  artifacts:
+    - src/workflow/nodes/format.py (TeamOutput.frontline, TeamOutput.reserve — missing Field validators)
+    - src/workflow/nodes/analyze.py:33 (advisory 'typically' wording)
+  missing:
+    - Field(min_length=3, max_length=4) on TeamOutput.frontline
+    - Field(min_length=1, max_length=2) on TeamOutput.reserve
 
 - truth: "ADMIN_KEY must be documented in .env.example and README so users know it is required before testing the admin endpoint"
   status: failed
-  reason: "ADMIN_KEY env var is not present in .env and is not documented — user had to read source code (dependencies.py) to discover it. Auth worked correctly once ADMIN_KEY was added to .env."
+  reason: "ADMIN_KEY env var is not present in .env and is not documented — user had to read source code to discover it"
   severity: minor
   test: 10
+  root_cause: "No .env.example file exists with ADMIN_KEY entry. README (if present) does not document required env vars for the admin endpoint. Fix: add ADMIN_KEY=<your-secret> to .env.example and document it in setup instructions."
   artifacts: []
-  missing: []
+  missing:
+    - ADMIN_KEY entry in .env.example or equivalent setup docs
