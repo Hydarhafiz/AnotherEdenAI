@@ -24,9 +24,14 @@ def _mock_llm_factory(content="stub response"):
     return llm
 
 
-# Canned ANALYZE JSON response used in happy-path tests
+# Canned ANALYZE JSON response used in happy-path tests.
+# Must have 3-4 frontline and 1-2 reserve to satisfy TeamOutput length validators.
 _ANALYZE_RESPONSE = (
-    '{"frontline": [{"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]}],'
+    '{"frontline": ['
+    '{"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},'
+    '{"name": "Riica", "role": "support", "grastas": ["SPD Up"]},'
+    '{"name": "Bertrand", "role": "tank", "grastas": []}'
+    '],'
     ' "reserve": [{"name": "Ciel", "role": "support", "grastas": []}],'
     ' "synergy_explanation": "Fire synergy with Aldo as main DPS"}'
 )

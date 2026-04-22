@@ -9,6 +9,7 @@ Covers AGENT-06, AGENT-07:
 """
 import json
 import pytest
+from pydantic import ValidationError
 from unittest.mock import MagicMock, patch
 
 from src.workflow.nodes.format import format_node, TeamOutput
@@ -16,16 +17,20 @@ from src.workflow.nodes.format import format_node, TeamOutput
 
 @pytest.fixture
 def valid_team_json():
-    """A valid JSON team recommendation string as ANALYZE would produce."""
+    """A valid JSON team recommendation string as ANALYZE would produce.
+
+    Uses 3 frontline + 1 reserve (minimum valid shape under TeamOutput length validators).
+    """
     return json.dumps({
         "frontline": [
             {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3", "ATK Up"]},
             {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
+            {"name": "Riica", "role": "support", "grastas": ["SPD Up"]},
         ],
         "reserve": [
             {"name": "Miyu", "role": "support", "grastas": []},
         ],
-        "synergy_explanation": "Aldo as fire DPS anchor with Ciel healing and Miyu support.",
+        "synergy_explanation": "Aldo as fire DPS anchor with Ciel healing, Riica boosting speed, and Miyu reserve support.",
     })
 
 
@@ -170,23 +175,27 @@ class TestFormatErrorPath:
             )
 
     def test_format_error_path_is_pydantic_valid(self, error_state):
-        """Error schema must also pass TeamOutput.model_validate."""
+        """Error schema must have the correct keys and types (frontline=[], reserve=[] by design)."""
         result = format_node(error_state)
-        # This must not raise
-        validated = TeamOutput.model_validate(result["final_output"])
-        assert validated is not None
+        final = result["final_output"]
+        assert "frontline" in final and isinstance(final["frontline"], list)
+        assert "reserve" in final and isinstance(final["reserve"], list)
+        assert "synergy_explanation" in final
+        assert "error" in final
 
     def test_format_no_error_path_when_retry_count_2(self, error_state):
         """retry_count=2 (below cap) should NOT trigger error path even with no db_results."""
         state = dict(error_state)
         state["retry_count"] = 2
-        # Should not hit error path — but with no analysis_result and db_results,
-        # this is an edge case. The key assertion is the function does not return error schema.
-        # FORMAT only hits error path if retry_count >= 3 AND db_results is empty.
-        # With retry_count=2, it should attempt to parse analysis_result.
         state["analysis_result"] = json.dumps({
-            "frontline": [{"name": "Aldo", "role": "DPS", "grastas": []}],
-            "reserve": [],
+            "frontline": [
+                {"name": "Aldo", "role": "DPS", "grastas": []},
+                {"name": "Ciel", "role": "healer", "grastas": []},
+                {"name": "Riica", "role": "support", "grastas": []},
+            ],
+            "reserve": [
+                {"name": "Miyu", "role": "support", "grastas": []},
+            ],
             "synergy_explanation": "test",
         })
         result = format_node(state)
@@ -202,20 +211,30 @@ class TestTeamOutputPydanticModel:
     def test_team_output_valid_structure(self):
         """TeamOutput.model_validate must accept a valid team dict."""
         data = {
-            "frontline": [{"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]}],
-            "reserve": [{"name": "Ciel", "role": "support", "grastas": []}],
+            "frontline": [
+                {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
+                {"name": "Ciel", "role": "healer", "grastas": []},
+                {"name": "Riica", "role": "support", "grastas": []},
+            ],
+            "reserve": [{"name": "Miyu", "role": "support", "grastas": []}],
             "synergy_explanation": "Fire synergy.",
         }
         output = TeamOutput.model_validate(data)
         assert output.frontline[0].name == "Aldo"
-        assert output.reserve[0].name == "Ciel"
+        assert output.reserve[0].name == "Miyu"
         assert output.synergy_explanation == "Fire synergy."
 
     def test_team_output_optional_error_field(self):
-        """TeamOutput error field is optional (defaults to None)."""
+        """TeamOutput error field is optional and accepts a string value."""
         data = {
-            "frontline": [],
-            "reserve": [],
+            "frontline": [
+                {"name": "Aldo", "role": "DPS", "grastas": []},
+                {"name": "Ciel", "role": "healer", "grastas": []},
+                {"name": "Riica", "role": "support", "grastas": []},
+            ],
+            "reserve": [
+                {"name": "Miyu", "role": "support", "grastas": []},
+            ],
             "synergy_explanation": "",
             "error": "Query failed",
         }
@@ -225,9 +244,114 @@ class TestTeamOutputPydanticModel:
     def test_team_output_error_defaults_to_none(self):
         """TeamOutput error field defaults to None when not provided."""
         data = {
-            "frontline": [],
-            "reserve": [],
+            "frontline": [
+                {"name": "Aldo", "role": "DPS", "grastas": []},
+                {"name": "Ciel", "role": "healer", "grastas": []},
+                {"name": "Riica", "role": "support", "grastas": []},
+            ],
+            "reserve": [
+                {"name": "Miyu", "role": "support", "grastas": []},
+            ],
             "synergy_explanation": "test",
         }
         output = TeamOutput.model_validate(data)
         assert output.error is None
+
+
+def _slot(name="X"):
+    return {"name": name, "role": "DPS", "grastas": []}
+
+
+class TestTeamOutputLengthValidators:
+    """Gap 2: TeamOutput must enforce frontline 3-4 and reserve 1-2 (UAT gap closure)."""
+
+    def test_rejects_two_frontline(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot("A"), _slot("B")],
+                reserve=[_slot("C")],
+                synergy_explanation="too few frontline",
+            )
+
+    def test_rejects_five_frontline(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot(n) for n in "ABCDE"],
+                reserve=[_slot("F")],
+                synergy_explanation="too many frontline",
+            )
+
+    def test_rejects_zero_reserve(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot(n) for n in "ABC"],
+                reserve=[],
+                synergy_explanation="empty reserve",
+            )
+
+    def test_rejects_three_reserve(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot(n) for n in "ABC"],
+                reserve=[_slot(n) for n in "DEF"],
+                synergy_explanation="too many reserve",
+            )
+
+    def test_accepts_minimum_valid_shape(self):
+        t = TeamOutput(
+            frontline=[_slot(n) for n in "ABC"],
+            reserve=[_slot("D")],
+            synergy_explanation="min valid",
+        )
+        assert len(t.frontline) == 3
+        assert len(t.reserve) == 1
+
+    def test_accepts_maximum_valid_shape(self):
+        t = TeamOutput(
+            frontline=[_slot(n) for n in "ABCD"],
+            reserve=[_slot("E"), _slot("F")],
+            synergy_explanation="max valid",
+        )
+        assert len(t.frontline) == 4
+        assert len(t.reserve) == 2
+
+
+class TestFormatNodeHandlesMalformedTeam:
+    """Gap 2: format_node must catch ValidationError AND ValueError and return error schema."""
+
+    _EXPECTED_ERROR_SCHEMA = {
+        "final_output": {
+            "frontline": [],
+            "reserve": [],
+            "synergy_explanation": "",
+            "error": "LLM returned malformed team structure — retry or check model",
+        }
+    }
+
+    def _base_state(self, analysis_result):
+        return {
+            "user_query": "q",
+            "roster": [],
+            "plan_strategy": "",
+            "cypher_query": "",
+            "db_results": [{"x": 1}],
+            "analysis_result": analysis_result,
+            "retry_count": 0,
+            "validation_errors": [],
+        }
+
+    def test_malformed_team_returns_error_schema(self):
+        """ValidationError path: valid JSON but wrong shape (2 frontline, 1 reserve)."""
+        import json as _json
+        bad_analysis = _json.dumps({
+            "frontline": [_slot("A"), _slot("B")],   # only 2 — invalid
+            "reserve": [_slot("C")],
+            "synergy_explanation": "bad shape",
+        })
+        result = format_node(self._base_state(bad_analysis))
+        assert result == self._EXPECTED_ERROR_SCHEMA
+
+    def test_non_json_llm_response_returns_error_schema(self):
+        """ValueError path: _extract_json raises when LLM returns completely non-JSON text."""
+        result = format_node(self._base_state("Sorry I cannot help"))
+        assert result == self._EXPECTED_ERROR_SCHEMA
