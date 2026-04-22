@@ -9,6 +9,7 @@ Covers AGENT-06, AGENT-07:
 """
 import json
 import pytest
+from pydantic import ValidationError
 from unittest.mock import MagicMock, patch
 
 from src.workflow.nodes.format import format_node, TeamOutput
@@ -255,3 +256,102 @@ class TestTeamOutputPydanticModel:
         }
         output = TeamOutput.model_validate(data)
         assert output.error is None
+
+
+def _slot(name="X"):
+    return {"name": name, "role": "DPS", "grastas": []}
+
+
+class TestTeamOutputLengthValidators:
+    """Gap 2: TeamOutput must enforce frontline 3-4 and reserve 1-2 (UAT gap closure)."""
+
+    def test_rejects_two_frontline(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot("A"), _slot("B")],
+                reserve=[_slot("C")],
+                synergy_explanation="too few frontline",
+            )
+
+    def test_rejects_five_frontline(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot(n) for n in "ABCDE"],
+                reserve=[_slot("F")],
+                synergy_explanation="too many frontline",
+            )
+
+    def test_rejects_zero_reserve(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot(n) for n in "ABC"],
+                reserve=[],
+                synergy_explanation="empty reserve",
+            )
+
+    def test_rejects_three_reserve(self):
+        with pytest.raises(ValidationError):
+            TeamOutput(
+                frontline=[_slot(n) for n in "ABC"],
+                reserve=[_slot(n) for n in "DEF"],
+                synergy_explanation="too many reserve",
+            )
+
+    def test_accepts_minimum_valid_shape(self):
+        t = TeamOutput(
+            frontline=[_slot(n) for n in "ABC"],
+            reserve=[_slot("D")],
+            synergy_explanation="min valid",
+        )
+        assert len(t.frontline) == 3
+        assert len(t.reserve) == 1
+
+    def test_accepts_maximum_valid_shape(self):
+        t = TeamOutput(
+            frontline=[_slot(n) for n in "ABCD"],
+            reserve=[_slot("E"), _slot("F")],
+            synergy_explanation="max valid",
+        )
+        assert len(t.frontline) == 4
+        assert len(t.reserve) == 2
+
+
+class TestFormatNodeHandlesMalformedTeam:
+    """Gap 2: format_node must catch ValidationError AND ValueError and return error schema."""
+
+    _EXPECTED_ERROR_SCHEMA = {
+        "final_output": {
+            "frontline": [],
+            "reserve": [],
+            "synergy_explanation": "",
+            "error": "LLM returned malformed team structure — retry or check model",
+        }
+    }
+
+    def _base_state(self, analysis_result):
+        return {
+            "user_query": "q",
+            "roster": [],
+            "plan_strategy": "",
+            "cypher_query": "",
+            "db_results": [{"x": 1}],
+            "analysis_result": analysis_result,
+            "retry_count": 0,
+            "validation_errors": [],
+        }
+
+    def test_malformed_team_returns_error_schema(self):
+        """ValidationError path: valid JSON but wrong shape (2 frontline, 1 reserve)."""
+        import json as _json
+        bad_analysis = _json.dumps({
+            "frontline": [_slot("A"), _slot("B")],   # only 2 — invalid
+            "reserve": [_slot("C")],
+            "synergy_explanation": "bad shape",
+        })
+        result = format_node(self._base_state(bad_analysis))
+        assert result == self._EXPECTED_ERROR_SCHEMA
+
+    def test_non_json_llm_response_returns_error_schema(self):
+        """ValueError path: _extract_json raises when LLM returns completely non-JSON text."""
+        result = format_node(self._base_state("Sorry I cannot help"))
+        assert result == self._EXPECTED_ERROR_SCHEMA
