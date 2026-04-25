@@ -100,22 +100,23 @@ Plans:
 - [ ] 04-03: UI polish and error display — validation retry progress rendered in UI ("attempt 2/3"); graceful error display when retry cap is exhausted; empty-result message when no matching teams found; smoke test with browser
 
 ### Phase 5: Integration, Polish, and Portfolio Hardening
-**Goal**: The system is end-to-end verified, all error paths are hardened, and the Dockerized app is deployed to AWS via GitHub Actions CI/CD — a recruiter can clone the repo, run pytest, and browse to a live public URL
+**Goal**: The system is end-to-end verified, all error paths are hardened, and a recruiter can clone the repo, run `pytest --tb=short`, and see the app working — OUTPUT-01 through OUTPUT-05 are closed
 **Depends on**: Phase 4 (full stack running)
-**Requirements**: OUTPUT-01, OUTPUT-02, OUTPUT-03, OUTPUT-04, OUTPUT-05, DEPLOY-01, DEPLOY-02, DEPLOY-03
+**Requirements**: OUTPUT-01, OUTPUT-02, OUTPUT-03, OUTPUT-04, OUTPUT-05
+**Note**: DEPLOY-01, DEPLOY-02, DEPLOY-03 deferred by user decision (2026-04-25). Plan 05-04 not created.
 **Success Criteria** (what must be TRUE):
   1. Running `pytest --tb=short` on a clean clone (with env vars set per README) produces a passing suite with no manual setup beyond `uv sync` and env configuration
   2. A query that returns no perfect team match produces a response listing the top 3 closest alternatives with a brief explanation of each tradeoff — it does not return an error or empty page
   3. Every character in a returned lineup has a role annotation (e.g., "AF anchor", "off-element mule", "healer") alongside their name
   4. Every team recommendation includes source attribution — which Grasta plus which personality trait creates each synergy, with no assertion that cannot be traced back to a graph node
   5. End-to-end response time from query submission to recommendation display is measured and confirmed at or below 15 seconds under normal conditions
-  6. A GitHub Actions pipeline builds the Docker image and deploys to AWS App Runner (or ECS Fargate) on merge to main — a public URL is accessible after deploy with no manual intervention
+
+**Plans:** 3 plans
 
 Plans:
-- [ ] 05-01: Output format hardening — enforce 4-frontline/2-reserve structure in FORMAT node; add per-character role annotations; add Grasta + personality source attribution to every synergy claim; add top-3 alternatives for empty/partial matches
-- [ ] 05-02: Full integration test suite — end-to-end pytest tests covering: happy path team recommendation, name normalization, empty-result graceful degradation, retry cap exhaustion, and /admin/refresh-data trigger; all tests runnable cold from README instructions
-- [ ] 05-03: Portfolio hardening — measure and log end-to-end latency; update README with `pytest --tb=short` instructions, env var list, and AuraDB Free setup steps; confirm recruiter cold-clone path works end to end
-- [ ] 05-04: AWS Serverless Deployment — write Dockerfile for FastAPI + HTMX app; write GitHub Actions CI/CD pipeline (build → push to ECR → deploy to AWS App Runner or ECS Fargate); configure env vars from AWS Secrets Manager or Parameter Store; verify public URL accessible after merge to main
+- [ ] 05-01-PLAN.md — Output format hardening: alternatives path (OUTPUT-04), attribution mandate in ANALYZE prompt (OUTPUT-02), AlternativesOutput Pydantic model, route_after_validate routing fix, alternatives accordion template, latency_ms logging
+- [ ] 05-02-PLAN.md — Full integration test suite: 5 D-07 scenarios (happy path, name normalization, alternatives, retry cap, admin auth)
+- [ ] 05-03-PLAN.md — Portfolio hardening: README rewrite with AuraDB quickstart, pytest commands, accurate architecture, cold-clone verification path
 
 ## Progress
 
@@ -129,4 +130,4 @@ Phases execute in strict dependency order: 1 → 2 → 3 → 4 → 5
 | 3. Connect Workflow to Real Neo4j | 4/4 | Complete | 2026-04-19 |
 | 3.1. Cloudflare Bypass — nodriver (INSERTED) | 1/1 | Complete | 2026-04-19 |
 | 4. FastAPI + HTMX Web Layer | 3/3 | Complete | 2026-04-21 |
-| 5. Integration, Polish, and Portfolio Hardening | 0/4 | Not started | - |
+| 5. Integration, Polish, and Portfolio Hardening | 0/3 | Not started | - |
