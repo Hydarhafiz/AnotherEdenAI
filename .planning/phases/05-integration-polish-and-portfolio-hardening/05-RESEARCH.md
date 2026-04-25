@@ -623,7 +623,7 @@ Never make a synergy claim without citing the specific Grasta and trait from the
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **App Runner vs ECS Express Mode for D-08**
    - What we know: App Runner is closed to new customers April 30, 2026 (5 days from today). ECS Express Mode is the official AWS replacement with a dedicated GitHub Action.
