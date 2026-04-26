@@ -12,7 +12,7 @@ import pytest
 from pydantic import ValidationError
 from unittest.mock import MagicMock, patch
 
-from src.workflow.nodes.format import format_node, TeamOutput
+from src.workflow.nodes.format import format_node, TeamOutput, AlternativesOutput
 
 
 @pytest.fixture
@@ -46,6 +46,7 @@ def success_state(valid_team_json):
         "validation_errors": [],
         "retry_count": 0,
         "analysis_result": valid_team_json,
+        "alternatives": "",
         "final_output": {},
     }
 
@@ -62,6 +63,7 @@ def error_state():
         "validation_errors": ["err1", "err2", "err3"],
         "retry_count": 3,
         "analysis_result": "",
+        "alternatives": "",
         "final_output": {},
     }
 
@@ -336,6 +338,7 @@ class TestFormatNodeHandlesMalformedTeam:
             "cypher_query": "",
             "db_results": [{"x": 1}],
             "analysis_result": analysis_result,
+            "alternatives": "",
             "retry_count": 0,
             "validation_errors": [],
         }
@@ -355,3 +358,61 @@ class TestFormatNodeHandlesMalformedTeam:
         """ValueError path: _extract_json raises when LLM returns completely non-JSON text."""
         result = format_node(self._base_state("Sorry I cannot help"))
         assert result == self._EXPECTED_ERROR_SCHEMA
+
+
+@pytest.fixture
+def valid_alternatives_json():
+    team = {
+        "frontline": [
+            {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
+            {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
+            {"name": "Riica", "role": "support", "grastas": []},
+        ],
+        "reserve": [{"name": "Miyu", "role": "support", "grastas": []}],
+        "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) — boosts Fire damage.",
+    }
+    return json.dumps({
+        "alternatives": [team, team, team],
+        "reason": "No Cypher results for highly specific query.",
+    })
+
+
+@pytest.fixture
+def alternatives_state(valid_alternatives_json):
+    return {
+        "user_query": "best fire team",
+        "roster": ["Aldo"],
+        "plan_strategy": "",
+        "cypher_query": "",
+        "db_results": [],
+        "validation_errors": [],
+        "retry_count": 3,
+        "analysis_result": "",
+        "alternatives": valid_alternatives_json,
+        "final_output": {},
+    }
+
+
+class TestFormatAlternativesPath:
+    """format_node alternatives path: alternatives key set produces AlternativesOutput."""
+
+    def test_format_alternatives_returns_only_final_output(self, alternatives_state):
+        result = format_node(alternatives_state)
+        assert list(result.keys()) == ["final_output"]
+
+    def test_format_alternatives_has_alternatives_key(self, alternatives_state):
+        result = format_node(alternatives_state)
+        assert "alternatives" in result["final_output"], "Missing 'alternatives' key"
+
+    def test_format_alternatives_has_exactly_three(self, alternatives_state):
+        result = format_node(alternatives_state)
+        assert len(result["final_output"]["alternatives"]) == 3
+
+    def test_format_alternatives_validates_with_pydantic(self, alternatives_state):
+        result = format_node(alternatives_state)
+        validated = AlternativesOutput.model_validate(result["final_output"])
+        assert validated is not None
+
+    def test_format_alternatives_no_error(self, alternatives_state):
+        result = format_node(alternatives_state)
+        assert result["final_output"].get("error") is None
