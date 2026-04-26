@@ -59,5 +59,6 @@ def sample_state():
         "validation_errors": [],
         "retry_count": 0,
         "analysis_result": "",
+        "alternatives": "",
         "final_output": {},
     }

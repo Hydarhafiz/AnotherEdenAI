@@ -1,0 +1,54 @@
+<!-- partials/alternatives.html — rendered by streaming.py when final_output.alternatives is set -->
+<!-- result dict has: alternatives (list of 3 TeamOutput dicts), reason (str), error (None on success) -->
+{% if result.get('error') %}
+  {% include "partials/error.html" with context %}
+{% else %}
+<article>
+  <header><h3>No exact match found — Top 3 Alternatives</h3></header>
+  {% if result.reason %}
+  <p><small>{{ result.reason }}</small></p>
+  {% endif %}
+
+  {% for alt in result.alternatives %}
+  <details {% if loop.first %}open{% endif %}>
+    <summary><strong>Alternative {{ loop.index }}</strong></summary>
+
+    <div class="frontline-grid">
+      {% for char in alt.frontline %}
+      <div class="char-card">
+        <strong>{{ char.name }}</strong>
+        <div class="role">{{ char.role }}</div>
+        {% if char.grastas %}
+        <div class="grastas">
+          <small>Grasta: {{ char.grastas | join(', ') }}</small>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if alt.reserve %}
+    <div class="reserve-grid">
+      {% for char in alt.reserve %}
+      <div class="char-card">
+        <strong>{{ char.name }}</strong>
+        <div class="role">{{ char.role }}</div>
+        {% if char.grastas %}
+        <div class="grastas">
+          <small>Grasta: {{ char.grastas | join(', ') }}</small>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if alt.synergy_explanation %}
+    <div class="synergy-box">
+      <strong>Synergy:</strong> {{ alt.synergy_explanation }}
+    </div>
+    {% endif %}
+  </details>
+  {% endfor %}
+</article>
+{% endif %}

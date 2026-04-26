@@ -57,20 +57,20 @@ class TestRouteAfterValidate:
         assert route_after_validate(state) == "generate_cypher"
 
     def test_route_after_validate_cap(self):
-        """Empty db_results with retry_count >= 3 must route to format."""
+        """Empty db_results with retry_count >= 3 must route to analyze (alternatives path)."""
         state = {
             "db_results": [],
             "retry_count": 3,
         }
-        assert route_after_validate(state) == "format"
+        assert route_after_validate(state) == "analyze"
 
     def test_route_after_validate_cap_above_three(self):
-        """retry_count > 3 also routes to format (defensive)."""
+        """retry_count > 3 also routes to analyze/alternatives (defensive)."""
         state = {
             "db_results": [],
             "retry_count": 5,
         }
-        assert route_after_validate(state) == "format"
+        assert route_after_validate(state) == "analyze"
 
     def test_route_after_validate_success_overrides_retry_count(self):
         """Non-empty db_results routes to analyze even if retry_count is high."""
@@ -200,12 +200,29 @@ class TestGraphHappyPath:
         )
 
     @pytest.mark.asyncio
-    async def test_retry_cap_exhausted_routes_to_format_error(self, stub_driver, sample_state):
-        """Driver always returns empty: retry cap at 3 routes to format with error.
+    async def test_retry_cap_exhausted_routes_to_analyze_alternatives(self, stub_driver, sample_state):
+        """Driver always returns empty: retry cap at 3 routes to analyze (alternatives path).
 
-        ANALYZE must never be called (retry cap goes directly to FORMAT).
+        Phase 5: analyze_node detects empty db_results and calls _generate_alternatives.
+        FORMAT then validates AlternativesOutput and returns final_output with alternatives list.
         stub_driver.execute_query must be called exactly 3 times.
         """
+        import json as _json
+
+        _team = {
+            "frontline": [
+                {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
+                {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
+                {"name": "Riica", "role": "support", "grastas": []},
+            ],
+            "reserve": [{"name": "Miyu", "role": "support", "grastas": []}],
+            "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) — boosts Fire damage.",
+        }
+        _alternatives_response = _json.dumps({
+            "alternatives": [_team, _team, _team],
+            "reason": "No Cypher results found for query.",
+        })
+
         stub_driver.execute_query.return_value = ([], None, None)
         mock_validate_llm = MagicMock()  # Should never be called (Step 1 always fails)
 
@@ -218,14 +235,13 @@ class TestGraphHappyPath:
                    return_value=_mock_llm_factory("MATCH (n) RETURN n")), \
              patch("src.workflow.nodes.validate.get_llm",
                    return_value=mock_validate_llm), \
-             patch("src.workflow.nodes.analyze.get_llm") as mock_analyze_llm:
+             patch("src.workflow.nodes.analyze.get_llm",
+                   return_value=_mock_llm_factory(_alternatives_response)):
             graph = build_graph(driver=stub_driver)
             result = await graph.ainvoke(sample_state)
 
         # Haiku never called when Step 1 always fails (empty result)
         mock_validate_llm.invoke.assert_not_called()
-        # ANALYZE never called on cap-exhausted path
-        mock_analyze_llm.assert_not_called()
 
         assert result["retry_count"] == 3, (
             f"Expected retry_count=3 (cap), got {result['retry_count']}"
@@ -239,14 +255,15 @@ class TestGraphHappyPath:
         )
         assert "final_output" in result
         final = result["final_output"]
-        assert "error" in final, (
-            f"Expected 'error' key in final_output on cap-exhausted path. Got: {final}"
+        # Alternatives path: final_output has "alternatives" key with 3 team dicts
+        assert "alternatives" in final, (
+            f"Expected 'alternatives' key in final_output on cap-exhausted path. Got: {final}"
         )
-        assert final["frontline"] == [], (
-            f"Expected frontline=[] on cap-exhausted path. Got: {final['frontline']}"
+        assert len(final["alternatives"]) == 3, (
+            f"Expected 3 alternatives, got {len(final['alternatives'])}"
         )
-        assert final["reserve"] == [], (
-            f"Expected reserve=[] on cap-exhausted path. Got: {final['reserve']}"
+        assert final.get("error") is None, (
+            f"Expected no error on alternatives path, got: {final.get('error')}"
         )
 
     @pytest.mark.asyncio

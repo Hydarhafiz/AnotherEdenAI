@@ -43,6 +43,17 @@ class TeamOutput(BaseModel):
     error: Optional[str] = None
 
 
+class AlternativesOutput(BaseModel):
+    """Three alternative full team compositions when db_results is empty.
+
+    alternatives: exactly 3 complete TeamOutput-shaped objects (validated by Pydantic).
+    reason: human-readable explanation of why alternatives were generated.
+    """
+
+    alternatives: list[TeamOutput] = Field(min_length=3, max_length=3)
+    reason: str
+
+
 def _extract_json(text: str) -> dict:
     """Extract and parse a JSON object from an LLM response string.
 
@@ -105,8 +116,8 @@ def format_node(state: WorkflowState) -> dict:
     retry_count = state.get("retry_count", 0)
     db_results = state.get("db_results", [])
 
-    # Error path: retry cap exhausted
-    if retry_count >= 3 and not db_results:
+    # Error path: retry cap exhausted (only when no alternatives were generated)
+    if retry_count >= 3 and not db_results and not state.get("alternatives"):
         validation_errors = state.get("validation_errors", [])
         error_str = "; ".join(validation_errors) if validation_errors else "Query failed after 3 retries"
         return {
@@ -117,6 +128,23 @@ def format_node(state: WorkflowState) -> dict:
                 "error": error_str,
             }
         }
+
+    # Alternatives path: analyze_node detected empty db_results and generated alternatives
+    alternatives_raw = state.get("alternatives", "")
+    if alternatives_raw:
+        try:
+            parsed = _extract_json(alternatives_raw)
+            validated = AlternativesOutput.model_validate(parsed)
+        except (ValidationError, ValueError):
+            return {
+                "final_output": {
+                    "frontline": [],
+                    "reserve": [],
+                    "synergy_explanation": "",
+                    "error": "LLM returned malformed alternatives structure — retry or check model",
+                }
+            }
+        return {"final_output": validated.model_dump()}
 
     # Happy path: parse and validate analysis_result
     analysis_result = state.get("analysis_result", "")

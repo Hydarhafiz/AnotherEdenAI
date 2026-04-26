@@ -29,12 +29,13 @@ EXPECTED_KEYS = {
     "validation_errors",
     "retry_count",
     "analysis_result",
+    "alternatives",
     "final_output",
 }
 
 
 def test_workflow_state_has_all_keys():
-    """WorkflowState must define exactly 9 keys."""
+    """WorkflowState must define exactly 10 keys."""
     hints = typing.get_type_hints(WorkflowState)
     assert set(hints.keys()) == EXPECTED_KEYS, (
         f"Key mismatch. Expected: {EXPECTED_KEYS}. Got: {set(hints.keys())}"
@@ -93,6 +94,11 @@ async def test_stub_nodes_return_only_owned_keys(sample_state):
     format_state["analysis_result"] = analyze_json_response
     format_state["db_results"] = [{"name": "Aldo"}]  # non-empty to avoid error path
 
+    # analyze_node state needs non-empty db_results so it takes the normal path
+    # (returning analysis_result, not alternatives)
+    analyze_state = dict(sample_state)
+    analyze_state["db_results"] = [{"name": "Aldo"}]
+
     with patch("src.workflow.nodes.plan.get_llm", return_value=mock_llm), \
          patch("src.workflow.nodes.plan.normalize_roster",
                 new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
@@ -106,7 +112,7 @@ async def test_stub_nodes_return_only_owned_keys(sample_state):
             (plan_result,                                          {"plan_strategy", "roster"}),
             (generate_cypher_node(sample_state),                   {"cypher_query"}),
             (await validate_node(sample_state, mock_driver),       {"db_results"}),
-            (analyze_node(sample_state),                           {"analysis_result"}),
+            (analyze_node(analyze_state),                          {"analysis_result"}),
             (format_node(format_state),                            {"final_output"}),
         ]
 

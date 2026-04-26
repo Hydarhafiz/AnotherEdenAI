@@ -5,11 +5,11 @@ Graph topology:
                                             |
                                             +--> generate_cypher  (retry, retry_count < 3)
                                             |
-                                            +--> format           (retry cap exhausted, retry_count >= 3)
+                                            +--> analyze          (retry cap exhausted — alternatives path, retry_count >= 3)
 
 Conditional routing after validate (route_after_validate):
     db_results non-empty  -> "analyze"          (success path)
-    retry_count >= 3      -> "format"           (retry cap — error output)
+    retry_count >= 3      -> "analyze"          (retry cap — alternatives path)
     otherwise             -> "generate_cypher"  (retry)
 """
 from typing import Literal
@@ -26,18 +26,21 @@ from .state import WorkflowState
 
 def route_after_validate(
     state: WorkflowState,
-) -> Literal["generate_cypher", "analyze", "format"]:
+) -> Literal["generate_cypher", "analyze"]:
     """Determine which node to visit after VALIDATE.
 
     Logic:
         - db_results non-empty -> "analyze"         (query succeeded)
-        - retry_count >= 3    -> "format"            (retry cap exhausted)
+        - retry_count >= 3    -> "analyze"           (retry cap — alternatives path)
         - otherwise           -> "generate_cypher"   (retry with new query)
 
     Note: VALIDATE only writes db_results on success (non-empty list) and only
     increments retry_count on failure. Since db_results has no reducer (overwrites),
     and the flow never returns to VALIDATE after routing to ANALYZE, db_results is
     either [] (never succeeded) or non-empty (just succeeded).
+
+    When retry_count >= 3 and db_results is empty, analyze_node detects the empty
+    db_results and calls _generate_alternatives() to produce 3 alternative teams.
 
     Args:
         state: Current WorkflowState after VALIDATE has run.
@@ -48,7 +51,7 @@ def route_after_validate(
     if state.get("db_results"):
         return "analyze"
     if state.get("retry_count", 0) >= 3:
-        return "format"
+        return "analyze"  # alternatives path — analyze_node detects empty db_results
     return "generate_cypher"
 
 
@@ -90,7 +93,7 @@ def build_graph(driver=None):
     builder.add_conditional_edges(
         "validate",
         route_after_validate,
-        ["generate_cypher", "analyze", "format"],
+        ["generate_cypher", "analyze"],
     )
 
     return builder.compile()

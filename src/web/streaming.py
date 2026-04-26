@@ -19,6 +19,7 @@ Node name mapping (per graph.py add_node strings):
 """
 import json
 import logging
+import time
 from collections.abc import AsyncIterable
 
 from fastapi.sse import ServerSentEvent
@@ -73,10 +74,12 @@ async def pipeline_sse_generator(
         "validation_errors": [],
         "retry_count": 0,
         "analysis_result": "",
+        "alternatives": "",
         "final_output": {},
     }
 
     final_output = None
+    start_ms = time.monotonic()
 
     try:
         async for chunk in graph.astream(initial_state, stream_mode="updates"):
@@ -112,6 +115,8 @@ async def pipeline_sse_generator(
                 # Capture final_output from format node for result rendering
                 if node_name == "format" and "final_output" in state_update:
                     final_output = state_update["final_output"]
+                    elapsed_ms = int((time.monotonic() - start_ms) * 1000)
+                    logger.info("latency_ms: %d", elapsed_ms)
 
     except Exception as exc:  # noqa: BLE001
         logger.exception("Pipeline error during SSE stream: %s", exc)
@@ -127,7 +132,12 @@ async def pipeline_sse_generator(
         # Send final HTML result fragment (D-12: Jinja2 renders server-side)
         if final_output is not None:
             try:
-                template = templates.env.get_template("partials/result.html")
+                is_alternatives = bool(final_output.get("alternatives"))
+                template_name = (
+                    "partials/alternatives.html" if is_alternatives
+                    else "partials/result.html"
+                )
+                template = templates.env.get_template(template_name)
                 html = template.render(result=final_output)
                 yield ServerSentEvent(raw_data=html, event="result")
                 logger.debug("SSE result event emitted (%d chars)", len(html))
