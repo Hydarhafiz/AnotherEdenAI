@@ -35,13 +35,46 @@ Rules:
 - frontline MUST contain exactly 4 characters (minimum 3 only if roster/db_results cannot supply 4)
 - reserve MUST contain exactly 2 characters (minimum 1 only if roster/db_results cannot supply 2)
 - Explain Grasta synergies specifically (e.g. "Fire T3 boosts AF damage by 30%")
-- Output ONLY the JSON object — no preamble, no markdown fences"""
+- Output ONLY the JSON object — no preamble, no markdown fences
+
+MANDATORY SOURCE ATTRIBUTION (per D-13):
+For each character in frontline and reserve, the synergy_explanation MUST cite:
+  [CharacterName]: [Grasta name] ([trait name]) — [effect description]
+Example: "Aldo: Fire T3 Grasta (Courage) — boosts Fire element damage by 30% in AF zone"
+Never make a synergy claim without citing the Grasta and trait from the database results."""
+
+
+ALTERNATIVES_SYSTEM_PROMPT = """You are an AnotherEden team-building expert.
+No characters were found in the database for this query.
+Using your knowledge of the Another Eden roster and the player's available characters,
+suggest 3 alternative team compositions that address the query intent.
+
+Output a JSON object with EXACTLY this structure:
+{
+  "alternatives": [
+    {
+      "frontline": [{"name": "...", "role": "...", "grastas": ["..."]}, ...],
+      "reserve": [{"name": "...", "role": "...", "grastas": ["..."]}],
+      "synergy_explanation": "..."
+    },
+    <second alternative>,
+    <third alternative>
+  ],
+  "reason": "Why no database results were found and what the query attempted."
+}
+
+Rules:
+- Output EXACTLY 3 alternative objects in the alternatives array — no more, no fewer.
+- Each alternative must have frontline (3-4 characters) and reserve (1-2 characters).
+- Only suggest characters from the player's roster.
+- Include Grasta citations: [CharacterName]: [Grasta name] ([trait]) — [effect].
+- Output ONLY the JSON object — no preamble, no markdown fences."""
 
 
 def analyze_node(state: WorkflowState) -> dict:
     """Synthesize db_results into a team recommendation using Sonnet 4.6.
 
-    Owned keys: analysis_result
+    Owned keys: analysis_result (normal path), alternatives (empty db_results path)
 
     Reads:
         db_results    — Neo4j query results (list of dicts)
@@ -50,12 +83,15 @@ def analyze_node(state: WorkflowState) -> dict:
         plan_strategy — PLAN node's traversal strategy
 
     Returns:
-        Dict containing only {"analysis_result": str}.
-        The value is the raw LLM response content (expected JSON string).
+        Normal path:       {"analysis_result": str} — raw LLM JSON string.
+        Empty-results path: {"alternatives": str}   — raw LLM JSON string with 3 alternatives.
     """
+    db_results = state.get("db_results", [])
+    if not db_results:
+        return _generate_alternatives(state)
+
     llm = get_llm(role="analyzer")
 
-    db_results = state.get("db_results", [])
     user_query = state.get("user_query", "")
     roster = state.get("roster", [])
     plan_strategy = state.get("plan_strategy", "")
@@ -76,3 +112,27 @@ def analyze_node(state: WorkflowState) -> dict:
 
     response = llm.invoke(messages)
     return {"analysis_result": response.content}
+
+
+def _generate_alternatives(state: WorkflowState) -> dict:
+    """Generate 3 alternative team compositions when db_results is empty.
+
+    Returns {"alternatives": str} — raw LLM JSON string; FORMAT parses this.
+    Owned key: alternatives (WorkflowState key added Phase 5).
+    """
+    llm = get_llm(role="analyzer")
+    roster_str = ", ".join(state.get("roster", [])) or "no characters specified"
+    user_query = state.get("user_query", "")
+    plan_strategy = state.get("plan_strategy", "")
+
+    messages = [
+        SystemMessage(content=ALTERNATIVES_SYSTEM_PROMPT),
+        HumanMessage(content=(
+            f"User query: {user_query}\n"
+            f"Player roster: {roster_str}\n"
+            f"Original traversal strategy: {plan_strategy}\n"
+            "No database results were found. Generate EXACTLY 3 alternative team compositions."
+        )),
+    ]
+    response = llm.invoke(messages)
+    return {"alternatives": response.content}

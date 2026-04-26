@@ -12,6 +12,7 @@ Key ownership:
     validation_errors — VALIDATE appends via operator.add reducer
     retry_count     — incremented by VALIDATE only (starts 0, cap 3)
     analysis_result — written by ANALYZE only (intermediate synthesis text)
+    alternatives    — written by ANALYZE only (empty db_results path; raw LLM JSON string)
     final_output    — written by FORMAT only (structured recommendation dict)
 
 Note on analysis_result:
@@ -44,7 +45,8 @@ class WorkflowState(TypedDict):
     retry_count: int
 
     # --- ANALYZE node output ---
-    analysis_result: str
+    analysis_result: str   # written by ANALYZE only (normal path)
+    alternatives: str      # written by ANALYZE only (empty db_results path; raw LLM JSON string)
 
     # --- FORMAT node output ---
     final_output: dict
