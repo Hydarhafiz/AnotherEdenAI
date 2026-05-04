@@ -20,6 +20,7 @@ from .nodes.analyze import analyze_node
 from .nodes.cypher import generate_cypher_node
 from .nodes.format import format_node
 from .nodes.plan import plan_node
+from .superboss import inject_superboss_context_node
 from .nodes.validate import validate_node
 from .state import WorkflowState
 
@@ -73,6 +74,7 @@ def build_graph(driver=None):
         return await plan_node(s, driver)
 
     builder.add_node("plan", _plan)
+    builder.add_node("superboss_context", inject_superboss_context_node)
     builder.add_node("generate_cypher", generate_cypher_node)
     # validate_node is async — use an async wrapper so LangGraph awaits it correctly.
     async def _validate(s):
@@ -84,7 +86,8 @@ def build_graph(driver=None):
 
     # --- Add edges ---
     builder.add_edge(START, "plan")
-    builder.add_edge("plan", "generate_cypher")
+    builder.add_edge("plan", "superboss_context")
+    builder.add_edge("superboss_context", "generate_cypher")
     builder.add_edge("generate_cypher", "validate")
     builder.add_edge("analyze", "format")
     builder.add_edge("format", END)

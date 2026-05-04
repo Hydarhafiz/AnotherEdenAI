@@ -17,7 +17,7 @@ from neo4j import AsyncGraphDatabase
 
 from .constants import SCHEMA_VERSION, ETL_MODE, NEO4J_URI, NEO4J_AUTH
 from .scraper import scrape_all
-from .loader import ensure_constraints, load_characters, load_grastas, load_ores
+from .loader import ensure_constraints, load_characters, load_grastas, load_ores, load_skills
 
 logging.basicConfig(
     level=logging.INFO,
@@ -59,6 +59,8 @@ async def main(driver=None) -> None:
         )
 
         await load_characters(driver, characters)
+        skills = [skill for character in characters for skill in character.skills]
+        await load_skills(driver, skills)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
 

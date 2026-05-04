@@ -16,7 +16,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
-from .models import CharacterRow, GrastaRow, OreRow
+from .models import CharacterRow, GrastaRow, OreRow, SkillRow
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +36,7 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT trait_name IF NOT EXISTS FOR (t:Trait) REQUIRE t.name IS UNIQUE",
         "CREATE CONSTRAINT grasta_name IF NOT EXISTS FOR (g:Grasta) REQUIRE g.name IS UNIQUE",
         "CREATE CONSTRAINT ore_name IF NOT EXISTS FOR (o:Ore) REQUIRE o.name IS UNIQUE",
+        "CREATE CONSTRAINT skill_name IF NOT EXISTS FOR (s:Skill) REQUIRE s.name IS UNIQUE",
     ]
     async with driver.session() as session:
         for cypher in constraints:
@@ -68,6 +69,7 @@ async def load_characters(driver, rows: list[CharacterRow]) -> None:
             "weapon": r.weapon,
             "light_shadow": r.light_shadow,
             "personalities": r.personalities,
+            "is_SA": r.is_SA,
         }
         for r in rows
     ]
@@ -78,7 +80,8 @@ UNWIND $rows AS row
 MERGE (c:Character {name: row.name})
 SET c.element = row.element,
     c.weapon = row.weapon,
-    c.light_shadow = row.light_shadow
+    c.light_shadow = row.light_shadow,
+    c.is_SA = row.is_SA
 """
     # Load Trait nodes and HAS_TRAIT edges
     cypher_traits = """
@@ -94,6 +97,35 @@ MERGE (c)-[:HAS_TRAIT]->(t)
         await session.run(cypher_traits, rows=char_data)
 
     logger.info("Loaded %d Character nodes", len(rows))
+
+
+async def load_skills(driver, rows: list[SkillRow]) -> None:
+    """Load Skill nodes and Character-HAS_SKILL edges using UNWIND+MERGE."""
+    if not rows:
+        logger.warning("load_skills called with empty list -- nothing to load")
+        return
+
+    skill_data = [
+        {
+            "character_name": r.character_name,
+            "name": r.name,
+            "multiplier": r.multiplier,
+            "element": r.element,
+        }
+        for r in rows
+    ]
+    cypher = """
+UNWIND $rows AS row
+MATCH (c:Character {name: row.character_name})
+MERGE (s:Skill {name: row.name})
+SET s.multiplier = row.multiplier,
+    s.element = row.element
+MERGE (c)-[:HAS_SKILL]->(s)
+"""
+    async with driver.session() as session:
+        await session.run(cypher, rows=skill_data)
+
+    logger.info("Loaded %d Skill nodes", len(rows))
 
 
 async def load_grastas(driver, rows: list[GrastaRow]) -> None:

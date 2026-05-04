@@ -7,7 +7,7 @@
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <script src="https://unpkg.com/htmx-ext-sse@2.2.4/sse.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <script src="/static/app.js" defer></script>
+  <script src="/static/app.js?v=4" defer></script>
   <style>
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
     .tab-btn { cursor: pointer; }
@@ -67,7 +67,7 @@
         <button type="submit">Find Best Team</button>
       </form>
 
-      <div id="progress-container" style="margin-top: 1.5rem;">
+      <div id="progress-slot" style="margin-top: 1.5rem;">
         <!-- POST /api/query swaps progress.html fragment here -->
       </div>
 

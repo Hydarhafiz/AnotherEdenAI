@@ -1,6 +1,7 @@
 .venv
 *.csv
 .env
+data/raw/
 
 __pycache__/
 *.py[cod]

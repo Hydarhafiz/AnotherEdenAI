@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 SCHEMA_VERSION = "1.0.0"
 
@@ -19,6 +20,18 @@ WIKI_URLS = {
 }
 
 GRASTA_CATEGORIES = ["Attack", "Life", "Support", "Special", "VC"]
+
+RAW_DATA_DIR = Path(os.getenv("RAW_DATA_DIR", "data/raw"))
+RAW_PAGE_FILES = {
+    "characters": RAW_DATA_DIR / "indexes" / "characters.html",
+    "grasta_attack": RAW_DATA_DIR / "indexes" / "grasta_attack.html",
+    "grasta_life": RAW_DATA_DIR / "indexes" / "grasta_life.html",
+    "grasta_support": RAW_DATA_DIR / "indexes" / "grasta_support.html",
+    "grasta_special": RAW_DATA_DIR / "indexes" / "grasta_special.html",
+    "grasta_vc": RAW_DATA_DIR / "indexes" / "grasta_vc.html",
+    "grasta_ores": RAW_DATA_DIR / "indexes" / "grasta_ores.html",
+}
+RAW_CHARACTER_DIR = RAW_DATA_DIR / "characters"
 
 # Minimum node counts for post-load assertion (from wiki audit 2026-03-14)
 EXPECTED_NODE_COUNTS = {

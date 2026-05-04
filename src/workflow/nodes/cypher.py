@@ -24,7 +24,8 @@ SCHEMA_CONTEXT = """
 **Character**
 - name (STRING, unique) — canonical wiki name
 - element (STRING) — Fire, Water, Wind, Earth, Thunder, Light, Dark, Null
-- weapon (STRING) — Sword, Blade, Bow, Spear, Hammer, Staff, Mace, Tome, Fist, Katana
+- weapon (STRING) — EXACT values: Sword, Blade, Bow, Spear, Hammer, Staff, Mace, Tome, Fist, Katana
+  CRITICAL: The property is `weapon`, NOT `weapon_type`. Never use `weapon_type`.
 - light_shadow (STRING) — "Light" or "Shadow"
 
 **Trait**
@@ -55,6 +56,13 @@ Character equipped with a personality trait. No relationship properties.
 Grasta requires a personality trait to equip. No relationship properties.
 IMPORTANT: Only non-VC grastas with a personality_req have this relationship.
 VC Grastas have NO REQUIRES_TRAIT edges.
+
+### Game Mechanic Concepts (NOT graph properties)
+
+**Zone / Slash Zone / AF Zone**: These are in-game buff mechanics. There is NO `zone` property,
+NO `HAS_GRASTA_SLOT` relationship, and NO `ALLOWS_GRASTA_TYPE` relationship in the graph.
+To find characters suited for a "slash zone" team, filter by `c.weapon = 'Sword'` and retrieve
+their traits and available grastas via HAS_TRAIT/REQUIRES_TRAIT paths.
 """.strip()
 
 # ---------------------------------------------------------------------------
@@ -93,11 +101,22 @@ RETURN c.name, collect(DISTINCT g.name) AS attack_grastas
 ORDER BY c.name
 ```
 
+### Example 5: Find sword-wielding characters and their grastas (for slash/zone team queries)
+```
+MATCH (c:Character)
+WHERE c.name IN $roster AND c.weapon = 'Sword'
+OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)<-[:REQUIRES_TRAIT]-(g:Grasta)
+RETURN c.name, c.element, c.weapon, collect(DISTINCT t.name) AS traits, collect(DISTINCT g.name) AS grastas
+ORDER BY c.name
+```
+
 ## Constraints
 - NEVER use an ENHANCES relationship — it does not exist in the graph
+- NEVER use `weapon_type` — the property is `weapon`
+- NEVER use HAS_GRASTA_SLOT, ALLOWS_GRASTA_TYPE, or any relationship not listed above
 - Ore nodes are standalone — do not attempt to traverse relationships from Ore
 - VC Grastas have NO REQUIRES_TRAIT edges — do not include them in trait-based lookups
-- Always use $roster as the parameter for the user's character list
+- Always use $roster as the parameter for the user's character list — never alias it to another variable
 - Return raw Cypher only — no markdown formatting, no code fences
 """.strip()
 

@@ -36,6 +36,9 @@ class WorkflowState(TypedDict):
     # --- PLAN node output ---
     plan_strategy: str
 
+    # --- SUPERBOSS_CONTEXT node output ---
+    boss_context: str
+
     # --- GENERATE_CYPHER node output ---
     cypher_query: str
 

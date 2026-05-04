@@ -6,7 +6,7 @@ ETL_MODE controls whether invalid rows raise or are silently skipped.
 import logging
 from typing import Optional
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 from .constants import STRICT
 
@@ -21,6 +21,8 @@ class CharacterRow(BaseModel):
     weapon: str
     light_shadow: str
     personalities: list[str]
+    is_SA: bool = Field(default=False)
+    skills: list["SkillRow"] = Field(default_factory=list)
 
     @field_validator("personalities", mode="before")
     @classmethod
@@ -28,6 +30,35 @@ class CharacterRow(BaseModel):
         if isinstance(v, str):
             return [p.strip() for p in v.split(",") if p.strip()]
         return list(v) if v else []
+
+    @field_validator("is_SA", mode="before")
+    @classmethod
+    def coerce_is_sa(cls, v):
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "y", "sa", "stellar"}
+        return bool(v)
+
+
+class SkillRow(BaseModel):
+    """Represents one parsed character skill for graph ingestion."""
+
+    character_name: str
+    name: str
+    multiplier: float | None = None
+    element: str | None = None
+
+    @field_validator("multiplier", mode="before")
+    @classmethod
+    def coerce_multiplier(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, str):
+            cleaned = v.strip().replace("%", "")
+            try:
+                return float(cleaned)
+            except ValueError:
+                return None
+        return float(v)
 
 
 class GrastaRow(BaseModel):

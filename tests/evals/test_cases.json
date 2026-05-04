@@ -1,0 +1,23 @@
+[
+  {
+    "id": "mazrika_axe_factuality",
+    "query": "Build a team around Mazrika and her Axe-compatible grasta options.",
+    "roster": ["Mazrika", "Aldo", "Feinne", "Cyrus", "Azami", "Gariyu"],
+    "must_include": ["Mazrika"],
+    "factuality_checks": ["Mazrika must be treated as an Axe user, not a Staff user."]
+  },
+  {
+    "id": "anabel_es_spear_factuality",
+    "query": "Build a water defensive team that uses Anabel ES correctly.",
+    "roster": ["Anabel ES", "Aldo", "Feinne", "Cyrus", "Levia", "Azami"],
+    "must_include": ["Anabel ES"],
+    "factuality_checks": ["Anabel ES must be treated as a Spear user; base and AS Anabel are Sword users."]
+  },
+  {
+    "id": "zeviro_as_axe_no_scythe",
+    "query": "Recommend a shadow-slash style team using Zeviro AS without inventing weapon classes.",
+    "roster": ["Zeviro AS", "Aldo", "Feinne", "Cyrus", "Gariyu", "Cerrine"],
+    "must_include": ["Zeviro AS"],
+    "factuality_checks": ["Zeviro AS must be recognized as an Axe user.", "Do not hallucinate a Scythe weapon class."]
+  }
+]

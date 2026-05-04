@@ -86,23 +86,37 @@ def analyze_node(state: WorkflowState) -> dict:
         Normal path:       {"analysis_result": str} — raw LLM JSON string.
         Empty-results path: {"alternatives": str}   — raw LLM JSON string with 3 alternatives.
     """
+    import logging
+    logger = logging.getLogger(__name__)
+
     db_results = state.get("db_results", [])
     if not db_results:
-        return _generate_alternatives(state)
+        try:
+            return _generate_alternatives(state)
+        except Exception:
+            logger.exception("_generate_alternatives failed — returning empty for format error path")
+            return {}
 
     llm = get_llm(role="analyzer")
 
     user_query = state.get("user_query", "")
     roster = state.get("roster", [])
     plan_strategy = state.get("plan_strategy", "")
+    boss_context = state.get("boss_context", "")
 
     roster_str = ", ".join(roster) if roster else "no characters specified"
+
+    # Cap records to avoid exceeding free-tier model context/timeout limits
+    MAX_RECORDS = 40
+    trimmed = db_results[:MAX_RECORDS]
+    trim_note = f" (truncated to {MAX_RECORDS} of {len(db_results)})" if len(db_results) > MAX_RECORDS else ""
 
     human_content = (
         f"User query: {user_query}\n"
         f"Player roster: {roster_str}\n"
         f"Traversal strategy: {plan_strategy}\n"
-        f"Database results:\n{db_results}"
+        f"Superboss mechanics context: {boss_context or 'none'}\n"
+        f"Database results{trim_note}:\n{trimmed}"
     )
 
     messages = [
@@ -124,6 +138,7 @@ def _generate_alternatives(state: WorkflowState) -> dict:
     roster_str = ", ".join(state.get("roster", [])) or "no characters specified"
     user_query = state.get("user_query", "")
     plan_strategy = state.get("plan_strategy", "")
+    boss_context = state.get("boss_context", "")
 
     messages = [
         SystemMessage(content=ALTERNATIVES_SYSTEM_PROMPT),
@@ -131,6 +146,7 @@ def _generate_alternatives(state: WorkflowState) -> dict:
             f"User query: {user_query}\n"
             f"Player roster: {roster_str}\n"
             f"Original traversal strategy: {plan_strategy}\n"
+            f"Superboss mechanics context: {boss_context or 'none'}\n"
             "No database results were found. Generate EXACTLY 3 alternative team compositions."
         )),
     ]

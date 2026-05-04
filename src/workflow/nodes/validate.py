@@ -27,10 +27,15 @@ RETRY_CAP = 3
 
 SEMANTIC_GATE_SYSTEM_PROMPT = (
     "You are a validation gate for a game team-building assistant. "
-    "Given the user's original query and the database results, determine if the "
-    "results actually answer the question. "
-    "Respond with exactly 'PASS: [brief reason]' if correct, "
-    "or 'FAIL: [explanation of mismatch]' if the results don't match what was asked."
+    "The database returns RAW CHARACTER DATA (names, weapons, elements, traits, grastas) "
+    "that a downstream AI analyzer will use to build the team recommendation. "
+    "Your job is NOT to check if the results already contain a team recommendation — "
+    "they never will. Instead, check whether the results contain relevant character "
+    "data (weapon types, elements, traits, grastas) that could be used to answer the query. "
+    "PASS if the results have any character attributes relevant to the query. "
+    "FAIL only if the results are completely wrong data (e.g. wrong characters, empty fields "
+    "unrelated to the query, or data for a completely different game mechanic). "
+    "Respond with exactly 'PASS: [brief reason]' or 'FAIL: [explanation of mismatch]'."
 )
 
 

@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 # Keys must match graph.py builder.add_node(...) first argument exactly.
 NODE_LABELS: dict[str, str] = {
     "plan": "PLAN",
+    "superboss_context": "SUPERBOSS",
     "generate_cypher": "CYPHER",
     "validate": "VALIDATE",
     "analyze": "ANALYZE",
@@ -69,6 +70,7 @@ async def pipeline_sse_generator(
         "user_query": query,
         "roster": roster,
         "plan_strategy": "",
+        "boss_context": "",
         "cypher_query": "",
         "db_results": [],
         "validation_errors": [],
@@ -92,11 +94,11 @@ async def pipeline_sse_generator(
             for node_name, state_update in chunk.items():
                 label = NODE_LABELS.get(node_name, node_name.upper())
 
-                # Pitfall 7: retry_count in update is post-increment value.
-                # attempt shown to user = retry_count + 1 for validate node.
+                # retry_count in state_update is the post-increment value (e.g. 1 after 1st fail).
+                # That value IS the attempt number: attempt 1 → retry_count=1, attempt 2 → 2, etc.
                 if node_name == "validate":
                     retry_count = state_update.get("retry_count", 0)
-                    attempt = retry_count + 1
+                    attempt = retry_count  # post-increment == attempt number
                     max_attempts = 3
                 else:
                     attempt = 1
