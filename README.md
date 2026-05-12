@@ -116,6 +116,8 @@ uv run python assert_schema.py   # must exit 0
 ```
 
 > **Note:** The scraper uses a nodriver headless browser to bypass Cloudflare. It requires a display (DISPLAY=:0 on WSL2/Linux, or runs natively on macOS/Windows Chrome).
+>
+> For crawl scopes, parsed-only reruns, manifest inspection, cache layout, and troubleshooting, use [ETL_GUIDE.md](guides/ETL_GUIDE.md).
 
 ### 6. Run the tests
 
@@ -290,7 +292,11 @@ The project uses five root-level planning and release documents:
 - `SCHEMA.md` for graph contract changes
 - `README.md` for setup and operator workflow
 
+Operator-facing ETL and scraping runbooks live in `ETL_GUIDE.md`.
+
 These are intended to stay in the repository root so planning, build, test, and release workflows can use the same source of truth across future milestones.
+
+Supplementary planning notes live in `future-ideas.md`. That file is the parking lot for promising ideas intentionally deferred from the active milestone so brainstorming can stay focused without losing good follow-up directions.
 
 ---
 

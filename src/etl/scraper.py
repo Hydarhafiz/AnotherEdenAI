@@ -23,6 +23,7 @@ Critical column mappings (verified against live wiki — see 01-RESEARCH.md):
     col[2] = stats/effect description
     col[3] = source/location
 """
+import asyncio
 import logging
 import random
 import re
@@ -52,6 +53,31 @@ def _slugify_title(title: str) -> str:
 def _read_soup(path: Path) -> BeautifulSoup:
     """Read a cached HTML file into BeautifulSoup."""
     return BeautifulSoup(path.read_text(encoding="utf-8"), "html.parser")
+
+
+async def _stop_browser(browser) -> None:
+    """Shut down nodriver cleanly before the event loop exits."""
+    if browser is None:
+        return
+    process = getattr(browser, "_process", None)
+    try:
+        connection = getattr(browser, "connection", None)
+        if connection is not None:
+            try:
+                await connection.disconnect()
+            except Exception:  # noqa: BLE001
+                logger.debug("Browser disconnect raised during cleanup", exc_info=True)
+    finally:
+        try:
+            browser.stop()
+        finally:
+            if process is not None:
+                try:
+                    await asyncio.wait_for(process.wait(), timeout=5)
+                except Exception:  # noqa: BLE001
+                    logger.debug("Browser process wait raised during cleanup", exc_info=True)
+            # Give nodriver's transport cleanup a chance to run before loop shutdown.
+            await asyncio.sleep(0.1)
 
 
 async def fetch_page(browser, url: str, expected_selector: str) -> BeautifulSoup:
@@ -87,22 +113,32 @@ async def fetch_page(browser, url: str, expected_selector: str) -> BeautifulSoup
     )
 
 
-async def fetch_raw_html(browser, url: str, expected_selector: str) -> str:
-    """Politely visit a URL and return raw HTML after table readiness."""
+async def fetch_raw_html(
+    browser,
+    url: str,
+    expected_selector: str,
+    operator_wait_seconds: int = 20,
+) -> tuple[str, dict[str, int | bool]]:
+    """Politely visit a URL and return raw HTML plus fetch diagnostics."""
     logger.info("Politely caching %s", url)
     tab = await browser.get(url)
     await tab.sleep(random.uniform(2.0, 5.0))
+    saw_cloudflare = False
 
     for attempt in range(10):
         html = await tab.get_content()
         soup = BeautifulSoup(html, "html.parser")
         title = soup.find("title")
         if title and "just a moment" in title.get_text().lower():
+            saw_cloudflare = True
             logger.debug("[%d/10] Cloudflare challenge pending on %s", attempt + 1, url)
-            await tab.sleep(random.uniform(2.0, 4.0))
+            await tab.sleep(random.uniform(2.0, 4.0) + operator_wait_seconds / 10)
             continue
         if soup.select(expected_selector):
-            return html
+            return html, {
+                "html_byte_size": len(html.encode("utf-8")),
+                "cloudflare_detected": saw_cloudflare,
+            }
         logger.debug("[%d/10] Waiting for %s on %s", attempt + 1, expected_selector, url)
         await tab.sleep(random.uniform(1.5, 3.0))
 
@@ -112,7 +148,7 @@ async def fetch_raw_html(browser, url: str, expected_selector: str) -> str:
 async def cache_url(browser, url: str, destination: Path, expected_selector: str) -> Path:
     """Fetch one page with polite jitter and persist the exact raw HTML."""
     destination.parent.mkdir(parents=True, exist_ok=True)
-    html = await fetch_raw_html(browser, url, expected_selector)
+    html, _diagnostics = await fetch_raw_html(browser, url, expected_selector)
     destination.write_text(html, encoding="utf-8")
     logger.info("Cached %s -> %s", url, destination)
     return destination
@@ -155,7 +191,7 @@ async def cache_all_raw_pages(include_character_pages: bool = False) -> dict[str
             await cache_character_pages(browser, [c.name for c in characters])
         return cached
     finally:
-        browser.stop()
+        await _stop_browser(browser)
 
 
 # ---------------------------------------------------------------------------
@@ -283,8 +319,10 @@ def parse_ores(soup: BeautifulSoup) -> list[OreRow]:
 
 
 async def scrape_all() -> dict:
-    await cache_all_raw_pages(include_character_pages=False)
-    return parse_all_from_cache()
+    from .pipeline import prepare_parsed_data
+
+    data, _manifest = await prepare_parsed_data()
+    return data
 
     """Scrape all 7 wiki pages sequentially using a single nodriver browser.
 
@@ -314,7 +352,7 @@ async def scrape_all() -> dict:
         vc_soup = await fetch_page(browser, WIKI_URLS["grasta_vc"], "tr.grasta-row-entry")
         ore_soup = await fetch_page(browser, WIKI_URLS["grasta_ores"], "tr.equip-row-entry")
     finally:
-        browser.stop()
+        await _stop_browser(browser)
 
     characters = parse_characters(char_soup)
 

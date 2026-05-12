@@ -16,6 +16,10 @@ The project keeps five root documents as planning and release anchors:
 - `SCHEMA.md`: graph contract and data-shape source of truth
 - `README.md`: setup, execution, and operator-facing guidance
 
+Supplementary planning context:
+
+- `future-ideas.md`: deferred ideas and next-milestone candidates that should not yet be promoted into the active implementation contract
+
 ## System Overview
 
 The system has three major layers:

@@ -1,23 +1,13 @@
-"""ETL entry point — orchestrates scrape → validate → load pipeline.
+"""ETL entry point for the staged cached fetch -> parse -> load pipeline."""
 
-Usage:
-    python src/etl/run_etl.py
-
-Environment variables:
-    ETL_MODE    "strict" (default) or "lenient"
-    NEO4J_URI   bolt://localhost:7687 (default)
-    NEO4J_AUTH  neo4j/anothereden (default)
-
-Requires Docker Neo4j to be running (see docker-compose.yml).
-"""
 import asyncio
 import logging
 
 from neo4j import AsyncGraphDatabase
 
-from .constants import SCHEMA_VERSION, ETL_MODE, NEO4J_URI, NEO4J_AUTH
-from .scraper import scrape_all
+from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
 from .loader import ensure_constraints, load_characters, load_grastas, load_ores, load_skills
+from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,18 +16,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-async def main(driver=None) -> None:
-    """Run the full ETL pipeline: scrape → validate → load → report.
+async def main(driver=None, config: CrawlConfig | None = None) -> None:
+    """Run the full ETL pipeline and load Neo4j from parsed artifacts."""
+    config = config or CrawlConfig()
+    print(
+        f"Starting ETL -- SCHEMA_VERSION={SCHEMA_VERSION} ETL_MODE={ETL_MODE} "
+        f"SOURCE_MODE={config.source_mode} CRAWL_SCOPE={config.crawl_scope}"
+    )
 
-    Args:
-        driver: Optional pre-created AsyncGraphDatabase driver. If None, a new driver
-                is created and closed after the pipeline completes. When provided (e.g.,
-                in test context), the caller is responsible for closing the driver.
-    """
-    print(f"Starting ETL — SCHEMA_VERSION={SCHEMA_VERSION} ETL_MODE={ETL_MODE}")
-
-    _own_driver = driver is None
-    if _own_driver:
+    own_driver = driver is None
+    if own_driver:
         driver = AsyncGraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH)
 
     try:
@@ -46,15 +34,15 @@ async def main(driver=None) -> None:
 
         await ensure_constraints(driver)
 
-        logger.info("Scraping wiki pages...")
-        data = await scrape_all()
+        logger.info("Preparing ETL data through staged cache/parse pipeline...")
+        data, manifest = await prepare_parsed_data(config=config)
 
         characters = data["characters"]
         grastas = data["grastas"]
         ores = data["ores"]
 
         logger.info(
-            "Scraped: %d characters, %d grastas, %d ores",
+            "Prepared: %d characters, %d grastas, %d ores",
             len(characters), len(grastas), len(ores),
         )
 
@@ -63,14 +51,14 @@ async def main(driver=None) -> None:
         await load_skills(driver, skills)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
+        mark_loaded(manifest, data)
 
         print(
-            f"ETL complete — loaded {len(characters)} characters, "
+            f"ETL complete -- loaded {len(characters)} characters, "
             f"{len(grastas)} grastas, {len(ores)} ores"
         )
-
     finally:
-        if _own_driver:
+        if own_driver:
             await driver.close()
 
 

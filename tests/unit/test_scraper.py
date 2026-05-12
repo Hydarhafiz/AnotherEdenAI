@@ -193,3 +193,31 @@ def test_parse_character_overrides():
     })
     assert aldo is not None
     assert aldo.weapon == "Sword"
+
+
+@pytest.mark.asyncio
+async def test_stop_browser_disconnects_before_stop():
+    """Browser cleanup awaits disconnect and still calls stop."""
+    from src.etl.scraper import _stop_browser
+
+    events = []
+
+    class FakeConnection:
+        async def disconnect(self):
+            events.append("disconnect")
+
+    class FakeBrowser:
+        def __init__(self):
+            self.connection = FakeConnection()
+            self._process = FakeProcess()
+
+        def stop(self):
+            events.append("stop")
+
+    class FakeProcess:
+        async def wait(self):
+            events.append("wait")
+
+    await _stop_browser(FakeBrowser())
+
+    assert events == ["disconnect", "stop", "wait"]

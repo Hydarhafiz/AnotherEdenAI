@@ -2,6 +2,15 @@ import os
 from pathlib import Path
 
 SCHEMA_VERSION = "1.0.0"
+ETL_SCHEMA_VERSION = os.getenv("ETL_SCHEMA_VERSION", SCHEMA_VERSION)
+
+
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "y", "on"}
+
 
 ETL_MODE = os.getenv("ETL_MODE", "strict")
 STRICT = ETL_MODE == "strict"
@@ -22,6 +31,9 @@ WIKI_URLS = {
 GRASTA_CATEGORIES = ["Attack", "Life", "Support", "Special", "VC"]
 
 RAW_DATA_DIR = Path(os.getenv("RAW_DATA_DIR", "data/raw"))
+PARSED_DATA_DIR = Path(os.getenv("PARSED_DATA_DIR", f"data/parsed/v{ETL_SCHEMA_VERSION}"))
+ETL_STATE_DIR = Path(os.getenv("ETL_STATE_DIR", "data/etl"))
+CRAWL_MANIFEST_PATH = ETL_STATE_DIR / "crawl_manifest.json"
 RAW_PAGE_FILES = {
     "characters": RAW_DATA_DIR / "indexes" / "characters.html",
     "grasta_attack": RAW_DATA_DIR / "indexes" / "grasta_attack.html",
@@ -32,6 +44,19 @@ RAW_PAGE_FILES = {
     "grasta_ores": RAW_DATA_DIR / "indexes" / "grasta_ores.html",
 }
 RAW_CHARACTER_DIR = RAW_DATA_DIR / "characters"
+PARSED_INDEX_DIR = PARSED_DATA_DIR / "indexes"
+PARSED_CHARACTER_DIR = PARSED_DATA_DIR / "characters"
+
+ETL_SOURCE_MODE = os.getenv("ETL_SOURCE_MODE", "live")
+ETL_CRAWL_SCOPE = os.getenv("ETL_CRAWL_SCOPE", "fallback")
+ETL_INCREMENTAL = _env_flag("ETL_INCREMENTAL", True)
+ETL_RESUME = _env_flag("ETL_RESUME", True)
+ETL_INCLUDE_CHARACTER_PAGES = _env_flag("ETL_INCLUDE_CHARACTER_PAGES", True)
+ETL_MAX_RETRIES = int(os.getenv("ETL_MAX_RETRIES", "3"))
+ETL_SMALL_CHARACTER_LIMIT = int(os.getenv("ETL_SMALL_CHARACTER_LIMIT", "10"))
+ETL_FALLBACK_CHARACTER_LIMIT = int(os.getenv("ETL_FALLBACK_CHARACTER_LIMIT", "100"))
+ETL_OPERATOR_WAIT_SECONDS = int(os.getenv("ETL_OPERATOR_WAIT_SECONDS", "20"))
+ETL_BROWSER_PROFILE_DIR = os.getenv("ETL_BROWSER_PROFILE_DIR")
 
 # Minimum node counts for post-load assertion (from wiki audit 2026-03-14)
 EXPECTED_NODE_COUNTS = {

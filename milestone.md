@@ -49,7 +49,7 @@ The user-facing recommendation target is:
 
 ### Feature A: Resumable Cached ETL Foundation
 
-Status: Not started
+Status: Completed
 
 Goal: Make long-running wiki ingestion reliable, debuggable, and restartable while reducing repeated live requests.
 
@@ -65,6 +65,7 @@ Technical requirements:
 - Retry failed URLs up to 3 times before failing the ETL run.
 - Support operator-assisted browser sessions for Cloudflare clearance, including browser profile reuse where practical.
 - Add configurable crawl controls for incremental runs, including small test runs, fallback-sized crawls, resume mode, and full-corpus attempts.
+- Update `guides/ETL_GUIDE.md` when Feature A changes crawl stages, cache layout, manifest behavior, or operator run/debug steps.
 
 Acceptance criteria:
 
@@ -93,6 +94,7 @@ Technical requirements:
 - Treat missing optional page sections as valid only when identity and required combat data pass quality checks.
 - Use page quality gates to detect partial/blocked pages.
 - Expect most characters to have around 8 active skills; zero active skills should fail unless explicitly documented as an exception.
+- Update `guides/ETL_GUIDE.md` when Feature B changes character-page scraping behavior, parse quality gates, or operator expectations for combat data extraction.
 
 Acceptance criteria:
 
@@ -134,6 +136,7 @@ Technical requirements:
 - Baseline badge properties are provisional: `name`, `stats`, `effect`, `source`, `source_url`, and `schema_version`.
 - Badge data may be referenced when directly relevant, but lineup output does not need mandatory badge assignments.
 - Do not ingest general Battle Mechanics, Status Effects, Buffs & Debuffs, or other reference documentation as Feature C graph artifacts.
+- Update `guides/ETL_GUIDE.md` when Feature C changes boss or badge discovery, crawl scope controls, quality gates, or debugging workflow for scraped combat pages.
 
 Acceptance criteria:
 
@@ -158,6 +161,7 @@ Technical requirements:
 - Minimum fallback coverage: at least 100+ characters with skills/passives and 20+ superbosses, selected through explicit crawl scope controls.
 - The fallback threshold is a planned crawl scope, not permission to silently skip failed URLs inside the selected scope.
 - Any URL selected for a run must pass fetch, parse, quality, and load stages or fail the ETL run after retries.
+- Update `guides/ETL_GUIDE.md` when Feature D changes crawl policy, scope definitions, fallback rules, or operator guidance for full vs fallback runs.
 
 Acceptance criteria:
 
@@ -293,7 +297,7 @@ Acceptance criteria:
 ## Current Completion Status
 
 - Milestone 2 planning: complete
-- Feature A: not started
+- Feature A: completed
 - Feature B: not started
 - Feature C: not started
 - Feature D: not started
