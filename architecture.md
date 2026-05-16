@@ -31,7 +31,7 @@ The system has three major layers:
 At a high level:
 
 - Wiki data is scraped and normalized into Pydantic ETL models.
-- The ETL pipeline loads Characters, Traits, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
+- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
 - User roster input is normalized and augmented with free-to-play units.
 - A five-node LangGraph pipeline plans the query, generates Cypher, validates it, analyzes results, and formats the output.
 - FastAPI exposes query and admin routes, while SSE streams progress back to the browser.
@@ -49,10 +49,18 @@ At a high level:
 Responsibilities:
 
 - Retrieve live wiki pages with `nodriver`
-- Parse Characters, Grastas, and Ores
+- Parse Characters, character detail combat entries, Grastas, and Ores
 - Validate records with Pydantic
 - Load normalized entities into Neo4j
 - Assert schema expectations after load
+
+Feature B combat graph behavior:
+
+- Character index rows exclude sidekick-only records before character-detail crawling.
+- Character detail crawl targets use canonical wiki hrefs from the Characters index, preserving alias/style pages such as `Dark_Devourer` and `Noble_Blossom_(Another_Style)`.
+- Character detail pages produce `Skill` rows for active skills and basic attack replacements, plus `PassiveSkill` rows for non-executable mechanics such as stances and zones.
+- Character detail validation requires recognizable active combat skills; partial or blocked pages with zero skills fail the selected ETL scope.
+- Stellar Awakening availability is inferred from both index metadata and character detail page sections.
 
 ### Workflow Layer
 

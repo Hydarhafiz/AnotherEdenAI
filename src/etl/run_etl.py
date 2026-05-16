@@ -6,7 +6,7 @@ import logging
 from neo4j import AsyncGraphDatabase
 
 from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
-from .loader import ensure_constraints, load_characters, load_grastas, load_ores, load_skills
+from .loader import ensure_constraints, load_characters, load_grastas, load_ores, load_passive_skills, load_skills
 from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
 
 logging.basicConfig(
@@ -48,7 +48,9 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
 
         await load_characters(driver, characters)
         skills = [skill for character in characters for skill in character.skills]
+        passive_skills = [passive for character in characters for passive in character.passive_skills]
         await load_skills(driver, skills)
+        await load_passive_skills(driver, passive_skills)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
         mark_loaded(manifest, data)

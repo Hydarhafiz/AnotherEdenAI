@@ -29,13 +29,22 @@ import random
 import re
 from pathlib import Path
 from typing import Optional
-from urllib.parse import quote
+from urllib.parse import quote, urljoin
 
 import nodriver as uc
 from bs4 import BeautifulSoup
 
 from .constants import RAW_CHARACTER_DIR, RAW_PAGE_FILES, WIKI_URLS
-from .models import CharacterRow, GrastaRow, OreRow, SkillRow, parse_character, parse_grasta, parse_ore
+from .models import (
+    CharacterRow,
+    GrastaRow,
+    OreRow,
+    PassiveSkillRow,
+    SkillRow,
+    parse_character,
+    parse_grasta,
+    parse_ore,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +57,13 @@ def _slugify_title(title: str) -> str:
     """Convert a wiki title to a stable local HTML filename stem."""
     slug = re.sub(r"[^A-Za-z0-9]+", "_", title.strip()).strip("_").lower()
     return slug or "unknown"
+
+
+def _wiki_page_title(name: str) -> str:
+    """Return the canonical wiki page title for index names with comma aliases."""
+    if "," in name:
+        return name.rsplit(",", 1)[1].strip()
+    return name.strip()
 
 
 def _read_soup(path: Path) -> BeautifulSoup:
@@ -158,8 +174,8 @@ async def cache_character_pages(browser, character_names: list[str]) -> list[Pat
     """Cache individual character detail pages under data/raw/characters/."""
     cached = []
     for name in character_names:
-        page_title = name.replace(" ", "_")
-        url = f"https://anothereden.wiki/w/{quote(page_title)}"
+        page_title = _wiki_page_title(name).replace(" ", "_")
+        url = f"https://anothereden.wiki/w/{quote(page_title, safe='(),')}"
         path = RAW_CHARACTER_DIR / f"{_slugify_title(name)}.html"
         cached.append(await cache_url(browser, url, path, "body"))
     return cached
@@ -203,12 +219,16 @@ def parse_characters(soup: BeautifulSoup) -> list[CharacterRow]:
     """Extract CharacterRow instances from a parsed Characters wiki page."""
     rows = []
     for tr in soup.select("tr.character-row-entry"):
+        if tr.get("data-accessory", "").strip().lower() == "sidekick":
+            continue
+        detail_link = tr.select_one('a[href^="/w/"]')
         raw = {
             "name": tr.get("data-name", ""),
             "element": tr.get("data-element", ""),
             "weapon": tr.get("data-weapon", ""),
             "light_shadow": tr.get("data-type", ""),
             "personalities": tr.get("data-personality", ""),
+            "detail_url": urljoin("https://anothereden.wiki", detail_link.get("href")) if detail_link else None,
             "is_SA": tr.get("data-sa", tr.get("data-stellar-awakening", "0")),
         }
         result = parse_character(raw)
@@ -217,26 +237,235 @@ def parse_characters(soup: BeautifulSoup) -> list[CharacterRow]:
     return rows
 
 
-def parse_character_skills(soup: BeautifulSoup, character_name: str) -> list[SkillRow]:
-    """Extract best-effort SkillRow instances from one cached character page."""
+def character_has_stellar_awakened(soup: BeautifulSoup) -> bool:
+    """Detect Stellar Awakening availability from a character detail page."""
+    for article in soup.select("article[title]"):
+        if "stellar awaken" in article.get("title", "").lower():
+            return True
+    for heading in soup.find_all(["h2", "h3", "h4"]):
+        text = heading.get_text(" ", strip=True).lower()
+        if "stellar awaken" in text:
+            return True
+    return bool(soup.select('[id*="Stellar_Awaken"], [data-section*="Stellar"]'))
+
+
+def _clean_cell_text(value: str | None) -> str:
+    if not value:
+        return ""
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def _table_headers(tr) -> list[str]:
+    table = tr.find_parent("table")
+    if not table:
+        return []
+    header_row = table.find("tr")
+    if not header_row:
+        return []
+    return [_clean_cell_text(cell.get_text(" ", strip=True)).lower() for cell in header_row.find_all(["th", "td"])]
+
+
+def _section_for_row(tr) -> str | None:
+    for previous in tr.find_all_previous(["h2", "h3", "h4"], limit=1):
+        headline = previous.get_text(" ", strip=True)
+        if headline:
+            return headline
+    return None
+
+
+def _row_is_stellar_gated(tr, section: str | None) -> bool:
+    marker = " ".join(
+        value
+        for value in [
+            tr.get("data-sa", ""),
+            tr.get("data-stellar", ""),
+            tr.get("data-stellar-awakened", ""),
+            section or "",
+            tr.get_text(" ", strip=True),
+        ]
+        if value
+    ).lower()
+    return "stellar awaken" in marker or "stellar awakened" in marker
+
+
+def _value_for(headers: list[str], cols: list[str], names: set[str]) -> str | None:
+    for idx, header in enumerate(headers):
+        if idx < len(cols) and any(name in header for name in names):
+            return cols[idx]
+    return None
+
+
+def _looks_like_passive(section: str | None, headers: list[str], cols: list[str], tr) -> bool:
+    marker = " ".join([section or "", " ".join(headers), " ".join(cols[:2]), " ".join(tr.get("class", []))]).lower()
+    passive_terms = {
+        "passive",
+        "ability",
+        "abilities",
+        "stance",
+        "zone",
+        "battle start",
+        "battle-start",
+        "stack",
+        "valor chant",
+        "stellar awakening passive",
+    }
+    active_terms = {"mp", "skill", "type", "element", "basic attack"}
+    if any(term in marker for term in passive_terms):
+        return True
+    return not any(term in marker for term in active_terms)
+
+
+def _passive_type(section: str | None, description: str) -> str | None:
+    text = f"{section or ''} {description}".lower()
+    for passive_type in ["zone", "stance", "stack", "battle-start", "stellar awakening", "valor chant", "passive"]:
+        if passive_type in text:
+            return passive_type
+    return None
+
+
+def _article_title(node) -> str | None:
+    article = node.find_parent("article")
+    if article and article.get("title"):
+        return article.get("title")
+    return None
+
+
+def _first_text(node, selector: str) -> str:
+    found = node.select_one(selector)
+    return _clean_cell_text(found.get_text(" ", strip=True)) if found else ""
+
+
+def _parse_skill_grid(soup: BeautifulSoup, character_name: str, source_url: str | None) -> list[SkillRow]:
     skills = []
-    selectors = "tr.skill-row-entry, tr[data-skill-name], table.wikitable tr"
-    for tr in soup.select(selectors):
-        cols = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
-        name = tr.get("data-skill-name") or (cols[0] if cols and cols[0].lower() != "skill" else "")
-        if not name:
+    for container in soup.select("article[title*='Skills'] div.character-skill-grid-container"):
+        name = _first_text(container, ".skill-name")
+        description = _first_text(container, ".skill-description")
+        if not name or name.lower() == "skill name" or not description:
             continue
+        section = _article_title(container) or _section_for_row(container)
         raw = {
             "character_name": character_name,
             "name": name,
-            "multiplier": tr.get("data-multiplier") or (cols[1] if len(cols) > 1 else None),
-            "element": tr.get("data-element") or (cols[2] if len(cols) > 2 else None),
+            "element": _first_text(container, ".character-skill-element-type .upper-grid"),
+            "skill_type": _first_text(container, ".character-skill-element-type .lower-grid"),
+            "mp": _first_text(container, ".character-skill-mp"),
+            "description": description,
+            "multiplier": _first_text(container, ".skill-mod"),
+            "source_url": source_url,
+            "section": section,
+            "requires_stellar_awakened": _row_is_stellar_gated(container, section),
+        }
+        try:
+            skills.append(SkillRow.model_validate(raw))
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping skill grid row for %s: %s", character_name, exc)
+    return skills
+
+
+def parse_character_skills(
+    soup: BeautifulSoup,
+    character_name: str,
+    source_url: str | None = None,
+) -> list[SkillRow]:
+    """Extract active SkillRow instances from one cached character page."""
+    grid_skills = _parse_skill_grid(soup, character_name, source_url)
+    if grid_skills:
+        return grid_skills
+
+    skills = []
+    selectors = "tr.skill-row-entry, tr[data-skill-name]"
+    for tr in soup.select(selectors):
+        cols = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
+        headers = _table_headers(tr)
+        section = _section_for_row(tr)
+        if _looks_like_passive(section, headers, cols, tr):
+            continue
+        name = tr.get("data-skill-name") or (cols[0] if cols and cols[0].lower() != "skill" else "")
+        if not name:
+            continue
+        description = (
+            tr.get("data-description")
+            or _value_for(headers, cols, {"description", "effect"})
+            or (cols[-1] if len(cols) > 1 else "")
+        )
+        raw = {
+            "character_name": character_name,
+            "name": _clean_cell_text(name),
+            "element": tr.get("data-element") or _value_for(headers, cols, {"element", "attribute"}),
+            "skill_type": tr.get("data-type") or _value_for(headers, cols, {"type", "attack type"}),
+            "mp": tr.get("data-mp") or _value_for(headers, cols, {"mp"}),
+            "description": _clean_cell_text(description),
+            "multiplier": tr.get("data-multiplier") or _value_for(headers, cols, {"multiplier", "mod"}),
+            "source_url": source_url,
+            "section": section,
+            "requires_stellar_awakened": _row_is_stellar_gated(tr, section),
         }
         try:
             skills.append(SkillRow.model_validate(raw))
         except Exception as exc:  # noqa: BLE001
             logger.debug("Skipping skill row for %s: %s", character_name, exc)
     return skills
+
+
+def parse_character_passive_skills(
+    soup: BeautifulSoup,
+    character_name: str,
+    source_url: str | None = None,
+) -> list[PassiveSkillRow]:
+    """Extract passive and non-executable mechanics from one cached character page."""
+    passives = []
+    for stance in soup.select("article[title='Stances/Zones'] div.character-stance"):
+        name = _first_text(stance, ".stance-title-name a") or _first_text(stance, ".stance-title-name")
+        description_parts = [
+            _first_text(stance, ".stance-row-properties"),
+            _first_text(stance, ".stance-row-af"),
+            _first_text(stance, ".stance-row-end"),
+        ]
+        description = _clean_cell_text(" ".join(part for part in description_parts if part))
+        if name and description:
+            raw = {
+                "character_name": character_name,
+                "name": name,
+                "description": description,
+                "source_url": source_url,
+                "section": "Stances/Zones",
+                "passive_type": "zone",
+                "requires_stellar_awakened": _row_is_stellar_gated(stance, "Stances/Zones"),
+            }
+            try:
+                passives.append(PassiveSkillRow.model_validate(raw))
+            except Exception as exc:  # noqa: BLE001
+                logger.debug("Skipping stance row for %s: %s", character_name, exc)
+
+    selectors = "tr.passive-row-entry, tr[data-passive-name]"
+    for tr in soup.select(selectors):
+        cols = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
+        headers = _table_headers(tr)
+        section = _section_for_row(tr)
+        if not _looks_like_passive(section, headers, cols, tr):
+            continue
+        name = tr.get("data-passive-name") or (cols[0] if cols and cols[0].lower() not in {"skill", "name"} else "")
+        if not name:
+            continue
+        description = (
+            tr.get("data-description")
+            or _value_for(headers, cols, {"description", "effect"})
+            or (cols[-1] if len(cols) > 1 else "")
+        )
+        raw = {
+            "character_name": character_name,
+            "name": _clean_cell_text(name),
+            "description": _clean_cell_text(description),
+            "source_url": source_url,
+            "section": section,
+            "passive_type": tr.get("data-passive-type") or _passive_type(section, description or ""),
+            "requires_stellar_awakened": _row_is_stellar_gated(tr, section),
+        }
+        try:
+            passives.append(PassiveSkillRow.model_validate(raw))
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping passive row for %s: %s", character_name, exc)
+    return passives
 
 
 def parse_grastas(soup: BeautifulSoup, category: str) -> list[GrastaRow]:
@@ -390,8 +619,13 @@ def parse_all_from_cache() -> dict:
     for idx, char in enumerate(characters):
         detail_path = RAW_CHARACTER_DIR / f"{_slugify_title(char.name)}.html"
         if detail_path.exists():
-            skills = parse_character_skills(_read_soup(detail_path), char.name)
-            characters[idx] = char.model_copy(update={"skills": skills})
+            detail_soup = _read_soup(detail_path)
+            skills = parse_character_skills(detail_soup, char.name)
+            passive_skills = parse_character_passive_skills(detail_soup, char.name)
+            is_sa = char.is_SA or character_has_stellar_awakened(detail_soup)
+            characters[idx] = char.model_copy(
+                update={"skills": skills, "passive_skills": passive_skills, "is_SA": is_sa}
+            )
 
     grastas = []
     grastas.extend(parse_grastas(attack_soup, "Attack"))

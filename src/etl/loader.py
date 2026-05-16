@@ -16,7 +16,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
-from .models import CharacterRow, GrastaRow, OreRow, SkillRow
+from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SkillRow
 
 logger = logging.getLogger(__name__)
 
@@ -25,23 +25,25 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 async def ensure_constraints(driver) -> None:
-    """Create uniqueness constraints for all four node types.
+    """Create uniqueness constraints for all graph node types.
 
     Uses IF NOT EXISTS so this is safe to call multiple times.
     Constraints must exist before any MERGE operations to guarantee
     true uniqueness (no duplicate nodes on concurrent writes).
     """
     constraints = [
+        "DROP CONSTRAINT skill_name IF EXISTS",
         "CREATE CONSTRAINT char_name IF NOT EXISTS FOR (c:Character) REQUIRE c.name IS UNIQUE",
         "CREATE CONSTRAINT trait_name IF NOT EXISTS FOR (t:Trait) REQUIRE t.name IS UNIQUE",
         "CREATE CONSTRAINT grasta_name IF NOT EXISTS FOR (g:Grasta) REQUIRE g.name IS UNIQUE",
         "CREATE CONSTRAINT ore_name IF NOT EXISTS FOR (o:Ore) REQUIRE o.name IS UNIQUE",
-        "CREATE CONSTRAINT skill_name IF NOT EXISTS FOR (s:Skill) REQUIRE s.name IS UNIQUE",
+        "CREATE CONSTRAINT skill_identity IF NOT EXISTS FOR (s:Skill) REQUIRE (s.character_name, s.name) IS UNIQUE",
+        "CREATE CONSTRAINT passive_skill_identity IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE (p.character_name, p.name) IS UNIQUE",
     ]
     async with driver.session() as session:
         for cypher in constraints:
             await session.run(cypher)
-    logger.info("Uniqueness constraints ensured (4 constraints)")
+    logger.info("Uniqueness constraints ensured (%d constraints)", len(constraints))
 
 
 # ---------------------------------------------------------------------------
@@ -109,23 +111,74 @@ async def load_skills(driver, rows: list[SkillRow]) -> None:
         {
             "character_name": r.character_name,
             "name": r.name,
-            "multiplier": r.multiplier,
             "element": r.element,
+            "skill_type": r.skill_type,
+            "mp": r.mp,
+            "description": r.description,
+            "multiplier": r.multiplier,
+            "source_url": r.source_url,
+            "section": r.section,
+            "requires_stellar_awakened": r.requires_stellar_awakened,
+            "schema_version": r.schema_version,
         }
         for r in rows
     ]
     cypher = """
 UNWIND $rows AS row
 MATCH (c:Character {name: row.character_name})
-MERGE (s:Skill {name: row.name})
-SET s.multiplier = row.multiplier,
-    s.element = row.element
+MERGE (s:Skill {character_name: row.character_name, name: row.name})
+SET s.element = row.element,
+    s.skill_type = row.skill_type,
+    s.mp = row.mp,
+    s.description = row.description,
+    s.multiplier = row.multiplier,
+    s.source_url = row.source_url,
+    s.section = row.section,
+    s.requires_stellar_awakened = row.requires_stellar_awakened,
+    s.schema_version = row.schema_version
 MERGE (c)-[:HAS_SKILL]->(s)
 """
     async with driver.session() as session:
         await session.run(cypher, rows=skill_data)
 
     logger.info("Loaded %d Skill nodes", len(rows))
+
+
+async def load_passive_skills(driver, rows: list[PassiveSkillRow]) -> None:
+    """Load PassiveSkill nodes and Character-HAS_PASSIVE_SKILL edges."""
+    if not rows:
+        logger.warning("load_passive_skills called with empty list -- nothing to load")
+        return
+
+    passive_data = [
+        {
+            "character_name": r.character_name,
+            "name": r.name,
+            "description": r.description,
+            "source_url": r.source_url,
+            "section": r.section,
+            "passive_type": r.passive_type,
+            "requires_stellar_awakened": r.requires_stellar_awakened,
+            "schema_version": r.schema_version,
+        }
+        for r in rows
+    ]
+    cypher = """
+UNWIND $rows AS row
+MATCH (c:Character {name: row.character_name})
+MERGE (p:PassiveSkill {character_name: row.character_name, name: row.name})
+SET p.description = row.description,
+    p.source_url = row.source_url,
+    p.section = row.section,
+    p.passive_type = row.passive_type,
+    p.requires_stellar_awakened = row.requires_stellar_awakened,
+    p.schema_version = row.schema_version
+MERGE (c)-[:HAS_PASSIVE_SKILL]->(p)
+"""
+    async with driver.session() as session:
+        await session.run(cypher, rows=passive_data)
+
+    logger.info("Loaded %d PassiveSkill nodes", len(rows))
 
 
 async def load_grastas(driver, rows: list[GrastaRow]) -> None:

@@ -23,8 +23,19 @@ CHARACTER_HTML = """
         data-element="Wind"
         data-weapon="Sword"
         data-type="Light"
+        data-accessory="Bangle"
         data-personality="Straw Dummy,Cool">
+      <td><a href="/w/Aldo" title="Aldo">Aldo</a></td>
       <td>Aldo</td>
+    </tr>
+    <tr class="character-row-entry"
+        data-name="Hameow"
+        data-element=""
+        data-weapon=""
+        data-type=""
+        data-accessory="Sidekick"
+        data-personality="">
+      <td>Hameow</td>
     </tr>
   </tbody>
 </table>
@@ -81,13 +92,61 @@ ORE_HTML = """
 </table>
 """
 
+CHARACTER_COMBAT_HTML = """
+<article class="tabber__panel" title="Active Skills">
+  <div class="character-skill-grid-container-title">
+    <div class="skill-name">Skill Name</div>
+  </div>
+  <div class="character-skill-grid-container">
+    <div class="character-skill-name-image">
+      <div class="skill-name"><a href="/w/Crystal_Rapier">Crystal Rapier</a></div>
+      <div class="skill-mp">MP 40</div>
+    </div>
+    <div class="character-skill-element-type">
+      <div class="upper-grid">Crystal</div>
+      <div class="lower-grid">Slash</div>
+    </div>
+    <div class="character-skill-description">
+      <div class="skill-description">Crystal type slash attack on a single enemy (L)</div>
+    </div>
+    <div class="character-skill-mod"><div class="skill-mod">180%</div></div>
+    <div class="character-skill-mp"><div>40</div></div>
+  </div>
+</article>
+<article class="tabber__panel" title="Stellar Awakened Skills">
+  <div class="character-skill-grid-container">
+    <div class="character-skill-name-image">
+      <div class="skill-name"><a href="/w/Oath_Arc">Oath Arc</a></div>
+      <div class="skill-mp">MP 90</div>
+    </div>
+    <div class="character-skill-element-type">
+      <div class="upper-grid">Crystal</div>
+      <div class="lower-grid">Slash</div>
+    </div>
+    <div class="character-skill-description">
+      <div class="skill-description">Deploy Dazzling Slash Stance and attack all enemies.</div>
+    </div>
+    <div class="character-skill-mod"><div class="skill-mod">450%</div></div>
+    <div class="character-skill-mp"><div>90</div></div>
+  </div>
+</article>
+<article class="tabber__panel" title="Stances/Zones">
+  <div class="character-stance">
+    <div class="stance-title-name"><a href="/w/Dazzling_Slash_Stance">Dazzling Slash Stance</a></div>
+    <div class="stance-row-properties">+30% for all Slash moves.</div>
+    <div class="stance-row-af">AF gauge charges per move while zone is active.</div>
+    <div class="stance-row-end">Zone stays in effect until overwritten.</div>
+  </div>
+</article>
+"""
+
 
 # ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 
 def test_parse_character():
-    """Parse a fixture character HTML row and verify all properties."""
+    """Parse character rows while excluding sidekick-only records."""
     from src.etl.scraper import parse_characters
     soup = BeautifulSoup(CHARACTER_HTML, "html.parser")
     rows = parse_characters(soup)
@@ -97,6 +156,7 @@ def test_parse_character():
     assert char.element == "Wind"
     assert char.weapon == "Sword"
     assert char.light_shadow == "Light"
+    assert char.detail_url == "https://anothereden.wiki/w/Aldo"
     assert "Straw Dummy" in char.personalities
     assert "Cool" in char.personalities
 
@@ -151,6 +211,41 @@ def test_parse_ores():
     assert ore.name == "AF After Victory Ore"
     assert "AF Gauge" in ore.stats
     assert "Fog" in ore.source
+
+
+def test_parse_character_detail_combat_graph_rows():
+    """Character pages produce active skills, SA-gated skills, and passive zone rows."""
+    from src.etl.scraper import (
+        character_has_stellar_awakened,
+        parse_character_passive_skills,
+        parse_character_skills,
+    )
+
+    soup = BeautifulSoup(CHARACTER_COMBAT_HTML, "html.parser")
+    skills = parse_character_skills(soup, "Eleanor", source_url="https://example.test/Eleanor")
+    passives = parse_character_passive_skills(soup, "Eleanor", source_url="https://example.test/Eleanor")
+
+    assert character_has_stellar_awakened(soup) is True
+    assert [skill.name for skill in skills] == ["Crystal Rapier", "Oath Arc"]
+    assert skills[0].element == "Crystal"
+    assert skills[0].skill_type == "Slash"
+    assert skills[0].mp == 40
+    assert skills[0].description.startswith("Crystal type slash")
+    assert skills[0].multiplier == 180.0
+    assert skills[0].requires_stellar_awakened is False
+    assert skills[1].section == "Stellar Awakened Skills"
+    assert skills[1].requires_stellar_awakened is True
+    assert [passive.name for passive in passives] == ["Dazzling Slash Stance"]
+    assert passives[0].passive_type == "zone"
+    assert "AF gauge" in passives[0].description
+
+
+def test_wiki_page_title_uses_style_alias_after_comma():
+    """Character index names can include base/form metadata before the canonical page title."""
+    from src.etl.scraper import _wiki_page_title
+
+    assert _wiki_page_title("Mighty (Alter),Dark Devourer") == "Dark Devourer"
+    assert _wiki_page_title("Aldo") == "Aldo"
 
 
 def test_parse_character_overrides():

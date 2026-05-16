@@ -9,6 +9,8 @@
 - `element` (STRING) — Fire, Water, Wind, Earth, Thunder, Light, Dark, Null
 - `weapon` (STRING) — Sword, Blade, Bow, Spear, Hammer, Staff, Mace, Tome, Fist, Katana
 - `light_shadow` (STRING) — "Light" or "Shadow"
+- `is_SA` (BOOLEAN) — true when Stellar Awakening exists for the game character
+- `detail_url` (STRING, nullable) — canonical wiki detail page URL discovered from the Characters index
 
 ### Trait
 - `name` (STRING, unique) — personality trait name shared by Characters and Grastas
@@ -26,6 +28,33 @@
 - `stats` (STRING) — stats/effect from col[2]
 - `source` (STRING) — drop location from col[3]
 
+### Skill
+- `character_name` (STRING) — owning Character name from the parsed character row
+- `name` (STRING) — skill display name
+- `element` (STRING, nullable) — parsed skill element when available
+- `skill_type` (STRING, nullable) — parsed active skill type such as Slash, Magic, Buff, Healing, Status, or Zone Buff
+- `mp` (INTEGER, nullable) — MP cost when available
+- `description` (STRING) — rich Option A text description
+- `multiplier` (FLOAT, nullable) — parsed multiplier when available
+- `source_url` (STRING, nullable) — source character detail page
+- `section` (STRING, nullable) — source page section, e.g. Active Skills or Stellar Awakened Skills
+- `requires_stellar_awakened` (BOOLEAN) — true when the skill is gated behind Stellar Awakening
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Uniqueness: `(character_name, name)`.
+
+### PassiveSkill
+- `character_name` (STRING) — owning Character name from the parsed character row
+- `name` (STRING) — passive or mechanic display name
+- `description` (STRING) — rich Option A text description
+- `source_url` (STRING, nullable) — source character detail page
+- `section` (STRING, nullable) — source page section, e.g. Stances/Zones
+- `passive_type` (STRING, nullable) — best-effort category such as zone, stance, stack, battle-start, stellar awakening, valor chant, or passive
+- `requires_stellar_awakened` (BOOLEAN) — true when the passive is gated behind Stellar Awakening
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Uniqueness: `(character_name, name)`.
+
 NOTE: Ore nodes are standalone entities. There is no ENHANCES relationship in the graph.
 The decision of which Ore to apply to which Grasta is a dynamic player/AI decision handled
 by the PLAN and ANALYZE agents at query time (Phase 2/3). Do not add ENHANCES edges.
@@ -39,11 +68,18 @@ Character equipped with a personality trait. No relationship properties.
 Grasta requires a personality trait to equip. No relationship properties.
 Gate: only created when category != "VC" AND personality_req is not None/empty.
 
+### (:Character)-[:HAS_SKILL]->(:Skill)
+Character has an executable active skill or basic attack replacement. No relationship properties.
+
+### (:Character)-[:HAS_PASSIVE_SKILL]->(:PassiveSkill)
+Character has a passive skill, stance, zone, battle-start effect, Stellar Awakening passive, or other non-executable mechanic. No relationship properties.
+
 ## Known Counts (from wiki audit 2026-03-14)
 - Character nodes: 393
 - Grasta nodes: 647 (Attack=231, Life=46, Support=56, Special=4, VC=310)
 - Ore nodes: 61
 - Trait nodes: varies (union of all character personalities + grasta personality_req values)
+- Skill and PassiveSkill counts vary by selected character-detail crawl scope.
 
 ## Schema Validation
 After ETL, `python assert_schema.py` must exit 0.

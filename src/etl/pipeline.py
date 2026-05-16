@@ -31,13 +31,16 @@ from .constants import (
     RAW_PAGE_FILES,
     WIKI_URLS,
 )
-from .models import CharacterRow, GrastaRow, OreRow, SkillRow
+from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SkillRow
 from .scraper import (
     CHROMIUM_PATH,
     _read_soup,
     _slugify_title,
     _stop_browser,
+    _wiki_page_title,
+    character_has_stellar_awakened,
     fetch_raw_html,
+    parse_character_passive_skills,
     parse_character_skills,
     parse_characters,
     parse_grastas,
@@ -155,27 +158,35 @@ def _build_index_targets() -> list[dict[str, Any]]:
     return targets
 
 
-def _build_character_targets(character_names: list[str], config: CrawlConfig) -> list[dict[str, Any]]:
+def _character_target_identity(record: str | dict[str, Any]) -> tuple[str, str | None]:
+    if isinstance(record, str):
+        return record, None
+    return record["name"], record.get("detail_url")
+
+
+def _build_character_targets(character_records: list[str | dict[str, Any]], config: CrawlConfig) -> list[dict[str, Any]]:
     if not config.include_character_pages:
         return []
 
     if config.crawl_scope == "small":
-        selected = character_names[: config.small_character_limit]
+        selected = character_records[: config.small_character_limit]
     elif config.crawl_scope == "fallback":
-        selected = character_names[: config.fallback_character_limit]
+        selected = character_records[: config.fallback_character_limit]
     elif config.crawl_scope == "full":
-        selected = character_names
+        selected = character_records
     else:
         raise ValueError(f"Unsupported ETL_CRAWL_SCOPE={config.crawl_scope!r}")
 
     targets = []
-    for name in selected:
+    for record in selected:
+        name, detail_url = _character_target_identity(record)
         slug = _slugify_title(name)
+        page_title = _wiki_page_title(name).replace(" ", "_")
         targets.append(
             _make_target(
                 target_id=f"character::{slug}",
-                url=f"https://anothereden.wiki/w/{quote(name.replace(' ', '_'))}",
-                expected_selector="body",
+                url=detail_url or f"https://anothereden.wiki/w/{quote(page_title, safe='(),')}",
+                expected_selector="div.character-skills, div.character-skill-grid-container",
                 raw_path=RAW_CHARACTER_DIR / f"{slug}.html",
                 parsed_path=PARSED_CHARACTER_DIR / f"{slug}.json",
                 kind="character_detail",
@@ -209,6 +220,15 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
             "etag": None,
         },
     )
+    target_changed = (
+        entry.get("url") not in {None, target["url"]}
+        or entry.get("expected_selector") not in {None, target["expected_selector"]}
+    )
+    if target_changed:
+        entry["state"] = "pending"
+        entry["quality_status"] = "pending"
+        entry["parsed_counts"] = {}
+        entry["last_error"] = None
     entry["url"] = target["url"]
     entry["expected_selector"] = target["expected_selector"]
     entry["kind"] = target["kind"]
@@ -221,6 +241,18 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
 def _should_fetch(entry: dict[str, Any], config: CrawlConfig) -> bool:
     if config.source_mode == "parsed":
         return False
+    if (
+        entry["kind"] == "character_detail"
+        and entry.get("quality_status") in {"empty", "failed"}
+        and config.resume
+    ):
+        return True
+    if entry["kind"] == "character_detail" and config.resume:
+        parsed_path = Path(entry.get("parsed_path", ""))
+        if parsed_path.exists():
+            payload = json.loads(parsed_path.read_text(encoding="utf-8"))
+            if payload.get("kind") == "character_detail" and payload.get("parsed_counts", {}).get("skills", 0) <= 0:
+                return True
     if not entry["raw_path"] or not Path(entry["raw_path"]).exists():
         return True
     if not config.incremental:
@@ -300,14 +332,19 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
         }
     elif kind == "character_detail":
         character_name = entry["metadata"]["character_name"]
-        rows = parse_character_skills(soup, character_name)
+        source_url = entry["url"]
+        skills = parse_character_skills(soup, character_name, source_url=source_url)
+        passive_skills = parse_character_passive_skills(soup, character_name, source_url=source_url)
+        is_sa = character_has_stellar_awakened(soup)
         payload = {
             "schema_version": ETL_SCHEMA_VERSION,
             "kind": kind,
             "character_name": character_name,
-            "rows": _serialize_models(rows),
-            "parsed_counts": {"skills": len(rows)},
-            "quality_status": "ok" if rows else "empty",
+            "is_SA": is_sa,
+            "rows": _serialize_models(skills),
+            "passive_rows": _serialize_models(passive_skills),
+            "parsed_counts": {"skills": len(skills), "passive_skills": len(passive_skills)},
+            "quality_status": "ok" if skills else "empty",
         }
     else:
         raise ValueError(f"Unsupported target kind {kind!r}")
@@ -345,7 +382,12 @@ def _validate_target(entry: dict[str, Any]) -> None:
             raise RuntimeError(f"Validation failed for {entry['id']}: parsed artifact was empty")
 
     if kind == "character_detail" and parsed_counts.get("skills", 0) <= 0:
-        entry["quality_status"] = "empty"
+        entry["quality_status"] = "failed"
+        entry["state"] = "failed"
+        entry["last_error"] = "Character detail page had no recognizable active combat skills"
+        raise RuntimeError(
+            f"Validation failed for {entry['id']}: character detail page had no recognizable active combat skills"
+        )
     else:
         entry["quality_status"] = "ok"
 
@@ -357,6 +399,8 @@ def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
     grastas: list[GrastaRow] = []
     ores: list[OreRow] = []
     character_skills: dict[str, list[SkillRow]] = {}
+    character_passive_skills: dict[str, list[PassiveSkillRow]] = {}
+    character_detail_is_sa: dict[str, bool] = {}
 
     for entry in manifest["targets"].values():
         if entry["state"] not in {"parsed", "loaded"}:
@@ -375,11 +419,19 @@ def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
         elif kind == "character_detail":
             character_name = payload["character_name"]
             character_skills[character_name] = [SkillRow.model_validate(row) for row in rows]
+            character_passive_skills[character_name] = [
+                PassiveSkillRow.model_validate(row) for row in payload.get("passive_rows", [])
+            ]
+            character_detail_is_sa[character_name] = bool(payload.get("is_SA"))
 
     characters = []
     for character in characters_by_name.values():
         skills = character_skills.get(character.name, [])
-        characters.append(character.model_copy(update={"skills": skills}))
+        passive_skills = character_passive_skills.get(character.name, [])
+        is_sa = character.is_SA or character_detail_is_sa.get(character.name, False)
+        characters.append(
+            character.model_copy(update={"skills": skills, "passive_skills": passive_skills, "is_SA": is_sa})
+        )
 
     return {"characters": characters, "grastas": grastas, "ores": ores}
 
@@ -479,11 +531,9 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
         characters_payload = _parse_target(manifest["targets"]["characters"])
         _save_manifest(manifest)
 
-    character_names = [
-        row["name"] for row in characters_payload["rows"]
-    ]
+    character_records = characters_payload["rows"]
 
-    character_targets = _build_character_targets(character_names, config)
+    character_targets = _build_character_targets(character_records, config)
     active_target_ids.update(_selected_target_ids(character_targets))
 
     for target in character_targets:

@@ -4,11 +4,12 @@ These models validate scraped rows before they are loaded into Neo4j.
 ETL_MODE controls whether invalid rows raise or are silently skipped.
 """
 import logging
+import re
 from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator
 
-from .constants import STRICT
+from .constants import ETL_SCHEMA_VERSION, STRICT
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +22,10 @@ class CharacterRow(BaseModel):
     weapon: str
     light_shadow: str
     personalities: list[str]
+    detail_url: str | None = None
     is_SA: bool = Field(default=False)
     skills: list["SkillRow"] = Field(default_factory=list)
+    passive_skills: list["PassiveSkillRow"] = Field(default_factory=list)
 
     @field_validator("personalities", mode="before")
     @classmethod
@@ -44,8 +47,25 @@ class SkillRow(BaseModel):
 
     character_name: str
     name: str
-    multiplier: float | None = None
     element: str | None = None
+    skill_type: str | None = None
+    mp: int | None = None
+    description: str = ""
+    multiplier: float | None = None
+    source_url: str | None = None
+    section: str | None = None
+    requires_stellar_awakened: bool = Field(default=False)
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("mp", mode="before")
+    @classmethod
+    def coerce_mp(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, str):
+            match = re.search(r"\d+", v)
+            return int(match.group(0)) if match else None
+        return int(v)
 
     @field_validator("multiplier", mode="before")
     @classmethod
@@ -59,6 +79,33 @@ class SkillRow(BaseModel):
             except ValueError:
                 return None
         return float(v)
+
+    @field_validator("requires_stellar_awakened", mode="before")
+    @classmethod
+    def coerce_requires_stellar_awakened(cls, v):
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "y", "sa", "stellar", "stellar awakened"}
+        return bool(v)
+
+
+class PassiveSkillRow(BaseModel):
+    """Represents one parsed passive or non-executable character mechanic."""
+
+    character_name: str
+    name: str
+    description: str = ""
+    source_url: str | None = None
+    section: str | None = None
+    passive_type: str | None = None
+    requires_stellar_awakened: bool = Field(default=False)
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("requires_stellar_awakened", mode="before")
+    @classmethod
+    def coerce_requires_stellar_awakened(cls, v):
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "y", "sa", "stellar", "stellar awakened"}
+        return bool(v)
 
 
 class GrastaRow(BaseModel):

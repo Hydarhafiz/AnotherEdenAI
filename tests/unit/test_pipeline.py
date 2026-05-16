@@ -31,11 +31,88 @@ def _set_pipeline_paths(monkeypatch, tmp_path):
 def test_build_character_targets_respects_small_scope(monkeypatch, tmp_path):
     pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
 
-    config = pipeline.CrawlConfig(crawl_scope="small", include_character_pages=True, small_character_limit=2)
-    targets = pipeline._build_character_targets(["Aldo", "Anabel", "Cyrus"], config)
+    config = pipeline.CrawlConfig(crawl_scope="small", include_character_pages=True, small_character_limit=3)
+    targets = pipeline._build_character_targets(
+        [
+            {"name": "Aldo", "detail_url": "https://anothereden.wiki/w/Aldo"},
+            {"name": "Mighty (Alter),Dark Devourer", "detail_url": "https://anothereden.wiki/w/Dark_Devourer"},
+            {"name": "Cyrus", "detail_url": "https://anothereden.wiki/w/Cyrus"},
+        ],
+        config,
+    )
 
-    assert [target["metadata"]["character_name"] for target in targets] == ["Aldo", "Anabel"]
+    assert [target["metadata"]["character_name"] for target in targets] == ["Aldo", "Mighty (Alter),Dark Devourer", "Cyrus"]
     assert all(target["kind"] == "character_detail" for target in targets)
+    assert all("character-skill" in target["expected_selector"] for target in targets)
+    assert targets[1]["url"].endswith("/Dark_Devourer")
+
+
+def test_should_refetch_empty_character_detail_when_resuming(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    entry = {
+        "kind": "character_detail",
+        "state": "parsed",
+        "quality_status": "empty",
+        "raw_path": str(tmp_path / "raw" / "characters" / "partial.html"),
+    }
+    Path(entry["raw_path"]).parent.mkdir(parents=True)
+    Path(entry["raw_path"]).write_text("<html><body>partial</body></html>", encoding="utf-8")
+
+    assert pipeline._should_fetch(entry, pipeline.CrawlConfig(source_mode="live", resume=True)) is True
+    assert pipeline._should_fetch(entry, pipeline.CrawlConfig(source_mode="parsed", resume=True)) is False
+
+
+def test_should_refetch_character_detail_with_zero_skill_artifact(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    parsed_path = tmp_path / "parsed" / "characters" / "partial.json"
+    _write_json(
+        parsed_path,
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "character_detail",
+            "character_name": "Partial",
+            "rows": [],
+            "passive_rows": [],
+            "parsed_counts": {"skills": 0, "passive_skills": 0},
+        },
+    )
+    entry = {
+        "kind": "character_detail",
+        "state": "parsed",
+        "quality_status": "pending",
+        "raw_path": str(tmp_path / "raw" / "characters" / "partial.html"),
+        "parsed_path": str(parsed_path),
+    }
+    Path(entry["raw_path"]).parent.mkdir(parents=True)
+    Path(entry["raw_path"]).write_text("<html><body>partial</body></html>", encoding="utf-8")
+
+    assert pipeline._should_fetch(entry, pipeline.CrawlConfig(source_mode="live", resume=True)) is True
+
+
+def test_ensure_target_entry_resets_when_url_or_selector_changes(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    manifest = pipeline._base_manifest()
+    original = pipeline._make_target(
+        target_id="character::alias",
+        url="https://example.test/Old_Alias",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "characters" / "alias.html",
+        parsed_path=tmp_path / "parsed" / "characters" / "alias.json",
+        kind="character_detail",
+        metadata={"character_name": "Alias"},
+    )
+    entry = pipeline._ensure_target_entry(manifest, original)
+    entry["state"] = "parsed"
+    entry["quality_status"] = "empty"
+    entry["parsed_counts"] = {"skills": 0}
+
+    updated = {**original, "url": "https://example.test/Canonical", "expected_selector": "div.character-skills"}
+    refreshed = pipeline._ensure_target_entry(manifest, updated)
+
+    assert refreshed["state"] == "pending"
+    assert refreshed["quality_status"] == "pending"
+    assert refreshed["parsed_counts"] == {}
+    assert refreshed["url"] == "https://example.test/Canonical"
 
 
 @pytest.mark.asyncio
@@ -83,7 +160,10 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
         entry = pipeline._ensure_target_entry(manifest, target)
         entry["state"] = "parsed"
 
-    character_targets = pipeline._build_character_targets(["Aldo"], pipeline.CrawlConfig(source_mode="parsed"))
+    character_targets = pipeline._build_character_targets(
+        [{"name": "Aldo", "detail_url": "https://example.test/Aldo"}],
+        pipeline.CrawlConfig(source_mode="parsed"),
+    )
     for target in character_targets:
         entry = pipeline._ensure_target_entry(manifest, target)
         entry["state"] = "parsed"
@@ -99,8 +179,10 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
                 "weapon": "Sword",
                 "light_shadow": "Light",
                 "personalities": ["Straw Dummy", "Cool"],
+                "detail_url": "https://example.test/Aldo",
                 "is_SA": False,
                 "skills": [],
+                "passive_skills": [],
             }]
             counts = {"characters": 1}
         elif kind in {"grasta_index", "grasta_vc_index"}:
@@ -138,8 +220,26 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
                 "name": "X Slash",
                 "multiplier": 180.0,
                 "element": "Wind",
+                "skill_type": "Slash",
+                "mp": 20,
+                "description": "Wind slash attack.",
+                "source_url": "https://example.test/Aldo",
+                "section": "Active Skills",
+                "requires_stellar_awakened": False,
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
             }],
-            "parsed_counts": {"skills": 1},
+            "passive_rows": [{
+                "character_name": "Aldo",
+                "name": "Wind Zone",
+                "description": "Boosts Wind moves.",
+                "source_url": "https://example.test/Aldo",
+                "section": "Stances/Zones",
+                "passive_type": "zone",
+                "requires_stellar_awakened": True,
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }],
+            "is_SA": True,
+            "parsed_counts": {"skills": 1, "passive_skills": 1},
         },
     )
 
@@ -153,10 +253,47 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
     )
 
     assert [character.name for character in data["characters"]] == ["Aldo"]
+    assert data["characters"][0].is_SA is True
     assert [skill.name for skill in data["characters"][0].skills] == ["X Slash"]
+    assert data["characters"][0].skills[0].mp == 20
+    assert [passive.name for passive in data["characters"][0].passive_skills] == ["Wind Zone"]
+    assert data["characters"][0].passive_skills[0].requires_stellar_awakened is True
     assert len(data["grastas"]) == 5
     assert len(data["ores"]) == 1
     assert loaded_manifest["targets"]["characters"]["quality_status"] == "ok"
+
+
+def test_validate_character_detail_rejects_partial_page_without_skills(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    target = pipeline._make_target(
+        target_id="character::blocked",
+        url="https://example.test/Blocked",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "characters" / "blocked.html",
+        parsed_path=tmp_path / "parsed" / "characters" / "blocked.json",
+        kind="character_detail",
+        metadata={"character_name": "Blocked"},
+    )
+    manifest = pipeline._base_manifest()
+    entry = pipeline._ensure_target_entry(manifest, target)
+    entry["state"] = "parsed"
+    _write_json(
+        Path(entry["parsed_path"]),
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "character_detail",
+            "character_name": "Blocked",
+            "rows": [],
+            "passive_rows": [],
+            "parsed_counts": {"skills": 0, "passive_skills": 0},
+        },
+    )
+
+    with pytest.raises(RuntimeError, match="no recognizable active combat skills"):
+        pipeline._validate_target(entry)
+
+    assert entry["state"] == "failed"
+    assert entry["quality_status"] == "failed"
 
 
 @pytest.mark.asyncio

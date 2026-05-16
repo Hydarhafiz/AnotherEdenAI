@@ -77,7 +77,7 @@ Acceptance criteria:
 
 ### Feature B: Combat Graph Schema Expansion
 
-Status: Not started
+Status: Completed
 
 Goal: Expand the Neo4j graph from character/grasta lookup into a richer combat knowledge graph while keeping the first implementation simple.
 
@@ -298,7 +298,7 @@ Acceptance criteria:
 
 - Milestone 2 planning: complete
 - Feature A: completed
-- Feature B: not started
+- Feature B: completed
 - Feature C: not started
 - Feature D: not started
 - Feature E: not started
