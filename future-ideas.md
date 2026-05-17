@@ -62,6 +62,38 @@ Readiness signals:
 - Roster, skill, passive, boss, badge, Grasta, and Ore data are stable.
 - The project has enough eval coverage to catch hallucinated or illegal equipment recommendations.
 
+## Sidekick Equipment
+
+Deferred from Milestone 3 because sidekick identity, auto skills, charge skills, aura effects, and official character association matter more for the first RAG-ready sidekick model.
+
+Idea:
+
+- Ingest Sidekick Equipment as a dedicated equipment subtype with Might/EQP values, enhancement levels, Lv0/Lv5/Lv10 effects, obtain paths, and upgrade materials.
+- Use sidekick equipment for later utility optimization such as status clearing, healing, barrier-piercing attacks, and specialized sidekick support.
+- Keep it separate from the first sidekick ETL because its enhancement structure is different from sidekick identity and ability parsing.
+
+Readiness signals:
+
+- Sidekick nodes and ability/aura records are stable.
+- AI recommendations are already using main/sub sidekick legality correctly.
+- Evaluation shows sidekick equipment would materially change recommendation quality.
+
+## AI-Derived Sidekick Strategic Synergy
+
+Deferred from Milestone 3 because the graph should first capture hard official facts before adding inferred strategic judgments.
+
+Idea:
+
+- Add soft synergy scoring between sidekicks, characters, bosses, zones, statuses, and team archetypes.
+- Use sidekick aura, auto skill, charge skill, and boss mechanics to infer "best with" recommendations.
+- Keep inferred synergy separate from official `UNLOCKS_SIDEKICK` or association facts, with confidence and evidence fields.
+
+Readiness signals:
+
+- Official sidekick-character association data is loaded and verified.
+- Curated boss data and recommendation evaluation exist.
+- The AI lineup milestone exposes repeated decisions where sidekick choice changes team quality.
+
 ## Structured Recommendation Output Contract
 
 Deferred from Milestone 2 until real ETL data reveals the most stable output shape.

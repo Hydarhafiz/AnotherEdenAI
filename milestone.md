@@ -1,313 +1,214 @@
-# AnotherEdenAI Milestone 2
+# AnotherEdenAI Milestone 3
 
 ## Executive Summary
 
-Milestone 2 transitions AnotherEdenAI from a static graph lookup baseline into a backend-first GraphRAG and MLOps system for boss-aware team recommendations. The work focuses on resilient ETL, expanded Neo4j combat data, richer roster constraints, and automated LLM evaluation.
+Milestone 3 builds a verified RAG-ready combat data foundation before deeper AI lineup recommendation work. The focus is ETL structure, graph coverage, source attribution, quality gates, and operator runbooks for sidekicks, curated weak superbosses, and baseline equipment context.
 
-This milestone is strictly backend, ETL, graph schema, workflow, and AI evaluation scope. There is no frontend or UI work.
+This milestone intentionally prioritizes reliable scraped data over agent behavior. Recommendation intelligence, soft synergy scoring, turn-by-turn battle planning, exact damage calculation, and production deployment are deferred to later milestones.
 
 ## Scope And Intended User Outcome
 
-The system should recommend the best available lineup for a queried boss based on the user's owned roster, Stellar Awakening state, Light/Shadow points, character skills, passive mechanics, boss mechanics, and supporting build context.
+The system should load enough structured combat context for future AI recommendations to reason from facts rather than guesses. After this milestone, the graph should support retrieval for:
 
-For Milestone 2, "best lineup" means best mechanic fit and constraint legality. Exact numeric damage calculation is explicitly out of scope because Another Eden damage math is complex, inventory-dependent, and difficult to verify reliably at this stage.
+- 6-hero lineup plus main and sub sidekick party composition.
+- Official sidekick-to-character unlock or association facts.
+- Sidekick auto skills, charge skills, and aura effects.
+- Curated weak superboss identity, difficulty, affinities, characteristics, mechanics text, and source attribution.
+- Existing character, skill, passive, Grasta, and Ore data without regression.
+- Baseline weapon and armor stats/effects where practical, used as context rather than full optimization.
 
-The user-facing recommendation target is:
-
-- A primary lineup that is legal for the user's current roster state.
-- Optional backup lineup when the owned roster has enough viable alternatives.
-- Optional upgrade or advanced suggestions for missing characters, Stellar Awakening unlocks, or investment paths that directly solve the queried boss mechanic.
-- Boss-specific explanation and turn 1-2 priority skill guidance with role assignments.
-- Clear disclaimer that exact damage output is not calculated.
+The portfolio story is that AnotherEdenAI has a deterministic, auditable ETL foundation with clear scrape scopes, diagnostics, and RAG-ready graph structure.
 
 ## Explicit Non-Goals
 
-- No frontend, UI, template, CSS, or web interaction changes.
-- No full turn-by-turn battle simulator.
+- No AI lineup recommendation implementation beyond preserving existing behavior.
 - No exact numeric damage calculator.
-- No mandatory full Grasta optimizer or best-in-slot equipment solver.
-- No mandatory Badge assignment for every lineup.
-- No human expert-labeled supervised benchmark dataset.
-- No full normalized combat ontology for every buff, debuff, trigger, zone, stack, and turn condition.
-- No live A/B testing product layer. Provider switching is configurable, but the milestone does not require a production experiment dashboard.
-- No FastAPI/admin ETL trigger expansion unless needed to preserve existing behavior.
+- No full turn-by-turn battle simulator.
+- No full equipment optimizer.
+- No sidekick equipment ingestion.
+- No AI-derived sidekick strategic synergy scoring.
+- No broad all-superboss scrape requirement.
+- No frontend redesign.
+- No production VPS/AWS deployment implementation.
+- No always-on cloud automation.
 
 ## Dependencies And Assumptions
 
-- `SCHEMA.md` remains the graph contract source of truth and must be updated during implementation when schema changes land.
-- Neo4j remains the canonical store for graph-native combat data.
-- Cached raw HTML is the long-lived source artifact for wiki data.
-- Parsed JSON is a schema-versioned derived artifact and must be regenerated when schema changes invalidate it.
-- Character and boss wiki pages may trigger Cloudflare or partial page loads.
-- Operator-assisted browser challenge handling is allowed for long scrape runs.
-- Kimi is the preferred low-cost generation model for reasoning nodes, while provider selection remains configurable.
-- Claude or another stronger configurable paid judge model is expected for the full evaluation tier.
-- Evaluation credentials must be supplied by the operator; missing paid-provider credentials fail the full evaluation tier when it is required.
-- Existing simple roster input must remain backward-compatible through normalization.
+- `SCHEMA.md` remains the graph contract source of truth and must be updated when schema changes land.
+- Existing character, skill, passive, Grasta, Ore, and roster behavior must not regress.
+- Cached raw HTML and parsed JSON remain the preferred durable ETL artifacts.
+- Scraper runs may encounter Cloudflare and partial pages; failures must be explicit and diagnosable.
+- Sidekick equipment is useful but lower priority than sidekick identity, abilities, aura, and official associations.
+- Grasta/Ore is the highest-impact build layer, but the current data should be reused unless review reveals a blocking gap.
+- Weapons and armor provide baseline attack/defense and effect context, but should not drive first-pass lineup decisions as strongly as Grasta/Ore or sidekicks.
+- Development and ETL should remain runnable locally to avoid unnecessary monthly cost.
+
+## Build-Impact Priority Model
+
+1. Grasta/Ore: highest priority for damage multipliers, shareable party support, and future optimizer value.
+2. Sidekick: high priority for aura, auto-action, charge skill, AF support, and official character association.
+3. Weapon/Armor: baseline priority for attack, magic attack, defense, magic defense, and contextual effects.
+4. Sidekick Equipment: deferred because impact is smaller and enhancement structure deserves its own milestone.
 
 ## Prioritized Feature Checklist
 
-### Feature A: Resumable Cached ETL Foundation
-
-Status: Completed
-
-Goal: Make long-running wiki ingestion reliable, debuggable, and restartable while reducing repeated live requests.
-
-Technical requirements:
-
-- Separate fetching, parsing, validation, and loading into distinct pipeline stages.
-- Save raw HTML for every fetched URL under the local raw data cache.
-- Save normalized parsed JSON snapshots as schema-versioned artifacts.
-- Treat parsed JSON as invalid when its schema version does not match the active ETL schema.
-- Load Neo4j from parsed JSON without requiring a live wiki fetch.
-- Add a resumable crawl manifest that tracks each URL through states such as `pending`, `cached`, `parsed`, `loaded`, and `failed`.
-- Record per-URL diagnostics such as attempt count, last error, HTML byte size, Cloudflare/challenge detection, parsed counts, and quality status.
-- Retry failed URLs up to 3 times before failing the ETL run.
-- Support operator-assisted browser sessions for Cloudflare clearance, including browser profile reuse where practical.
-- Add configurable crawl controls for incremental runs, including small test runs, fallback-sized crawls, resume mode, and full-corpus attempts.
-- Update `guides/ETL_GUIDE.md` when Feature A changes crawl stages, cache layout, manifest behavior, or operator run/debug steps.
-
-Acceptance criteria:
-
-- ETL can resume after interruption without discarding successfully cached pages.
-- A failed URL is visible in the manifest with enough detail to debug it.
-- The loader can run from cached parsed JSON with no live wiki access.
-- Unresolved failed URLs fail the ETL run for the selected crawl scope after 3 retries.
-- The pipeline can intentionally run small-scope, fallback-scope, and full-scope crawls.
-
-### Feature B: Combat Graph Schema Expansion
-
-Status: Completed
-
-Goal: Expand the Neo4j graph from character/grasta lookup into a richer combat knowledge graph while keeping the first implementation simple.
-
-Technical requirements:
-
-- Add or verify `Character.is_SA` as a game-data boolean meaning Stellar Awakening exists for that character.
-- Infer or verify `Character.is_SA` from character detail pages when Stellar Awakened sections exist, not only from index/list metadata.
-- Add `Skill` nodes for executable active skills and basic attack replacements.
-- Add `PassiveSkill` nodes for passive skills, stacks, stances, zones, battle-start effects, Stellar Awakening passives, and other non-executable mechanics.
-- Connect characters to combat entries with `HAS_SKILL` and `HAS_PASSIVE_SKILL`.
-- Store rich descriptions as text properties under the Option A schema approach.
-- Include baseline skill fields where available: `name`, `character_name`, `element`, `skill_type`, `mp`, `description`, `multiplier`, `source_url`, `section`, `requires_stellar_awakened`, and `schema_version`.
-- Include baseline passive fields where available: `name`, `character_name`, `description`, `source_url`, `section`, `passive_type`, `requires_stellar_awakened`, and `schema_version`.
-- Treat missing optional page sections as valid only when identity and required combat data pass quality checks.
-- Use page quality gates to detect partial/blocked pages.
-- Expect most characters to have around 8 active skills; zero active skills should fail unless explicitly documented as an exception.
-- Update `guides/ETL_GUIDE.md` when Feature B changes character-page scraping behavior, parse quality gates, or operator expectations for combat data extraction.
-
-Acceptance criteria:
-
-- Character detail pages produce graph-native active skill and passive skill data.
-- SA-gated skills/passives are marked and distinguishable from normal skills/passives.
-- A character with missing optional Stellar Awakened or stance/zone sections can still parse successfully.
-- A blocked or partial page with no recognizable combat data fails quality validation.
-
-### Feature C: Superboss And Badge Data Ingestion
+### Feature A: Sidekick Graph ETL
 
 Status: Not started
 
-Goal: Add boss mechanics and badge data to the graph so recommendations can reason against concrete fight constraints and optional build context.
+Goal: Add sidekicks as first-class non-hero party members with structured ability and aura data.
 
 Technical requirements:
 
-- Use the wiki `Superbosses` page as the canonical discovery index for powerful optional boss candidates.
-- Keep manual allowlist/limit controls for development and fallback runs, but treat the index as the source of truth for discovery.
-- Add graph-native `Superboss` nodes using an Option A schema only after the linked detail page passes quality checks.
-- Keep index-only boss rows in the crawl manifest as discovered or pending records, not as Neo4j `Superboss` facts.
-- Boss detail quality gates must require identity, source URL, location/context, at least one stat or HP field, structured affinity data or explicit unknown, and at least one parsed mechanics/skills/turn-script section.
-- Baseline boss properties are provisional pending real ETL inspection: `name`, `source_url`, `difficulty_label`, `location`, `hp`, `weak`, `resist`, `null`, `absorb`, `mechanics_text`, `turn_script_text`, `turn_events`, `mechanic_tags`, `offensive_elements`, `offensive_skill_types`, `status_effects_inflicted`, and `schema_version`.
-- Store boss damage affinities as structured list properties only: `weak`, `resist`, `null`, and `absorb`.
-- Standardize affinity, element, and skill-type values against the wiki Battle Mechanics vocabulary where possible, including `Slash`, `Pierce`, `Blunt`, `Magic`, `Fire`, `Water`, `Earth`, `Wind`, `Thunder`, `Shade`, and `Crystal`.
-- Store complete turn mechanics in `turn_script_text` for LLM context.
-- Store best-effort `turn_events` JSON for row-level debugging, evaluation, and future migration.
-- Each `turn_events` item should include `turn`, `name`, `effect`, and best-effort parsed `elements` and `skill_types` when detectable.
-- Store aggregate boss offense fields: `offensive_elements` and `offensive_skill_types`.
-- Store aggregate `status_effects_inflicted` for statuses the boss can apply, standardized where possible.
-- Keep statuses, buffs, debuffs, zones, AF effects, and resource effects in text fields, turn-event effects, and mechanic tags for Milestone 2 rather than fully normalizing them.
-- Store `mechanic_tags` as best-effort retrieval metadata generated from index characteristics and detail-page text.
-- Allow both recognized/common mechanic tags and freeform tags for unusual boss mechanics.
-- Prefer JSON mechanic tag objects with fields such as `tag`, `source`, `confidence`, and `evidence_text`.
-- Allow simple string mechanic tags as an exception for irregular pages that cannot reliably fit the default tag object shape.
-- Boss PoC selection is capability-based, not tied to specific named bosses.
-- Initial boss cases must be mechanically rich enough to test AF interaction, survivability, status handling, zone behavior, or roster constraints.
-- Attempt full boss scraping when possible, but support fallback-sized crawl scope.
-- Add graph-native `Badge` nodes.
-- Baseline badge properties are provisional: `name`, `stats`, `effect`, `source`, `source_url`, and `schema_version`.
-- Badge data may be referenced when directly relevant, but lineup output does not need mandatory badge assignments.
-- Do not ingest general Battle Mechanics, Status Effects, Buffs & Debuffs, or other reference documentation as Feature C graph artifacts.
-- Update `guides/ETL_GUIDE.md` when Feature C changes boss or badge discovery, crawl scope controls, quality gates, or debugging workflow for scraped combat pages.
+- Scrape the Sidekick index as the canonical discovery source.
+- Scrape selected sidekick detail pages from canonical wiki URLs.
+- Add `Sidekick` nodes with identity, source URL, acquisition/unlock text where available, rarity/rank where available, and `schema_version`.
+- Add structured child nodes for sidekick abilities:
+  - `SidekickSkill` for auto skills.
+  - `SidekickSkill` for charge skills.
+  - `SidekickAura` for aura effects.
+- Connect sidekicks to ability records using relationships such as `HAS_AUTO_SKILL`, `HAS_CHARGE_SKILL`, and `HAS_AURA`.
+- Model official hero association or unlock facts using a relationship such as `(:Character)-[:UNLOCKS_SIDEKICK]->(:Sidekick)` when discoverable from wiki content.
+- Keep sidekicks separate from `Character` nodes because party legality is 6 heroes plus main/sub sidekick slots.
+- Represent main/sub sidekick behavior in data or documentation: main sidekick can use full sidekick abilities, while sub sidekick contributes aura-only effects.
+- Treat Tetra Another Style and Minalca Another Style as a golden fixture for official association/unlock behavior.
+- Unknown or irregular sidekick sections must be captured in diagnostics or raw text rather than silently ignored.
+- Update `guides/ETL_GUIDE.md` when sidekick crawl controls, cache layout, quality gates, or debugging steps are implemented.
 
 Acceptance criteria:
 
-- Boss candidates are discovered from the `Superbosses` index.
-- Neo4j `Superboss` nodes are created only for detail pages that pass quality checks.
-- At least the fallback crawl scope can load boss data into Neo4j with structured affinity, offense, status, turn-event, and mechanic-tag fields.
-- At least 1-2 mechanically rich boss records can be used by the workflow for boss-aware recommendations.
-- Recommendations can prefer skills that hit boss `weak` affinities and avoid primary damage plans that hit boss `null` or `absorb` affinities unless the plan explicitly accounts for an affinity-changing mechanic.
-- Recommendations can consider boss offensive elements, offensive skill types, and inflicted statuses when explaining survivability, cleanse, resistance, immunity, or mitigation needs.
-- Badge records are ingested and queryable from Neo4j.
-- Boss and badge fields can be revised after ETL data inspection without changing the milestone's Option A strategy.
+- Sidekick records load into Neo4j with source attribution.
+- Sidekick auto skill, charge skill, and aura records are queryable separately.
+- The graph can retrieve official sidekick-character association/unlock facts for at least one golden fixture.
+- Sidekick records do not count as frontline or backline heroes.
+- Selected sidekick pages either load successfully or fail with manifest diagnostics after retries.
 
-### Feature D: Coverage Targets And Crawl Policy
+### Feature B: Curated Weak Superboss ETL
 
 Status: Not started
 
-Goal: Define practical ingestion coverage while acknowledging Cloudflare and long-running crawl risk.
+Goal: Add a small, reliable superboss seed set before scaling to broader boss coverage.
 
 Technical requirements:
 
-- Target coverage: scrape and load the full available character skill/passive corpus and full available superboss corpus when the wiki allows it.
-- Minimum fallback coverage: at least 100+ characters with skills/passives and 20+ superbosses, selected through explicit crawl scope controls.
-- The fallback threshold is a planned crawl scope, not permission to silently skip failed URLs inside the selected scope.
-- Any URL selected for a run must pass fetch, parse, quality, and load stages or fail the ETL run after retries.
-- Update `guides/ETL_GUIDE.md` when Feature D changes crawl policy, scope definitions, fallback rules, or operator guidance for full vs fallback runs.
+- Use the `Superbosses` wiki page as the canonical discovery index.
+- Capture index metadata such as tier/level, refight status, version, characteristics, and linked detail URL where available.
+- Detail-parse only a curated weak-boss allowlist in this milestone.
+- Initial candidates include:
+  - Zennon Ogre's Shadow
+  - Flame Eater from the Gariyu chance encounter page
+  - Nameless Girl
+  - 2 to 5 additional Level 1 to 3 candidates after page-shape inspection
+- Add `Superboss` nodes only when detail pages pass quality gates.
+- Store structured fields where practical: `name`, `source_url`, `difficulty_tier`, `level`, `hp`, `weak`, `resist`, `null`, `absorb`, `characteristics`, `mechanic_tags`, `mechanics_text`, and `schema_version`.
+- Store mechanics text for RAG grounding even when turn-by-turn structure is not reliable.
+- Defer strict turn-event normalization unless a page has a clean table that can be parsed safely.
+- Keep full superboss coverage as a later scaling milestone.
+- Update `guides/ETL_GUIDE.md` when boss discovery, allowlists, crawl controls, or quality gates are implemented.
 
 Acceptance criteria:
 
-- A fallback-sized run can be executed intentionally and tracked through the manifest.
-- A full-corpus attempt can resume from prior cached progress.
-- Selected-scope failures are surfaced as ETL failures, not hidden omissions.
+- The index can discover superboss candidates without loading unvalidated index-only facts as final boss nodes.
+- At least 3 weak superbosses load with source URL, difficulty/tier context, affinity fields or explicit unknowns, and mechanics text.
+- At least one section-anchored boss page, such as Flame Eater, is handled or fails with clear diagnostics.
+- The graph can retrieve boss weak/resist/null/absorb fields and mechanics text without LLM inference.
+- Selected boss URLs are not silently skipped.
 
-### Feature E: Roster Constraint Model
+### Feature C: Grasta/Ore Preservation And Lightweight Retrieval Tags
 
 Status: Not started
 
-Goal: Make recommendations legal against the player's actual roster state, including ownership, Stellar Awakening, and Light/Shadow investment.
+Goal: Preserve the existing highest-impact build data while adding only safe metadata needed for retrieval.
 
 Technical requirements:
 
-- Normalize simple roster entries into structured entries.
-- Default structured roster shape:
-
-```json
-{
-  "name": "Alma AS",
-  "owned": true,
-  "stellar_awakened": false,
-  "light_shadow_points": 0
-}
-```
-
-- `Character.is_SA` means the game character has Stellar Awakening available.
-- Roster `stellar_awakened` means the player has unlocked SA for that owned character.
-- Plain name input remains supported and defaults to `owned=true`, `stellar_awakened=false`, and `light_shadow_points=0`.
-- Automatic F2P roster augmentation must not make characters legal by default. Free and gacha characters are treated the same: they are legal only when explicitly listed/owned.
-- Use Light/Shadow thresholds:
-  - `< 80`: max 3 active equipped skills.
-  - `>= 80`: max 4 active equipped skills.
-  - `>= 120`: extra badge-slot context recorded for future equipment reasoning.
-  - `>= 200`: extra grasta-slot context recorded for future Grasta reasoning.
-- Hard enforcement in Milestone 2 is required for active skill slot count.
-- SA-only skills/passives must not be presented as currently usable unless `stellar_awakened=true`.
-- SA unlocks may be suggested only in upgrade/advanced sections when they directly solve the queried boss mechanic.
+- Do not rebuild Grasta/Ore scraping from scratch in this milestone.
+- Preserve existing Grasta, Ore, Trait, and related relationship behavior.
+- Add lightweight effect tags or multiplier metadata only when they can be parsed cheaply and safely from existing fields.
+- Keep Grasta/Ore data review as a required handoff item before the AI lineup recommendation milestone.
+- Avoid introducing unverified exact damage math.
 
 Acceptance criteria:
 
-- Existing simple roster input continues to work through normalization.
-- Main recommended teams include only owned characters.
-- Main recommendations do not use SA-only skills for non-SA roster entries.
-- Main recommendations do not equip more than 3 active skills for characters below 80 Light/Shadow or more than 4 for characters at or above 80.
-- Missing characters, SA unlocks, or investment advice appear separately from the legal primary lineup.
+- Existing Grasta/Ore ETL and schema assertions still pass.
+- Existing graph queries for shareable Grasta compatibility still work.
+- Any new tags include source or derivation clarity.
+- Open Grasta/Ore coverage questions are documented for the next milestone review.
 
-### Feature F: Boss-Aware Recommendation Contract
+### Feature D: Weapon And Armor Baseline ETL
 
 Status: Not started
 
-Goal: Align workflow behavior with the expanded graph while keeping output cost and complexity reasonable.
+Goal: Add baseline equipment context for future damage and survivability reasoning without building a full optimizer.
 
 Technical requirements:
 
-- Main output must recommend legal heroes and selected active skills against the queried boss.
-- Output must include boss-specific counterplay reasoning.
-- Output must include turn 1-2 priority skills and role assignments, not a full fight rotation.
-- Output may include contextual Grasta suggestions when directly relevant, especially pain/poison or personality-compatible patterns.
-- Grasta advice must be framed as optional build optimization unless a later optimizer makes it enforceable.
-- Output may include contextual Badge suggestions when directly relevant.
-- Primary lineup is required when enough legal roster data exists.
-- Backup lineup is required only when the owned roster has enough viable alternatives.
-- Upgrade/advanced suggestions may include missing characters, SA unlocks, or investment paths that directly solve the boss.
-- The workflow output contract may remain natural-language initially and should be revisited after ETL data inspection.
+- Scrape weapon and armor index/list pages where page structure is stable enough.
+- Add baseline equipment nodes such as `Weapon` and `Armor`, or a shared `Equipment` model if that better matches observed data.
+- Capture baseline fields where available:
+  - name
+  - type/category
+  - level or tier
+  - attack/magic attack for weapons
+  - defense/magic defense for armor
+  - effect text
+  - obtain/source text
+  - source URL
+  - `schema_version`
+- Treat weapons as attack/magic attack baseline before Grasta/Ore multipliers.
+- Treat armor as defense/sustainability baseline.
+- Do not rank best-in-slot equipment in this milestone.
 
 Acceptance criteria:
 
-- Recommendations explain why selected characters and skills address the boss mechanics.
-- The system can gracefully return a best-effort provisional team with uncertainty when data is incomplete.
-- Missing roster upgrades are boss-specific and do not become broad generic pull advice.
-- The response includes a disclaimer that exact damage output is not calculated.
+- A small selected equipment scope can load baseline weapon and armor data with source attribution.
+- Equipment effects are retrievable as text for future RAG use.
+- Equipment load failures are tracked in the manifest.
+- The implementation does not imply exact damage or survivability optimization.
 
-### Feature G: Configurable Provider Routing
+### Feature E: ETL Reliability, Manifest, And RAG Readiness Gates
 
 Status: Not started
 
-Goal: Keep provider usage cost-aware and swappable without building a full experiment platform.
+Goal: Define measurable ETL success so the milestone is judged by data quality, not subjective AI output.
 
 Technical requirements:
 
-- Expand the LLM provider factory so generation and judge providers are independently configurable.
-- Prefer Kimi as the default low-cost reasoning provider.
-- Keep Claude or another stronger paid model configurable for judging and fallback.
-- Preserve existing syntax-heavy routing behavior where Claude may remain useful for Cypher generation if configured.
-- Avoid hard-coding provider choices into workflow nodes.
+- Every selected URL must end in an explicit state such as loaded or failed after retries.
+- Failed URLs must include diagnostics: URL, stage, attempt count, last error, quality-gate reason, and cache artifact references where available.
+- Parsed JSON must be able to reload Neo4j without live scraping.
+- Every loaded graph entity must have source URL attribution where the wiki source exists.
+- Every structured node added in this milestone must include `schema_version`.
+- Add or update schema assertion coverage for new labels and relationships.
+- Maintain local/offline ETL operation guidance to keep development cost low.
+- Update `guides/ETL_GUIDE.md` for new commands, troubleshooting, manifest states, and replay-from-cache workflows.
 
 Acceptance criteria:
 
-- The operator can switch reasoning provider without code redesign.
-- The operator can switch judge provider without code redesign.
-- Provider configuration is visible enough for eval reports to identify which model produced and judged each run.
+- Selected crawl scope has 100% pass/fail accountability.
+- Curated sidekick and weak-superboss scope targets 90-100% successful load rate.
+- No selected URL is silently skipped.
+- Schema assertions pass after loading selected scope.
+- Golden retrieval queries prove sidekick association, sidekick ability/aura, boss affinity, boss mechanics text, and baseline equipment context.
+- The ETL can be rerun from parsed artifacts without live wiki access.
 
-### Feature H: Two-Tier LLM Evaluation Framework
+## Planned Sub-Guides
 
-Status: Not started
-
-Goal: Add CI/CD-ready evaluation that measures objective correctness cheaply first, then runs deeper paid evaluation only after basic gates pass.
-
-Technical requirements:
-
-- Build a `pytest` evaluation suite around a golden/adversarial dataset of approximately 20-30 queries.
-- Use unsupervised LLM-as-a-judge evaluation, not human expert-supervised expected perfect teams.
-- Include normal boss recommendation cases with rosters around 12-20 owned characters.
-- Include adversarial cases such as impossible rosters, ambiguous boss requests, missing data, non-SA roster entries, SA upgrade opportunities, and skill-slot legality.
-- Tier 1 is mandatory and uses Ollama or free OpenRouter-compatible models where possible.
-- Tier 1 evaluates objective gates:
-  - Strict factuality/hallucination.
-  - Roster constraint adherence.
-  - Schema formatting.
-  - Skill-slot legality.
-- Tier 2 runs only after Tier 1 passes and is mandatory at that point.
-- Tier 2 uses the configured stronger paid judge model.
-- Missing paid-provider credentials fail the overall evaluation run when Tier 2 is required.
-- Tier 2 evaluates all metrics:
-  - Strict factuality/hallucination.
-  - Roster constraint adherence.
-  - Tactical synergy and boss mechanic adherence.
-  - Schema formatting.
-  - Skill-slot legality.
-- Tactical synergy should inspect both final recommendations and written reasoning/explanation.
-- Tactical synergy starts as scored/reportable quality rather than the primary hard CI gate.
-
-Acceptance criteria:
-
-- CI fails on schema invalidity, roster-rule violations, skill-slot violations, or factual hallucination.
-- CI reports tactical synergy and boss mechanic adherence scores from the paid judge tier.
-- Eval reports identify model/provider configuration for generator and judge.
-- The eval dataset includes at least one SA-gated scenario and one skill-slot legality scenario.
-- Free/local model failures are visible in Tier 1 and can be used to decide whether paid evaluation is needed.
+- Update `guides/ETL_GUIDE.md` for sidekick, boss, equipment, manifest, cache, quality-gate, and local/offline operation steps.
+- Add a short ETL coverage review section or future guide before the AI lineup recommendation milestone. This review should inspect whether Grasta/Ore, sidekick, boss, weapon, and armor fields are enough for legal lineup generation.
 
 ## Current Completion Status
 
-- Milestone 2 planning: complete
-- Feature A: completed
-- Feature B: completed
+- Milestone 3 planning: complete
+- Feature A: not started
+- Feature B: not started
 - Feature C: not started
 - Feature D: not started
 - Feature E: not started
-- Feature F: not started
-- Feature G: not started
-- Feature H: not started
 
 ## Open Questions
 
-- After ETL inspection, should workflow output move from natural-language sections into strict structured fields such as `team`, `role_assignments`, `turn_1_2_skill_plan`, `boss_counterplay`, `upgrade_path`, and `confidence`?
-- After real character and boss pages are parsed, should any combat mechanics graduate from Option A text properties into Option B normalized nodes or relationships?
-- After Badge and Grasta data are available, what should be the next optimizer milestone boundary for equipment and damage setup?
+- After inspecting sidekick pages, are there sidekicks with irregular extra ability or aura sections that require additional node types?
+- After inspecting weak superboss pages, which 2 to 5 additional Level 1 to 3 bosses should join the seed set?
+- Should weapons and armor share one equipment label or use separate labels after real page-shape inspection?
+- Which Grasta/Ore fields are missing for the next AI lineup recommendation milestone?
