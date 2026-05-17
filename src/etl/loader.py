@@ -16,7 +16,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
-from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SkillRow
+from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,9 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT ore_name IF NOT EXISTS FOR (o:Ore) REQUIRE o.name IS UNIQUE",
         "CREATE CONSTRAINT skill_identity IF NOT EXISTS FOR (s:Skill) REQUIRE (s.character_name, s.name) IS UNIQUE",
         "CREATE CONSTRAINT passive_skill_identity IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE (p.character_name, p.name) IS UNIQUE",
+        "CREATE CONSTRAINT sidekick_name IF NOT EXISTS FOR (s:Sidekick) REQUIRE s.name IS UNIQUE",
+        "CREATE CONSTRAINT sidekick_skill_identity IF NOT EXISTS FOR (s:SidekickSkill) REQUIRE (s.sidekick_name, s.name, s.skill_kind) IS UNIQUE",
+        "CREATE CONSTRAINT sidekick_aura_identity IF NOT EXISTS FOR (a:SidekickAura) REQUIRE (a.sidekick_name, a.name) IS UNIQUE",
     ]
     async with driver.session() as session:
         for cypher in constraints:
@@ -179,6 +182,113 @@ MERGE (c)-[:HAS_PASSIVE_SKILL]->(p)
         await session.run(cypher, rows=passive_data)
 
     logger.info("Loaded %d PassiveSkill nodes", len(rows))
+
+
+async def load_sidekicks(driver, rows: list[SidekickRow]) -> None:
+    """Load Sidekick nodes, ability child nodes, and official association edges."""
+    if not rows:
+        logger.warning("load_sidekicks called with empty list -- nothing to load")
+        return
+
+    sidekick_data = [
+        {
+            "name": r.name,
+            "source_url": r.source_url,
+            "acquisition_text": r.acquisition_text,
+            "rarity": r.rarity,
+            "role_tags": r.role_tags,
+            "main_slot_behavior": r.main_slot_behavior,
+            "sub_slot_behavior": r.sub_slot_behavior,
+            "diagnostics_text": r.diagnostics_text,
+            "schema_version": r.schema_version,
+            "associated_character_names": r.associated_character_names,
+        }
+        for r in rows
+    ]
+    skill_data = [
+        {
+            "sidekick_name": r.name,
+            "name": skill.name,
+            "skill_kind": skill.skill_kind,
+            "element": skill.element,
+            "skill_type": skill.skill_type,
+            "charge_cost": skill.charge_cost,
+            "description": skill.description,
+            "source_url": skill.source_url,
+            "section": skill.section,
+            "schema_version": skill.schema_version,
+        }
+        for r in rows
+        for skill in [*r.auto_skills, *r.charge_skills]
+    ]
+    aura_data = [
+        {
+            "sidekick_name": r.name,
+            "name": aura.name,
+            "activation_condition": aura.activation_condition,
+            "effect_text": aura.effect_text,
+            "source_url": aura.source_url,
+            "section": aura.section,
+            "schema_version": aura.schema_version,
+        }
+        for r in rows
+        for aura in r.auras
+    ]
+
+    cypher_sidekicks = """
+UNWIND $rows AS row
+MERGE (s:Sidekick {name: row.name})
+SET s.source_url = row.source_url,
+    s.acquisition_text = row.acquisition_text,
+    s.rarity = row.rarity,
+    s.role_tags = row.role_tags,
+    s.main_slot_behavior = row.main_slot_behavior,
+    s.sub_slot_behavior = row.sub_slot_behavior,
+    s.diagnostics_text = row.diagnostics_text,
+    s.schema_version = row.schema_version
+WITH row, s
+UNWIND row.associated_character_names AS character_name
+MATCH (c:Character {name: character_name})
+MERGE (c)-[:UNLOCKS_SIDEKICK]->(s)
+"""
+    cypher_skills = """
+UNWIND $rows AS row
+MATCH (sidekick:Sidekick {name: row.sidekick_name})
+MERGE (skill:SidekickSkill {sidekick_name: row.sidekick_name, name: row.name, skill_kind: row.skill_kind})
+SET skill.element = row.element,
+    skill.skill_type = row.skill_type,
+    skill.charge_cost = row.charge_cost,
+    skill.description = row.description,
+    skill.source_url = row.source_url,
+    skill.section = row.section,
+    skill.schema_version = row.schema_version
+WITH sidekick, skill, row
+FOREACH (_ IN CASE WHEN row.skill_kind = 'auto' THEN [1] ELSE [] END |
+    MERGE (sidekick)-[:HAS_AUTO_SKILL]->(skill)
+)
+FOREACH (_ IN CASE WHEN row.skill_kind = 'charge' THEN [1] ELSE [] END |
+    MERGE (sidekick)-[:HAS_CHARGE_SKILL]->(skill)
+)
+"""
+    cypher_auras = """
+UNWIND $rows AS row
+MATCH (sidekick:Sidekick {name: row.sidekick_name})
+MERGE (aura:SidekickAura {sidekick_name: row.sidekick_name, name: row.name})
+SET aura.activation_condition = row.activation_condition,
+    aura.effect_text = row.effect_text,
+    aura.source_url = row.source_url,
+    aura.section = row.section,
+    aura.schema_version = row.schema_version
+MERGE (sidekick)-[:HAS_AURA]->(aura)
+"""
+    async with driver.session() as session:
+        await session.run(cypher_sidekicks, rows=sidekick_data)
+        if skill_data:
+            await session.run(cypher_skills, rows=skill_data)
+        if aura_data:
+            await session.run(cypher_auras, rows=aura_data)
+
+    logger.info("Loaded %d Sidekick nodes", len(rows))
 
 
 async def load_grastas(driver, rows: list[GrastaRow]) -> None:

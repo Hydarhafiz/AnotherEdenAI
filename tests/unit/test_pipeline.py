@@ -18,7 +18,9 @@ def _set_pipeline_paths(monkeypatch, tmp_path):
 
     monkeypatch.setattr(pipeline, "CRAWL_MANIFEST_PATH", tmp_path / "etl" / "crawl_manifest.json")
     monkeypatch.setattr(pipeline, "RAW_CHARACTER_DIR", tmp_path / "raw" / "characters")
+    monkeypatch.setattr(pipeline, "RAW_SIDEKICK_DIR", tmp_path / "raw" / "sidekicks")
     monkeypatch.setattr(pipeline, "PARSED_CHARACTER_DIR", tmp_path / "parsed" / "characters")
+    monkeypatch.setattr(pipeline, "PARSED_SIDEKICK_DIR", tmp_path / "parsed" / "sidekicks")
     monkeypatch.setattr(pipeline, "PARSED_INDEX_DIR", tmp_path / "parsed" / "indexes")
     monkeypatch.setattr(
         pipeline,
@@ -45,6 +47,25 @@ def test_build_character_targets_respects_small_scope(monkeypatch, tmp_path):
     assert all(target["kind"] == "character_detail" for target in targets)
     assert all("character-skill" in target["expected_selector"] for target in targets)
     assert targets[1]["url"].endswith("/Dark_Devourer")
+
+
+def test_build_sidekick_targets_respects_small_scope(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+
+    config = pipeline.CrawlConfig(crawl_scope="small", include_sidekick_pages=True, small_sidekick_limit=2)
+    targets = pipeline._build_sidekick_targets(
+        [
+            {"name": "Tetra (Another Style)", "source_url": "https://anothereden.wiki/w/Tetra_(Another_Style)"},
+            {"name": "Mare", "source_url": "https://anothereden.wiki/w/Mare"},
+            {"name": "Hameow", "source_url": "https://anothereden.wiki/w/Hameow"},
+        ],
+        config,
+    )
+
+    assert [target["metadata"]["sidekick"]["name"] for target in targets] == ["Tetra (Another Style)", "Mare"]
+    assert all(target["kind"] == "sidekick_detail" for target in targets)
+    assert all("skill-description" in target["expected_selector"] for target in targets)
+    assert str(targets[0]["raw_path"]).endswith("tetra_another_style.html")
 
 
 def test_should_refetch_empty_character_detail_when_resuming(monkeypatch, tmp_path):
@@ -168,6 +189,14 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
         entry = pipeline._ensure_target_entry(manifest, target)
         entry["state"] = "parsed"
 
+    sidekick_targets = pipeline._build_sidekick_targets(
+        [{"name": "Tetra (Another Style)", "source_url": "https://example.test/Tetra_AS"}],
+        pipeline.CrawlConfig(source_mode="parsed"),
+    )
+    for target in sidekick_targets:
+        entry = pipeline._ensure_target_entry(manifest, target)
+        entry["state"] = "parsed"
+
     pipeline._save_manifest(manifest)
 
     for key, kind in pipeline.INDEX_KINDS.items():
@@ -185,6 +214,15 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
                 "passive_skills": [],
             }]
             counts = {"characters": 1}
+        elif key == "sidekick":
+            rows = [{
+                "name": "Tetra (Another Style)",
+                "source_url": "https://example.test/Tetra_AS",
+                "rarity": "AS",
+                "role_tags": ["SR_Bud_Healer_NATK"],
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }]
+            counts = {"sidekicks": 1}
         elif kind in {"grasta_index", "grasta_vc_index"}:
             rows = [{
                 "name": f"{key}-grasta",
@@ -243,6 +281,49 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
         },
     )
 
+    _write_json(
+        pipeline.PARSED_SIDEKICK_DIR / "tetra_another_style.json",
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "sidekick_detail",
+            "rows": [{
+                "name": "Tetra (Another Style)",
+                "source_url": "https://example.test/Tetra_AS",
+                "acquisition_text": "Unlock through Minalca AS.",
+                "rarity": "AS",
+                "role_tags": ["SR_Bud_Healer_NATK"],
+                "associated_character_names": ["Minalca (Another Style)"],
+                "auto_skills": [{
+                    "sidekick_name": "Tetra (Another Style)",
+                    "name": "Nurturing Roar",
+                    "skill_kind": "auto",
+                    "description": "Auto heal.",
+                    "source_url": "https://example.test/Tetra_AS",
+                    "schema_version": pipeline.ETL_SCHEMA_VERSION,
+                }],
+                "charge_skills": [{
+                    "sidekick_name": "Tetra (Another Style)",
+                    "name": "Life Bloom",
+                    "skill_kind": "charge",
+                    "charge_cost": 5,
+                    "description": "Consumes 5 Charge.",
+                    "source_url": "https://example.test/Tetra_AS",
+                    "schema_version": pipeline.ETL_SCHEMA_VERSION,
+                }],
+                "auras": [{
+                    "sidekick_name": "Tetra (Another Style)",
+                    "name": "Guardian Aura",
+                    "activation_condition": "When HP is below 80%",
+                    "effect_text": "All party members max HP +30%.",
+                    "source_url": "https://example.test/Tetra_AS",
+                    "schema_version": pipeline.ETL_SCHEMA_VERSION,
+                }],
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }],
+            "parsed_counts": {"sidekicks": 1, "auto_skills": 1, "charge_skills": 1, "auras": 1, "associations": 1},
+        },
+    )
+
     async def fail_if_browser_started(_config):
         raise AssertionError("parsed mode should not start a browser")
 
@@ -258,6 +339,11 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
     assert data["characters"][0].skills[0].mp == 20
     assert [passive.name for passive in data["characters"][0].passive_skills] == ["Wind Zone"]
     assert data["characters"][0].passive_skills[0].requires_stellar_awakened is True
+    assert [sidekick.name for sidekick in data["sidekicks"]] == ["Tetra (Another Style)"]
+    assert [skill.name for skill in data["sidekicks"][0].auto_skills] == ["Nurturing Roar"]
+    assert [skill.name for skill in data["sidekicks"][0].charge_skills] == ["Life Bloom"]
+    assert [aura.name for aura in data["sidekicks"][0].auras] == ["Guardian Aura"]
+    assert data["sidekicks"][0].associated_character_names == ["Minalca (Another Style)"]
     assert len(data["grastas"]) == 5
     assert len(data["ores"]) == 1
     assert loaded_manifest["targets"]["characters"]["quality_status"] == "ok"
@@ -294,6 +380,131 @@ def test_validate_character_detail_rejects_partial_page_without_skills(monkeypat
 
     assert entry["state"] == "failed"
     assert entry["quality_status"] == "failed"
+
+
+def test_validate_sidekick_detail_rejects_partial_page_without_abilities(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    target = pipeline._make_target(
+        target_id="sidekick::blocked",
+        url="https://example.test/Blocked",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "sidekicks" / "blocked.html",
+        parsed_path=tmp_path / "parsed" / "sidekicks" / "blocked.json",
+        kind="sidekick_detail",
+        metadata={"sidekick": {"name": "Blocked", "source_url": "https://example.test/Blocked"}},
+    )
+    manifest = pipeline._base_manifest()
+    entry = pipeline._ensure_target_entry(manifest, target)
+    entry["state"] = "parsed"
+    _write_json(
+        Path(entry["parsed_path"]),
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "sidekick_detail",
+            "rows": [],
+            "parsed_counts": {"sidekicks": 1, "auto_skills": 0, "charge_skills": 0, "auras": 0},
+        },
+    )
+
+    with pytest.raises(RuntimeError, match="no recognizable sidekick abilities"):
+        pipeline._validate_target(entry)
+
+    assert entry["state"] == "failed"
+    assert entry["quality_status"] == "failed"
+
+
+def test_aggregate_parsed_data_ignores_inactive_stale_targets(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    manifest = pipeline._base_manifest()
+
+    active_entry = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="sidekick",
+            url="https://example.test/Sidekick",
+            expected_selector="#Released_Sidekicks",
+            raw_path=tmp_path / "raw" / "indexes" / "sidekick.html",
+            parsed_path=tmp_path / "parsed" / "indexes" / "sidekick.json",
+            kind="sidekick_index",
+        ),
+    )
+    active_entry["state"] = "parsed"
+    stale_entry = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="sidekick::stale_character",
+            url="https://example.test/Stale",
+            expected_selector="body",
+            raw_path=tmp_path / "raw" / "sidekicks" / "stale.html",
+            parsed_path=tmp_path / "parsed" / "sidekicks" / "stale.json",
+            kind="sidekick_detail",
+            metadata={"sidekick": {"name": "Stale Character", "source_url": "https://example.test/Stale"}},
+        ),
+    )
+    stale_entry["state"] = "parsed"
+
+    _write_json(
+        Path(active_entry["parsed_path"]),
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "sidekick_index",
+            "rows": [{"name": "Tetra", "source_url": "https://example.test/Tetra"}],
+            "parsed_counts": {"sidekicks": 1},
+        },
+    )
+    _write_json(
+        Path(stale_entry["parsed_path"]),
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "sidekick_detail",
+            "rows": [{"name": "Stale Character", "source_url": "https://example.test/Stale"}],
+            "parsed_counts": {"sidekicks": 1, "auto_skills": 1, "charge_skills": 0, "auras": 0},
+        },
+    )
+
+    data = pipeline._aggregate_parsed_data(manifest, active_target_ids={"sidekick"})
+
+    assert [sidekick.name for sidekick in data["sidekicks"]] == ["Tetra"]
+
+
+def test_mark_inactive_targets_marks_stale_detail_entries(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    manifest = pipeline._base_manifest()
+    active_entry = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="sidekick::tetra",
+            url="https://example.test/Tetra",
+            expected_selector="body",
+            raw_path=tmp_path / "raw" / "sidekicks" / "tetra.html",
+            parsed_path=tmp_path / "parsed" / "sidekicks" / "tetra.json",
+            kind="sidekick_detail",
+            metadata={"sidekick": {"name": "Tetra", "source_url": "https://example.test/Tetra"}},
+        ),
+    )
+    stale_entry = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="sidekick::minalca",
+            url="https://example.test/Minalca",
+            expected_selector="body",
+            raw_path=tmp_path / "raw" / "sidekicks" / "minalca.html",
+            parsed_path=tmp_path / "parsed" / "sidekicks" / "minalca.json",
+            kind="sidekick_detail",
+            metadata={"sidekick": {"name": "Minalca", "source_url": "https://example.test/Minalca"}},
+        ),
+    )
+    active_entry["state"] = "parsed"
+    active_entry["quality_status"] = "ok"
+    stale_entry["state"] = "parsed"
+    stale_entry["quality_status"] = "ok"
+
+    pipeline._mark_inactive_targets(manifest, {"sidekick::tetra"})
+
+    assert active_entry["state"] == "parsed"
+    assert stale_entry["state"] == "inactive"
+    assert stale_entry["quality_status"] == "inactive"
+    assert "not selected" in stale_entry["last_error"]
 
 
 @pytest.mark.asyncio
@@ -361,6 +572,14 @@ def test_mark_loaded_advances_parsed_targets(monkeypatch, tmp_path):
                     "light_shadow": "Light",
                     "personalities": ["Cool"],
                     "skills": [],
+                }
+            )
+        ],
+        "sidekicks": [
+            pipeline.SidekickRow.model_validate(
+                {
+                    "name": "Tetra (Another Style)",
+                    "source_url": "https://example.test/Tetra_AS",
                 }
             )
         ],

@@ -17,21 +17,26 @@ from .constants import (
     ETL_BROWSER_PROFILE_DIR,
     ETL_CRAWL_SCOPE,
     ETL_FALLBACK_CHARACTER_LIMIT,
+    ETL_FALLBACK_SIDEKICK_LIMIT,
     ETL_INCLUDE_CHARACTER_PAGES,
+    ETL_INCLUDE_SIDEKICK_PAGES,
     ETL_INCREMENTAL,
     ETL_MAX_RETRIES,
     ETL_OPERATOR_WAIT_SECONDS,
     ETL_RESUME,
     ETL_SCHEMA_VERSION,
     ETL_SMALL_CHARACTER_LIMIT,
+    ETL_SMALL_SIDEKICK_LIMIT,
     ETL_SOURCE_MODE,
     PARSED_CHARACTER_DIR,
     PARSED_INDEX_DIR,
+    PARSED_SIDEKICK_DIR,
     RAW_CHARACTER_DIR,
     RAW_PAGE_FILES,
+    RAW_SIDEKICK_DIR,
     WIKI_URLS,
 )
-from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SkillRow
+from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow
 from .scraper import (
     CHROMIUM_PATH,
     _read_soup,
@@ -45,6 +50,8 @@ from .scraper import (
     parse_characters,
     parse_grastas,
     parse_ores,
+    parse_sidekick_detail,
+    parse_sidekick_index,
     parse_vc_grastas,
 )
 
@@ -52,6 +59,7 @@ logger = logging.getLogger(__name__)
 
 INDEX_SELECTORS = {
     "characters": "tr.character-row-entry",
+    "sidekick": "#Released_Sidekicks",
     "grasta_attack": "tr.grasta-row-entry",
     "grasta_life": "tr.grasta-row-entry",
     "grasta_support": "tr.grasta-row-entry",
@@ -62,6 +70,7 @@ INDEX_SELECTORS = {
 
 INDEX_KINDS = {
     "characters": "characters_index",
+    "sidekick": "sidekick_index",
     "grasta_attack": "grasta_index",
     "grasta_life": "grasta_index",
     "grasta_support": "grasta_index",
@@ -85,10 +94,13 @@ class CrawlConfig:
     incremental: bool = ETL_INCREMENTAL
     resume: bool = ETL_RESUME
     include_character_pages: bool = ETL_INCLUDE_CHARACTER_PAGES
+    include_sidekick_pages: bool = ETL_INCLUDE_SIDEKICK_PAGES
     max_retries: int = ETL_MAX_RETRIES
     operator_wait_seconds: int = ETL_OPERATOR_WAIT_SECONDS
     small_character_limit: int = ETL_SMALL_CHARACTER_LIMIT
     fallback_character_limit: int = ETL_FALLBACK_CHARACTER_LIMIT
+    small_sidekick_limit: int = ETL_SMALL_SIDEKICK_LIMIT
+    fallback_sidekick_limit: int = ETL_FALLBACK_SIDEKICK_LIMIT
     browser_profile_dir: str | None = ETL_BROWSER_PROFILE_DIR
 
 
@@ -191,6 +203,41 @@ def _build_character_targets(character_records: list[str | dict[str, Any]], conf
                 parsed_path=PARSED_CHARACTER_DIR / f"{slug}.json",
                 kind="character_detail",
                 metadata={"character_name": name},
+            )
+        )
+    return targets
+
+
+def _build_sidekick_targets(sidekick_records: list[dict[str, Any]], config: CrawlConfig) -> list[dict[str, Any]]:
+    if not config.include_sidekick_pages:
+        return []
+
+    if config.crawl_scope == "small":
+        selected = sidekick_records[: config.small_sidekick_limit]
+    elif config.crawl_scope == "fallback":
+        selected = sidekick_records[: config.fallback_sidekick_limit]
+    elif config.crawl_scope == "full":
+        selected = sidekick_records
+    else:
+        raise ValueError(f"Unsupported ETL_CRAWL_SCOPE={config.crawl_scope!r}")
+
+    targets = []
+    for record in selected:
+        try:
+            sidekick = SidekickRow.model_validate(record)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping invalid sidekick target record %s: %s", record.get("name"), exc)
+            continue
+        slug = _slugify_title(sidekick.name)
+        targets.append(
+            _make_target(
+                target_id=f"sidekick::{slug}",
+                url=sidekick.source_url,
+                expected_selector="div.character-skill-grid-container, .skill-description",
+                raw_path=RAW_SIDEKICK_DIR / f"{slug}.html",
+                parsed_path=PARSED_SIDEKICK_DIR / f"{slug}.json",
+                kind="sidekick_detail",
+                metadata={"sidekick": sidekick.model_dump(mode="json")},
             )
         )
     return targets
@@ -301,6 +348,15 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
             "parsed_counts": {"characters": len(rows)},
             "quality_status": "ok" if rows else "empty",
         }
+    elif kind == "sidekick_index":
+        rows = parse_sidekick_index(soup)
+        payload = {
+            "schema_version": ETL_SCHEMA_VERSION,
+            "kind": kind,
+            "rows": _serialize_models(rows),
+            "parsed_counts": {"sidekicks": len(rows)},
+            "quality_status": "ok" if rows else "empty",
+        }
     elif kind == "grasta_index":
         index_key = entry["metadata"]["index_key"]
         category = INDEX_CATEGORIES[index_key]
@@ -346,6 +402,22 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
             "parsed_counts": {"skills": len(skills), "passive_skills": len(passive_skills)},
             "quality_status": "ok" if skills else "empty",
         }
+    elif kind == "sidekick_detail":
+        sidekick = SidekickRow.model_validate(entry["metadata"]["sidekick"])
+        row = parse_sidekick_detail(soup, sidekick, source_url=entry["url"])
+        payload = {
+            "schema_version": ETL_SCHEMA_VERSION,
+            "kind": kind,
+            "rows": [row.model_dump(mode="json")],
+            "parsed_counts": {
+                "sidekicks": 1,
+                "auto_skills": len(row.auto_skills),
+                "charge_skills": len(row.charge_skills),
+                "auras": len(row.auras),
+                "associations": len(row.associated_character_names),
+            },
+            "quality_status": "ok" if row.auto_skills or row.charge_skills or row.auras else "empty",
+        }
     else:
         raise ValueError(f"Unsupported target kind {kind!r}")
 
@@ -373,7 +445,7 @@ def _validate_target(entry: dict[str, Any]) -> None:
     parsed_counts = payload.get("parsed_counts", {})
     kind = payload["kind"]
 
-    if kind in {"characters_index", "grasta_index", "grasta_vc_index", "ore_index"}:
+    if kind in {"characters_index", "sidekick_index", "grasta_index", "grasta_vc_index", "ore_index"}:
         total = sum(int(value) for value in parsed_counts.values())
         if total <= 0:
             entry["quality_status"] = "failed"
@@ -388,14 +460,29 @@ def _validate_target(entry: dict[str, Any]) -> None:
         raise RuntimeError(
             f"Validation failed for {entry['id']}: character detail page had no recognizable active combat skills"
         )
+    elif kind == "sidekick_detail" and (
+        parsed_counts.get("auto_skills", 0)
+        + parsed_counts.get("charge_skills", 0)
+        + parsed_counts.get("auras", 0)
+    ) <= 0:
+        entry["quality_status"] = "failed"
+        entry["state"] = "failed"
+        entry["last_error"] = "Sidekick detail page had no recognizable auto skill, charge skill, or aura"
+        raise RuntimeError(
+            f"Validation failed for {entry['id']}: sidekick detail page had no recognizable sidekick abilities"
+        )
     else:
         entry["quality_status"] = "ok"
 
     entry["last_error"] = None
 
 
-def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
+def _aggregate_parsed_data(
+    manifest: dict[str, Any],
+    active_target_ids: set[str] | None = None,
+) -> dict[str, list[Any]]:
     characters_by_name: dict[str, CharacterRow] = {}
+    sidekicks_by_name: dict[str, SidekickRow] = {}
     grastas: list[GrastaRow] = []
     ores: list[OreRow] = []
     character_skills: dict[str, list[SkillRow]] = {}
@@ -403,6 +490,8 @@ def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
     character_detail_is_sa: dict[str, bool] = {}
 
     for entry in manifest["targets"].values():
+        if active_target_ids is not None and entry["id"] not in active_target_ids:
+            continue
         if entry["state"] not in {"parsed", "loaded"}:
             continue
         payload = _load_rows(Path(entry["parsed_path"]))
@@ -412,6 +501,14 @@ def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
             for row in rows:
                 character = CharacterRow.model_validate(row)
                 characters_by_name[character.name] = character
+        elif kind == "sidekick_index":
+            for row in rows:
+                try:
+                    sidekick = SidekickRow.model_validate(row)
+                except Exception as exc:  # noqa: BLE001
+                    logger.debug("Skipping invalid sidekick index artifact row %s: %s", row.get("name"), exc)
+                    continue
+                sidekicks_by_name[sidekick.name] = sidekick
         elif kind in {"grasta_index", "grasta_vc_index"}:
             grastas.extend(GrastaRow.model_validate(row) for row in rows)
         elif kind == "ore_index":
@@ -423,6 +520,10 @@ def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
                 PassiveSkillRow.model_validate(row) for row in payload.get("passive_rows", [])
             ]
             character_detail_is_sa[character_name] = bool(payload.get("is_SA"))
+        elif kind == "sidekick_detail":
+            for row in rows:
+                sidekick = SidekickRow.model_validate(row)
+                sidekicks_by_name[sidekick.name] = sidekick
 
     characters = []
     for character in characters_by_name.values():
@@ -433,7 +534,7 @@ def _aggregate_parsed_data(manifest: dict[str, Any]) -> dict[str, list[Any]]:
             character.model_copy(update={"skills": skills, "passive_skills": passive_skills, "is_SA": is_sa})
         )
 
-    return {"characters": characters, "grastas": grastas, "ores": ores}
+    return {"characters": characters, "sidekicks": list(sidekicks_by_name.values()), "grastas": grastas, "ores": ores}
 
 
 def _selected_targets(manifest: dict[str, Any], kinds: set[str] | None = None) -> list[dict[str, Any]]:
@@ -496,6 +597,19 @@ def _failed_entries(manifest: dict[str, Any], selected_ids: set[str]) -> list[di
     ]
 
 
+def _mark_inactive_targets(manifest: dict[str, Any], active_target_ids: set[str]) -> None:
+    """Mark previously selected detail targets inactive when the current scope no longer selects them."""
+    for entry in manifest["targets"].values():
+        if entry["id"] in active_target_ids:
+            continue
+        if entry["kind"] not in {"character_detail", "sidekick_detail"}:
+            continue
+        if entry["state"] in {"pending", "cached", "parsed", "loaded", "failed"}:
+            entry["state"] = "inactive"
+            entry["quality_status"] = "inactive"
+            entry["last_error"] = "Target not selected by current crawl scope"
+
+
 async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[str, list[Any]], dict[str, Any]]:
     config = config or CrawlConfig()
     manifest = _load_manifest()
@@ -519,24 +633,38 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
 
     if config.source_mode == "parsed":
         characters_entry = manifest["targets"]["characters"]
+        sidekick_entry = manifest["targets"]["sidekick"]
         if not _parsed_is_current(characters_entry):
             raise RuntimeError(
                 "Parsed source mode requires a current characters parsed snapshot "
                 f"at {characters_entry['parsed_path']}"
             )
+        if not _parsed_is_current(sidekick_entry):
+            raise RuntimeError(
+                "Parsed source mode requires a current sidekick parsed snapshot "
+                f"at {sidekick_entry['parsed_path']}"
+            )
         characters_payload = _load_rows(Path(characters_entry["parsed_path"]))
+        sidekick_payload = _load_rows(Path(sidekick_entry["parsed_path"]))
     else:
         if not Path(manifest["targets"]["characters"]["raw_path"]).exists():
             raise RuntimeError("Characters index was not cached successfully; cannot continue ETL parse stage.")
+        if not Path(manifest["targets"]["sidekick"]["raw_path"]).exists():
+            raise RuntimeError("Sidekick index was not cached successfully; cannot continue ETL parse stage.")
         characters_payload = _parse_target(manifest["targets"]["characters"])
+        sidekick_payload = _parse_target(manifest["targets"]["sidekick"])
         _save_manifest(manifest)
 
     character_records = characters_payload["rows"]
+    sidekick_records = sidekick_payload["rows"]
 
     character_targets = _build_character_targets(character_records, config)
+    sidekick_targets = _build_sidekick_targets(sidekick_records, config)
     active_target_ids.update(_selected_target_ids(character_targets))
+    active_target_ids.update(_selected_target_ids(sidekick_targets))
+    _mark_inactive_targets(manifest, active_target_ids)
 
-    for target in character_targets:
+    for target in [*character_targets, *sidekick_targets]:
         _ensure_target_entry(manifest, target)
     _save_manifest(manifest)
 
@@ -546,7 +674,7 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
             for entry in _selected_targets(manifest):
                 if entry["id"] not in active_target_ids:
                     continue
-                if entry["kind"] != "character_detail":
+                if entry["kind"] not in {"character_detail", "sidekick_detail"}:
                     continue
                 if _should_fetch(entry, config):
                     try:
@@ -580,17 +708,21 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
         failed_urls = ", ".join(f"{entry['id']} ({entry['attempt_count']} attempts)" for entry in failures)
         raise RuntimeError(f"ETL fetch failures remain after retries: {failed_urls}")
 
-    return _aggregate_parsed_data(manifest), manifest
+    return _aggregate_parsed_data(manifest, active_target_ids), manifest
 
 
 def mark_loaded(manifest: dict[str, Any], data: dict[str, list[Any]]) -> None:
     loaded_character_names = {character.name for character in data["characters"]}
+    loaded_sidekick_names = {sidekick.name for sidekick in data.get("sidekicks", [])}
 
     for entry in manifest["targets"].values():
         if entry["state"] != "parsed":
             continue
         if entry["kind"] == "character_detail":
             if entry["metadata"]["character_name"] not in loaded_character_names:
+                continue
+        if entry["kind"] == "sidekick_detail":
+            if entry["metadata"]["sidekick"]["name"] not in loaded_sidekick_names:
                 continue
         entry["state"] = "loaded"
         entry["last_loaded_at"] = _timestamp()

@@ -54,7 +54,7 @@ The portfolio story is that AnotherEdenAI has a deterministic, auditable ETL fou
 
 ### Feature A: Sidekick Graph ETL
 
-Status: Not started
+Status: Completed
 
 Goal: Add sidekicks as first-class non-hero party members with structured ability and aura data.
 
@@ -200,7 +200,7 @@ Acceptance criteria:
 ## Current Completion Status
 
 - Milestone 3 planning: complete
-- Feature A: not started
+- Feature A: completed
 - Feature B: not started
 - Feature C: not started
 - Feature D: not started

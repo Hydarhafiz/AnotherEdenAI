@@ -6,7 +6,15 @@ import logging
 from neo4j import AsyncGraphDatabase
 
 from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
-from .loader import ensure_constraints, load_characters, load_grastas, load_ores, load_passive_skills, load_skills
+from .loader import (
+    ensure_constraints,
+    load_characters,
+    load_grastas,
+    load_ores,
+    load_passive_skills,
+    load_sidekicks,
+    load_skills,
+)
 from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
 
 logging.basicConfig(
@@ -38,12 +46,13 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         data, manifest = await prepare_parsed_data(config=config)
 
         characters = data["characters"]
+        sidekicks = data["sidekicks"]
         grastas = data["grastas"]
         ores = data["ores"]
 
         logger.info(
-            "Prepared: %d characters, %d grastas, %d ores",
-            len(characters), len(grastas), len(ores),
+            "Prepared: %d characters, %d sidekicks, %d grastas, %d ores",
+            len(characters), len(sidekicks), len(grastas), len(ores),
         )
 
         await load_characters(driver, characters)
@@ -51,13 +60,14 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         passive_skills = [passive for character in characters for passive in character.passive_skills]
         await load_skills(driver, skills)
         await load_passive_skills(driver, passive_skills)
+        await load_sidekicks(driver, sidekicks)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
         mark_loaded(manifest, data)
 
         print(
             f"ETL complete -- loaded {len(characters)} characters, "
-            f"{len(grastas)} grastas, {len(ores)} ores"
+            f"{len(sidekicks)} sidekicks, {len(grastas)} grastas, {len(ores)} ores"
         )
     finally:
         if own_driver:

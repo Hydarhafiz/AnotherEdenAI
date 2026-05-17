@@ -140,6 +140,113 @@ CHARACTER_COMBAT_HTML = """
 </article>
 """
 
+SIDEKICK_INDEX_HTML = """
+<table>
+  <tbody>
+    <tr class="character-row-entry"
+        data-name="Tetra (Another Style)"
+        data-sidekick="1"
+        data-accessory="Sidekick"
+        data-rarity="AS"
+        data-role_strict="SR_Bud_Healer_NATK, SR_Aura_Bud_NATK">
+      <td><a href="/w/Tetra_(Another_Style)" title="Tetra (Another Style)">Tetra AS</a></td>
+    </tr>
+    <tr class="character-row-entry"
+        data-name="Aldo"
+        data-accessory="Bangle"
+        data-rarity="5">
+      <td><a href="/w/Aldo" title="Aldo">Aldo</a></td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+SIDEKICK_RELEASED_INDEX_HTML = """
+<div class="mw-parser-output">
+  <h2><span class="mw-headline" id="Released_Sidekicks">Released Sidekicks</span></h2>
+  <div class="sidekick-head">
+    <div class="sidekick-images">
+      <div class="sidekick-icon"><a href="/w/Tetra" title="Tetra"><img alt="2000000001 command.png"></a></div>
+      <div class="sidekick-owner"><a href="/w/Minalca" title="Minalca"><img alt="101010131 rank5 command.png"></a></div>
+    </div>
+    <div class="sidekick-name"><a href="/w/Tetra" title="Tetra">Tetra</a> (5★)</div>
+  </div>
+  <div class="sidekick-head">
+    <div class="sidekick-images">
+      <div class="sidekick-icon"><a href="/w/Tetra_(Another_Style)" title="Tetra (Another Style)"><img alt="2000000001 s2 command.png"></a></div>
+      <div class="sidekick-owner"><a href="/w/Minalca_(Another_Style)" title="Minalca (Another Style)"><img alt="101010131 s2 rank5 command.png"></a></div>
+    </div>
+    <div class="sidekick-name"><a href="/w/Tetra_(Another_Style)" title="Tetra (Another Style)">Tetra AS</a> (5★)</div>
+  </div>
+  <p>
+    <a href="/w/File:2000000001_command.png" title="File:2000000001 command.png">Image</a>
+    <a href="/w/Mare" title="Mare">Mare</a> (5★)
+  </p>
+  <h2><span class="mw-headline" id="Contents">Contents</span></h2>
+  <p><a href="/w/Characters" title="Characters">Characters</a></p>
+</div>
+"""
+
+SIDEKICK_DETAIL_HTML = """
+<article class="tabber__panel" title="Sidekick Skills">
+  <div class="character-skill-grid-container">
+    <div class="character-skill-name-image">
+      <div class="skill-name"><a href="/w/Nurturing_Roar">Nurturing Roar</a></div>
+      <div class="skill-mp">MP 1</div>
+    </div>
+    <div class="character-skill-element-type">
+      <div class="upper-grid">Null</div>
+      <div class="lower-grid">Healing</div>
+    </div>
+    <div class="character-skill-description">
+      <div class="skill-description"><b><a href="/w/Turn_Order">Auto</a></b>Restore all party members' HP +15%
+      <ul><li><b>[When <a href="/w/Minalca_(Another_Style)" title="Minalca (Another Style)">Minalca (Another Style)</a> is at front]</b>: Stack +1 Charge</li></ul></div>
+    </div>
+    <div class="character-skill-mp"><div>1</div></div>
+  </div>
+  <div class="character-skill-grid-container">
+    <div class="character-skill-name-image">
+      <div class="skill-name"><a href="/w/Life_Bloom">Life Bloom</a></div>
+      <div class="skill-mp">MP -5</div>
+    </div>
+    <div class="character-skill-element-type">
+      <div class="upper-grid">Null</div>
+      <div class="lower-grid">Buff</div>
+    </div>
+    <div class="character-skill-description">
+      <div class="skill-description"><b><a href="/w/Turn_Order">Charged</a></b>Consumes 5 Charge to restore HP and MP</div>
+    </div>
+    <div class="character-skill-mp"><div>-5</div></div>
+  </div>
+  <div class="character-skill-grid-container">
+    <div class="character-skill-name-image">
+      <div class="skill-name"><a href="/w/Guardian_Aura">Guardian Aura</a></div>
+      <div class="skill-mp">MP 0</div>
+    </div>
+    <div class="character-skill-element-type">
+      <div class="upper-grid"></div>
+      <div class="lower-grid">Buff</div>
+    </div>
+    <div class="character-skill-description">
+      <div class="skill-description"><b><a href="/w/Aura">Aura</a></b><b>Activation condition:</b> When HP is below 80%
+      <ul><li>All party members max HP <b>+30%</b></li></ul></div>
+    </div>
+    <div class="character-skill-mp"><div>0</div></div>
+  </div>
+  <div class="character-skill-grid-container">
+    <div class="character-skill-name-image">
+      <div class="skill-name"><a href="/w/Irregular_Field">Irregular Field</a></div>
+    </div>
+    <div class="character-skill-description">
+      <div class="skill-description">Unrecognized sidekick section text.</div>
+    </div>
+  </div>
+</article>
+<h2><span class="mw-headline" id="Encounter">Encounter</span></h2>
+<h3><span class="mw-headline" id="Encounter_them_in_the_Gallery_of_Dreams">Encounter them in the Gallery of Dreams</span></h3>
+<p>Certain characters have 5 star class styles that add a sidekick to your party.</p>
+"""
+
 
 # ---------------------------------------------------------------------------
 # Tests
@@ -238,6 +345,61 @@ def test_parse_character_detail_combat_graph_rows():
     assert [passive.name for passive in passives] == ["Dazzling Slash Stance"]
     assert passives[0].passive_type == "zone"
     assert "AF gauge" in passives[0].description
+
+
+def test_parse_sidekick_index_discovers_only_sidekick_rows():
+    """Sidekick index rows become Sidekick records without entering Character rows."""
+    from src.etl.scraper import parse_sidekick_index
+
+    soup = BeautifulSoup(SIDEKICK_INDEX_HTML, "html.parser")
+    rows = parse_sidekick_index(soup)
+
+    assert [row.name for row in rows] == ["Tetra (Another Style)"]
+    assert rows[0].source_url == "https://anothereden.wiki/w/Tetra_(Another_Style)"
+    assert rows[0].rarity == "AS"
+    assert rows[0].role_tags == ["SR_Bud_Healer_NATK", "SR_Aura_Bud_NATK"]
+    assert rows[0].schema_version
+
+
+def test_parse_sidekick_index_discovers_released_sidekick_links():
+    """The canonical Sidekick page lists released sidekicks as links, not Cargo rows."""
+    from src.etl.scraper import parse_sidekick_index
+
+    soup = BeautifulSoup(SIDEKICK_RELEASED_INDEX_HTML, "html.parser")
+    rows = parse_sidekick_index(soup)
+
+    assert [row.name for row in rows] == ["Tetra", "Tetra (Another Style)"]
+    assert rows[1].source_url == "https://anothereden.wiki/w/Tetra_(Another_Style)"
+    assert rows[1].rarity == "5★"
+    assert rows[0].associated_character_names == ["Minalca"]
+    assert rows[1].associated_character_names == ["Minalca (Another Style)"]
+    assert "Minalca" not in [row.name for row in rows]
+
+
+def test_parse_sidekick_detail_splits_abilities_auras_associations_and_diagnostics():
+    """Sidekick detail pages produce queryable auto skill, charge skill, aura, and association facts."""
+    from src.etl.models import SidekickRow
+    from src.etl.scraper import parse_sidekick_detail
+
+    soup = BeautifulSoup(SIDEKICK_DETAIL_HTML, "html.parser")
+    row = parse_sidekick_detail(
+        soup,
+        SidekickRow(name="Tetra (Another Style)", source_url="https://example.test/Tetra_AS"),
+    )
+
+    assert row.main_slot_behavior.startswith("Main sidekick")
+    assert row.sub_slot_behavior.startswith("Sub sidekick")
+    assert row.acquisition_text.startswith("Certain characters")
+    assert row.associated_character_names == ["Minalca (Another Style)"]
+    assert [skill.name for skill in row.auto_skills] == ["Nurturing Roar"]
+    assert row.auto_skills[0].skill_kind == "auto"
+    assert row.auto_skills[0].skill_type == "Healing"
+    assert [skill.name for skill in row.charge_skills] == ["Life Bloom"]
+    assert row.charge_skills[0].charge_cost == 5
+    assert [aura.name for aura in row.auras] == ["Guardian Aura"]
+    assert row.auras[0].activation_condition == "When HP is below 80%"
+    assert "All party members max HP" in row.auras[0].effect_text
+    assert "Irregular Field" in row.diagnostics_text
 
 
 def test_wiki_page_title_uses_style_alias_after_comma():

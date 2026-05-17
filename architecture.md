@@ -31,7 +31,7 @@ The system has three major layers:
 At a high level:
 
 - Wiki data is scraped and normalized into Pydantic ETL models.
-- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
+- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Sidekicks, SidekickSkills, SidekickAuras, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
 - User roster input is normalized and augmented with free-to-play units.
 - A five-node LangGraph pipeline plans the query, generates Cypher, validates it, analyzes results, and formats the output.
 - FastAPI exposes query and admin routes, while SSE streams progress back to the browser.
@@ -49,10 +49,20 @@ At a high level:
 Responsibilities:
 
 - Retrieve live wiki pages with `nodriver`
-- Parse Characters, character detail combat entries, Grastas, and Ores
+- Parse Characters, character detail combat entries, Sidekicks, sidekick ability/aura entries, Grastas, and Ores
 - Validate records with Pydantic
 - Load normalized entities into Neo4j
 - Assert schema expectations after load
+
+Feature A sidekick graph behavior:
+
+- The canonical Sidekick page discovers released sidekicks from sidekick cards; sidekick identity comes from `.sidekick-name`, while `.sidekick-owner` links are association facts.
+- Sidekick detail pages use character skill-grid markup and are parsed into separate auto skills, charge skills, and aura records.
+- Sidekicks load as `Sidekick` nodes, not `Character` nodes, preserving the later 6-hero plus main/sub sidekick legality model.
+- `SidekickSkill` and `SidekickAura` child nodes are connected with `HAS_AUTO_SKILL`, `HAS_CHARGE_SKILL`, and `HAS_AURA`.
+- Official owner/unlock facts load as `(:Character)-[:UNLOCKS_SIDEKICK]->(:Sidekick)` when the associated character exists in the graph.
+- Small and fallback sidekick scope cover the full current sidekick detail set because the total sidekick list is small.
+- The manual Feature A smoke runner clears generated sidekick detail artifacts and stale sidekick-detail manifest entries before live smoke runs to keep reused smoke roots honest.
 
 Feature B combat graph behavior:
 

@@ -108,6 +108,75 @@ class PassiveSkillRow(BaseModel):
         return bool(v)
 
 
+class SidekickSkillRow(BaseModel):
+    """Represents one parsed sidekick auto or charge skill."""
+
+    sidekick_name: str
+    name: str
+    skill_kind: str
+    element: str | None = None
+    skill_type: str | None = None
+    charge_cost: int | None = None
+    description: str = ""
+    source_url: str | None = None
+    section: str | None = None
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("skill_kind")
+    @classmethod
+    def validate_skill_kind(cls, v):
+        if v not in {"auto", "charge"}:
+            raise ValueError("skill_kind must be auto or charge")
+        return v
+
+    @field_validator("charge_cost", mode="before")
+    @classmethod
+    def coerce_charge_cost(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, str):
+            match = re.search(r"-?\d+", v)
+            return abs(int(match.group(0))) if match else None
+        return abs(int(v))
+
+
+class SidekickAuraRow(BaseModel):
+    """Represents one parsed sidekick aura effect."""
+
+    sidekick_name: str
+    name: str
+    activation_condition: str | None = None
+    effect_text: str = ""
+    source_url: str | None = None
+    section: str | None = None
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+
+class SidekickRow(BaseModel):
+    """Represents a sidekick as a first-class non-hero party member."""
+
+    name: str
+    source_url: str
+    acquisition_text: str | None = None
+    rarity: str | None = None
+    role_tags: list[str] = Field(default_factory=list)
+    main_slot_behavior: str = "Main sidekick can use auto skills, charge skills, and aura effects."
+    sub_slot_behavior: str = "Sub sidekick contributes aura-only effects."
+    associated_character_names: list[str] = Field(default_factory=list)
+    diagnostics_text: str | None = None
+    auto_skills: list[SidekickSkillRow] = Field(default_factory=list)
+    charge_skills: list[SidekickSkillRow] = Field(default_factory=list)
+    auras: list[SidekickAuraRow] = Field(default_factory=list)
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("role_tags", "associated_character_names", mode="before")
+    @classmethod
+    def parse_string_list(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return list(v) if v else []
+
+
 class GrastaRow(BaseModel):
     """Represents a single grasta row scraped from any Grasta wiki page."""
 

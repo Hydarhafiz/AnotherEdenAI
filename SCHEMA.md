@@ -55,6 +55,44 @@ Uniqueness: `(character_name, name)`.
 
 Uniqueness: `(character_name, name)`.
 
+### Sidekick
+- `name` (STRING, unique) — canonical wiki sidekick name
+- `source_url` (STRING) — canonical wiki detail page URL
+- `acquisition_text` (STRING, nullable) — wiki encounter/acquisition text when available
+- `rarity` (STRING, nullable) — sidekick rank such as `3★`, `4★`, `5★`, or style marker when available
+- `role_tags` (LIST<STRING>) — raw index role tags when available
+- `main_slot_behavior` (STRING) — main sidekick can use auto skills, charge skills, and aura effects
+- `sub_slot_behavior` (STRING) — sub sidekick contributes aura-only effects
+- `diagnostics_text` (STRING, nullable) — irregular parsed sidekick sections preserved for review
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Sidekicks are separate from `Character` nodes. They do not count as frontline or backline heroes.
+
+### SidekickSkill
+- `sidekick_name` (STRING) — owning Sidekick name
+- `name` (STRING) — skill display name
+- `skill_kind` (STRING) — `auto` or `charge`
+- `element` (STRING, nullable) — parsed skill element when available
+- `skill_type` (STRING, nullable) — parsed sidekick skill type when available
+- `charge_cost` (INTEGER, nullable) — charge consumed or generated when available
+- `description` (STRING) — source-grounded skill text
+- `source_url` (STRING, nullable) — source sidekick detail page
+- `section` (STRING, nullable) — source page section
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Uniqueness: `(sidekick_name, name, skill_kind)`.
+
+### SidekickAura
+- `sidekick_name` (STRING) — owning Sidekick name
+- `name` (STRING) — aura display name
+- `activation_condition` (STRING, nullable) — best-effort parsed activation condition
+- `effect_text` (STRING) — source-grounded aura effect text
+- `source_url` (STRING, nullable) — source sidekick detail page
+- `section` (STRING, nullable) — source page section
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Uniqueness: `(sidekick_name, name)`.
+
 NOTE: Ore nodes are standalone entities. There is no ENHANCES relationship in the graph.
 The decision of which Ore to apply to which Grasta is a dynamic player/AI decision handled
 by the PLAN and ANALYZE agents at query time (Phase 2/3). Do not add ENHANCES edges.
@@ -74,12 +112,25 @@ Character has an executable active skill or basic attack replacement. No relatio
 ### (:Character)-[:HAS_PASSIVE_SKILL]->(:PassiveSkill)
 Character has a passive skill, stance, zone, battle-start effect, Stellar Awakening passive, or other non-executable mechanic. No relationship properties.
 
+### (:Sidekick)-[:HAS_AUTO_SKILL]->(:SidekickSkill)
+Sidekick has an auto skill. Target `SidekickSkill.skill_kind` is `auto`.
+
+### (:Sidekick)-[:HAS_CHARGE_SKILL]->(:SidekickSkill)
+Sidekick has a charge skill. Target `SidekickSkill.skill_kind` is `charge`.
+
+### (:Sidekick)-[:HAS_AURA]->(:SidekickAura)
+Sidekick has an aura effect. Auras can be contributed by sub sidekicks.
+
+### (:Character)-[:UNLOCKS_SIDEKICK]->(:Sidekick)
+Official wiki association or unlock fact between a Character and Sidekick when discoverable from the Sidekick index or detail page.
+
 ## Known Counts (from wiki audit 2026-03-14)
 - Character nodes: 393
 - Grasta nodes: 647 (Attack=231, Life=46, Support=56, Special=4, VC=310)
 - Ore nodes: 61
 - Trait nodes: varies (union of all character personalities + grasta personality_req values)
 - Skill and PassiveSkill counts vary by selected character-detail crawl scope.
+- Sidekick, SidekickSkill, and SidekickAura counts vary by selected sidekick crawl scope.
 
 ## Schema Validation
 After ETL, `python assert_schema.py` must exit 0.

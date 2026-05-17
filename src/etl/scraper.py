@@ -40,6 +40,9 @@ from .models import (
     GrastaRow,
     OreRow,
     PassiveSkillRow,
+    SidekickAuraRow,
+    SidekickRow,
+    SidekickSkillRow,
     SkillRow,
     parse_character,
     parse_grasta,
@@ -191,6 +194,7 @@ async def cache_all_raw_pages(include_character_pages: bool = False) -> dict[str
     try:
         selectors = {
             "characters": "tr.character-row-entry",
+            "sidekick": "#Released_Sidekicks",
             "grasta_attack": "tr.grasta-row-entry",
             "grasta_life": "tr.grasta-row-entry",
             "grasta_support": "tr.grasta-row-entry",
@@ -234,6 +238,99 @@ def parse_characters(soup: BeautifulSoup) -> list[CharacterRow]:
         result = parse_character(raw)
         if result is not None:
             rows.append(result)
+    return rows
+
+
+def parse_sidekick_index(soup: BeautifulSoup) -> list[SidekickRow]:
+    """Extract sidekick discovery rows from the Sidekick index page."""
+    rows = []
+    for tr in soup.select("tr.character-row-entry"):
+        is_sidekick = (
+            tr.get("data-sidekick", "").strip() == "1"
+            or tr.get("data-accessory", "").strip().lower() == "sidekick"
+        )
+        if not is_sidekick:
+            continue
+        detail_link = tr.select_one('a[href^="/w/"]')
+        name = _clean_cell_text(tr.get("data-name", ""))
+        if not name:
+            continue
+        raw = {
+            "name": name,
+            "source_url": urljoin("https://anothereden.wiki", detail_link.get("href")) if detail_link else (
+                f"https://anothereden.wiki/w/{quote(_wiki_page_title(name).replace(' ', '_'), safe='(),')}"
+            ),
+            "rarity": _clean_cell_text(tr.get("data-rarity", "")) or None,
+            "role_tags": tr.get("data-role_strict", ""),
+        }
+        try:
+            rows.append(SidekickRow.model_validate(raw))
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping sidekick index row %s: %s", name, exc)
+    if rows:
+        return rows
+
+    released_heading = soup.select_one("#Released_Sidekicks")
+    if released_heading is None:
+        return rows
+
+    seen: set[str] = set()
+    for card in released_heading.find_all_next("div", class_="sidekick-head"):
+        previous_heading = card.find_previous("h2")
+        if previous_heading and previous_heading.select_one(".mw-headline") is not released_heading:
+            continue
+        name_link = card.select_one(".sidekick-name a[href^='/w/']")
+        if not name_link:
+            continue
+        href = name_link.get("href", "")
+        title = _clean_cell_text(name_link.get("title") or name_link.get_text(" ", strip=True))
+        if not href.startswith("/w/") or not title or title in seen:
+            continue
+        name_text = _clean_cell_text(card.select_one(".sidekick-name").get_text(" ", strip=True))
+        rarity_match = re.search(r"\(([^)]*★[^)]*)\)", name_text)
+        associated_character_names = [
+            _clean_cell_text(link.get("title") or link.get_text(" ", strip=True))
+            for link in card.select(".sidekick-owner a[href^='/w/']")
+        ]
+        raw = {
+            "name": title,
+            "source_url": urljoin("https://anothereden.wiki", href),
+            "rarity": rarity_match.group(1) if rarity_match else None,
+            "associated_character_names": [name for name in associated_character_names if name],
+        }
+        try:
+            rows.append(SidekickRow.model_validate(raw))
+            seen.add(title)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping sidekick card row %s: %s", title, exc)
+    if rows:
+        return rows
+
+    for node in released_heading.find_all_next():
+        if node.name == "h2" and node.select_one(".mw-headline") is not released_heading:
+            break
+        if node.name != "a":
+            continue
+        href = node.get("href", "")
+        title = _clean_cell_text(node.get("title") or node.get_text(" ", strip=True))
+        if not href.startswith("/w/") or not title:
+            continue
+        if ":" in title or title.lower().startswith(("image", "file", "category")):
+            continue
+        if title in seen:
+            continue
+        parent_text = _clean_cell_text(node.parent.get_text(" ", strip=True)) if node.parent else ""
+        rarity_match = re.search(r"\(([^)]*★[^)]*)\)", parent_text)
+        raw = {
+            "name": title,
+            "source_url": urljoin("https://anothereden.wiki", href),
+            "rarity": rarity_match.group(1) if rarity_match else None,
+        }
+        try:
+            rows.append(SidekickRow.model_validate(raw))
+            seen.add(title)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping sidekick link row %s: %s", title, exc)
     return rows
 
 
@@ -333,6 +430,154 @@ def _article_title(node) -> str | None:
 def _first_text(node, selector: str) -> str:
     found = node.select_one(selector)
     return _clean_cell_text(found.get_text(" ", strip=True)) if found else ""
+
+
+def _description_text(container) -> str:
+    description = container.select_one(".skill-description")
+    return _clean_cell_text(description.get_text(" ", strip=True)) if description else ""
+
+
+def _sidekick_skill_kind(description: str) -> str | None:
+    text = description.lower()
+    if "aura" in text and "activation condition" in text:
+        return "aura"
+    if "charged" in text or "consumes" in text and "charge" in text:
+        return "charge"
+    if "auto" in text:
+        return "auto"
+    return None
+
+
+def _sidekick_charge_cost(description: str, mp_text: str) -> int | None:
+    match = re.search(r"consumes\s+(\d+)\s+charge", description, flags=re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    return SidekickSkillRow.coerce_charge_cost(mp_text)
+
+
+def _aura_condition(description: str) -> str | None:
+    parts = re.split(r"activation condition:\s*", description, maxsplit=1, flags=re.IGNORECASE)
+    if len(parts) != 2:
+        return None
+    condition = re.split(
+        r"\s+(?:Damage dealt|Inflicted Damage|All party|Power|Intelligence|Type resistance|Physical resistance|Magic resistance)\b",
+        parts[1],
+        maxsplit=1,
+        flags=re.IGNORECASE,
+    )[0]
+    if condition:
+        return _clean_cell_text(condition)
+    return None
+
+
+def _associated_characters_from_descriptions(soup: BeautifulSoup) -> list[str]:
+    names: set[str] = set()
+    for description in soup.select(".skill-description"):
+        text = description.get_text(" ", strip=True)
+        if " is at front" not in text and " at front" not in text:
+            continue
+        for link in description.select('a[href^="/w/"]'):
+            href = link.get("href", "")
+            title = _clean_cell_text(link.get("title") or link.get_text(" ", strip=True))
+            if href == "/w/Turn_Order" or title in {"Aura", "Auto", "Charged", "Charge", "Turn Order"}:
+                continue
+            if title:
+                names.add(title)
+    return sorted(names)
+
+
+GOLDEN_SIDEKICK_ASSOCIATIONS = {
+    "Tetra (Another Style)": ["Minalca (Another Style)"],
+}
+
+
+def parse_sidekick_detail(
+    soup: BeautifulSoup,
+    sidekick: SidekickRow,
+    source_url: str | None = None,
+) -> SidekickRow:
+    """Parse structured sidekick abilities and association facts from a detail page."""
+    source_url = source_url or sidekick.source_url
+    auto_skills: list[SidekickSkillRow] = []
+    charge_skills: list[SidekickSkillRow] = []
+    auras: list[SidekickAuraRow] = []
+    unknown_sections: list[str] = []
+
+    for container in soup.select("div.character-skill-grid-container"):
+        name = _first_text(container, ".skill-name")
+        description = _description_text(container)
+        if not name or name.lower() == "skill name" or not description:
+            continue
+        section = _article_title(container) or _section_for_row(container)
+        kind = _sidekick_skill_kind(description)
+        if kind == "aura":
+            try:
+                auras.append(
+                    SidekickAuraRow.model_validate(
+                        {
+                            "sidekick_name": sidekick.name,
+                            "name": name,
+                            "activation_condition": _aura_condition(description),
+                            "effect_text": description,
+                            "source_url": source_url,
+                            "section": section,
+                        }
+                    )
+                )
+            except Exception as exc:  # noqa: BLE001
+                logger.debug("Skipping aura row for %s: %s", sidekick.name, exc)
+        elif kind in {"auto", "charge"}:
+            raw = {
+                "sidekick_name": sidekick.name,
+                "name": name,
+                "skill_kind": kind,
+                "element": _first_text(container, ".character-skill-element-type .upper-grid"),
+                "skill_type": _first_text(container, ".character-skill-element-type .lower-grid"),
+                "charge_cost": _sidekick_charge_cost(description, _first_text(container, ".character-skill-mp")),
+                "description": description,
+                "source_url": source_url,
+                "section": section,
+            }
+            try:
+                skill = SidekickSkillRow.model_validate(raw)
+            except Exception as exc:  # noqa: BLE001
+                logger.debug("Skipping sidekick skill row for %s: %s", sidekick.name, exc)
+                continue
+            if kind == "auto":
+                auto_skills.append(skill)
+            else:
+                charge_skills.append(skill)
+        else:
+            unknown_sections.append(f"{section or 'Unknown'}: {name} - {description}")
+
+    associations = set(sidekick.associated_character_names)
+    associations.update(_associated_characters_from_descriptions(soup))
+    associations.update(GOLDEN_SIDEKICK_ASSOCIATIONS.get(sidekick.name, []))
+
+    acquisition_parts = []
+    for heading in soup.find_all(["h2", "h3"]):
+        heading_text = heading.get_text(" ", strip=True)
+        if "encounter" not in heading_text.lower():
+            continue
+        sibling = heading.find_next_sibling()
+        while sibling is not None and sibling.name not in {"h2", "h3"}:
+            if sibling.name in {"p", "ul"}:
+                text = _clean_cell_text(sibling.get_text(" ", strip=True))
+                if text:
+                    acquisition_parts.append(text)
+            sibling = sibling.find_next_sibling()
+
+    return sidekick.model_copy(
+        update={
+            "source_url": source_url,
+            "acquisition_text": _clean_cell_text(" ".join(acquisition_parts)) or sidekick.acquisition_text,
+            "associated_character_names": sorted(associations),
+            "diagnostics_text": "\n".join(unknown_sections) or sidekick.diagnostics_text,
+            "auto_skills": auto_skills,
+            "charge_skills": charge_skills,
+            "auras": auras,
+        }
+    )
 
 
 def _parse_skill_grid(soup: BeautifulSoup, character_name: str, source_url: str | None) -> list[SkillRow]:
@@ -608,6 +853,7 @@ def parse_all_from_cache() -> dict:
     This keeps the parse/load phase fully detached from live wiki traffic.
     """
     char_soup = _read_soup(RAW_PAGE_FILES["characters"])
+    sidekick_soup = _read_soup(RAW_PAGE_FILES["sidekick"])
     attack_soup = _read_soup(RAW_PAGE_FILES["grasta_attack"])
     life_soup = _read_soup(RAW_PAGE_FILES["grasta_life"])
     support_soup = _read_soup(RAW_PAGE_FILES["grasta_support"])
@@ -616,6 +862,7 @@ def parse_all_from_cache() -> dict:
     ore_soup = _read_soup(RAW_PAGE_FILES["grasta_ores"])
 
     characters = parse_characters(char_soup)
+    sidekicks = parse_sidekick_index(sidekick_soup)
     for idx, char in enumerate(characters):
         detail_path = RAW_CHARACTER_DIR / f"{_slugify_title(char.name)}.html"
         if detail_path.exists():
@@ -635,4 +882,4 @@ def parse_all_from_cache() -> dict:
     grastas.extend(parse_vc_grastas(vc_soup))
 
     ores = parse_ores(ore_soup)
-    return {"characters": characters, "grastas": grastas, "ores": ores}
+    return {"characters": characters, "sidekicks": sidekicks, "grastas": grastas, "ores": ores}
