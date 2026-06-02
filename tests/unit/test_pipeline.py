@@ -19,8 +19,10 @@ def _set_pipeline_paths(monkeypatch, tmp_path):
     monkeypatch.setattr(pipeline, "CRAWL_MANIFEST_PATH", tmp_path / "etl" / "crawl_manifest.json")
     monkeypatch.setattr(pipeline, "RAW_CHARACTER_DIR", tmp_path / "raw" / "characters")
     monkeypatch.setattr(pipeline, "RAW_SIDEKICK_DIR", tmp_path / "raw" / "sidekicks")
+    monkeypatch.setattr(pipeline, "RAW_SUPERBOSS_DIR", tmp_path / "raw" / "superbosses")
     monkeypatch.setattr(pipeline, "PARSED_CHARACTER_DIR", tmp_path / "parsed" / "characters")
     monkeypatch.setattr(pipeline, "PARSED_SIDEKICK_DIR", tmp_path / "parsed" / "sidekicks")
+    monkeypatch.setattr(pipeline, "PARSED_SUPERBOSS_DIR", tmp_path / "parsed" / "superbosses")
     monkeypatch.setattr(pipeline, "PARSED_INDEX_DIR", tmp_path / "parsed" / "indexes")
     monkeypatch.setattr(
         pipeline,
@@ -66,6 +68,35 @@ def test_build_sidekick_targets_respects_small_scope(monkeypatch, tmp_path):
     assert all(target["kind"] == "sidekick_detail" for target in targets)
     assert all("skill-description" in target["expected_selector"] for target in targets)
     assert str(targets[0]["raw_path"]).endswith("tetra_another_style.html")
+
+
+def test_build_superboss_targets_uses_curated_detail_metadata(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+
+    targets = pipeline._build_superboss_targets(
+        [
+            {
+                "name": "Flame Eater",
+                "source_url": "https://anothereden.wiki/w/Gariyu_(Chance_Encounter)#Flame_Eater",
+                "difficulty_tier": "2",
+                "level": 2,
+                "characteristics": "Summons companions",
+            },
+            {
+                "name": "Nameless Girl",
+                "source_url": "https://anothereden.wiki/w/Nameless_Girl",
+                "difficulty_tier": "3",
+                "level": 3,
+            },
+        ],
+        pipeline.CrawlConfig(source_mode="parsed"),
+    )
+
+    assert [target["metadata"]["superboss"]["name"] for target in targets] == ["Flame Eater", "Nameless Girl"]
+    assert all(target["kind"] == "superboss_detail" for target in targets)
+    assert targets[0]["url"].endswith("#Flame_Eater")
+    assert str(targets[0]["raw_path"]).endswith("flame_eater.html")
+    assert str(targets[0]["parsed_path"]).endswith("flame_eater.json")
 
 
 def test_should_refetch_empty_character_detail_when_resuming(monkeypatch, tmp_path):
@@ -197,6 +228,20 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
         entry = pipeline._ensure_target_entry(manifest, target)
         entry["state"] = "parsed"
 
+    superboss_targets = pipeline._build_superboss_targets(
+        [{
+            "name": "Flame Eater",
+            "source_url": "https://example.test/Gariyu#Flame_Eater",
+            "difficulty_tier": "2",
+            "level": 2,
+            "characteristics": "Summons companions",
+        }],
+        pipeline.CrawlConfig(source_mode="parsed"),
+    )
+    for target in superboss_targets:
+        entry = pipeline._ensure_target_entry(manifest, target)
+        entry["state"] = "parsed"
+
     pipeline._save_manifest(manifest)
 
     for key, kind in pipeline.INDEX_KINDS.items():
@@ -223,6 +268,17 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
                 "schema_version": pipeline.ETL_SCHEMA_VERSION,
             }]
             counts = {"sidekicks": 1}
+        elif key == "superbosses":
+            rows = [{
+                "name": "Flame Eater",
+                "source_url": "https://example.test/Gariyu#Flame_Eater",
+                "difficulty_tier": "2",
+                "level": 2,
+                "refight_status": "No",
+                "version": "1.2.5",
+                "characteristics": "Summons companions",
+            }]
+            counts = {"superboss_candidates": 1}
         elif kind in {"grasta_index", "grasta_vc_index"}:
             rows = [{
                 "name": f"{key}-grasta",
@@ -324,6 +380,30 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
         },
     )
 
+    _write_json(
+        pipeline.PARSED_SUPERBOSS_DIR / "flame_eater.json",
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "superboss_detail",
+            "rows": [{
+                "name": "Flame Eater",
+                "source_url": "https://example.test/Gariyu#Flame_Eater",
+                "difficulty_tier": "2",
+                "level": 2,
+                "hp": 123456,
+                "weak": ["Water"],
+                "resist": ["Fire"],
+                "null": ["unknown"],
+                "absorb": ["unknown"],
+                "characteristics": "Summons companions",
+                "mechanic_tags": ["companion summon"],
+                "mechanics_text": "Summons companions and uses fire damage.",
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }],
+            "parsed_counts": {"superbosses": 1, "mechanics_text_chars": 40},
+        },
+    )
+
     async def fail_if_browser_started(_config):
         raise AssertionError("parsed mode should not start a browser")
 
@@ -344,9 +424,95 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
     assert [skill.name for skill in data["sidekicks"][0].charge_skills] == ["Life Bloom"]
     assert [aura.name for aura in data["sidekicks"][0].auras] == ["Guardian Aura"]
     assert data["sidekicks"][0].associated_character_names == ["Minalca (Another Style)"]
+    assert [boss.name for boss in data["superbosses"]] == ["Flame Eater"]
+    assert data["superbosses"][0].weak == ["Water"]
+    assert "fire damage" in data["superbosses"][0].mechanics_text
     assert len(data["grastas"]) == 5
     assert len(data["ores"]) == 1
     assert loaded_manifest["targets"]["characters"]["quality_status"] == "ok"
+
+
+@pytest.mark.asyncio
+async def test_parsed_mode_skips_missing_detail_artifacts_without_fetch(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+
+    manifest = pipeline._base_manifest()
+    for target in pipeline._build_index_targets():
+        entry = pipeline._ensure_target_entry(manifest, target)
+        entry["state"] = "parsed"
+
+    missing_target = pipeline._build_character_targets(
+        [{"name": "Akane (Alter),Blooming Blade", "detail_url": "https://example.test/Blooming_Blade"}],
+        pipeline.CrawlConfig(source_mode="parsed", crawl_scope="small", small_character_limit=1),
+    )[0]
+    missing_entry = pipeline._ensure_target_entry(manifest, missing_target)
+    missing_entry["state"] = "pending"
+
+    pipeline._save_manifest(manifest)
+
+    for key, kind in pipeline.INDEX_KINDS.items():
+        parsed_path = pipeline.PARSED_INDEX_DIR / f"{key}.json"
+        if key == "characters":
+            rows = [{
+                "name": "Akane (Alter),Blooming Blade",
+                "element": "Fire",
+                "weapon": "Katana",
+                "light_shadow": "Light",
+                "personalities": ["Eastern"],
+                "detail_url": "https://example.test/Blooming_Blade",
+                "is_SA": False,
+                "skills": [],
+                "passive_skills": [],
+            }]
+            counts = {"characters": 1}
+        elif key == "sidekick":
+            rows = [{"name": "Tetra", "source_url": "https://example.test/Tetra"}]
+            counts = {"sidekicks": 1}
+        elif key == "superbosses":
+            rows = [{
+                "name": "Flame Eater",
+                "source_url": "https://example.test/Gariyu#Flame_Eater",
+                "difficulty_tier": "2",
+                "level": 2,
+            }]
+            counts = {"superboss_candidates": 1}
+        elif kind in {"grasta_index", "grasta_vc_index"}:
+            rows = [{
+                "name": f"{key}-grasta",
+                "category": "VC" if key == "grasta_vc" else pipeline.INDEX_CATEGORIES.get(key, "Attack"),
+                "tier": 1,
+                "stats": "ATK+5%",
+                "personality_req": None,
+                "is_shareable": key != "grasta_vc",
+            }]
+            counts = {"grastas": 1}
+        else:
+            rows = [{"name": "Ore Alpha", "stats": "SPD+5", "source": "Shop"}]
+            counts = {"ores": 1}
+
+        _write_json(
+            parsed_path,
+            {
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+                "kind": kind,
+                "rows": rows,
+                "parsed_counts": counts,
+            },
+        )
+
+    async def fail_if_browser_started(_config):
+        raise AssertionError("parsed mode should not start a browser")
+
+    monkeypatch.setattr(pipeline, "_start_browser", fail_if_browser_started)
+
+    data, loaded_manifest = await pipeline.prepare_parsed_data(
+        config=pipeline.CrawlConfig(source_mode="parsed", crawl_scope="small", small_character_limit=1)
+    )
+
+    assert [character.name for character in data["characters"]] == ["Akane (Alter),Blooming Blade"]
+    assert data["characters"][0].skills == []
+    assert loaded_manifest["targets"]["character::akane_alter_blooming_blade"]["state"] == "inactive"
+    assert "not available in parsed source mode" in loaded_manifest["targets"]["character::akane_alter_blooming_blade"]["last_error"]
 
 
 def test_validate_character_detail_rejects_partial_page_without_skills(monkeypatch, tmp_path):
@@ -411,6 +577,43 @@ def test_validate_sidekick_detail_rejects_partial_page_without_abilities(monkeyp
 
     assert entry["state"] == "failed"
     assert entry["quality_status"] == "failed"
+
+
+def test_validate_superboss_detail_rejects_page_without_mechanics_text(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    target = pipeline._make_target(
+        target_id="superboss::blocked",
+        url="https://example.test/Blocked#Boss",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "superbosses" / "blocked.html",
+        parsed_path=tmp_path / "parsed" / "superbosses" / "blocked.json",
+        kind="superboss_detail",
+        metadata={
+            "superboss": {
+                "name": "Blocked",
+                "source_url": "https://example.test/Blocked#Boss",
+            }
+        },
+    )
+    manifest = pipeline._base_manifest()
+    entry = pipeline._ensure_target_entry(manifest, target)
+    entry["state"] = "parsed"
+    _write_json(
+        Path(entry["parsed_path"]),
+        {
+            "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            "kind": "superboss_detail",
+            "rows": [],
+            "parsed_counts": {"superbosses": 1, "mechanics_text_chars": 0},
+        },
+    )
+
+    with pytest.raises(RuntimeError, match="no mechanics text"):
+        pipeline._validate_target(entry)
+
+    assert entry["state"] == "failed"
+    assert entry["quality_status"] == "failed"
+    assert "RAG grounding" in entry["last_error"]
 
 
 def test_aggregate_parsed_data_ignores_inactive_stale_targets(monkeypatch, tmp_path):
@@ -580,6 +783,15 @@ def test_mark_loaded_advances_parsed_targets(monkeypatch, tmp_path):
                 {
                     "name": "Tetra (Another Style)",
                     "source_url": "https://example.test/Tetra_AS",
+                }
+            )
+        ],
+        "superbosses": [
+            pipeline.SuperbossRow.model_validate(
+                {
+                    "name": "Flame Eater",
+                    "source_url": "https://example.test/Gariyu#Flame_Eater",
+                    "mechanics_text": "Uses fire damage.",
                 }
             )
         ],

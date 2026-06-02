@@ -247,6 +247,54 @@ SIDEKICK_DETAIL_HTML = """
 <p>Certain characters have 5 star class styles that add a sidekick to your party.</p>
 """
 
+SUPERBOSS_INDEX_HTML = """
+<table>
+  <tbody>
+    <tr>
+      <th>Difficulty</th><th>Name</th><th>Refight</th><th>Version</th><th>Characteristics</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><a href="/w/Zennon_Ogre%27s_Shadow" title="Zennon Ogre's Shadow">Zennon Ogre's Shadow</a></td>
+      <td>Refightable</td>
+      <td>1.0.0</td>
+      <td>HP stopper, high firepower</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><a href="/w/Gariyu_(Chance_Encounter)" title="Flame Eater">Flame Eater</a></td>
+      <td>No</td>
+      <td>1.2.5</td>
+      <td>Summons companions</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><a href="/w/Melvillithan" title="Melvillithan">Melvillithan</a></td>
+      <td>Yes</td>
+      <td>3.0.0</td>
+      <td>Not in the weak curated seed set</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+SUPERBOSS_DETAIL_HTML = """
+<div id="mw-content-text">
+  <h2><span class="mw-headline" id="Flame_Eater">Flame Eater</span></h2>
+  <table>
+    <tr><th>HP</th><td>1,234,567</td></tr>
+    <tr><th>Weak</th><td>Water / Slash</td></tr>
+    <tr><th>Resist</th><td>Fire</td></tr>
+    <tr><th>Null</th><td>Earth</td></tr>
+    <tr><th>Absorb</th><td>None</td></tr>
+  </table>
+  <p>The battle has an HP stopper and summons companions on later turns.</p>
+  <ul><li>Uses fire damage and debuffs party resistance.</li></ul>
+  <h2><span class="mw-headline" id="Other_Boss">Other Boss</span></h2>
+  <p>This later section should not be included in Flame Eater mechanics text.</p>
+</div>
+"""
+
 
 # ---------------------------------------------------------------------------
 # Tests
@@ -400,6 +448,55 @@ def test_parse_sidekick_detail_splits_abilities_auras_associations_and_diagnosti
     assert row.auras[0].activation_condition == "When HP is below 80%"
     assert "All party members max HP" in row.auras[0].effect_text
     assert "Irregular Field" in row.diagnostics_text
+
+
+def test_parse_superboss_index_discovers_only_curated_weak_candidates():
+    """Superbosses index rows provide discovery metadata without broad all-boss expansion."""
+    from src.etl.scraper import parse_superboss_index
+
+    soup = BeautifulSoup(SUPERBOSS_INDEX_HTML, "html.parser")
+    rows = parse_superboss_index(soup)
+
+    assert [row.name for row in rows] == ["Zennon Ogre's Shadow", "Flame Eater"]
+    assert rows[0].source_url == "https://anothereden.wiki/w/Zennon_Ogre%27s_Shadow"
+    assert rows[0].difficulty_tier == "1"
+    assert rows[0].level == 1
+    assert rows[0].refight_status == "Refightable"
+    assert rows[0].version == "1.0.0"
+    assert "HP stopper" in rows[0].characteristics
+    assert rows[1].source_url == "https://anothereden.wiki/w/Gariyu_(Chance_Encounter)#Flame_Eater"
+
+
+def test_parse_superboss_detail_keeps_section_anchor_and_structured_fields():
+    """Section-anchored pages produce explicit affinity fields and RAG mechanics text."""
+    from src.etl.models import SuperbossIndexRow
+    from src.etl.scraper import parse_superboss_detail
+
+    soup = BeautifulSoup(SUPERBOSS_DETAIL_HTML, "html.parser")
+    row = parse_superboss_detail(
+        soup,
+        SuperbossIndexRow.model_validate(
+            {
+                "name": "Flame Eater",
+                "source_url": "https://anothereden.wiki/w/Gariyu_(Chance_Encounter)#Flame_Eater",
+                "difficulty_tier": "2",
+                "level": 2,
+                "characteristics": "Summons companions",
+            }
+        ),
+    )
+
+    assert row.name == "Flame Eater"
+    assert row.source_url.endswith("#Flame_Eater")
+    assert row.hp == 1234567
+    assert row.weak == ["Water", "Slash"]
+    assert row.resist == ["Fire"]
+    assert row.null == ["Earth"]
+    assert row.absorb == ["None"]
+    assert "HP stopper" in row.mechanics_text
+    assert "Other Boss" not in row.mechanics_text
+    assert {"companion summon", "hp stopper"}.issubset(set(row.mechanic_tags))
+    assert row.schema_version
 
 
 def test_wiki_page_title_uses_style_alias_after_comma():

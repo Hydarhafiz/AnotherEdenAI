@@ -85,7 +85,7 @@ Acceptance criteria:
 
 ### Feature B: Curated Weak Superboss ETL
 
-Status: Not started
+Status: Completed
 
 Goal: Add a small, reliable superboss seed set before scaling to broader boss coverage.
 
@@ -201,7 +201,7 @@ Acceptance criteria:
 
 - Milestone 3 planning: complete
 - Feature A: completed
-- Feature B: not started
+- Feature B: completed
 - Feature C: not started
 - Feature D: not started
 - Feature E: not started

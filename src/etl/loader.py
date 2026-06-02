@@ -16,7 +16,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
-from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow
+from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow, SuperbossRow
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +42,7 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT sidekick_name IF NOT EXISTS FOR (s:Sidekick) REQUIRE s.name IS UNIQUE",
         "CREATE CONSTRAINT sidekick_skill_identity IF NOT EXISTS FOR (s:SidekickSkill) REQUIRE (s.sidekick_name, s.name, s.skill_kind) IS UNIQUE",
         "CREATE CONSTRAINT sidekick_aura_identity IF NOT EXISTS FOR (a:SidekickAura) REQUIRE (a.sidekick_name, a.name) IS UNIQUE",
+        "CREATE CONSTRAINT superboss_name IF NOT EXISTS FOR (s:Superboss) REQUIRE s.name IS UNIQUE",
     ]
     async with driver.session() as session:
         for cypher in constraints:
@@ -289,6 +290,52 @@ MERGE (sidekick)-[:HAS_AURA]->(aura)
             await session.run(cypher_auras, rows=aura_data)
 
     logger.info("Loaded %d Sidekick nodes", len(rows))
+
+
+async def load_superbosses(driver, rows: list[SuperbossRow]) -> None:
+    """Load curated Superboss nodes that passed detail-page quality gates."""
+    if not rows:
+        logger.warning("load_superbosses called with empty list -- nothing to load")
+        return
+
+    boss_data = [
+        {
+            "name": r.name,
+            "source_url": r.source_url,
+            "difficulty_tier": r.difficulty_tier,
+            "level": r.level,
+            "hp": r.hp,
+            "weak": r.weak,
+            "resist": r.resist,
+            "null": r.null,
+            "absorb": r.absorb,
+            "characteristics": r.characteristics,
+            "mechanic_tags": r.mechanic_tags,
+            "mechanics_text": r.mechanics_text,
+            "schema_version": r.schema_version,
+        }
+        for r in rows
+    ]
+    cypher = """
+UNWIND $rows AS row
+MERGE (s:Superboss {name: row.name})
+SET s.source_url = row.source_url,
+    s.difficulty_tier = row.difficulty_tier,
+    s.level = row.level,
+    s.hp = row.hp,
+    s.weak = row.weak,
+    s.resist = row.resist,
+    s.null = row.null,
+    s.absorb = row.absorb,
+    s.characteristics = row.characteristics,
+    s.mechanic_tags = row.mechanic_tags,
+    s.mechanics_text = row.mechanics_text,
+    s.schema_version = row.schema_version
+"""
+    async with driver.session() as session:
+        await session.run(cypher, rows=boss_data)
+
+    logger.info("Loaded %d Superboss nodes", len(rows))
 
 
 async def load_grastas(driver, rows: list[GrastaRow]) -> None:

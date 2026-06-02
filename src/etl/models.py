@@ -177,6 +177,53 @@ class SidekickRow(BaseModel):
         return list(v) if v else []
 
 
+class SuperbossIndexRow(BaseModel):
+    """Represents one superboss candidate discovered from the Superbosses index."""
+
+    name: str
+    source_url: str
+    difficulty_tier: str | None = None
+    level: int | None = None
+    refight_status: str | None = None
+    version: str | None = None
+    characteristics: str = ""
+
+
+class SuperbossRow(BaseModel):
+    """Represents a curated superboss detail row for graph ingestion."""
+
+    name: str
+    source_url: str
+    difficulty_tier: str | None = None
+    level: int | None = None
+    hp: int | None = None
+    weak: list[str] = Field(default_factory=lambda: ["unknown"])
+    resist: list[str] = Field(default_factory=lambda: ["unknown"])
+    null: list[str] = Field(default_factory=lambda: ["unknown"])
+    absorb: list[str] = Field(default_factory=lambda: ["unknown"])
+    characteristics: str = ""
+    mechanic_tags: list[str] = Field(default_factory=list)
+    mechanics_text: str
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("weak", "resist", "null", "absorb", "mechanic_tags", mode="before")
+    @classmethod
+    def parse_string_list(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in re.split(r"[,;/|]", v) if item.strip()] or ["unknown"]
+        return list(v) if v else ["unknown"]
+
+    @field_validator("hp", mode="before")
+    @classmethod
+    def coerce_hp(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, str):
+            match = re.search(r"\d[\d,]*", v)
+            return int(match.group(0).replace(",", "")) if match else None
+        return int(v)
+
+
 class GrastaRow(BaseModel):
     """Represents a single grasta row scraped from any Grasta wiki page."""
 

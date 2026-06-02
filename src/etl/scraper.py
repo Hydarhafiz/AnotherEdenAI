@@ -34,7 +34,7 @@ from urllib.parse import quote, urljoin
 import nodriver as uc
 from bs4 import BeautifulSoup
 
-from .constants import RAW_CHARACTER_DIR, RAW_PAGE_FILES, WIKI_URLS
+from .constants import RAW_CHARACTER_DIR, RAW_DATA_DIR, RAW_PAGE_FILES, WIKI_URLS
 from .models import (
     CharacterRow,
     GrastaRow,
@@ -44,6 +44,8 @@ from .models import (
     SidekickRow,
     SidekickSkillRow,
     SkillRow,
+    SuperbossIndexRow,
+    SuperbossRow,
     parse_character,
     parse_grasta,
     parse_ore,
@@ -195,6 +197,7 @@ async def cache_all_raw_pages(include_character_pages: bool = False) -> dict[str
         selectors = {
             "characters": "tr.character-row-entry",
             "sidekick": "#Released_Sidekicks",
+            "superbosses": "#List_of_Optional_Bosses, table, tr",
             "grasta_attack": "tr.grasta-row-entry",
             "grasta_life": "tr.grasta-row-entry",
             "grasta_support": "tr.grasta-row-entry",
@@ -334,6 +337,154 @@ def parse_sidekick_index(soup: BeautifulSoup) -> list[SidekickRow]:
     return rows
 
 
+def parse_superboss_index(soup: BeautifulSoup) -> list[SuperbossIndexRow]:
+    """Extract weak superboss discovery rows from the canonical Superbosses index."""
+    rows: list[SuperbossIndexRow] = []
+    seen: set[str] = set()
+    for tr in soup.find_all("tr"):
+        cells = tr.find_all(["td", "th"])
+        if len(cells) < 4:
+            continue
+        difficulty_tier = _clean_cell_text(cells[0].get_text(" ", strip=True))
+        if not re.fullmatch(r"\d+(?:\.\d+)?", difficulty_tier):
+            continue
+        name_cell = cells[1]
+        link = name_cell.select_one('a[href^="/w/"]')
+        raw_name = _clean_cell_text(
+            (link.get("title") if link else None)
+            or name_cell.get_text(" ", strip=True).split("/")[0]
+        )
+        if not raw_name:
+            continue
+        canonical_name = _clean_boss_name(raw_name)
+        if canonical_name not in {_clean_boss_name(name) for name in CURATED_WEAK_SUPERBOSS_NAMES}:
+            continue
+        source_url = CURATED_WEAK_SUPERBOSS_URL_OVERRIDES.get(raw_name) or CURATED_WEAK_SUPERBOSS_URL_OVERRIDES.get(canonical_name)
+        if source_url is None and link:
+            source_url = urljoin("https://anothereden.wiki", link.get("href"))
+        if source_url is None:
+            continue
+        raw = {
+            "name": canonical_name,
+            "source_url": source_url,
+            "difficulty_tier": difficulty_tier,
+            "level": _boss_level_from_tier(difficulty_tier),
+            "refight_status": _clean_cell_text(cells[2].get_text(" ", strip=True)) or None,
+            "version": _clean_cell_text(cells[3].get_text(" ", strip=True)) or None,
+            "characteristics": _clean_cell_text(" ".join(cell.get_text(" ", strip=True) for cell in cells[4:])),
+        }
+        try:
+            row = SuperbossIndexRow.model_validate(raw)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping superboss index row %s: %s", raw_name, exc)
+            continue
+        if row.name not in seen:
+            rows.append(row)
+            seen.add(row.name)
+    return rows
+
+
+def _fragment_section_nodes(soup: BeautifulSoup, source_url: str):
+    fragment = source_url.rsplit("#", 1)[1] if "#" in source_url else ""
+    if not fragment:
+        return []
+    anchor = soup.find(id=fragment) or soup.find("span", id=fragment)
+    if anchor is None:
+        return []
+    heading = anchor.find_parent(["h2", "h3", "h4"]) or anchor
+    heading_rank = int(heading.name[1]) if getattr(heading, "name", "").startswith("h") else 2
+    nodes = []
+    sibling = heading.find_next_sibling()
+    while sibling is not None:
+        if sibling.name in {"h2", "h3", "h4"} and int(sibling.name[1]) <= heading_rank:
+            break
+        nodes.append(sibling)
+        sibling = sibling.find_next_sibling()
+    return nodes
+
+
+def _boss_search_nodes(soup: BeautifulSoup, source_url: str):
+    section_nodes = _fragment_section_nodes(soup, source_url)
+    if section_nodes:
+        return section_nodes
+    content = soup.select_one("#mw-content-text") or soup.select_one("main") or soup.body or soup
+    return list(content.find_all(["table", "p", "ul", "ol", "article", "div"], recursive=True))
+
+
+def _extract_labeled_boss_fields(nodes) -> dict[str, str]:
+    fields: dict[str, str] = {}
+    label_map = {
+        "hp": "hp",
+        "weak": "weak",
+        "weakness": "weak",
+        "resist": "resist",
+        "resistance": "resist",
+        "null": "null",
+        "immune": "null",
+        "absorb": "absorb",
+    }
+    for node in nodes:
+        for tr in node.find_all("tr") if hasattr(node, "find_all") else []:
+            cells = tr.find_all(["th", "td"])
+            if len(cells) < 2:
+                continue
+            label = _clean_cell_text(cells[0].get_text(" ", strip=True)).lower().strip(":")
+            for needle, field in label_map.items():
+                if needle in label:
+                    fields.setdefault(field, _cell_text_with_media(cells[1]))
+                    break
+    return fields
+
+
+def _boss_mechanics_text(nodes, fallback_soup: BeautifulSoup) -> str:
+    parts: list[str] = []
+    allowed_terms = re.compile(
+        r"skill|move|action|turn|hp|weak|resist|null|absorb|battle|strategy|stopper|summon|"
+        r"barrier|damage|buff|debuff|af|zone|attack|condition|mechanic|chance encounter",
+        flags=re.IGNORECASE,
+    )
+    for node in nodes:
+        if not hasattr(node, "get_text"):
+            continue
+        text = _clean_cell_text(_cell_text_with_media(node))
+        if len(text) < 20:
+            continue
+        if allowed_terms.search(text):
+            parts.append(text)
+    if not parts:
+        content = fallback_soup.select_one("#mw-content-text") or fallback_soup.body or fallback_soup
+        text = _clean_cell_text(content.get_text(" ", strip=True))
+        parts.append(text)
+    return _clean_cell_text(" ".join(parts))[:5000]
+
+
+def parse_superboss_detail(
+    soup: BeautifulSoup,
+    candidate: SuperbossIndexRow,
+    source_url: str | None = None,
+) -> SuperbossRow:
+    """Parse a curated superboss detail page into a RAG-grounded graph row."""
+    source_url = source_url or candidate.source_url
+    nodes = _boss_search_nodes(soup, source_url)
+    fields = _extract_labeled_boss_fields(nodes)
+    mechanics_text = _boss_mechanics_text(nodes, soup)
+    raw = {
+        "name": candidate.name,
+        "source_url": source_url,
+        "difficulty_tier": candidate.difficulty_tier,
+        "level": candidate.level,
+        "hp": fields.get("hp"),
+        "weak": _split_boss_values(fields.get("weak")),
+        "resist": _split_boss_values(fields.get("resist")),
+        "null": _split_boss_values(fields.get("null")),
+        "absorb": _split_boss_values(fields.get("absorb")),
+        "characteristics": candidate.characteristics,
+        "mechanic_tags": _mechanic_tags(candidate.characteristics, mechanics_text),
+        "mechanics_text": mechanics_text,
+    }
+    return SuperbossRow.model_validate(raw)
+
+
 def character_has_stellar_awakened(soup: BeautifulSoup) -> bool:
     """Detect Stellar Awakening availability from a character detail page."""
     for article in soup.select("article[title]"):
@@ -350,6 +501,69 @@ def _clean_cell_text(value: str | None) -> str:
     if not value:
         return ""
     return re.sub(r"\s+", " ", value).strip()
+
+
+def _clean_boss_name(value: str) -> str:
+    return _clean_cell_text(value).replace("♀", "").replace("♂", "").strip()
+
+
+def _cell_text_with_media(cell) -> str:
+    parts = [cell.get_text(" ", strip=True)]
+    for media in cell.select("img[alt], img[title], a[title]"):
+        parts.append(media.get("alt") or media.get("title") or "")
+    return _clean_cell_text(" ".join(part for part in parts if part))
+
+
+def _boss_level_from_tier(difficulty_tier: str | None) -> int | None:
+    if not difficulty_tier:
+        return None
+    match = re.search(r"\d+", difficulty_tier)
+    return int(match.group(0)) if match else None
+
+
+def _split_boss_values(value: str | None) -> list[str]:
+    text = _clean_cell_text(value)
+    if not text:
+        return ["unknown"]
+    values = [
+        _clean_cell_text(part)
+        for part in re.split(r"[,;/|・]+|\band\b", text, flags=re.IGNORECASE)
+        if _clean_cell_text(part)
+    ]
+    return values or ["unknown"]
+
+
+def _mechanic_tags(characteristics: str, mechanics_text: str) -> list[str]:
+    text = f"{characteristics} {mechanics_text}".lower()
+    candidates = {
+        "af seal": ["af seal", "another force seal", "af sealed"],
+        "barrier": ["barrier"],
+        "buff/debuff reset": ["buff debuff reset", "buff/debuff reset", "buff and debuff reset"],
+        "companion summon": ["summon companion", "summon companions", "summons companion", "summons companions", "companion summon"],
+        "fixed damage": ["fixed damage", "percentage damage"],
+        "high firepower": ["high firepower", "high damage"],
+        "hp stopper": ["stopper"],
+        "long battle": ["long battle", "endurance battle"],
+        "resistance change": ["resistance change", "weakness change"],
+        "status ailment": ["status ailment", "status abnormal", "poison", "stun", "seal"],
+    }
+    return sorted(tag for tag, needles in candidates.items() if any(needle in text for needle in needles))
+
+
+CURATED_WEAK_SUPERBOSS_NAMES = {
+    "Zennon Ogre's Shadow",
+    "Flame Eater",
+    "Flame Eater ♀",
+    "Nameless Girl",
+    "Mimi",
+    "Cradle System",
+    "Insula Ventorum",
+}
+
+CURATED_WEAK_SUPERBOSS_URL_OVERRIDES = {
+    "Flame Eater": "https://anothereden.wiki/w/Gariyu_(Chance_Encounter)#Flame_Eater",
+    "Flame Eater ♀": "https://anothereden.wiki/w/Gariyu_(Chance_Encounter)#Flame_Eater",
+}
 
 
 def _table_headers(tr) -> list[str]:
@@ -854,6 +1068,7 @@ def parse_all_from_cache() -> dict:
     """
     char_soup = _read_soup(RAW_PAGE_FILES["characters"])
     sidekick_soup = _read_soup(RAW_PAGE_FILES["sidekick"])
+    superboss_soup = _read_soup(RAW_PAGE_FILES["superbosses"])
     attack_soup = _read_soup(RAW_PAGE_FILES["grasta_attack"])
     life_soup = _read_soup(RAW_PAGE_FILES["grasta_life"])
     support_soup = _read_soup(RAW_PAGE_FILES["grasta_support"])
@@ -863,6 +1078,12 @@ def parse_all_from_cache() -> dict:
 
     characters = parse_characters(char_soup)
     sidekicks = parse_sidekick_index(sidekick_soup)
+    superbosses = []
+    for candidate in parse_superboss_index(superboss_soup):
+        detail_path = RAW_DATA_DIR / "superbosses" / f"{_slugify_title(candidate.name)}.html"
+        if detail_path.exists():
+            detail_soup = _read_soup(detail_path)
+            superbosses.append(parse_superboss_detail(detail_soup, candidate, source_url=candidate.source_url))
     for idx, char in enumerate(characters):
         detail_path = RAW_CHARACTER_DIR / f"{_slugify_title(char.name)}.html"
         if detail_path.exists():
@@ -882,4 +1103,10 @@ def parse_all_from_cache() -> dict:
     grastas.extend(parse_vc_grastas(vc_soup))
 
     ores = parse_ores(ore_soup)
-    return {"characters": characters, "sidekicks": sidekicks, "grastas": grastas, "ores": ores}
+    return {
+        "characters": characters,
+        "sidekicks": sidekicks,
+        "superbosses": superbosses,
+        "grastas": grastas,
+        "ores": ores,
+    }

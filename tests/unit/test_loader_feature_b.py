@@ -179,3 +179,51 @@ async def test_load_sidekicks_writes_feature_a_nodes_and_relationships():
     assert "MERGE (aura:SidekickAura" in aura_cypher
     assert "MERGE (sidekick)-[:HAS_AURA]->(aura)" in aura_cypher
     assert aura_params["rows"][0]["activation_condition"] == "When HP is below 80%"
+
+
+@pytest.mark.asyncio
+async def test_load_superbosses_writes_feature_b_rag_fields():
+    from src.etl.loader import load_superbosses
+    from src.etl.models import SuperbossRow
+
+    driver = RecordingDriver()
+
+    await load_superbosses(
+        driver,
+        [
+            SuperbossRow.model_validate(
+                {
+                    "name": "Flame Eater",
+                    "source_url": "https://example.test/Gariyu#Flame_Eater",
+                    "difficulty_tier": "2",
+                    "level": 2,
+                    "hp": "1,234,567",
+                    "weak": ["Water", "Slash"],
+                    "resist": ["Fire"],
+                    "null": ["unknown"],
+                    "absorb": ["unknown"],
+                    "characteristics": "Summons companions",
+                    "mechanic_tags": ["companion summon", "hp stopper"],
+                    "mechanics_text": "The battle has an HP stopper and summons companions.",
+                }
+            )
+        ],
+    )
+
+    cypher, params = driver.calls[0]
+    row = params["rows"][0]
+    assert "MERGE (s:Superboss {name: row.name})" in cypher
+    assert "s.weak = row.weak" in cypher
+    assert "s.mechanics_text = row.mechanics_text" in cypher
+    assert row["name"] == "Flame Eater"
+    assert row["source_url"].endswith("#Flame_Eater")
+    assert row["difficulty_tier"] == "2"
+    assert row["level"] == 2
+    assert row["hp"] == 1234567
+    assert row["weak"] == ["Water", "Slash"]
+    assert row["resist"] == ["Fire"]
+    assert row["null"] == ["unknown"]
+    assert row["absorb"] == ["unknown"]
+    assert row["mechanic_tags"] == ["companion summon", "hp stopper"]
+    assert "summons companions" in row["mechanics_text"]
+    assert row["schema_version"]

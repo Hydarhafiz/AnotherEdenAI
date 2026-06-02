@@ -93,6 +93,23 @@ Uniqueness: `(sidekick_name, name, skill_kind)`.
 
 Uniqueness: `(sidekick_name, name)`.
 
+### Superboss
+- `name` (STRING, unique) — canonical curated superboss name
+- `source_url` (STRING) — wiki detail page URL, including a section anchor when the boss lives on a larger encounter page
+- `difficulty_tier` (STRING, nullable) — tier value discovered from the Superbosses index
+- `level` (INTEGER, nullable) — numeric level derived from the difficulty tier where available
+- `hp` (INTEGER, nullable) — parsed HP value when a clean detail-page field is available
+- `weak` (LIST<STRING>) — parsed weakness values, or `["unknown"]` when unavailable
+- `resist` (LIST<STRING>) — parsed resistance values, or `["unknown"]` when unavailable
+- `null` (LIST<STRING>) — parsed null/immune values, or `["unknown"]` when unavailable
+- `absorb` (LIST<STRING>) — parsed absorb values, or `["unknown"]` when unavailable
+- `characteristics` (STRING) — source-grounded index characteristic text
+- `mechanic_tags` (LIST<STRING>) — lightweight deterministic tags derived from source text for retrieval
+- `mechanics_text` (STRING) — source-grounded mechanics text retained for RAG context
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Superboss rows are loaded only from curated detail pages that pass quality gates. Index-only candidate facts are discovery metadata, not final graph nodes.
+
 NOTE: Ore nodes are standalone entities. There is no ENHANCES relationship in the graph.
 The decision of which Ore to apply to which Grasta is a dynamic player/AI decision handled
 by the PLAN and ANALYZE agents at query time (Phase 2/3). Do not add ENHANCES edges.
@@ -131,6 +148,7 @@ Official wiki association or unlock fact between a Character and Sidekick when d
 - Trait nodes: varies (union of all character personalities + grasta personality_req values)
 - Skill and PassiveSkill counts vary by selected character-detail crawl scope.
 - Sidekick, SidekickSkill, and SidekickAura counts vary by selected sidekick crawl scope.
+- Superboss counts vary by curated weak-superboss crawl scope.
 
 ## Schema Validation
 After ETL, `python assert_schema.py` must exit 0.

@@ -21,6 +21,7 @@ NEO4J_AUTH = tuple(os.getenv("NEO4J_AUTH", "neo4j/anothereden").split("/", 1))
 WIKI_URLS = {
     "characters": "https://anothereden.wiki/w/Characters",
     "sidekick": "https://anothereden.wiki/w/Sidekick",
+    "superbosses": "https://anothereden.wiki/w/Superbosses",
     "grasta_attack": "https://anothereden.wiki/w/Grasta_Attack",
     "grasta_life": "https://anothereden.wiki/w/Grasta_Life",
     "grasta_support": "https://anothereden.wiki/w/Grasta_Support",
@@ -38,6 +39,7 @@ CRAWL_MANIFEST_PATH = ETL_STATE_DIR / "crawl_manifest.json"
 RAW_PAGE_FILES = {
     "characters": RAW_DATA_DIR / "indexes" / "characters.html",
     "sidekick": RAW_DATA_DIR / "indexes" / "sidekick.html",
+    "superbosses": RAW_DATA_DIR / "indexes" / "superbosses.html",
     "grasta_attack": RAW_DATA_DIR / "indexes" / "grasta_attack.html",
     "grasta_life": RAW_DATA_DIR / "indexes" / "grasta_life.html",
     "grasta_support": RAW_DATA_DIR / "indexes" / "grasta_support.html",
@@ -47,9 +49,11 @@ RAW_PAGE_FILES = {
 }
 RAW_CHARACTER_DIR = RAW_DATA_DIR / "characters"
 RAW_SIDEKICK_DIR = RAW_DATA_DIR / "sidekicks"
+RAW_SUPERBOSS_DIR = RAW_DATA_DIR / "superbosses"
 PARSED_INDEX_DIR = PARSED_DATA_DIR / "indexes"
 PARSED_CHARACTER_DIR = PARSED_DATA_DIR / "characters"
 PARSED_SIDEKICK_DIR = PARSED_DATA_DIR / "sidekicks"
+PARSED_SUPERBOSS_DIR = PARSED_DATA_DIR / "superbosses"
 
 ETL_SOURCE_MODE = os.getenv("ETL_SOURCE_MODE", "live")
 ETL_CRAWL_SCOPE = os.getenv("ETL_CRAWL_SCOPE", "fallback")
@@ -57,6 +61,7 @@ ETL_INCREMENTAL = _env_flag("ETL_INCREMENTAL", True)
 ETL_RESUME = _env_flag("ETL_RESUME", True)
 ETL_INCLUDE_CHARACTER_PAGES = _env_flag("ETL_INCLUDE_CHARACTER_PAGES", True)
 ETL_INCLUDE_SIDEKICK_PAGES = _env_flag("ETL_INCLUDE_SIDEKICK_PAGES", True)
+ETL_INCLUDE_SUPERBOSS_PAGES = _env_flag("ETL_INCLUDE_SUPERBOSS_PAGES", True)
 ETL_MAX_RETRIES = int(os.getenv("ETL_MAX_RETRIES", "3"))
 ETL_SMALL_CHARACTER_LIMIT = int(os.getenv("ETL_SMALL_CHARACTER_LIMIT", "10"))
 ETL_SMALL_SIDEKICK_LIMIT = int(os.getenv("ETL_SMALL_SIDEKICK_LIMIT", "25"))

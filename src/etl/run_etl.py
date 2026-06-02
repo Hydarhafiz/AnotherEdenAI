@@ -14,6 +14,7 @@ from .loader import (
     load_passive_skills,
     load_sidekicks,
     load_skills,
+    load_superbosses,
 )
 from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
 
@@ -47,12 +48,13 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
 
         characters = data["characters"]
         sidekicks = data["sidekicks"]
+        superbosses = data["superbosses"]
         grastas = data["grastas"]
         ores = data["ores"]
 
         logger.info(
-            "Prepared: %d characters, %d sidekicks, %d grastas, %d ores",
-            len(characters), len(sidekicks), len(grastas), len(ores),
+            "Prepared: %d characters, %d sidekicks, %d superbosses, %d grastas, %d ores",
+            len(characters), len(sidekicks), len(superbosses), len(grastas), len(ores),
         )
 
         await load_characters(driver, characters)
@@ -61,13 +63,15 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         await load_skills(driver, skills)
         await load_passive_skills(driver, passive_skills)
         await load_sidekicks(driver, sidekicks)
+        await load_superbosses(driver, superbosses)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
         mark_loaded(manifest, data)
 
         print(
             f"ETL complete -- loaded {len(characters)} characters, "
-            f"{len(sidekicks)} sidekicks, {len(grastas)} grastas, {len(ores)} ores"
+            f"{len(sidekicks)} sidekicks, {len(superbosses)} superbosses, "
+            f"{len(grastas)} grastas, {len(ores)} ores"
         )
     finally:
         if own_driver:

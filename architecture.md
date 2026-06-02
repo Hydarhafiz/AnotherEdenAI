@@ -31,7 +31,7 @@ The system has three major layers:
 At a high level:
 
 - Wiki data is scraped and normalized into Pydantic ETL models.
-- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Sidekicks, SidekickSkills, SidekickAuras, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
+- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Sidekicks, SidekickSkills, SidekickAuras, curated Superbosses, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
 - User roster input is normalized and augmented with free-to-play units.
 - A five-node LangGraph pipeline plans the query, generates Cypher, validates it, analyzes results, and formats the output.
 - FastAPI exposes query and admin routes, while SSE streams progress back to the browser.
@@ -49,7 +49,7 @@ At a high level:
 Responsibilities:
 
 - Retrieve live wiki pages with `nodriver`
-- Parse Characters, character detail combat entries, Sidekicks, sidekick ability/aura entries, Grastas, and Ores
+- Parse Characters, character detail combat entries, Sidekicks, sidekick ability/aura entries, curated weak Superbosses, Grastas, and Ores
 - Validate records with Pydantic
 - Load normalized entities into Neo4j
 - Assert schema expectations after load
@@ -64,7 +64,16 @@ Feature A sidekick graph behavior:
 - Small and fallback sidekick scope cover the full current sidekick detail set because the total sidekick list is small.
 - The manual Feature A smoke runner clears generated sidekick detail artifacts and stale sidekick-detail manifest entries before live smoke runs to keep reused smoke roots honest.
 
-Feature B combat graph behavior:
+Feature B curated superboss graph behavior:
+
+- The canonical Superbosses page discovers weak-boss candidates as index metadata, including difficulty tier, refight status, version, characteristics, and detail URLs.
+- Only curated weak superboss targets are promoted into detail crawl targets; broad all-superboss coverage remains deferred.
+- Detail pages produce `Superboss` rows with source URL, tier/level context, HP and affinity fields where cleanly parseable, deterministic mechanic tags, mechanics text, and schema version.
+- Section-anchored boss pages, such as Flame Eater on the Gariyu chance encounter page, are parsed within the selected section when the anchor is available.
+- Superboss detail validation requires mechanics text for RAG grounding; selected boss URLs fail visibly in the manifest instead of being silently skipped.
+- Index-only candidate facts are not loaded as final graph nodes.
+
+Feature B combat graph behavior from earlier milestone work:
 
 - Character index rows exclude sidekick-only records before character-detail crawling.
 - Character detail crawl targets use canonical wiki hrefs from the Characters index, preserving alias/style pages such as `Dark_Devourer` and `Noble_Blossom_(Another_Style)`.
