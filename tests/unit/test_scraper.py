@@ -92,6 +92,54 @@ ORE_HTML = """
 </table>
 """
 
+WEAPON_HTML = """
+<table>
+  <tbody>
+    <tr class="equip-row-entry"
+        data-name="Lunar Sword"
+        data-type="Sword"
+        data-level="60"
+        data-atk="185"
+        data-matk="22"
+        data-effect="Type attack +10%"
+        data-source="Crafted from Moonlight Forest materials">
+      <td></td>
+      <td>Lunar Sword</td>
+      <td>Sword</td>
+      <td>60</td>
+      <td>185</td>
+      <td>22</td>
+      <td>Type attack +10%</td>
+      <td>Crafted from Moonlight Forest materials</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+ARMOR_HTML = """
+<table>
+  <tbody>
+    <tr class="equip-row-entry"
+        data-name="Dream Ring"
+        data-category="Ring"
+        data-level="55"
+        data-def="138"
+        data-mdef="166"
+        data-effect="Restore HP after battle"
+        data-obtain="Treasure chest">
+      <td></td>
+      <td>Dream Ring</td>
+      <td>Ring</td>
+      <td>55</td>
+      <td>138</td>
+      <td>166</td>
+      <td>Restore HP after battle</td>
+      <td>Treasure chest</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
 CHARACTER_COMBAT_HTML = """
 <article class="tabber__panel" title="Active Skills">
   <div class="character-skill-grid-container-title">
@@ -366,6 +414,51 @@ def test_parse_ores():
     assert ore.name == "AF After Victory Ore"
     assert "AF Gauge" in ore.stats
     assert "Fog" in ore.source
+
+
+def test_parse_equipment_index_weapon_baseline_fields():
+    """Feature D: weapon indexes produce baseline attack context with source attribution."""
+    from src.etl.scraper import parse_equipment_index
+
+    soup = BeautifulSoup(WEAPON_HTML, "html.parser")
+    rows = parse_equipment_index(soup, "weapon", "https://anothereden.wiki/w/Weapons")
+
+    assert len(rows) == 1
+    weapon = rows[0]
+    assert weapon.name == "Lunar Sword"
+    assert weapon.equipment_slot == "weapon"
+    assert weapon.category == "Sword"
+    assert weapon.level == 60
+    assert weapon.attack == 185
+    assert weapon.magic_attack == 22
+    assert weapon.defense is None
+    assert weapon.magic_defense is None
+    assert weapon.effect_text == "Type attack +10%"
+    assert weapon.obtain_text.startswith("Crafted")
+    assert weapon.source_url == "https://anothereden.wiki/w/Weapons"
+    assert weapon.schema_version
+
+
+def test_parse_equipment_index_armor_baseline_fields():
+    """Feature D: armor indexes produce defense/sustainability context."""
+    from src.etl.scraper import parse_equipment_index
+
+    soup = BeautifulSoup(ARMOR_HTML, "html.parser")
+    rows = parse_equipment_index(soup, "armor", "https://anothereden.wiki/w/Armor")
+
+    assert len(rows) == 1
+    armor = rows[0]
+    assert armor.name == "Dream Ring"
+    assert armor.equipment_slot == "armor"
+    assert armor.category == "Ring"
+    assert armor.level == 55
+    assert armor.attack is None
+    assert armor.magic_attack is None
+    assert armor.defense == 138
+    assert armor.magic_defense == 166
+    assert armor.effect_text == "Restore HP after battle"
+    assert armor.obtain_text == "Treasure chest"
+    assert armor.source_url == "https://anothereden.wiki/w/Armor"
 
 
 def test_parse_character_detail_combat_graph_rows():

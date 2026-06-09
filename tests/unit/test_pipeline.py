@@ -99,6 +99,49 @@ def test_build_superboss_targets_uses_curated_detail_metadata(monkeypatch, tmp_p
     assert str(targets[0]["parsed_path"]).endswith("flame_eater.json")
 
 
+def test_parse_equipment_index_target_records_manifest_counts(monkeypatch, tmp_path):
+    """Feature D: equipment index parsing writes rows and pass/fail counts to artifacts."""
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    manifest = pipeline._base_manifest()
+    target = pipeline._make_target(
+        target_id="weapons",
+        url="https://anothereden.wiki/w/Weapons",
+        expected_selector="tr.equip-row-entry",
+        raw_path=tmp_path / "raw" / "indexes" / "weapons.html",
+        parsed_path=tmp_path / "parsed" / "indexes" / "weapons.json",
+        kind="equipment_index",
+        metadata={"index_key": "weapons"},
+    )
+    entry = pipeline._ensure_target_entry(manifest, target)
+    Path(entry["raw_path"]).parent.mkdir(parents=True)
+    Path(entry["raw_path"]).write_text(
+        """
+        <table><tbody>
+          <tr class="equip-row-entry" data-name="Lunar Sword" data-type="Sword"
+              data-level="60" data-atk="185" data-matk="22"
+              data-effect="Type attack +10%" data-source="Crafted">
+            <td></td><td>Lunar Sword</td>
+          </tr>
+        </tbody></table>
+        """,
+        encoding="utf-8",
+    )
+
+    payload = pipeline._parse_target(entry)
+
+    assert payload["kind"] == "equipment_index"
+    assert payload["parsed_counts"] == {"weapons": 1}
+    assert payload["quality_status"] == "ok"
+    assert entry["state"] == "parsed"
+    assert entry["quality_status"] == "ok"
+    row = payload["rows"][0]
+    assert row["name"] == "Lunar Sword"
+    assert row["equipment_slot"] == "weapon"
+    assert row["attack"] == 185
+    assert row["effect_text"] == "Type attack +10%"
+    assert row["source_url"] == "https://anothereden.wiki/w/Weapons"
+
+
 def test_should_refetch_empty_character_detail_when_resuming(monkeypatch, tmp_path):
     pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
     entry = {
@@ -289,9 +332,37 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
                 "is_shareable": key != "grasta_vc",
             }]
             counts = {"grastas": 1}
-        else:
+        elif kind == "ore_index":
             rows = [{"name": "Ore Alpha", "stats": "SPD+5", "source": "Shop"}]
             counts = {"ores": 1}
+        elif key == "weapons":
+            rows = [{
+                "name": "Lunar Sword",
+                "equipment_slot": "weapon",
+                "category": "Sword",
+                "level": 60,
+                "attack": 185,
+                "magic_attack": 22,
+                "effect_text": "Type attack +10%",
+                "obtain_text": "Crafted",
+                "source_url": "https://anothereden.wiki/w/Weapons",
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }]
+            counts = {"weapons": 1}
+        else:
+            rows = [{
+                "name": "Dream Ring",
+                "equipment_slot": "armor",
+                "category": "Ring",
+                "level": 55,
+                "defense": 138,
+                "magic_defense": 166,
+                "effect_text": "Restore HP after battle",
+                "obtain_text": "Treasure chest",
+                "source_url": "https://anothereden.wiki/w/Armor",
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }]
+            counts = {"armors": 1}
 
         _write_json(
             parsed_path,
@@ -429,6 +500,12 @@ async def test_prepare_parsed_data_uses_schema_versioned_artifacts_without_fetch
     assert "fire damage" in data["superbosses"][0].mechanics_text
     assert len(data["grastas"]) == 5
     assert len(data["ores"]) == 1
+    equipment_by_slot = {row.equipment_slot: row for row in data["equipment"]}
+    assert set(equipment_by_slot) == {"weapon", "armor"}
+    assert equipment_by_slot["weapon"].name == "Lunar Sword"
+    assert equipment_by_slot["weapon"].effect_text == "Type attack +10%"
+    assert equipment_by_slot["armor"].name == "Dream Ring"
+    assert equipment_by_slot["armor"].source_url.endswith("/Armor")
     assert loaded_manifest["targets"]["characters"]["quality_status"] == "ok"
 
 
@@ -486,9 +563,27 @@ async def test_parsed_mode_skips_missing_detail_artifacts_without_fetch(monkeypa
                 "is_shareable": key != "grasta_vc",
             }]
             counts = {"grastas": 1}
-        else:
+        elif kind == "ore_index":
             rows = [{"name": "Ore Alpha", "stats": "SPD+5", "source": "Shop"}]
             counts = {"ores": 1}
+        elif key == "weapons":
+            rows = [{
+                "name": "Lunar Sword",
+                "equipment_slot": "weapon",
+                "attack": 185,
+                "source_url": "https://anothereden.wiki/w/Weapons",
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }]
+            counts = {"weapons": 1}
+        else:
+            rows = [{
+                "name": "Dream Ring",
+                "equipment_slot": "armor",
+                "defense": 138,
+                "source_url": "https://anothereden.wiki/w/Armor",
+                "schema_version": pipeline.ETL_SCHEMA_VERSION,
+            }]
+            counts = {"armors": 1}
 
         _write_json(
             parsed_path,
@@ -511,6 +606,10 @@ async def test_parsed_mode_skips_missing_detail_artifacts_without_fetch(monkeypa
 
     assert [character.name for character in data["characters"]] == ["Akane (Alter),Blooming Blade"]
     assert data["characters"][0].skills == []
+    assert {(row.equipment_slot, row.name) for row in data["equipment"]} == {
+        ("weapon", "Lunar Sword"),
+        ("armor", "Dream Ring"),
+    }
     assert loaded_manifest["targets"]["character::akane_alter_blooming_blade"]["state"] == "inactive"
     assert "not available in parsed source mode" in loaded_manifest["targets"]["character::akane_alter_blooming_blade"]["last_error"]
 

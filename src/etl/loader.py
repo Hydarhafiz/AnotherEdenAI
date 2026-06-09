@@ -16,7 +16,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
-from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow, SuperbossRow
+from .models import CharacterRow, EquipmentRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow, SuperbossRow
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +37,7 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT trait_name IF NOT EXISTS FOR (t:Trait) REQUIRE t.name IS UNIQUE",
         "CREATE CONSTRAINT grasta_name IF NOT EXISTS FOR (g:Grasta) REQUIRE g.name IS UNIQUE",
         "CREATE CONSTRAINT ore_name IF NOT EXISTS FOR (o:Ore) REQUIRE o.name IS UNIQUE",
+        "CREATE CONSTRAINT equipment_identity IF NOT EXISTS FOR (e:Equipment) REQUIRE (e.equipment_slot, e.name) IS UNIQUE",
         "CREATE CONSTRAINT skill_identity IF NOT EXISTS FOR (s:Skill) REQUIRE (s.character_name, s.name) IS UNIQUE",
         "CREATE CONSTRAINT passive_skill_identity IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE (p.character_name, p.name) IS UNIQUE",
         "CREATE CONSTRAINT sidekick_name IF NOT EXISTS FOR (s:Sidekick) REQUIRE s.name IS UNIQUE",
@@ -427,6 +428,50 @@ SET o.stats = row.stats,
         await session.run(cypher_nodes, rows=ore_data)
 
     logger.info("Loaded %d Ore nodes", len(rows))
+
+
+async def load_equipment(driver, rows: list[EquipmentRow]) -> None:
+    """Load baseline Weapon/Armor context as standalone Equipment nodes."""
+    if not rows:
+        logger.warning("load_equipment called with empty list -- nothing to load")
+        return
+
+    equipment_data = [
+        {
+            "name": r.name,
+            "equipment_slot": r.equipment_slot,
+            "category": r.category,
+            "level": r.level,
+            "attack": r.attack,
+            "magic_attack": r.magic_attack,
+            "defense": r.defense,
+            "magic_defense": r.magic_defense,
+            "effect_text": r.effect_text,
+            "obtain_text": r.obtain_text,
+            "source_url": r.source_url,
+            "schema_version": r.schema_version,
+        }
+        for r in rows
+    ]
+
+    cypher = """
+UNWIND $rows AS row
+MERGE (e:Equipment {equipment_slot: row.equipment_slot, name: row.name})
+SET e.category = row.category,
+    e.level = row.level,
+    e.attack = row.attack,
+    e.magic_attack = row.magic_attack,
+    e.defense = row.defense,
+    e.magic_defense = row.magic_defense,
+    e.effect_text = row.effect_text,
+    e.obtain_text = row.obtain_text,
+    e.source_url = row.source_url,
+    e.schema_version = row.schema_version
+"""
+    async with driver.session() as session:
+        await session.run(cypher, rows=equipment_data)
+
+    logger.info("Loaded %d Equipment nodes", len(rows))
 
 
 # ---------------------------------------------------------------------------

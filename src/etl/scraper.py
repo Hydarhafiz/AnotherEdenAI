@@ -37,6 +37,7 @@ from bs4 import BeautifulSoup
 from .constants import RAW_CHARACTER_DIR, RAW_DATA_DIR, RAW_PAGE_FILES, WIKI_URLS
 from .models import (
     CharacterRow,
+    EquipmentRow,
     GrastaRow,
     OreRow,
     PassiveSkillRow,
@@ -47,6 +48,7 @@ from .models import (
     SuperbossIndexRow,
     SuperbossRow,
     parse_character,
+    parse_equipment,
     parse_grasta,
     parse_ore,
 )
@@ -204,6 +206,8 @@ async def cache_all_raw_pages(include_character_pages: bool = False) -> dict[str
             "grasta_special": "tr.grasta-row-entry",
             "grasta_vc": "tr.grasta-row-entry",
             "grasta_ores": "tr.equip-row-entry",
+            "weapons": "tr.equip-row-entry",
+            "armor": "tr.equip-row-entry",
         }
         cached = {}
         for key, url in WIKI_URLS.items():
@@ -1006,6 +1010,85 @@ def parse_ores(soup: BeautifulSoup) -> list[OreRow]:
     return rows
 
 
+def _value_for_any(headers: list[str], cols: list[str], names: set[str]) -> str:
+    normalized_names = {name.lower() for name in names}
+    for idx, header in enumerate(headers):
+        normalized_header = header.lower().strip()
+        if normalized_header in normalized_names and idx < len(cols):
+            return cols[idx]
+    for idx, header in enumerate(headers):
+        normalized_header = header.lower().strip()
+        if any(name in normalized_header for name in normalized_names) and idx < len(cols):
+            return cols[idx]
+    return ""
+
+
+def parse_equipment_index(soup: BeautifulSoup, equipment_slot: str, source_url: str) -> list[EquipmentRow]:
+    """Extract baseline Weapon/Armor rows from a wiki equipment index."""
+    rows = []
+    for tr in soup.select("tr.equip-row-entry"):
+        cells = tr.find_all(["td", "th"])
+        if len(cells) < 2:
+            logger.warning("Skipping equipment row with too few columns: %s", tr)
+            continue
+
+        cols = [_clean_cell_text(cell.get_text(" ", strip=True)) for cell in cells]
+        headers = _table_headers(tr)
+        name = (
+            _clean_cell_text(tr.get("data-name", ""))
+            or _value_for_any(headers, cols, {"name", "weapon", "armor", "equipment"})
+            or (cols[1] if len(cols) > 1 else cols[0])
+        )
+        category = (
+            _clean_cell_text(tr.get("data-type", ""))
+            or _clean_cell_text(tr.get("data-category", ""))
+            or _value_for_any(headers, cols, {"type", "category", "weapon type", "armor type"})
+        )
+        level = (
+            tr.get("data-level")
+            or tr.get("data-lv")
+            or _value_for_any(headers, cols, {"level", "lv", "tier"})
+        )
+        attack = tr.get("data-atk") or _value_for_any(headers, cols, {"atk", "attack"})
+        magic_attack = (
+            tr.get("data-matk")
+            or tr.get("data-m_atk")
+            or _value_for_any(headers, cols, {"matk", "m.atk", "magic attack"})
+        )
+        defense = tr.get("data-def") or _value_for_any(headers, cols, {"def", "defense"})
+        magic_defense = (
+            tr.get("data-mdef")
+            or tr.get("data-m_def")
+            or _value_for_any(headers, cols, {"mdef", "m.def", "magic defense"})
+        )
+        effect_text = (
+            _clean_cell_text(tr.get("data-effect", ""))
+            or _value_for_any(headers, cols, {"effect", "ability", "bonus"})
+        )
+        obtain_text = (
+            _clean_cell_text(tr.get("data-source", ""))
+            or _clean_cell_text(tr.get("data-obtain", ""))
+            or _value_for_any(headers, cols, {"source", "obtain", "obtained", "location", "how to obtain"})
+        )
+        raw = {
+            "name": name,
+            "equipment_slot": equipment_slot,
+            "category": category or None,
+            "level": level,
+            "attack": attack if equipment_slot == "weapon" else None,
+            "magic_attack": magic_attack if equipment_slot == "weapon" else None,
+            "defense": defense if equipment_slot == "armor" else None,
+            "magic_defense": magic_defense if equipment_slot == "armor" else None,
+            "effect_text": effect_text,
+            "obtain_text": obtain_text,
+            "source_url": source_url,
+        }
+        result = parse_equipment(raw)
+        if result is not None:
+            rows.append(result)
+    return rows
+
+
 async def scrape_all() -> dict:
     from .pipeline import prepare_parsed_data
 
@@ -1039,6 +1122,8 @@ async def scrape_all() -> dict:
         special_soup = await fetch_page(browser, WIKI_URLS["grasta_special"], "tr.grasta-row-entry")
         vc_soup = await fetch_page(browser, WIKI_URLS["grasta_vc"], "tr.grasta-row-entry")
         ore_soup = await fetch_page(browser, WIKI_URLS["grasta_ores"], "tr.equip-row-entry")
+        weapon_soup = await fetch_page(browser, WIKI_URLS["weapons"], "tr.equip-row-entry")
+        armor_soup = await fetch_page(browser, WIKI_URLS["armor"], "tr.equip-row-entry")
     finally:
         await _stop_browser(browser)
 
@@ -1052,13 +1137,17 @@ async def scrape_all() -> dict:
     grastas.extend(parse_vc_grastas(vc_soup))
 
     ores = parse_ores(ore_soup)
+    equipment = [
+        *parse_equipment_index(weapon_soup, "weapon", WIKI_URLS["weapons"]),
+        *parse_equipment_index(armor_soup, "armor", WIKI_URLS["armor"]),
+    ]
 
     logger.info(
-        "Scraped %d characters, %d grastas, %d ores",
-        len(characters), len(grastas), len(ores),
+        "Scraped %d characters, %d grastas, %d ores, %d equipment rows",
+        len(characters), len(grastas), len(ores), len(equipment),
     )
 
-    return {"characters": characters, "grastas": grastas, "ores": ores}
+    return {"characters": characters, "grastas": grastas, "ores": ores, "equipment": equipment}
 
 
 def parse_all_from_cache() -> dict:
@@ -1075,6 +1164,8 @@ def parse_all_from_cache() -> dict:
     special_soup = _read_soup(RAW_PAGE_FILES["grasta_special"])
     vc_soup = _read_soup(RAW_PAGE_FILES["grasta_vc"])
     ore_soup = _read_soup(RAW_PAGE_FILES["grasta_ores"])
+    weapon_soup = _read_soup(RAW_PAGE_FILES["weapons"])
+    armor_soup = _read_soup(RAW_PAGE_FILES["armor"])
 
     characters = parse_characters(char_soup)
     sidekicks = parse_sidekick_index(sidekick_soup)
@@ -1103,10 +1194,15 @@ def parse_all_from_cache() -> dict:
     grastas.extend(parse_vc_grastas(vc_soup))
 
     ores = parse_ores(ore_soup)
+    equipment = [
+        *parse_equipment_index(weapon_soup, "weapon", WIKI_URLS["weapons"]),
+        *parse_equipment_index(armor_soup, "armor", WIKI_URLS["armor"]),
+    ]
     return {
         "characters": characters,
         "sidekicks": sidekicks,
         "superbosses": superbosses,
         "grastas": grastas,
         "ores": ores,
+        "equipment": equipment,
     }

@@ -137,7 +137,7 @@ Acceptance criteria:
 
 ### Feature D: Weapon And Armor Baseline ETL
 
-Status: Not started
+Status: Completed
 
 Goal: Add baseline equipment context for future damage and survivability reasoning without building a full optimizer.
 
@@ -203,7 +203,7 @@ Acceptance criteria:
 - Feature A: completed
 - Feature B: completed
 - Feature C: completed
-- Feature D: not started
+- Feature D: completed
 - Feature E: not started
 
 ## Open Questions

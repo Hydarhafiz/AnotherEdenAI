@@ -200,3 +200,70 @@ def test_ore_effect_tags_are_derived_with_derivation_clarity():
 
     assert row.effect_tags == ["category:ore", "combat:af", "stat:spd"]
     assert row.effect_tag_derivation == TAG_DERIVATION_RULE
+
+
+def test_equipment_row_captures_weapon_baseline_without_optimizer_fields():
+    """Feature D: weapons keep baseline attack context and source attribution."""
+    from src.etl.models import EquipmentRow
+
+    row = EquipmentRow.model_validate({
+        "name": "Lunar Sword",
+        "equipment_slot": "weapon",
+        "category": "Sword",
+        "level": "60",
+        "attack": "185",
+        "magic_attack": "22",
+        "effect_text": "Type attack +10%",
+        "obtain_text": "Crafted from Moonlight Forest materials",
+        "source_url": "https://anothereden.wiki/w/Weapons",
+    })
+
+    assert row.name == "Lunar Sword"
+    assert row.equipment_slot == "weapon"
+    assert row.category == "Sword"
+    assert row.level == 60
+    assert row.attack == 185
+    assert row.magic_attack == 22
+    assert row.defense is None
+    assert row.magic_defense is None
+    assert row.effect_text == "Type attack +10%"
+    assert row.obtain_text.startswith("Crafted")
+    assert row.source_url.endswith("/Weapons")
+    assert not hasattr(row, "rank_score")
+    assert not hasattr(row, "best_in_slot")
+
+
+def test_equipment_row_captures_armor_baseline_defenses():
+    """Feature D: armor keeps survivability context without damage math."""
+    from src.etl.models import EquipmentRow
+
+    row = EquipmentRow.model_validate({
+        "name": "Dream Ring",
+        "equipment_slot": "armor",
+        "category": "Ring",
+        "level": "55",
+        "defense": "138",
+        "magic_defense": "166",
+        "effect_text": "Restore HP after battle",
+        "obtain_text": "Treasure chest",
+        "source_url": "https://anothereden.wiki/w/Armor",
+    })
+
+    assert row.equipment_slot == "armor"
+    assert row.defense == 138
+    assert row.magic_defense == 166
+    assert row.attack is None
+    assert row.magic_attack is None
+    assert row.schema_version
+
+
+def test_parse_equipment_rejects_unknown_slot():
+    """Feature D: equipment slot is deliberately limited to weapon or armor."""
+    from src.etl.models import EquipmentRow
+
+    with pytest.raises(ValidationError):
+        EquipmentRow.model_validate({
+            "name": "Mystery Item",
+            "equipment_slot": "accessory",
+            "source_url": "https://example.test/Equipment",
+        })

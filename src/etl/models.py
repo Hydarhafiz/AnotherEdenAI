@@ -355,6 +355,40 @@ class OreRow(BaseModel):
             )
 
 
+class EquipmentRow(BaseModel):
+    """Represents baseline weapon or armor context scraped from equipment indexes."""
+
+    name: str
+    equipment_slot: str
+    category: str | None = None
+    level: int | None = None
+    attack: int | None = None
+    magic_attack: int | None = None
+    defense: int | None = None
+    magic_defense: int | None = None
+    effect_text: str = ""
+    obtain_text: str = ""
+    source_url: str
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("equipment_slot")
+    @classmethod
+    def validate_equipment_slot(cls, v):
+        if v not in {"weapon", "armor"}:
+            raise ValueError("equipment_slot must be weapon or armor")
+        return v
+
+    @field_validator("level", "attack", "magic_attack", "defense", "magic_defense", mode="before")
+    @classmethod
+    def coerce_optional_int(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, str):
+            match = re.search(r"-?\d+", v.replace(",", ""))
+            return int(match.group(0)) if match else None
+        return int(v)
+
+
 # ---------------------------------------------------------------------------
 # Parse helpers with ETL_MODE toggle
 # ---------------------------------------------------------------------------
@@ -418,4 +452,15 @@ def parse_ore(raw: dict) -> Optional[OreRow]:
         if STRICT:
             raise
         logger.warning("Skipping ore %s: %s", raw.get("name"), exc)
+        return None
+
+
+def parse_equipment(raw: dict) -> Optional[EquipmentRow]:
+    """Validate a raw equipment dict into an EquipmentRow."""
+    try:
+        return EquipmentRow.model_validate(raw)
+    except Exception as exc:
+        if STRICT:
+            raise
+        logger.warning("Skipping equipment %s: %s", raw.get("name"), exc)
         return None

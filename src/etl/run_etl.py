@@ -9,6 +9,7 @@ from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
 from .loader import (
     ensure_constraints,
     load_characters,
+    load_equipment,
     load_grastas,
     load_ores,
     load_passive_skills,
@@ -51,10 +52,11 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         superbosses = data["superbosses"]
         grastas = data["grastas"]
         ores = data["ores"]
+        equipment = data["equipment"]
 
         logger.info(
-            "Prepared: %d characters, %d sidekicks, %d superbosses, %d grastas, %d ores",
-            len(characters), len(sidekicks), len(superbosses), len(grastas), len(ores),
+            "Prepared: %d characters, %d sidekicks, %d superbosses, %d grastas, %d ores, %d equipment rows",
+            len(characters), len(sidekicks), len(superbosses), len(grastas), len(ores), len(equipment),
         )
 
         await load_characters(driver, characters)
@@ -66,12 +68,13 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         await load_superbosses(driver, superbosses)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
+        await load_equipment(driver, equipment)
         mark_loaded(manifest, data)
 
         print(
             f"ETL complete -- loaded {len(characters)} characters, "
             f"{len(sidekicks)} sidekicks, {len(superbosses)} superbosses, "
-            f"{len(grastas)} grastas, {len(ores)} ores"
+            f"{len(grastas)} grastas, {len(ores)} ores, {len(equipment)} equipment rows"
         )
     finally:
         if own_driver:

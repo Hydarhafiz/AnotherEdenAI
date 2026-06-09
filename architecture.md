@@ -31,7 +31,7 @@ The system has three major layers:
 At a high level:
 
 - Wiki data is scraped and normalized into Pydantic ETL models.
-- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Sidekicks, SidekickSkills, SidekickAuras, curated Superbosses, Grastas, and Ores into Neo4j with idempotent MERGE behavior.
+- The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Sidekicks, SidekickSkills, SidekickAuras, curated Superbosses, Grastas, Ores, and baseline Equipment into Neo4j with idempotent MERGE behavior.
 - User roster input is normalized and augmented with free-to-play units.
 - A five-node LangGraph pipeline plans the query, generates Cypher, validates it, analyzes results, and formats the output.
 - FastAPI exposes query and admin routes, while SSE streams progress back to the browser.
@@ -49,7 +49,7 @@ At a high level:
 Responsibilities:
 
 - Retrieve live wiki pages with `nodriver`
-- Parse Characters, character detail combat entries, Sidekicks, sidekick ability/aura entries, curated weak Superbosses, Grastas, and Ores
+- Parse Characters, character detail combat entries, Sidekicks, sidekick ability/aura entries, curated weak Superbosses, Grastas, Ores, and baseline weapon/armor Equipment
 - Validate records with Pydantic
 - Load normalized entities into Neo4j
 - Assert schema expectations after load
@@ -88,6 +88,14 @@ Feature C Grasta/Ore preservation behavior:
 - `effect_tag_derivation` records that the tags are deterministic keyword metadata from existing fields.
 - The tags support RAG lookup but do not represent exact damage math, optimizer ranking, or verified multiplier calculations.
 - Ore nodes remain standalone; no `ENHANCES` or Grasta-to-Ore relationship is introduced.
+
+Feature D equipment graph behavior:
+
+- Weapon and armor index pages are parsed into a shared `Equipment` model keyed by `(equipment_slot, name)`.
+- Weapon rows capture baseline attack and magic attack where available; armor rows capture baseline defense and magic defense where available.
+- Equipment rows preserve category/type, level or tier, effect text, obtain/source text, source URL, and schema version for RAG grounding.
+- Equipment nodes are loaded as standalone baseline context and do not imply best-in-slot ranking, optimizer scoring, exact damage math, survivability calculation, or equip/recommendation relationships.
+- Verified ETL output on 2026-06-09 loaded 888 Equipment nodes: 664 weapons and 224 armor records.
 
 ### Workflow Layer
 

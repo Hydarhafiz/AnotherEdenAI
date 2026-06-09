@@ -32,6 +32,24 @@
 - `effect_tags` (LIST<STRING>) — deterministic keyword tags derived from existing Ore name/stats text for retrieval
 - `effect_tag_derivation` (STRING) — derivation note for `effect_tags`; tags are not exact damage math
 
+### Equipment
+- `name` (STRING) — equipment display name from the weapon or armor index
+- `equipment_slot` (STRING) — `weapon` or `armor`
+- `category` (STRING, nullable) — weapon or armor type/category when available
+- `level` (INTEGER, nullable) — level or tier value when available
+- `attack` (INTEGER, nullable) — weapon attack baseline when available
+- `magic_attack` (INTEGER, nullable) — weapon magic attack baseline when available
+- `defense` (INTEGER, nullable) — armor defense baseline when available
+- `magic_defense` (INTEGER, nullable) — armor magic defense baseline when available
+- `effect_text` (STRING) — source-grounded equipment effect text for RAG retrieval
+- `obtain_text` (STRING) — source-grounded obtain/source text
+- `source_url` (STRING) — wiki index URL used for the row
+- `schema_version` (STRING) — ETL schema version used for this row
+
+Uniqueness: `(equipment_slot, name)`.
+
+Equipment nodes provide baseline context only. They do not encode best-in-slot ranking, optimizer scores, exact damage math, or survivability calculations.
+
 ### Skill
 - `character_name` (STRING) — owning Character name from the parsed character row
 - `name` (STRING) — skill display name
@@ -118,6 +136,8 @@ NOTE: Ore nodes are standalone entities. There is no ENHANCES relationship in th
 The decision of which Ore to apply to which Grasta is a dynamic player/AI decision handled
 by the PLAN and ANALYZE agents at query time (Phase 2/3). Do not add ENHANCES edges.
 
+NOTE: Equipment nodes are standalone baseline context records. There are no Equipment recommendation, ranking, build, or equip relationships in the graph for Milestone 3.
+
 ## Relationship Types
 
 ### (:Character)-[:HAS_TRAIT]->(:Trait)
@@ -149,6 +169,7 @@ Official wiki association or unlock fact between a Character and Sidekick when d
 - Character nodes: 393
 - Grasta nodes: 647 (Attack=231, Life=46, Support=56, Special=4, VC=310)
 - Ore nodes: 61
+- Equipment nodes: 888 (weapon=664, armor=224 from verified ETL run 2026-06-09)
 - Trait nodes: varies (union of all character personalities + grasta personality_req values)
 - Skill and PassiveSkill counts vary by selected character-detail crawl scope.
 - Sidekick, SidekickSkill, and SidekickAura counts vary by selected sidekick crawl scope.

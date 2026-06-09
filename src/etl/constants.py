@@ -28,6 +28,8 @@ WIKI_URLS = {
     "grasta_special": "https://anothereden.wiki/w/Grasta_Special",
     "grasta_vc": "https://anothereden.wiki/w/Grasta_VC",
     "grasta_ores": "https://anothereden.wiki/w/Grasta_Ores",
+    "weapons": "https://anothereden.wiki/w/Weapons",
+    "armor": "https://anothereden.wiki/w/Armor",
 }
 
 GRASTA_CATEGORIES = ["Attack", "Life", "Support", "Special", "VC"]
@@ -46,6 +48,8 @@ RAW_PAGE_FILES = {
     "grasta_special": RAW_DATA_DIR / "indexes" / "grasta_special.html",
     "grasta_vc": RAW_DATA_DIR / "indexes" / "grasta_vc.html",
     "grasta_ores": RAW_DATA_DIR / "indexes" / "grasta_ores.html",
+    "weapons": RAW_DATA_DIR / "indexes" / "weapons.html",
+    "armor": RAW_DATA_DIR / "indexes" / "armor.html",
 }
 RAW_CHARACTER_DIR = RAW_DATA_DIR / "characters"
 RAW_SIDEKICK_DIR = RAW_DATA_DIR / "sidekicks"

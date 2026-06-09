@@ -39,7 +39,17 @@ from .constants import (
     RAW_SUPERBOSS_DIR,
     WIKI_URLS,
 )
-from .models import CharacterRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow, SuperbossIndexRow, SuperbossRow
+from .models import (
+    CharacterRow,
+    EquipmentRow,
+    GrastaRow,
+    OreRow,
+    PassiveSkillRow,
+    SidekickRow,
+    SkillRow,
+    SuperbossIndexRow,
+    SuperbossRow,
+)
 from .scraper import (
     CHROMIUM_PATH,
     _read_soup,
@@ -52,6 +62,7 @@ from .scraper import (
     parse_character_skills,
     parse_characters,
     parse_grastas,
+    parse_equipment_index,
     parse_ores,
     parse_sidekick_detail,
     parse_sidekick_index,
@@ -72,6 +83,8 @@ INDEX_SELECTORS = {
     "grasta_special": "tr.grasta-row-entry",
     "grasta_vc": "tr.grasta-row-entry",
     "grasta_ores": "tr.equip-row-entry",
+    "weapons": "tr.equip-row-entry",
+    "armor": "tr.equip-row-entry",
 }
 
 INDEX_KINDS = {
@@ -84,6 +97,8 @@ INDEX_KINDS = {
     "grasta_special": "grasta_index",
     "grasta_vc": "grasta_vc_index",
     "grasta_ores": "ore_index",
+    "weapons": "equipment_index",
+    "armor": "equipment_index",
 }
 
 INDEX_CATEGORIES = {
@@ -429,6 +444,17 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
             "parsed_counts": {"ores": len(rows)},
             "quality_status": "ok" if rows else "empty",
         }
+    elif kind == "equipment_index":
+        index_key = entry["metadata"]["index_key"]
+        equipment_slot = "weapon" if index_key == "weapons" else "armor"
+        rows = parse_equipment_index(soup, equipment_slot, entry["url"])
+        payload = {
+            "schema_version": ETL_SCHEMA_VERSION,
+            "kind": kind,
+            "rows": _serialize_models(rows),
+            "parsed_counts": {f"{equipment_slot}s": len(rows)},
+            "quality_status": "ok" if rows else "empty",
+        }
     elif kind == "character_detail":
         character_name = entry["metadata"]["character_name"]
         source_url = entry["url"]
@@ -501,7 +527,15 @@ def _validate_target(entry: dict[str, Any]) -> None:
     parsed_counts = payload.get("parsed_counts", {})
     kind = payload["kind"]
 
-    if kind in {"characters_index", "sidekick_index", "superboss_index", "grasta_index", "grasta_vc_index", "ore_index"}:
+    if kind in {
+        "characters_index",
+        "sidekick_index",
+        "superboss_index",
+        "grasta_index",
+        "grasta_vc_index",
+        "ore_index",
+        "equipment_index",
+    }:
         total = sum(int(value) for value in parsed_counts.values())
         if total <= 0:
             entry["quality_status"] = "failed"
@@ -549,6 +583,7 @@ def _aggregate_parsed_data(
     superbosses_by_name: dict[str, SuperbossRow] = {}
     grastas: list[GrastaRow] = []
     ores: list[OreRow] = []
+    equipment_by_identity: dict[tuple[str, str], EquipmentRow] = {}
     character_skills: dict[str, list[SkillRow]] = {}
     character_passive_skills: dict[str, list[PassiveSkillRow]] = {}
     character_detail_is_sa: dict[str, bool] = {}
@@ -577,6 +612,14 @@ def _aggregate_parsed_data(
             grastas.extend(GrastaRow.model_validate(row) for row in rows)
         elif kind == "ore_index":
             ores.extend(OreRow.model_validate(row) for row in rows)
+        elif kind == "equipment_index":
+            for row in rows:
+                try:
+                    equipment = EquipmentRow.model_validate(row)
+                except Exception as exc:  # noqa: BLE001
+                    logger.debug("Skipping invalid equipment artifact row %s: %s", row.get("name"), exc)
+                    continue
+                equipment_by_identity[(equipment.equipment_slot, equipment.name)] = equipment
         elif kind == "character_detail":
             character_name = payload["character_name"]
             character_skills[character_name] = [SkillRow.model_validate(row) for row in rows]
@@ -608,6 +651,7 @@ def _aggregate_parsed_data(
         "superbosses": list(superbosses_by_name.values()),
         "grastas": grastas,
         "ores": ores,
+        "equipment": list(equipment_by_identity.values()),
     }
 
 
