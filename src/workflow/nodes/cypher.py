@@ -38,11 +38,15 @@ SCHEMA_CONTEXT = """
 - stats (STRING) — stat bonuses (e.g., "INT +10 SPD +10")
 - is_shareable (BOOLEAN) — true if data-share="1"
 - personality_req (STRING, nullable) — trait name required; null for VC and weapon-based grastas
+- effect_tags (LIST<STRING>) — deterministic keyword tags derived from existing Grasta text for retrieval
+- effect_tag_derivation (STRING) — derivation note for effect_tags; tags are not exact damage math
 
 **Ore**
 - name (STRING, unique) — ore display name
 - stats (STRING) — stats/effect description
 - source (STRING) — drop location
+- effect_tags (LIST<STRING>) — deterministic keyword tags derived from existing Ore text for retrieval
+- effect_tag_derivation (STRING) — derivation note for effect_tags; tags are not exact damage math
 
 NOTE: Ore nodes are standalone entities. There is NO ENHANCES relationship in the graph.
 Ore application is a dynamic player/AI decision at query time — do NOT use ENHANCES edges.
@@ -101,7 +105,23 @@ RETURN c.name, collect(DISTINCT g.name) AS attack_grastas
 ORDER BY c.name
 ```
 
-### Example 5: Find sword-wielding characters and their grastas (for slash/zone team queries)
+### Example 5: Find grastas by lightweight retrieval tag
+```
+MATCH (g:Grasta)
+WHERE 'combat:af' IN g.effect_tags OR 'combat:critical' IN g.effect_tags
+RETURN g.name, g.category, g.stats, g.effect_tags, g.effect_tag_derivation
+LIMIT 25
+```
+
+### Example 6: Find ores by lightweight retrieval tag
+```
+MATCH (o:Ore)
+WHERE 'combat:af' IN o.effect_tags OR 'stat:spd' IN o.effect_tags
+RETURN o.name, o.stats, o.source, o.effect_tags, o.effect_tag_derivation
+LIMIT 25
+```
+
+### Example 7: Find sword-wielding characters and their grastas (for slash/zone team queries)
 ```
 MATCH (c:Character)
 WHERE c.name IN $roster AND c.weapon = 'Sword'

@@ -105,6 +105,25 @@ def test_cypher_node_includes_constraints(state_with_plan, mock_llm_cypher):
     assert "VC" in system_content, "SystemMessage must mention VC no REQUIRES_TRAIT constraint"
 
 
+def test_cypher_node_includes_feature_c_retrieval_tags(state_with_plan, mock_llm_cypher):
+    """Feature C: prompts expose effect tags with derivation clarity, not exact damage math."""
+    with patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm_cypher):
+        generate_cypher_node(state_with_plan)
+
+    call_args = mock_llm_cypher.invoke.call_args
+    messages = call_args[0][0]
+
+    from langchain_core.messages import SystemMessage
+    system_messages = [m for m in messages if isinstance(m, SystemMessage)]
+    system_content = system_messages[0].content
+
+    assert "effect_tags" in system_content
+    assert "effect_tag_derivation" in system_content
+    assert "'combat:af' IN g.effect_tags" in system_content
+    assert "'stat:spd' IN o.effect_tags" in system_content
+    assert "not exact damage math" in system_content
+
+
 def test_cypher_node_includes_plan_strategy(state_with_plan, mock_llm_cypher):
     """HumanMessage must include the plan_strategy from state."""
     with patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm_cypher):

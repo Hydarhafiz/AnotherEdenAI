@@ -81,6 +81,14 @@ Feature B combat graph behavior from earlier milestone work:
 - Character detail validation requires recognizable active combat skills; partial or blocked pages with zero skills fail the selected ETL scope.
 - Stellar Awakening availability is inferred from both index metadata and character detail page sections.
 
+Feature C Grasta/Ore preservation behavior:
+
+- Existing Grasta, Ore, Trait, `HAS_TRAIT`, and `REQUIRES_TRAIT` behavior is preserved; Grasta/Ore scraping is not rebuilt in this milestone.
+- Grasta and Ore rows derive lightweight `effect_tags` from already-scraped name/category/stats/personality text for retrieval.
+- `effect_tag_derivation` records that the tags are deterministic keyword metadata from existing fields.
+- The tags support RAG lookup but do not represent exact damage math, optimizer ranking, or verified multiplier calculations.
+- Ore nodes remain standalone; no `ENHANCES` or Grasta-to-Ore relationship is introduced.
+
 ### Workflow Layer
 
 - Graph wiring: `src/workflow/graph.py`

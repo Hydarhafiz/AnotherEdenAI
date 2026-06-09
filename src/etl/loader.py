@@ -357,6 +357,8 @@ async def load_grastas(driver, rows: list[GrastaRow]) -> None:
             "stats": r.stats,
             "personality_req": r.personality_req,
             "is_shareable": r.is_shareable,
+            "effect_tags": r.effect_tags,
+            "effect_tag_derivation": r.effect_tag_derivation,
         }
         for r in rows
     ]
@@ -368,7 +370,9 @@ MERGE (g:Grasta {name: row.name})
 SET g.category = row.category,
     g.tier = row.tier,
     g.stats = row.stats,
-    g.is_shareable = row.is_shareable
+    g.is_shareable = row.is_shareable,
+    g.effect_tags = row.effect_tags,
+    g.effect_tag_derivation = row.effect_tag_derivation
 """
     # Load REQUIRES_TRAIT edges — gated: non-VC only, personality_req not null/empty
     cypher_edges = """
@@ -404,6 +408,8 @@ async def load_ores(driver, rows: list[OreRow]) -> None:
             "name": r.name,
             "stats": r.stats,
             "source": r.source,
+            "effect_tags": r.effect_tags,
+            "effect_tag_derivation": r.effect_tag_derivation,
         }
         for r in rows
     ]
@@ -413,7 +419,9 @@ async def load_ores(driver, rows: list[OreRow]) -> None:
 UNWIND $rows AS row
 MERGE (o:Ore {name: row.name})
 SET o.stats = row.stats,
-    o.source = row.source
+    o.source = row.source,
+    o.effect_tags = row.effect_tags,
+    o.effect_tag_derivation = row.effect_tag_derivation
 """
     async with driver.session() as session:
         await session.run(cypher_nodes, rows=ore_data)

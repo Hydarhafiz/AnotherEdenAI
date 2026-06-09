@@ -22,11 +22,15 @@
 - `stats` (STRING) — stat bonuses from col[3] (e.g., "INT +10 SPD +10")
 - `is_shareable` (BOOLEAN) — true if data-share="1"
 - `personality_req` (STRING, nullable) — trait name from data-personality; null for VC and weapon-based grastas
+- `effect_tags` (LIST<STRING>) — deterministic keyword tags derived from existing Grasta name/category/stats/personality text for retrieval
+- `effect_tag_derivation` (STRING) — derivation note for `effect_tags`; tags are not exact damage math
 
 ### Ore
 - `name` (STRING, unique) — ore display name from col[1]
 - `stats` (STRING) — stats/effect from col[2]
 - `source` (STRING) — drop location from col[3]
+- `effect_tags` (LIST<STRING>) — deterministic keyword tags derived from existing Ore name/stats text for retrieval
+- `effect_tag_derivation` (STRING) — derivation note for `effect_tags`; tags are not exact damage math
 
 ### Skill
 - `character_name` (STRING) — owning Character name from the parsed character row

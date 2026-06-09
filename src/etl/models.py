@@ -14,6 +14,66 @@ from .constants import ETL_SCHEMA_VERSION, STRICT
 logger = logging.getLogger(__name__)
 
 
+TAG_DERIVATION_RULE = "deterministic keyword tags derived from existing name/category/stats text"
+
+_EFFECT_TAG_PATTERNS: tuple[tuple[str, str], ...] = (
+    ("element:fire", r"\bfire\b"),
+    ("element:water", r"\bwater\b"),
+    ("element:wind", r"\bwind\b"),
+    ("element:earth", r"\bearth\b"),
+    ("element:thunder", r"\bthunder\b"),
+    ("element:shade", r"\bshade\b|\bdark\b"),
+    ("element:crystal", r"\bcrystal\b"),
+    ("element:null", r"\bnull\b"),
+    ("attack:slash", r"\bslash\b|katana|sword|blade"),
+    ("attack:pierce", r"\bpierce\b|bow|spear"),
+    ("attack:blunt", r"\bblunt\b|hammer|fist"),
+    ("attack:magic", r"\bmagic\b|staff|tome"),
+    ("status:pain", r"\bpain\b"),
+    ("status:poison", r"\bpoison\b"),
+    ("status:stun", r"\bstun\b"),
+    ("status:sleep", r"\bsleep\b"),
+    ("combat:critical", r"\bcritical\b|\bcrit\b"),
+    ("combat:af", r"\baf\b|another force"),
+    ("combat:zone", r"\bzone\b|stance"),
+    ("combat:damage", r"\bdamage\b|\bdmg\b"),
+    ("combat:heal", r"\bheal\b|restore hp|hp recovery"),
+    ("combat:mp", r"\bmp\b"),
+    ("combat:barrier", r"\bbarrier\b|shield"),
+    ("stat:hp", r"\bhp\b"),
+    ("stat:mp", r"\bmp\b"),
+    ("stat:pwr", r"\bpwr\b|\bpower\b|\batk\b"),
+    ("stat:int", r"\bint\b|intelligence"),
+    ("stat:spd", r"\bspd\b|\bspeed\b"),
+    ("stat:end", r"\bend\b|endurance"),
+    ("stat:spr", r"\bspr\b|spirit"),
+    ("stat:luck", r"\bluck\b"),
+    ("resistance:type", r"type resistance|all type res"),
+    ("resistance:physical", r"physical resistance"),
+    ("resistance:magic", r"magic resistance"),
+)
+
+
+def _dedupe_preserve_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value and value not in seen:
+            result.append(value)
+            seen.add(value)
+    return result
+
+
+def derive_effect_tags(*parts: str | None, prefixes: list[str] | None = None) -> list[str]:
+    """Build low-risk retrieval tags from text already present in the scraped row."""
+    text = " ".join(part or "" for part in parts).lower()
+    tags = list(prefixes or [])
+    for tag, pattern in _EFFECT_TAG_PATTERNS:
+        if re.search(pattern, text, flags=re.IGNORECASE):
+            tags.append(tag)
+    return _dedupe_preserve_order(tags)
+
+
 class CharacterRow(BaseModel):
     """Represents a single character row scraped from the Characters wiki page."""
 
@@ -233,6 +293,8 @@ class GrastaRow(BaseModel):
     stats: str
     personality_req: Optional[str] = None
     is_shareable: bool
+    effect_tags: list[str] = Field(default_factory=list)
+    effect_tag_derivation: str = Field(default=TAG_DERIVATION_RULE)
 
     @field_validator("tier", mode="before")
     @classmethod
@@ -246,6 +308,27 @@ class GrastaRow(BaseModel):
             return v == "1"
         return bool(v)
 
+    @field_validator("effect_tags", mode="before")
+    @classmethod
+    def parse_effect_tags(cls, v):
+        if isinstance(v, str):
+            return [tag.strip() for tag in re.split(r"[,;/|]", v) if tag.strip()]
+        return list(v) if v else []
+
+    def model_post_init(self, __context) -> None:
+        if not self.effect_tags:
+            object.__setattr__(
+                self,
+                "effect_tags",
+                derive_effect_tags(
+                    self.name,
+                    self.category,
+                    self.stats,
+                    self.personality_req,
+                    prefixes=[f"category:{self.category.lower()}", f"tier:{self.tier}"],
+                ),
+            )
+
 
 class OreRow(BaseModel):
     """Represents a single ore row scraped from the Grasta Ores wiki page."""
@@ -253,6 +336,23 @@ class OreRow(BaseModel):
     name: str
     stats: str
     source: str
+    effect_tags: list[str] = Field(default_factory=list)
+    effect_tag_derivation: str = Field(default=TAG_DERIVATION_RULE)
+
+    @field_validator("effect_tags", mode="before")
+    @classmethod
+    def parse_effect_tags(cls, v):
+        if isinstance(v, str):
+            return [tag.strip() for tag in re.split(r"[,;/|]", v) if tag.strip()]
+        return list(v) if v else []
+
+    def model_post_init(self, __context) -> None:
+        if not self.effect_tags:
+            object.__setattr__(
+                self,
+                "effect_tags",
+                derive_effect_tags(self.name, self.stats, prefixes=["category:ore"]),
+            )
 
 
 # ---------------------------------------------------------------------------

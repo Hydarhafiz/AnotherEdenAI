@@ -116,7 +116,7 @@ Acceptance criteria:
 
 ### Feature C: Grasta/Ore Preservation And Lightweight Retrieval Tags
 
-Status: Not started
+Status: Completed
 
 Goal: Preserve the existing highest-impact build data while adding only safe metadata needed for retrieval.
 
@@ -202,7 +202,7 @@ Acceptance criteria:
 - Milestone 3 planning: complete
 - Feature A: completed
 - Feature B: completed
-- Feature C: not started
+- Feature C: completed
 - Feature D: not started
 - Feature E: not started
 

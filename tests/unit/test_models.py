@@ -141,3 +141,62 @@ def test_parse_ore_valid():
     })
     assert result is not None
     assert result.name == "Speed Ore"
+
+
+def test_grasta_effect_tags_are_derived_from_existing_text():
+    """Feature C: Grasta tags are lightweight retrieval metadata, not damage math."""
+    from src.etl.models import TAG_DERIVATION_RULE, GrastaRow
+
+    row = GrastaRow.model_validate({
+        "name": "Fire Slash Pain Grasta",
+        "category": "Attack",
+        "tier": "3",
+        "stats": "PWR +10 Fire slash damage when target has Pain",
+        "personality_req": "Sword",
+        "is_shareable": "1",
+    })
+
+    assert row.effect_tags == [
+        "category:attack",
+        "tier:3",
+        "element:fire",
+        "attack:slash",
+        "status:pain",
+        "combat:damage",
+        "stat:pwr",
+    ]
+    assert row.effect_tag_derivation == TAG_DERIVATION_RULE
+    assert not any(tag.startswith("multiplier:") for tag in row.effect_tags)
+
+
+def test_grasta_effect_tags_can_be_explicit_without_rederivation():
+    """Feature C: replayed parsed artifacts can preserve already-derived tags."""
+    from src.etl.models import GrastaRow
+
+    row = GrastaRow.model_validate({
+        "name": "Manual Tag Grasta",
+        "category": "Support",
+        "tier": 2,
+        "stats": "INT +10",
+        "personality_req": None,
+        "is_shareable": True,
+        "effect_tags": "custom:one, custom:two",
+        "effect_tag_derivation": "fixture supplied",
+    })
+
+    assert row.effect_tags == ["custom:one", "custom:two"]
+    assert row.effect_tag_derivation == "fixture supplied"
+
+
+def test_ore_effect_tags_are_derived_with_derivation_clarity():
+    """Feature C: Ore tags are derived from name/stats and remain standalone metadata."""
+    from src.etl.models import TAG_DERIVATION_RULE, OreRow
+
+    row = OreRow.model_validate({
+        "name": "AF Speed Ore",
+        "stats": "Restore AF Gauge by 10% on victory and SPD +5",
+        "source": "Fog People Vendor",
+    })
+
+    assert row.effect_tags == ["category:ore", "combat:af", "stat:spd"]
+    assert row.effect_tag_derivation == TAG_DERIVATION_RULE
