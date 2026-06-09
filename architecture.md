@@ -52,7 +52,15 @@ Responsibilities:
 - Parse Characters, character detail combat entries, Sidekicks, sidekick ability/aura entries, curated weak Superbosses, Grastas, Ores, and baseline weapon/armor Equipment
 - Validate records with Pydantic
 - Load normalized entities into Neo4j
-- Assert schema expectations after load
+- Assert schema and RAG-readiness expectations after load
+
+Feature E ETL reliability behavior:
+
+- The crawl manifest records every selected target with explicit `loaded`, `failed`, or inactive/not-selected state.
+- Failed selected targets retain URL, failure stage, attempt count, last error, quality-gate reason when applicable, and raw/parsed cache artifact references.
+- Parsed source mode reloads Neo4j from current schema-versioned JSON artifacts without live wiki access.
+- The manifest readiness summary reports selected target accountability, failed and pending targets, and curated sidekick/superboss detail success rate.
+- Post-load schema assertions verify milestone-added labels, required `schema_version`, wiki `source_url` attribution, sidekick association and ability/aura paths, boss affinity/mechanics retrieval, and baseline equipment context.
 
 Feature A sidekick graph behavior:
 

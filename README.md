@@ -11,7 +11,7 @@ A production-grade AI system that answers natural-language team-building questio
 You type: *"What's the highest-damage blunt-zone synergy I can build from my roster?"*
 
 The system:
-1. Scrapes live character, Grasta, and Ore data from the community wiki into a Neo4j graph
+1. Scrapes live character, sidekick, curated superboss, Grasta, Ore, weapon, and armor data from the community wiki into a Neo4j graph
 2. Normalises your roster input to canonical graph names and augments it with free-to-play units
 3. Routes your question through a 5-node LangGraph agent pipeline (PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE → FORMAT)
 4. Streams pipeline progress to your browser via SSE — "Validating... attempt 2/3" — so you know it's working
@@ -36,7 +36,8 @@ FastAPI Web Layer  ──── POST /api/query ──────┐
                       │
                       ▼
               Neo4j Graph Database
-         (Characters, Traits, Grastas, Ores)
+   (Characters, Traits, Skills, Sidekicks,
+    Superbosses, Grastas, Ores, Equipment)
                       ▲
                       │
                ETL Pipeline
@@ -108,7 +109,7 @@ docker compose up -d
 
 ### 5. Run the ETL pipeline
 
-This scrapes character, Grasta, and Ore data from the wiki and loads it into Neo4j (~393 characters, ~647 Grastas, ~61 Ores):
+This scrapes the selected wiki scope and loads it into Neo4j, including characters, combat skills, sidekicks, curated weak superbosses, Grastas, Ores, and baseline weapon/armor equipment:
 
 ```bash
 uv run python -m src.etl.run_etl
@@ -204,37 +205,28 @@ AnotherEdenAI/
 
 ## Graph Schema
 
-The Neo4j graph has four node labels and two relationship types:
+The Neo4j graph models roster heroes, combat facts, build context, and RAG retrieval targets:
 
 ```
-(:Character {name, element, weapon, light_shadow})
-    -[:HAS_TRAIT]->
-(:Trait {name})
-    <-[:REQUIRES_TRAIT]-
-(:Grasta {name, category, tier, stats, is_shareable, personality_req})
+(:Character)-[:HAS_TRAIT]->(:Trait)<-[:REQUIRES_TRAIT]-(:Grasta)
+(:Character)-[:HAS_SKILL]->(:Skill)
+(:Character)-[:HAS_PASSIVE_SKILL]->(:PassiveSkill)
+(:Character)-[:UNLOCKS_SIDEKICK]->(:Sidekick)
+(:Sidekick)-[:HAS_AUTO_SKILL|HAS_CHARGE_SKILL]->(:SidekickSkill)
+(:Sidekick)-[:HAS_AURA]->(:SidekickAura)
+(:Superboss)
 
-(:Ore {name, stats, source})   ← standalone; no edges
+(:Ore)
+(:Equipment)
 ```
 
-Full contract: [SCHEMA.md](SCHEMA.md) — versioned at `SCHEMA_VERSION: 1.0.0`.
+Full contract: [SCHEMA.md](SCHEMA.md) - versioned at SCHEMA_VERSION: 1.0.0.
 
-### Live Graph Snapshot (as of 2026-04-26)
+### Verified ETL Snapshot
 
-| Node Label | Count |
-|------------|-------|
-| Character | 397 |
-| Grasta | 501 (VC=316, Attack=122, Support=39, Life=22, Special=2) |
-| Trait | 130 |
-| Ore | 62 |
+Milestone 3 verified baseline equipment output on 2026-06-09 with 888 Equipment nodes: 664 weapons and 224 armor records. Character, skill, passive skill, sidekick, superboss, Grasta, Ore, and Trait counts vary by selected crawl scope and should be checked with uv run python assert_schema.py after ETL.
 
-| Relationship Type | Count |
-|-------------------|-------|
-| `:HAS_TRAIT` (Character → Trait) | 1,863 |
-| `:REQUIRES_TRAIT` (Grasta → Trait) | 104 |
-
-**Character breakdown by weapon:** Staff (82), Sword (54), Bow (45), Katana (43), Fists (42), Lance (40), Ax (36), Hammer (30)
-
-The graph's two relationship types power the core synergy query: a character-compatible shareable Grasta is one where `(c)-[:HAS_TRAIT]->(t)<-[:REQUIRES_TRAIT]-(g {is_shareable: true})`.
+The original Grasta synergy path remains available: a character-compatible shareable Grasta is one where (c)-[:HAS_TRAIT]->(t)<-[:REQUIRES_TRAIT]-(g {is_shareable: true}). Milestone 3 adds RAG-ready retrieval paths for sidekick associations, sidekick abilities and auras, boss affinities and mechanics text, and baseline equipment context.
 
 ---
 
@@ -304,9 +296,10 @@ Supplementary planning notes live in `future-ideas.md`. That file is the parking
 
 | Version | Focus |
 |---------|-------|
-| v1 (current) | Core GraphRAG pipeline, roster filtering, streaming web UI |
-| v2 | AF zone mechanics, Grasta stat optimisation, farming dungeon advisor |
-| v3 | Superboss turn-by-turn guides, HP stopper analysis (RAG over wiki) |
+| Milestone 4 (active) | Legal 6-hero plus 2-sidekick lineup recommendation intelligence |
+| Milestone 5 | AI agent optimization, evaluation, and cost control |
+| Milestone 6 | Portfolio frontend experience |
+| Milestone 7 | Cost-controlled demo deployment |
 
 ---
 

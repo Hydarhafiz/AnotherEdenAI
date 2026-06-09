@@ -9,9 +9,31 @@ All notable changes to this project are documented here, grouped by development 
 ### Added
 - Root `architecture.md` documenting the current ETL, workflow, web, and schema boundaries for future milestone planning
 - Root `milestone.md` establishing a living baseline for post-v1 roadmap planning
+- Milestone 3 release sync documenting RAG-ready ETL coverage, manifest diagnostics, readiness gates, and the handoff to recommendation intelligence
 
 ### Changed
 - `README.md` now documents the five root project pillars used for planning and release synchronization
+- Roadmap now marks Milestone 3 completed and Milestone 4 active
+
+## [Milestone 3] RAG-Ready ETL Data Coverage - 2026-06-09
+
+**Goal:** Complete the factual ETL layer needed before legal, boss-aware AI lineup recommendations.
+
+### Added
+- Sidekick graph ETL with separate sidekick identity, auto skill, charge skill, aura, and official character association records
+- Curated weak superboss ETL with source URLs, affinity fields, mechanic tags, mechanics text, and quality gates
+- Baseline `Equipment` ETL for weapon and armor context without optimizer or best-in-slot semantics
+- Lightweight Grasta/Ore retrieval tags derived from existing scraped fields
+- Crawl manifest diagnostics for selected targets, including failure stage, quality-gate reason, attempts, errors, and cache artifact references
+- Manifest `readiness_summary` reporting selected-target accountability and curated sidekick/superboss detail success
+- Post-load schema assertions for milestone-added labels, `schema_version`, `source_url`, and golden RAG retrieval paths
+
+### Changed
+- `milestone.md`, `roadmap.md`, `architecture.md`, `SCHEMA.md`, and `guides/ETL_GUIDE.md` now reflect completed Milestone 3 behavior
+- Parsed-source ETL guidance now documents offline replay, inactive missing detail artifacts, and Feature E readiness checks
+
+### Tests
+- Added unit coverage for fetch failure diagnostics, quality-gate diagnostics, manifest readiness summaries, and loaded-target readiness updates
 
 ---
 

@@ -34,6 +34,7 @@ Important behavior:
 - parsed artifacts are invalid when their schema version does not match the active ETL schema
 - parsed-only runs can rebuild ETL output without live wiki fetches
 - selected-scope failures should stay visible instead of being silently skipped
+- the manifest summarizes selected-target accountability and curated sidekick/superboss load success
 
 ## Prerequisites
 
@@ -90,9 +91,13 @@ Pipeline controls:
 - `ETL_INCREMENTAL`
 - `ETL_RESUME`
 - `ETL_INCLUDE_CHARACTER_PAGES`
+- `ETL_INCLUDE_SIDEKICK_PAGES`
+- `ETL_INCLUDE_SUPERBOSS_PAGES`
 - `ETL_MAX_RETRIES`
 - `ETL_SMALL_CHARACTER_LIMIT`
+- `ETL_SMALL_SIDEKICK_LIMIT`
 - `ETL_FALLBACK_CHARACTER_LIMIT`
+- `ETL_FALLBACK_SIDEKICK_LIMIT`
 - `ETL_OPERATOR_WAIT_SECONDS`
 - `ETL_BROWSER_PROFILE_DIR`
 - `ETL_SCHEMA_VERSION`
@@ -122,15 +127,30 @@ The crawl manifest records per-target state such as:
 - `parsed`
 - `loaded`
 - `failed`
+- `inactive`
 
 Useful diagnostics include:
 
 - attempt count
 - last error
+- failure stage
+- quality-gate reason
 - HTML byte size
 - Cloudflare detection
 - parsed counts
 - quality status
+- raw and parsed cache artifact paths
+
+The top-level `readiness_summary` gives a quick Feature E check:
+
+- `selected_target_count`
+- `loaded_count`
+- `failed_count`
+- `pending_accountability_count`
+- `pass_fail_accountability_percent`
+- `curated_detail_success_percent`
+- `failed_targets`
+- `pending_targets`
 
 Use the manifest first when a run behaves unexpectedly.
 
@@ -160,7 +180,37 @@ uv run python -m src.etl.run_etl
 
 Use this when raw and parsed cache already exist and you want to confirm Neo4j can load without live wiki access.
 
-### 3. Manual Scraper Smoke Check
+On PowerShell, use:
+
+```powershell
+$env:ETL_SOURCE_MODE = "parsed"
+uv run python -m src.etl.run_etl
+```
+
+On bash, use:
+
+```bash
+ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
+```
+
+Parsed replay requires current schema-versioned index artifacts and only selects detail artifacts that already exist. Missing detail artifacts are marked `inactive` instead of fetched.
+
+### 3. Feature E Readiness Gate
+
+After a successful load, run:
+
+```bash
+uv run python assert_schema.py
+```
+
+This checks:
+
+- minimum node presence for character, Grasta, Ore, Trait, Skill, PassiveSkill, Sidekick, SidekickSkill, SidekickAura, Superboss, and Equipment labels
+- `schema_version` on milestone-added structured labels
+- `source_url` attribution on wiki-sourced structured labels
+- golden retrieval paths for sidekick associations, sidekick abilities and auras, boss affinities and mechanics text, and baseline equipment context
+
+### 4. Manual Scraper Smoke Check
 
 Use the helper:
 
@@ -174,7 +224,7 @@ Then rerun in parsed mode:
 uv run python tools/manual_feature_a_smoke.py --run-root data/manual_feature_a/smoke1 --source-mode parsed --scope small
 ```
 
-### 4. Schema Invalidation Check
+### 5. Schema Invalidation Check
 
 Corrupt a parsed artifact's `schema_version`, then rerun parsed mode.
 
@@ -202,6 +252,9 @@ If parsed mode fails immediately:
 If a live run fails:
 
 - inspect failed targets in the manifest
+- check `failure_stage` first: `fetch`, `parse`, or `quality_gate`
+- use `quality_gate_reason` to distinguish blocked/partial pages from parser defects
+- open the listed raw or parsed cache artifact when available
 - confirm browser/Chromium availability
 - confirm display/browser interaction is possible
 - retry with a smaller crawl scope for diagnosis

@@ -135,6 +135,7 @@ def _base_manifest() -> dict[str, Any]:
     return {
         "etl_schema_version": ETL_SCHEMA_VERSION,
         "updated_at": _timestamp(),
+        "readiness_summary": {},
         "targets": {},
     }
 
@@ -144,6 +145,7 @@ def _load_manifest() -> dict[str, Any]:
         return _base_manifest()
     manifest = json.loads(CRAWL_MANIFEST_PATH.read_text(encoding="utf-8"))
     manifest.setdefault("etl_schema_version", ETL_SCHEMA_VERSION)
+    manifest.setdefault("readiness_summary", {})
     manifest.setdefault("targets", {})
     return manifest
 
@@ -303,6 +305,8 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
             "state": "pending",
             "attempt_count": 0,
             "last_error": None,
+            "failure_stage": None,
+            "quality_gate_reason": None,
             "html_byte_size": 0,
             "cloudflare_detected": False,
             "parsed_counts": {},
@@ -314,6 +318,10 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
             "last_parsed_at": None,
             "last_loaded_at": None,
             "etag": None,
+            "cache_artifacts": {
+                "raw_path": target["raw_path"],
+                "parsed_path": target["parsed_path"],
+            },
         },
     )
     target_changed = (
@@ -325,11 +333,17 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
         entry["quality_status"] = "pending"
         entry["parsed_counts"] = {}
         entry["last_error"] = None
+        entry["failure_stage"] = None
+        entry["quality_gate_reason"] = None
     entry["url"] = target["url"]
     entry["expected_selector"] = target["expected_selector"]
     entry["kind"] = target["kind"]
     entry["raw_path"] = target["raw_path"]
     entry["parsed_path"] = target["parsed_path"]
+    entry["cache_artifacts"] = {
+        "raw_path": target["raw_path"],
+        "parsed_path": target["parsed_path"],
+    }
     entry["metadata"] = target["metadata"]
     return entry
 
@@ -508,8 +522,19 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
     entry["parsed_counts"] = payload["parsed_counts"]
     entry["quality_status"] = payload["quality_status"]
     entry["last_error"] = None
+    entry["failure_stage"] = None
+    entry["quality_gate_reason"] = None
     entry["last_parsed_at"] = _timestamp()
     return payload
+
+
+def _fail_target(entry: dict[str, Any], *, stage: str, message: str, quality_gate_reason: str | None = None) -> None:
+    entry["state"] = "failed"
+    entry["failure_stage"] = stage
+    entry["last_error"] = message
+    if quality_gate_reason is not None:
+        entry["quality_status"] = "failed"
+        entry["quality_gate_reason"] = quality_gate_reason
 
 
 def _load_rows(path: Path) -> dict[str, Any]:
@@ -538,15 +563,21 @@ def _validate_target(entry: dict[str, Any]) -> None:
     }:
         total = sum(int(value) for value in parsed_counts.values())
         if total <= 0:
-            entry["quality_status"] = "failed"
-            entry["state"] = "failed"
-            entry["last_error"] = "Parsed artifact was empty"
+            _fail_target(
+                entry,
+                stage="quality_gate",
+                message="Parsed artifact was empty",
+                quality_gate_reason="Parsed artifact must contain at least one row",
+            )
             raise RuntimeError(f"Validation failed for {entry['id']}: parsed artifact was empty")
 
     if kind == "character_detail" and parsed_counts.get("skills", 0) <= 0:
-        entry["quality_status"] = "failed"
-        entry["state"] = "failed"
-        entry["last_error"] = "Character detail page had no recognizable active combat skills"
+        _fail_target(
+            entry,
+            stage="quality_gate",
+            message="Character detail page had no recognizable active combat skills",
+            quality_gate_reason="Character detail page must parse at least one active combat skill",
+        )
         raise RuntimeError(
             f"Validation failed for {entry['id']}: character detail page had no recognizable active combat skills"
         )
@@ -555,16 +586,22 @@ def _validate_target(entry: dict[str, Any]) -> None:
         + parsed_counts.get("charge_skills", 0)
         + parsed_counts.get("auras", 0)
     ) <= 0:
-        entry["quality_status"] = "failed"
-        entry["state"] = "failed"
-        entry["last_error"] = "Sidekick detail page had no recognizable auto skill, charge skill, or aura"
+        _fail_target(
+            entry,
+            stage="quality_gate",
+            message="Sidekick detail page had no recognizable auto skill, charge skill, or aura",
+            quality_gate_reason="Sidekick detail page must parse at least one auto skill, charge skill, or aura",
+        )
         raise RuntimeError(
             f"Validation failed for {entry['id']}: sidekick detail page had no recognizable sidekick abilities"
         )
     elif kind == "superboss_detail" and parsed_counts.get("mechanics_text_chars", 0) <= 0:
-        entry["quality_status"] = "failed"
-        entry["state"] = "failed"
-        entry["last_error"] = "Superboss detail page had no mechanics text for RAG grounding"
+        _fail_target(
+            entry,
+            stage="quality_gate",
+            message="Superboss detail page had no mechanics text for RAG grounding",
+            quality_gate_reason="Superboss detail page must retain mechanics text for RAG grounding",
+        )
         raise RuntimeError(
             f"Validation failed for {entry['id']}: superboss detail page had no mechanics text"
         )
@@ -572,6 +609,8 @@ def _validate_target(entry: dict[str, Any]) -> None:
         entry["quality_status"] = "ok"
 
     entry["last_error"] = None
+    entry["failure_stage"] = None
+    entry["quality_gate_reason"] = None
 
 
 def _aggregate_parsed_data(
@@ -680,6 +719,8 @@ def _filter_parsed_ready_detail_targets(
         entry["state"] = "inactive"
         entry["quality_status"] = "inactive"
         entry["last_error"] = "Detail artifact is not available in parsed source mode"
+        entry["failure_stage"] = None
+        entry["quality_gate_reason"] = None
     return ready_targets
 
 
@@ -713,14 +754,21 @@ async def _fetch_target(browser, entry: dict[str, Any], config: CrawlConfig) -> 
             entry["html_byte_size"] = diagnostics["html_byte_size"]
             entry["cloudflare_detected"] = diagnostics["cloudflare_detected"]
             entry["last_error"] = None
+            entry["failure_stage"] = None
+            entry["quality_gate_reason"] = None
             entry["last_cached_at"] = _timestamp()
             return
         except Exception as exc:  # noqa: BLE001
             last_error = exc
             entry["last_error"] = str(exc)
+            entry["failure_stage"] = "fetch"
             entry["state"] = "pending"
 
-    entry["state"] = "failed"
+    _fail_target(
+        entry,
+        stage="fetch",
+        message=f"Failed to fetch after {config.max_retries} attempts: {last_error}",
+    )
     raise RuntimeError(f"Failed to fetch {entry['id']} after {config.max_retries} attempts") from last_error
 
 
@@ -730,6 +778,58 @@ def _failed_entries(manifest: dict[str, Any], selected_ids: set[str]) -> list[di
         for entry in manifest["targets"].values()
         if entry["id"] in selected_ids and entry["state"] == "failed"
     ]
+
+
+def _update_readiness_summary(manifest: dict[str, Any], active_target_ids: set[str]) -> None:
+    selected_entries = [entry for entry in manifest["targets"].values() if entry["id"] in active_target_ids]
+    accountable_states = {"loaded", "failed"}
+    loaded = [entry for entry in selected_entries if entry["state"] == "loaded"]
+    failed = [entry for entry in selected_entries if entry["state"] == "failed"]
+    pending = [entry for entry in selected_entries if entry["state"] not in accountable_states]
+    detail_entries = [
+        entry
+        for entry in selected_entries
+        if entry["kind"] in {"sidekick_detail", "superboss_detail"}
+    ]
+    successful_details = [entry for entry in detail_entries if entry["state"] == "loaded"]
+    manifest["readiness_summary"] = {
+        "updated_at": _timestamp(),
+        "selected_target_count": len(selected_entries),
+        "loaded_count": len(loaded),
+        "failed_count": len(failed),
+        "pending_accountability_count": len(pending),
+        "pass_fail_accountability_percent": (
+            round(((len(loaded) + len(failed)) / len(selected_entries)) * 100, 2)
+            if selected_entries
+            else 100.0
+        ),
+        "curated_detail_success_percent": (
+            round((len(successful_details) / len(detail_entries)) * 100, 2)
+            if detail_entries
+            else 100.0
+        ),
+        "failed_targets": [
+            {
+                "id": entry["id"],
+                "url": entry["url"],
+                "stage": entry.get("failure_stage"),
+                "attempt_count": entry.get("attempt_count", 0),
+                "last_error": entry.get("last_error"),
+                "quality_gate_reason": entry.get("quality_gate_reason"),
+                "cache_artifacts": entry.get("cache_artifacts"),
+            }
+            for entry in failed
+        ],
+        "pending_targets": [
+            {
+                "id": entry["id"],
+                "url": entry["url"],
+                "state": entry["state"],
+                "quality_status": entry.get("quality_status"),
+            }
+            for entry in pending
+        ],
+    }
 
 
 def _mark_inactive_targets(manifest: dict[str, Any], active_target_ids: set[str]) -> None:
@@ -743,6 +843,8 @@ def _mark_inactive_targets(manifest: dict[str, Any], active_target_ids: set[str]
             entry["state"] = "inactive"
             entry["quality_status"] = "inactive"
             entry["last_error"] = "Target not selected by current crawl scope"
+            entry["failure_stage"] = None
+            entry["quality_gate_reason"] = None
 
 
 async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[str, list[Any]], dict[str, Any]]:
@@ -795,9 +897,20 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
             raise RuntimeError("Sidekick index was not cached successfully; cannot continue ETL parse stage.")
         if not Path(manifest["targets"]["superbosses"]["raw_path"]).exists():
             raise RuntimeError("Superbosses index was not cached successfully; cannot continue ETL parse stage.")
-        characters_payload = _parse_target(manifest["targets"]["characters"])
-        sidekick_payload = _parse_target(manifest["targets"]["sidekick"])
-        superboss_payload = _parse_target(manifest["targets"]["superbosses"])
+        try:
+            characters_payload = _parse_target(manifest["targets"]["characters"])
+            sidekick_payload = _parse_target(manifest["targets"]["sidekick"])
+            superboss_payload = _parse_target(manifest["targets"]["superbosses"])
+        except Exception as exc:  # noqa: BLE001
+            for entry in (
+                manifest["targets"]["characters"],
+                manifest["targets"]["sidekick"],
+                manifest["targets"]["superbosses"],
+            ):
+                if entry["state"] != "parsed":
+                    _fail_target(entry, stage="parse", message=str(exc))
+            _save_manifest(manifest)
+            raise
         _save_manifest(manifest)
 
     character_records = characters_payload["rows"]
@@ -845,18 +958,36 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
                     "Parsed source mode requires a current parsed snapshot "
                     f"at {entry['parsed_path']}"
                 )
-            _validate_target(entry)
+            try:
+                _validate_target(entry)
+            except Exception:
+                _update_readiness_summary(manifest, active_target_ids)
+                _save_manifest(manifest)
+                raise
             _save_manifest(manifest)
             continue
         if _should_parse(entry):
-            _parse_target(entry)
+            try:
+                _parse_target(entry)
+            except Exception as exc:  # noqa: BLE001
+                _fail_target(entry, stage="parse", message=str(exc))
+                _update_readiness_summary(manifest, active_target_ids)
+                _save_manifest(manifest)
+                raise
             _save_manifest(manifest)
         if entry["state"] in {"parsed", "loaded"}:
-            _validate_target(entry)
+            try:
+                _validate_target(entry)
+            except Exception:
+                _update_readiness_summary(manifest, active_target_ids)
+                _save_manifest(manifest)
+                raise
             _save_manifest(manifest)
 
     failures = _failed_entries(manifest, active_target_ids)
     if failures:
+        _update_readiness_summary(manifest, active_target_ids)
+        _save_manifest(manifest)
         failed_urls = ", ".join(f"{entry['id']} ({entry['attempt_count']} attempts)" for entry in failures)
         raise RuntimeError(f"ETL fetch failures remain after retries: {failed_urls}")
 
@@ -882,5 +1013,14 @@ def mark_loaded(manifest: dict[str, Any], data: dict[str, list[Any]]) -> None:
                 continue
         entry["state"] = "loaded"
         entry["last_loaded_at"] = _timestamp()
+        entry["last_error"] = None
+        entry["failure_stage"] = None
+        entry["quality_gate_reason"] = None
 
+    active_target_ids = {
+        entry["id"]
+        for entry in manifest["targets"].values()
+        if entry["state"] != "inactive"
+    }
+    _update_readiness_summary(manifest, active_target_ids)
     _save_manifest(manifest)

@@ -179,6 +179,12 @@ Official wiki association or unlock fact between a Character and Sidekick when d
 After ETL, `python assert_schema.py` must exit 0.
 `get_schema()` from langchain_neo4j.Neo4jGraph must match this document.
 
+The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
+- minimum loaded counts for `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, and `Equipment`
+- `schema_version` presence on milestone-added structured labels
+- wiki `source_url` attribution where the source exists
+- golden retrieval paths for sidekick associations, sidekick auto/charge skills, sidekick auras, boss affinities and mechanics text, and baseline equipment context
+
 ## Future Extensions
 
 ### OPT-03: AF Zone Mechanics (v2)

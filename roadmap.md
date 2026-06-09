@@ -17,15 +17,15 @@ The portfolio target audience is recruiters, senior managers, and potential free
 
 ## Current Active Milestone
 
-The active milestone is Milestone 3, documented in `milestone.md`.
+Milestone 3 is completed. The active milestone is now Milestone 4, which begins the AI lineup recommendation intelligence work unlocked by the RAG-ready ETL data foundation.
 
-Milestone 3 focuses on data coverage before recommendation intelligence:
+Milestone 4 focuses on:
 
-- Sidekick graph ETL.
-- Curated weak superboss ETL.
-- Existing Grasta/Ore preservation with lightweight retrieval tags where safe.
-- Baseline weapon and armor ETL.
-- ETL reliability metrics, manifest diagnostics, schema assertions, and RAG readiness gates.
+- Structured roster ownership, Stellar Awakening, and Light/Shadow rules.
+- Legal 6-hero plus main/sub sidekick lineup generation.
+- Skill-slot legality and boss-aware recommendation contracts.
+- Grasta/Ore and equipment coverage review before recommendation logic depends on them.
+- Initial evaluation gates for legality, factuality, and boss-counterplay relevance.
 
 ## Ordered Major Milestones
 
@@ -73,7 +73,7 @@ Exit criteria:
 
 ### Milestone 3: RAG-Ready ETL Data Coverage
 
-Status: Active
+Status: Completed
 
 Purpose:
 
@@ -100,7 +100,7 @@ Exit criteria:
 
 ### Milestone 4: AI Lineup Recommendation Intelligence
 
-Status: Planned
+Status: Active
 
 Purpose:
 

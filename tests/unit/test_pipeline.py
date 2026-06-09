@@ -243,7 +243,47 @@ async def test_fetch_target_retries_and_records_diagnostics(monkeypatch, tmp_pat
     assert entry["state"] == "cached"
     assert entry["cloudflare_detected"] is True
     assert entry["html_byte_size"] == 15
+    assert entry["failure_stage"] is None
+    assert entry["cache_artifacts"]["raw_path"] == str(tmp_path / "raw" / "indexes" / "characters.html")
+    assert entry["cache_artifacts"]["parsed_path"] == str(tmp_path / "parsed" / "indexes" / "characters.json")
     assert Path(entry["raw_path"]).read_text(encoding="utf-8") == "<html>ok</html>"
+
+
+@pytest.mark.asyncio
+async def test_fetch_target_failure_records_feature_e_diagnostics(monkeypatch, tmp_path):
+    """Feature E: failed selected URLs retain URL, stage, attempts, error, and cache refs."""
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+
+    async def fake_fetch_raw_html(_browser, _url, _selector, operator_wait_seconds):
+        raise RuntimeError(f"blocked after wait {operator_wait_seconds}")
+
+    monkeypatch.setattr(pipeline, "fetch_raw_html", fake_fetch_raw_html)
+
+    target = pipeline._make_target(
+        target_id="superboss::blocked",
+        url="https://example.test/Blocked#Boss",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "superbosses" / "blocked.html",
+        parsed_path=tmp_path / "parsed" / "superbosses" / "blocked.json",
+        kind="superboss_detail",
+        metadata={"superboss": {"name": "Blocked", "source_url": "https://example.test/Blocked#Boss"}},
+    )
+    manifest = pipeline._base_manifest()
+    entry = pipeline._ensure_target_entry(manifest, target)
+
+    with pytest.raises(RuntimeError, match="after 2 attempts"):
+        await pipeline._fetch_target(object(), entry, pipeline.CrawlConfig(max_retries=2, operator_wait_seconds=11))
+
+    assert entry["state"] == "failed"
+    assert entry["url"] == "https://example.test/Blocked#Boss"
+    assert entry["failure_stage"] == "fetch"
+    assert entry["attempt_count"] == 2
+    assert "blocked after wait 11" in entry["last_error"]
+    assert entry["quality_gate_reason"] is None
+    assert entry["cache_artifacts"] == {
+        "raw_path": str(tmp_path / "raw" / "superbosses" / "blocked.html"),
+        "parsed_path": str(tmp_path / "parsed" / "superbosses" / "blocked.json"),
+    }
 
 
 @pytest.mark.asyncio
@@ -645,6 +685,9 @@ def test_validate_character_detail_rejects_partial_page_without_skills(monkeypat
 
     assert entry["state"] == "failed"
     assert entry["quality_status"] == "failed"
+    assert entry["failure_stage"] == "quality_gate"
+    assert entry["quality_gate_reason"] == "Character detail page must parse at least one active combat skill"
+    assert entry["cache_artifacts"]["parsed_path"].endswith("blocked.json")
 
 
 def test_validate_sidekick_detail_rejects_partial_page_without_abilities(monkeypatch, tmp_path):
@@ -676,6 +719,8 @@ def test_validate_sidekick_detail_rejects_partial_page_without_abilities(monkeyp
 
     assert entry["state"] == "failed"
     assert entry["quality_status"] == "failed"
+    assert entry["failure_stage"] == "quality_gate"
+    assert entry["quality_gate_reason"] == "Sidekick detail page must parse at least one auto skill, charge skill, or aura"
 
 
 def test_validate_superboss_detail_rejects_page_without_mechanics_text(monkeypatch, tmp_path):
@@ -713,6 +758,8 @@ def test_validate_superboss_detail_rejects_page_without_mechanics_text(monkeypat
     assert entry["state"] == "failed"
     assert entry["quality_status"] == "failed"
     assert "RAG grounding" in entry["last_error"]
+    assert entry["failure_stage"] == "quality_gate"
+    assert entry["quality_gate_reason"] == "Superboss detail page must retain mechanics text for RAG grounding"
 
 
 def test_aggregate_parsed_data_ignores_inactive_stale_targets(monkeypatch, tmp_path):
@@ -903,3 +950,83 @@ def test_mark_loaded_advances_parsed_targets(monkeypatch, tmp_path):
     reloaded = pipeline._load_manifest()
     assert reloaded["targets"]["characters"]["state"] == "loaded"
     assert reloaded["targets"]["character::aldo"]["state"] == "loaded"
+
+
+def test_update_readiness_summary_reports_feature_e_accountability(monkeypatch, tmp_path):
+    """Feature E: selected scope exposes pass/fail accountability and curated-detail success."""
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    manifest = pipeline._base_manifest()
+
+    loaded_sidekick = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="sidekick::tetra",
+            url="https://example.test/Tetra",
+            expected_selector="body",
+            raw_path=tmp_path / "raw" / "sidekicks" / "tetra.html",
+            parsed_path=tmp_path / "parsed" / "sidekicks" / "tetra.json",
+            kind="sidekick_detail",
+            metadata={"sidekick": {"name": "Tetra", "source_url": "https://example.test/Tetra"}},
+        ),
+    )
+    failed_boss = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="superboss::blocked",
+            url="https://example.test/Blocked#Boss",
+            expected_selector="body",
+            raw_path=tmp_path / "raw" / "superbosses" / "blocked.html",
+            parsed_path=tmp_path / "parsed" / "superbosses" / "blocked.json",
+            kind="superboss_detail",
+            metadata={"superboss": {"name": "Blocked", "source_url": "https://example.test/Blocked#Boss"}},
+        ),
+    )
+    pending_index = pipeline._ensure_target_entry(
+        manifest,
+        pipeline._make_target(
+            target_id="characters",
+            url="https://example.test/Characters",
+            expected_selector="tr.character-row-entry",
+            raw_path=tmp_path / "raw" / "indexes" / "characters.html",
+            parsed_path=tmp_path / "parsed" / "indexes" / "characters.json",
+            kind="characters_index",
+        ),
+    )
+
+    loaded_sidekick["state"] = "loaded"
+    pipeline._fail_target(
+        failed_boss,
+        stage="quality_gate",
+        message="Superboss detail page had no mechanics text for RAG grounding",
+        quality_gate_reason="Superboss detail page must retain mechanics text for RAG grounding",
+    )
+    pending_index["state"] = "parsed"
+    pending_index["quality_status"] = "ok"
+
+    pipeline._update_readiness_summary(manifest, {"sidekick::tetra", "superboss::blocked", "characters"})
+
+    summary = manifest["readiness_summary"]
+    assert summary["selected_target_count"] == 3
+    assert summary["loaded_count"] == 1
+    assert summary["failed_count"] == 1
+    assert summary["pending_accountability_count"] == 1
+    assert summary["pass_fail_accountability_percent"] == 66.67
+    assert summary["curated_detail_success_percent"] == 50.0
+    assert summary["failed_targets"] == [{
+        "id": "superboss::blocked",
+        "url": "https://example.test/Blocked#Boss",
+        "stage": "quality_gate",
+        "attempt_count": 0,
+        "last_error": "Superboss detail page had no mechanics text for RAG grounding",
+        "quality_gate_reason": "Superboss detail page must retain mechanics text for RAG grounding",
+        "cache_artifacts": {
+            "raw_path": str(tmp_path / "raw" / "superbosses" / "blocked.html"),
+            "parsed_path": str(tmp_path / "parsed" / "superbosses" / "blocked.json"),
+        },
+    }]
+    assert summary["pending_targets"] == [{
+        "id": "characters",
+        "url": "https://example.test/Characters",
+        "state": "parsed",
+        "quality_status": "ok",
+    }]
