@@ -36,11 +36,13 @@ async def main(roster: list[str], query: str) -> dict:
             "user_query": query,
             "roster": roster,
             "plan_strategy": "",
+            "boss_context": "",
             "cypher_query": "",
             "db_results": [],
             "validation_errors": [],
             "retry_count": 0,
             "analysis_result": "",
+            "alternatives": "",
             "final_output": {},
         }
         result = await graph.ainvoke(initial_state)

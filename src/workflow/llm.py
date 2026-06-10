@@ -23,8 +23,8 @@ _SONNET = "claude-sonnet-4-6"
 _HAIKU = "claude-haiku-4-6-20251001"
 
 # OpenRouter model IDs (anthropic models served via proxy)
-_OR_SONNET = "nvidia/nemotron-3-super-120b-a12b:free"
-_OR_HAIKU = "nvidia/nemotron-3-super-120b-a12b:free"
+_OR_SONNET = "moonshotai/kimi-k2.6:free"
+_OR_HAIKU = "moonshotai/kimi-k2.6:free"
 
 # Moonshot/Kimi OpenAI-compatible API
 _KIMI = os.getenv("KIMI_MODEL", "kimi-k2-0905-preview")

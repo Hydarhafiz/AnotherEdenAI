@@ -6,6 +6,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from .matchup import context_to_json, retrieve_matchup_context
 from .state import WorkflowState
 
 
@@ -67,3 +68,17 @@ def inject_superboss_context_node(state: WorkflowState) -> dict:
     if boss is None:
         return {"boss_context": ""}
     return {"boss_context": json.dumps(boss.model_dump(), ensure_ascii=False)}
+
+
+async def retrieve_superboss_context_node(state: WorkflowState, driver) -> dict:
+    """Write graph-backed boss matchup context for analyzer prompt grounding."""
+    query = state.get("user_query", "")
+    try:
+        context = await retrieve_matchup_context(driver, query)
+    except Exception:
+        context = None
+
+    if context and context.boss:
+        return {"boss_context": context_to_json(context)}
+
+    return inject_superboss_context_node(state)

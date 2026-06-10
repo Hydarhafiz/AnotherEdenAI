@@ -12,7 +12,7 @@ web layer compatibility.
 """
 import json
 import re
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
@@ -22,6 +22,22 @@ from ..state import WorkflowState
 
 class CharacterSlot(CharacterBuild):
     """A single character slot in the team recommendation."""
+
+
+class Citation(BaseModel):
+    """One source citation carried through recommendation output."""
+
+    label: str
+    source_url: str
+
+
+class BossAffinityOutput(BaseModel):
+    """Boss affinity facts surfaced in the recommendation output."""
+
+    weak: list[str] = Field(default_factory=list)
+    resist: list[str] = Field(default_factory=list)
+    null: list[str] = Field(default_factory=list)
+    absorb: list[str] = Field(default_factory=list)
 
 
 class TeamOutput(BaseModel):
@@ -39,6 +55,12 @@ class TeamOutput(BaseModel):
     reserve: list[CharacterSlot] = Field(min_length=2, max_length=2)
     main_sidekick: Optional[str] = None
     sub_sidekick: Optional[str] = None
+    fit_label: Optional[Literal["high", "medium", "low"]] = None
+    confidence_label: Optional[Literal["high", "medium", "low"]] = None
+    rubric_summary: dict[str, str] = Field(default_factory=dict)
+    boss_affinity: BossAffinityOutput = Field(default_factory=BossAffinityOutput)
+    risks: list[str] = Field(default_factory=list)
+    citations: list[Citation] = Field(default_factory=list)
     synergy_explanation: str
     error: Optional[str] = None
 
@@ -54,6 +76,20 @@ class TeamOutput(BaseModel):
         sidekick_as_hero = sorted(set(hero_names) & sidekicks)
         if sidekick_as_hero:
             raise ValueError(f"sidekicks cannot occupy hero slots: {', '.join(sidekick_as_hero)}")
+        probability_text = " ".join(
+            [
+                self.synergy_explanation,
+                *self.risks,
+                *self.rubric_summary.values(),
+            ]
+        ).lower()
+        if (
+            "win probability" in probability_text
+            or "win rate" in probability_text
+            or "win chance" in probability_text
+            or re.search(r"\b\d+(?:\.\d+)?\s*%\s*(?:win|clear|success|victory)", probability_text)
+        ):
+            raise ValueError("recommendations must not present numeric win probability")
         return self
 
 

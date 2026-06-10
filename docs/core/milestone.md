@@ -158,7 +158,7 @@ Acceptance criteria:
 
 ### Feature C: Boss Matchup Retrieval And Transparent Fit Rubric
 
-Status: Planned
+Status: Completed
 
 Goal: Rank and explain candidate lineups as a navigation tool using transparent fit criteria rather than fake win probability.
 

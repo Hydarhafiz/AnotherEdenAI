@@ -137,6 +137,7 @@ Routing notes:
 - Graceful fallback formatting is required when retries are exhausted.
 - Alternatives output is supported when no exact ideal team exists.
 - Milestone 4 Feature B legality models define structured roster ownership, optional Stellar Awakening state, owned sidekicks, exactly four frontline heroes, exactly two reserve heroes, optional main/sub sidekick slots, duplicate-hero rejection, sidekick-as-hero rejection, owned/F2P hero enforcement, sidekick ownership or assumption checks, skill/passive existence checks, and conservative SA-gated skill/passive handling.
+- Milestone 4 Feature C retrieves selected `Superboss` affinity/mechanics facts plus relevant `MechanicReference` rows before analysis, then passes a transparent fit-rubric context into recommendation reasoning. Fit labels cover legality, offense, defense, synergy, sustain, MP, sidekick contribution, build readiness, uncertainty, and upgrade burden; they are ranking signals, not win probabilities.
 - `FORMAT` validates the final recommendation shape before rendering so invalid 4-frontline/2-reserve output fails before the web layer presents it.
 
 ### Web Layer

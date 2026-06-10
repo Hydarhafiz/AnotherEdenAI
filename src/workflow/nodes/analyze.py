@@ -28,6 +28,26 @@ Output a JSON object with EXACTLY this structure:
   ],
   "main_sidekick": "<sidekick_name_or_null>",
   "sub_sidekick": "<sidekick_name_or_null>",
+  "fit_label": "high|medium|low",
+  "confidence_label": "high|medium|low",
+  "rubric_summary": {
+    "offense": "high|medium|low - weakness coverage and affinity conflicts",
+    "defense": "high|medium|low - mitigation, resistance, cleanse, or status handling",
+    "synergy": "high|medium|low - role, zone, AF, buff/debuff, and placement fit",
+    "sustain": "high|medium|low - healing, recovery, long-fight stability",
+    "mp": "high|medium|low - MP sustainability",
+    "sidekick": "high|medium|low - main/sub contribution",
+    "build_readiness": "high|medium|low - Grasta/Ore/equipment assumptions",
+    "upgrade_burden": "high|medium|low - SA or rare setup assumptions"
+  },
+  "boss_affinity": {
+    "weak": ["<element_or_attack_type>", ...],
+    "resist": ["<element_or_attack_type>", ...],
+    "null": ["<element_or_attack_type>", ...],
+    "absorb": ["<element_or_attack_type>", ...]
+  },
+  "risks": ["<missing_or_uncertain_data_and_counterplay_risk>", ...],
+  "citations": [{"label": "<boss_or_mechanic_fact>", "source_url": "<url>"}],
   "synergy_explanation": "<explanation of grasta and role synergies>"
 }
 
@@ -39,6 +59,10 @@ Rules:
 - Do not duplicate heroes between frontline and reserve
 - Sidekicks, when present, go only in main_sidekick/sub_sidekick and never in hero slots
 - Explain Grasta synergies specifically (e.g. "Fire T3 boosts AF damage by 30%")
+- Use Superboss mechanics context when present. Boss affinity facts in boss_affinity must match that context.
+- Explain offense, defense, synergy, sustain, MP, sidekick, build-readiness, and upgrade-burden tradeoffs where relevant.
+- Missing or uncertain data must lower confidence or appear in risks. Do not invent certainty.
+- Fit labels are transparent ranking/navigation signals, not success probabilities. Never output numeric win probability.
 - Output ONLY the JSON object — no preamble, no markdown fences
 
 MANDATORY SOURCE ATTRIBUTION (per D-13):
@@ -61,6 +85,21 @@ Output a JSON object with EXACTLY this structure:
       "reserve": [{"name": "...", "role": "...", "grastas": ["..."]}],
       "main_sidekick": null,
       "sub_sidekick": null,
+      "fit_label": "medium",
+      "confidence_label": "low",
+      "rubric_summary": {
+        "offense": "low - no graph-backed boss facts",
+        "defense": "low - no graph-backed boss facts",
+        "synergy": "medium - roster roles are plausible",
+        "sustain": "medium - healer or mitigation included",
+        "mp": "medium - MP risk should be monitored",
+        "sidekick": "low - no sidekick selected",
+        "build_readiness": "medium - assumes common late-game Grasta/Ore access",
+        "upgrade_burden": "medium - assumptions must be labeled"
+      },
+      "boss_affinity": {"weak": [], "resist": [], "null": [], "absorb": []},
+      "risks": ["No database results were found; confidence is low."],
+      "citations": [],
       "synergy_explanation": "..."
     },
     <second alternative>,
@@ -75,6 +114,7 @@ Rules:
 - Only suggest characters from the player's roster.
 - Do not duplicate heroes. Do not place sidekicks in hero slots.
 - Include Grasta citations: [CharacterName]: [Grasta name] ([trait]) — [effect].
+- Never present numeric win probability.
 - Output ONLY the JSON object — no preamble, no markdown fences."""
 
 
