@@ -26,14 +26,18 @@ Output a JSON object with EXACTLY this structure:
     {"name": "<character_name>", "role": "<role>", "grastas": ["<grasta_name>", ...]},
     ...
   ],
+  "main_sidekick": "<sidekick_name_or_null>",
+  "sub_sidekick": "<sidekick_name_or_null>",
   "synergy_explanation": "<explanation of grasta and role synergies>"
 }
 
 Rules:
 - ONLY use characters present in the db_results AND the player's roster
 - Assign meaningful roles: AF anchor, healer, DPS, support, buffer, debuffer
-- frontline MUST contain exactly 4 characters (minimum 3 only if roster/db_results cannot supply 4)
-- reserve MUST contain exactly 2 characters (minimum 1 only if roster/db_results cannot supply 2)
+- frontline MUST contain exactly 4 characters
+- reserve MUST contain exactly 2 characters
+- Do not duplicate heroes between frontline and reserve
+- Sidekicks, when present, go only in main_sidekick/sub_sidekick and never in hero slots
 - Explain Grasta synergies specifically (e.g. "Fire T3 boosts AF damage by 30%")
 - Output ONLY the JSON object — no preamble, no markdown fences
 
@@ -55,6 +59,8 @@ Output a JSON object with EXACTLY this structure:
     {
       "frontline": [{"name": "...", "role": "...", "grastas": ["..."]}, ...],
       "reserve": [{"name": "...", "role": "...", "grastas": ["..."]}],
+      "main_sidekick": null,
+      "sub_sidekick": null,
       "synergy_explanation": "..."
     },
     <second alternative>,
@@ -65,8 +71,9 @@ Output a JSON object with EXACTLY this structure:
 
 Rules:
 - Output EXACTLY 3 alternative objects in the alternatives array — no more, no fewer.
-- Each alternative must have frontline (3-4 characters) and reserve (1-2 characters).
+- Each alternative must have exactly 4 frontline heroes and exactly 2 reserve heroes.
 - Only suggest characters from the player's roster.
+- Do not duplicate heroes. Do not place sidekicks in hero slots.
 - Include Grasta citations: [CharacterName]: [Grasta name] ([trait]) — [effect].
 - Output ONLY the JSON object — no preamble, no markdown fences."""
 

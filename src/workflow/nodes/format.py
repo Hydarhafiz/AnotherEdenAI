@@ -14,33 +14,47 @@ import json
 import re
 from typing import Optional
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
+from ..legality import CharacterBuild
 from ..state import WorkflowState
 
 
-class CharacterSlot(BaseModel):
+class CharacterSlot(CharacterBuild):
     """A single character slot in the team recommendation."""
-
-    name: str
-    role: str
-    grastas: list[str]
 
 
 class TeamOutput(BaseModel):
     """Structured team recommendation output validated by Pydantic v2.
 
-    frontline: EXACTLY 3-4 characters in the main battle formation
-    reserve: EXACTLY 1-2 backup characters
+    frontline: EXACTLY 4 characters in the main battle formation
+    reserve: EXACTLY 2 backup characters
+    main_sidekick/sub_sidekick: optional sidekick slots, never counted as heroes
     synergy_explanation: human-readable explanation of grasta and role synergies
     error: set on error path (retry cap exhausted OR malformed/non-JSON LLM output),
            None on success path
     """
 
-    frontline: list[CharacterSlot] = Field(min_length=3, max_length=4)
-    reserve: list[CharacterSlot] = Field(min_length=1, max_length=2)
+    frontline: list[CharacterSlot] = Field(min_length=4, max_length=4)
+    reserve: list[CharacterSlot] = Field(min_length=2, max_length=2)
+    main_sidekick: Optional[str] = None
+    sub_sidekick: Optional[str] = None
     synergy_explanation: str
     error: Optional[str] = None
+
+    @model_validator(mode="after")
+    def _validate_lineup_legality_shape(self) -> "TeamOutput":
+        hero_names = [slot.name for slot in self.frontline + self.reserve]
+        duplicates = sorted({name for name in hero_names if hero_names.count(name) > 1})
+        if duplicates:
+            raise ValueError(f"duplicate heroes are not legal: {', '.join(duplicates)}")
+        if self.main_sidekick and self.sub_sidekick and self.main_sidekick == self.sub_sidekick:
+            raise ValueError("main_sidekick and sub_sidekick must be different")
+        sidekicks = {name for name in [self.main_sidekick, self.sub_sidekick] if name}
+        sidekick_as_hero = sorted(set(hero_names) & sidekicks)
+        if sidekick_as_hero:
+            raise ValueError(f"sidekicks cannot occupy hero slots: {', '.join(sidekick_as_hero)}")
+        return self
 
 
 class AlternativesOutput(BaseModel):

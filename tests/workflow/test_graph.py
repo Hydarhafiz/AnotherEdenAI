@@ -25,14 +25,18 @@ def _mock_llm_factory(content="stub response"):
 
 
 # Canned ANALYZE JSON response used in happy-path tests.
-# Must have 3-4 frontline and 1-2 reserve to satisfy TeamOutput length validators.
+# Must have exactly 4 frontline and 2 reserve to satisfy Feature B legality.
 _ANALYZE_RESPONSE = (
     '{"frontline": ['
     '{"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},'
     '{"name": "Riica", "role": "support", "grastas": ["SPD Up"]},'
-    '{"name": "Bertrand", "role": "tank", "grastas": []}'
+    '{"name": "Bertrand", "role": "tank", "grastas": []},'
+    '{"name": "Shion", "role": "DPS", "grastas": []}'
     '],'
-    ' "reserve": [{"name": "Ciel", "role": "support", "grastas": []}],'
+    ' "reserve": ['
+    '{"name": "Ciel", "role": "support", "grastas": []},'
+    '{"name": "Feinne", "role": "healer", "grastas": []}'
+    '],'
     ' "synergy_explanation": "Fire synergy with Aldo as main DPS"}'
 )
 
@@ -214,8 +218,12 @@ class TestGraphHappyPath:
                 {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
                 {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
                 {"name": "Riica", "role": "support", "grastas": []},
+                {"name": "Shion", "role": "DPS", "grastas": []},
             ],
-            "reserve": [{"name": "Miyu", "role": "support", "grastas": []}],
+            "reserve": [
+                {"name": "Miyu", "role": "support", "grastas": []},
+                {"name": "Feinne", "role": "healer", "grastas": []},
+            ],
             "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) — boosts Fire damage.",
         }
         _alternatives_response = _json.dumps({

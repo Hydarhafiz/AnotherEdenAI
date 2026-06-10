@@ -125,7 +125,7 @@ Acceptance criteria:
 
 ### Feature B: Roster And Party Legality Contract
 
-Status: Planned
+Status: Completed
 
 Goal: Prevent impossible recommendations before AI ranking or explanation happens.
 

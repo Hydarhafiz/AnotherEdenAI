@@ -118,6 +118,7 @@ Feature D equipment graph behavior:
 - Graph wiring: `src/workflow/graph.py`
 - State contract: `src/workflow/state.py`
 - LLM provider factory: `src/workflow/llm.py`
+- Legality contract: `src/workflow/legality.py`
 - Roster utilities: `src/workflow/normalize.py`, `src/workflow/f2p.py`
 - Nodes: `src/workflow/nodes/`
 
@@ -135,6 +136,8 @@ Routing notes:
 - Validation failures retry Cypher generation up to three times.
 - Graceful fallback formatting is required when retries are exhausted.
 - Alternatives output is supported when no exact ideal team exists.
+- Milestone 4 Feature B legality models define structured roster ownership, optional Stellar Awakening state, owned sidekicks, exactly four frontline heroes, exactly two reserve heroes, optional main/sub sidekick slots, duplicate-hero rejection, sidekick-as-hero rejection, owned/F2P hero enforcement, sidekick ownership or assumption checks, skill/passive existence checks, and conservative SA-gated skill/passive handling.
+- `FORMAT` validates the final recommendation shape before rendering so invalid 4-frontline/2-reserve output fails before the web layer presents it.
 
 ### Web Layer
 

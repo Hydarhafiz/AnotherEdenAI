@@ -19,16 +19,18 @@ from src.workflow.nodes.format import format_node, TeamOutput, AlternativesOutpu
 def valid_team_json():
     """A valid JSON team recommendation string as ANALYZE would produce.
 
-    Uses 3 frontline + 1 reserve (minimum valid shape under TeamOutput length validators).
+    Uses 4 frontline + 2 reserve (the Feature B legal lineup shape).
     """
     return json.dumps({
         "frontline": [
             {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3", "ATK Up"]},
             {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
             {"name": "Riica", "role": "support", "grastas": ["SPD Up"]},
+            {"name": "Shion", "role": "DPS", "grastas": []},
         ],
         "reserve": [
             {"name": "Miyu", "role": "support", "grastas": []},
+            {"name": "Feinne", "role": "healer", "grastas": []},
         ],
         "synergy_explanation": "Aldo as fire DPS anchor with Ciel healing, Riica boosting speed, and Miyu reserve support.",
     })
@@ -194,9 +196,11 @@ class TestFormatErrorPath:
                 {"name": "Aldo", "role": "DPS", "grastas": []},
                 {"name": "Ciel", "role": "healer", "grastas": []},
                 {"name": "Riica", "role": "support", "grastas": []},
+                {"name": "Shion", "role": "DPS", "grastas": []},
             ],
             "reserve": [
                 {"name": "Miyu", "role": "support", "grastas": []},
+                {"name": "Feinne", "role": "healer", "grastas": []},
             ],
             "synergy_explanation": "test",
         })
@@ -217,8 +221,12 @@ class TestTeamOutputPydanticModel:
                 {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
                 {"name": "Ciel", "role": "healer", "grastas": []},
                 {"name": "Riica", "role": "support", "grastas": []},
+                {"name": "Shion", "role": "DPS", "grastas": []},
             ],
-            "reserve": [{"name": "Miyu", "role": "support", "grastas": []}],
+            "reserve": [
+                {"name": "Miyu", "role": "support", "grastas": []},
+                {"name": "Feinne", "role": "healer", "grastas": []},
+            ],
             "synergy_explanation": "Fire synergy.",
         }
         output = TeamOutput.model_validate(data)
@@ -233,9 +241,11 @@ class TestTeamOutputPydanticModel:
                 {"name": "Aldo", "role": "DPS", "grastas": []},
                 {"name": "Ciel", "role": "healer", "grastas": []},
                 {"name": "Riica", "role": "support", "grastas": []},
+                {"name": "Shion", "role": "DPS", "grastas": []},
             ],
             "reserve": [
                 {"name": "Miyu", "role": "support", "grastas": []},
+                {"name": "Feinne", "role": "healer", "grastas": []},
             ],
             "synergy_explanation": "",
             "error": "Query failed",
@@ -250,9 +260,11 @@ class TestTeamOutputPydanticModel:
                 {"name": "Aldo", "role": "DPS", "grastas": []},
                 {"name": "Ciel", "role": "healer", "grastas": []},
                 {"name": "Riica", "role": "support", "grastas": []},
+                {"name": "Shion", "role": "DPS", "grastas": []},
             ],
             "reserve": [
                 {"name": "Miyu", "role": "support", "grastas": []},
+                {"name": "Feinne", "role": "healer", "grastas": []},
             ],
             "synergy_explanation": "test",
         }
@@ -265,7 +277,7 @@ def _slot(name="X"):
 
 
 class TestTeamOutputLengthValidators:
-    """Gap 2: TeamOutput must enforce frontline 3-4 and reserve 1-2 (UAT gap closure)."""
+    """Feature B: TeamOutput must enforce exactly 4 frontline and 2 reserve."""
 
     def test_rejects_two_frontline(self):
         with pytest.raises(ValidationError):
@@ -299,20 +311,11 @@ class TestTeamOutputLengthValidators:
                 synergy_explanation="too many reserve",
             )
 
-    def test_accepts_minimum_valid_shape(self):
-        t = TeamOutput(
-            frontline=[_slot(n) for n in "ABC"],
-            reserve=[_slot("D")],
-            synergy_explanation="min valid",
-        )
-        assert len(t.frontline) == 3
-        assert len(t.reserve) == 1
-
-    def test_accepts_maximum_valid_shape(self):
+    def test_accepts_exact_valid_shape(self):
         t = TeamOutput(
             frontline=[_slot(n) for n in "ABCD"],
-            reserve=[_slot("E"), _slot("F")],
-            synergy_explanation="max valid",
+            reserve=[_slot(n) for n in "EF"],
+            synergy_explanation="valid",
         )
         assert len(t.frontline) == 4
         assert len(t.reserve) == 2
@@ -367,8 +370,12 @@ def valid_alternatives_json():
             {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
             {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
             {"name": "Riica", "role": "support", "grastas": []},
+            {"name": "Shion", "role": "DPS", "grastas": []},
         ],
-        "reserve": [{"name": "Miyu", "role": "support", "grastas": []}],
+        "reserve": [
+            {"name": "Miyu", "role": "support", "grastas": []},
+            {"name": "Feinne", "role": "healer", "grastas": []},
+        ],
         "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) — boosts Fire damage.",
     }
     return json.dumps({
