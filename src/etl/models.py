@@ -284,6 +284,34 @@ class SuperbossRow(BaseModel):
         return int(v)
 
 
+class MechanicReferenceRow(BaseModel):
+    """One curated battle-mechanics reference for recommendation RAG."""
+
+    id: str
+    title: str
+    source_url: str
+    source_page: str
+    section_path: list[str] = Field(default_factory=list)
+    mechanic_type: str
+    topic_tags: list[str] = Field(default_factory=list)
+    applies_to: list[str] = Field(default_factory=list)
+    rules_text: str = ""
+    summary: str = ""
+    caveats: str = ""
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    @field_validator("section_path", "topic_tags", "applies_to", mode="before")
+    @classmethod
+    def parse_string_list(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in re.split(r"[,;/|>]", v) if item.strip()]
+        return list(v) if v else []
+
+    def model_post_init(self, __context) -> None:
+        if not self.rules_text.strip() and not self.summary.strip():
+            raise ValueError("MechanicReferenceRow requires rules_text or summary")
+
+
 class GrastaRow(BaseModel):
     """Represents a single grasta row scraped from any Grasta wiki page."""
 
@@ -463,4 +491,15 @@ def parse_equipment(raw: dict) -> Optional[EquipmentRow]:
         if STRICT:
             raise
         logger.warning("Skipping equipment %s: %s", raw.get("name"), exc)
+        return None
+
+
+def parse_mechanic_reference(raw: dict) -> Optional[MechanicReferenceRow]:
+    """Validate a curated mechanic reference row."""
+    try:
+        return MechanicReferenceRow.model_validate(raw)
+    except Exception as exc:
+        if STRICT:
+            raise
+        logger.warning("Skipping mechanic reference %s: %s", raw.get("id"), exc)
         return None

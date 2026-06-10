@@ -28,17 +28,20 @@ Important local artifacts:
 - `data/raw/`: raw cached HTML
 - `data/parsed/`: schema-versioned parsed JSON snapshots
 - `data/etl/crawl_manifest.json`: crawl state and diagnostics
+- `src/etl/mechanics_corpus.json`: curated Milestone 4 mechanics references replayed into parsed artifacts
 
 Important behavior:
 
 - parsed artifacts are invalid when their schema version does not match the active ETL schema
 - parsed-only runs can rebuild ETL output without live wiki fetches
+- mechanics references load from the curated local corpus, while live runs also cache the referenced source pages under `data/raw/mechanics/`
 - selected-scope failures should stay visible instead of being silently skipped
 - the manifest summarizes selected-target accountability and curated sidekick/superboss load success
 
 ## Prerequisites
 
 - Python environment installed and activated
+- `uv` available on PATH
 - Chrome/Chromium available for `nodriver`
 - Neo4j running if you want to execute the full load stage
 - a usable display session if Cloudflare/browser interaction is needed
@@ -46,9 +49,12 @@ Important behavior:
 Typical setup:
 
 ```bash
+cd /home/shogunix/AnotherEdenAI
 uv sync
 docker compose up -d
 ```
+
+Use `uv run ...` for ETL, schema checks, and tests so commands use the project environment resolved from `pyproject.toml` and `uv.lock`. Avoid bare `python`, `pytest`, or `pip install ...` during normal project work; keep `pip` only as a fallback for bootstrapping `uv` on a new machine.
 
 ## Standard Commands
 
@@ -107,6 +113,7 @@ Artifact locations:
 - `RAW_DATA_DIR`
 - `PARSED_DATA_DIR`
 - `ETL_STATE_DIR`
+- `CURATED_MECHANICS_PATH`
 
 ## Crawl Scopes
 
@@ -209,8 +216,25 @@ This checks:
 - `schema_version` on milestone-added structured labels
 - `source_url` attribution on wiki-sourced structured labels
 - golden retrieval paths for sidekick associations, sidekick abilities and auras, boss affinities and mechanics text, and baseline equipment context
+- golden retrieval paths for weakness handling, sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore mechanics references
 
-### 4. Manual Scraper Smoke Check
+### 4. Mechanics Corpus Replay
+
+The Milestone 4 mechanics corpus is curated in:
+
+```bash
+src/etl/mechanics_corpus.json
+```
+
+During ETL, the corpus is validated as `MechanicReference` rows, written to:
+
+```bash
+data/parsed/v1.0.0/mechanics/mechanic_references.json
+```
+
+and loaded into Neo4j as standalone `MechanicReference` nodes. Live ETL mode also caches the full referenced mechanics pages under `data/raw/mechanics/` for auditability; parsed mode can still replay the curated corpus without those live source-page caches.
+
+### 5. Manual Scraper Smoke Check
 
 Use the helper:
 
@@ -224,7 +248,7 @@ Then rerun in parsed mode:
 uv run python tools/manual_feature_a_smoke.py --run-root data/manual_feature_a/smoke1 --source-mode parsed --scope small
 ```
 
-### 5. Schema Invalidation Check
+### 6. Schema Invalidation Check
 
 Corrupt a parsed artifact's `schema_version`, then rerun parsed mode.
 

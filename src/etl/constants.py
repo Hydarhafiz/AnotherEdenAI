@@ -32,6 +32,22 @@ WIKI_URLS = {
     "armor": "https://anothereden.wiki/w/Armor",
 }
 
+MECHANICS_PAGE_URLS = {
+    "damage_formula": "https://anothereden.wiki/w/Damage_Formula",
+    "buffs_and_debuffs": "https://anothereden.wiki/w/Buffs_and_Debuffs",
+    "status_effects": "https://anothereden.wiki/w/Status_Effects",
+    "zones": "https://anothereden.wiki/w/Zones",
+    "battle_mechanics": "https://anothereden.wiki/w/Battle_Mechanics",
+    "another_force": "https://anothereden.wiki/w/Another_Force",
+    "grasta": "https://anothereden.wiki/w/Grasta#Progression-1",
+    "stats": "https://anothereden.wiki/w/Stats",
+    "healing_formula": "https://anothereden.wiki/w/Healing_Formula",
+    "speed_control": "https://anothereden.wiki/w/Speed_Control",
+    "stellar_awakening": "https://anothereden.wiki/w/Stellar_Awakening",
+    "turn_order": "https://anothereden.wiki/w/Turn_Order",
+    "sidekick": "https://anothereden.wiki/w/Sidekick",
+}
+
 GRASTA_CATEGORIES = ["Attack", "Life", "Support", "Special", "VC"]
 
 RAW_DATA_DIR = Path(os.getenv("RAW_DATA_DIR", "data/raw"))
@@ -54,10 +70,13 @@ RAW_PAGE_FILES = {
 RAW_CHARACTER_DIR = RAW_DATA_DIR / "characters"
 RAW_SIDEKICK_DIR = RAW_DATA_DIR / "sidekicks"
 RAW_SUPERBOSS_DIR = RAW_DATA_DIR / "superbosses"
+RAW_MECHANICS_DIR = RAW_DATA_DIR / "mechanics"
 PARSED_INDEX_DIR = PARSED_DATA_DIR / "indexes"
 PARSED_CHARACTER_DIR = PARSED_DATA_DIR / "characters"
 PARSED_SIDEKICK_DIR = PARSED_DATA_DIR / "sidekicks"
 PARSED_SUPERBOSS_DIR = PARSED_DATA_DIR / "superbosses"
+PARSED_MECHANICS_DIR = PARSED_DATA_DIR / "mechanics"
+CURATED_MECHANICS_PATH = Path(os.getenv("CURATED_MECHANICS_PATH", "src/etl/mechanics_corpus.json"))
 
 ETL_SOURCE_MODE = os.getenv("ETL_SOURCE_MODE", "live")
 ETL_CRAWL_SCOPE = os.getenv("ETL_CRAWL_SCOPE", "fallback")

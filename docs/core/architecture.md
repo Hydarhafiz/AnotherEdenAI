@@ -62,6 +62,14 @@ Feature E ETL reliability behavior:
 - The manifest readiness summary reports selected target accountability, failed and pending targets, and curated sidekick/superboss detail success rate.
 - Post-load schema assertions verify milestone-added labels, required `schema_version`, wiki `source_url` attribution, sidekick association and ability/aura paths, boss affinity/mechanics retrieval, and baseline equipment context.
 
+Milestone 4 Feature A mechanics corpus behavior:
+
+- Referenced battle-mechanics wiki pages are cacheable as raw source artifacts under `data/raw/mechanics/` during live ETL runs.
+- The recommendation-focused golden corpus is curated locally in `src/etl/mechanics_corpus.json` and replayed into schema-versioned parsed artifacts under `data/parsed/.../mechanics/`.
+- Curated entries load as standalone `MechanicReference` nodes with source URL, source page, section path, mechanic type, topic tags, applies-to labels, rules text or summary, caveats, and schema version.
+- `MechanicReference` retrieval is separate from boss, character, sidekick, Grasta/Ore, and equipment retrieval so recommendation reasoning can cite general battle rules independently from entity facts.
+- Post-load schema assertions include golden retrieval checks for weakness handling, main/sub sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore setup.
+
 Feature A sidekick graph behavior:
 
 - The canonical Sidekick page discovers released sidekicks from sidekick cards; sidekick identity comes from `.sidekick-name`, while `.sidekick-owner` links are association facts.

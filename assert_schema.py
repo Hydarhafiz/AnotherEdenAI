@@ -14,7 +14,7 @@ import os
 import sys
 
 # Verify SCHEMA.md exists before attempting Neo4j connection
-schema_path = os.path.join(os.path.dirname(__file__), "SCHEMA.md")
+schema_path = os.path.join(os.path.dirname(__file__), "docs", "core", "SCHEMA.md")
 if not os.path.isfile(schema_path):
     print("FAIL: SCHEMA.md missing")
     sys.exit(1)
@@ -32,6 +32,7 @@ READINESS_NODE_MINIMUMS = {
     "SidekickAura": 1,
     "Superboss": 1,
     "Equipment": 1,
+    "MechanicReference": 1,
 }
 
 SCHEMA_VERSION_LABELS = [
@@ -42,6 +43,7 @@ SCHEMA_VERSION_LABELS = [
     "SidekickAura",
     "Superboss",
     "Equipment",
+    "MechanicReference",
 ]
 
 SOURCE_URL_LABELS = [
@@ -52,9 +54,69 @@ SOURCE_URL_LABELS = [
     "SidekickAura",
     "Superboss",
     "Equipment",
+    "MechanicReference",
 ]
 
 READINESS_QUERIES = [
+    (
+        "mechanics weakness reference",
+        """
+        MATCH (m:MechanicReference)
+        WHERE 'weakness' IN m.topic_tags
+          AND m.source_url IS NOT NULL
+          AND m.source_url <> ''
+          AND (
+            (m.rules_text IS NOT NULL AND m.rules_text <> '')
+            OR (m.summary IS NOT NULL AND m.summary <> '')
+          )
+        RETURN count(*) AS cnt
+        """,
+    ),
+    (
+        "mechanics sidekick reference",
+        """
+        MATCH (m:MechanicReference)
+        WHERE 'sidekick' IN m.topic_tags
+          AND 'sidekick_legality' IN m.applies_to
+        RETURN count(*) AS cnt
+        """,
+    ),
+    (
+        "mechanics stellar awakening reference",
+        """
+        MATCH (m:MechanicReference)
+        WHERE 'stellar-awakening' IN m.topic_tags
+          AND 'lineup_legality' IN m.applies_to
+        RETURN count(*) AS cnt
+        """,
+    ),
+    (
+        "mechanics speed turn order reference",
+        """
+        MATCH (m:MechanicReference)
+        WHERE 'speed' IN m.topic_tags
+          AND m.mechanic_type = 'turn_order'
+        RETURN count(*) AS cnt
+        """,
+    ),
+    (
+        "mechanics sustain reference",
+        """
+        MATCH (m:MechanicReference)
+        WHERE 'sustain' IN m.topic_tags
+          AND m.mechanic_type = 'sustain'
+        RETURN count(*) AS cnt
+        """,
+    ),
+    (
+        "mechanics grasta ore reference",
+        """
+        MATCH (m:MechanicReference)
+        WHERE 'grasta' IN m.topic_tags
+          AND 'ore' IN m.topic_tags
+        RETURN count(*) AS cnt
+        """,
+    ),
     (
         "sidekick association",
         """

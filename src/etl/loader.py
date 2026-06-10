@@ -16,7 +16,17 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
-from .models import CharacterRow, EquipmentRow, GrastaRow, OreRow, PassiveSkillRow, SidekickRow, SkillRow, SuperbossRow
+from .models import (
+    CharacterRow,
+    EquipmentRow,
+    GrastaRow,
+    MechanicReferenceRow,
+    OreRow,
+    PassiveSkillRow,
+    SidekickRow,
+    SkillRow,
+    SuperbossRow,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +54,7 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT sidekick_skill_identity IF NOT EXISTS FOR (s:SidekickSkill) REQUIRE (s.sidekick_name, s.name, s.skill_kind) IS UNIQUE",
         "CREATE CONSTRAINT sidekick_aura_identity IF NOT EXISTS FOR (a:SidekickAura) REQUIRE (a.sidekick_name, a.name) IS UNIQUE",
         "CREATE CONSTRAINT superboss_name IF NOT EXISTS FOR (s:Superboss) REQUIRE s.name IS UNIQUE",
+        "CREATE CONSTRAINT mechanic_reference_id IF NOT EXISTS FOR (m:MechanicReference) REQUIRE m.id IS UNIQUE",
     ]
     async with driver.session() as session:
         for cypher in constraints:
@@ -337,6 +348,51 @@ SET s.source_url = row.source_url,
         await session.run(cypher, rows=boss_data)
 
     logger.info("Loaded %d Superboss nodes", len(rows))
+
+
+async def load_mechanic_references(driver, rows: list[MechanicReferenceRow]) -> None:
+    """Load curated battle mechanics as standalone RAG reference nodes."""
+    if not rows:
+        logger.warning("load_mechanic_references called with empty list -- nothing to load")
+        return
+
+    reference_data = [
+        {
+            "id": r.id,
+            "title": r.title,
+            "source_url": r.source_url,
+            "source_page": r.source_page,
+            "section_path": r.section_path,
+            "mechanic_type": r.mechanic_type,
+            "topic_tags": r.topic_tags,
+            "applies_to": r.applies_to,
+            "rules_text": r.rules_text,
+            "summary": r.summary,
+            "caveats": r.caveats,
+            "schema_version": r.schema_version,
+        }
+        for r in rows
+    ]
+
+    cypher = """
+UNWIND $rows AS row
+MERGE (m:MechanicReference {id: row.id})
+SET m.title = row.title,
+    m.source_url = row.source_url,
+    m.source_page = row.source_page,
+    m.section_path = row.section_path,
+    m.mechanic_type = row.mechanic_type,
+    m.topic_tags = row.topic_tags,
+    m.applies_to = row.applies_to,
+    m.rules_text = row.rules_text,
+    m.summary = row.summary,
+    m.caveats = row.caveats,
+    m.schema_version = row.schema_version
+"""
+    async with driver.session() as session:
+        await session.run(cypher, rows=reference_data)
+
+    logger.info("Loaded %d MechanicReference nodes", len(rows))
 
 
 async def load_grastas(driver, rows: list[GrastaRow]) -> None:

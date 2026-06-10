@@ -11,6 +11,7 @@ from .loader import (
     load_characters,
     load_equipment,
     load_grastas,
+    load_mechanic_references,
     load_ores,
     load_passive_skills,
     load_sidekicks,
@@ -53,10 +54,18 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         grastas = data["grastas"]
         ores = data["ores"]
         equipment = data["equipment"]
+        mechanic_references = data["mechanic_references"]
 
         logger.info(
-            "Prepared: %d characters, %d sidekicks, %d superbosses, %d grastas, %d ores, %d equipment rows",
-            len(characters), len(sidekicks), len(superbosses), len(grastas), len(ores), len(equipment),
+            "Prepared: %d characters, %d sidekicks, %d superbosses, %d mechanic references, "
+            "%d grastas, %d ores, %d equipment rows",
+            len(characters),
+            len(sidekicks),
+            len(superbosses),
+            len(mechanic_references),
+            len(grastas),
+            len(ores),
+            len(equipment),
         )
 
         await load_characters(driver, characters)
@@ -66,6 +75,7 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         await load_passive_skills(driver, passive_skills)
         await load_sidekicks(driver, sidekicks)
         await load_superbosses(driver, superbosses)
+        await load_mechanic_references(driver, mechanic_references)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
         await load_equipment(driver, equipment)
@@ -74,6 +84,7 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         print(
             f"ETL complete -- loaded {len(characters)} characters, "
             f"{len(sidekicks)} sidekicks, {len(superbosses)} superbosses, "
+            f"{len(mechanic_references)} mechanic references, "
             f"{len(grastas)} grastas, {len(ores)} ores, {len(equipment)} equipment rows"
         )
     finally:

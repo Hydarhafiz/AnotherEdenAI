@@ -75,7 +75,7 @@ Source-grounding notes:
 
 ### Feature A: Battle Mechanics Corpus And `MechanicReference` Graph
 
-Status: Planned
+Status: Completed
 
 Goal: Add a compact, manually curated mechanics RAG layer so the recommender grounds lineup reasoning in source-backed battle rules before proposing teams.
 

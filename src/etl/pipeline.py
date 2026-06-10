@@ -10,10 +10,9 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
-import nodriver as uc
-
 from .constants import (
     CRAWL_MANIFEST_PATH,
+    CURATED_MECHANICS_PATH,
     ETL_BROWSER_PROFILE_DIR,
     ETL_CRAWL_SCOPE,
     ETL_FALLBACK_CHARACTER_LIMIT,
@@ -29,11 +28,14 @@ from .constants import (
     ETL_SMALL_CHARACTER_LIMIT,
     ETL_SMALL_SIDEKICK_LIMIT,
     ETL_SOURCE_MODE,
+    MECHANICS_PAGE_URLS,
     PARSED_CHARACTER_DIR,
     PARSED_INDEX_DIR,
+    PARSED_MECHANICS_DIR,
     PARSED_SIDEKICK_DIR,
     PARSED_SUPERBOSS_DIR,
     RAW_CHARACTER_DIR,
+    RAW_MECHANICS_DIR,
     RAW_PAGE_FILES,
     RAW_SIDEKICK_DIR,
     RAW_SUPERBOSS_DIR,
@@ -43,12 +45,14 @@ from .models import (
     CharacterRow,
     EquipmentRow,
     GrastaRow,
+    MechanicReferenceRow,
     OreRow,
     PassiveSkillRow,
     SidekickRow,
     SkillRow,
     SuperbossIndexRow,
     SuperbossRow,
+    parse_mechanic_reference,
 )
 from .scraper import (
     CHROMIUM_PATH,
@@ -86,6 +90,8 @@ INDEX_SELECTORS = {
     "weapons": "tr.equip-row-entry",
     "armor": "tr.equip-row-entry",
 }
+
+MECHANICS_SOURCE_SELECTOR = "#mw-content-text, body"
 
 INDEX_KINDS = {
     "characters": "characters_index",
@@ -193,6 +199,44 @@ def _build_index_targets() -> list[dict[str, Any]]:
             )
         )
     return targets
+
+
+def _build_mechanics_source_targets() -> list[dict[str, Any]]:
+    return [
+        _make_target(
+            target_id=f"mechanics_source::{key}",
+            url=url,
+            expected_selector=MECHANICS_SOURCE_SELECTOR,
+            raw_path=RAW_MECHANICS_DIR / f"{key}.html",
+            parsed_path=PARSED_MECHANICS_DIR / "sources" / f"{key}.json",
+            kind="mechanics_source_page",
+            metadata={"source_key": key},
+        )
+        for key, url in MECHANICS_PAGE_URLS.items()
+    ]
+
+
+def _load_curated_mechanic_references() -> list[MechanicReferenceRow]:
+    payload = json.loads(CURATED_MECHANICS_PATH.read_text(encoding="utf-8"))
+    raw_rows = payload["rows"] if isinstance(payload, dict) else payload
+    rows = []
+    for raw in raw_rows:
+        row = parse_mechanic_reference(raw)
+        if row is not None:
+            rows.append(row)
+    parsed_path = PARSED_MECHANICS_DIR / "mechanic_references.json"
+    _write_json(
+        parsed_path,
+        {
+            "schema_version": ETL_SCHEMA_VERSION,
+            "kind": "mechanic_references",
+            "rows": _serialize_models(rows),
+            "parsed_counts": {"mechanic_references": len(rows)},
+            "quality_status": "ok" if rows else "empty",
+            "curated_source_path": str(CURATED_MECHANICS_PATH),
+        },
+    )
+    return rows
 
 
 def _character_target_identity(record: str | dict[str, Any]) -> tuple[str, str | None]:
@@ -514,6 +558,17 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
             },
             "quality_status": "ok" if row.mechanics_text else "empty",
         }
+    elif kind == "mechanics_source_page":
+        text = soup.get_text(" ", strip=True)
+        payload = {
+            "schema_version": ETL_SCHEMA_VERSION,
+            "kind": kind,
+            "source_key": entry["metadata"]["source_key"],
+            "source_url": entry["url"],
+            "rows": [],
+            "parsed_counts": {"mechanics_source_text_chars": len(text)},
+            "quality_status": "ok" if text else "empty",
+        }
     else:
         raise ValueError(f"Unsupported target kind {kind!r}")
 
@@ -560,6 +615,7 @@ def _validate_target(entry: dict[str, Any]) -> None:
         "grasta_vc_index",
         "ore_index",
         "equipment_index",
+        "mechanics_source_page",
     }:
         total = sum(int(value) for value in parsed_counts.values())
         if total <= 0:
@@ -605,6 +661,14 @@ def _validate_target(entry: dict[str, Any]) -> None:
         raise RuntimeError(
             f"Validation failed for {entry['id']}: superboss detail page had no mechanics text"
         )
+    elif kind == "mechanics_source_page" and parsed_counts.get("mechanics_source_text_chars", 0) <= 0:
+        _fail_target(
+            entry,
+            stage="quality_gate",
+            message="Mechanics source page had no text content",
+            quality_gate_reason="Mechanics source page must retain source text for cache accountability",
+        )
+        raise RuntimeError(f"Validation failed for {entry['id']}: mechanics source page had no text")
     else:
         entry["quality_status"] = "ok"
 
@@ -626,6 +690,7 @@ def _aggregate_parsed_data(
     character_skills: dict[str, list[SkillRow]] = {}
     character_passive_skills: dict[str, list[PassiveSkillRow]] = {}
     character_detail_is_sa: dict[str, bool] = {}
+    mechanic_references = _load_curated_mechanic_references()
 
     for entry in manifest["targets"].values():
         if active_target_ids is not None and entry["id"] not in active_target_ids:
@@ -691,6 +756,7 @@ def _aggregate_parsed_data(
         "grastas": grastas,
         "ores": ores,
         "equipment": list(equipment_by_identity.values()),
+        "mechanic_references": mechanic_references,
     }
 
 
@@ -725,6 +791,8 @@ def _filter_parsed_ready_detail_targets(
 
 
 async def _start_browser(config: CrawlConfig):
+    import nodriver as uc
+
     browser_args = ["--no-sandbox", "--disable-setuid-sandbox"]
     if config.browser_profile_dir:
         browser_args.append(f"--user-data-dir={config.browser_profile_dir}")
@@ -837,7 +905,7 @@ def _mark_inactive_targets(manifest: dict[str, Any], active_target_ids: set[str]
     for entry in manifest["targets"].values():
         if entry["id"] in active_target_ids:
             continue
-        if entry["kind"] not in {"character_detail", "sidekick_detail", "superboss_detail"}:
+        if entry["kind"] not in {"character_detail", "sidekick_detail", "superboss_detail", "mechanics_source_page"}:
             continue
         if entry["state"] in {"pending", "cached", "parsed", "loaded", "failed"}:
             entry["state"] = "inactive"
@@ -852,16 +920,18 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
     manifest = _load_manifest()
 
     index_targets = _build_index_targets()
+    mechanics_source_targets = _build_mechanics_source_targets()
     active_target_ids = _selected_target_ids(index_targets)
+    active_target_ids.update(_selected_target_ids(mechanics_source_targets))
 
-    for target in index_targets:
+    for target in [*index_targets, *mechanics_source_targets]:
         _ensure_target_entry(manifest, target)
     _save_manifest(manifest)
 
     if config.source_mode != "parsed":
         browser = await _start_browser(config)
         try:
-            for entry in _selected_targets(manifest, set(INDEX_KINDS.values())):
+            for entry in _selected_targets(manifest, {*INDEX_KINDS.values(), "mechanics_source_page"}):
                 if _should_fetch(entry, config):
                     await _fetch_target(browser, entry, config)
                     _save_manifest(manifest)
@@ -887,6 +957,13 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
                 "Parsed source mode requires a current superboss parsed snapshot "
                 f"at {superboss_entry['parsed_path']}"
             )
+        for source_target in mechanics_source_targets:
+            source_entry = manifest["targets"][source_target["id"]]
+            if not _parsed_is_current(source_entry):
+                source_entry["state"] = "inactive"
+                source_entry["quality_status"] = "inactive"
+                source_entry["last_error"] = "Mechanics raw source artifact is not available in parsed source mode"
+                active_target_ids.discard(source_entry["id"])
         characters_payload = _load_rows(Path(characters_entry["parsed_path"]))
         sidekick_payload = _load_rows(Path(sidekick_entry["parsed_path"]))
         superboss_payload = _load_rows(Path(superboss_entry["parsed_path"]))
@@ -901,6 +978,10 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
             characters_payload = _parse_target(manifest["targets"]["characters"])
             sidekick_payload = _parse_target(manifest["targets"]["sidekick"])
             superboss_payload = _parse_target(manifest["targets"]["superbosses"])
+            for source_target in mechanics_source_targets:
+                source_entry = manifest["targets"][source_target["id"]]
+                if source_entry["state"] in {"cached", "parsed", "loaded"} or Path(source_entry["raw_path"]).exists():
+                    _parse_target(source_entry)
         except Exception as exc:  # noqa: BLE001
             for entry in (
                 manifest["targets"]["characters"],
@@ -951,6 +1032,8 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
 
     for entry in _selected_targets(manifest):
         if entry["id"] not in active_target_ids:
+            continue
+        if entry["state"] == "inactive":
             continue
         if config.source_mode == "parsed":
             if not _parsed_is_current(entry):

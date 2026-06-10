@@ -31,7 +31,10 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import quote, urljoin
 
-import nodriver as uc
+try:
+    import nodriver as uc
+except ModuleNotFoundError:  # pragma: no cover - exercised only in browserless test envs
+    uc = None
 from bs4 import BeautifulSoup
 
 from .constants import RAW_CHARACTER_DIR, RAW_DATA_DIR, RAW_PAGE_FILES, WIKI_URLS
@@ -190,6 +193,8 @@ async def cache_character_pages(browser, character_names: list[str]) -> list[Pat
 
 async def cache_all_raw_pages(include_character_pages: bool = False) -> dict[str, Path]:
     """Cache source wiki HTML locally without parsing it in-memory."""
+    if uc is None:
+        raise RuntimeError("nodriver is required for live wiki scraping")
     browser = await uc.start(
         browser_executable_path=CHROMIUM_PATH,
         headless=False,

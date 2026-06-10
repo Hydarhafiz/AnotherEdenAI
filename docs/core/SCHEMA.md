@@ -132,6 +132,22 @@ Uniqueness: `(sidekick_name, name)`.
 
 Superboss rows are loaded only from curated detail pages that pass quality gates. Index-only candidate facts are discovery metadata, not final graph nodes.
 
+### MechanicReference
+- `id` (STRING, unique) — stable curated mechanics reference identifier
+- `title` (STRING) — display title for the reference
+- `source_url` (STRING) — wiki mechanics source URL used for citation
+- `source_page` (STRING) — source page name
+- `section_path` (LIST<STRING>) — curated section path within the source page
+- `mechanic_type` (STRING) — broad category such as party, sidekick, affinity, damage, sustain, support, status, zone, burst, turn_order, progression_gate, or build_context
+- `topic_tags` (LIST<STRING>) — retrieval tags for recommendation grounding
+- `applies_to` (LIST<STRING>) — recommendation concerns this reference supports
+- `rules_text` (STRING) — curated rules or recommendation-grounding text
+- `summary` (STRING) — compact retrieval summary
+- `caveats` (STRING) — scope limits or uncertainty notes
+- `schema_version` (STRING) — ETL schema version used for this row
+
+MechanicReference nodes are manually curated from cached mechanics source pages and loaded as standalone RAG references. They ground recommendation reasoning but do not implement deterministic damage, healing, speed, or turn-by-turn simulation.
+
 NOTE: Ore nodes are standalone entities. There is no ENHANCES relationship in the graph.
 The decision of which Ore to apply to which Grasta is a dynamic player/AI decision handled
 by the PLAN and ANALYZE agents at query time (Phase 2/3). Do not add ENHANCES edges.
@@ -170,6 +186,7 @@ Official wiki association or unlock fact between a Character and Sidekick when d
 - Grasta nodes: 647 (Attack=231, Life=46, Support=56, Special=4, VC=310)
 - Ore nodes: 61
 - Equipment nodes: 888 (weapon=664, armor=224 from verified ETL run 2026-06-09)
+- MechanicReference nodes: 12 golden Milestone 4 references in the first curated corpus
 - Trait nodes: varies (union of all character personalities + grasta personality_req values)
 - Skill and PassiveSkill counts vary by selected character-detail crawl scope.
 - Sidekick, SidekickSkill, and SidekickAura counts vary by selected sidekick crawl scope.
@@ -181,9 +198,11 @@ After ETL, `python assert_schema.py` must exit 0.
 
 The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - minimum loaded counts for `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, and `Equipment`
+- minimum loaded count for `MechanicReference`
 - `schema_version` presence on milestone-added structured labels
 - wiki `source_url` attribution where the source exists
 - golden retrieval paths for sidekick associations, sidekick auto/charge skills, sidekick auras, boss affinities and mechanics text, and baseline equipment context
+- golden retrieval paths for weakness handling, main/sub sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore setup
 
 ## Future Extensions
 

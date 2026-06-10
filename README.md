@@ -81,6 +81,25 @@ cd AnotherEdenAI
 uv sync
 ```
 
+### Python Environment Policy
+
+Run project commands from the repository root:
+
+```bash
+cd /home/shogunix/AnotherEdenAI
+```
+
+Use `uv` as the primary Python runner and dependency manager:
+
+```bash
+uv sync
+uv run python -m src.etl.run_etl
+uv run python assert_schema.py
+uv run pytest tests/unit -q
+```
+
+Avoid bare `python`, `pytest`, or `pip install ...` for normal project work because they can target a different interpreter or environment. Keep `pip` only as a fallback for bootstrapping `uv` on a new machine when no OS package, standalone installer, or `uv` binary is available.
+
 ### 3. Configure environment
 
 ```bash
