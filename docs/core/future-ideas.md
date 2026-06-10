@@ -122,3 +122,52 @@ Readiness signals:
 
 - The two-tier eval framework is running and generating useful reports.
 - Failures cluster around specific battle-mechanics misunderstandings.
+
+## Alternative Character And Pull-Planning Suggestions
+
+Deferred from Milestone 4 because the active recommendation milestone should first prove legal owned-roster lineup navigation for selected bosses.
+
+Idea:
+
+- Recommend useful not-owned or not-yet-built characters as upgrade inspiration after producing owned-roster lineups.
+- Clearly label whether each suggested character is owned, not owned, Stellar Awakening-gated, or dependent on specific skills/equipment.
+- Include recommended 3/4 skill selections and the lineup slot or role the character would replace.
+- Keep suggestions framed as upgrade targets or role inspiration, not spending advice or banner recommendations.
+
+Readiness signals:
+
+- Milestone 4 owned-roster recommendations are stable and pass legality/factuality gates.
+- The recommendation contract can distinguish usable-now picks from upgrade assumptions.
+- The UI has room to present upgrade suggestions without confusing them with legal current-lineup recommendations.
+
+## Intermediate And Strong Superboss Evaluation Tiers
+
+Deferred from Milestone 4 because the first navigator should prove legality, mechanics grounding, and useful top-3 recommendations on weak superbosses before expanding difficulty coverage.
+
+Idea:
+
+- Add intermediate and strong superboss eval groups after the weak-boss golden set is reliable.
+- Use tier labels such as `weak`, `intermediate`, and `strong` in eval metadata.
+- Increase expectations around boss-specific mechanics, stoppers, status handling, turn order, sustain, and execution caveats as tiers get harder.
+
+Readiness signals:
+
+- The 5 weak-boss eval set passes deterministic legality and factuality gates.
+- Recommendation quality judge feedback is stable enough to compare improvements across releases.
+- Additional boss data has enough mechanics text and affinity coverage to support trustworthy recommendations.
+
+## Deterministic Battle Simulation And Win-Probability Estimation
+
+Deferred from Milestone 4 because the active system is a navigation tool, not a prediction tool.
+
+Idea:
+
+- Build a deterministic or semi-deterministic simulator for damage, healing, buffs/debuffs, speed, AF windows, boss turns, stoppers, MP use, and survival checks.
+- Estimate lineup success under explicit assumptions about stats, equipment, Grasta/Ore inventory, skill rotation, boss behavior, and player execution.
+- Present probabilities only when backed by validated simulation data and clearly stated assumptions.
+
+Readiness signals:
+
+- Mechanics RAG, lineup legality, and recommendation quality are stable.
+- Character stats, enemy stats, equipment, Grasta/Ore, boss turn scripts, and skill effects are sufficiently structured.
+- Human-reviewed battle cases or strong replay fixtures exist to validate simulation outputs.
