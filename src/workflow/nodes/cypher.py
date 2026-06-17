@@ -192,6 +192,9 @@ def generate_cypher_node(state: WorkflowState) -> dict:
     Returns:
         Dict containing only {"cypher_query": str}.
     """
+    if _is_lineup_recommendation_query(state.get("user_query", "")):
+        return {"cypher_query": LINEUP_RECOMMENDATION_QUERY}
+
     llm = get_llm(role="cypher")
 
     roster_str = ", ".join(state["roster"]) if state["roster"] else "no characters specified"
@@ -219,3 +222,62 @@ def generate_cypher_node(state: WorkflowState) -> dict:
     response = llm.invoke(messages)
     cleaned_cypher = _strip_markdown_fences(response.content)
     return {"cypher_query": cleaned_cypher}
+
+
+LINEUP_RECOMMENDATION_QUERY = """
+MATCH (c:Character)
+WHERE c.name IN $roster
+OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)
+OPTIONAL MATCH (t)<-[:REQUIRES_TRAIT]-(g:Grasta)
+OPTIONAL MATCH (c)-[:HAS_SKILL]->(skill:Skill)
+OPTIONAL MATCH (c)-[:HAS_PASSIVE_SKILL]->(passive:PassiveSkill)
+WITH c,
+     collect(DISTINCT t.name) AS traits,
+     collect(DISTINCT g.name)[..12] AS grastas,
+     collect(DISTINCT {
+       name: skill.name,
+       element: skill.element,
+       skill_type: skill.skill_type,
+       description: skill.description,
+       requires_stellar_awakened: coalesce(skill.requires_stellar_awakened, false)
+     })[..12] AS skills,
+     collect(DISTINCT {
+       name: passive.name,
+       passive_type: passive.passive_type,
+       description: passive.description,
+       requires_stellar_awakened: coalesce(passive.requires_stellar_awakened, false)
+     })[..8] AS passives
+OPTIONAL MATCH (boss:Superboss)
+WHERE toLower($user_query) CONTAINS toLower(boss.name)
+   OR any(token IN split(toLower(boss.name), ' ') WHERE size(token) >= 4 AND toLower($user_query) CONTAINS token)
+WITH c, traits, grastas, skills, passives, collect(DISTINCT boss {
+  .name,
+  .source_url,
+  .weak,
+  .resist,
+  .null,
+  .absorb,
+  .characteristics,
+  .mechanic_tags,
+  .mechanics_text
+})[..1] AS boss_facts
+RETURN c.name AS character_name,
+       c.element AS element,
+       c.weapon AS weapon,
+       c.light_shadow AS light_shadow,
+       coalesce(c.is_SA, false) AS has_stellar_awakening,
+       traits,
+       grastas,
+       skills,
+       passives,
+       boss_facts
+ORDER BY c.name
+""".strip()
+
+
+def _is_lineup_recommendation_query(query: str) -> bool:
+    """Return true for boss-aware lineup requests that need broad roster facts."""
+    normalized = query.lower()
+    lineup_terms = ["lineup", "team", "party", "composition", "recommend"]
+    combat_terms = ["defeat", "beat", "boss", "superboss", "fight", "battle", "matchup", "manifest"]
+    return any(term in normalized for term in lineup_terms) and any(term in normalized for term in combat_terms)

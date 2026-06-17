@@ -138,7 +138,9 @@ Routing notes:
 - Alternatives output is supported when no exact ideal team exists.
 - Milestone 4 Feature B legality models define structured roster ownership, optional Stellar Awakening state, owned sidekicks, exactly four frontline heroes, exactly two reserve heroes, optional main/sub sidekick slots, duplicate-hero rejection, sidekick-as-hero rejection, owned/F2P hero enforcement, sidekick ownership or assumption checks, skill/passive existence checks, and conservative SA-gated skill/passive handling.
 - Milestone 4 Feature C retrieves selected `Superboss` affinity/mechanics facts plus relevant `MechanicReference` rows before analysis, then passes a transparent fit-rubric context into recommendation reasoning. Fit labels cover legality, offense, defense, synergy, sustain, MP, sidekick contribution, build readiness, uncertainty, and upgrade burden; they are ranking signals, not win probabilities.
-- `FORMAT` validates the final recommendation shape before rendering so invalid 4-frontline/2-reserve output fails before the web layer presents it.
+- Milestone 4 Feature D uses deterministic broad roster-fact retrieval for boss-aware lineup requests so recommendation prompts are grounded in available characters, skills, passives, Grasta context, and matching `Superboss` facts instead of over-narrow exact-match Cypher filters.
+- `VALIDATE` and `ANALYZE` compact Neo4j result rows before LLM calls, bounding record count, nested list size, dictionary keys, and long text snippets to keep hosted-model prompt sizes controlled.
+- `FORMAT` validates the final recommendation shape before rendering so invalid 4-frontline/2-reserve output fails before the web layer presents it. Feature D top-three outputs are validated as exactly three recommendation plans with archetypes, strategy summaries, build notes, boss counterplay, sustain/MP notes, risks, fit/confidence labels, and citations.
 
 ### Web Layer
 
@@ -169,13 +171,14 @@ Important boundaries:
 ## External Dependencies
 
 - Neo4j 5 for graph storage
-- Anthropic, OpenRouter, Bedrock, or Ollama through the LLM provider factory
+- OpenRouter by default, or Anthropic, Bedrock, or Ollama through the LLM provider factory
 - `nodriver` plus Chrome for scraping
 - FastAPI, Jinja2, and HTMX for web delivery
 
 ## Operational Constraints
 
 - The validation retry cap is a hard cost-control mechanism and should not be bypassed casually.
+- Prompt-context compaction is part of the workflow cost-control boundary and should stay in place for graph rows with verbose skill, passive, boss, or mechanics text.
 - The scraper depends on a real browser environment and is sensitive to Cloudflare behavior.
 - The graph contract should remain stable before prompt or Cypher examples are expanded.
 - The UI is intentionally lightweight; major frontend changes should preserve streaming visibility and failure transparency.

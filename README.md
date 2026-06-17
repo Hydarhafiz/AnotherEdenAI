@@ -111,9 +111,11 @@ cp .env.example .env
 |----------|----------|-------------|
 | `NEO4J_URI` | yes | Bolt URI — `bolt://localhost:7687` (Docker) or AuraDB URI |
 | `NEO4J_AUTH` | yes | Credentials in `user/pass` format |
-| `LLM_PROVIDER` | yes | `anthropic` (production) or `ollama` (local dev, no API cost) |
+| `LLM_PROVIDER` | yes | `openrouter` (default), `anthropic`, `bedrock`, or `ollama` |
+| `OPENROUTER_API_KEY` | if `openrouter` | OpenRouter key used by all workflow nodes |
+| `OPENROUTER_MODEL` | if `openrouter` | OpenRouter model ID, default `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` |
+| `OPENROUTER_VALIDATOR_MODEL` | no | Optional OpenRouter model override for the validation gate |
 | `ANTHROPIC_API_KEY` | if `anthropic` | Your Anthropic API key |
-| `OPENROUTER_API_KEY` | if `openrouter` | OpenRouter key (alternative provider) |
 | `OLLAMA_MODEL` | no | Ollama model name (default: `llama3.2`) |
 | `ETL_MODE` | no | `strict` (default) or `lenient` |
 | `ADMIN_KEY` | yes | Secret for `POST /admin/refresh-data`; sent as `X-Admin-Key` header |
@@ -275,9 +277,9 @@ When `VALIDATE` fails three times the graph routes to graceful error formatting 
 |----------|-----------|
 | LangGraph `StateGraph` over plain function chain | Explicit conditional edges, first-class retry loop, testable node isolation |
 | `WorkflowState` as Pydantic-validated `TypedDict` | Nodes return only the keys they own — mutation bugs surface immediately in tests |
-| Haiku for VALIDATE, Sonnet for reasoning | Haiku is fast and cheap enough for a syntax gate; Sonnet earns its cost on PLAN and ANALYZE |
+| Role-aware LLM factory | OpenRouter is the default for all workflow nodes; optional provider/model switches keep cost experiments isolated |
 | 3× retry hard cap on VALIDATE | Personal API budget guard — prevents runaway Sonnet spend on broken Cypher loops |
-| `LLM_PROVIDER` env var factory | `ollama` for local dev, `anthropic` for production — same code path, zero code changes |
+| `LLM_PROVIDER` env var factory | `openrouter` by default, with `ollama`, `anthropic`, and `bedrock` available without node code changes |
 | nodriver (undetected headless Chrome) over httpx | Cloudflare Turnstile blocks headless scrapers; nodriver spoofs a real browser fingerprint |
 | Idempotent MERGE loader | Re-running ETL is safe — no duplicate nodes, stale data is overwritten in place |
 | SSE over WebSocket | One-way server-push is sufficient for pipeline progress; SSE requires no upgrade handshake |
@@ -287,7 +289,7 @@ When `VALIDATE` fails three times the graph routes to graceful error formatting 
 
 ## Development Notes
 
-**Local LLM budget tip:** Set `LLM_PROVIDER=ollama` during development. All five nodes switch to your local model automatically — no API spend until you flip to `anthropic` for final validation.
+**Local LLM budget tip:** Set `LLM_PROVIDER=ollama` during development. All workflow nodes switch to your local model automatically. For hosted free-tier experiments, keep `LLM_PROVIDER=openrouter` and set `OPENROUTER_MODEL`.
 
 **ETL without a browser:** The nodriver scraper requires Chrome. On headless CI or Docker, set `DISPLAY=:0` (WSL2 has this available). A future version could swap in a static fixture for CI.
 

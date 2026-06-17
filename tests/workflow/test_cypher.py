@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from langchain_core.messages import AIMessage
 
-from src.workflow.nodes.cypher import generate_cypher_node
+from src.workflow.nodes.cypher import LINEUP_RECOMMENDATION_QUERY, generate_cypher_node
 
 
 @pytest.fixture
@@ -209,3 +209,26 @@ def test_cypher_node_strips_plain_fences(state_with_plan):
     assert result["cypher_query"] == "MATCH (c:Character) RETURN c.name", (
         f"Expected stripped Cypher, got: {result['cypher_query']!r}"
     )
+
+
+def test_boss_lineup_query_uses_broad_deterministic_roster_retrieval(sample_state):
+    """Feature D: boss lineup requests must not be narrowed into empty exact-match filters."""
+    state = {
+        **sample_state,
+        "user_query": "Create a lineup to defeat Mimi",
+        "plan_strategy": "Find Thunder magic attackers with narrow trait filters",
+    }
+
+    with patch("src.workflow.nodes.cypher.get_llm") as mock_get_llm:
+        result = generate_cypher_node(state)
+
+    mock_get_llm.assert_not_called()
+    assert result == {"cypher_query": LINEUP_RECOMMENDATION_QUERY}
+    query = result["cypher_query"]
+    assert "c.name IN $roster" in query
+    assert "HAS_SKILL" in query
+    assert "HAS_PASSIVE_SKILL" in query
+    assert "Superboss" in query
+    assert "$user_query" in query
+    assert "c.element = 'Thunder'" not in query
+    assert "c.weapon = 'Staff'" not in query

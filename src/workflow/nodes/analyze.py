@@ -8,65 +8,92 @@ with the team recommendation structure that FORMAT will parse and validate.
 """
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from ..context_compaction import compact_records
 from ..llm import get_llm
 from ..state import WorkflowState
 
 ANALYZE_SYSTEM_PROMPT = """You are an AnotherEden team-building expert analyzing graph query results.
 
 Given the database results from a Neo4j character graph and the user's team query,
-synthesize an optimal team recommendation.
+synthesize the top three legal, source-grounded lineup recommendations.
 
 Output a JSON object with EXACTLY this structure:
 {
-  "frontline": [
-    {"name": "<character_name>", "role": "<role>", "grastas": ["<grasta_name>", ...]},
-    ...
-  ],
-  "reserve": [
-    {"name": "<character_name>", "role": "<role>", "grastas": ["<grasta_name>", ...]},
-    ...
-  ],
-  "main_sidekick": "<sidekick_name_or_null>",
-  "sub_sidekick": "<sidekick_name_or_null>",
-  "fit_label": "high|medium|low",
-  "confidence_label": "high|medium|low",
-  "rubric_summary": {
-    "offense": "high|medium|low - weakness coverage and affinity conflicts",
-    "defense": "high|medium|low - mitigation, resistance, cleanse, or status handling",
-    "synergy": "high|medium|low - role, zone, AF, buff/debuff, and placement fit",
-    "sustain": "high|medium|low - healing, recovery, long-fight stability",
-    "mp": "high|medium|low - MP sustainability",
-    "sidekick": "high|medium|low - main/sub contribution",
-    "build_readiness": "high|medium|low - Grasta/Ore/equipment assumptions",
-    "upgrade_burden": "high|medium|low - SA or rare setup assumptions"
-  },
   "boss_affinity": {
     "weak": ["<element_or_attack_type>", ...],
     "resist": ["<element_or_attack_type>", ...],
     "null": ["<element_or_attack_type>", ...],
     "absorb": ["<element_or_attack_type>", ...]
   },
-  "risks": ["<missing_or_uncertain_data_and_counterplay_risk>", ...],
-  "citations": [{"label": "<boss_or_mechanic_fact>", "source_url": "<url>"}],
-  "synergy_explanation": "<explanation of grasta and role synergies>"
+  "archetype_viability_notes": ["<why an archetype is strong or weaker if relevant>", ...],
+  "recommendations": [
+    {
+      "archetype": "burst",
+      "frontline": [
+        {
+          "name": "<character_name>",
+          "role": "<role>",
+          "grastas": ["<grasta_or_ore_note>", ...],
+          "recommended_skills": ["<skill_name>", ...],
+          "recommended_passives": ["<passive_name>", ...],
+          "upgrade_assumptions": ["<SA_or_rare_setup_assumption>", ...]
+        },
+        ...
+      ],
+      "reserve": [
+        {"name": "<character_name>", "role": "<role>", "grastas": [], "recommended_skills": [], "recommended_passives": [], "upgrade_assumptions": []},
+        ...
+      ],
+      "main_sidekick": "<sidekick_name_or_null>",
+      "sub_sidekick": "<sidekick_name_or_null>",
+      "strategy_summary": "<compact default-view strategy>",
+      "key_facts": ["<skill/passive/sidekick fact grounded in graph results>", ...],
+      "build_notes": ["<late-game Grasta/Ore/equipment assumption>", ...],
+      "boss_counterplay_notes": ["<boss mechanic or affinity counterplay>", ...],
+      "sustain_mp_notes": ["<healing, mitigation, MP stability, or sustain note>", ...],
+      "risks": ["<missing_or_uncertain_data_and_counterplay_risk>", ...],
+      "fit_label": "high|medium|low",
+      "confidence_label": "high|medium|low",
+      "rubric_summary": {
+        "offense": "high|medium|low - weakness coverage and affinity conflicts",
+        "defense": "high|medium|low - mitigation, resistance, cleanse, or status handling",
+        "synergy": "high|medium|low - role, zone, AF, buff/debuff, and placement fit",
+        "sustain": "high|medium|low - healing, recovery, long-fight stability",
+        "mp": "high|medium|low - MP sustainability",
+        "sidekick": "high|medium|low - main/sub contribution",
+        "build_readiness": "high|medium|low - Grasta/Ore/equipment assumptions",
+        "upgrade_burden": "high|medium|low - SA or rare setup assumptions"
+      },
+      "citations": [{"label": "<boss_or_mechanic_fact>", "source_url": "<url>"}],
+      "synergy_explanation": "<explanation of grasta, role, and counterplay synergies>"
+    },
+    {"archetype": "sustain", "...": "..."},
+    {"archetype": "hybrid", "...": "..."}
+  ]
 }
 
 Rules:
+- Output EXACTLY 3 recommendation objects in recommendations.
+- Prefer one burst, one sustain, and one hybrid lineup. If the boss strongly favors one archetype, output legal variants and explain why the weaker archetypes are weaker in archetype_viability_notes.
 - ONLY use characters present in the db_results AND the player's roster
+- Do not include not-owned alternative characters or pull-planning suggestions in active recommendations.
 - Assign meaningful roles: AF anchor, healer, DPS, support, buffer, debuffer
-- frontline MUST contain exactly 4 characters
-- reserve MUST contain exactly 2 characters
+- Each recommendation frontline MUST contain exactly 4 characters.
+- Each recommendation reserve MUST contain exactly 2 characters.
 - Do not duplicate heroes between frontline and reserve
 - Sidekicks, when present, go only in main_sidekick/sub_sidekick and never in hero slots
-- Explain Grasta synergies specifically (e.g. "Fire T3 boosts AF damage by 30%")
+- Recommended skills must exist in the database results for that character. Use 3 or 4 skills per character when data supports it; use fewer only when data is incomplete and add a risk.
+- Treat Stellar Awakening-gated skills/passives conservatively and put any upgrade assumption in upgrade_assumptions.
+- Explain Grasta/Ore/equipment build notes as late-game-access assumptions, not exact optimizer output.
 - Use Superboss mechanics context when present. Boss affinity facts in boss_affinity must match that context.
 - Explain offense, defense, synergy, sustain, MP, sidekick, build-readiness, and upgrade-burden tradeoffs where relevant.
 - Missing or uncertain data must lower confidence or appear in risks. Do not invent certainty.
 - Fit labels are transparent ranking/navigation signals, not success probabilities. Never output numeric win probability.
+- Every recommendation must include boss or mechanics citations from the graph/mechanics context.
 - Output ONLY the JSON object — no preamble, no markdown fences
 
 MANDATORY SOURCE ATTRIBUTION (per D-13):
-For each character in frontline and reserve, the synergy_explanation MUST cite:
+For each character in each frontline and reserve, the synergy_explanation MUST cite:
   [CharacterName]: [Grasta name] ([trait name]) — [effect description]
 Example: "Aldo: Fire T3 Grasta (Courage) — boosts Fire element damage by 30% in AF zone"
 Never make a synergy claim without citing the Grasta and trait from the database results."""
@@ -153,10 +180,16 @@ def analyze_node(state: WorkflowState) -> dict:
 
     roster_str = ", ".join(roster) if roster else "no characters specified"
 
-    # Cap records to avoid exceeding free-tier model context/timeout limits
-    MAX_RECORDS = 40
-    trimmed = db_results[:MAX_RECORDS]
-    trim_note = f" (truncated to {MAX_RECORDS} of {len(db_results)})" if len(db_results) > MAX_RECORDS else ""
+    # Cap records and nested text to avoid exceeding hosted free-tier context limits.
+    MAX_RECORDS = 12
+    trimmed = compact_records(
+        db_results,
+        max_records=MAX_RECORDS,
+        max_list_items=4,
+        max_string_chars=180,
+        max_dict_keys=10,
+    )
+    trim_note = f" (compacted to {MAX_RECORDS} of {len(db_results)})" if len(db_results) > MAX_RECORDS else " (compacted)"
 
     human_content = (
         f"User query: {user_query}\n"

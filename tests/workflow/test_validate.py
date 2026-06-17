@@ -228,6 +228,31 @@ class TestStep2SemanticGate:
         assert "Aldo" in all_content  # from JSON of records
 
     @pytest.mark.asyncio
+    async def test_validate_semantic_gate_compacts_large_records(self):
+        """Large nested graph rows must be summarized before reaching the validator LLM."""
+        state = _make_state(retry_count=0, user_query="Create a lineup to defeat Mimi")
+        giant_description = "very long skill text " * 2000
+        records = [
+            {
+                "character_name": "Aldo",
+                "skills": [{"name": "Skill", "description": giant_description} for _ in range(20)],
+                "passives": [{"name": "Passive", "description": giant_description} for _ in range(20)],
+            }
+            for _ in range(30)
+        ]
+        driver = _make_driver(records=records)
+        mock_haiku = _mock_haiku("PASS: Results match")
+
+        with patch("src.workflow.nodes.validate.get_llm", return_value=mock_haiku):
+            await validate_node(state, driver)
+
+        messages = mock_haiku.invoke.call_args[0][0]
+        all_content = " ".join(str(m.content) for m in messages)
+        assert len(all_content) < 25_000
+        assert "[truncated" in all_content
+        assert "more items omitted" in all_content
+
+    @pytest.mark.asyncio
     async def test_validate_semantic_pass(self):
         """Haiku returning PASS: must return only db_results — no error keys."""
         state = _make_state(retry_count=0)
@@ -393,3 +418,15 @@ class TestRosterParameter:
 
         call_kwargs = driver.execute_query.call_args.kwargs
         assert call_kwargs.get("roster") == []
+
+    @pytest.mark.asyncio
+    async def test_user_query_passed_as_kwarg(self):
+        """execute_query must receive user_query for boss-aware retrieval queries."""
+        state = _make_state(user_query="Create a lineup to defeat Mimi")
+        driver = _make_driver(records=[])
+
+        with patch("src.workflow.nodes.validate.get_llm", return_value=MagicMock()):
+            await validate_node(state, driver)
+
+        call_kwargs = driver.execute_query.call_args.kwargs
+        assert call_kwargs["user_query"] == "Create a lineup to defeat Mimi"

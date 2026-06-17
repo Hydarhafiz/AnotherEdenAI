@@ -24,6 +24,7 @@ EXPECTED_KEYS = {
     "user_query",
     "roster",
     "plan_strategy",
+    "boss_context",
     "cypher_query",
     "db_results",
     "validation_errors",
@@ -35,7 +36,7 @@ EXPECTED_KEYS = {
 
 
 def test_workflow_state_has_all_keys():
-    """WorkflowState must define exactly 10 keys."""
+    """WorkflowState must define the expected graph state keys."""
     hints = typing.get_type_hints(WorkflowState)
     assert set(hints.keys()) == EXPECTED_KEYS, (
         f"Key mismatch. Expected: {EXPECTED_KEYS}. Got: {set(hints.keys())}"
@@ -82,8 +83,16 @@ async def test_stub_nodes_return_only_owned_keys(sample_state):
 
     # analyze_node is a real LLM node — mock returns JSON the format_node can parse
     analyze_json_response = json.dumps({
-        "frontline": [{"name": "Aldo", "role": "DPS", "grastas": []}],
-        "reserve": [],
+        "frontline": [
+            {"name": "Aldo", "role": "DPS", "grastas": []},
+            {"name": "Ciel", "role": "support", "grastas": []},
+            {"name": "Riica", "role": "healer", "grastas": []},
+            {"name": "Shion", "role": "DPS", "grastas": []},
+        ],
+        "reserve": [
+            {"name": "Miyu", "role": "support", "grastas": []},
+            {"name": "Feinne", "role": "healer", "grastas": []},
+        ],
         "synergy_explanation": "stub",
     })
     mock_analyze_llm = MagicMock()

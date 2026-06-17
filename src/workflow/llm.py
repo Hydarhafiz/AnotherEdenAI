@@ -1,10 +1,8 @@
 """LLM provider abstraction for AnotherEdenAI workflow.
 
 Controls which LLM backend is used by role:
-    GENERATE_CYPHER and VALIDATE are pinned to Claude/Anthropic for syntax reliability.
-    PLAN and ANALYZE can route through Kimi via LLM_REASONING_PROVIDER or LLM_AB_BUCKET.
-    LLM_PROVIDER=anthropic   (default) -> ChatAnthropic (Sonnet or Haiku by role)
-    LLM_PROVIDER=openrouter            -> ChatOpenAI via OpenRouter proxy (Sonnet or Haiku by role)
+    LLM_PROVIDER=openrouter  (default) -> ChatOpenAI via OpenRouter proxy
+    LLM_PROVIDER=anthropic             -> ChatAnthropic (Sonnet or Haiku by role)
     LLM_PROVIDER=bedrock               -> ChatBedrockConverse (Sonnet or Haiku by role)
     LLM_PROVIDER=ollama                -> ChatOllama (local, zero API cost)
 
@@ -18,13 +16,14 @@ from langchain_core.language_models import BaseChatModel
 from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 
-# Anthropic / OpenRouter model IDs
+# Anthropic model IDs
 _SONNET = "claude-sonnet-4-6"
 _HAIKU = "claude-haiku-4-6-20251001"
 
-# OpenRouter model IDs (anthropic models served via proxy)
-_OR_SONNET = "moonshotai/kimi-k2.6:free"
-_OR_HAIKU = "moonshotai/kimi-k2.6:free"
+# OpenRouter model IDs. Use one model for all roles by default, with an optional
+# cheaper/faster validator override.
+_OR_MODEL = os.getenv("OPENROUTER_MODEL", "nvidia/nemotron-3-super-120b-a12b:free")
+_OR_VALIDATOR_MODEL = os.getenv("OPENROUTER_VALIDATOR_MODEL", _OR_MODEL)
 
 # Moonshot/Kimi OpenAI-compatible API
 _KIMI = os.getenv("KIMI_MODEL", "kimi-k2-0905-preview")
@@ -35,23 +34,15 @@ _BEDROCK_HAIKU = "anthropic.claude-3-5-haiku-20241022-v1:0"
 
 
 def _provider_for_role(role: str) -> str:
-    """Resolve provider with strict Claude routing for syntax-sensitive roles."""
-    normalized = role.lower()
-    if normalized in {"cypher", "validator"}:
-        return "anthropic"
-    if normalized in {"planner", "analyzer", "plan", "analyze"}:
-        ab_bucket = os.getenv("LLM_AB_BUCKET", "").lower()
-        if ab_bucket in {"kimi", "moonshot"}:
-            return "kimi"
-        return os.getenv("LLM_REASONING_PROVIDER", os.getenv("LLM_PROVIDER", "anthropic")).lower()
-    return os.getenv("LLM_PROVIDER", "anthropic").lower()
+    """Resolve the configured provider for every workflow role."""
+    return os.getenv("LLM_PROVIDER", "openrouter").lower()
 
 
 def get_llm(role: str = "default") -> BaseChatModel:
     """Return a BaseChatModel based on LLM_PROVIDER env var.
 
-    LLM_PROVIDER=anthropic   (default) -> ChatAnthropic (Sonnet or Haiku by role)
-    LLM_PROVIDER=openrouter            -> ChatOpenAI via OpenRouter proxy
+    LLM_PROVIDER=openrouter  (default) -> ChatOpenAI via OpenRouter proxy
+    LLM_PROVIDER=anthropic             -> ChatAnthropic (Sonnet or Haiku by role)
     LLM_PROVIDER=bedrock               -> ChatBedrockConverse
     LLM_PROVIDER=ollama                -> ChatOllama (local, zero API cost)
 
@@ -72,7 +63,7 @@ def get_llm(role: str = "default") -> BaseChatModel:
         )
 
     if provider == "openrouter":
-        model = _OR_HAIKU if role == "validator" else _OR_SONNET
+        model = _OR_VALIDATOR_MODEL if role == "validator" else _OR_MODEL
         return ChatOpenAI(
             model=model,
             openai_api_base="https://openrouter.ai/api/v1",

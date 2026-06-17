@@ -12,7 +12,12 @@ import pytest
 from pydantic import ValidationError
 from unittest.mock import MagicMock, patch
 
-from src.workflow.nodes.format import format_node, TeamOutput, AlternativesOutput
+from src.workflow.nodes.format import (
+    AlternativesOutput,
+    RecommendationSetOutput,
+    TeamOutput,
+    format_node,
+)
 
 
 @pytest.fixture
@@ -423,3 +428,164 @@ class TestFormatAlternativesPath:
     def test_format_alternatives_no_error(self, alternatives_state):
         result = format_node(alternatives_state)
         assert result["final_output"].get("error") is None
+
+
+def _feature_d_team(archetype="burst", *, suffix="A"):
+    return {
+        "archetype": archetype,
+        "frontline": [
+            {
+                "name": f"Aldo {suffix}",
+                "role": "Fire slash DPS",
+                "grastas": ["Fire Power Grasta with Bull's Eye Ore"],
+                "recommended_skills": ["Dragon God Slash", "Volcano Blade", "X Slash"],
+            },
+            {
+                "name": f"Ciel {suffix}",
+                "role": "buff and debuff support",
+                "grastas": ["Support Grasta"],
+                "recommended_skills": ["Elemental Song", "Heart Break", "Speed Song"],
+            },
+            {
+                "name": f"Riica {suffix}",
+                "role": "mitigation and emergency healing",
+                "grastas": ["HP Up Grasta"],
+                "recommended_skills": ["Guard Protocol", "Power Heal", "Mind Stamp"],
+            },
+            {
+                "name": f"Shion {suffix}",
+                "role": "secondary fire slash pressure",
+                "grastas": ["Fire Power Grasta"],
+                "recommended_skills": ["Phoenix Slash", "Scarlet Blade", "Roaring Slash"],
+            },
+        ],
+        "reserve": [
+            {
+                "name": f"Miyu {suffix}",
+                "role": "reserve slash support",
+                "grastas": ["Pain Grasta"],
+                "recommended_skills": ["Rune Blade", "Princess Bloom", "Flame Slash"],
+            },
+            {
+                "name": f"Feinne {suffix}",
+                "role": "reserve healer",
+                "grastas": ["MP Recovery Grasta"],
+                "recommended_skills": ["Refresh", "Heal", "Angel Song"],
+            },
+        ],
+        "main_sidekick": "Tetra",
+        "sub_sidekick": "Korobo",
+        "strategy_summary": f"{archetype.title()} plan that pressures weakness while preserving fallback sustain.",
+        "key_facts": ["Aldo has fire slash pressure; Tetra contributes main-slot support."],
+        "build_notes": ["Assumes common late-game Pain/Poison Grasta and Bull's Eye Ore access."],
+        "boss_counterplay_notes": ["Targets Fire and Slash weakness while avoiding Water resistance."],
+        "sustain_mp_notes": ["Feinne and Riica cover healing while reserve swapping protects MP."],
+        "risks": ["Status cleanse timing is still player-executed and uncertain."],
+        "fit_label": "high",
+        "confidence_label": "medium",
+        "rubric_summary": {
+            "offense": "high - Fire and Slash cover graph weakness.",
+            "defense": "medium - mitigation and healing are present.",
+            "synergy": "high - slash pressure and support roles align.",
+            "sustain": "medium - recovery exists but timing matters.",
+            "mp": "medium - reserve swapping helps MP stability.",
+            "sidekick": "high - main and sub sidekick slots contribute.",
+            "build_readiness": "medium - assumes common late-game Grasta/Ore access.",
+            "upgrade_burden": "low - no SA-only skill is required.",
+        },
+        "citations": [
+            {"label": "Flame Eater", "source_url": "https://example.test/flame-eater"},
+            {"label": "Weakness Handling", "source_url": "https://example.test/affinity"},
+        ],
+        "synergy_explanation": (
+            f"Aldo {suffix}: Fire Power Grasta (Courage) - supports fire slash pressure. "
+            f"Ciel {suffix}: Support Grasta (Minstrel) - supports buffs and debuffs."
+        ),
+    }
+
+
+def _feature_d_payload():
+    return {
+        "boss_affinity": {
+            "weak": ["Fire", "Slash"],
+            "resist": ["Water"],
+            "null": ["Thunder"],
+            "absorb": ["Earth"],
+        },
+        "archetype_viability_notes": [],
+        "recommendations": [
+            _feature_d_team("burst", suffix="A"),
+            _feature_d_team("sustain", suffix="B"),
+            _feature_d_team("hybrid", suffix="C"),
+        ],
+    }
+
+
+class TestFeatureDRecommendationSet:
+    """Feature D: format_node validates the top-3 lineup recommendation contract."""
+
+    def _state(self, payload):
+        return {
+            "analysis_result": json.dumps(payload),
+            "db_results": [{"ok": True}],
+            "retry_count": 0,
+            "alternatives": "",
+            "validation_errors": [],
+        }
+
+    def test_format_node_accepts_top_three_archetype_recommendations(self):
+        result = format_node(self._state(_feature_d_payload()))
+        final = result["final_output"]
+
+        validated = RecommendationSetOutput.model_validate(final)
+        assert validated.error is None
+        assert final["boss_affinity"] == {
+            "weak": ["Fire", "Slash"],
+            "resist": ["Water"],
+            "null": ["Thunder"],
+            "absorb": ["Earth"],
+        }
+        assert [rec["archetype"] for rec in final["recommendations"]] == ["burst", "sustain", "hybrid"]
+        for rec in final["recommendations"]:
+            assert len(rec["frontline"]) == 4
+            assert len(rec["reserve"]) == 2
+            assert rec["strategy_summary"]
+            assert rec["build_notes"]
+            assert rec["boss_counterplay_notes"]
+            assert rec["sustain_mp_notes"]
+            assert rec["risks"]
+            assert rec["citations"]
+            assert rec["fit_label"] in {"high", "medium", "low"}
+            assert rec["confidence_label"] in {"high", "medium", "low"}
+
+    def test_rejects_missing_required_feature_d_detail(self):
+        payload = _feature_d_payload()
+        payload["recommendations"][0]["build_notes"] = []
+
+        result = format_node(self._state(payload))
+
+        assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"
+
+    def test_allows_archetype_variants_only_with_viability_notes(self):
+        payload = _feature_d_payload()
+        payload["recommendations"] = [
+            _feature_d_team("burst", suffix="A"),
+            _feature_d_team("burst", suffix="B"),
+            _feature_d_team("hybrid", suffix="C"),
+        ]
+        payload["archetype_viability_notes"] = [
+            "Sustain is weaker because the boss punishes long setup; second burst variant is provided."
+        ]
+
+        result = format_node(self._state(payload))
+
+        assert result["final_output"].get("error") is None
+        assert [rec["archetype"] for rec in result["final_output"]["recommendations"]] == ["burst", "burst", "hybrid"]
+
+    def test_rejects_archetype_variants_without_viability_notes(self):
+        payload = _feature_d_payload()
+        payload["recommendations"][1]["archetype"] = "burst"
+
+        result = format_node(self._state(payload))
+
+        assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"

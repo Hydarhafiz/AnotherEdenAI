@@ -3,6 +3,94 @@
 {% if result.get('error') %}
   <!-- Error path: retry cap exhausted -->
   {% include "partials/error.html" with context %}
+{% elif result.get('recommendations') %}
+  <article>
+    <header><h3>Top 3 Lineup Recommendations</h3></header>
+
+    {% if result.archetype_viability_notes %}
+    <div class="synergy-box">
+      <strong>Archetype notes:</strong> {{ result.archetype_viability_notes | join(' ') }}
+    </div>
+    {% endif %}
+
+    {% for rec in result.recommendations %}
+    <details {% if loop.first %}open{% endif %}>
+      <summary>
+        <strong>{{ rec.archetype | title }}</strong>
+        {% if rec.fit_label %}<small>Fit: {{ rec.fit_label }}</small>{% endif %}
+        {% if rec.confidence_label %}<small>Confidence: {{ rec.confidence_label }}</small>{% endif %}
+      </summary>
+
+      {% if rec.strategy_summary %}
+      <p>{{ rec.strategy_summary }}</p>
+      {% endif %}
+
+      <div class="frontline-grid">
+        {% for char in rec.frontline %}
+        <div class="char-card">
+          <strong>{{ char.name }}</strong>
+          <div class="role">{{ char.role }}</div>
+          {% if char.recommended_skills %}
+          <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
+          {% endif %}
+          {% if char.grastas %}
+          <div class="grastas">
+            <small>Build: {{ char.grastas | join(', ') }}</small>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if rec.reserve %}
+      <div class="reserve-grid">
+        {% for char in rec.reserve %}
+        <div class="char-card">
+          <strong>{{ char.name }}</strong>
+          <div class="role">{{ char.role }}</div>
+          {% if char.recommended_skills %}
+          <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
+          {% endif %}
+          {% if char.grastas %}
+          <div class="grastas">
+            <small>Build: {{ char.grastas | join(', ') }}</small>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if rec.main_sidekick or rec.sub_sidekick %}
+      <p><small>Sidekicks: main {{ rec.main_sidekick or 'none' }}, sub {{ rec.sub_sidekick or 'none' }}</small></p>
+      {% endif %}
+
+      {% if rec.boss_counterplay_notes %}
+      <div class="synergy-box">
+        <strong>Counterplay:</strong> {{ rec.boss_counterplay_notes | join(' ') }}
+      </div>
+      {% endif %}
+
+      {% if rec.sustain_mp_notes %}
+      <div class="synergy-box">
+        <strong>Sustain and MP:</strong> {{ rec.sustain_mp_notes | join(' ') }}
+      </div>
+      {% endif %}
+
+      {% if rec.risks %}
+      <div class="synergy-box">
+        <strong>Risks:</strong> {{ rec.risks | join(' ') }}
+      </div>
+      {% endif %}
+
+      {% if rec.synergy_explanation %}
+      <div class="synergy-box">
+        <strong>Synergy:</strong> {{ rec.synergy_explanation }}
+      </div>
+      {% endif %}
+    </details>
+    {% endfor %}
+  </article>
 {% elif not result.get('frontline') %}
   <!-- Empty path: pipeline ran but returned no team -->
   {% include "partials/empty.html" with context %}

@@ -20,6 +20,7 @@ import json
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from ..context_compaction import compact_records
 from ..llm import get_llm
 from ..state import WorkflowState
 
@@ -64,6 +65,7 @@ async def validate_node(state: WorkflowState, driver) -> dict:
         records, _, _ = await driver.execute_query(
             cypher,
             roster=state.get("roster", []),
+            user_query=state.get("user_query", ""),
             database_="neo4j",
         )
     except Exception as exc:
@@ -84,7 +86,14 @@ async def validate_node(state: WorkflowState, driver) -> dict:
     # Step 2: Haiku 4.6 Semantic Gate
     # ------------------------------------------------------------------
     llm = get_llm(role="validator")
-    results_json = json.dumps([dict(r) for r in records], indent=2)
+    compacted_records = compact_records(
+        records,
+        max_records=6,
+        max_list_items=2,
+        max_string_chars=100,
+        max_dict_keys=8,
+    )
+    results_json = json.dumps(compacted_records, indent=2)
     messages = [
         SystemMessage(content=SEMANTIC_GATE_SYSTEM_PROMPT),
         HumanMessage(

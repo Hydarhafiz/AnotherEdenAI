@@ -201,7 +201,7 @@ Acceptance criteria:
 
 ### Feature D: Top 3 Lineup Recommendation Contract
 
-Status: Planned
+Status: Completed
 
 Goal: Produce three useful, legal, source-grounded lineup plans for each supported boss.
 

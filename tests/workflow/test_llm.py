@@ -43,9 +43,11 @@ class TestOpenRouter:
         mock_cls.assert_called_once()
         assert result is mock_instance
 
-    def test_get_llm_openrouter_default_role_uses_sonnet(self, monkeypatch):
+    def test_get_llm_openrouter_default_role_uses_configured_model(self, monkeypatch):
         mod = _reload_with_provider(monkeypatch, "openrouter")
         monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
+        monkeypatch.setenv("OPENROUTER_MODEL", "openrouter/test-model")
+        mod = _reload_with_provider(monkeypatch, "openrouter")
 
         captured_kwargs = {}
 
@@ -57,13 +59,14 @@ class TestOpenRouter:
             mod.get_llm(role="planner")
 
         model = captured_kwargs.get("model", "")
-        assert "sonnet" in model or "claude-3.5" in model, (
-            f"Expected sonnet/claude-3.5 model for planner role, got: {model}"
-        )
+        assert model == "openrouter/test-model"
 
-    def test_get_llm_openrouter_validator_role_uses_haiku(self, monkeypatch):
+    def test_get_llm_openrouter_validator_role_uses_validator_model_override(self, monkeypatch):
         mod = _reload_with_provider(monkeypatch, "openrouter")
         monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
+        monkeypatch.setenv("OPENROUTER_MODEL", "openrouter/main-model")
+        monkeypatch.setenv("OPENROUTER_VALIDATOR_MODEL", "openrouter/validator-model")
+        mod = _reload_with_provider(monkeypatch, "openrouter")
 
         captured_kwargs = {}
 
@@ -75,9 +78,28 @@ class TestOpenRouter:
             mod.get_llm(role="validator")
 
         model = captured_kwargs.get("model", "")
-        assert "haiku" in model, (
-            f"Expected haiku model for validator role, got: {model}"
-        )
+        assert model == "openrouter/validator-model"
+
+    @pytest.mark.parametrize("role", ["planner", "cypher", "validator", "analyzer"])
+    def test_default_provider_routes_all_workflow_roles_to_openrouter(self, monkeypatch, role):
+        mod = _reload_with_provider(monkeypatch, None)
+        monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
+        monkeypatch.setenv("OPENROUTER_MODEL", "openrouter/all-workflow-model")
+        monkeypatch.setenv("OPENROUTER_VALIDATOR_MODEL", "openrouter/all-workflow-model")
+        mod = _reload_with_provider(monkeypatch, None)
+
+        captured_kwargs = {}
+
+        def fake_chatopenai(**kwargs):
+            captured_kwargs.update(kwargs)
+            return MagicMock()
+
+        with patch.object(mod, "ChatOpenAI", side_effect=fake_chatopenai) as mock_cls:
+            mod.get_llm(role=role)
+
+        mock_cls.assert_called_once()
+        assert captured_kwargs["openai_api_base"] == "https://openrouter.ai/api/v1"
+        assert captured_kwargs["model"] == "openrouter/all-workflow-model"
 
     def test_get_llm_openrouter_uses_openrouter_base_url(self, monkeypatch):
         mod = _reload_with_provider(monkeypatch, "openrouter")
@@ -145,11 +167,12 @@ class TestAnthropic:
         mock_cls.assert_called_once()
         assert result is mock_instance
 
-    def test_get_llm_default_provider_is_anthropic(self, monkeypatch):
+    def test_get_llm_default_provider_is_openrouter(self, monkeypatch):
         mod = _reload_with_provider(monkeypatch, None)
+        monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
 
         mock_instance = MagicMock()
-        with patch.object(mod, "ChatAnthropic", return_value=mock_instance) as mock_cls:
+        with patch.object(mod, "ChatOpenAI", return_value=mock_instance) as mock_cls:
             result = mod.get_llm()
 
         mock_cls.assert_called_once()

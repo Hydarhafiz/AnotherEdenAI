@@ -55,6 +55,12 @@ class TeamOutput(BaseModel):
     reserve: list[CharacterSlot] = Field(min_length=2, max_length=2)
     main_sidekick: Optional[str] = None
     sub_sidekick: Optional[str] = None
+    archetype: Optional[str] = None
+    strategy_summary: str = ""
+    key_facts: list[str] = Field(default_factory=list)
+    build_notes: list[str] = Field(default_factory=list)
+    boss_counterplay_notes: list[str] = Field(default_factory=list)
+    sustain_mp_notes: list[str] = Field(default_factory=list)
     fit_label: Optional[Literal["high", "medium", "low"]] = None
     confidence_label: Optional[Literal["high", "medium", "low"]] = None
     rubric_summary: dict[str, str] = Field(default_factory=dict)
@@ -102,6 +108,48 @@ class AlternativesOutput(BaseModel):
 
     alternatives: list[TeamOutput] = Field(min_length=3, max_length=3)
     reason: str
+
+
+class RecommendationSetOutput(BaseModel):
+    """Feature D top-three recommendation envelope.
+
+    recommendations: exactly 3 legal-shape lineup plans, usually burst/sustain/hybrid.
+    boss_affinity: graph-derived affinity facts shared across the recommendation set.
+    archetype_viability_notes: explains weaker archetypes or variant rationale.
+    """
+
+    recommendations: list[TeamOutput] = Field(min_length=3, max_length=3)
+    boss_affinity: BossAffinityOutput = Field(default_factory=BossAffinityOutput)
+    archetype_viability_notes: list[str] = Field(default_factory=list)
+    error: Optional[str] = None
+
+    @model_validator(mode="after")
+    def _validate_feature_d_contract(self) -> "RecommendationSetOutput":
+        archetypes = [rec.archetype.lower() for rec in self.recommendations if rec.archetype]
+        for rec in self.recommendations:
+            if not rec.archetype:
+                raise ValueError("each recommendation must include an archetype")
+            if not rec.strategy_summary:
+                raise ValueError("each recommendation must include a strategy_summary")
+            if not rec.citations:
+                raise ValueError("each recommendation must include source citations")
+            if not (rec.key_facts or rec.boss_counterplay_notes):
+                raise ValueError("each recommendation must include key facts or boss counterplay notes")
+            if not rec.build_notes:
+                raise ValueError("each recommendation must include build notes")
+            if not rec.boss_counterplay_notes:
+                raise ValueError("each recommendation must include boss counterplay notes")
+            if not rec.sustain_mp_notes:
+                raise ValueError("each recommendation must include sustain and MP notes")
+            if not rec.risks:
+                raise ValueError("each recommendation must include risks or assumptions")
+            if not rec.fit_label or not rec.confidence_label:
+                raise ValueError("each recommendation must include fit and confidence labels")
+
+        expected = {"burst", "sustain", "hybrid"}
+        if not expected.issubset(set(archetypes)) and not self.archetype_viability_notes:
+            raise ValueError("variant recommendations require archetype_viability_notes")
+        return self
 
 
 def _extract_json(text: str) -> dict:
@@ -200,7 +248,10 @@ def format_node(state: WorkflowState) -> dict:
     analysis_result = state.get("analysis_result", "")
     try:
         parsed = _extract_json(analysis_result)
-        validated = TeamOutput.model_validate(parsed)
+        if "recommendations" in parsed:
+            validated = RecommendationSetOutput.model_validate(parsed)
+        else:
+            validated = TeamOutput.model_validate(parsed)
     except (ValidationError, ValueError):
         # ValidationError: shape is wrong (e.g. 2 frontline instead of 3-4)
         # ValueError: _extract_json could not find JSON in the LLM output

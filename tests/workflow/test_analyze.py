@@ -106,6 +106,32 @@ class TestAnalyzePassesContextToLLM:
             "Expected plan_strategy content ('Fire element') to appear in LLM prompt"
         )
 
+    def test_analyze_compacts_large_db_results_before_prompting(self, sample_analyze_state):
+        """Analyzer prompt should preserve useful rows without sending huge raw descriptions."""
+        giant_description = "very long skill text " * 2000
+        state = {
+            **sample_analyze_state,
+            "db_results": [
+                {
+                    "character_name": f"Hero {index}",
+                    "skills": [{"name": "Skill", "description": giant_description} for _ in range(20)],
+                    "passives": [{"name": "Passive", "description": giant_description} for _ in range(20)],
+                }
+                for index in range(50)
+            ],
+        }
+        mock_llm = _make_mock_llm()
+
+        with patch("src.workflow.nodes.analyze.get_llm", return_value=mock_llm):
+            analyze_node(state)
+
+        messages = mock_llm.invoke.call_args[0][0]
+        all_content = " ".join(str(m.content) for m in messages)
+        assert len(all_content) < 80_000
+        assert "[truncated" in all_content
+        assert "more items omitted" in all_content
+        assert "Hero 0" in all_content
+
 
 class TestAnalyzeUsesAnalyzerRole:
     """analyze_node must call get_llm with role='analyzer'."""

@@ -48,12 +48,13 @@ def mock_llm():
 def sample_state():
     """Function-scoped complete initial WorkflowState with default values.
 
-    All 9 keys are present and set to sensible defaults for testing.
+    All state keys are present and set to sensible defaults for testing.
     """
     return {
         "user_query": "best fire team",
         "roster": ["Aldo", "Ciel"],
         "plan_strategy": "",
+        "boss_context": "",
         "cypher_query": "",
         "db_results": [],
         "validation_errors": [],
