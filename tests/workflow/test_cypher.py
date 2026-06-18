@@ -228,6 +228,12 @@ def test_boss_lineup_query_uses_broad_deterministic_roster_retrieval(sample_stat
     assert "c.name IN $roster" in query
     assert "HAS_SKILL" in query
     assert "HAS_PASSIVE_SKILL" in query
+    assert "Sidekick" in query
+    assert "HAS_AUTO_SKILL" in query
+    assert "HAS_CHARGE_SKILL" in query
+    assert "HAS_AURA" in query
+    assert "$owned_sidekicks" in query
+    assert "owned_sidekick_facts" in query
     assert "Superboss" in query
     assert "$user_query" in query
     assert "c.element = 'Thunder'" not in query

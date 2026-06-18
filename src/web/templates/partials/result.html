@@ -13,83 +13,193 @@
     </div>
     {% endif %}
 
+    <div class="recommendation-list">
     {% for rec in result.recommendations %}
-    <details {% if loop.first %}open{% endif %}>
+    <details class="recommendation-card">
       <summary>
-        <strong>{{ rec.archetype | title }}</strong>
-        {% if rec.fit_label %}<small>Fit: {{ rec.fit_label }}</small>{% endif %}
-        {% if rec.confidence_label %}<small>Confidence: {{ rec.confidence_label }}</small>{% endif %}
+        <div class="recommendation-summary">
+          <div class="recommendation-title">
+            <h4>{{ rec.archetype | title }}</h4>
+            {% if rec.fit_label %}<span class="label-pill">Fit: {{ rec.fit_label }}</span>{% endif %}
+            {% if rec.confidence_label %}<span class="label-pill">Confidence: {{ rec.confidence_label }}</span>{% endif %}
+          </div>
+
+          <div class="lineup-compact">
+            <div><span>Frontline:</span> {{ rec.frontline | map(attribute='name') | join(', ') }}</div>
+            <div><span>Reserve:</span> {{ rec.reserve | map(attribute='name') | join(', ') }}</div>
+            {% if rec.main_sidekick or rec.sub_sidekick %}
+            <div><span>Sidekicks:</span> main {{ rec.main_sidekick or 'none' }}, sub {{ rec.sub_sidekick or 'none' }}</div>
+            {% endif %}
+          </div>
+
+          {% if rec.strategy_summary %}
+          <strong>Short strategy</strong>
+          <p>{{ rec.strategy_summary }}</p>
+          {% endif %}
+
+          {% if rec.risks %}
+          <strong>Main risks</strong>
+          <ul class="compact-risks">
+            {% for risk in rec.risks[:2] %}
+            <li>{{ risk }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
       </summary>
 
-      {% if rec.strategy_summary %}
-      <p>{{ rec.strategy_summary }}</p>
-      {% endif %}
+      <div class="detail-grid">
+        <section class="detail-section full-width">
+          <h5>Character Roles And Placement</h5>
+          <div class="frontline-grid">
+            {% for char in rec.frontline %}
+            <div class="char-card">
+              <strong>{{ char.name }}</strong>
+              <div class="role">Frontline - {{ char.role }}</div>
+              {% if char.recommended_skills %}
+              <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
+              {% else %}
+              <div><small>Skills: none supplied</small></div>
+              {% endif %}
+              {% if char.recommended_passives %}
+              <div><small>Passives: {{ char.recommended_passives | join(', ') }}</small></div>
+              {% else %}
+              <div><small>Passives: none supplied</small></div>
+              {% endif %}
+              {% if char.upgrade_assumptions %}
+              <div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>
+              {% else %}
+              <div><small>Assumes: no upgrade assumptions listed</small></div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
 
-      <div class="frontline-grid">
-        {% for char in rec.frontline %}
-        <div class="char-card">
-          <strong>{{ char.name }}</strong>
-          <div class="role">{{ char.role }}</div>
-          {% if char.recommended_skills %}
-          <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
-          {% endif %}
-          {% if char.grastas %}
-          <div class="grastas">
-            <small>Build: {{ char.grastas | join(', ') }}</small>
+          {% if rec.reserve %}
+          <div class="reserve-grid">
+            {% for char in rec.reserve %}
+            <div class="char-card">
+              <strong>{{ char.name }}</strong>
+              <div class="role">Reserve - {{ char.role }}</div>
+              {% if char.recommended_skills %}
+              <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
+              {% else %}
+              <div><small>Skills: none supplied</small></div>
+              {% endif %}
+              {% if char.recommended_passives %}
+              <div><small>Passives: {{ char.recommended_passives | join(', ') }}</small></div>
+              {% else %}
+              <div><small>Passives: none supplied</small></div>
+              {% endif %}
+              {% if char.upgrade_assumptions %}
+              <div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>
+              {% else %}
+              <div><small>Assumes: no upgrade assumptions listed</small></div>
+              {% endif %}
+            </div>
+            {% endfor %}
           </div>
           {% endif %}
-        </div>
-        {% endfor %}
-      </div>
+        </section>
 
-      {% if rec.reserve %}
-      <div class="reserve-grid">
-        {% for char in rec.reserve %}
-        <div class="char-card">
-          <strong>{{ char.name }}</strong>
-          <div class="role">{{ char.role }}</div>
-          {% if char.recommended_skills %}
-          <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
-          {% endif %}
+        {% set build = namespace(notes=rec.build_notes or []) %}
+        {% for char in rec.frontline + rec.reserve %}
           {% if char.grastas %}
-          <div class="grastas">
-            <small>Build: {{ char.grastas | join(', ') }}</small>
-          </div>
+            {% set build.notes = build.notes + [char.name ~ ': ' ~ (char.grastas | join(', '))] %}
           {% endif %}
-        </div>
         {% endfor %}
-      </div>
-      {% endif %}
+        {% if build.notes %}
+        <section class="detail-section">
+          <h5>Build Notes</h5>
+          <ul>
+            {% for note in build.notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
 
-      {% if rec.main_sidekick or rec.sub_sidekick %}
-      <p><small>Sidekicks: main {{ rec.main_sidekick or 'none' }}, sub {{ rec.sub_sidekick or 'none' }}</small></p>
-      {% endif %}
+        {% if rec.key_facts or rec.main_sidekick or rec.sub_sidekick %}
+        <section class="detail-section">
+          <h5>Sidekick And Key Facts</h5>
+          {% if rec.main_sidekick or rec.sub_sidekick %}
+          <p><small>Main {{ rec.main_sidekick or 'none' }}, sub {{ rec.sub_sidekick or 'none' }}</small></p>
+          {% endif %}
+          {% if rec.key_facts %}
+          <ul>
+            {% for fact in rec.key_facts %}
+            <li>{{ fact }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </section>
+        {% endif %}
 
-      {% if rec.boss_counterplay_notes %}
-      <div class="synergy-box">
-        <strong>Counterplay:</strong> {{ rec.boss_counterplay_notes | join(' ') }}
-      </div>
-      {% endif %}
+        {% if rec.boss_counterplay_notes %}
+        <section class="detail-section">
+          <h5>Boss Counterplay</h5>
+          <ul>
+            {% for note in rec.boss_counterplay_notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
 
-      {% if rec.sustain_mp_notes %}
-      <div class="synergy-box">
-        <strong>Sustain and MP:</strong> {{ rec.sustain_mp_notes | join(' ') }}
-      </div>
-      {% endif %}
+        {% if rec.sustain_mp_notes %}
+        <section class="detail-section">
+          <h5>Sustain And MP</h5>
+          <ul>
+            {% for note in rec.sustain_mp_notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
 
-      {% if rec.risks %}
-      <div class="synergy-box">
-        <strong>Risks:</strong> {{ rec.risks | join(' ') }}
-      </div>
-      {% endif %}
+        {% if rec.risks %}
+        <section class="detail-section">
+          <h5>Assumptions And Uncertainty</h5>
+          <ul>
+            {% for risk in rec.risks %}
+            <li>{{ risk }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
 
-      {% if rec.synergy_explanation %}
-      <div class="synergy-box">
-        <strong>Synergy:</strong> {{ rec.synergy_explanation }}
+        {% if rec.rubric_summary %}
+        <section class="detail-section">
+          <h5>Fit Rubric</h5>
+          <ul>
+            {% for label, value in rec.rubric_summary.items() %}
+            <li><strong>{{ label | replace('_', ' ') | title }}:</strong> {{ value }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        {% if rec.citations %}
+        <section class="detail-section">
+          <h5>Citations</h5>
+          <ul>
+            {% for citation in rec.citations %}
+            <li><a href="{{ citation.source_url }}" target="_blank" rel="noopener noreferrer">{{ citation.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        {% if rec.synergy_explanation %}
+        <section class="detail-section full-width">
+          <h5>Synergy</h5>
+          <p>{{ rec.synergy_explanation }}</p>
+        </section>
+        {% endif %}
       </div>
-      {% endif %}
     </details>
     {% endfor %}
+    </div>
   </article>
 {% elif not result.get('frontline') %}
   <!-- Empty path: pipeline ran but returned no team -->

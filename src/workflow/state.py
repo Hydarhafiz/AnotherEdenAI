@@ -6,6 +6,7 @@ Each key is owned by at most one node — no key is written by multiple nodes.
 Key ownership:
     user_query      — set by caller (input)
     roster          — set by caller (input)
+    owned_sidekicks — set by caller (input), normalized by PLAN when present
     plan_strategy   — written by PLAN node only
     cypher_query    — written by GENERATE_CYPHER node only
     db_results      — written by VALIDATE node only (non-empty = success)
@@ -32,6 +33,7 @@ class WorkflowState(TypedDict):
     # --- Caller-provided inputs ---
     user_query: str
     roster: list[str]
+    owned_sidekicks: list[str]
 
     # --- PLAN node output ---
     plan_strategy: str

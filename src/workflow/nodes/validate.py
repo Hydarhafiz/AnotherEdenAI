@@ -65,6 +65,7 @@ async def validate_node(state: WorkflowState, driver) -> dict:
         records, _, _ = await driver.execute_query(
             cypher,
             roster=state.get("roster", []),
+            owned_sidekicks=state.get("owned_sidekicks", []),
             user_query=state.get("user_query", ""),
             database_="neo4j",
         )

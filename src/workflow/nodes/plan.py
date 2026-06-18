@@ -8,6 +8,7 @@ before the LLM prompt is built.
 """
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from ..legality import normalize_sidekicks
 from ..llm import get_llm
 from ..normalize import normalize_roster
 from ..f2p import augment_with_f2p
@@ -49,13 +50,16 @@ async def plan_node(state: WorkflowState, driver) -> dict:
     normalized = await normalize_roster(driver, state["roster"])
     # Step 2: augment with F2P characters (deduped)
     full_roster = augment_with_f2p(normalized)
+    owned_sidekicks = await normalize_sidekicks(driver, state.get("owned_sidekicks", []))
 
     llm = get_llm(role="planner")
 
     roster_str = ", ".join(full_roster) if full_roster else "no characters specified"
+    sidekick_str = ", ".join(owned_sidekicks) if owned_sidekicks else "no sidekicks selected"
     human_content = (
         f"Query: {state['user_query']}\n"
-        f"Available roster: {roster_str}"
+        f"Available roster: {roster_str}\n"
+        f"Owned sidekicks: {sidekick_str}"
     )
 
     messages = [
@@ -64,4 +68,4 @@ async def plan_node(state: WorkflowState, driver) -> dict:
     ]
 
     response = llm.invoke(messages)
-    return {"plan_strategy": response.content, "roster": full_roster}
+    return {"plan_strategy": response.content, "roster": full_roster, "owned_sidekicks": owned_sidekicks}

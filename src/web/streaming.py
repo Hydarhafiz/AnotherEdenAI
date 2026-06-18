@@ -47,6 +47,7 @@ async def pipeline_sse_generator(
     driver,
     templates: Jinja2Templates,
     request,
+    owned_sidekicks: list[str] | None = None,
 ) -> AsyncIterable[ServerSentEvent]:
     """Async generator: run LangGraph pipeline, emit SSE events per node completion.
 
@@ -61,6 +62,7 @@ async def pipeline_sse_generator(
     Args:
         query:     User's natural language query string.
         roster:    List of owned character name strings.
+        owned_sidekicks: List of owned sidekick name strings.
         driver:    Neo4j AsyncDriver singleton from app.state (passed from route handler).
         templates: Jinja2Templates instance from the route's templates variable.
         request:   FastAPI Request (used for is_disconnected() check).
@@ -69,6 +71,7 @@ async def pipeline_sse_generator(
     initial_state = {
         "user_query": query,
         "roster": roster,
+        "owned_sidekicks": owned_sidekicks or [],
         "plan_strategy": "",
         "boss_context": "",
         "cypher_query": "",
@@ -94,11 +97,11 @@ async def pipeline_sse_generator(
             for node_name, state_update in chunk.items():
                 label = NODE_LABELS.get(node_name, node_name.upper())
 
-                # retry_count in state_update is the post-increment value (e.g. 1 after 1st fail).
-                # That value IS the attempt number: attempt 1 → retry_count=1, attempt 2 → 2, etc.
+                # retry_count is the number of completed failed attempts.
+                # The displayed attempt is the next validation attempt.
                 if node_name == "validate":
                     retry_count = state_update.get("retry_count", 0)
-                    attempt = retry_count  # post-increment == attempt number
+                    attempt = retry_count + 1
                     max_attempts = 3
                 else:
                     attempt = 1

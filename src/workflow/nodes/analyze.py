@@ -82,6 +82,7 @@ Rules:
 - Each recommendation reserve MUST contain exactly 2 characters.
 - Do not duplicate heroes between frontline and reserve
 - Sidekicks, when present, go only in main_sidekick/sub_sidekick and never in hero slots
+- ONLY use sidekicks listed in Player owned sidekicks. If no sidekicks are selected, set main_sidekick and sub_sidekick to null and add a risk that no sidekick ownership was supplied.
 - Recommended skills must exist in the database results for that character. Use 3 or 4 skills per character when data supports it; use fewer only when data is incomplete and add a risk.
 - Treat Stellar Awakening-gated skills/passives conservatively and put any upgrade assumption in upgrade_assumptions.
 - Explain Grasta/Ore/equipment build notes as late-game-access assumptions, not exact optimizer output.
@@ -140,6 +141,7 @@ Rules:
 - Each alternative must have exactly 4 frontline heroes and exactly 2 reserve heroes.
 - Only suggest characters from the player's roster.
 - Do not duplicate heroes. Do not place sidekicks in hero slots.
+- Only use sidekicks listed in Player owned sidekicks. If none are selected, set both sidekick slots to null.
 - Include Grasta citations: [CharacterName]: [Grasta name] ([trait]) — [effect].
 - Never present numeric win probability.
 - Output ONLY the JSON object — no preamble, no markdown fences."""
@@ -177,8 +179,10 @@ def analyze_node(state: WorkflowState) -> dict:
     roster = state.get("roster", [])
     plan_strategy = state.get("plan_strategy", "")
     boss_context = state.get("boss_context", "")
+    owned_sidekicks = state.get("owned_sidekicks", [])
 
     roster_str = ", ".join(roster) if roster else "no characters specified"
+    sidekick_str = ", ".join(owned_sidekicks) if owned_sidekicks else "no sidekicks selected"
 
     # Cap records and nested text to avoid exceeding hosted free-tier context limits.
     MAX_RECORDS = 12
@@ -194,6 +198,7 @@ def analyze_node(state: WorkflowState) -> dict:
     human_content = (
         f"User query: {user_query}\n"
         f"Player roster: {roster_str}\n"
+        f"Player owned sidekicks: {sidekick_str}\n"
         f"Traversal strategy: {plan_strategy}\n"
         f"Superboss mechanics context: {boss_context or 'none'}\n"
         f"Database results{trim_note}:\n{trimmed}"
@@ -216,6 +221,7 @@ def _generate_alternatives(state: WorkflowState) -> dict:
     """
     llm = get_llm(role="analyzer")
     roster_str = ", ".join(state.get("roster", [])) or "no characters specified"
+    sidekick_str = ", ".join(state.get("owned_sidekicks", [])) or "no sidekicks selected"
     user_query = state.get("user_query", "")
     plan_strategy = state.get("plan_strategy", "")
     boss_context = state.get("boss_context", "")
@@ -225,6 +231,7 @@ def _generate_alternatives(state: WorkflowState) -> dict:
         HumanMessage(content=(
             f"User query: {user_query}\n"
             f"Player roster: {roster_str}\n"
+            f"Player owned sidekicks: {sidekick_str}\n"
             f"Original traversal strategy: {plan_strategy}\n"
             f"Superboss mechanics context: {boss_context or 'none'}\n"
             "No database results were found. Generate EXACTLY 3 alternative team compositions."

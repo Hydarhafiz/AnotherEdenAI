@@ -23,6 +23,7 @@ from src.workflow.nodes.format import format_node
 EXPECTED_KEYS = {
     "user_query",
     "roster",
+    "owned_sidekicks",
     "plan_strategy",
     "boss_context",
     "cypher_query",
@@ -115,10 +116,10 @@ async def test_stub_nodes_return_only_owned_keys(sample_state):
          patch("src.workflow.nodes.cypher.get_llm", return_value=mock_llm), \
          patch("src.workflow.nodes.validate.get_llm", return_value=mock_validate_llm), \
          patch("src.workflow.nodes.analyze.get_llm", return_value=mock_analyze_llm):
-        # plan_node is now async and returns both plan_strategy and roster
+        # plan_node is now async and returns plan_strategy plus normalized ownership inputs
         plan_result = await plan_node(sample_state, mock_driver)
         cases = [
-            (plan_result,                                          {"plan_strategy", "roster"}),
+            (plan_result,                                          {"plan_strategy", "roster", "owned_sidekicks"}),
             (generate_cypher_node(sample_state),                   {"cypher_query"}),
             (await validate_node(sample_state, mock_driver),       {"db_results"}),
             (analyze_node(analyze_state),                          {"analysis_result"}),

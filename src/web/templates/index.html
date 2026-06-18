@@ -7,7 +7,7 @@
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <script src="https://unpkg.com/htmx-ext-sse@2.2.4/sse.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <script src="/static/app.js?v=4" defer></script>
+  <script src="/static/app.js?v=5" defer></script>
   <style>
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
     .tab-btn { cursor: pointer; }
@@ -22,6 +22,26 @@
     .char-card .grastas { font-size: 0.8rem; margin-top: 0.5rem; }
     .synergy-box { margin-top: 1rem; padding: 1rem; background: var(--pico-card-background-color); border-radius: 0.5rem; }
     #progress-status { min-height: 2rem; font-style: italic; }
+    .recommendation-list { display: grid; gap: 1rem; }
+    .recommendation-card { border: 1px solid var(--pico-muted-border-color); border-radius: 0.5rem; padding: 1rem; background: var(--pico-card-background-color); }
+    .recommendation-card > summary { cursor: pointer; list-style-position: outside; }
+    .recommendation-summary { display: grid; gap: 0.75rem; margin-left: 0.25rem; }
+    .recommendation-title { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+    .recommendation-title h4 { margin: 0; }
+    .label-pill { display: inline-flex; align-items: center; border: 1px solid var(--pico-muted-border-color); border-radius: 999px; padding: 0.15rem 0.5rem; font-size: 0.78rem; line-height: 1.4; color: var(--pico-muted-color); }
+    .lineup-compact { display: grid; gap: 0.35rem; font-size: 0.9rem; }
+    .lineup-compact span { color: var(--pico-muted-color); }
+    .compact-risks { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .detail-section { border-top: 1px solid var(--pico-muted-border-color); padding-top: 0.75rem; }
+    .detail-section h5 { margin-bottom: 0.4rem; }
+    .detail-section ul { margin-bottom: 0; }
+    .detail-section.full-width { grid-column: 1 / -1; }
+    @media (max-width: 900px) {
+      main.container > div { grid-template-columns: 1fr !important; }
+      .frontline-grid { grid-template-columns: repeat(2, 1fr); }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -35,6 +55,7 @@
       <h2>Your Roster</h2>
       <div class="tabs">
         <button class="tab-btn" onclick="switchTab('characters')" id="tab-characters">Characters</button>
+        <button class="tab-btn" onclick="switchTab('sidekicks')" id="tab-sidekicks">Sidekicks</button>
         <button class="tab-btn" onclick="switchTab('grastas')" id="tab-grastas">Grastas</button>
       </div>
 
@@ -42,6 +63,13 @@
         <input type="search" id="character-search" placeholder="Search characters..." oninput="filterList('characters')">
         <div class="roster-list" id="character-list">
           <p aria-busy="true">Loading characters...</p>
+        </div>
+      </div>
+
+      <div id="panel-sidekicks" class="tab-panel">
+        <input type="search" id="sidekick-search" placeholder="Search sidekicks..." oninput="filterList('sidekicks')">
+        <div class="roster-list" id="sidekick-list">
+          <p aria-busy="true">Loading sidekicks...</p>
         </div>
       </div>
 

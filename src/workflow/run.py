@@ -35,6 +35,7 @@ async def main(roster: list[str], query: str) -> dict:
         initial_state = {
             "user_query": query,
             "roster": roster,
+            "owned_sidekicks": [],
             "plan_strategy": "",
             "boss_context": "",
             "cypher_query": "",

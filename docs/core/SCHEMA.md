@@ -90,6 +90,13 @@ Uniqueness: `(character_name, name)`.
 
 Sidekicks are separate from `Character` nodes. They do not count as frontline or backline heroes.
 
+Query-time ownership contract:
+
+- `GET /api/entities` returns separate `characters`, `sidekicks`, and `grastas` name lists.
+- `POST /api/query` accepts `query`, `roster`, and optional `owned_sidekicks`.
+- Selected sidekick names are normalized against `Sidekick` nodes before retrieval.
+- Recommendation retrieval and output may use only selected owned sidekicks. An empty selection keeps main/sub sidekick slots empty and must be represented as a risk or assumption rather than inferred ownership.
+
 ### SidekickSkill
 - `sidekick_name` (STRING) — owning Sidekick name
 - `name` (STRING) — skill display name

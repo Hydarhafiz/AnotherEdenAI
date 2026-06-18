@@ -53,6 +53,7 @@ def sample_state():
     return {
         "user_query": "best fire team",
         "roster": ["Aldo", "Ciel"],
+        "owned_sidekicks": [],
         "plan_strategy": "",
         "boss_context": "",
         "cypher_query": "",

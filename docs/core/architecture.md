@@ -139,6 +139,7 @@ Routing notes:
 - Milestone 4 Feature B legality models define structured roster ownership, optional Stellar Awakening state, owned sidekicks, exactly four frontline heroes, exactly two reserve heroes, optional main/sub sidekick slots, duplicate-hero rejection, sidekick-as-hero rejection, owned/F2P hero enforcement, sidekick ownership or assumption checks, skill/passive existence checks, and conservative SA-gated skill/passive handling.
 - Milestone 4 Feature C retrieves selected `Superboss` affinity/mechanics facts plus relevant `MechanicReference` rows before analysis, then passes a transparent fit-rubric context into recommendation reasoning. Fit labels cover legality, offense, defense, synergy, sustain, MP, sidekick contribution, build readiness, uncertainty, and upgrade burden; they are ranking signals, not win probabilities.
 - Milestone 4 Feature D uses deterministic broad roster-fact retrieval for boss-aware lineup requests so recommendation prompts are grounded in available characters, skills, passives, Grasta context, and matching `Superboss` facts instead of over-narrow exact-match Cypher filters.
+- Milestone 4 Feature E carries optional owned-sidekick selections from the web request through SSE state and PLAN normalization. Broad lineup retrieval includes ability and aura facts only for normalized selected sidekicks; when none are selected, analysis keeps both sidekick slots empty and surfaces the missing ownership context as a risk.
 - `VALIDATE` and `ANALYZE` compact Neo4j result rows before LLM calls, bounding record count, nested list size, dictionary keys, and long text snippets to keep hosted-model prompt sizes controlled.
 - `FORMAT` validates the final recommendation shape before rendering so invalid 4-frontline/2-reserve output fails before the web layer presents it. Feature D top-three outputs are validated as exactly three recommendation plans with archetypes, strategy summaries, build notes, boss counterplay, sustain/MP notes, risks, fit/confidence labels, and citations.
 
@@ -152,9 +153,10 @@ Routing notes:
 
 Responsibilities:
 
-- Accept roster and natural-language query input
+- Accept character roster, owned-sidekick, and natural-language query input
 - Start background workflow execution
 - Stream progress updates over SSE
+- Render three collapsed recommendation summaries with expandable evidence, explicit short-strategy and main-risk labels, and clear fallbacks when skills, passives, or upgrade assumptions are absent
 - Render final result or graceful failure UI
 - Expose admin-triggered ETL refresh
 

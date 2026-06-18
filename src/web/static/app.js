@@ -3,6 +3,7 @@
  */
 const STORAGE_KEY = "anothereden_roster";
 const GRASTA_STORAGE_KEY = "anothereden_grastas";
+const SIDEKICK_STORAGE_KEY = "anothereden_sidekicks";
 
 function loadRoster() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -10,12 +11,18 @@ function loadRoster() {
 function loadGrastas() {
   return JSON.parse(localStorage.getItem(GRASTA_STORAGE_KEY) || "[]");
 }
+function loadSidekicks() {
+  return JSON.parse(localStorage.getItem(SIDEKICK_STORAGE_KEY) || "[]");
+}
 function saveRoster(roster) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(roster));
   updateRosterPayload();
 }
 function saveGrastas(grastas) {
   localStorage.setItem(GRASTA_STORAGE_KEY, JSON.stringify(grastas));
+}
+function saveSidekicks(sidekicks) {
+  localStorage.setItem(SIDEKICK_STORAGE_KEY, JSON.stringify(sidekicks));
 }
 
 function updateRosterPayload() {
@@ -29,8 +36,12 @@ function switchTab(tab) {
 }
 
 function filterList(type) {
-  const searchId = type === "characters" ? "character-search" : "grasta-search";
-  const listId = type === "characters" ? "character-list" : "grasta-list";
+  const searchId = type === "characters" ? "character-search"
+    : type === "sidekicks" ? "sidekick-search"
+    : "grasta-search";
+  const listId = type === "characters" ? "character-list"
+    : type === "sidekicks" ? "sidekick-list"
+    : "grasta-list";
   const q = document.getElementById(searchId).value.toLowerCase();
   document.querySelectorAll(`#${listId} .roster-item`).forEach(item => {
     item.style.display = item.dataset.name.toLowerCase().includes(q) ? "" : "none";
@@ -53,12 +64,18 @@ function buildChecklistHTML(names, storageKey, listId, checkboxClass) {
 
   ul.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
     cb.addEventListener("change", () => {
-      const isChar = checkboxClass === "char-checkbox";
-      const current = isChar ? loadRoster() : loadGrastas();
+      const kind = checkboxClass === "char-checkbox" ? "character"
+        : checkboxClass === "sidekick-checkbox" ? "sidekick"
+        : "grasta";
+      const current = kind === "character" ? loadRoster()
+        : kind === "sidekick" ? loadSidekicks()
+        : loadGrastas();
       const updated = cb.checked
         ? [...new Set([...current, cb.value])]
         : current.filter(n => n !== cb.value);
-      if (isChar) saveRoster(updated); else saveGrastas(updated);
+      if (kind === "character") saveRoster(updated);
+      else if (kind === "sidekick") saveSidekicks(updated);
+      else saveGrastas(updated);
     });
   });
 }
@@ -269,11 +286,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(r => r.json())
     .then(data => {
       buildChecklistHTML(data.characters, STORAGE_KEY, "character-list", "char-checkbox");
+      buildChecklistHTML(data.sidekicks, SIDEKICK_STORAGE_KEY, "sidekick-list", "sidekick-checkbox");
       buildChecklistHTML(data.grastas, GRASTA_STORAGE_KEY, "grasta-list", "grasta-checkbox");
     })
     .catch(err => {
       console.error("Failed to load entities:", err);
       document.getElementById("character-list").innerHTML = "<p>Error loading characters.</p>";
+      document.getElementById("sidekick-list").innerHTML = "<p>Error loading sidekicks.</p>";
       document.getElementById("grasta-list").innerHTML = "<p>Error loading Grastas.</p>";
     });
 
@@ -285,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const query = document.getElementById("query-input").value.trim();
       if (!query) return;
       const roster = loadRoster();
+      const owned_sidekicks = loadSidekicks();
 
       setSubmitBusy(true);
       pipelineActiveStepId = null;
@@ -299,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const resp = await fetch("/api/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, roster }),
+          body: JSON.stringify({ query, roster, owned_sidekicks }),
         });
         if (!resp.ok) {
           slot.innerHTML = `<p style="color:red">Error ${resp.status}: ${resp.statusText}</p>`;

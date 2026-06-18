@@ -247,10 +247,22 @@ WITH c,
        description: passive.description,
        requires_stellar_awakened: coalesce(passive.requires_stellar_awakened, false)
      })[..8] AS passives
+OPTIONAL MATCH (s:Sidekick)
+WHERE s.name IN $owned_sidekicks
+OPTIONAL MATCH (s)-[:HAS_AUTO_SKILL]->(auto:SidekickSkill)
+OPTIONAL MATCH (s)-[:HAS_CHARGE_SKILL]->(charge:SidekickSkill)
+OPTIONAL MATCH (s)-[:HAS_AURA]->(aura:SidekickAura)
+WITH c, traits, grastas, skills, passives,
+     [sidekick IN collect(DISTINCT {
+       name: s.name,
+       auto_skill: auto.name,
+       charge_skill: charge.name,
+       aura: aura.name
+     }) WHERE sidekick.name IS NOT NULL][..8] AS owned_sidekick_facts
 OPTIONAL MATCH (boss:Superboss)
 WHERE toLower($user_query) CONTAINS toLower(boss.name)
    OR any(token IN split(toLower(boss.name), ' ') WHERE size(token) >= 4 AND toLower($user_query) CONTAINS token)
-WITH c, traits, grastas, skills, passives, collect(DISTINCT boss {
+WITH c, traits, grastas, skills, passives, owned_sidekick_facts, collect(DISTINCT boss {
   .name,
   .source_url,
   .weak,
@@ -270,6 +282,7 @@ RETURN c.name AS character_name,
        grastas,
        skills,
        passives,
+       owned_sidekick_facts,
        boss_facts
 ORDER BY c.name
 """.strip()
