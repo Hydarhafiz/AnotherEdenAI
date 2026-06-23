@@ -10,12 +10,14 @@ Covers AGENT-06, AGENT-07:
 import json
 import pytest
 from pydantic import ValidationError
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
+from src.workflow.legality import LegalityContext
 from src.workflow.nodes.format import (
     AlternativesOutput,
     RecommendationSetOutput,
     TeamOutput,
+    format_and_validate_node,
     format_node,
 )
 
@@ -589,3 +591,66 @@ class TestFeatureDRecommendationSet:
         result = format_node(self._state(payload))
 
         assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"
+
+
+class TestProductionLegalityGate:
+    """The production FORMAT wrapper blocks graph- or roster-illegal LLM output."""
+
+    @staticmethod
+    def _context(*, skills=None):
+        return LegalityContext(
+            known_characters={"Aldo", "Ciel", "Riica", "Shion", "Miyu", "Feinne"},
+            character_skills=skills or {},
+        )
+
+    @pytest.mark.asyncio
+    async def test_legal_lineup_passes_before_final_output(self, success_state):
+        state = dict(success_state)
+        state["roster"] = ["Aldo", "Ciel", "Riica", "Shion", "Miyu", "Feinne"]
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(),
+        ) as collect_context:
+            result = await format_and_validate_node(state, driver)
+
+        assert result["final_output"].get("error") is None
+        collect_context.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_unowned_llm_character_is_blocked(self, success_state):
+        state = dict(success_state)
+        state["roster"] = ["Aldo", "Ciel"]
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(),
+        ):
+            result = await format_and_validate_node(state, driver)
+
+        final = result["final_output"]
+        assert final["frontline"] == []
+        assert final["reserve"] == []
+        assert "not owned or F2P-available" in final["error"]
+
+    @pytest.mark.asyncio
+    async def test_unsupported_skill_is_blocked(self, success_state):
+        payload = json.loads(success_state["analysis_result"])
+        payload["frontline"][0]["recommended_skills"] = ["Imaginary Slash"]
+        state = dict(success_state)
+        state["analysis_result"] = json.dumps(payload)
+        state["roster"] = ["Aldo", "Ciel", "Riica", "Shion", "Miyu", "Feinne"]
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(skills={"Aldo": {"X Slash"}}),
+        ):
+            result = await format_and_validate_node(state, driver)
+
+        assert "does not have recommended skill: Imaginary Slash" in result["final_output"]["error"]

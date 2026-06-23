@@ -141,7 +141,7 @@ Routing notes:
 - Milestone 4 Feature D uses deterministic broad roster-fact retrieval for boss-aware lineup requests so recommendation prompts are grounded in available characters, skills, passives, Grasta context, and matching `Superboss` facts instead of over-narrow exact-match Cypher filters.
 - Milestone 4 Feature E carries optional owned-sidekick selections from the web request through SSE state and PLAN normalization. Broad lineup retrieval includes ability and aura facts only for normalized selected sidekicks; when none are selected, analysis keeps both sidekick slots empty and surfaces the missing ownership context as a risk.
 - `VALIDATE` and `ANALYZE` compact Neo4j result rows before LLM calls, bounding record count, nested list size, dictionary keys, and long text snippets to keep hosted-model prompt sizes controlled.
-- `FORMAT` validates the final recommendation shape before rendering so invalid 4-frontline/2-reserve output fails before the web layer presents it. Feature D top-three outputs are validated as exactly three recommendation plans with archetypes, strategy summaries, build notes, boss counterplay, sustain/MP notes, risks, fit/confidence labels, and citations.
+- `FORMAT` validates the final recommendation shape, then checks every single-team, top-three, or alternatives lineup against graph-backed character, sidekick, skill, passive, ownership, and Stellar Awakening facts before rendering. Illegal or unverifiable recommendations fail gracefully before the web layer presents them. Feature D top-three outputs are validated as exactly three recommendation plans with archetypes, strategy summaries, build notes, boss counterplay, sustain/MP notes, risks, fit/confidence labels, and citations.
 
 ### Web Layer
 

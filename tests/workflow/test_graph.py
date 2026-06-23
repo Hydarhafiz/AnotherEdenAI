@@ -15,6 +15,7 @@ from unittest.mock import AsyncMock, MagicMock, patch, call
 from langchain_core.messages import AIMessage
 
 from src.workflow.graph import build_graph, route_after_validate
+from src.workflow.legality import LegalityContext
 
 
 def _mock_llm_factory(content="stub response"):
@@ -39,6 +40,13 @@ _ANALYZE_RESPONSE = (
     '],'
     ' "synergy_explanation": "Fire synergy with Aldo as main DPS"}'
 )
+
+_GRAPH_HEROES = {"Aldo", "Riica", "Bertrand", "Shion", "Ciel", "Feinne", "Miyu"}
+_GRAPH_ROSTER = sorted(_GRAPH_HEROES)
+
+
+def _graph_legality_context():
+    return LegalityContext(known_characters=_GRAPH_HEROES)
 
 
 class TestRouteAfterValidate:
@@ -91,6 +99,15 @@ class TestGraphHappyPath:
     All graph tests use ainvoke() because validate_node is async.
     """
 
+    @pytest.fixture(autouse=True)
+    def _mock_graph_legality_facts(self):
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=_graph_legality_context(),
+        ):
+            yield
+
     @pytest.mark.asyncio
     async def test_full_graph_happy_path(self, stub_driver, sample_state):
         """Full pipeline with all 5 nodes: query flows through to structured team output.
@@ -115,8 +132,8 @@ class TestGraphHappyPath:
         with patch("src.workflow.nodes.plan.get_llm",
                    return_value=_mock_llm_factory("Find Fire element characters with synergy traits")), \
              patch("src.workflow.nodes.plan.normalize_roster",
-                   new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
-             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=["Aldo", "Ciel"]), \
+                   new_callable=AsyncMock, return_value=_GRAPH_ROSTER), \
+             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=_GRAPH_ROSTER), \
              patch("src.workflow.nodes.cypher.get_llm",
                    return_value=_mock_llm_factory(
                        "MATCH (c:Character)-[:HAS_TRAIT]->(t:Trait) "
@@ -176,8 +193,8 @@ class TestGraphHappyPath:
         with patch("src.workflow.nodes.plan.get_llm",
                    return_value=_mock_llm_factory("stub plan")), \
              patch("src.workflow.nodes.plan.normalize_roster",
-                   new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
-             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=["Aldo", "Ciel"]), \
+                   new_callable=AsyncMock, return_value=_GRAPH_ROSTER), \
+             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=_GRAPH_ROSTER), \
              patch("src.workflow.nodes.cypher.get_llm",
                    return_value=_mock_llm_factory("MATCH (n) RETURN n")), \
              patch("src.workflow.nodes.validate.get_llm",
@@ -237,8 +254,8 @@ class TestGraphHappyPath:
         with patch("src.workflow.nodes.plan.get_llm",
                    return_value=_mock_llm_factory("stub plan")), \
              patch("src.workflow.nodes.plan.normalize_roster",
-                   new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
-             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=["Aldo", "Ciel"]), \
+                   new_callable=AsyncMock, return_value=_GRAPH_ROSTER), \
+             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=_GRAPH_ROSTER), \
              patch("src.workflow.nodes.cypher.get_llm",
                    return_value=_mock_llm_factory("MATCH (n) RETURN n")), \
              patch("src.workflow.nodes.validate.get_llm",
@@ -292,8 +309,8 @@ class TestGraphHappyPath:
         with patch("src.workflow.nodes.plan.get_llm",
                    return_value=_mock_llm_factory("stub plan")), \
              patch("src.workflow.nodes.plan.normalize_roster",
-                   new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
-             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=["Aldo", "Ciel"]), \
+                   new_callable=AsyncMock, return_value=_GRAPH_ROSTER), \
+             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=_GRAPH_ROSTER), \
              patch("src.workflow.nodes.cypher.get_llm",
                    return_value=_mock_llm_factory("MATCH (n) RETURN n")), \
              patch("src.workflow.nodes.validate.get_llm",
@@ -333,8 +350,8 @@ class TestGraphHappyPath:
         with patch("src.workflow.nodes.plan.get_llm",
                    return_value=_mock_llm_factory("plan strategy")) as mock_plan, \
              patch("src.workflow.nodes.plan.normalize_roster",
-                   new_callable=AsyncMock, return_value=["Aldo", "Ciel"]), \
-             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=["Aldo", "Ciel"]), \
+                   new_callable=AsyncMock, return_value=_GRAPH_ROSTER), \
+             patch("src.workflow.nodes.plan.augment_with_f2p", return_value=_GRAPH_ROSTER), \
              patch("src.workflow.nodes.cypher.get_llm",
                    return_value=_mock_llm_factory("MATCH (n) RETURN n")) as mock_cypher, \
              patch("src.workflow.nodes.validate.get_llm",

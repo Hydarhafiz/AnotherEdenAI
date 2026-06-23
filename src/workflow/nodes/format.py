@@ -16,7 +16,13 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
-from ..legality import CharacterBuild
+from ..legality import (
+    CharacterBuild,
+    LineupModel,
+    RosterInput,
+    collect_legality_context,
+    validate_lineup_legality,
+)
 from ..state import WorkflowState
 
 
@@ -264,3 +270,49 @@ def format_node(state: WorkflowState) -> dict:
             }
         }
     return {"final_output": validated.model_dump()}
+
+
+async def format_and_validate_node(state: WorkflowState, driver) -> dict:
+    """Format output, then enforce graph-backed lineup legality before rendering.
+
+    The synchronous format_node remains the pure Pydantic transformation
+    boundary. Production graph execution uses this wrapper so every successful
+    single-team, recommendation-set, or alternatives payload is checked against
+    roster ownership plus graph-backed character, sidekick, skill, passive, and
+    Stellar Awakening facts before final_output is emitted.
+    """
+    formatted = format_node(state)
+    final_output = formatted["final_output"]
+    if final_output.get("error"):
+        return formatted
+
+    try:
+        roster = RosterInput(
+            owned_characters=state.get("roster", []),
+            stellar_awakened=state.get("stellar_awakened", {}),
+            owned_sidekicks=state.get("owned_sidekicks", []),
+        )
+        for lineup_payload in _lineup_payloads(final_output):
+            lineup = LineupModel.model_validate(lineup_payload)
+            context = await collect_legality_context(driver, lineup)
+            validate_lineup_legality(lineup, roster, context)
+    except Exception as exc:
+        return {
+            "final_output": {
+                "frontline": [],
+                "reserve": [],
+                "synergy_explanation": "",
+                "error": f"Recommendation failed legality validation: {exc}",
+            }
+        }
+
+    return formatted
+
+
+def _lineup_payloads(final_output: dict) -> list[dict]:
+    """Return every lineup-shaped payload from a supported final envelope."""
+    if "recommendations" in final_output:
+        return final_output["recommendations"]
+    if "alternatives" in final_output:
+        return final_output["alternatives"]
+    return [final_output]

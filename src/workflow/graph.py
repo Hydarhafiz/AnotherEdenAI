@@ -18,7 +18,7 @@ from langgraph.graph import END, START, StateGraph
 
 from .nodes.analyze import analyze_node
 from .nodes.cypher import generate_cypher_node
-from .nodes.format import format_node
+from .nodes.format import format_and_validate_node
 from .nodes.plan import plan_node
 from .superboss import retrieve_superboss_context_node
 from .nodes.validate import validate_node
@@ -85,7 +85,10 @@ def build_graph(driver=None):
 
     builder.add_node("validate", _validate)
     builder.add_node("analyze", analyze_node)
-    builder.add_node("format", format_node)
+    async def _format(s):
+        return await format_and_validate_node(s, driver)
+
+    builder.add_node("format", _format)
 
     # --- Add edges ---
     builder.add_edge(START, "plan")
