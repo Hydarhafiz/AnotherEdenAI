@@ -523,6 +523,38 @@ def _feature_d_payload():
     }
 
 
+def _feature_d_roster_names(payload):
+    return [
+        slot["name"]
+        for recommendation in payload["recommendations"]
+        for slot in recommendation["frontline"] + recommendation["reserve"]
+    ]
+
+
+def _feature_d_skill_map(payload):
+    return {
+        slot["name"]: set(slot.get("recommended_skills", []))
+        for recommendation in payload["recommendations"]
+        for slot in recommendation["frontline"] + recommendation["reserve"]
+    }
+
+
+def _boss_context_payload():
+    return json.dumps({
+        "boss": {
+            "name": "Flame Eater",
+            "source_url": "https://example.test/flame-eater",
+            "weak": ["Fire", "Slash"],
+            "resist": ["Water"],
+            "null": ["Thunder"],
+            "absorb": ["Earth"],
+            "characteristics": "Weak superboss fixture for recommendation tests.",
+            "mechanic_tags": ["weakness", "sustain"],
+            "mechanics_text": "Punishes unsupported elements and rewards fire slash pressure.",
+        }
+    })
+
+
 class TestFeatureDRecommendationSet:
     """Feature D: format_node validates the top-3 lineup recommendation contract."""
 
@@ -591,6 +623,86 @@ class TestFeatureDRecommendationSet:
         result = format_node(self._state(payload))
 
         assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"
+
+
+class TestBossAffinityFidelityGate:
+    """Feature C: final output boss affinities must remain equal to graph facts."""
+
+    @staticmethod
+    def _context(payload):
+        return LegalityContext(
+            known_characters=set(_feature_d_roster_names(payload)),
+            known_sidekicks={"Tetra", "Korobo"},
+            character_skills=_feature_d_skill_map(payload),
+        )
+
+    @staticmethod
+    def _state(payload):
+        return {
+            "analysis_result": json.dumps(payload),
+            "boss_context": _boss_context_payload(),
+            "roster": _feature_d_roster_names(payload),
+            "owned_sidekicks": ["Tetra", "Korobo"],
+            "db_results": [{"ok": True}],
+            "retry_count": 0,
+            "alternatives": "",
+            "validation_errors": [],
+        }
+
+    @pytest.mark.asyncio
+    async def test_matching_affinity_passes_case_and_order_insensitive(self):
+        payload = _feature_d_payload()
+        payload["boss_affinity"] = {
+            "weak": ["slash", "FIRE"],
+            "resist": ["water"],
+            "null": ["THUNDER"],
+            "absorb": ["earth"],
+        }
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(payload),
+        ):
+            result = await format_and_validate_node(self._state(payload), driver)
+
+        assert result["final_output"].get("error") is None
+
+    @pytest.mark.asyncio
+    async def test_mismatched_affinity_is_blocked_before_rendering(self):
+        payload = _feature_d_payload()
+        payload["boss_affinity"]["weak"] = ["Water"]
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(payload),
+        ):
+            result = await format_and_validate_node(self._state(payload), driver)
+
+        final = result["final_output"]
+        assert final["frontline"] == []
+        assert final["reserve"] == []
+        assert "boss affinity facts do not match graph facts" in final["error"]
+        assert "recommendation_set.weak" in final["error"]
+
+    @pytest.mark.asyncio
+    async def test_empty_affinity_output_is_blocked_when_graph_has_facts(self):
+        payload = _feature_d_payload()
+        payload["boss_affinity"] = {}
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(payload),
+        ):
+            result = await format_and_validate_node(self._state(payload), driver)
+
+        assert "boss affinity facts do not match graph facts" in result["final_output"]["error"]
+        assert "recommendation_set.weak" in result["final_output"]["error"]
 
 
 class TestProductionLegalityGate:

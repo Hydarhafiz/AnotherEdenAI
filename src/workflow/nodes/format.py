@@ -287,6 +287,7 @@ async def format_and_validate_node(state: WorkflowState, driver) -> dict:
         return formatted
 
     try:
+        _validate_boss_affinity_fidelity(final_output, state.get("boss_context", ""))
         roster = RosterInput(
             owned_characters=state.get("roster", []),
             stellar_awakened=state.get("stellar_awakened", {}),
@@ -302,7 +303,7 @@ async def format_and_validate_node(state: WorkflowState, driver) -> dict:
                 "frontline": [],
                 "reserve": [],
                 "synergy_explanation": "",
-                "error": f"Recommendation failed legality validation: {exc}",
+                "error": f"Recommendation failed final validation: {exc}",
             }
         }
 
@@ -316,3 +317,55 @@ def _lineup_payloads(final_output: dict) -> list[dict]:
     if "alternatives" in final_output:
         return final_output["alternatives"]
     return [final_output]
+
+
+def _validate_boss_affinity_fidelity(final_output: dict, boss_context: str) -> None:
+    """Reject output affinities that differ from graph-backed boss facts."""
+    if not boss_context:
+        return
+    try:
+        context = json.loads(boss_context)
+    except (TypeError, json.JSONDecodeError):
+        return
+
+    graph_boss = context.get("boss") if isinstance(context, dict) else None
+    if not isinstance(graph_boss, dict):
+        return
+
+    output_affinities = _output_boss_affinities(final_output)
+    if not output_affinities:
+        raise ValueError("boss affinity output is missing despite graph-backed boss facts")
+
+    mismatches = []
+    for output_label, affinity in output_affinities:
+        for field in ("weak", "resist", "null", "absorb"):
+            expected = _normalized_affinity_values(graph_boss.get(field, []))
+            actual = _normalized_affinity_values(affinity.get(field, []))
+            if actual != expected:
+                mismatches.append(
+                    f"{output_label}.{field} expected {sorted(expected)} but received {sorted(actual)}"
+                )
+    if mismatches:
+        raise ValueError("boss affinity facts do not match graph facts: " + "; ".join(mismatches))
+
+
+def _output_boss_affinities(final_output: dict) -> list[tuple[str, dict]]:
+    """Return canonical affinity objects for a supported output envelope."""
+    if "recommendations" in final_output:
+        value = final_output.get("boss_affinity")
+        return [("recommendation_set", value)] if isinstance(value, dict) else []
+    if "alternatives" in final_output:
+        return [
+            (f"alternative_{index}", affinity)
+            for index, alternative in enumerate(final_output.get("alternatives", []), start=1)
+            if isinstance((affinity := alternative.get("boss_affinity")), dict)
+        ]
+    value = final_output.get("boss_affinity")
+    return [("team", value)] if isinstance(value, dict) else []
+
+
+def _normalized_affinity_values(values) -> set[str]:
+    """Compare affinity lists case-insensitively and independent of order."""
+    if not isinstance(values, list):
+        return set()
+    return {str(value).strip().lower() for value in values if str(value).strip()}
