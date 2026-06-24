@@ -1,6 +1,8 @@
-# AnotherEdenAI Milestone 4
+# AnotherEdenAI Milestone 4 Closeout
 
 ## Executive Summary
+
+Status: Completed for Features A-E on 2026-06-24. Feature F is deferred to Milestone 5.
 
 Milestone 4 builds the first source-grounded AI lineup recommendation navigator for curated Another Eden superbosses. The milestone focuses on legal, roster-constrained, boss-aware team formation using the RAG-ready graph foundation from Milestone 3 plus a new manually curated battle-mechanics corpus stored in Neo4j.
 
@@ -275,42 +277,24 @@ Acceptance criteria:
 - Failed legality/factuality checks render a clear graceful error instead of a misleading recommendation.
 - Existing web route and streaming tests are updated for the new output shape.
 
-### Feature F: Evaluation Gates And Golden Weak-Boss Set
 
-Status: Planned
+### Deferred To Milestone 5: Evaluation Gates And Golden Weak-Boss Set
 
-Goal: Verify the navigator with deterministic gates first, then judge recommendation quality only after impossible outputs are blocked.
+Feature F is no longer part of the Milestone 4 release closeout. It becomes the first Milestone 5 feature because the recommendation contract, legality gate, boss-affinity fidelity gate, source-grounded top-three output, and compact/expandable UI are now in place.
 
-Technical requirements:
+Milestone 5 should preserve the original Feature F intent:
 
-- Use a golden evaluation set of 5 curated weak superbosses from the Milestone 3 data foundation.
-- Design eval metadata so future tiers can add `weak`, `intermediate`, and `strong` boss groups, but defer non-weak tiers.
-- Prioritize deterministic legality and factuality tests:
-  - exactly 6 heroes
-  - 4 frontline and 2 reserve
-  - main/sub sidekick legality
-  - only owned characters in actual lineups
-  - no duplicate heroes
-  - recommended skills exist
-  - SA-gated skills are legal or clearly labeled as upgrade assumptions
-  - boss facts match graph facts
-  - cited mechanics references exist
-  - no numeric win-probability claims
-- Add recommendation quality judge tests only after legality/factuality gates pass.
-- Quality judging should evaluate:
-  - burst lineup behaves like burst
-  - sustain lineup includes sustain/mitigation
-  - hybrid lineup is meaningfully balanced
-  - tradeoffs are useful
-  - risks and assumptions are honest
-  - recommendation is helpful as navigation
+- Use a golden evaluation set of 5 curated weak superbosses.
+- Run deterministic legality and factuality gates before any subjective quality judge.
+- Separate hard failures from subjective recommendation-quality feedback.
+- Keep intermediate and strong boss tiers deferred but easy to add.
+- Add reusable evaluation guidance if repeated commands, report interpretation, or cleanup steps become operationally important.
 
-Acceptance criteria:
+Additional Milestone 5 seed improvements requested during Milestone 4 closeout:
 
-- The system passes deterministic legality and factuality tests for the 5 weak-boss eval set.
-- Quality judge tests run only after core gates pass.
-- Eval reports separate hard failures from subjective quality feedback.
-- Intermediate and strong boss eval tiers are explicitly deferred but easy to add later.
+- Clean up sidekick/character graph overlap by removing sidekick-name records from `Character` nodes when a `Character.name` matches a `Sidekick.name`.
+- Decide the recommendation inventory policy for weapon, armor, and Grasta suggestions: weapon/armor may be recommended as per-lineup assumptions with at most one use per character per lineup, while Grasta can be reused many times; determine whether player ownership should be required or whether late-game-access assumptions remain acceptable.
+- Evaluate authentication for user data persistence and rate limiting for live deployments so public demo traffic cannot spam workflow calls or create runaway API bills.
 
 ## Planned Guide Updates
 
@@ -319,17 +303,18 @@ Acceptance criteria:
 
 ## Current Completion Status
 
-- Milestone 4 planning: in progress
-- Feature A: planned
-- Feature B: planned
-- Feature C: planned
-- Feature D: planned
+- Milestone 4: completed for Features A-E
+- Feature A: completed
+- Feature B: completed
+- Feature C: completed
+- Feature D: completed
 - Feature E: completed
-- Feature F: planned
+- Feature F: deferred to Milestone 5
 
-## Open Questions
+## Open Questions Moved To Milestone 5
 
 - Which exact 5 weak superbosses should be selected for the golden evaluation set?
-- Should `MechanicReference` retrieval start with keyword/topic-tag matching only, or include vector search in the first implementation?
-- How should optional Stellar Awakening state be represented in the web form and API payload?
-- Which model/provider should be used for final recommendation ranking during local development and portfolio demos?
+- Which model/provider should be used for final recommendation ranking, quality judging, and portfolio demos?
+- How should authentication, user data persistence, and rate limiting be scoped for a live website without creating avoidable API-billing risk?
+- Should weapon, armor, and Grasta recommendations remain assumption-based build notes, or become inventory-aware constraints in the lineup contract?
+- What cleanup workflow should remove sidekick records that were incorrectly ingested as `Character` nodes without damaging legitimate character data?

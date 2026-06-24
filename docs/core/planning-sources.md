@@ -146,6 +146,14 @@ This file stores source references used during planning discussions. It separate
 
 ## Planning Decisions And Research Gaps
 
+
+### Milestone 5 Transition Notes
+
+- Planning decision on 2026-06-24: Milestone 4 is closed for Features A-E. The original Feature F evaluation-gates work moves into Milestone 5 because the recommendation contract, final legality gate, boss-affinity fidelity gate, and compact/expandable UI are now verified.
+- Planning decision on 2026-06-24: Milestone 5 should include a data-hygiene task to remove sidekick-name records that also appear as `Character` nodes, using exact name overlap between `Character` and `Sidekick` nodes as the first detection rule before any destructive graph cleanup is implemented.
+- Planning decision on 2026-06-24: Milestone 5 should decide whether weapon, armor, and Grasta recommendations remain late-game-access assumptions or become inventory-aware constraints. The seed policy to evaluate is one weapon and one armor use per character per lineup, while Grasta recommendations may be reused many times.
+- Planning decision on 2026-06-24: Milestone 5 should evaluate authentication, user data persistence, and rate limiting before live deployment so public traffic cannot create uncontrolled LLM/API spend.
+
 - Planning decision on 2026-06-09: Milestone 4 should treat the provided battle-mechanics references as primary RAG sources that the LLM retrieves before making lineup recommendations. Exact deterministic battle simulation remains out of scope unless a later planning decision adds the required data and tests.
 - Planning decision on 2026-06-09: Milestone 4 should scrape/cache the full referenced mechanics pages into project artifacts, then curate section-by-section mechanics chunks for cleaner LLM retrieval. Neo4j or retrieval ingestion should replay from curated local artifacts so mistakes can be corrected without repeated live scraping.
 - Planning decision on 2026-06-09: Curated mechanics corpus entries should be stored in Neo4j as `MechanicReference` nodes to improve GraphRAG retrieval, source attribution, scalability, and hallucination resistance.

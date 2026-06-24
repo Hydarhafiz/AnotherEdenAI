@@ -1,8 +1,8 @@
 # Another Eden AI — GraphRAG Team Builder
 
-A production-grade AI system that answers natural-language team-building questions for the JRPG *Another Eden*, constrained to the player's actual roster with zero hallucinated mechanics.
+A production-grade AI system that recommends source-grounded, boss-aware lineup plans for the JRPG *Another Eden*, constrained to the player's actual roster with legality and factuality gates before rendering.
 
-> **Portfolio note:** This project demonstrates a full MLOps pipeline — from graph ETL through multi-agent LLM orchestration to a streaming web UI — built end-to-end using Claude Sonnet 4.6, LangGraph, and Neo4j.
+> **Portfolio note:** This project demonstrates a full AI engineering pipeline -- from graph ETL through LangGraph orchestration, deterministic validation, source-grounded recommendation contracts, and a streaming web UI -- built with configurable LLM providers and Neo4j.
 
 ---
 
@@ -11,11 +11,12 @@ A production-grade AI system that answers natural-language team-building questio
 You type: *"What's the highest-damage blunt-zone synergy I can build from my roster?"*
 
 The system:
-1. Scrapes live character, sidekick, curated superboss, Grasta, Ore, weapon, and armor data from the community wiki into a Neo4j graph
-2. Normalises your roster input to canonical graph names and augments it with free-to-play units
-3. Routes your question through a 5-node LangGraph agent pipeline (PLAN → GENERATE_CYPHER → VALIDATE → ANALYZE → FORMAT)
-4. Streams pipeline progress to your browser via SSE — "Validating... attempt 2/3" — so you know it's working
-5. Returns a 4-frontline / 2-reserve team with per-character role annotations, Grasta+trait source attribution, and — when no perfect match exists — the top 3 closest alternatives with tradeoff explanations
+1. Scrapes live character, sidekick, curated superboss, Grasta, Ore, weapon, armor, and curated battle-mechanics data from the community wiki into a Neo4j graph
+2. Normalises your roster input to canonical graph names, augments it with free-to-play units, and accepts optional owned sidekicks
+3. Routes your question through a LangGraph pipeline (PLAN -> SUPERBOSS_CONTEXT -> GENERATE_CYPHER -> VALIDATE -> ANALYZE -> FORMAT)
+4. Streams pipeline progress to your browser via SSE -- "Validating... attempt 2/3" -- so you know it's working
+5. Returns three legal 4-frontline / 2-reserve lineup plans, usually burst, sustain, and hybrid, with sidekick slots, recommended skills, build assumptions, boss counterplay, risks, confidence labels, and citations
+6. Blocks malformed, illegal, or boss-fact-mismatched recommendations before the web layer renders them
 
 ---
 
@@ -23,25 +24,25 @@ The system:
 
 ```
 Browser (HTMX + SSE)
-        │
-        ▼
-FastAPI Web Layer  ──── POST /api/query ──────┐
-        │                                      │
-        │            LangGraph Pipeline        │
-        │  ┌────────────────────────────────┐  │
-        │  │  PLAN  →  GENERATE_CYPHER  →  │  │
-        └─►│  VALIDATE (max 3 retries)  →  │──┘
-           │  ANALYZE  →  FORMAT           │
-           └──────────┬─────────────────────┘
-                      │
-                      ▼
+        |
+        v
+FastAPI Web Layer  ---- POST /api/query ------+
+        |                                      |
+        |            LangGraph Pipeline        |
+        |  +--------------------------------+  |
+        |  | PLAN -> SUPERBOSS_CONTEXT ->   |  |
+        +->| GENERATE_CYPHER -> VALIDATE -> |--+
+           | ANALYZE -> FORMAT              |
+           +-------------+------------------+
+                         |
+                         v
               Neo4j Graph Database
    (Characters, Traits, Skills, Sidekicks,
-    Superbosses, Grastas, Ores, Equipment)
-                      ▲
-                      │
+    Superbosses, MechanicReferences, Grastas, Ores, Equipment)
+                         ^
+                         |
                ETL Pipeline
-        (nodriver scraper → Pydantic models → MERGE loader)
+        (nodriver scraper -> Pydantic models -> MERGE loader)
 ```
 
 ### Stack
@@ -52,8 +53,8 @@ FastAPI Web Layer  ──── POST /api/query ──────┐
 | Web framework | FastAPI + Jinja2 + HTMX |
 | Streaming | Server-Sent Events (SSE) |
 | Agent orchestration | LangGraph 1.0 StateGraph |
-| Reasoning LLM | Claude Sonnet 4.6 (PLAN, CYPHER, ANALYZE nodes) |
-| Validation LLM | Claude Haiku 4.5 (VALIDATE node — fast and cheap) |
+| Reasoning LLM | Configurable via `LLM_PROVIDER` (`openrouter`, `anthropic`, `bedrock`, or `ollama`) |
+| Validation LLM | Configurable validator model, optimized for cheap syntax/result gating |
 | Graph database | Neo4j 5 (AuraDB Free or local Docker) |
 | Graph client | langchain-neo4j `Neo4jGraph` + async driver |
 | ETL scraping | nodriver (async headless Chrome, Cloudflare bypass) |
@@ -139,7 +140,7 @@ uv run python assert_schema.py   # must exit 0
 
 > **Note:** The scraper uses a nodriver headless browser to bypass Cloudflare. It requires a display (DISPLAY=:0 on WSL2/Linux, or runs natively on macOS/Windows Chrome).
 >
-> For crawl scopes, parsed-only reruns, manifest inspection, cache layout, and troubleshooting, use [ETL_GUIDE.md](guides/ETL_GUIDE.md).
+> For crawl scopes, parsed-only reruns, manifest inspection, cache layout, and troubleshooting, use [ETL_GUIDE.md](docs/guides/ETL_GUIDE.md).
 
 ### 6. Run the tests
 
@@ -236,12 +237,13 @@ The Neo4j graph models roster heroes, combat facts, build context, and RAG retri
 (:Sidekick)-[:HAS_AUTO_SKILL|HAS_CHARGE_SKILL]->(:SidekickSkill)
 (:Sidekick)-[:HAS_AURA]->(:SidekickAura)
 (:Superboss)
+(:MechanicReference)
 
 (:Ore)
 (:Equipment)
 ```
 
-Full contract: [SCHEMA.md](SCHEMA.md) - versioned at SCHEMA_VERSION: 1.0.0.
+Full contract: [SCHEMA.md](docs/core/SCHEMA.md) - versioned at SCHEMA_VERSION: 1.0.0.
 
 ### Verified ETL Snapshot
 
@@ -254,20 +256,21 @@ The original Grasta synergy path remains available: a character-compatible share
 ## LangGraph Pipeline
 
 ```
-START → PLAN → GENERATE_CYPHER → VALIDATE ─► ANALYZE → FORMAT → END
-                      ▲               │
-                      └── retry ──────┘ (max 3x, then graceful error)
+START -> PLAN -> SUPERBOSS_CONTEXT -> GENERATE_CYPHER -> VALIDATE -> ANALYZE -> FORMAT -> END
+                                      ^               |
+                                      +---- retry ----+ (max 3x, then graceful error)
 ```
 
 | Node | Model | Responsibility |
 |------|-------|---------------|
-| PLAN | Sonnet 4.6 | Decompose query into graph traversal sub-goals |
-| GENERATE_CYPHER | Sonnet 4.6 | Produce Cypher with injected schema + few-shot examples |
-| VALIDATE | Haiku 4.5 | Syntax check + non-empty result gate; retry on failure |
-| ANALYZE | Sonnet 4.6 | Synthesise results into team recommendation with attribution |
-| FORMAT | — | Structure into `TeamOutput` or `AlternativesOutput` Pydantic model |
+| PLAN | configurable | Decompose query into graph traversal sub-goals and normalize roster/sidekick input |
+| SUPERBOSS_CONTEXT | -- | Retrieve selected boss facts and mechanics context for recommendation grounding |
+| GENERATE_CYPHER | configurable | Produce Cypher with injected schema + few-shot examples |
+| VALIDATE | configurable | Syntax check + non-empty result gate; retry on failure |
+| ANALYZE | configurable | Synthesize graph and boss context into top-three recommendation data |
+| FORMAT | -- | Structure output, then enforce boss-affinity fidelity and lineup legality before rendering |
 
-When `VALIDATE` fails three times the graph routes to graceful error formatting — the retry cap is a hard budget guard against runaway API costs.
+When `VALIDATE` fails three times the graph routes to graceful error formatting -- the retry cap is a hard budget guard against runaway API costs.
 
 ---
 
@@ -297,19 +300,17 @@ When `VALIDATE` fails three times the graph routes to graceful error formatting 
 
 ## Root Project Docs
 
-The project uses five root-level planning and release documents:
+The project uses `docs/core/` planning and release documents:
 
-- `milestone.md` for active epic scope and feature sequencing
+- `docs/core/milestone.md` for active epic scope and feature sequencing
 - `CHANGELOG.md` for release history
-- `architecture.md` for current system design and boundaries
-- `SCHEMA.md` for graph contract changes
+- `docs/core/architecture.md` for current system design and boundaries
+- `docs/core/SCHEMA.md` for graph contract changes
 - `README.md` for setup and operator workflow
 
-Operator-facing ETL and scraping runbooks live in `ETL_GUIDE.md`.
+Operator-facing ETL and scraping runbooks live in `docs/guides/ETL_GUIDE.md`.
 
-These are intended to stay in the repository root so planning, build, test, and release workflows can use the same source of truth across future milestones.
-
-Supplementary planning notes live in `future-ideas.md`. That file is the parking lot for promising ideas intentionally deferred from the active milestone so brainstorming can stay focused without losing good follow-up directions.
+Supplementary planning notes live in `docs/core/future-ideas.md`. That file is the parking lot for promising ideas intentionally deferred from the active milestone so brainstorming can stay focused without losing good follow-up directions.
 
 ---
 
@@ -317,8 +318,8 @@ Supplementary planning notes live in `future-ideas.md`. That file is the parking
 
 | Version | Focus |
 |---------|-------|
-| Milestone 4 (active) | Legal 6-hero plus 2-sidekick lineup recommendation intelligence |
-| Milestone 5 | AI agent optimization, evaluation, and cost control |
+| Milestone 4 (completed) | Legal 6-hero plus 2-sidekick lineup recommendation intelligence |
+| Milestone 5 (active) | Evaluation gates, recommendation optimization, graph cleanup, and cost control |
 | Milestone 6 | Portfolio frontend experience |
 | Milestone 7 | Cost-controlled demo deployment |
 

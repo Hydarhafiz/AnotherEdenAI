@@ -13,7 +13,29 @@ All notable changes to this project are documented here, grouped by development 
 
 ### Changed
 - `README.md` now documents the five root project pillars used for planning and release synchronization
-- Roadmap now marks Milestone 3 completed and Milestone 4 active
+- Roadmap now records completed Milestone 3 and Milestone 4, with Milestone 5 active
+
+
+## [Milestone 4] AI Lineup Recommendation Intelligence - 2026-06-24
+
+**Goal:** Ship the first source-grounded, roster-constrained superboss lineup navigator while deferring repeatable evaluation automation to Milestone 5.
+
+### Added
+- Curated `MechanicReference` corpus and retrieval path for battle-mechanics grounding.
+- Structured roster and lineup legality contracts covering owned/F2P characters, main/sub sidekicks, recommended skills, and Stellar Awakening-gated choices.
+- Boss matchup retrieval and transparent fit rubric using graph-backed boss facts and mechanics references without numeric win-probability claims.
+- Top-three burst, sustain, and hybrid recommendation contract with citations, build notes, boss counterplay, sustain/MP notes, risks, fit labels, and confidence labels.
+- Compact and expandable web rendering for the top-three recommendation output.
+
+### Changed
+- FORMAT now performs final validation before rendering, including boss-affinity fidelity against graph facts and graph-backed lineup legality for every single-team, top-three, or alternatives payload.
+- Roadmap now marks Milestone 4 Features A-E completed and promotes Feature F evaluation gates into Milestone 5.
+- Milestone 5 now also tracks sidekick/character graph cleanup, weapon/armor/Grasta recommendation policy, authentication, persistence, and rate-limit planning.
+
+### Tests
+- Verified workflow, web, and unit regression coverage for mechanics retrieval, legality gates, boss matchup/rubric shape, top-three output validation, compact UI rendering, and final FORMAT factuality/legality checks.
+
+---
 
 ## [Milestone 3] RAG-Ready ETL Data Coverage - 2026-06-09
 

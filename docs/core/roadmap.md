@@ -17,15 +17,16 @@ The portfolio target audience is recruiters, senior managers, and potential free
 
 ## Current Active Milestone
 
-Milestone 3 is completed. The active milestone is now Milestone 4, which begins the AI lineup recommendation intelligence work unlocked by the RAG-ready ETL data foundation.
+Milestone 4 is completed for Features A-E. The active milestone is now Milestone 5, which builds on the stable recommendation contract with evaluation gates, quality/cost optimization, graph cleanup, and live-site cost controls.
 
-Milestone 4 focuses on:
+Milestone 5 focuses on:
 
-- Structured roster ownership, Stellar Awakening, and Light/Shadow rules.
-- Legal 6-hero plus main/sub sidekick lineup generation.
-- Skill-slot legality and boss-aware recommendation contracts.
-- Grasta/Ore and equipment coverage review before recommendation logic depends on them.
-- Initial evaluation gates for legality, factuality, and boss-counterplay relevance.
+- Golden weak-boss evaluation gates for legality, factuality, and recommendation quality.
+- Configurable generation and judge providers, with cheap deterministic gates before paid judge usage.
+- Context selection, prompt compression, latency, and token/cost reporting.
+- Cleanup of sidekick records that also appear as `Character` nodes.
+- A clear weapon/armor/Grasta recommendation policy, including per-lineup weapon/armor uniqueness and reusable Grasta assumptions.
+- Authentication, user data persistence, and rate limiting decisions for a public demo or live website.
 
 ## Ordered Major Milestones
 
@@ -100,7 +101,7 @@ Exit criteria:
 
 ### Milestone 4: AI Lineup Recommendation Intelligence
 
-Status: Active
+Status: Completed
 
 Purpose:
 
@@ -113,7 +114,7 @@ Expected artifacts:
 - Skill-slot legality.
 - Boss-aware recommendation contract.
 - Grasta/Ore and equipment coverage review before implementation.
-- Initial evaluation suite for legality, factuality, and boss-counterplay relevance.
+- Compact and expandable recommendation UI for top-three lineup results.
 
 Dependencies:
 
@@ -121,25 +122,29 @@ Dependencies:
 
 Exit criteria:
 
-- The system can recommend legal teams for curated bosses using owned roster constraints.
-- Recommendations cite graph facts and clearly separate legal lineup, upgrade suggestions, and uncertainty.
-- CI catches hallucinated characters, illegal sidekick usage, and skill-slot violations.
+- The system can recommend legal top-three lineup plans for curated bosses using owned roster constraints.
+- Recommendations cite graph facts and clearly separate legal lineup, build assumptions, risks, and uncertainty.
+- CI catches hallucinated characters, illegal sidekick usage, illegal skill slots, numeric win-probability claims, and boss-affinity drift from graph facts.
 
-### Milestone 5: AI Agent Optimization And Cost Control
+### Milestone 5: Evaluation, Optimization, And Cost Control
 
-Status: Planned
+Status: Active
 
 Purpose:
 
-- Improve recommendation quality, latency, and cost efficiency for portfolio demos.
+- Improve recommendation quality, latency, data hygiene, and cost safety after the Milestone 4 recommendation contract is stable.
 
 Expected artifacts:
 
+- Golden weak-boss evaluation gates promoted from Milestone 4 Feature F.
 - Configurable generation and judge providers.
 - Context selection and prompt compression strategy.
 - Two-tier evaluation: cheap local/free gates first, paid judge only after basic gates pass.
 - Latency and token/cost reporting.
 - Model/provider comparison reports.
+- Sidekick/Character overlap cleanup for Neo4j data hygiene.
+- Weapon, armor, and Grasta recommendation policy for assumption-based or inventory-aware builds.
+- Authentication, user data persistence, and rate limiting plan for live-site cost protection.
 
 Dependencies:
 
@@ -147,9 +152,10 @@ Dependencies:
 
 Exit criteria:
 
-- The system has measurable accuracy and latency baselines.
+- The system has measurable legality, factuality, recommendation-quality, latency, and cost baselines.
 - Paid model usage is bounded and explainable.
 - Evaluation reports show which provider generated and judged each run.
+- Live-site persistence and rate-limit decisions are documented before deployment work begins.
 
 ### Milestone 6: Frontend Portfolio Experience
 
