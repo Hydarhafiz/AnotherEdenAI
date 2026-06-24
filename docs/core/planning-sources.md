@@ -147,6 +147,69 @@ This file stores source references used during planning discussions. It separate
 ## Planning Decisions And Research Gaps
 
 
+### Milestone 5: Evaluation, Optimization, And Cost Control
+
+#### Repository Grounding
+
+- Title: Milestone 4 closeout and Milestone 5 seed scope
+  URL: local `docs/core/milestone.md`
+  Source type: repository planning document
+  Date added: 2026-06-25
+  Related area: Milestone 5 evaluation gates, sidekick cleanup, equipment policy, authentication, persistence, and rate limiting
+  Relevance: Captures the transition from completed Milestone 4 Features A-E into Milestone 5, including deferred golden weak-boss evals and user-requested improvements.
+  Caveats/open questions: Rewritten on 2026-06-25 as the active Milestone 5 plan.
+
+- Title: LLM provider factory
+  URL: local `src/workflow/llm.py`
+  Source type: repository source file
+  Date added: 2026-06-25
+  Related area: provider/model selection
+  Relevance: Shows OpenRouter is already the default provider path and that provider/model selection is centralized through environment-driven settings.
+  Caveats/open questions: Milestone 5 needs clearer role-specific model configuration and provider/model metadata in eval reports.
+
+- Title: Recommendation legality and final validation code
+  URL: local `src/workflow/legality.py`, local `src/workflow/nodes/format.py`
+  Source type: repository source files
+  Date added: 2026-06-25
+  Related area: backend guardrails
+  Relevance: Existing code already validates roster ownership, sidekick slots, skill/passive existence, Stellar Awakening gates, boss-affinity fidelity, recommendation shape, and no win-probability claims.
+  Caveats/open questions: Milestone 5 should audit which prompt guardrails can be reduced once backend tests fully cover fixed constraints.
+
+- Title: Curated weak superboss scope
+  URL: local `src/etl/scraper.py`
+  Source type: repository source file
+  Date added: 2026-06-25
+  Related area: golden weak-boss eval set
+  Relevance: Defines the current curated weak superboss candidates: Zennon Ogre's Shadow, Flame Eater, Flame Eater female variant, Nameless Girl, Mimi, Cradle System, and Insula Ventorum.
+  Caveats/open questions: Milestone 5 still needs to choose the exact five golden eval bosses.
+
+#### External Model And Cost References
+
+- Title: OpenRouter public model metadata API
+  URL: https://openrouter.ai/api/v1/models
+  Source type: provider API metadata
+  Date added: 2026-06-25
+  Related area: OpenRouter model selection and cost planning
+  Relevance: Public metadata inspected on 2026-06-25 showed `moonshotai/kimi-k2.6` available with structured outputs and tool support, 262144-token context, input pricing around USD 0.66 per 1M tokens, output pricing around USD 3.41 per 1M tokens, and cached-input pricing around USD 0.144 per 1M tokens.
+  Caveats/open questions: Pricing, availability, context windows, provider routing, and supported parameters can change. Recheck immediately before release testing or public beta.
+
+#### Planning Decisions
+
+- Planning decision on 2026-06-25: Use free/local models for fast development, including the current `nvidia/nemotron-3-super-120b-a12b:free` OpenRouter path when useful.
+- Planning decision on 2026-06-25: Use `moonshotai/kimi-k2.6` as the intended paid OpenRouter model for staging, evaluation, release testing, and controlled beta/demo traffic unless Milestone 5 eval evidence selects a better paid default.
+- Planning decision on 2026-06-25: Paid AI judge calls should run for offline evaluation/report generation, not for every live user recommendation.
+- Planning decision on 2026-06-25: Start public demo or controlled Discord beta planning with an RM50/month OpenRouter ceiling. If usage hits the ceiling, pause or disable paid calls first, then decide whether increasing the ceiling is worth the portfolio value.
+- Planning decision on 2026-06-25: Backend deterministic validation should own fixed guardrails such as 4-frontline/2-reserve shape, no duplicate heroes, sidekick slot legality, owned roster enforcement, skill/passive existence, Stellar Awakening gates, skill-count limits, boss-affinity fidelity, equipment uniqueness when named, and no win-probability claims.
+- Planning decision on 2026-06-25: AI should focus on dynamic judgment such as hero selection, archetype viability, synergy, skill priority, build usefulness, risk explanation, and subjective quality review.
+- Planning decision on 2026-06-25: Milestone 5 implementation order should start with sidekick/character cleanup, weapon/armor/Grasta policy, and backend guardrail audit before golden evals and paid OpenRouter/Kimi setup, because deterministic correctness makes paid staging tests cheaper and more meaningful.
+
+#### Research Gaps
+
+- Determine actual token usage and RM cost per recommendation run after context compression.
+- Determine whether `moonshotai/kimi-k2.6` remains the best paid model after comparing staging eval outputs against at least one cheaper or stronger OpenRouter alternative.
+- Determine per-user and global request limits that keep a 20-30 player Discord beta inside the RM50/month budget.
+- Determine the minimum authentication and persistence approach for controlled beta feedback collection.
+
 ### Milestone 5 Transition Notes
 
 - Planning decision on 2026-06-24: Milestone 4 is closed for Features A-E. The original Feature F evaluation-gates work moves into Milestone 5 because the recommendation contract, final legality gate, boss-affinity fidelity gate, and compact/expandable UI are now verified.

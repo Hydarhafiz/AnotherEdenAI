@@ -21,12 +21,15 @@ Milestone 4 is completed for Features A-E. The active milestone is now Milestone
 
 Milestone 5 focuses on:
 
-- Golden weak-boss evaluation gates for legality, factuality, and recommendation quality.
-- Configurable generation and judge providers, with cheap deterministic gates before paid judge usage.
-- Context selection, prompt compression, latency, and token/cost reporting.
 - Cleanup of sidekick records that also appear as `Character` nodes.
 - A clear weapon/armor/Grasta recommendation policy, including per-lineup weapon/armor uniqueness and reusable Grasta assumptions.
-- Authentication, user data persistence, and rate limiting decisions for a public demo or live website.
+- Backend guardrail audit that moves fixed constraints out of AI prompts where possible.
+- Golden weak-boss evaluation gates for legality, factuality, and recommendation quality, runnable first with free/local models.
+- Configurable generation and judge providers, with free/local models for development and `moonshotai/kimi-k2.6` as the intended paid OpenRouter staging/evaluation/release model unless eval evidence changes the default.
+- Cheap deterministic gates before any paid judge usage.
+- Authentication, user data persistence, and rate limiting decisions for a controlled Discord beta, public demo, or live website.
+- RM50/month as the starter OpenRouter ceiling for public beta/demo periods, with warning thresholds and a hard stop before runaway spend.
+- Context selection, prompt compression, latency, and token/cost reporting.
 
 ## Ordered Major Milestones
 
@@ -156,6 +159,7 @@ Exit criteria:
 - Paid model usage is bounded and explainable.
 - Evaluation reports show which provider generated and judged each run.
 - Live-site persistence and rate-limit decisions are documented before deployment work begins.
+- Controlled beta planning can support roughly 20-30 testers without exposing an unlimited paid endpoint.
 
 ### Milestone 6: Frontend Portfolio Experience
 
