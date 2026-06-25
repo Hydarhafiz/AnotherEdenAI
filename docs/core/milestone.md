@@ -127,14 +127,19 @@ Acceptance criteria:
 
 Status: Planned.
 
-Goal: Decide and enforce how build recommendations should mention equipment and Grasta without pretending to know full player inventory.
+Goal: Decide and enforce how build recommendations should mention per-character weapon, armor, and Grasta setup without pretending to know full player inventory.
 
 Technical requirements:
 
 - Keep Milestone 5 as assumption-based build advice, not full inventory optimization.
-- Treat specific weapon and armor recommendations as per-lineup assumptions.
+- Extend the recommendation output contract so each recommended character can carry exactly one weapon assumption, exactly one armor assumption, and exactly three Grasta assumptions.
+- Treat weapon, armor, and Grasta suggestions as recommended build assumptions even when the player has not entered ownership for those items.
+- Treat specific weapon and armor recommendations as per-lineup assumptions, not account-wide ownership facts.
 - Enforce or test that one named weapon and one named armor are not assigned to multiple characters in the same lineup when the model names specific items.
-- Allow Grasta recommendations to be reused many times under late-game-access assumptions.
+- Permit the same named weapon or armor to appear in separate top-three recommendation lineups, because each lineup is an alternative plan.
+- Allow Grasta recommendations to be reused many times under late-game-access assumptions, including repeated copies on the same character when the recommendation explicitly calls for them.
+- Validate Grasta compatibility against the character weapon type or personality requirement where graph data supports that check; unsupported compatibility claims must be labeled as assumptions rather than treated as graph facts.
+- Require damage-oriented build notes that depend on pain/poison multipliers to identify a lineup skill, passive, sidekick, or clearly labeled assumption that applies or enables pain/poison against the boss.
 - Require rare, event-limited, or unusually specific build assumptions to be labeled.
 - Keep `Equipment` nodes as retrieval context only; do not add equip relationships or optimizer rankings in this milestone.
 - Identify what future inventory-aware mode would require, including user-owned equipment, Grasta, Ore, badge, and Light/Shadow data.
@@ -142,8 +147,12 @@ Technical requirements:
 Acceptance criteria:
 
 - Recommendation output clearly separates lineup legality from build assumptions.
-- Weapon/armor uniqueness per lineup is documented and covered by tests or a planned deterministic validator.
-- Grasta reuse assumptions are documented and not treated as ownership proof.
+- Each character recommendation can display one weapon, one armor, and three Grasta slots without relying on free-text parsing.
+- Weapon/armor uniqueness per lineup is documented and covered by tests or a deterministic validator.
+- Weapon/armor uniqueness checks are scoped to a single lineup and do not reject the same item appearing in another alternative lineup.
+- Grasta reuse assumptions are documented, allowed by validation, and not treated as ownership proof.
+- Grasta recommendations are checked against available graph compatibility data, or explicitly caveated when compatibility cannot be verified.
+- Pain/poison-dependent damage recommendations identify the lineup source of pain/poison application or clearly label it as a build assumption.
 - No output claims exact best-in-slot optimization.
 - Any future inventory-aware optimizer remains deferred unless explicitly promoted in a later milestone.
 
