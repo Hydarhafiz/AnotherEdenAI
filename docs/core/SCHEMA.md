@@ -209,6 +209,7 @@ The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - `schema_version` presence on milestone-added structured labels
 - wiki `source_url` attribution where the source exists
 - golden retrieval paths for sidekick associations, sidekick auto/charge skills, sidekick auras, boss affinities and mechanics text, and baseline equipment context
+- no exact `Character.name`/`Sidekick.name` overlap remains after the Milestone 5 sidekick cleanup gate
 - golden retrieval paths for weakness handling, main/sub sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore setup
 
 ## Future Extensions

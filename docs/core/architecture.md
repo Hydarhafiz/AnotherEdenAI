@@ -77,6 +77,8 @@ Feature A sidekick graph behavior:
 - Sidekicks load as `Sidekick` nodes, not `Character` nodes, preserving the later 6-hero plus main/sub sidekick legality model.
 - `SidekickSkill` and `SidekickAura` child nodes are connected with `HAS_AUTO_SKILL`, `HAS_CHARGE_SKILL`, and `HAS_AURA`.
 - Official owner/unlock facts load as `(:Character)-[:UNLOCKS_SIDEKICK]->(:Sidekick)` when the associated character exists in the graph.
+- Milestone 5 cleanup reports exact `Character.name`/`Sidekick.name` overlaps and removes only confirmed duplicate `Character` nodes that lack character skill/passive detail and sidekick-unlock edges.
+- Parsed or live ETL replay runs the cleanup after sidekick loading so sidekick-only records are not reintroduced as heroes.
 - Small and fallback sidekick scope cover the full current sidekick detail set because the total sidekick list is small.
 - The manual Feature A smoke runner clears generated sidekick detail artifacts and stale sidekick-detail manifest entries before live smoke runs to keep reused smoke roots honest.
 

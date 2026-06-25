@@ -220,6 +220,20 @@ try:
             else:
                 print(f"OK: {label} source_url present")
 
+        overlap_count = _count(
+            session,
+            """
+            MATCH (c:Character)
+            MATCH (:Sidekick {name: c.name})
+            RETURN count(c) AS cnt
+            """,
+        )
+        if overlap_count:
+            print(f"FAIL: {overlap_count} sidekick name(s) still appear as Character nodes")
+            failed = True
+        else:
+            print("OK: no sidekick names appear as Character nodes")
+
         for name, cypher in READINESS_QUERIES:
             cnt = _count(session, cypher)
             if cnt <= 0:

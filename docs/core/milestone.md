@@ -101,7 +101,7 @@ Implementation order matters for this milestone. Work starts with graph/data cor
 
 ### Feature A: Sidekick/Character Graph Cleanup
 
-Status: Planned.
+Status: Completed.
 
 Goal: Remove sidekick records incorrectly represented as `Character` nodes without damaging legitimate character data.
 

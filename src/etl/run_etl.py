@@ -7,6 +7,7 @@ from neo4j import AsyncGraphDatabase
 
 from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
 from .loader import (
+    cleanup_duplicate_sidekick_characters,
     ensure_constraints,
     load_characters,
     load_equipment,
@@ -74,6 +75,19 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         await load_skills(driver, skills)
         await load_passive_skills(driver, passive_skills)
         await load_sidekicks(driver, sidekicks)
+        overlap_report = await cleanup_duplicate_sidekick_characters(driver)
+        overlap_names = [row["name"] for row in overlap_report]
+        cleanup_names = [row["name"] for row in overlap_report if row["cleanup_candidate"]]
+        if overlap_names:
+            logger.info(
+                "Sidekick/Character overlap report: %s",
+                ", ".join(overlap_names),
+            )
+        if cleanup_names:
+            logger.info(
+                "Confirmed duplicate sidekick Character nodes removed: %s",
+                ", ".join(cleanup_names),
+            )
         await load_superbosses(driver, superbosses)
         await load_mechanic_references(driver, mechanic_references)
         await load_grastas(driver, grastas)

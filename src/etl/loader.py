@@ -30,6 +30,86 @@ from .models import (
 
 logger = logging.getLogger(__name__)
 
+
+SIDEKICK_CHARACTER_OVERLAP_QUERY = """
+MATCH (c:Character)
+MATCH (s:Sidekick {name: c.name})
+OPTIONAL MATCH (c)-[:HAS_SKILL]->(skill:Skill)
+WITH c, s, count(skill) AS skill_count
+OPTIONAL MATCH (c)-[:HAS_PASSIVE_SKILL]->(passive:PassiveSkill)
+WITH c, s, skill_count, count(passive) AS passive_skill_count
+OPTIONAL MATCH (c)-[:UNLOCKS_SIDEKICK]->(unlocked:Sidekick)
+WITH
+    c,
+    s,
+    skill_count,
+    passive_skill_count,
+    count(unlocked) AS unlock_relationship_count
+WITH
+    c,
+    s,
+    skill_count,
+    passive_skill_count,
+    unlock_relationship_count,
+    (
+        skill_count = 0
+        AND passive_skill_count = 0
+    ) AS lacks_character_detail,
+    (
+        c.detail_url IS NULL
+        OR c.detail_url = ''
+        OR c.detail_url = s.source_url
+    ) AS sidekick_like_origin
+RETURN
+    c.name AS name,
+    c.element AS element,
+    c.weapon AS weapon,
+    c.light_shadow AS light_shadow,
+    c.detail_url AS character_detail_url,
+    s.source_url AS sidekick_source_url,
+    skill_count,
+    passive_skill_count,
+    unlock_relationship_count,
+    lacks_character_detail,
+    sidekick_like_origin,
+    (
+        lacks_character_detail
+        AND unlock_relationship_count = 0
+    ) AS cleanup_candidate
+ORDER BY name
+"""
+
+
+async def find_sidekick_character_overlaps(driver) -> list[dict]:
+    """Return exact name overlaps between Character and Sidekick nodes."""
+    async with driver.session() as session:
+        result = await session.run(SIDEKICK_CHARACTER_OVERLAP_QUERY)
+        return [dict(record) async for record in result]
+
+
+async def cleanup_duplicate_sidekick_characters(driver) -> list[dict]:
+    """Delete confirmed sidekick duplicates that were also loaded as Character nodes."""
+    overlaps = await find_sidekick_character_overlaps(driver)
+    cleanup_names = [row["name"] for row in overlaps if row["cleanup_candidate"]]
+    if not cleanup_names:
+        logger.info("No confirmed duplicate sidekick Character nodes to remove")
+        return overlaps
+
+    cypher = """
+UNWIND $names AS name
+MATCH (c:Character {name: name})
+MATCH (:Sidekick {name: name})
+WHERE NOT (c)-[:HAS_SKILL]->(:Skill)
+  AND NOT (c)-[:HAS_PASSIVE_SKILL]->(:PassiveSkill)
+  AND NOT (c)-[:UNLOCKS_SIDEKICK]->(:Sidekick)
+DETACH DELETE c
+"""
+    async with driver.session() as session:
+        await session.run(cypher, names=cleanup_names)
+
+    logger.info("Removed %d duplicate sidekick Character nodes", len(cleanup_names))
+    return overlaps
+
 # ---------------------------------------------------------------------------
 # Constraints
 # ---------------------------------------------------------------------------
