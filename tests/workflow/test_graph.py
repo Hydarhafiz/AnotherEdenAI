@@ -29,14 +29,14 @@ def _mock_llm_factory(content="stub response"):
 # Must have exactly 4 frontline and 2 reserve to satisfy Feature B legality.
 _ANALYZE_RESPONSE = (
     '{"frontline": ['
-    '{"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},'
-    '{"name": "Riica", "role": "support", "grastas": ["SPD Up"]},'
-    '{"name": "Bertrand", "role": "tank", "grastas": []},'
-    '{"name": "Shion", "role": "DPS", "grastas": []}'
+    '{"name": "Aldo", "role": "DPS", "weapon": "available weapon", "armor": "available armor", "grastas": ["Fire T3", "Fire T3", "Fire T3"]},'
+    '{"name": "Riica", "role": "support", "weapon": "available weapon", "armor": "available armor", "grastas": ["SPD Up", "SPD Up", "SPD Up"]},'
+    '{"name": "Bertrand", "role": "tank", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},'
+    '{"name": "Shion", "role": "DPS", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]}'
     '],'
     ' "reserve": ['
-    '{"name": "Ciel", "role": "support", "grastas": []},'
-    '{"name": "Feinne", "role": "healer", "grastas": []}'
+    '{"name": "Ciel", "role": "support", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},'
+    '{"name": "Feinne", "role": "healer", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]}'
     '],'
     ' "synergy_explanation": "Fire synergy with Aldo as main DPS"}'
 )
@@ -46,7 +46,10 @@ _GRAPH_ROSTER = sorted(_GRAPH_HEROES)
 
 
 def _graph_legality_context():
-    return LegalityContext(known_characters=_GRAPH_HEROES)
+    return LegalityContext(
+        known_characters=_GRAPH_HEROES,
+        known_grastas={"Fire T3", "HP Up", "SPD Up", "Power of Mind"},
+    )
 
 
 class TestRouteAfterValidate:
@@ -232,16 +235,16 @@ class TestGraphHappyPath:
 
         _team = {
             "frontline": [
-                {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
-                {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
-                {"name": "Riica", "role": "support", "grastas": []},
-                {"name": "Shion", "role": "DPS", "grastas": []},
+                {"name": "Aldo", "role": "DPS", "weapon": "available weapon", "armor": "available armor", "grastas": ["Fire T3", "Fire T3", "Fire T3"]},
+                {"name": "Ciel", "role": "healer", "weapon": "available weapon", "armor": "available armor", "grastas": ["HP Up", "HP Up", "HP Up"]},
+                {"name": "Riica", "role": "support", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},
+                {"name": "Shion", "role": "DPS", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},
             ],
             "reserve": [
-                {"name": "Miyu", "role": "support", "grastas": []},
-                {"name": "Feinne", "role": "healer", "grastas": []},
+                {"name": "Miyu", "role": "support", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},
+                {"name": "Feinne", "role": "healer", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},
             ],
-            "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) — boosts Fire damage.",
+            "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) - boosts Fire damage.",
         }
         _alternatives_response = _json.dumps({
             "alternatives": [_team, _team, _team],

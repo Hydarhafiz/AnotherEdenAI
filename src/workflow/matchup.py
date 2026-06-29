@@ -121,7 +121,7 @@ def evaluate_lineup_fit(
 
     references = mechanic_references or []
     hero_text = " ".join(
-        " ".join([hero.name, hero.role, *hero.recommended_skills, *hero.recommended_passives, *hero.grastas])
+        " ".join([hero.name, hero.role, hero.weapon, hero.armor, *hero.recommended_skills, *hero.recommended_passives, *hero.grastas])
         for hero in lineup.heroes
     ).lower()
     elements = _known_elements(hero_text)
@@ -241,7 +241,7 @@ def context_to_json(context: MatchupContext) -> str:
 
 def _looks_like_boss_query(query: str) -> bool:
     normalized = query.lower()
-    return any(word in normalized for word in ["boss", "superboss", "manifest", "fight", "battle", "matchup"])
+    return any(word in normalized for word in ["boss", "superboss", "manifest", "fight", "battle", "matchup", "defeat"])
 
 
 def _known_elements(text: str) -> set[str]:

@@ -15,14 +15,16 @@ from src.workflow.legality import (
 )
 
 
-def _hero(name, *, skills=None, passives=None, assumptions=None):
+def _hero(name, *, skills=None, passives=None, assumptions=None, weapon="available weapon", armor="available armor", grastas=None):
     return {
         "name": name,
         "role": "role",
-        "grastas": [],
+        "weapon": weapon,
+        "armor": armor,
+        "grastas": grastas or ["Power of Mind", "Power of Mind", "Power of Mind"],
         "recommended_skills": skills or [],
         "recommended_passives": passives or [],
-        "upgrade_assumptions": assumptions or [],
+        "upgrade_assumptions": ["Grasta compatibility assumed by fixture."] if assumptions is None else assumptions,
     }
 
 
@@ -38,14 +40,31 @@ def _lineup(*, names=None, main_sidekick="Tetra", sub_sidekick="Korobo", **overr
     return LineupModel.model_validate(data)
 
 
-def _context(*, heroes=None, sidekicks=None, skills=None, passives=None, gated_skills=None, gated_passives=None, assumed_sidekicks=None):
+def _context(
+    *,
+    heroes=None,
+    sidekicks=None,
+    weapons=None,
+    traits=None,
+    skills=None,
+    passives=None,
+    gated_skills=None,
+    gated_passives=None,
+    known_grastas=None,
+    grasta_reqs=None,
+    assumed_sidekicks=None,
+):
     return LegalityContext(
         known_characters=set(heroes or ["Aldo", "Ciel", "Miyu", "Shion", "Feinne", "Cyrus"]),
         known_sidekicks=set(sidekicks or ["Tetra", "Korobo"]),
+        character_weapons=weapons or {},
+        character_traits=traits or {},
         character_skills=skills or {},
         character_passives=passives or {},
         sa_gated_skills=gated_skills or {},
         sa_gated_passives=gated_passives or {},
+        known_grastas=set(known_grastas or ["Power of Mind"]),
+        grasta_personality_reqs=grasta_reqs or {},
         assumed_available_sidekicks=set(assumed_sidekicks or []),
     )
 
@@ -107,6 +126,149 @@ class TestLineupShape:
     def test_rejects_selected_sidekick_as_hero(self):
         with pytest.raises(ValidationError, match="sidekicks cannot occupy hero slots"):
             _lineup(names=["Tetra", "Ciel", "Miyu", "Shion", "Feinne", "Cyrus"], main_sidekick="Tetra")
+
+
+class TestFeatureBBuildPolicy:
+    def test_rejects_missing_weapon_or_armor_contract_fields(self):
+        hero = _hero("Aldo")
+        hero.pop("weapon")
+
+        with pytest.raises(ValidationError, match="weapon"):
+            _lineup(frontline=[hero, _hero("Ciel"), _hero("Miyu"), _hero("Shion")])
+
+    def test_rejects_non_three_grasta_slots(self):
+        with pytest.raises(ValidationError, match="grastas"):
+            _lineup(frontline=[
+                _hero("Aldo", grastas=["Power of Mind", "Power of Mind"]),
+                _hero("Ciel"),
+                _hero("Miyu"),
+                _hero("Shion"),
+            ])
+
+    def test_rejects_duplicate_specific_weapon_within_one_lineup(self):
+        with pytest.raises(ValidationError, match="specific weapons cannot repeat"):
+            _lineup(frontline=[
+                _hero("Aldo", weapon="Lunar Sword"),
+                _hero("Ciel", weapon="Lunar Sword"),
+                _hero("Miyu", weapon="available weapon"),
+                _hero("Shion", weapon="available weapon"),
+            ])
+
+    def test_allows_repeated_weapon_and_armor_categories(self):
+        lineup = _lineup(frontline=[
+            _hero("Aldo", weapon="Sword", armor="Bracelet"),
+            _hero("Ciel", weapon="Sword", armor="Bracelet"),
+            _hero("Miyu", weapon="Sword", armor="Bracelet"),
+            _hero("Shion", weapon="Sword", armor="Bracelet"),
+        ])
+
+        assert [hero.weapon for hero in lineup.frontline] == ["Sword"] * 4
+        assert [hero.armor for hero in lineup.frontline] == ["Bracelet"] * 4
+
+    def test_allows_reused_grasta_copies(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(frontline=[
+            _hero("Aldo", grastas=["Power of Mind", "Power of Mind", "Power of Mind"]),
+            _hero("Ciel"),
+            _hero("Miyu"),
+            _hero("Shion"),
+        ])
+
+        result = validate_lineup_legality(lineup, roster, _context())
+
+        assert result.frontline[0].grastas == ["Power of Mind", "Power of Mind", "Power of Mind"]
+
+    def test_accepts_personality_grasta_when_character_has_required_trait(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(frontline=[
+            _hero("Aldo", grastas=["Power of Fire", "Power of Fire", "Power of Fire"], assumptions=[]),
+            _hero("Ciel"),
+            _hero("Miyu"),
+            _hero("Shion"),
+        ])
+        context = _context(
+            traits={"Aldo": {"Guts"}},
+            known_grastas=["Power of Mind", "Power of Fire"],
+            grasta_reqs={"Power of Fire": "Guts"},
+        )
+
+        result = validate_lineup_legality(lineup, roster, context)
+
+        assert result == lineup
+
+    def test_rejects_personality_grasta_when_required_trait_is_missing(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(frontline=[
+            _hero("Aldo", grastas=["Power of Fire", "Power of Fire", "Power of Fire"], assumptions=[]),
+            _hero("Ciel"),
+            _hero("Miyu"),
+            _hero("Shion"),
+        ])
+        context = _context(known_grastas=["Power of Mind", "Power of Fire"], grasta_reqs={"Power of Fire": "Guts"})
+
+        with pytest.raises(LineupLegalityError, match="lacks required trait"):
+            validate_lineup_legality(lineup, roster, context)
+
+    def test_rejects_weapon_type_grasta_when_character_weapon_mismatches(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(frontline=[
+            _hero("Aldo", grastas=["Sword Power Grasta", "Sword Power Grasta", "Sword Power Grasta"], assumptions=[]),
+            _hero("Ciel"),
+            _hero("Miyu"),
+            _hero("Shion"),
+        ])
+        context = _context(
+            weapons={"Aldo": "Bow"},
+            known_grastas=["Power of Mind", "Sword Power Grasta"],
+        )
+
+        with pytest.raises(LineupLegalityError, match="character weapon is Bow"):
+            validate_lineup_legality(lineup, roster, context)
+
+    def test_rejects_unverifiable_grasta_without_caveat(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(frontline=[
+            _hero("Aldo", grastas=["Mystery Grasta", "Mystery Grasta", "Mystery Grasta"], assumptions=[]),
+            _hero("Ciel"),
+            _hero("Miyu"),
+            _hero("Shion"),
+        ])
+
+        with pytest.raises(LineupLegalityError, match="unverifiable Grasta assumption"):
+            validate_lineup_legality(lineup, roster, _context())
+
+    def test_rejects_pain_grasta_plan_without_pain_or_poison_source(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(
+            build_notes=["Damage assumes Pain Grasta multiplier."],
+            frontline=[
+                _hero("Aldo", grastas=["Pain Grasta", "Pain Grasta", "Pain Grasta"], assumptions=["Pain Grasta compatibility assumed."]),
+                _hero("Ciel"),
+                _hero("Miyu"),
+                _hero("Shion"),
+            ],
+        )
+        context = _context(known_grastas=["Power of Mind", "Pain Grasta"])
+
+        with pytest.raises(LineupLegalityError, match="pain/poison-dependent build assumptions"):
+            validate_lineup_legality(lineup, roster, context)
+
+    def test_accepts_pain_grasta_plan_with_skill_source(self):
+        roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
+        lineup = _lineup(
+            build_notes=["Damage assumes Pain Grasta multiplier."],
+            frontline=[
+                _hero("Aldo", skills=["Poison Edge"], grastas=["Pain Grasta", "Pain Grasta", "Pain Grasta"], assumptions=["Pain Grasta compatibility assumed; Poison Edge applies poison."]),
+                _hero("Ciel"),
+                _hero("Miyu"),
+                _hero("Shion"),
+            ],
+        )
+        context = _context(known_grastas=["Power of Mind", "Pain Grasta"], skills={"Aldo": {"Poison Edge"}})
+
+        result = validate_lineup_legality(lineup, roster, context)
+
+        assert result == lineup
 
 
 class TestLineupLegality:
@@ -214,7 +376,7 @@ class TestLineupLegality:
     def test_accepts_unknown_sa_gated_skill_when_labeled_as_upgrade_assumption(self):
         roster = RosterInput(owned_characters=["Ciel", "Miyu", "Shion"], owned_sidekicks=["Tetra", "Korobo"])
         lineup = _lineup(frontline=[
-            _hero("Aldo", skills=["Stellar Slash"], assumptions=["Requires Stellar Slash after Stellar Awakening upgrade"]),
+            _hero("Aldo", skills=["Stellar Slash"], assumptions=["Requires Stellar Slash after Stellar Awakening upgrade", "Grasta compatibility assumed by fixture."]),
             _hero("Ciel"),
             _hero("Miyu"),
             _hero("Shion"),

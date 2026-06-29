@@ -14,7 +14,7 @@ Both functions require an async Neo4j driver and must be awaited.
 async def normalize_character_name(driver, input_name: str) -> str | None:
     """Resolve a player-supplied name to the canonical graph name.
 
-    Performs a case-insensitive exact-or-contains match against Character nodes.
+    Performs a case-insensitive exact-or-contains match against Character nodes,\n    excluding stale nodes whose names exactly overlap Sidekick nodes.
     Returns the shortest matching canonical name (prioritises exact matches via
     ORDER BY size(c.name) ASC), or None if no match is found.
 
@@ -28,8 +28,14 @@ async def normalize_character_name(driver, input_name: str) -> str | None:
     records, _, _ = await driver.execute_query(
         """
         MATCH (c:Character)
-        WHERE toLower(c.name) = toLower($input)
-           OR toLower(c.name) CONTAINS toLower($input)
+        WHERE (
+          toLower(c.name) = toLower($input)
+          OR toLower(c.name) CONTAINS toLower($input)
+        )
+        AND NOT EXISTS {
+          MATCH (s:Sidekick)
+          WHERE toLower(s.name) = toLower(c.name)
+        }
         RETURN c.name AS canonical
         ORDER BY size(c.name) ASC
         LIMIT 1

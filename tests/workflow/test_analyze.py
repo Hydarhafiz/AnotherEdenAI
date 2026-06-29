@@ -7,6 +7,7 @@ Covers AGENT-06, AGENT-07:
 - analysis_result is the LLM response content string
 """
 import pytest
+from json import JSONDecodeError
 from unittest.mock import MagicMock, patch, call
 from langchain_core.messages import AIMessage
 
@@ -159,3 +160,31 @@ class TestAnalyzeResultIsLLMContent:
             f"Expected analysis_result == LLM content. "
             f"Got: {result['analysis_result']!r}, Expected: {expected_content!r}"
         )
+
+
+class TestAnalyzeProviderResponseRetry:
+    def test_retries_malformed_provider_json_response(self, sample_analyze_state):
+        mock_llm = _make_mock_llm(content='{"recommendations": []}')
+        mock_llm.invoke.side_effect = [
+            JSONDecodeError("Expecting value", "", 0),
+            AIMessage(content='{"recommendations": []}'),
+        ]
+
+        with patch("src.workflow.nodes.analyze.get_llm", return_value=mock_llm):
+            result = analyze_node(sample_analyze_state)
+
+        assert result["analysis_result"] == '{"recommendations": []}'
+        assert mock_llm.invoke.call_count == 2
+
+    def test_stops_after_bounded_malformed_provider_retries(self, sample_analyze_state):
+        mock_llm = _make_mock_llm()
+        mock_llm.invoke.side_effect = JSONDecodeError("Expecting value", "", 0)
+
+        with patch("src.workflow.nodes.analyze.get_llm", return_value=mock_llm):
+            with pytest.raises(
+                RuntimeError,
+                match="malformed JSON responses after 2 attempts",
+            ):
+                analyze_node(sample_analyze_state)
+
+        assert mock_llm.invoke.call_count == 2

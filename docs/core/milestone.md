@@ -59,6 +59,8 @@ External/current planning inputs:
 
 - OpenRouter public model metadata inspected on 2026-06-25 confirms `moonshotai/kimi-k2.6` availability, structured-output support, tool support, 262144-token context, and public pricing at the time of inspection.
 - OpenRouter pricing and model availability are current external facts and must be rechecked before release decisions or budget estimates are finalized.
+- The Another Eden Wiki Grasta overview and Attack Grasta list ground personality matching, Dormant sharing, Tier 3 uniqueness defaults, repeatable exceptions, and Pain/Poison conditions.
+- Community Reddit, GameFAQs, and Steam discussions inform the temporary role-based build heuristic only; they are not hard legality sources and require later gamer-beta validation.
 
 Open research gaps:
 
@@ -83,7 +85,7 @@ Backend deterministic checks own fixed constraints. These checks should run befo
 - Boss affinity output must match graph-backed boss facts.
 - Recommendation text must not claim numeric win probability, win rate, clear chance, or deterministic victory.
 - Weapon and armor recommendations must not assign the same specific weapon or armor to more than one character in the same lineup when the recommendation names specific equipment.
-- Grasta recommendations may reuse common assumptions across characters unless a future inventory-aware mode is explicitly added.
+- Grasta compatibility and exact-variant acquisition cardinality are deterministic backend constraints; only variants marked repeatable may reuse copies beyond their recorded limit.
 
 AI dynamic checks own subjective or contextual judgment:
 
@@ -91,6 +93,7 @@ AI dynamic checks own subjective or contextual judgment:
 - Burst, sustain, and hybrid archetype viability.
 - Skill priority and role fit when multiple legal choices exist.
 - Synergy across zones, buffs, debuffs, pain/poison setup, AF support, sustain, and sidekick auras.
+- Role-aware ranking that prefers Pain/Poison on active damage dealers and distinct Dormant-shareable Grasta on reserve mules while allowing explained exceptions.
 - Whether build notes are useful, specific, and honestly caveated.
 - Whether risks and uncertainty are clear enough for a real player.
 - Whether recommendation quality improved or regressed between providers, prompts, or retrieval strategies.
@@ -123,60 +126,95 @@ Acceptance criteria:
 - Recommendation legality tests continue to reject sidekick-as-hero output.
 - ETL replay does not reintroduce the duplicate records.
 
-### Feature B: Weapon, Armor, And Grasta Recommendation Policy
+### Feature B: Build Item Identity, Cardinality, And Recommendation Policy
 
-Status: Planned.
+Status: Reopened; implementation incomplete after failed manual verification.
 
-Goal: Decide and enforce how build recommendations should mention per-character weapon, armor, and Grasta setup without pretending to know full player inventory.
+Goal: Correct the graph and recommendation data contract so weapon, armor, and Grasta assumptions use distinct, compatible, cardinality-aware records without requiring player inventory entry.
 
-Technical requirements:
+Why this feature was reopened:
 
-- Keep Milestone 5 as assumption-based build advice, not full inventory optimization.
-- Extend the recommendation output contract so each recommended character can carry exactly one weapon assumption, exactly one armor assumption, and exactly three Grasta assumptions.
-- Treat weapon, armor, and Grasta suggestions as recommended build assumptions even when the player has not entered ownership for those items.
-- Treat specific weapon and armor recommendations as per-lineup assumptions, not account-wide ownership facts.
-- Enforce or test that one named weapon and one named armor are not assigned to multiple characters in the same lineup when the model names specific items.
-- Permit the same named weapon or armor to appear in separate top-three recommendation lineups, because each lineup is an alternative plan.
-- Allow Grasta recommendations to be reused many times under late-game-access assumptions, including repeated copies on the same character when the recommendation explicitly calls for them.
-- Validate Grasta compatibility against the character weapon type or personality requirement where graph data supports that check; unsupported compatibility claims must be labeled as assumptions rather than treated as graph facts.
-- Require damage-oriented build notes that depend on pain/poison multipliers to identify a lineup skill, passive, sidekick, or clearly labeled assumption that applies or enables pain/poison against the boss.
-- Require rare, event-limited, or unusually specific build assumptions to be labeled.
-- Keep `Equipment` nodes as retrieval context only; do not add equip relationships or optimizer rankings in this milestone.
-- Identify what future inventory-aware mode would require, including user-owned equipment, Grasta, Ore, badge, and Light/Shadow data.
-
-Acceptance criteria:
-
-- Recommendation output clearly separates lineup legality from build assumptions.
-- Each character recommendation can display one weapon, one armor, and three Grasta slots without relying on free-text parsing.
-- Weapon/armor uniqueness per lineup is documented and covered by tests or a deterministic validator.
-- Weapon/armor uniqueness checks are scoped to a single lineup and do not reject the same item appearing in another alternative lineup.
-- Grasta reuse assumptions are documented, allowed by validation, and not treated as ownership proof.
-- Grasta recommendations are checked against available graph compatibility data, or explicitly caveated when compatibility cannot be verified.
-- Pain/poison-dependent damage recommendations identify the lineup source of pain/poison application or clearly label it as a build assumption.
-- No output claims exact best-in-slot optimization.
-- Any future inventory-aware optimizer remains deferred unless explicitly promoted in a later milestone.
-
-### Feature C: Backend Guardrail Audit And AI Responsibility Split
-
-Status: Planned.
-
-Goal: Reduce prompt overload and conflicting instructions by moving fixed validation out of AI prompts wherever possible.
+- Manual Feature B verification exposed that multiple Almighty Power and Enhance if Max HP variants are collapsed into one Neo4j node because the current loader merges Grasta by name alone.
+- The collapsed node can accumulate unrelated personality requirements, causing valid and invalid compatibility decisions to become indistinguishable.
+- Akane Alter is present in parsed artifacts as Akane (Alter),Blooming Blade, but analyzer output shortened the canonical name and failed final legality.
+- Feature C cannot build trustworthy constrained candidates until these data identities are corrected.
 
 Technical requirements:
 
-- Audit current recommendation prompts, Pydantic models, legality code, format validation, and tests.
-- Classify each guardrail as deterministic backend, dynamic AI generation, dynamic AI judge, or documentation-only caveat.
-- Add or tighten backend tests for fixed constraints that should not depend on the model.
-- Keep AI prompts focused on dynamic recommendation reasoning rather than repeating every fixed rule in full.
-- Preserve enough prompt guidance for the model to produce valid structured output, but make backend validation the source of truth.
-- Document failure behavior when the AI proposes an illegal or unverifiable output.
+- Preserve the existing recommendation shape of exactly one weapon assumption, one armor assumption, and three Grasta assumptions per character.
+- Keep build items assumption-based even when the player has not entered item ownership; this is not a full inventory optimizer.
+- Introduce a stable grasta_id that distinguishes variants by the fields required for legality, including category, tier, base name, personality requirement, weapon requirement or weapon group, and any source variant needed to prevent collisions.
+- Extend parsed Grasta data with source-grounded compatibility, sharing, acquisition, and display fields needed by recommendation logic, including personality/weapon discriminator, source_url, obtain/source text where available, finite-versus-repeatable acquisition classification, and maximum theoretical copies when known.
+- Distinguish regular Attack Grasta such as Almighty Power (Dragon) from Personality Special Grasta and other special-slot records.
+- Replace name-only Grasta MERGE identity and uniqueness constraints, increment SCHEMA_VERSION, update schema assertions, and require parsed/live ETL replay or a safe migration that removes collapsed legacy nodes.
+- Preserve separate REQUIRES_TRAIT relationships per exact Grasta variant so one variant never accumulates unrelated personality requirements.
+- Enforce theoretical account cardinality per lineup even without inventory input: a unique exact Tier 3 variant may appear at most once in one lineup, while variants explicitly marked repeatable may reuse copies according to their metadata.
+- Reset account-cardinality allocation between alternative lineups because each recommendation is an independent plan.
+- Allow one character to equip multiple distinct personality Grasta when the character matches every required trait and each exact variant remains within its copy limit.
+- Preserve weapon-compatible repeatable Pain/Poison Grasta choices and require a skill, passive, sidekick, or explicit supported assumption that applies the corresponding status.
+- Keep specific weapon and armor uniqueness scoped to one lineup; treat weapon/armor category labels as repeatable generic assumptions.
+- Introduce stable canonical character candidate identity and display aliases so analyzer output cannot shorten Akane (Alter),Blooming Blade into an unknown character.
+- Add a character coverage/readiness audit that compares parsed character targets, Neo4j Character nodes, and frontend-selectable roster entries; missing or stale identities must fail visibly.
+- Preserve Equipment as retrieval context only and keep exact best-in-slot ranking, badges, Ores, Light/Shadow slot expansion, and full inventory ownership outside this feature.
+- Update docs/guides/ETL_GUIDE.md during implementation because the schema change requires repeatable migration/replay and verification steps.
 
 Acceptance criteria:
 
-- Fixed constraints listed in the Guardrail Ownership Policy have backend tests or an explicit implementation task.
-- Recommendation prompts no longer carry unnecessary duplicated guardrail text once backend checks exist.
-- Illegal or unverifiable model output fails gracefully before rendering.
-- Eval reports identify whether a failure belongs to backend validation, AI generation, or AI judgment.
+- Distinct Almighty Power personality variants and Enhance-if-Max-HP variants load as distinct graph records with stable IDs.
+- No Grasta node has personality requirements belonging to another variant.
+- The graph records whether an exact variant is unique, finite, repeatable, or unknown; legality uses that metadata instead of assuming all Grasta are infinitely reusable.
+- The same unique exact Grasta cannot be assigned twice inside one lineup but may appear in separate alternative lineups.
+- Distinct compatible personality variants may coexist on one matching character.
+- Repeatable weapon-compatible Pain/Poison Grasta may fill multiple slots when the lineup has a supported status source.
+- Akane (Alter),Blooming Blade and other alias/style characters round-trip from parsed data through Neo4j, frontend selection, candidate generation, and final display without canonical-name drift.
+- Readiness checks identify any parsed or frontend-selectable character missing from Neo4j.
+- Schema assertions and focused ETL tests fail against the old name-collapsing behavior.
+- Feature B automated tests pass, then its manual verification remains pending until expanded Feature C can produce a valid end-to-end recommendation.
+
+### Feature C: Candidate-Constrained Generation, Guardrail Ownership, And Correction Loop
+
+Status: Expanded and planned; blocked on Feature B data-contract correction.
+
+Goal: Replace free-text hard-field generation with backend-provided candidates, validate each lineup independently, and correct only invalid lineups under a bounded cost policy.
+
+Technical requirements:
+
+- Audit prompts, state, Pydantic models, graph retrieval, legality code, formatter behavior, UI error handling, and tests; classify every rule as deterministic backend, dynamic AI judgment, or documentation-only caveat.
+- Add a deterministic candidate-preparation boundary after successful graph retrieval and before analysis.
+- Build compact candidate bundles with stable IDs and display metadata for canonical characters, character-owned skills/passives, owned sidekicks, compatible Grasta variants, equipment assumptions, graph-backed citations, and boss affinity/mechanics facts.
+- Preserve candidate coverage for the eligible roster; remove the arbitrary first-12-record behavior as a legality source and report when context selection omits an eligible candidate.
+- Require the analyzer to select backend-provided IDs for all hard fields. The analyzer may author roles, strategy, tradeoffs, risks, and explanations, but may not invent character, skill, passive, sidekick, item, citation, or boss-fact identifiers.
+- Resolve IDs to display names only after deterministic validation.
+- Validate burst, sustain, and hybrid lineups independently for shape, ownership, canonical identity, skill/passive existence, Stellar Awakening gates, sidekick legality, equipment uniqueness, Grasta compatibility/cardinality, Pain/Poison source, citations, and boss-affinity fidelity.
+- Freeze valid lineups between correction rounds.
+- Return invalid lineup diagnostics as structured error codes and paths plus the exact allowed replacement candidate IDs; do not rely on prose-only retry feedback.
+- Correct all remaining invalid lineups together in at most two conditional batched rounds after initial analysis, for no more than three analyzer calls per request.
+- Skip correction calls when initial output is fully valid.
+- Discard lineups that remain invalid after the correction cap. Never render an incompatible character, skill, item, or Grasta as part of a valid lineup.
+- Return one to three fully valid lineups as a partial result set with warnings that identify missing archetypes and rejected/corrected proposals; return graceful failure only when zero valid lineups remain.
+- Distinguish Cypher retrieval retries, provider transport retries, analyzer correction rounds, structured-output normalization, and final legality failures in state, logs, SSE progress, UI messages, and future eval reports.
+- Use the current beta build heuristic as a ranking preference: favor Pain/Poison Grasta on active damage dealers when a reliable setter exists and favor distinct Dormant-shareable Grasta on reserve mules.
+- Keep that build heuristic non-mandatory; allow support, tank, AF, farming, or boss-specific exceptions when the recommendation explains the tradeoff.
+- Keep exact damage simulation, exact best-in-slot claims, and automatic substitution outside the approved candidate set out of scope.
+- Add docs/guides/recommendation-validation.md with local setup, ETL/schema readiness checks, candidate inspection, Mimi smoke tests, correction-round diagnostics, partial-result expectations, failure classification, and what manual testers should report.
+- Require later Features D, E, and G to update the guide when eval commands, provider/cost reporting, or context compression changes validation behavior.
+
+Acceptance criteria:
+
+- Analyzer output cannot reference a hard-field ID absent from the backend candidate bundle.
+- Canonical alias/style identities such as Akane Alter cannot fail because the model shortened their display name.
+- Incompatible personality/weapon Grasta and exhausted unique-copy variants are excluded from allowed replacements.
+- A correction request receives structured validation errors and allowed candidates, not merely the original prompt.
+- A fully valid first response performs no correction call.
+- A request performs at most two correction rounds and at most three analyzer calls total.
+- Valid lineups survive correction of other lineups unchanged.
+- Invalid lineups remaining after the cap are absent from rendered recommendations and represented only by warnings.
+- One or two valid lineups render successfully with explicit missing-archetype warnings; zero valid lineups render a graceful classified error.
+- Cypher retry counters and analyzer correction counters are separate and visibly distinguishable.
+- The default frontline Pain/Poison and reserve-mule preference is tested as ranking guidance, while hard compatibility/cardinality remains deterministic.
+- Existing fixed guardrails remain backend-owned and have modular tests.
+- The exact Mimi prompt used during Feature B verification returns at least one fully valid owned-roster lineup without incompatible Grasta, hallucinated characters, unsupported skills/passives, missing citations, or boss-affinity drift.
+- docs/guides/recommendation-validation.md is sufficient for another developer or tester to repeat schema readiness, automated checks, and manual smoke verification.
 
 ### Feature D: Golden Weak-Boss Evaluation Harness
 
@@ -281,14 +319,15 @@ Acceptance criteria:
 
 - Add or update `docs/guides/` evaluation guidance if the golden weak-boss eval workflow requires repeated commands, fixtures, paid-mode toggles, report interpretation, or cleanup steps.
 - Add or update operator guidance for paid-model configuration, RM50 budget thresholds, and public beta safety if those steps become repeated procedures.
-- Update ETL guidance if sidekick/character cleanup becomes a replayable ETL or Neo4j maintenance workflow.
+- Update ETL guidance for the reopened Grasta identity/cardinality schema migration and character coverage checks.
+- Add and maintain docs/guides/recommendation-validation.md for candidate inspection, correction-loop diagnostics, Mimi smoke testing, partial-result verification, and failure classification.
 
 ## Current Completion Status
 
-- Milestone 5: active planning complete, implementation not started.
-- Feature A, Sidekick/Character Graph Cleanup: planned.
-- Feature B, Weapon, Armor, And Grasta Recommendation Policy: planned.
-- Feature C, Backend Guardrail Audit And AI Responsibility Split: planned.
+- Milestone 5: active; Feature A is complete, Feature B is reopened, and later features remain pending.
+- Feature A, Sidekick/Character Graph Cleanup: completed.
+- Feature B, Build Item Identity, Cardinality, And Recommendation Policy: reopened; implementation incomplete after failed manual verification.
+- Feature C, Candidate-Constrained Generation, Guardrail Ownership, And Correction Loop: expanded and planned; blocked on Feature B.
 - Feature D, Golden Weak-Boss Evaluation Harness: planned.
 - Feature E, Provider Strategy, Cost Reporting, And RM50 Budget Gate: planned.
 - Feature F, Authentication, Persistence, Rate Limiting, And Beta Safety Plan: planned.

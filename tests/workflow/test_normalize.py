@@ -58,6 +58,18 @@ class TestNormalizeCharacterName:
         assert call_kwargs.get("database_") == "neo4j"
 
     @pytest.mark.asyncio
+    async def test_excludes_exact_sidekick_character_overlaps(self, mock_driver):
+        """Roster normalization must not accept stale sidekick Character nodes."""
+        mock_driver.execute_query.return_value = ([], None, None)
+
+        result = await normalize_character_name(mock_driver, "Mare")
+
+        assert result is None
+        query = mock_driver.execute_query.call_args.args[0]
+        assert "MATCH (s:Sidekick)" in query
+        assert "toLower(s.name) = toLower(c.name)" in query
+
+    @pytest.mark.asyncio
     async def test_returns_first_canonical_when_multiple(self, mock_driver):
         """When driver returns multiple records, first canonical is returned."""
         mock_driver.execute_query.return_value = (

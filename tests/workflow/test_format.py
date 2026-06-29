@@ -21,6 +21,22 @@ from src.workflow.nodes.format import (
     format_node,
 )
 
+def _with_feature_b_build_slots(value):
+    if isinstance(value, dict):
+        updated = {key: _with_feature_b_build_slots(child) for key, child in value.items()}
+        if "name" in updated and "role" in updated:
+            updated.setdefault("weapon", "available weapon")
+            updated.setdefault("armor", "available armor")
+            grastas = list(updated.get("grastas") or ["Power of Mind"])
+            while len(grastas) < 3:
+                grastas.append(grastas[-1] if grastas else "Power of Mind")
+            updated["grastas"] = grastas[:3]
+        return updated
+    if isinstance(value, list):
+        return [_with_feature_b_build_slots(item) for item in value]
+    return value
+
+
 
 @pytest.fixture
 def valid_team_json():
@@ -28,7 +44,7 @@ def valid_team_json():
 
     Uses 4 frontline + 2 reserve (the Feature B legal lineup shape).
     """
-    return json.dumps({
+    return json.dumps(_with_feature_b_build_slots({
         "frontline": [
             {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3", "ATK Up"]},
             {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
@@ -40,7 +56,7 @@ def valid_team_json():
             {"name": "Feinne", "role": "healer", "grastas": []},
         ],
         "synergy_explanation": "Aldo as fire DPS anchor with Ciel healing, Riica boosting speed, and Miyu reserve support.",
-    })
+    }))
 
 
 @pytest.fixture
@@ -198,7 +214,7 @@ class TestFormatErrorPath:
         """retry_count=2 (below cap) should NOT trigger error path even with no db_results."""
         state = dict(error_state)
         state["retry_count"] = 2
-        state["analysis_result"] = json.dumps({
+        state["analysis_result"] = json.dumps(_with_feature_b_build_slots({
             "frontline": [
                 {"name": "Aldo", "role": "DPS", "grastas": []},
                 {"name": "Ciel", "role": "healer", "grastas": []},
@@ -210,7 +226,7 @@ class TestFormatErrorPath:
                 {"name": "Feinne", "role": "healer", "grastas": []},
             ],
             "synergy_explanation": "test",
-        })
+        }))
         result = format_node(state)
         final = result["final_output"]
         assert final.get("error") is None, (
@@ -223,7 +239,7 @@ class TestTeamOutputPydanticModel:
 
     def test_team_output_valid_structure(self):
         """TeamOutput.model_validate must accept a valid team dict."""
-        data = {
+        data = _with_feature_b_build_slots({
             "frontline": [
                 {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
                 {"name": "Ciel", "role": "healer", "grastas": []},
@@ -235,7 +251,7 @@ class TestTeamOutputPydanticModel:
                 {"name": "Feinne", "role": "healer", "grastas": []},
             ],
             "synergy_explanation": "Fire synergy.",
-        }
+        })
         output = TeamOutput.model_validate(data)
         assert output.frontline[0].name == "Aldo"
         assert output.reserve[0].name == "Miyu"
@@ -243,7 +259,7 @@ class TestTeamOutputPydanticModel:
 
     def test_team_output_optional_error_field(self):
         """TeamOutput error field is optional and accepts a string value."""
-        data = {
+        data = _with_feature_b_build_slots({
             "frontline": [
                 {"name": "Aldo", "role": "DPS", "grastas": []},
                 {"name": "Ciel", "role": "healer", "grastas": []},
@@ -256,13 +272,13 @@ class TestTeamOutputPydanticModel:
             ],
             "synergy_explanation": "",
             "error": "Query failed",
-        }
+        })
         output = TeamOutput.model_validate(data)
         assert output.error == "Query failed"
 
     def test_team_output_error_defaults_to_none(self):
         """TeamOutput error field defaults to None when not provided."""
-        data = {
+        data = _with_feature_b_build_slots({
             "frontline": [
                 {"name": "Aldo", "role": "DPS", "grastas": []},
                 {"name": "Ciel", "role": "healer", "grastas": []},
@@ -274,13 +290,13 @@ class TestTeamOutputPydanticModel:
                 {"name": "Feinne", "role": "healer", "grastas": []},
             ],
             "synergy_explanation": "test",
-        }
+        })
         output = TeamOutput.model_validate(data)
         assert output.error is None
 
 
 def _slot(name="X"):
-    return {"name": name, "role": "DPS", "grastas": []}
+    return _with_feature_b_build_slots({"name": name, "role": "DPS", "grastas": []})
 
 
 class TestTeamOutputLengthValidators:
@@ -331,15 +347,6 @@ class TestTeamOutputLengthValidators:
 class TestFormatNodeHandlesMalformedTeam:
     """Gap 2: format_node must catch ValidationError AND ValueError and return error schema."""
 
-    _EXPECTED_ERROR_SCHEMA = {
-        "final_output": {
-            "frontline": [],
-            "reserve": [],
-            "synergy_explanation": "",
-            "error": "LLM returned malformed team structure — retry or check model",
-        }
-    }
-
     def _base_state(self, analysis_result):
         return {
             "user_query": "q",
@@ -362,17 +369,76 @@ class TestFormatNodeHandlesMalformedTeam:
             "synergy_explanation": "bad shape",
         })
         result = format_node(self._base_state(bad_analysis))
-        assert result == self._EXPECTED_ERROR_SCHEMA
+        error = result["final_output"]["error"]
+        assert "LLM returned malformed team structure" in error
+        assert "frontline: List should have at least 4 items" in error
+        assert "reserve: List should have at least 2 items" in error
+
+    def test_completes_two_grasta_slots_with_reusable_copy(self):
+        payload = _feature_d_payload()
+        payload["recommendations"][0]["frontline"][2]["grastas"] = [
+            "Power of Mind",
+            "Power of Mind",
+        ]
+
+        result = format_node(self._base_state(json.dumps(payload)))
+
+        grastas = result["final_output"]["recommendations"][0]["frontline"][2]["grastas"]
+        assert grastas == ["Power of Mind", "Power of Mind", "Power of Mind"]
+
+    def test_extracts_names_from_graph_style_skill_and_passive_records(self):
+        payload = _feature_d_payload()
+        hero = payload["recommendations"][0]["frontline"][0]
+        hero["recommended_skills"] = [
+            {"name": "Blaze Sword", "description": "Fire slash attack."}
+        ]
+        hero["recommended_passives"] = [
+            {"name": "Fire Zone", "description": "Deploys Fire Zone."}
+        ]
+
+        result = format_node(self._base_state(json.dumps(payload)))
+
+        normalized = result["final_output"]["recommendations"][0]["frontline"][0]
+        assert normalized["recommended_skills"] == ["Blaze Sword"]
+        assert normalized["recommended_passives"] == ["Fire Zone"]
+
+    def test_rejects_graph_style_choice_without_name(self):
+        payload = _feature_d_payload()
+        payload["recommendations"][0]["frontline"][0]["recommended_passives"] = [
+            {"description": "Missing passive name."}
+        ]
+
+        result = format_node(self._base_state(json.dumps(payload)))
+
+        assert "recommended_passives.0" in result["final_output"]["error"]
+
+    def test_does_not_invent_grasta_when_model_supplies_none(self):
+        payload = _feature_d_payload()
+        payload["recommendations"][0]["frontline"][2]["grastas"] = []
+
+        result = format_node(self._base_state(json.dumps(payload)))
+
+        assert "at least 3 items" in result["final_output"]["error"]
 
     def test_non_json_llm_response_returns_error_schema(self):
         """ValueError path: _extract_json raises when LLM returns completely non-JSON text."""
         result = format_node(self._base_state("Sorry I cannot help"))
-        assert result == self._EXPECTED_ERROR_SCHEMA
+        assert result["final_output"]["error"] == (
+            "LLM returned malformed team structure: analyzer did not return a valid JSON object"
+        )
+
+    def test_truncated_json_reports_likely_truncation(self):
+        result = format_node(self._base_state('{"recommendations": [{"frontline": ['))
+
+        assert result["final_output"]["error"] == (
+            "LLM returned malformed team structure: analyzer returned incomplete JSON "
+            "(the response appears to be truncated)"
+        )
 
 
 @pytest.fixture
 def valid_alternatives_json():
-    team = {
+    team = _with_feature_b_build_slots({
         "frontline": [
             {"name": "Aldo", "role": "DPS", "grastas": ["Fire T3"]},
             {"name": "Ciel", "role": "healer", "grastas": ["HP Up"]},
@@ -384,7 +450,7 @@ def valid_alternatives_json():
             {"name": "Feinne", "role": "healer", "grastas": []},
         ],
         "synergy_explanation": "Aldo: Fire T3 Grasta (Courage) — boosts Fire damage.",
-    }
+    })
     return json.dumps({
         "alternatives": [team, team, team],
         "reason": "No Cypher results for highly specific query.",
@@ -433,7 +499,7 @@ class TestFormatAlternativesPath:
 
 
 def _feature_d_team(archetype="burst", *, suffix="A"):
-    return {
+    return _with_feature_b_build_slots({
         "archetype": archetype,
         "frontline": [
             {
@@ -479,7 +545,7 @@ def _feature_d_team(archetype="burst", *, suffix="A"):
         "sub_sidekick": "Korobo",
         "strategy_summary": f"{archetype.title()} plan that pressures weakness while preserving fallback sustain.",
         "key_facts": ["Aldo has fire slash pressure; Tetra contributes main-slot support."],
-        "build_notes": ["Assumes common late-game Pain/Poison Grasta and Bull's Eye Ore access."],
+        "build_notes": ["Assumes common late-game Pain/Poison Grasta and Bull's Eye Ore access; Poison Edge applies poison as an explicit build assumption for the multiplier setup."],
         "boss_counterplay_notes": ["Targets Fire and Slash weakness while avoiding Water resistance."],
         "sustain_mp_notes": ["Feinne and Riica cover healing while reserve swapping protects MP."],
         "risks": ["Status cleanse timing is still player-executed and uncertain."],
@@ -503,7 +569,7 @@ def _feature_d_team(archetype="burst", *, suffix="A"):
             f"Aldo {suffix}: Fire Power Grasta (Courage) - supports fire slash pressure. "
             f"Ciel {suffix}: Support Grasta (Minstrel) - supports buffs and debuffs."
         ),
-    }
+    })
 
 
 def _feature_d_payload():
@@ -536,6 +602,15 @@ def _feature_d_skill_map(payload):
         slot["name"]: set(slot.get("recommended_skills", []))
         for recommendation in payload["recommendations"]
         for slot in recommendation["frontline"] + recommendation["reserve"]
+    }
+
+
+def _feature_d_grasta_names(payload):
+    return {
+        grasta
+        for recommendation in payload["recommendations"]
+        for slot in recommendation["frontline"] + recommendation["reserve"]
+        for grasta in slot.get("grastas", [])
     }
 
 
@@ -592,13 +667,37 @@ class TestFeatureDRecommendationSet:
             assert rec["fit_label"] in {"high", "medium", "low"}
             assert rec["confidence_label"] in {"high", "medium", "low"}
 
+    def test_fills_missing_citations_from_grounded_boss_context(self):
+        payload = _feature_d_payload()
+        for recommendation in payload["recommendations"]:
+            recommendation["citations"] = []
+
+        state = self._state(payload)
+        state["boss_context"] = _boss_context_payload()
+        result = format_node(state)
+
+        for recommendation in result["final_output"]["recommendations"]:
+            assert recommendation["citations"] == [{
+                "label": "Flame Eater",
+                "source_url": "https://example.test/flame-eater",
+            }]
+
+    def test_still_rejects_missing_citations_without_grounded_context(self):
+        payload = _feature_d_payload()
+        for recommendation in payload["recommendations"]:
+            recommendation["citations"] = []
+
+        result = format_node(self._state(payload))
+
+        assert "each recommendation must include source citations" in result["final_output"]["error"]
+
     def test_rejects_missing_required_feature_d_detail(self):
         payload = _feature_d_payload()
         payload["recommendations"][0]["build_notes"] = []
 
         result = format_node(self._state(payload))
 
-        assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"
+        assert "each recommendation must include build notes" in result["final_output"]["error"]
 
     def test_allows_archetype_variants_only_with_viability_notes(self):
         payload = _feature_d_payload()
@@ -622,7 +721,7 @@ class TestFeatureDRecommendationSet:
 
         result = format_node(self._state(payload))
 
-        assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"
+        assert "variant recommendations require archetype_viability_notes" in result["final_output"]["error"]
 
 
 class TestBossAffinityFidelityGate:
@@ -634,6 +733,7 @@ class TestBossAffinityFidelityGate:
             known_characters=set(_feature_d_roster_names(payload)),
             known_sidekicks={"Tetra", "Korobo"},
             character_skills=_feature_d_skill_map(payload),
+            known_grastas=_feature_d_grasta_names(payload),
         )
 
     @staticmethod
@@ -689,6 +789,31 @@ class TestBossAffinityFidelityGate:
         assert "recommendation_set.weak" in final["error"]
 
     @pytest.mark.asyncio
+    async def test_empty_affinity_matches_graph_unknown_sentinel(self):
+        payload = _feature_d_payload()
+        payload["boss_affinity"] = {
+            "weak": [],
+            "resist": [],
+            "null": [],
+            "absorb": [],
+        }
+        state = self._state(payload)
+        boss_context = json.loads(state["boss_context"])
+        for field in ("weak", "resist", "null", "absorb"):
+            boss_context["boss"][field] = ["unknown"]
+        state["boss_context"] = json.dumps(boss_context)
+        driver = MagicMock()
+
+        with patch(
+            "src.workflow.nodes.format.collect_legality_context",
+            new_callable=AsyncMock,
+            return_value=self._context(payload),
+        ):
+            result = await format_and_validate_node(state, driver)
+
+        assert result["final_output"].get("error") is None
+
+    @pytest.mark.asyncio
     async def test_empty_affinity_output_is_blocked_when_graph_has_facts(self):
         payload = _feature_d_payload()
         payload["boss_affinity"] = {}
@@ -713,6 +838,7 @@ class TestProductionLegalityGate:
         return LegalityContext(
             known_characters={"Aldo", "Ciel", "Riica", "Shion", "Miyu", "Feinne"},
             character_skills=skills or {},
+            known_grastas={"Fire T3", "ATK Up", "HP Up", "SPD Up", "Power of Mind"},
         )
 
     @pytest.mark.asyncio

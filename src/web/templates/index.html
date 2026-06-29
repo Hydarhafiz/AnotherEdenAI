@@ -7,7 +7,7 @@
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <script src="https://unpkg.com/htmx-ext-sse@2.2.4/sse.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <script src="/static/app.js?v=5" defer></script>
+  <script src="/static/app.js?v=6" defer></script>
   <style>
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
     .tab-btn { cursor: pointer; }
@@ -56,7 +56,6 @@
       <div class="tabs">
         <button class="tab-btn" onclick="switchTab('characters')" id="tab-characters">Characters</button>
         <button class="tab-btn" onclick="switchTab('sidekicks')" id="tab-sidekicks">Sidekicks</button>
-        <button class="tab-btn" onclick="switchTab('grastas')" id="tab-grastas">Grastas</button>
       </div>
 
       <div id="panel-characters" class="tab-panel active">
@@ -73,12 +72,6 @@
         </div>
       </div>
 
-      <div id="panel-grastas" class="tab-panel">
-        <input type="search" id="grasta-search" placeholder="Search Grastas..." oninput="filterList('grastas')">
-        <div class="roster-list" id="grasta-list">
-          <p aria-busy="true">Loading Grastas...</p>
-        </div>
-      </div>
     </section>
 
     <!-- Query panel -->

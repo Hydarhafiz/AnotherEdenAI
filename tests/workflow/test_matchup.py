@@ -16,6 +16,22 @@ from src.workflow.matchup import (
 from src.workflow.nodes.format import format_node
 
 
+def _with_feature_b_build_slots(value):
+    if isinstance(value, dict):
+        updated = {key: _with_feature_b_build_slots(child) for key, child in value.items()}
+        if "name" in updated and "role" in updated:
+            updated.setdefault("weapon", "available weapon")
+            updated.setdefault("armor", "available armor")
+            grastas = list(updated.get("grastas") or ["Power of Mind"])
+            while len(grastas) < 3:
+                grastas.append(grastas[-1] if grastas else "Power of Mind")
+            updated["grastas"] = grastas[:3]
+        return updated
+    if isinstance(value, list):
+        return [_with_feature_b_build_slots(item) for item in value]
+    return value
+
+
 class AsyncRecordStream:
     def __init__(self, records):
         self._records = list(records)
@@ -62,34 +78,36 @@ class RecordingDriver:
         return RecordingSession(self.session_calls, self.mechanic_records)
 
 
+def _build(name: str, role: str, *, grastas=None, recommended_skills=None, upgrade_assumptions=None) -> CharacterBuild:
+    values = list(grastas or ["Power of Mind"])
+    while len(values) < 3:
+        values.append(values[-1])
+    return CharacterBuild(
+        name=name,
+        role=role,
+        weapon="available weapon",
+        armor="available armor",
+        grastas=values[:3],
+        recommended_skills=recommended_skills or [],
+        upgrade_assumptions=upgrade_assumptions or [],
+    )
+
 def _lineup(*, main_sidekick: str | None = "Tetra", sub_sidekick: str | None = "Korobo") -> LineupModel:
     return LineupModel(
         frontline=[
-            CharacterBuild(
-                name="Aldo",
-                role="Fire slash DPS with AF burst",
+            _build(
+                "Aldo",
+                "Fire slash DPS with AF burst",
                 grastas=["Fire Power Grasta", "Bull's Eye Ore"],
                 recommended_skills=["Fire Slash"],
             ),
-            CharacterBuild(
-                name="Feinne",
-                role="healer with status cleanse and MP restore",
-                recommended_skills=["Heal", "Cleanse"],
-            ),
-            CharacterBuild(
-                name="Riica",
-                role="mitigation support and barrier",
-                recommended_skills=["Guard Protocol"],
-            ),
-            CharacterBuild(
-                name="Ciel",
-                role="buff and debuff support",
-                recommended_skills=["Elemental Song"],
-            ),
+            _build("Feinne", "healer with status cleanse and MP restore", recommended_skills=["Heal", "Cleanse"]),
+            _build("Riica", "mitigation support and barrier", recommended_skills=["Guard Protocol"]),
+            _build("Ciel", "buff and debuff support", recommended_skills=["Elemental Song"]),
         ],
         reserve=[
-            CharacterBuild(name="Miyu", role="slash zone backup", recommended_skills=["Rune Blade"]),
-            CharacterBuild(name="Shion", role="fire slash reserve DPS", recommended_skills=["Phoenix Slash"]),
+            _build("Miyu", "slash zone backup", recommended_skills=["Rune Blade"]),
+            _build("Shion", "fire slash reserve DPS", recommended_skills=["Phoenix Slash"]),
         ],
         main_sidekick=main_sidekick,
         sub_sidekick=sub_sidekick,
@@ -229,8 +247,36 @@ async def test_retrieve_matchup_context_queries_boss_facts_and_mechanic_referenc
     assert "boss_counterplay" in mechanics_params["applies_to"]
 
 
+@pytest.mark.asyncio
+async def test_retrieve_matchup_context_recognizes_defeat_intent_for_mimi():
+    boss = {
+        "boss": {
+            "name": "Mimi",
+            "source_url": "https://anothereden.wiki/w/Mimi",
+            "weak": ["unknown"],
+            "resist": ["unknown"],
+            "null": ["unknown"],
+            "absorb": ["unknown"],
+            "characteristics": "Weak superboss.",
+            "mechanic_tags": ["sustain"],
+            "mechanics_text": "Mimi uses physical and Earth attacks.",
+        }
+    }
+    driver = RecordingDriver(boss_records=[boss], mechanic_records=[])
+
+    context = await retrieve_matchup_context(driver, "Create lineups to defeat Mimi")
+
+    assert context.boss is not None
+    assert context.boss.name == "Mimi"
+    assert context.citations[0] == {
+        "label": "Mimi",
+        "source_url": "https://anothereden.wiki/w/Mimi",
+    }
+    assert driver.execute_calls[0][1]["query"] == "Create lineups to defeat Mimi"
+
+
 def test_format_node_preserves_rubric_output_shape_and_boss_affinity():
-    payload = {
+    payload = _with_feature_b_build_slots({
         "frontline": [
             {"name": "Aldo", "role": "Fire slash DPS", "grastas": ["Fire Power Grasta"]},
             {"name": "Feinne", "role": "healer", "grastas": []},
@@ -259,7 +305,7 @@ def test_format_node_preserves_rubric_output_shape_and_boss_affinity():
         "risks": ["Status handling depends on cleanse timing."],
         "citations": [{"label": "Flame Eater", "source_url": "https://example.test/flame-eater"}],
         "synergy_explanation": "Aldo: Fire Power Grasta (Courage) - supports Fire pressure.",
-    }
+    })
 
     result = format_node({"analysis_result": json.dumps(payload), "db_results": [{"ok": True}], "retry_count": 0})
 
@@ -282,7 +328,7 @@ def test_format_node_preserves_rubric_output_shape_and_boss_affinity():
 
 
 def test_format_node_rejects_numeric_win_probability_language():
-    payload = {
+    payload = _with_feature_b_build_slots({
         "frontline": [
             {"name": "Aldo", "role": "Fire slash DPS", "grastas": []},
             {"name": "Feinne", "role": "healer", "grastas": []},
@@ -297,8 +343,8 @@ def test_format_node_rejects_numeric_win_probability_language():
         "confidence_label": "high",
         "rubric_summary": {"offense": "80% win chance from Fire weakness."},
         "synergy_explanation": "Aldo: Fire Power Grasta (Courage) - supports Fire pressure.",
-    }
+    })
 
     result = format_node({"analysis_result": json.dumps(payload), "db_results": [{"ok": True}], "retry_count": 0})
 
-    assert result["final_output"]["error"] == "LLM returned malformed team structure — retry or check model"
+    assert "recommendations must not present numeric win probability" in result["final_output"]["error"]

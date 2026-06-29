@@ -193,19 +193,127 @@ This file stores source references used during planning discussions. It separate
   Relevance: Public metadata inspected on 2026-06-25 showed `moonshotai/kimi-k2.6` available with structured outputs and tool support, 262144-token context, input pricing around USD 0.66 per 1M tokens, output pricing around USD 3.41 per 1M tokens, and cached-input pricing around USD 0.144 per 1M tokens.
   Caveats/open questions: Pricing, availability, context windows, provider routing, and supported parameters can change. Recheck immediately before release testing or public beta.
 
+
+#### Feature B/C Grasta Legality And Build Strategy
+
+- Title: Grasta overview and personality recommendations
+  URL: https://anothereden.wiki/Grasta#Personality_Grastas-1
+  Source type: community wiki mechanics reference
+  Date added: 2026-06-29
+  Related area: Milestone 5 Features B-C, personality compatibility, Dormant sharing, and Grasta mules
+  Relevance: States that personality Grasta require a matching holder personality, Dormant Ore enables party sharing, and community terminology uses Grasta mule/carrier for reserve holders. It also documents the general rule that Tier 3 Grasta are unique.
+  Caveats/open questions: The wiki is community-maintained; exact damage-ranking claims should remain guidance unless separately grounded in formula references.
+
+- Title: Grasta Attack list
+  URL: https://anothereden.wiki/w/Grasta_Attack
+  Source type: community wiki data/reference page
+  Date added: 2026-06-29
+  Related area: Milestone 5 Features B-C, Grasta variant identity, acquisition cardinality, weapon/personality triggers, and Pain/Poison conditions
+  Relevance: Lists distinct Almighty Power personality variants, matching-personality party sharing, T2 Pain/Poison weapon variants with 30% conditional damage, and explicit infinite-copy markers for exceptional Tier 3 Grasta.
+  Caveats/open questions: The current ETL discards variant identity by merging rows on Grasta.name; implementation must preserve personality/weapon discriminator and finite-versus-repeatable acquisition metadata.
+
+- Title: Personality Special Grasta
+  URL: https://anothereden.wiki/Grasta#Valor_Chants-0
+  Source type: community wiki mechanics reference
+  Date added: 2026-06-29
+  Related area: personality-gated special Grasta
+  Relevance: States that Personality Special Grasta can only be equipped by characters with the matching personality.
+  Caveats/open questions: Special-slot Personality Grasta must not be conflated with regular Attack-category Almighty Power variants.
+
+- Title: Grasta setup guide
+  URL: https://www.reddit.com/r/AnotherEdenGlobal/comments/j4gv69/grasta_setup_guide/
+  Source type: community strategy guide
+  Date added: 2026-06-29
+  Related area: Pain/Poison setters, multiplicative stacking, and role-oriented build examples
+  Relevance: Provides community examples of repeated Pain/Poison multipliers, status-setter dependencies, and role-specific exceptions.
+  Caveats/open questions: Older guide with version-specific examples; use for heuristic candidate ranking and test scenarios, not immutable mechanics or current character coverage.
+
+- Title: Recommended Grasta
+  URL: https://www.reddit.com/r/AnotherEdenGlobal/comments/eu264p/recommended_grasta/
+  Source type: community discussion
+  Date added: 2026-06-29
+  Related area: early-game and role-based Grasta recommendations
+  Relevance: Supplies community context for offensive versus support Grasta choices.
+  Caveats/open questions: Old discussion predating later Grasta and Ore systems; weak evidence for current deterministic policy.
+
+- Title: Grasta questions
+  URL: https://gamefaqs.gamespot.com/boards/237373-another-eden-the-cat-beyond-time-and-space/78610985
+  Source type: community discussion
+  Date added: 2026-06-29
+  Related area: Tier 3 availability and role-oriented Grasta selection
+  Relevance: Captures player questions and community explanations around limited high-tier Grasta and offensive/support setups.
+  Caveats/open questions: Archived discussion and secondary evidence; the current wiki should govern acquisition cardinality.
+
+- Title: Grasta, Grasta Enhancements, and You
+  URL: https://www.reddit.com/r/AnotherEdenGlobal/comments/s4swv5/grasta_grasta_enhancements_and_you/
+  Source type: community strategy discussion
+  Date added: 2026-06-29
+  Related area: Ore allocation, Pain/Poison build inventory, and specialized fight setups
+  Relevance: Provides practical community estimates for Pain/Poison and Dormant Ore allocation across damage dealers.
+  Caveats/open questions: Version-dependent and inventory-opinionated; suitable for ranking heuristics, not hard legality.
+
+- Title: Need a rewind on Grasta, badge, and damage setup
+  URL: https://www.reddit.com/r/AnotherEdenGlobal/comments/1adst9c/need_a_rewind_on_grasta_badge_and_damage_setup/
+  Source type: community strategy discussion
+  Date added: 2026-06-29
+  Related area: multiplicative Pain/Poison examples and additive support Grasta stacking
+  Relevance: Shows a community calculation model that treats Pain/Poison and offensive Ores as multipliers while grouping Max HP, element, and Almighty support bonuses additively.
+  Caveats/open questions: The post itself asks unresolved formula questions; do not treat every calculation as authoritative without a formula source.
+
+- Title: Help and Questions weekly megathread
+  URL: https://www.reddit.com/r/AnotherEdenGlobal/comments/1f5ny6x/help_questions_weekly_megathread/
+  Source type: community support thread
+  Date added: 2026-06-29
+  Related area: contemporary player build advice
+  Relevance: User-provided supporting context for role-based DPS, support, and reserve-mule builds.
+  Caveats/open questions: Large mixed-topic thread; no stable authoritative rule should depend on it without a direct supporting comment and corroboration.
+
+- Title: Top auto-attackers discussion
+  URL: https://steamcommunity.com/app/1252600/discussions/0/3476233614741453118/
+  Source type: community discussion
+  Date added: 2026-06-29
+  Related area: situational Grasta/Ore examples
+  Relevance: Shows practical build examples combining elemental Grasta with Bull's Eye and enemy-count Ores.
+  Caveats/open questions: Focused on auto-attack farming rather than superboss lineups; retain only as weak contextual evidence.
+
+#### Feature C Repository Failure Grounding
+
+- Title: Grasta row identity and loader merge audit
+  URL: local `src/etl/models.py`, local `src/etl/loader.py`, local `data/parsed/v1.0.0/indexes/grasta_attack.json`
+  Source type: repository source and parsed artifacts
+  Date added: 2026-06-29
+  Related area: Milestone 5 Features B-C, Grasta compatibility and account-copy legality
+  Relevance: Parsed artifacts contain many Almighty Power personality variants and Enhance-if-Max-HP variants, while the loader merges every variant as `(:Grasta {name})`. This collapses distinct rows and creates incorrect multi-trait requirements on one node.
+  Caveats/open questions: Schema identity must change before compatibility validation or candidate generation can be trusted; migration and replay requirements must be planned.
+
+- Title: Akane Alter canonical-name audit
+  URL: local `data/parsed/v1.0.0/indexes/characters.json`, local `data/parsed/v1.0.0/characters/akane_alter_blooming_blade.json`, local `src/workflow/normalize.py`
+  Source type: repository source and parsed artifacts
+  Date added: 2026-06-29
+  Related area: canonical roster identity and analyzer legality
+  Relevance: Akane Alter exists as `Akane (Alter),Blooming Blade`; analyzer output shortened it to `Akane (Alter)`, which final legality treated as unknown. This is canonical-name drift, not missing parsed coverage.
+  Caveats/open questions: Candidate output should use stable IDs or exact canonical names; fuzzy normalization should remain an input convenience rather than an output repair mechanism.
+
 #### Planning Decisions
 
+- Planning decision on 2026-06-29: Expanded Feature C must create and maintain docs/guides/recommendation-validation.md covering schema/ETL readiness, candidate inspection, Mimi smoke tests, correction-round diagnostics, partial-result behavior, failure classification, and manual-verification reporting.
+- Planning decision on 2026-06-29: Until gamer beta feedback provides stronger role-by-role build evidence, candidate ranking should prefer Pain/Poison Grasta on active damage dealers when a reliable status setter exists and distinct Dormant-shareable Grasta on reserve mules. This is a transparent default heuristic, not hard legality; boss-, role-, or skill-specific exceptions are allowed when explained.
+- Planning decision on 2026-06-29: Recommendation correction is capped at two conditional batched rounds after initial analysis, for at most three analyzer calls per request. Valid lineups are frozen between rounds; only remaining invalid lineups and precise allowed-candidate feedback are sent for correction. No correction call runs when initial output is fully valid.
+- Planning decision on 2026-06-29: Hard recommendation fields must use backend-provided stable candidate IDs rather than model-authored names. Candidate bundles must constrain characters, skills, passives, sidekicks, equipment assumptions, Grasta variants, citations, and boss facts; display names are resolved after validation. Fuzzy name normalization remains an input convenience and must not repair analyzer output.
+- Planning decision on 2026-06-29: Every displayed lineup must pass all hard legality checks. After targeted correction retries, invalid lineups are discarded; warnings may explain rejected or replaced proposals but must not present incompatible characters, skills, equipment, or Grasta as part of a valid lineup. Valid lineups may still be returned as a partial result set.
+- Planning decision on 2026-06-29: Reopen Feature B as a data-contract prerequisite. Feature B must preserve distinct Grasta variants, personality/weapon discriminators, finite-versus-repeatable acquisition cardinality, and canonical character identities. Feature C will consume those corrected facts for candidate-constrained generation, independent lineup validation, targeted retries, partial valid results, and warnings.
 - Planning decision on 2026-06-25: Use free/local models for fast development, including the current `nvidia/nemotron-3-super-120b-a12b:free` OpenRouter path when useful.
 - Planning decision on 2026-06-25: Use `moonshotai/kimi-k2.6` as the intended paid OpenRouter model for staging, evaluation, release testing, and controlled beta/demo traffic unless Milestone 5 eval evidence selects a better paid default.
 - Planning decision on 2026-06-25: Paid AI judge calls should run for offline evaluation/report generation, not for every live user recommendation.
 - Planning decision on 2026-06-25: Start public demo or controlled Discord beta planning with an RM50/month OpenRouter ceiling. If usage hits the ceiling, pause or disable paid calls first, then decide whether increasing the ceiling is worth the portfolio value.
 - Planning decision on 2026-06-25: Backend deterministic validation should own fixed guardrails such as 4-frontline/2-reserve shape, no duplicate heroes, sidekick slot legality, owned roster enforcement, skill/passive existence, Stellar Awakening gates, skill-count limits, boss-affinity fidelity, equipment uniqueness when named, and no win-probability claims.
-- Planning decision on 2026-06-25: User clarification promoted Feature B from prose-only equipment policy into a build-slot output contract: each character should carry one weapon, one armor, and three Grasta assumptions; weapon and armor uniqueness is per lineup only; Grasta may be reused, including repeated copies; Grasta compatibility and pain/poison-dependent damage setup need deterministic validation where graph data supports it or explicit caveats where it does not.
+- Planning decision on 2026-06-25: User clarification promoted Feature B from prose-only equipment policy into a build-slot output contract: each character should carry one weapon, one armor, and three Grasta assumptions; weapon and armor uniqueness is per lineup only; Grasta may be reused, including repeated copies; Grasta compatibility and pain/poison-dependent damage setup need deterministic validation where graph data supports it or explicit caveats where it does not. Superseded in part on 2026-06-29: reuse is now governed by exact-variant acquisition cardinality, so unique Tier 3 variants cannot repeat within one lineup.
 - Planning decision on 2026-06-25: AI should focus on dynamic judgment such as hero selection, archetype viability, synergy, skill priority, build usefulness, risk explanation, and subjective quality review.
 - Planning decision on 2026-06-25: Milestone 5 implementation order should start with sidekick/character cleanup, weapon/armor/Grasta policy, and backend guardrail audit before golden evals and paid OpenRouter/Kimi setup, because deterministic correctness makes paid staging tests cheaper and more meaningful.
 
 #### Research Gaps
 
+- Validate the frontline Pain/Poison and reserve Grasta-mule default with experienced Another Eden players during the planned beta; record counterexamples and revise ranking heuristics without weakening hard compatibility or acquisition-cardinality rules.
 - Determine actual token usage and RM cost per recommendation run after context compression.
 - Determine whether `moonshotai/kimi-k2.6` remains the best paid model after comparing staging eval outputs against at least one cheaper or stronger OpenRouter alternative.
 - Determine per-user and global request limits that keep a 20-30 player Discord beta inside the RM50/month budget.

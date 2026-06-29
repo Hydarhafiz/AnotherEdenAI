@@ -22,24 +22,26 @@ class QueryRequest(BaseModel):
 
 @router.get("/entities")
 async def get_entities(driver=Depends(get_driver)):
-    """Return all Character, Sidekick, and Grasta names for the roster checklist.
+    """Return Character and Sidekick names for ownership checklists.
 
-    Uses UNION ALL so both node types are returned in one round-trip.
-    Returns: {"characters": [str, ...], "sidekicks": [str, ...], "grastas": [str, ...]}
+    Build items come from graph-backed recommendation context, not player ownership.
+    Returns: {"characters": [str, ...], "sidekicks": [str, ...]}
     """
     records, _, _ = await driver.execute_query(
         "MATCH (c:Character) RETURN c.name AS name, 'Character' AS type "
         "UNION ALL "
         "MATCH (s:Sidekick) RETURN s.name AS name, 'Sidekick' AS type "
-        "UNION ALL "
-        "MATCH (g:Grasta) RETURN g.name AS name, 'Grasta' AS type "
         "ORDER BY name",
         database_="neo4j",
     )
-    characters = [r["name"] for r in records if r["type"] == "Character"]
     sidekicks = [r["name"] for r in records if r["type"] == "Sidekick"]
-    grastas = [r["name"] for r in records if r["type"] == "Grasta"]
-    return {"characters": characters, "sidekicks": sidekicks, "grastas": grastas}
+    sidekick_names = {name.casefold() for name in sidekicks}
+    characters = [
+        r["name"]
+        for r in records
+        if r["type"] == "Character" and r["name"].casefold() not in sidekick_names
+    ]
+    return {"characters": characters, "sidekicks": sidekicks}
 
 
 @router.post("/query")

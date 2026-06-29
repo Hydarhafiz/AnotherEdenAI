@@ -11,6 +11,7 @@ with the same keys (frontline, reserve, synergy_explanation, error) for
 web layer compatibility.
 """
 import json
+import logging
 import re
 from typing import Literal, Optional
 
@@ -24,6 +25,9 @@ from ..legality import (
     validate_lineup_legality,
 )
 from ..state import WorkflowState
+
+
+logger = logging.getLogger(__name__)
 
 
 class CharacterSlot(CharacterBuild):
@@ -195,7 +199,93 @@ def _extract_json(text: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    raise ValueError(f"No valid JSON object found in analysis_result: {text!r}")
+    open_braces = text.count("{")
+    close_braces = text.count("}")
+    if open_braces > close_braces:
+        raise ValueError(
+            "analyzer returned incomplete JSON (the response appears to be truncated)"
+        )
+    raise ValueError("analyzer did not return a valid JSON object")
+
+
+def _normalize_analyzer_shape(value):
+    """Normalize safe graph-record variants before strict output validation."""
+    if isinstance(value, dict):
+        for child in value.values():
+            _normalize_analyzer_shape(child)
+
+        if "name" in value and "role" in value:
+            grastas = value.get("grastas")
+            if isinstance(grastas, list):
+                while grastas and len(grastas) < 3:
+                    grastas.append(grastas[-1])
+
+            for key in ("recommended_skills", "recommended_passives"):
+                choices = value.get(key)
+                if isinstance(choices, list):
+                    value[key] = [
+                        choice["name"]
+                        if isinstance(choice, dict) and isinstance(choice.get("name"), str)
+                        else choice
+                        for choice in choices
+                    ]
+    elif isinstance(value, list):
+        for child in value:
+            _normalize_analyzer_shape(child)
+    return value
+
+
+def _ground_missing_citations(value: dict, boss_context: str) -> dict:
+    """Fill omitted recommendation citations only from trusted graph context."""
+    recommendations = value.get("recommendations")
+    if not isinstance(recommendations, list) or not boss_context:
+        return value
+
+    try:
+        context = json.loads(boss_context)
+    except (json.JSONDecodeError, TypeError):
+        return value
+
+    citations = [
+        citation
+        for citation in context.get("citations", [])
+        if (
+            isinstance(citation, dict)
+            and isinstance(citation.get("label"), str)
+            and isinstance(citation.get("source_url"), str)
+            and citation["label"]
+            and citation["source_url"]
+        )
+    ]
+    if not citations:
+        boss = context.get("boss")
+        if (
+            isinstance(boss, dict)
+            and isinstance(boss.get("name"), str)
+            and isinstance(boss.get("source_url"), str)
+            and boss["name"]
+            and boss["source_url"]
+        ):
+            citations = [{"label": boss["name"], "source_url": boss["source_url"]}]
+
+    if citations:
+        for recommendation in recommendations:
+            if isinstance(recommendation, dict) and not recommendation.get("citations"):
+                recommendation["citations"] = [dict(citation) for citation in citations]
+    return value
+
+
+def _format_structure_error(kind: str, exc: ValidationError | ValueError) -> str:
+    """Return useful formatter diagnostics without exposing the raw LLM response."""
+    if isinstance(exc, ValidationError):
+        details = []
+        for error in exc.errors(include_url=False)[:5]:
+            location = ".".join(str(part) for part in error["loc"]) or "response"
+            details.append(f"{location}: {error['msg']}")
+        suffix = "; ".join(details)
+    else:
+        suffix = str(exc)
+    return f"LLM returned malformed {kind} structure: {suffix}"
 
 
 def format_node(state: WorkflowState) -> dict:
@@ -237,15 +327,16 @@ def format_node(state: WorkflowState) -> dict:
     alternatives_raw = state.get("alternatives", "")
     if alternatives_raw:
         try:
-            parsed = _extract_json(alternatives_raw)
+            parsed = _normalize_analyzer_shape(_extract_json(alternatives_raw))
             validated = AlternativesOutput.model_validate(parsed)
-        except (ValidationError, ValueError):
+        except (ValidationError, ValueError) as exc:
+            logger.warning("%s", _format_structure_error("alternatives", exc))
             return {
                 "final_output": {
                     "frontline": [],
                     "reserve": [],
                     "synergy_explanation": "",
-                    "error": "LLM returned malformed alternatives structure — retry or check model",
+                    "error": _format_structure_error("alternatives", exc),
                 }
             }
         return {"final_output": validated.model_dump()}
@@ -253,20 +344,22 @@ def format_node(state: WorkflowState) -> dict:
     # Happy path: parse and validate analysis_result
     analysis_result = state.get("analysis_result", "")
     try:
-        parsed = _extract_json(analysis_result)
+        parsed = _normalize_analyzer_shape(_extract_json(analysis_result))
+        parsed = _ground_missing_citations(parsed, state.get("boss_context", ""))
         if "recommendations" in parsed:
             validated = RecommendationSetOutput.model_validate(parsed)
         else:
             validated = TeamOutput.model_validate(parsed)
-    except (ValidationError, ValueError):
+    except (ValidationError, ValueError) as exc:
         # ValidationError: shape is wrong (e.g. 2 frontline instead of 3-4)
         # ValueError: _extract_json could not find JSON in the LLM output
+        logger.warning("%s", _format_structure_error("team", exc))
         return {
             "final_output": {
                 "frontline": [],
                 "reserve": [],
                 "synergy_explanation": "",
-                "error": "LLM returned malformed team structure — retry or check model",
+                "error": _format_structure_error("team", exc),
             }
         }
     return {"final_output": validated.model_dump()}
@@ -368,4 +461,8 @@ def _normalized_affinity_values(values) -> set[str]:
     """Compare affinity lists case-insensitively and independent of order."""
     if not isinstance(values, list):
         return set()
-    return {str(value).strip().lower() for value in values if str(value).strip()}
+    return {
+        normalized
+        for value in values
+        if (normalized := str(value).strip().lower()) and normalized != "unknown"
+    }

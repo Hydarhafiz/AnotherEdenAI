@@ -4,16 +4,15 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 
 class TestGetEntities:
-    def test_get_entities_returns_characters_sidekicks_and_grastas(self, test_client, stub_driver):
-        """GET /api/entities returns JSON with characters, sidekicks, and grastas keys."""
-        # Override stub to return mixed Character + Grasta records
+    def test_get_entities_returns_characters_and_sidekicks(self, test_client, stub_driver):
+        """GET /api/entities returns only ownership-selectable entity types."""
+        # Override stub to return mixed Character and Sidekick records
         stub_driver.execute_query = AsyncMock(
             return_value=(
                 [
                     {"name": "Aldo", "type": "Character"},
                     {"name": "Ciel", "type": "Character"},
                     {"name": "Tetra", "type": "Sidekick"},
-                    {"name": "All-Round Grasta", "type": "Grasta"},
                 ],
                 None,
                 None,
@@ -24,10 +23,28 @@ class TestGetEntities:
         data = response.json()
         assert "characters" in data
         assert "sidekicks" in data
-        assert "grastas" in data
+        assert set(data) == {"characters", "sidekicks"}
         assert "Aldo" in data["characters"]
         assert "Tetra" in data["sidekicks"]
-        assert "All-Round Grasta" in data["grastas"]
+
+    def test_get_entities_excludes_sidekick_character_name_overlap(self, test_client, stub_driver):
+        """Stale duplicate Character nodes must not appear in the hero picker."""
+        stub_driver.execute_query = AsyncMock(
+            return_value=(
+                [
+                    {"name": "Aldo", "type": "Character"},
+                    {"name": "Mare", "type": "Character"},
+                    {"name": "Mare", "type": "Sidekick"},
+                ],
+                None,
+                None,
+            )
+        )
+
+        data = test_client.get("/api/entities").json()
+
+        assert data["characters"] == ["Aldo"]
+        assert data["sidekicks"] == ["Mare"]
 
     def test_get_entities_empty_db(self, test_client, stub_driver):
         """GET /api/entities returns empty lists when Neo4j returns no records."""
@@ -37,7 +54,6 @@ class TestGetEntities:
         data = response.json()
         assert data["characters"] == []
         assert data["sidekicks"] == []
-        assert data["grastas"] == []
 
 
 class TestPostQuery:

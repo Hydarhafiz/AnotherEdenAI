@@ -56,6 +56,9 @@
             <div class="char-card">
               <strong>{{ char.name }}</strong>
               <div class="role">Frontline - {{ char.role }}</div>
+              <div><small>Weapon: {{ char.weapon }}</small></div>
+              <div><small>Armor: {{ char.armor }}</small></div>
+              <div><small>Grasta: {{ char.grastas | join(', ') }}</small></div>
               {% if char.recommended_skills %}
               <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
               {% else %}
@@ -81,6 +84,9 @@
             <div class="char-card">
               <strong>{{ char.name }}</strong>
               <div class="role">Reserve - {{ char.role }}</div>
+              <div><small>Weapon: {{ char.weapon }}</small></div>
+              <div><small>Armor: {{ char.armor }}</small></div>
+              <div><small>Grasta: {{ char.grastas | join(', ') }}</small></div>
               {% if char.recommended_skills %}
               <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
               {% else %}
@@ -104,9 +110,7 @@
 
         {% set build = namespace(notes=rec.build_notes or []) %}
         {% for char in rec.frontline + rec.reserve %}
-          {% if char.grastas %}
-            {% set build.notes = build.notes + [char.name ~ ': ' ~ (char.grastas | join(', '))] %}
-          {% endif %}
+          {% set build.notes = build.notes + [char.name ~ ': weapon ' ~ char.weapon ~ '; armor ' ~ char.armor ~ '; Grasta ' ~ (char.grastas | join(', '))] %}
         {% endfor %}
         {% if build.notes %}
         <section class="detail-section">
@@ -214,11 +218,11 @@
       <div class="char-card">
         <strong>{{ char.name }}</strong>
         <div class="role">{{ char.role }}</div>
-        {% if char.grastas %}
+        <div><small>Weapon: {{ char.weapon }}</small></div>
+        <div><small>Armor: {{ char.armor }}</small></div>
         <div class="grastas">
           <small>Grasta: {{ char.grastas | join(', ') }}</small>
         </div>
-        {% endif %}
       </div>
       {% endfor %}
     </div>
@@ -229,11 +233,11 @@
       <div class="char-card">
         <strong>{{ char.name }}</strong>
         <div class="role">{{ char.role }}</div>
-        {% if char.grastas %}
+        <div><small>Weapon: {{ char.weapon }}</small></div>
+        <div><small>Armor: {{ char.armor }}</small></div>
         <div class="grastas">
           <small>Grasta: {{ char.grastas | join(', ') }}</small>
         </div>
-        {% endif %}
       </div>
       {% endfor %}
     </div>

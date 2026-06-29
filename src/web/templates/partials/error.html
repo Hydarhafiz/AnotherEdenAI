@@ -2,12 +2,12 @@
 <!-- Rendered when result.error is set (retry cap exhausted or pipeline failure). -->
 <article role="alert" style="border-left: 4px solid #e74c3c; padding: 1rem;">
   <header><strong>No recommendation found</strong></header>
-  <p>The AI could not generate a valid Cypher query after 3 attempts.</p>
+  <p>The recommendation pipeline could not produce a valid result.</p>
   {% if result.error %}
   <details>
     <summary>Error details</summary>
     <pre style="font-size: 0.8rem; white-space: pre-wrap;">{{ result.error }}</pre>
   </details>
   {% endif %}
-  <p><small>Try rephrasing your query or adding more characters to your roster.</small></p>
+  <p><small>Review the error details, then retry. Rephrase the query only when the details point to retrieval.</small></p>
 </article>

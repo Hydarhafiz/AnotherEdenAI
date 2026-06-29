@@ -33,10 +33,15 @@ def _visible_text(html: str) -> str:
 
 
 def _slot(name: str, role: str, *, grastas: list[str] | None = None) -> dict:
+    values = list(grastas or ["Power of Mind"] )
+    while len(values) < 3:
+        values.append(values[-1])
     return {
         "name": name,
         "role": role,
-        "grastas": grastas or [],
+        "weapon": "available weapon",
+        "armor": "available armor",
+        "grastas": values[:3],
         "recommended_skills": [f"{name} Skill"],
         "recommended_passives": [f"{name} Passive"],
         "upgrade_assumptions": [],
@@ -47,7 +52,9 @@ def _minimal_slot(name: str, role: str) -> dict:
     return {
         "name": name,
         "role": role,
-        "grastas": [],
+        "weapon": "available weapon",
+        "armor": "available armor",
+        "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"],
         "recommended_skills": [],
         "recommended_passives": [],
         "upgrade_assumptions": [],
@@ -164,7 +171,7 @@ def test_feature_e_recommendations_render_expandable_evidence_sections():
     assert "Assumes: no upgrade assumptions listed" in text
     assert "Build Notes" in text
     assert "Assumes common late-game grasta access." in text
-    assert "Aldo: Fire T3" in text
+    assert "Aldo: weapon available weapon; armor available armor; Grasta Fire T3" in text
     assert "Sidekick And Key Facts" in text
     assert "Boss Counterplay" in text
     assert "Sustain And MP" in text
@@ -189,6 +196,8 @@ def test_feature_e_error_result_uses_graceful_failure_partial():
     text = _visible_text(html)
 
     assert "No recommendation found" in text
+    assert "The recommendation pipeline could not produce a valid result." in text
+    assert "valid Cypher query after 3 attempts" not in text
     assert "Error details" in text
     assert "LLM returned malformed team structure" in text
     assert "recommendation-card" not in html

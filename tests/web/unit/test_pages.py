@@ -16,14 +16,16 @@ class TestIndexPage:
         assert "hx-post" in response.text or "/api/query" in response.text
 
     def test_index_contains_sidekick_picker(self, test_client):
-        """GET / page exposes sidekick selection alongside characters and grastas."""
+        """GET / page exposes sidekick ownership selection alongside characters."""
         response = test_client.get("/")
         assert response.status_code == 200
         assert "Sidekicks" in response.text
         assert "sidekick-list" in response.text
+        assert "panel-grastas" not in response.text
+        assert "grasta-list" not in response.text
 
-    def test_index_busts_cached_frontend_bundle_for_sidekick_picker(self, test_client):
-        """GET / references the app.js version that includes sidekick picker code."""
+    def test_index_busts_cached_frontend_bundle_after_picker_change(self, test_client):
+        """GET / references the app.js version without stale Grasta ownership code."""
         response = test_client.get("/")
         assert response.status_code == 200
-        assert "/static/app.js?v=5" in response.text
+        assert "/static/app.js?v=6" in response.text

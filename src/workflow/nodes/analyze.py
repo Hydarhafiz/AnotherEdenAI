@@ -6,11 +6,37 @@ Returns only: {"analysis_result": str}
 The analysis_result is a raw string from the LLM, intended to be a JSON object
 with the team recommendation structure that FORMAT will parse and validate.
 """
+import logging
+from json import JSONDecodeError
+
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from ..context_compaction import compact_records
 from ..llm import get_llm
 from ..state import WorkflowState
+
+
+logger = logging.getLogger(__name__)
+ANALYZER_TRANSPORT_ATTEMPTS = 2
+
+
+def _invoke_analyzer(llm, messages):
+    """Retry malformed provider response envelopes without retrying model output."""
+    for attempt in range(1, ANALYZER_TRANSPORT_ATTEMPTS + 1):
+        try:
+            return llm.invoke(messages)
+        except JSONDecodeError as exc:
+            if attempt >= ANALYZER_TRANSPORT_ATTEMPTS:
+                raise RuntimeError(
+                    "Analyzer provider returned malformed JSON responses "
+                    f"after {ANALYZER_TRANSPORT_ATTEMPTS} attempts"
+                ) from exc
+            logger.warning(
+                "Analyzer provider returned malformed JSON response; retrying (%d/%d)",
+                attempt + 1,
+                ANALYZER_TRANSPORT_ATTEMPTS,
+            )
+
 
 ANALYZE_SYSTEM_PROMPT = """You are an AnotherEden team-building expert analyzing graph query results.
 
@@ -33,7 +59,9 @@ Output a JSON object with EXACTLY this structure:
         {
           "name": "<character_name>",
           "role": "<role>",
-          "grastas": ["<grasta_or_ore_note>", ...],
+          "weapon": "<one weapon assumption>",
+          "armor": "<one armor assumption>",
+          "grastas": ["<grasta_slot_1>", "<grasta_slot_2>", "<grasta_slot_3>"],
           "recommended_skills": ["<skill_name>", ...],
           "recommended_passives": ["<passive_name>", ...],
           "upgrade_assumptions": ["<SA_or_rare_setup_assumption>", ...]
@@ -41,7 +69,7 @@ Output a JSON object with EXACTLY this structure:
         ...
       ],
       "reserve": [
-        {"name": "<character_name>", "role": "<role>", "grastas": [], "recommended_skills": [], "recommended_passives": [], "upgrade_assumptions": []},
+        {"name": "<character_name>", "role": "<role>", "weapon": "<one weapon assumption>", "armor": "<one armor assumption>", "grastas": ["<grasta_slot_1>", "<grasta_slot_2>", "<grasta_slot_3>"], "recommended_skills": [], "recommended_passives": [], "upgrade_assumptions": []},
         ...
       ],
       "main_sidekick": "<sidekick_name_or_null>",
@@ -84,6 +112,12 @@ Rules:
 - Sidekicks, when present, go only in main_sidekick/sub_sidekick and never in hero slots
 - ONLY use sidekicks listed in Player owned sidekicks. If no sidekicks are selected, set main_sidekick and sub_sidekick to null and add a risk that no sidekick ownership was supplied.
 - Recommended skills must exist in the database results for that character. Use 3 or 4 skills per character when data supports it; use fewer only when data is incomplete and add a risk.
+- Every character MUST include exactly one weapon string, exactly one armor string, and exactly three Grasta strings.
+- Treat weapon, armor, and Grasta suggestions as build assumptions even if the player did not enter item ownership.
+- Do not assign the same specific weapon or the same specific armor to multiple characters inside the same recommendation lineup. The same item may appear again in a different recommendation lineup.
+- Grasta may be reused freely, including repeated copies on one character, when the build calls for it.
+- Prefer Grasta that match the character weapon type or listed traits from the database results. If compatibility cannot be verified from graph facts, state that caveat in upgrade_assumptions or build_notes.
+- If Pain/Poison Grasta or pain/poison multipliers are part of the damage plan, identify the skill, passive, sidekick, or explicit assumption that applies or enables pain/poison.
 - Treat Stellar Awakening-gated skills/passives conservatively and put any upgrade assumption in upgrade_assumptions.
 - Explain Grasta/Ore/equipment build notes as late-game-access assumptions, not exact optimizer output.
 - Use Superboss mechanics context when present. Boss affinity facts in boss_affinity must match that context.
@@ -109,8 +143,8 @@ Output a JSON object with EXACTLY this structure:
 {
   "alternatives": [
     {
-      "frontline": [{"name": "...", "role": "...", "grastas": ["..."]}, ...],
-      "reserve": [{"name": "...", "role": "...", "grastas": ["..."]}],
+      "frontline": [{"name": "...", "role": "...", "weapon": "...", "armor": "...", "grastas": ["...", "...", "..."]}, ...],
+      "reserve": [{"name": "...", "role": "...", "weapon": "...", "armor": "...", "grastas": ["...", "...", "..."]}],
       "main_sidekick": null,
       "sub_sidekick": null,
       "fit_label": "medium",
@@ -142,6 +176,10 @@ Rules:
 - Only suggest characters from the player's roster.
 - Do not duplicate heroes. Do not place sidekicks in hero slots.
 - Only use sidekicks listed in Player owned sidekicks. If none are selected, set both sidekick slots to null.
+- Every character MUST include exactly one weapon string, exactly one armor string, and exactly three Grasta strings.
+- Do not assign the same specific weapon or armor to multiple characters inside one alternative lineup.
+- Grasta may be reused freely, including repeated copies on one character.
+- If Pain/Poison Grasta or pain/poison multipliers are part of the damage plan, identify the source or label it as an assumption.
 - Include Grasta citations: [CharacterName]: [Grasta name] ([trait]) — [effect].
 - Never present numeric win probability.
 - Output ONLY the JSON object — no preamble, no markdown fences."""
@@ -209,7 +247,7 @@ def analyze_node(state: WorkflowState) -> dict:
         HumanMessage(content=human_content),
     ]
 
-    response = llm.invoke(messages)
+    response = _invoke_analyzer(llm, messages)
     return {"analysis_result": response.content}
 
 
@@ -237,5 +275,5 @@ def _generate_alternatives(state: WorkflowState) -> dict:
             "No database results were found. Generate EXACTLY 3 alternative team compositions."
         )),
     ]
-    response = llm.invoke(messages)
+    response = _invoke_analyzer(llm, messages)
     return {"alternatives": response.content}

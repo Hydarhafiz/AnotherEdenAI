@@ -18,11 +18,11 @@
       <div class="char-card">
         <strong>{{ char.name }}</strong>
         <div class="role">{{ char.role }}</div>
-        {% if char.grastas %}
+        <div><small>Weapon: {{ char.weapon }}</small></div>
+        <div><small>Armor: {{ char.armor }}</small></div>
         <div class="grastas">
           <small>Grasta: {{ char.grastas | join(', ') }}</small>
         </div>
-        {% endif %}
       </div>
       {% endfor %}
     </div>
@@ -33,11 +33,11 @@
       <div class="char-card">
         <strong>{{ char.name }}</strong>
         <div class="role">{{ char.role }}</div>
-        {% if char.grastas %}
+        <div><small>Weapon: {{ char.weapon }}</small></div>
+        <div><small>Armor: {{ char.armor }}</small></div>
         <div class="grastas">
           <small>Grasta: {{ char.grastas | join(', ') }}</small>
         </div>
-        {% endif %}
       </div>
       {% endfor %}
     </div>
