@@ -137,6 +137,8 @@ class LegalityContext(BaseModel):
     known_grastas: set[str] = Field(default_factory=set)
     grasta_personality_reqs: dict[str, str] = Field(default_factory=dict)
     assumed_available_sidekicks: set[str] = Field(default_factory=set)
+    grasta_weapon_reqs: dict[str, str] = Field(default_factory=dict)
+    grasta_copy_limits: dict[str, int | None] = Field(default_factory=dict)
 
 
 class LineupLegalityError(ValueError):
@@ -235,12 +237,15 @@ async def collect_legality_context(
         WITH known_characters, character_rows, trait_rows, skill_rows, passive_rows,
              collect(DISTINCT s.name) AS known_sidekicks
         OPTIONAL MATCH (g:Grasta)
-        WHERE g.name IN $grasta_names
+        WHERE g.grasta_id IN $grasta_names OR g.display_name IN $grasta_names
         OPTIONAL MATCH (g)-[:REQUIRES_TRAIT]->(required_trait:Trait)
         RETURN known_characters, character_rows, trait_rows, skill_rows, passive_rows, known_sidekicks,
                collect(DISTINCT {
-                 name: g.name,
-                 personality_req: required_trait.name
+                 selection: CASE WHEN g.grasta_id IN $grasta_names THEN g.grasta_id ELSE g.display_name END,
+                 personality_req: required_trait.name,
+                 weapon_req: g.weapon_req,
+                 acquisition_class: g.acquisition_class,
+                 max_copies: g.max_theoretical_copies
                }) AS grasta_rows
         """,
         hero_names=hero_names,
@@ -259,8 +264,10 @@ async def collect_legality_context(
         character_passives=_rows_to_name_map(row.get("passive_rows", []), gated=False),
         sa_gated_skills=_rows_to_name_map(row.get("skill_rows", []), gated=True),
         sa_gated_passives=_rows_to_name_map(row.get("passive_rows", []), gated=True),
-        known_grastas={row["name"] for row in grasta_rows if row.get("name")},
-        grasta_personality_reqs={row["name"]: row["personality_req"] for row in grasta_rows if row.get("name") and row.get("personality_req")},
+        known_grastas={item["selection"] for item in grasta_rows if item.get("selection")},
+        grasta_personality_reqs={item["selection"]: item["personality_req"] for item in grasta_rows if item.get("selection") and item.get("personality_req")},
+        grasta_weapon_reqs={item["selection"]: item["weapon_req"] for item in grasta_rows if item.get("selection") and item.get("weapon_req")},
+        grasta_copy_limits={item["selection"]: item.get("max_copies") for item in grasta_rows if item.get("selection") and item.get("acquisition_class") != "repeatable"},
         assumed_available_sidekicks=assumed_available_sidekicks or set(),
     )
 
@@ -311,6 +318,7 @@ def validate_lineup_legality(
         if sidekick not in allowed_sidekicks:
             errors.append(f"{slot_name} is not owned or assumption-available: {sidekick}")
 
+    errors.extend(_validate_grasta_cardinality(candidate, context))
     if _lineup_depends_on_pain_poison(candidate) and not _lineup_has_pain_poison_source(candidate):
         errors.append("pain/poison-dependent build assumptions must identify a skill, passive, sidekick, or explicit assumption that applies pain/poison")
 
@@ -381,12 +389,30 @@ def _validate_grasta_compatibility(
                 errors.append(f"{hero.name} lacks required trait for Grasta {grasta}: {personality_req}")
             continue
 
-        weapon_req = _weapon_type_from_grasta_name(grasta)
+        weapon_req = context.grasta_weapon_reqs.get(grasta) or _weapon_type_from_grasta_name(grasta)
         if weapon_req:
             if weapon and weapon.lower() != weapon_req.lower():
                 errors.append(f"{hero.name} cannot use weapon-type Grasta {grasta}; character weapon is {weapon}")
             continue
 
+    return errors
+
+
+def _validate_grasta_cardinality(
+    lineup: LineupModel,
+    context: LegalityContext,
+) -> list[str]:
+    allocated: dict[str, int] = {}
+    errors: list[str] = []
+    for hero in lineup.heroes:
+        for grasta in hero.grastas:
+            allocated[grasta] = allocated.get(grasta, 0) + 1
+            limit = context.grasta_copy_limits.get(grasta)
+            if limit is not None and allocated[grasta] > limit:
+                errors.append(
+                    f"Grasta copy limit exceeded for {grasta}: "
+                    f"{allocated[grasta]} assigned, maximum {limit}"
+                )
     return errors
 
 

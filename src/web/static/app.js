@@ -72,6 +72,7 @@ const NODE_TO_STEP = {
   "PLAN":     "step-plan",
   "CYPHER":   "step-cypher",
   "VALIDATE": "step-validate",
+  "CANDIDATES": "step-candidates",
   "ANALYZE":  "step-analyze",
   "FORMAT":   "step-format",
 };
@@ -80,6 +81,7 @@ const STEP_LABELS = {
   "PLAN":     "Planning strategy",
   "CYPHER":   "Building database query",
   "VALIDATE": "Validating results",
+  "CANDIDATES": "Preparing legal candidates",
   "ANALYZE":  "Analyzing team composition",
   "FORMAT":   "Formatting recommendations",
 };
@@ -99,6 +101,11 @@ const STEPS_HTML = `
   <div class="pipeline-step" id="step-validate" data-node="VALIDATE">
     <span class="step-icon">⬜</span>
     <span class="step-label">Validating results</span>
+    <span class="step-time"></span>
+  </div>
+  <div class="pipeline-step" id="step-candidates" data-node="CANDIDATES">
+    <span class="step-icon">⬜</span>
+    <span class="step-label">Preparing legal candidates</span>
     <span class="step-time"></span>
   </div>
   <div class="pipeline-step" id="step-analyze"  data-node="ANALYZE">
@@ -212,8 +219,11 @@ function handleNodeStatus(payload) {
   const stepId = NODE_TO_STEP[node];
   if (!stepId) return;
 
-  const retryText = (node === "VALIDATE" && attempt > 1)
-    ? "retry " + attempt + "/" + max : null;
+  let retryText = null;
+  if (node === "VALIDATE" && attempt > 1) retryText = "Cypher retry " + attempt + "/" + max;
+  if (node === "ANALYZE" && payload.correction_rounds > 0) {
+    retryText = "correction " + payload.correction_rounds + "/2";
+  }
 
   stepMarkActive(stepId, STEP_LABELS[node] || node, retryText);
   pipelineActiveStepId = stepId;

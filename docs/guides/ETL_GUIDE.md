@@ -289,6 +289,21 @@ If Neo4j load fails:
 - confirm the database is reachable
 - rerun `assert_schema.py` after a successful load
 
+## Feature B Grasta Identity Migration
+
+Schema 1.1.0 replaces the name-only Grasta constraint with `grasta_id`. A normal ETL replay drops the legacy constraint, removes only Grasta nodes without a stable ID, and reloads exact variants from current parsed artifacts.
+
+Because schema-versioned parsed artifacts from 1.0.0 are invalid, refresh/reparse the cached Grasta index pages, then run:
+
+```bash
+ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
+uv run python assert_schema.py
+```
+
+The ETL must report removal of collapsed legacy Grasta nodes before loading exact variants. Verify that Almighty Power personality variants and weapon-specific Enhance if Max HP variants have distinct `grasta_id` values, one `REQUIRES_TRAIT` relationship at most per exact personality variant, and explicit acquisition/cardinality metadata.
+
+The same ETL run performs the character coverage gate. Any parsed character missing from Neo4j or excluded from the frontend roster list aborts visibly; alias/style inputs such as Akane Alter must resolve to the full canonical display name.
+
 ## Maintenance Rule
 
 When an implementation changes ETL stages, crawl controls, manifest shape, operator workflow, artifact layout, or debugging steps, update this guide in the same feature.

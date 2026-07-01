@@ -128,9 +128,10 @@ class RecommendationSetOutput(BaseModel):
     archetype_viability_notes: explains weaker archetypes or variant rationale.
     """
 
-    recommendations: list[TeamOutput] = Field(min_length=3, max_length=3)
+    recommendations: list[TeamOutput] = Field(min_length=1, max_length=3)
     boss_affinity: BossAffinityOutput = Field(default_factory=BossAffinityOutput)
     archetype_viability_notes: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
     error: Optional[str] = None
 
     @model_validator(mode="after")
@@ -157,7 +158,7 @@ class RecommendationSetOutput(BaseModel):
                 raise ValueError("each recommendation must include fit and confidence labels")
 
         expected = {"burst", "sustain", "hybrid"}
-        if not expected.issubset(set(archetypes)) and not self.archetype_viability_notes:
+        if not expected.issubset(set(archetypes)) and not (self.archetype_viability_notes or self.warnings):
             raise ValueError("variant recommendations require archetype_viability_notes")
         return self
 
@@ -310,6 +311,19 @@ def format_node(state: WorkflowState) -> dict:
     retry_count = state.get("retry_count", 0)
     db_results = state.get("db_results", [])
 
+    analysis_failure = state.get("analysis_failure", {})
+    if analysis_failure:
+        return {
+            "final_output": {
+                "frontline": [],
+                "reserve": [],
+                "synergy_explanation": "",
+                "error": analysis_failure.get("message", "Recommendation analysis failed"),
+                "error_type": analysis_failure.get("type", "analysis_failure"),
+                "diagnostics": analysis_failure.get("diagnostics", []),
+            }
+        }
+
     # Error path: retry cap exhausted (only when no alternatives were generated)
     if retry_count >= 3 and not db_results and not state.get("alternatives"):
         validation_errors = state.get("validation_errors", [])
@@ -320,6 +334,7 @@ def format_node(state: WorkflowState) -> dict:
                 "reserve": [],
                 "synergy_explanation": "",
                 "error": error_str,
+                "error_type": "cypher_retrieval_exhausted",
             }
         }
 
@@ -381,26 +396,57 @@ async def format_and_validate_node(state: WorkflowState, driver) -> dict:
 
     try:
         _validate_boss_affinity_fidelity(final_output, state.get("boss_context", ""))
-        roster = RosterInput(
-            owned_characters=state.get("roster", []),
-            stellar_awakened=state.get("stellar_awakened", {}),
-            owned_sidekicks=state.get("owned_sidekicks", []),
-        )
-        for lineup_payload in _lineup_payloads(final_output):
-            lineup = LineupModel.model_validate(lineup_payload)
-            context = await collect_legality_context(driver, lineup)
-            validate_lineup_legality(lineup, roster, context)
     except Exception as exc:
         return {
             "final_output": {
-                "frontline": [],
-                "reserve": [],
-                "synergy_explanation": "",
-                "error": f"Recommendation failed final validation: {exc}",
-            }
+                "frontline": [], "reserve": [], "synergy_explanation": "",
+                "error": f"Recommendation failed boss-fact validation: {exc}",
+                "error_type": "boss_affinity_fidelity_failure",
+            },
+            "final_legality_errors": [{"code": "boss.affinity", "message": str(exc)}],
         }
 
-    return formatted
+    roster = RosterInput(
+        owned_characters=state.get("roster", []),
+        stellar_awakened=state.get("stellar_awakened", {}),
+        owned_sidekicks=state.get("owned_sidekicks", []),
+    )
+    valid_payloads = []
+    failures = []
+    for index, lineup_payload in enumerate(_lineup_payloads(final_output)):
+        try:
+            lineup = LineupModel.model_validate(lineup_payload)
+            context = await collect_legality_context(driver, lineup)
+            validate_lineup_legality(lineup, roster, context)
+            valid_payloads.append(lineup_payload)
+        except Exception as exc:
+            logger.warning("Final legality rejected lineup %d: %s", index, exc)
+            failures.append({
+                "code": "final_legality.lineup",
+                "path": f"recommendations.{index}",
+                "message": str(exc),
+            })
+
+    if failures and "recommendations" in final_output:
+        final_output["recommendations"] = valid_payloads
+        final_output.setdefault("warnings", []).append(
+            f"Discarded {len(failures)} lineup(s) during final graph legality validation."
+        )
+    if not valid_payloads:
+        details = "; ".join(failure["message"] for failure in failures)
+        return {
+            "final_output": {
+                "frontline": [], "reserve": [], "synergy_explanation": "",
+                "error": (
+                    "No fully valid recommendation remained after final legality validation."
+                    + (f" {details}" if details else "")
+                ),
+                "error_type": "final_legality_exhausted",
+                "diagnostics": failures,
+            },
+            "final_legality_errors": failures,
+        }
+    return {"final_output": final_output, "final_legality_errors": failures}
 
 
 def _lineup_payloads(final_output: dict) -> list[dict]:

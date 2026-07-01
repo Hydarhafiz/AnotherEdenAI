@@ -1,11 +1,14 @@
 # Graph Schema Contract
-**SCHEMA_VERSION: 1.0.0**
+**SCHEMA_VERSION: 1.1.0**
 **Status:** Stable — do not modify without incrementing SCHEMA_VERSION and running ETL
 
 ## Node Labels and Properties
 
 ### Character
 - `name` (STRING, unique) — canonical wiki name
+- `character_id` (STRING, unique candidate identity) — stable identity derived from name and detail URL
+- `display_name` (STRING) — full canonical roster/display name
+- `aliases` (LIST<STRING>) — accepted inputs that resolve back to the canonical name
 - `element` (STRING) — Fire, Water, Wind, Earth, Thunder, Light, Dark, Null
 - `weapon` (STRING) — Sword, Blade, Bow, Spear, Hammer, Staff, Mace, Tome, Fist, Katana
 - `light_shadow` (STRING) — "Light" or "Shadow"
@@ -16,14 +19,23 @@
 - `name` (STRING, unique) — personality trait name shared by Characters and Grastas
 
 ### Grasta
-- `name` (STRING, unique) — display name from wiki col[1]; VC grastas: col[1] only (NOT data-name which includes character)
+- `grasta_id` (STRING, unique) — stable exact-variant identity
+- `name` (STRING) — shared base name from the wiki
+- `display_name` (STRING) — compatibility-disambiguated recommendation label
 - `category` (STRING) — Attack | Life | Support | Special | VC
-- `tier` (INTEGER) — grasta tier level (always read from data-tier; do NOT hard-code VC=4, wiki shows tier=3)
-- `stats` (STRING) — stat bonuses from col[3] (e.g., "INT +10 SPD +10")
+- `tier` (INTEGER) — grasta tier level from data-tier
+- `stats` (STRING) — stat bonuses from the source row
 - `is_shareable` (BOOLEAN) — true if data-share="1"
-- `personality_req` (STRING, nullable) — trait name from data-personality; null for VC and weapon-based grastas
-- `effect_tags` (LIST<STRING>) — deterministic keyword tags derived from existing Grasta name/category/stats/personality text for retrieval
-- `effect_tag_derivation` (STRING) — derivation note for `effect_tags`; tags are not exact damage math
+- `personality_req` (STRING, nullable) — exact personality compatibility discriminator
+- `weapon_req` (STRING, nullable) — exact required weapon when one weapon flag is set
+- `weapon_group` (LIST<STRING>) — all compatible weapon flags from the source row
+- `source_url`, `obtain_text`, `effect_text` (STRING) — source-grounded context
+- `source_variant` (STRING) — optional discriminator when other identity fields collide
+- `acquisition_class` (STRING) — unique | finite | repeatable | unknown
+- `max_theoretical_copies` (INTEGER, nullable) — exact-variant account ceiling when known
+- `schema_version` (STRING) — ETL schema version used for this row
+- `effect_tags` (LIST<STRING>) — deterministic retrieval tags
+- `effect_tag_derivation` (STRING) — derivation note; tags are not exact damage math
 
 ### Ore
 - `name` (STRING, unique) — ore display name from col[1]

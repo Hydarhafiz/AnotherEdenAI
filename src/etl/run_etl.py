@@ -8,6 +8,7 @@ from neo4j import AsyncGraphDatabase
 from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
 from .loader import (
     cleanup_duplicate_sidekick_characters,
+    audit_character_readiness,
     ensure_constraints,
     load_characters,
     load_equipment,
@@ -17,6 +18,7 @@ from .loader import (
     load_passive_skills,
     load_sidekicks,
     load_skills,
+    remove_collapsed_legacy_grastas,
     load_superbosses,
 )
 from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
@@ -88,8 +90,10 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
                 "Confirmed duplicate sidekick Character nodes removed: %s",
                 ", ".join(cleanup_names),
             )
+        await audit_character_readiness(driver, [character.name for character in characters])
         await load_superbosses(driver, superbosses)
         await load_mechanic_references(driver, mechanic_references)
+        await remove_collapsed_legacy_grastas(driver)
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
         await load_equipment(driver, equipment)

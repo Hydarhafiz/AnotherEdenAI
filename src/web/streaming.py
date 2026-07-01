@@ -36,6 +36,7 @@ NODE_LABELS: dict[str, str] = {
     "superboss_context": "SUPERBOSS",
     "generate_cypher": "CYPHER",
     "validate": "VALIDATE",
+    "prepare_candidates": "CANDIDATES",
     "analyze": "ANALYZE",
     "format": "FORMAT",
 }
@@ -78,6 +79,17 @@ async def pipeline_sse_generator(
         "db_results": [],
         "validation_errors": [],
         "retry_count": 0,
+        "stellar_awakened": {},
+        "cypher_retry_count": 0,
+        "candidate_bundle": {},
+        "candidate_warnings": [],
+        "analyzer_call_count": 0,
+        "analyzer_correction_rounds": 0,
+        "provider_transport_retries": 0,
+        "structured_output_errors": [],
+        "candidate_validation_errors": [],
+        "analysis_failure": {},
+        "final_legality_errors": [],
         "analysis_result": "",
         "alternatives": "",
         "final_output": {},
@@ -100,8 +112,11 @@ async def pipeline_sse_generator(
                 # retry_count is the number of completed failed attempts.
                 # The displayed attempt is the next validation attempt.
                 if node_name == "validate":
-                    retry_count = state_update.get("retry_count", 0)
+                    retry_count = state_update.get("cypher_retry_count", state_update.get("retry_count", 0))
                     attempt = retry_count + 1
+                    max_attempts = 3
+                elif node_name == "analyze":
+                    attempt = max(1, state_update.get("analyzer_call_count", 1))
                     max_attempts = 3
                 else:
                     attempt = 1
@@ -112,6 +127,12 @@ async def pipeline_sse_generator(
                     "node": label,
                     "attempt": attempt,
                     "max": max_attempts,
+                    "cypher_retries": state_update.get("cypher_retry_count", state_update.get("retry_count", 0)),
+                    "correction_rounds": state_update.get("analyzer_correction_rounds", 0),
+                    "provider_transport_retries": state_update.get("provider_transport_retries", 0),
+                    "structured_output_error_count": len(state_update.get("structured_output_errors", [])),
+                    "candidate_validation_error_count": len(state_update.get("candidate_validation_errors", [])),
+                    "failure_type": state_update.get("analysis_failure", {}).get("type"),
                 })
 
                 yield ServerSentEvent(data=event_data, event="node_status")

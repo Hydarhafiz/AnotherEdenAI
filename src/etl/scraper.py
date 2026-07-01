@@ -936,26 +936,53 @@ def parse_character_passive_skills(
     return passives
 
 
-def parse_grastas(soup: BeautifulSoup, category: str) -> list[GrastaRow]:
-    """Extract GrastaRow instances from a non-VC Grasta wiki page.
+def _classify_grasta_acquisition(obtain_text: str, tier: int) -> tuple[str, int | None]:
+    if "\u221e" in obtain_text or re.search(r"\b(?:unlimited|repeatable)\b", obtain_text, re.IGNORECASE):
+        return "repeatable", None
+    count_match = re.match(r"^(\d+)\s*[:x]", obtain_text.strip())
+    if count_match:
+        count = int(count_match.group(1))
+        return ("unique" if count == 1 else "finite"), count
+    if tier == 3:
+        return "unique", 1
+    return "unknown", None
 
-    Uses data-name for the name, data-tier for the tier (never hard-coded),
-    and col[3] for stats (col[2] is personality_req).
-    """
+
+def parse_grastas(soup: BeautifulSoup, category: str) -> list[GrastaRow]:
+    """Extract exact, compatibility-aware Grasta variants from a wiki page."""
     rows = []
+    weapon_aliases = {
+        "staff": "Staff", "sword": "Sword", "katana": "Katana",
+        "ax": "Axe", "lance": "Spear", "bow": "Bow",
+        "fists": "Fist", "hammer": "Hammer",
+    }
     for tr in soup.select("tr.grasta-row-entry"):
         cols = tr.find_all("td")
         if len(cols) < 4:
             logger.warning("Skipping grasta row with too few columns: %s", tr)
             continue
         personality_raw = tr.get("data-personality") or None
+        weapon_group = [
+            display for attribute, display in weapon_aliases.items()
+            if tr.get(f"data-{attribute}", "0") == "1"
+        ]
+        tier = int(tr.get("data-tier", 0))
+        obtain_text = cols[5].get_text(" ", strip=True) if len(cols) > 5 else ""
+        acquisition_class, max_copies = _classify_grasta_acquisition(obtain_text, tier)
         raw = {
             "name": tr.get("data-name", ""),
             "category": category,
-            "tier": tr.get("data-tier", 0),
+            "tier": tier,
             "stats": cols[3].get_text(" ", strip=True),
             "personality_req": personality_raw,
+            "weapon_req": weapon_group[0] if len(weapon_group) == 1 else None,
+            "weapon_group": weapon_group,
             "is_shareable": tr.get("data-share", "0"),
+            "source_url": WIKI_URLS[f"grasta_{category.lower()}"],
+            "effect_text": cols[4].get_text(" ", strip=True) if len(cols) > 4 else "",
+            "obtain_text": obtain_text,
+            "acquisition_class": acquisition_class,
+            "max_theoretical_copies": max_copies,
         }
         result = parse_grasta(raw)
         if result is not None:
@@ -986,6 +1013,12 @@ def parse_vc_grastas(soup: BeautifulSoup) -> list[GrastaRow]:
             "stats": cols[3].get_text(" ", strip=True),
             "personality_req": None,
             "is_shareable": tr.get("data-share", "0"),
+            "source_url": WIKI_URLS["grasta_vc"],
+            "source_variant": tr.get("data-name", ""),
+            "effect_text": cols[4].get_text(" ", strip=True) if len(cols) > 4 else "",
+            "obtain_text": cols[5].get_text(" ", strip=True) if len(cols) > 5 else "",
+            "acquisition_class": "unique",
+            "max_theoretical_copies": 1,
         }
         result = parse_grasta(raw)
         if result is not None:

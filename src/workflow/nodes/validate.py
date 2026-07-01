@@ -74,14 +74,14 @@ async def validate_node(state: WorkflowState, driver) -> dict:
             f"Attempt {retry_count + 1}: Query failed due to Exception. "
             f"Context: {type(exc).__name__}: {exc}"
         )
-        return {"validation_errors": [error_msg], "retry_count": retry_count + 1}
+        return {"validation_errors": [error_msg], "retry_count": retry_count + 1, "cypher_retry_count": retry_count + 1}
 
     if not records:
         error_msg = (
             f"Attempt {retry_count + 1}: Query failed due to Empty Result. "
             f"Context: Query returned no records -- possible hallucinated traversal path."
         )
-        return {"validation_errors": [error_msg], "retry_count": retry_count + 1}
+        return {"validation_errors": [error_msg], "retry_count": retry_count + 1, "cypher_retry_count": retry_count + 1}
 
     # ------------------------------------------------------------------
     # Step 2: Haiku 4.6 Semantic Gate
@@ -108,7 +108,7 @@ async def validate_node(state: WorkflowState, driver) -> dict:
 
     if response.content.strip().upper().startswith("PASS"):
         # Both steps pass — return only db_results
-        return {"db_results": [dict(r) for r in records]}
+        return {"db_results": [dict(r) for r in records], "cypher_retry_count": retry_count}
 
     # Semantic fail — extract explanation from Haiku's response
     content = response.content.strip()
@@ -123,4 +123,4 @@ async def validate_node(state: WorkflowState, driver) -> dict:
         f"Attempt {retry_count + 1}: Query failed due to Semantic Mismatch. "
         f"Context: {explanation}"
     )
-    return {"validation_errors": [error_msg], "retry_count": retry_count + 1}
+    return {"validation_errors": [error_msg], "retry_count": retry_count + 1, "cypher_retry_count": retry_count + 1}

@@ -37,6 +37,7 @@ READINESS_NODE_MINIMUMS = {
 
 SCHEMA_VERSION_LABELS = [
     "Skill",
+    "Grasta",
     "PassiveSkill",
     "Sidekick",
     "SidekickSkill",
@@ -48,6 +49,7 @@ SCHEMA_VERSION_LABELS = [
 
 SOURCE_URL_LABELS = [
     "Skill",
+    "Grasta",
     "PassiveSkill",
     "Sidekick",
     "SidekickSkill",
@@ -219,6 +221,34 @@ try:
                 failed = True
             else:
                 print(f"OK: {label} source_url present")
+
+        invalid_grastas = _count(
+            session,
+            """
+            MATCH (g:Grasta)
+            WHERE g.grasta_id IS NULL OR g.grasta_id = ''
+               OR g.display_name IS NULL OR g.display_name = ''
+               OR g.acquisition_class IS NULL
+            RETURN count(g) AS cnt
+            """,
+        )
+        cross_variant_traits = _count(
+            session,
+            """
+            MATCH (g:Grasta)-[:REQUIRES_TRAIT]->(t:Trait)
+            WITH g, count(DISTINCT t) AS trait_count
+            WHERE trait_count > 1
+            RETURN count(g) AS cnt
+            """,
+        )
+        if invalid_grastas or cross_variant_traits:
+            print(
+                f"FAIL: Grasta identity metadata invalid={invalid_grastas}, "
+                f"cross-variant trait nodes={cross_variant_traits}"
+            )
+            failed = True
+        else:
+            print("OK: exact Grasta identities and trait isolation")
 
         overlap_count = _count(
             session,

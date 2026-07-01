@@ -31,13 +31,19 @@ async def normalize_character_name(driver, input_name: str) -> str | None:
         WHERE (
           toLower(c.name) = toLower($input)
           OR toLower(c.name) CONTAINS toLower($input)
+          OR any(alias IN coalesce(c.aliases, []) WHERE toLower(alias) = toLower($input))
+          OR any(alias IN coalesce(c.aliases, []) WHERE toLower(alias) CONTAINS toLower($input))
         )
         AND NOT EXISTS {
           MATCH (s:Sidekick)
           WHERE toLower(s.name) = toLower(c.name)
         }
         RETURN c.name AS canonical
-        ORDER BY size(c.name) ASC
+        ORDER BY
+          CASE
+            WHEN toLower(c.name) = toLower($input) THEN 0
+            WHEN any(alias IN coalesce(c.aliases, []) WHERE toLower(alias) = toLower($input)) THEN 1
+            ELSE 2 END, size(c.name) ASC
         LIMIT 1
         """,
         input=input_name,

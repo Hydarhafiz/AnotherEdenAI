@@ -10,12 +10,14 @@ Covers AGENT-04, AGENT-05, AGENT-06, AGENT-07:
 
 Note: validate_node is async (Phase 3), so graph tests use ainvoke().
 """
+import json
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch, call
 from langchain_core.messages import AIMessage
 
 from src.workflow.graph import build_graph, route_after_validate
 from src.workflow.legality import LegalityContext
+from tests.workflow.test_candidates import candidate_bundle, candidate_lineup
 
 
 def _mock_llm_factory(content="stub response"):
@@ -25,21 +27,19 @@ def _mock_llm_factory(content="stub response"):
     return llm
 
 
-# Canned ANALYZE JSON response used in happy-path tests.
-# Must have exactly 4 frontline and 2 reserve to satisfy Feature B legality.
-_ANALYZE_RESPONSE = (
-    '{"frontline": ['
-    '{"name": "Aldo", "role": "DPS", "weapon": "available weapon", "armor": "available armor", "grastas": ["Fire T3", "Fire T3", "Fire T3"]},'
-    '{"name": "Riica", "role": "support", "weapon": "available weapon", "armor": "available armor", "grastas": ["SPD Up", "SPD Up", "SPD Up"]},'
-    '{"name": "Bertrand", "role": "tank", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},'
-    '{"name": "Shion", "role": "DPS", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]}'
-    '],'
-    ' "reserve": ['
-    '{"name": "Ciel", "role": "support", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]},'
-    '{"name": "Feinne", "role": "healer", "weapon": "available weapon", "armor": "available armor", "grastas": ["Power of Mind", "Power of Mind", "Power of Mind"]}'
-    '],'
-    ' "synergy_explanation": "Fire synergy with Aldo as main DPS"}'
-)
+def _graph_candidate_data():
+    bundle = candidate_bundle()
+    names = ["Aldo", "Riica", "Bertrand", "Shion", "Ciel", "Feinne"]
+    for character, name in zip(bundle["characters"], names):
+        character["name"] = name
+        character["display_name"] = name
+        character["aliases"] = [name]
+    proposal = candidate_lineup(bundle)
+    proposal["main_sidekick_id"] = None
+    return bundle, json.dumps({"recommendations": [proposal]})
+
+
+_GRAPH_BUNDLE, _ANALYZE_RESPONSE = _graph_candidate_data()
 
 _GRAPH_HEROES = {"Aldo", "Riica", "Bertrand", "Shion", "Ciel", "Feinne", "Miyu"}
 _GRAPH_ROSTER = sorted(_GRAPH_HEROES)
@@ -48,7 +48,15 @@ _GRAPH_ROSTER = sorted(_GRAPH_HEROES)
 def _graph_legality_context():
     return LegalityContext(
         known_characters=_GRAPH_HEROES,
-        known_grastas={"Fire T3", "HP Up", "SPD Up", "Power of Mind"},
+        character_skills={
+            character["name"]: {skill["name"] for skill in character["skills"]}
+            for character in _GRAPH_BUNDLE["characters"]
+        },
+        character_passives={
+            character["name"]: {passive["name"] for passive in character["passives"]}
+            for character in _GRAPH_BUNDLE["characters"]
+        },
+        known_grastas={"Power of Mind"},
     )
 
 
@@ -56,12 +64,12 @@ class TestRouteAfterValidate:
     """Unit tests for route_after_validate routing function."""
 
     def test_route_after_validate_success(self):
-        """Non-empty db_results must route to analyze."""
+        """Non-empty db_results must route to prepare_candidates."""
         state = {
             "db_results": [{"name": "Aldo"}],
             "retry_count": 0,
         }
-        assert route_after_validate(state) == "analyze"
+        assert route_after_validate(state) == "prepare_candidates"
 
     def test_route_after_validate_retry(self):
         """Empty db_results with retry_count < 3 must route to generate_cypher."""
@@ -72,28 +80,28 @@ class TestRouteAfterValidate:
         assert route_after_validate(state) == "generate_cypher"
 
     def test_route_after_validate_cap(self):
-        """Empty db_results with retry_count >= 3 must route to analyze (alternatives path)."""
+        """Empty db_results with retry_count >= 3 must route to classified formatting failure."""
         state = {
             "db_results": [],
             "retry_count": 3,
         }
-        assert route_after_validate(state) == "analyze"
+        assert route_after_validate(state) == "format"
 
     def test_route_after_validate_cap_above_three(self):
-        """retry_count > 3 also routes to analyze/alternatives (defensive)."""
+        """retry_count > 3 also routes to classified formatting failure (defensive)."""
         state = {
             "db_results": [],
             "retry_count": 5,
         }
-        assert route_after_validate(state) == "analyze"
+        assert route_after_validate(state) == "format"
 
     def test_route_after_validate_success_overrides_retry_count(self):
-        """Non-empty db_results routes to analyze even if retry_count is high."""
+        """Non-empty db_results routes through candidate preparation even if retry_count is high."""
         state = {
             "db_results": [{"name": "Ciel"}],
             "retry_count": 2,
         }
-        assert route_after_validate(state) == "analyze"
+        assert route_after_validate(state) == "prepare_candidates"
 
 
 class TestGraphHappyPath:
@@ -108,6 +116,10 @@ class TestGraphHappyPath:
             "src.workflow.nodes.format.collect_legality_context",
             new_callable=AsyncMock,
             return_value=_graph_legality_context(),
+        ), patch(
+            "src.workflow.graph.prepare_candidates_node",
+            new_callable=AsyncMock,
+            return_value={"candidate_bundle": _GRAPH_BUNDLE, "candidate_warnings": []},
         ):
             yield
 
@@ -151,22 +163,22 @@ class TestGraphHappyPath:
 
         assert "final_output" in result
         final = result["final_output"]
-        assert "frontline" in final
-        assert "reserve" in final
-        assert "synergy_explanation" in final
+        assert len(final["recommendations"]) == 1
+        lineup = final["recommendations"][0]
+        assert lineup["synergy_explanation"]
 
         # Aldo should be in frontline
-        frontline_names = [slot["name"] for slot in final["frontline"]]
+        frontline_names = [slot["name"] for slot in lineup["frontline"]]
         assert "Aldo" in frontline_names, (
             f"Expected 'Aldo' in frontline, got: {frontline_names}"
         )
         # Ciel should be in reserve
-        reserve_names = [slot["name"] for slot in final["reserve"]]
+        reserve_names = [slot["name"] for slot in lineup["reserve"]]
         assert "Ciel" in reserve_names, (
             f"Expected 'Ciel' in reserve, got: {reserve_names}"
         )
         # synergy_explanation should be non-empty
-        assert final["synergy_explanation"], "Expected non-empty synergy_explanation"
+        assert lineup["synergy_explanation"], "Expected non-empty synergy_explanation"
 
         # Success path: no error key (or error is None)
         assert final.get("error") is None, (
@@ -215,9 +227,8 @@ class TestGraphHappyPath:
         )
         assert "final_output" in result
         final = result["final_output"]
-        assert "frontline" in final
-        assert "reserve" in final
-        assert "synergy_explanation" in final
+        assert len(final["recommendations"]) == 1
+        assert final["recommendations"][0]["synergy_explanation"]
         # Should NOT have error key on success path
         assert final.get("error") is None, (
             f"Expected no 'error' key on retry-then-success path. Got: {final.get('error')}"
@@ -283,16 +294,9 @@ class TestGraphHappyPath:
         )
         assert "final_output" in result
         final = result["final_output"]
-        # Alternatives path: final_output has "alternatives" key with 3 team dicts
-        assert "alternatives" in final, (
-            f"Expected 'alternatives' key in final_output on cap-exhausted path. Got: {final}"
-        )
-        assert len(final["alternatives"]) == 3, (
-            f"Expected 3 alternatives, got {len(final['alternatives'])}"
-        )
-        assert final.get("error") is None, (
-            f"Expected no error on alternatives path, got: {final.get('error')}"
-        )
+        assert final["error_type"] == "cypher_retrieval_exhausted"
+        assert final["frontline"] == []
+        assert final["reserve"] == []
 
     @pytest.mark.asyncio
     async def test_semantic_fail_triggers_retry(self, stub_driver, sample_state):

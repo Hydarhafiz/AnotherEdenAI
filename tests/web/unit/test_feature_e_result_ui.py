@@ -143,7 +143,7 @@ def test_feature_e_recommendations_render_as_three_compact_cards():
     text = _visible_text(html)
 
     assert html.count('class="recommendation-card"') == 3
-    assert "Top 3 Lineup Recommendations" in text
+    assert "Lineup Recommendations" in text
     assert "Burst" in text
     assert "Sustain" in text
     assert "Hybrid" in text
@@ -228,7 +228,7 @@ async def test_feature_e_streaming_renders_real_recommendation_template():
     assert len(result_events) == 1
     rendered = result_events[0].raw_data
     assert rendered is not None
-    assert "Top 3 Lineup Recommendations" in rendered
+    assert "Lineup Recommendations" in rendered
     assert rendered.count('class="recommendation-card"') == 3
     assert "Boss Counterplay" in rendered
     assert captured_state["owned_sidekicks"] == ["Korobo", "Tetra"]

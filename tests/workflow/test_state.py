@@ -33,6 +33,17 @@ EXPECTED_KEYS = {
     "analysis_result",
     "alternatives",
     "final_output",
+    "stellar_awakened",
+    "cypher_retry_count",
+    "candidate_bundle",
+    "candidate_warnings",
+    "analyzer_call_count",
+    "analyzer_correction_rounds",
+    "provider_transport_retries",
+    "structured_output_errors",
+    "candidate_validation_errors",
+    "analysis_failure",
+    "final_legality_errors",
 }
 
 
@@ -121,7 +132,7 @@ async def test_stub_nodes_return_only_owned_keys(sample_state):
         cases = [
             (plan_result,                                          {"plan_strategy", "roster", "owned_sidekicks"}),
             (generate_cypher_node(sample_state),                   {"cypher_query"}),
-            (await validate_node(sample_state, mock_driver),       {"db_results"}),
+            (await validate_node(sample_state, mock_driver),       {"db_results", "cypher_retry_count"}),
             (analyze_node(analyze_state),                          {"analysis_result"}),
             (format_node(format_state),                            {"final_output"}),
         ]

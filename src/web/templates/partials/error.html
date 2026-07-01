@@ -3,6 +3,7 @@
 <article role="alert" style="border-left: 4px solid #e74c3c; padding: 1rem;">
   <header><strong>No recommendation found</strong></header>
   <p>The recommendation pipeline could not produce a valid result.</p>
+  {% if result.error_type %}<p><small>Failure class: {{ result.error_type }}</small></p>{% endif %}
   {% if result.error %}
   <details>
     <summary>Error details</summary>

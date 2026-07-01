@@ -12,9 +12,9 @@ Key ownership:
     db_results      — written by VALIDATE node only (non-empty = success)
     validation_errors — VALIDATE appends via operator.add reducer
     retry_count     — incremented by VALIDATE only (starts 0, cap 3)
-    analysis_result — written by ANALYZE only (intermediate synthesis text)
-    alternatives    — written by ANALYZE only (empty db_results path; raw LLM JSON string)
-    final_output    — written by FORMAT only (structured recommendation dict)
+    candidate_bundle — written by PREPARE_CANDIDATES as the hard-field authority
+    analysis_result — written by ANALYZE after bounded ID validation/correction
+    final_output    — written by FORMAT with partial-result legality handling
 
 Note on analysis_result:
     This intermediate key resolves the ANALYZE->FORMAT ambiguity. ANALYZE writes
@@ -34,6 +34,7 @@ class WorkflowState(TypedDict):
     user_query: str
     roster: list[str]
     owned_sidekicks: list[str]
+    stellar_awakened: dict
 
     # --- PLAN node output ---
     plan_strategy: str
@@ -48,10 +49,22 @@ class WorkflowState(TypedDict):
     db_results: list[dict]
     validation_errors: Annotated[list[str], operator.add]
     retry_count: int
+    cypher_retry_count: int
+
+    # --- PREPARE_CANDIDATES node outputs ---
+    candidate_bundle: dict
+    candidate_warnings: list[str]
 
     # --- ANALYZE node output ---
     analysis_result: str   # written by ANALYZE only (normal path)
     alternatives: str      # written by ANALYZE only (empty db_results path; raw LLM JSON string)
+    analyzer_call_count: int
+    analyzer_correction_rounds: int
+    provider_transport_retries: int
+    structured_output_errors: list[dict]
+    candidate_validation_errors: list[dict]
+    analysis_failure: dict
 
     # --- FORMAT node output ---
     final_output: dict
+    final_legality_errors: list[dict]

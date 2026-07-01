@@ -124,8 +124,10 @@ async def ensure_constraints(driver) -> None:
     constraints = [
         "DROP CONSTRAINT skill_name IF EXISTS",
         "CREATE CONSTRAINT char_name IF NOT EXISTS FOR (c:Character) REQUIRE c.name IS UNIQUE",
+        "CREATE CONSTRAINT character_id IF NOT EXISTS FOR (c:Character) REQUIRE c.character_id IS UNIQUE",
         "CREATE CONSTRAINT trait_name IF NOT EXISTS FOR (t:Trait) REQUIRE t.name IS UNIQUE",
-        "CREATE CONSTRAINT grasta_name IF NOT EXISTS FOR (g:Grasta) REQUIRE g.name IS UNIQUE",
+        "DROP CONSTRAINT grasta_name IF EXISTS",
+        "CREATE CONSTRAINT grasta_id IF NOT EXISTS FOR (g:Grasta) REQUIRE g.grasta_id IS UNIQUE",
         "CREATE CONSTRAINT ore_name IF NOT EXISTS FOR (o:Ore) REQUIRE o.name IS UNIQUE",
         "CREATE CONSTRAINT equipment_identity IF NOT EXISTS FOR (e:Equipment) REQUIRE (e.equipment_slot, e.name) IS UNIQUE",
         "CREATE CONSTRAINT skill_identity IF NOT EXISTS FOR (s:Skill) REQUIRE (s.character_name, s.name) IS UNIQUE",
@@ -162,6 +164,10 @@ async def load_characters(driver, rows: list[CharacterRow]) -> None:
 
     char_data = [
         {
+            "character_id": r.character_id,
+            "display_name": r.display_name,
+            "aliases": r.aliases,
+            "detail_url": r.detail_url,
             "name": r.name,
             "element": r.element,
             "weapon": r.weapon,
@@ -176,7 +182,11 @@ async def load_characters(driver, rows: list[CharacterRow]) -> None:
     cypher_chars = """
 UNWIND $rows AS row
 MERGE (c:Character {name: row.name})
-SET c.element = row.element,
+SET c.character_id = row.character_id,
+    c.display_name = row.display_name,
+    c.aliases = row.aliases,
+    c.detail_url = row.detail_url,
+    c.element = row.element,
     c.weapon = row.weapon,
     c.light_shadow = row.light_shadow,
     c.is_SA = row.is_SA
@@ -191,10 +201,36 @@ MATCH (c:Character {name: row.name})
 MERGE (c)-[:HAS_TRAIT]->(t)
 """
     async with driver.session() as session:
+
+
         await session.run(cypher_chars, rows=char_data)
         await session.run(cypher_traits, rows=char_data)
 
     logger.info("Loaded %d Character nodes", len(rows))
+async def audit_character_readiness(driver, parsed_names: list[str]) -> dict[str, list[str]]:
+    """Fail visibly when parsed canonical identities are absent or not roster-selectable."""
+    records, _, _ = await driver.execute_query(
+        """
+MATCH (c:Character)
+WHERE c.name IN $parsed_names
+OPTIONAL MATCH (s:Sidekick {name: c.name})
+WITH collect(DISTINCT c.name) AS graph_names,
+     collect(DISTINCT CASE WHEN s IS NULL THEN c.name END) AS selectable_names
+RETURN graph_names, [name IN selectable_names WHERE name IS NOT NULL] AS selectable_names
+""",
+        parsed_names=parsed_names,
+        database_="neo4j",
+    )
+    row = records[0] if records else {}
+    graph_names = set(row.get("graph_names", []))
+    selectable_names = set(row.get("selectable_names", []))
+    report = {
+        "missing_from_graph": sorted(set(parsed_names) - graph_names),
+        "missing_from_frontend": sorted(set(parsed_names) - selectable_names),
+    }
+    if any(report.values()):
+        raise RuntimeError(f"Character coverage/readiness audit failed: {report}")
+    return report
 
 
 async def load_skills(driver, rows: list[SkillRow]) -> None:
@@ -475,47 +511,57 @@ SET m.title = row.title,
     logger.info("Loaded %d MechanicReference nodes", len(rows))
 
 
-async def load_grastas(driver, rows: list[GrastaRow]) -> None:
-    """Load Grasta nodes and REQUIRES_TRAIT edges using UNWIND+MERGE.
 
-    Grasta nodes: all categories loaded via MERGE.
-    REQUIRES_TRAIT edges: created only when category != 'VC' AND
-    personality_req is not None/empty.  VC grastas never get REQUIRES_TRAIT.
-    """
+
+async def remove_collapsed_legacy_grastas(driver) -> int:
+    """Remove name-keyed legacy nodes before replaying exact Grasta variants."""
+    cypher = """
+MATCH (g:Grasta)
+WHERE g.grasta_id IS NULL OR g.grasta_id = ''
+WITH collect(g) AS legacy
+FOREACH (node IN legacy | DETACH DELETE node)
+RETURN size(legacy) AS removed
+"""
+    async with driver.session() as session:
+        record = await (await session.run(cypher)).single()
+    removed = record["removed"] if record else 0
+    logger.info("Removed %d collapsed legacy Grasta nodes", removed)
+    return removed
+
+
+async def load_grastas(driver, rows: list[GrastaRow]) -> None:
+    """Load exact Grasta variants and their isolated trait requirements."""
     if not rows:
-        logger.warning("load_grastas called with empty list — nothing to load")
+        logger.warning("load_grastas called with empty list - nothing to load")
         return
 
-    grasta_data = [
-        {
-            "name": r.name,
-            "category": r.category,
-            "tier": r.tier,
-            "stats": r.stats,
-            "personality_req": r.personality_req,
-            "is_shareable": r.is_shareable,
-            "effect_tags": r.effect_tags,
-            "effect_tag_derivation": r.effect_tag_derivation,
-        }
-        for r in rows
-    ]
-
-    # Load Grasta nodes
+    grasta_data = [row.model_dump() for row in rows]
     cypher_nodes = """
 UNWIND $rows AS row
-MERGE (g:Grasta {name: row.name})
-SET g.category = row.category,
+MERGE (g:Grasta {grasta_id: row.grasta_id})
+SET g.name = row.name,
+    g.display_name = row.display_name,
+    g.category = row.category,
     g.tier = row.tier,
     g.stats = row.stats,
+    g.personality_req = row.personality_req,
+    g.weapon_req = row.weapon_req,
+    g.weapon_group = row.weapon_group,
     g.is_shareable = row.is_shareable,
+    g.source_url = row.source_url,
+    g.obtain_text = row.obtain_text,
+    g.effect_text = row.effect_text,
+    g.source_variant = row.source_variant,
+    g.acquisition_class = row.acquisition_class,
+    g.max_theoretical_copies = row.max_theoretical_copies,
     g.effect_tags = row.effect_tags,
-    g.effect_tag_derivation = row.effect_tag_derivation
+    g.effect_tag_derivation = row.effect_tag_derivation,
+    g.schema_version = row.schema_version
 """
-    # Load REQUIRES_TRAIT edges — gated: non-VC only, personality_req not null/empty
     cypher_edges = """
 UNWIND $rows AS row
 WITH row WHERE row.category <> 'VC' AND row.personality_req IS NOT NULL AND row.personality_req <> ''
-MATCH (g:Grasta {name: row.name})
+MATCH (g:Grasta {grasta_id: row.grasta_id})
 MERGE (t:Trait {name: row.personality_req})
 MERGE (g)-[:REQUIRES_TRAIT]->(t)
 """
@@ -523,7 +569,7 @@ MERGE (g)-[:REQUIRES_TRAIT]->(t)
         await session.run(cypher_nodes, rows=grasta_data)
         await session.run(cypher_edges, rows=grasta_data)
 
-    logger.info("Loaded %d Grasta nodes", len(rows))
+    logger.info("Loaded %d exact Grasta variants", len(rows))
 
 
 async def load_ores(driver, rows: list[OreRow]) -> None:

@@ -278,7 +278,8 @@ class TestStep2SemanticGate:
         with patch("src.workflow.nodes.validate.get_llm", return_value=mock_haiku):
             result = await validate_node(state, driver)
 
-        assert list(result.keys()) == ["db_results"]
+        assert list(result.keys()) == ["db_results", "cypher_retry_count"]
+        assert result["cypher_retry_count"] == 0
 
     @pytest.mark.asyncio
     async def test_validate_success_returns_db_results(self):

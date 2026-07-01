@@ -94,14 +94,14 @@ RETURN c.name, collect(t.name) AS traits
 ```
 MATCH (c:Character)-[:HAS_TRAIT]->(t:Trait)<-[:REQUIRES_TRAIT]-(g:Grasta)
 WHERE c.name IN $roster AND g.category = 'Attack' AND g.is_shareable = true
-RETURN c.name, t.name, g.name, g.stats
+RETURN c.name, t.name, coalesce(g.display_name, g.name) AS grasta, g.grasta_id, g.stats
 ```
 
 ### Example 4: Find attack grastas available to a roster
 ```
 MATCH (c:Character)-[:HAS_TRAIT]->(t:Trait)<-[:REQUIRES_TRAIT]-(g:Grasta)
 WHERE c.name IN $roster AND g.category = 'Attack'
-RETURN c.name, collect(DISTINCT g.name) AS attack_grastas
+RETURN c.name, collect(DISTINCT coalesce(g.display_name, g.name)) AS attack_grastas
 ORDER BY c.name
 ```
 
@@ -109,7 +109,7 @@ ORDER BY c.name
 ```
 MATCH (g:Grasta)
 WHERE 'combat:af' IN g.effect_tags OR 'combat:critical' IN g.effect_tags
-RETURN g.name, g.category, g.stats, g.effect_tags, g.effect_tag_derivation
+RETURN g.grasta_id, coalesce(g.display_name, g.name) AS grasta, g.category, g.stats, g.acquisition_class, g.max_theoretical_copies, g.effect_tags, g.effect_tag_derivation
 LIMIT 25
 ```
 
@@ -126,7 +126,7 @@ LIMIT 25
 MATCH (c:Character)
 WHERE c.name IN $roster AND c.weapon = 'Sword'
 OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)<-[:REQUIRES_TRAIT]-(g:Grasta)
-RETURN c.name, c.element, c.weapon, collect(DISTINCT t.name) AS traits, collect(DISTINCT g.name) AS grastas
+RETURN c.name, c.element, c.weapon, collect(DISTINCT t.name) AS traits, collect(DISTINCT coalesce(g.display_name, g.name)) AS grastas
 ORDER BY c.name
 ```
 
@@ -233,7 +233,7 @@ OPTIONAL MATCH (c)-[:HAS_SKILL]->(skill:Skill)
 OPTIONAL MATCH (c)-[:HAS_PASSIVE_SKILL]->(passive:PassiveSkill)
 WITH c,
      collect(DISTINCT t.name) AS traits,
-     collect(DISTINCT g.name)[..12] AS grastas,
+     collect(DISTINCT coalesce(g.display_name, g.name))[..12] AS grastas,
      collect(DISTINCT {
        name: skill.name,
        element: skill.element,

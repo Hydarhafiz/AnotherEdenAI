@@ -1,21 +1,19 @@
 """LangGraph StateGraph wiring for the AnotherEdenAI workflow.
 
 Graph topology:
-    START -> plan -> generate_cypher -> validate --(conditional)--> analyze -> format -> END
-                                            |
-                                            +--> generate_cypher  (retry, retry_count < 3)
-                                            |
-                                            +--> analyze          (retry cap exhausted — alternatives path, retry_count >= 3)
+    START -> plan -> superboss_context -> generate_cypher -> validate
+      validate success -> prepare_candidates -> analyze -> format -> END
+      validate retry   -> generate_cypher
+      retry cap        -> format classified retrieval failure -> END
 
-Conditional routing after validate (route_after_validate):
-    db_results non-empty  -> "analyze"          (success path)
-    retry_count >= 3      -> "analyze"          (retry cap — alternatives path)
-    otherwise             -> "generate_cypher"  (retry)
+Candidate preparation is the hard-field authority. ANALYZE may make one initial
+selection call and at most two correction calls; FORMAT retains only legal lineups.
 """
 from typing import Literal
 
 from langgraph.graph import END, START, StateGraph
 
+from .candidates import prepare_candidates_node
 from .nodes.analyze import analyze_node
 from .nodes.cypher import generate_cypher_node
 from .nodes.format import format_and_validate_node
@@ -27,32 +25,17 @@ from .state import WorkflowState
 
 def route_after_validate(
     state: WorkflowState,
-) -> Literal["generate_cypher", "analyze"]:
-    """Determine which node to visit after VALIDATE.
+) -> Literal["generate_cypher", "prepare_candidates", "format"]:
+    """Route success through candidates and exhausted retrieval to failure.
 
-    Logic:
-        - db_results non-empty -> "analyze"         (query succeeded)
-        - retry_count >= 3    -> "analyze"           (retry cap — alternatives path)
-        - otherwise           -> "generate_cypher"   (retry with new query)
-
-    Note: VALIDATE only writes db_results on success (non-empty list) and only
-    increments retry_count on failure. Since db_results has no reducer (overwrites),
-    and the flow never returns to VALIDATE after routing to ANALYZE, db_results is
-    either [] (never succeeded) or non-empty (just succeeded).
-
-    When retry_count >= 3 and db_results is empty, analyze_node detects the empty
-    db_results and calls _generate_alternatives() to produce 3 alternative teams.
-
-    Args:
-        state: Current WorkflowState after VALIDATE has run.
-
-    Returns:
-        One of "generate_cypher", "analyze", or "format".
+    Non-empty results proceed to deterministic candidate preparation. Failed
+    retrieval retries Cypher up to the existing cap; exhausted retrieval bypasses
+    unconstrained alternatives and is classified by FORMAT.
     """
     if state.get("db_results"):
-        return "analyze"
+        return "prepare_candidates"
     if state.get("retry_count", 0) >= 3:
-        return "analyze"  # alternatives path — analyze_node detects empty db_results
+        return "format"
     return "generate_cypher"
 
 
@@ -84,6 +67,10 @@ def build_graph(driver=None):
         return await validate_node(s, driver)
 
     builder.add_node("validate", _validate)
+    async def _prepare_candidates(s):
+        return await prepare_candidates_node(s, driver)
+
+    builder.add_node("prepare_candidates", _prepare_candidates)
     builder.add_node("analyze", analyze_node)
     async def _format(s):
         return await format_and_validate_node(s, driver)
@@ -95,6 +82,7 @@ def build_graph(driver=None):
     builder.add_edge("plan", "superboss_context")
     builder.add_edge("superboss_context", "generate_cypher")
     builder.add_edge("generate_cypher", "validate")
+    builder.add_edge("prepare_candidates", "analyze")
     builder.add_edge("analyze", "format")
     builder.add_edge("format", END)
 
@@ -102,7 +90,7 @@ def build_graph(driver=None):
     builder.add_conditional_edges(
         "validate",
         route_after_validate,
-        ["generate_cypher", "analyze"],
+        ["generate_cypher", "prepare_candidates", "format"],
     )
 
     return builder.compile()

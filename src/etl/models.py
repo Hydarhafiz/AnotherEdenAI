@@ -4,6 +4,8 @@ These models validate scraped rows before they are loaded into Neo4j.
 ETL_MODE controls whether invalid rows raise or are silently skipped.
 """
 import logging
+import hashlib
+import unicodedata
 import re
 from typing import Optional
 
@@ -64,6 +66,26 @@ def _dedupe_preserve_order(values: list[str]) -> list[str]:
     return result
 
 
+def _stable_id(prefix: str, *parts: object) -> str:
+    normalized = "\x1f".join(
+        unicodedata.normalize("NFKC", str(part or "")).strip().casefold()
+        for part in parts
+    )
+    return f"{prefix}:{hashlib.sha256(normalized.encode('utf-8')).hexdigest()[:20]}"
+
+
+def _character_aliases(name: str) -> list[str]:
+    aliases = [name]
+    if "," in name:
+        base, style = [part.strip() for part in name.split(",", 1)]
+        aliases.extend([base, style])
+        parenthetical = re.match(r"^(.*?)\s*\(([^)]+)\)$", base)
+        if parenthetical:
+            aliases.append(f"{parenthetical.group(1)} {parenthetical.group(2)}")
+    return _dedupe_preserve_order(aliases)
+
+
+
 def derive_effect_tags(*parts: str | None, prefixes: list[str] | None = None) -> list[str]:
     """Build low-risk retrieval tags from text already present in the scraped row."""
     text = " ".join(part or "" for part in parts).lower()
@@ -86,6 +108,9 @@ class CharacterRow(BaseModel):
     is_SA: bool = Field(default=False)
     skills: list["SkillRow"] = Field(default_factory=list)
     passive_skills: list["PassiveSkillRow"] = Field(default_factory=list)
+    character_id: str = ""
+    display_name: str = ""
+    aliases: list[str] = Field(default_factory=list)
 
     @field_validator("personalities", mode="before")
     @classmethod
@@ -100,6 +125,15 @@ class CharacterRow(BaseModel):
         if isinstance(v, str):
             return v.strip().lower() in {"1", "true", "yes", "y", "sa", "stellar"}
         return bool(v)
+
+
+    def model_post_init(self, __context) -> None:
+        if not self.character_id:
+            object.__setattr__(self, "character_id", _stable_id("character", self.name, self.detail_url))
+        if not self.display_name:
+            object.__setattr__(self, "display_name", self.name)
+        if not self.aliases:
+            object.__setattr__(self, "aliases", _character_aliases(self.name))
 
 
 class SkillRow(BaseModel):
@@ -322,6 +356,18 @@ class GrastaRow(BaseModel):
     personality_req: Optional[str] = None
     is_shareable: bool
     effect_tags: list[str] = Field(default_factory=list)
+    weapon_req: Optional[str] = None
+    weapon_group: list[str] = Field(default_factory=list)
+    source_url: str = ""
+    obtain_text: str = ""
+    effect_text: str = ""
+    source_variant: str = ""
+    acquisition_class: str = "unknown"
+    max_theoretical_copies: int | None = None
+    grasta_id: str = ""
+    display_name: str = ""
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
     effect_tag_derivation: str = Field(default=TAG_DERIVATION_RULE)
 
     @field_validator("tier", mode="before")
@@ -343,7 +389,39 @@ class GrastaRow(BaseModel):
             return [tag.strip() for tag in re.split(r"[,;/|]", v) if tag.strip()]
         return list(v) if v else []
 
+    @field_validator("weapon_group", mode="before")
+    @classmethod
+    def parse_weapon_group(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in re.split(r"[,;/|]", v) if item.strip()]
+        return list(v) if v else []
+
+    @field_validator("max_theoretical_copies", mode="before")
+    @classmethod
+    def coerce_max_copies(cls, v):
+        if v in (None, ""):
+            return None
+        return max(1, int(v))
+
     def model_post_init(self, __context) -> None:
+        discriminator = self.personality_req or self.weapon_req or "/".join(self.weapon_group)
+        discriminator = discriminator or self.source_variant or f"{self.category} T{self.tier}"
+        if not self.display_name:
+            object.__setattr__(
+                self,
+                "display_name",
+                f"{self.name} ({discriminator})",
+            )
+        if not self.grasta_id:
+            object.__setattr__(
+                self,
+                "grasta_id",
+                _stable_id(
+                    "grasta", self.category, self.tier, self.name,
+                    self.personality_req, self.weapon_req,
+                    "/".join(self.weapon_group), self.source_variant,
+                ),
+            )
         if not self.effect_tags:
             object.__setattr__(
                 self,
@@ -353,6 +431,8 @@ class GrastaRow(BaseModel):
                     self.category,
                     self.stats,
                     self.personality_req,
+                    self.weapon_req,
+                    self.effect_text,
                     prefixes=[f"category:{self.category.lower()}", f"tier:{self.tier}"],
                 ),
             )
