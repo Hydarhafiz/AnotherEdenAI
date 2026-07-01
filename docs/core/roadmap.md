@@ -2,72 +2,113 @@
 
 ## Executive Summary
 
-AnotherEdenAI is a personal portfolio project that demonstrates production-minded AI engineering for a complex game recommendation domain. The long-term program is to build a cost-aware GraphRAG system that scrapes Another Eden wiki data, stores combat facts in Neo4j, and uses AI agents to recommend legal, boss-aware 6-hero plus 2-sidekick lineups from a player's owned roster.
+AnotherEdenAI is a personal portfolio project demonstrating production-minded AI engineering for a complex game-recommendation domain. The long-term program builds a cost-aware system that scrapes Another Eden wiki data, stores combat facts in Neo4j, and recommends legal, boss-aware six-hero plus optional two-sidekick lineups from a player's owned roster.
 
-The portfolio target audience is recruiters, senior managers, and potential freelance clients. The project should show practical judgment: reliable ETL, strict recommendation rules, transparent evaluation, polished UI, and deployment that can be turned on only during job-search or demo periods.
+The program now separates two product paths:
+
+- Production lineup recommendation uses deterministic typed retrieval, backend filtering and scoring, bounded candidate generation, compact LLM refinement, and deterministic validation.
+- Exploratory GraphRAG may retain dynamic planning and Cypher generation for flexible graph questions, but it does not own production lineup legality.
+
+The portfolio target audience is recruiters, senior managers, and potential freelance clients. The system should demonstrate reliable ETL, auditable recommendation logic, strict legality, measurable evaluation, bounded AI cost, transparent degradation, and a deployment that can be enabled only for job-search or demo periods.
 
 ## Program Objectives And Success Criteria
 
 - Build an auditable ETL pipeline that can scrape and replay wiki data through cached artifacts.
-- Represent combat data in a graph structure that supports RAG retrieval and legality checks.
-- Recommend teams without hallucinating unavailable characters, illegal skills, or unsupported mechanics.
-- Keep AI cost controlled through local/free development paths, configurable providers, prompt/context optimization, and paid-model use only where it earns value.
+- Represent combat facts in Neo4j while keeping derived recommendation policy reproducible from versioned repository artifacts.
+- Recommend teams without hallucinating unavailable characters, illegal skills, unsupported mechanics, or impossible item allocations.
+- Keep deterministic search, role scoring, candidate generation, and validation in the backend.
+- Reserve the LLM for strategy-level ranking, bounded refinement, skill choice from shortlists, and explanation.
+- Keep AI cost controlled through compact projections, preflight budgets, provider usage accounting, free/local development paths, and paid-model use only where it earns value.
 - Present the project through a polished web interface that communicates engineering quality quickly.
 - Support low-cost deployment that can be switched on for interviews, demos, freelancing, or job-hunting campaigns and switched off afterward.
 
+Program success requires deterministic candidate generation without production PLAN/Cypher LLM calls, 100% hard legality on golden fixtures, partial valid output instead of all-or-nothing failure, and paid analyzer usage within the locked Milestone 5 token ceilings.
+
 ## Current Active Milestone
 
-Milestone 4 is completed for Features A-E. The active milestone is now Milestone 5, which builds on the stable recommendation contract with evaluation gates, quality/cost optimization, graph cleanup, and live-site cost controls.
+Milestone 4 is completed for Features A-E. The active milestone is Milestone 5, rewritten around candidate-constrained generation and production cost safety.
 
-Milestone 5 focuses on:
+Milestone 5 maps to `docs/core/milestone.md` and is ordered around:
 
-- Cleanup of sidekick records that also appear as `Character` nodes.
-- A clear weapon/armor/Grasta recommendation policy, including per-lineup weapon/armor uniqueness and reusable Grasta assumptions.
-- Backend guardrail audit that moves fixed constraints out of AI prompts where possible.
-- Golden weak-boss evaluation gates for legality, factuality, and recommendation quality, runnable first with free/local models.
-- Configurable generation and judge providers, with free/local models for development and `moonshotai/kimi-k2.6` as the intended paid OpenRouter staging/evaluation/release model unless eval evidence changes the default.
-- Cheap deterministic gates before any paid judge usage.
-- Authentication, user data persistence, and rate limiting decisions for a controlled Discord beta, public demo, or live website.
-- RM50/month as the starter OpenRouter ceiling for public beta/demo periods, with warning thresholds and a hard stop before runaway spend.
-- Context selection, prompt compression, latency, and token/cost reporting.
+- Completing and verifying identity, cardinality, and canonical-ID prerequisites.
+- Deterministic typed retrieval for the production recommender.
+- Reproducible role taxonomy and evidence materialization.
+- Hard filtering, contextual role scoring, and role-aware skill packaging.
+- Assumption-based late-game build packages.
+- Capability-coverage templates, top-8 role pools, and bounded beam search.
+- Compact analyzer projections with at most one bounded swap per lineup.
+- A maximum of two analyzer calls, deterministic fallback, and partial-result behavior.
+- Golden evaluation, provider usage accounting, and paid-call gates.
+- Authentication, persistence, rate limiting, and deployment safeguards only after the recommendation core is proven.
+
+## Research References
+
+Detailed source and repository-grounding notes live in `docs/core/planning-sources.md`.
+
+Most important current references:
+
+- OpenRouter Usage Accounting for provider-reported prompt, completion, reasoning, cached, total-token, and cost data.
+- OpenRouter Structured Outputs for strict JSON Schema response contracts on compatible models.
+- OpenRouter Models documentation for release-time capability, pricing, and limit snapshots.
+- Another Eden mechanics and Grasta references already recorded for affinity handling, role evidence, setup dependencies, and item legality.
+- The existing workflow, legality, candidate, evaluation, architecture, and schema files inspected during Milestone 5 replanning.
+
+## Open Research Gaps
+
+- Real prompt, completion, reasoning, cache, and cost distributions after the compact projection is implemented.
+- Golden-fixture and experienced-player evidence for initial scoring weights and must-include counter exceptions.
+- Whether the intended paid model remains the best quality/cost choice at release time.
+- Whether an optional OpenRouter-assisted curation batch materially improves low-confidence role-tag coverage.
+- Per-user and global request limits for a controlled 20-30-player beta.
+- Minimum authentication and persistence design for beta feedback and budget enforcement.
+
+These gaps may tune weights, providers, or later beta safeguards. They do not block deterministic architecture implementation.
 
 ## Ordered Major Milestones
 
 ### Milestone 1: GraphRAG Foundation
 
-Status: Completed
+Status: Completed.
 
 Purpose:
 
-- Establish the initial Neo4j graph, core ETL pipeline, LangGraph workflow, and FastAPI/HTMX streaming UI.
+- Establish the initial Neo4j graph, ETL pipeline, LangGraph workflow, and FastAPI/HTMX streaming UI.
 
 Expected artifacts:
 
 - Character, Trait, Grasta, and Ore graph.
-- LangGraph PLAN -> GENERATE_CYPHER -> VALIDATE -> ANALYZE -> FORMAT pipeline.
+- Initial PLAN -> GENERATE_CYPHER -> VALIDATE -> ANALYZE -> FORMAT workflow.
 - Roster-constrained query path.
 - Streaming web UI and admin ETL trigger.
+
+Dependencies:
+
+- None; this is the foundation milestone.
 
 Exit criteria:
 
 - Existing app runs locally.
 - Core workflow tests pass.
-- Initial graph can answer roster-constrained Grasta/team-building questions.
+- Initial graph answers roster-constrained graph questions.
 
 ### Milestone 2: Combat Graph Expansion
 
-Status: Partially completed
+Status: Partially completed.
 
 Purpose:
 
-- Expand character data from simple identity and Grasta compatibility into active skill and passive combat data.
+- Expand character data from identity and Grasta compatibility into active skill and passive combat facts.
 
 Expected artifacts:
 
 - Cached/resumable ETL foundation.
 - Character active skills and passive skills.
-- Stellar Awakening availability and skill/passive gating.
-- Updated schema and ETL guide.
+- Stellar Awakening availability and gating.
+- Updated schema and ETL guidance.
+
+Dependencies:
+
+- Milestone 1 graph, ETL, and workflow foundation.
 
 Exit criteria:
 
@@ -77,162 +118,180 @@ Exit criteria:
 
 ### Milestone 3: RAG-Ready ETL Data Coverage
 
-Status: Completed
+Status: Completed.
 
 Purpose:
 
-- Add the next factual data layer before AI recommendation implementation.
+- Add the factual data needed before legal boss-aware recommendation.
 
 Expected artifacts:
 
-- Sidekick nodes with structured auto skill, charge skill, aura, and official hero association.
-- Curated weak superboss nodes with affinity and mechanics retrieval fields.
-- Preserved Grasta/Ore data and lightweight retrieval tags where safe.
-- Baseline weapon and armor context.
-- Manifest and schema assertions for selected crawl scopes.
+- Sidekick identity, skills, auras, and official associations.
+- Curated weak-superboss affinity and mechanics facts.
+- MechanicReference corpus.
+- Preserved Grasta/Ore data and baseline equipment context.
+- Manifest and schema assertions.
 
 Dependencies:
 
-- Existing ETL cache/replay foundation.
-- Existing character/skill/passive graph.
+- Milestone 2 cached ETL and character combat data.
 
 Exit criteria:
 
-- Selected crawl scope has 100% pass/fail accountability.
-- Curated sidekick and weak-superboss data loads with source attribution.
-- Golden graph retrieval queries prove the new RAG structures are usable.
+- Selected crawl scope has pass/fail accountability.
+- Curated sidekick and superboss data loads with attribution.
+- Golden retrieval queries prove the structures are usable.
 
 ### Milestone 4: AI Lineup Recommendation Intelligence
 
-Status: Completed
+Status: Completed.
 
 Purpose:
 
-- Use the expanded graph to recommend legal 6-hero plus 2-sidekick lineups against selected bosses.
+- Establish the first structured, legal six-hero plus optional sidekick recommendation contract.
 
 Expected artifacts:
 
-- Structured roster model with ownership, Stellar Awakening, and Light/Shadow rules.
-- Main/sub sidekick legality.
-- Skill-slot legality.
-- Boss-aware recommendation contract.
-- Grasta/Ore and equipment coverage review before implementation.
-- Compact and expandable recommendation UI for top-three lineup results.
+- Structured roster ownership and Stellar Awakening state.
+- Sidekick and skill-slot legality.
+- Boss-aware top-three recommendation contract.
+- Final factuality and legality gate.
+- Compact and expandable result UI.
 
 Dependencies:
 
-- Milestone 3 data coverage and RAG readiness.
+- Milestone 3 RAG-ready combat, sidekick, boss, mechanics, and build facts.
 
 Exit criteria:
 
-- The system can recommend legal top-three lineup plans for curated bosses using owned roster constraints.
-- Recommendations cite graph facts and clearly separate legal lineup, build assumptions, risks, and uncertainty.
-- CI catches hallucinated characters, illegal sidekick usage, illegal skill slots, numeric win-probability claims, and boss-affinity drift from graph facts.
+- Curated boss recommendations use owned/F2P constraints.
+- Output separates lineup, assumptions, risks, and uncertainty.
+- Tests catch hallucinated characters, illegal slots, affinity drift, and numeric win-probability claims.
 
-### Milestone 5: Evaluation, Optimization, And Cost Control
+### Milestone 5: Deterministic Recommendation Engine, Evaluation, And Cost Control
 
-Status: Active
+Status: Active.
 
 Purpose:
 
-- Improve recommendation quality, latency, data hygiene, and cost safety after the Milestone 4 recommendation contract is stable.
+- Replace broad-context LLM lineup search with a production-safe backend candidate engine and a compact, bounded strategist LLM.
 
 Expected artifacts:
 
-- Golden weak-boss evaluation gates promoted from Milestone 4 Feature F.
-- Configurable generation and judge providers.
-- Context selection and prompt compression strategy.
-- Two-tier evaluation: cheap local/free gates first, paid judge only after basic gates pass.
-- Latency and token/cost reporting.
-- Model/provider comparison reports.
-- Sidekick/Character overlap cleanup for Neo4j data hygiene.
-- Weapon, armor, and Grasta recommendation policy for assumption-based or inventory-aware builds.
-- Authentication, user data persistence, and rate limiting plan for live-site cost protection.
+- Typed production retrieval independent of PLAN and generated Cypher.
+- Versioned role taxonomy, tagging rules, curated overrides, and reproducible Neo4j materialization.
+- Contextual RoleScores and role-aware skill shortlists.
+- `late_game_assumed` build packages with legality and cardinality evidence.
+- Hard filters, capability templates, top-8 role pools, must-include counter exceptions, and beam width capped at 50.
+- Five to ten diverse legal candidates when available, with partial and zero-candidate contracts.
+- Full internal candidate objects and compact analyzer projections.
+- One optional one-for-one swap per lineup from backend-supplied choices.
+- Maximum two analyzer calls and deterministic degraded fallback.
+- Golden deterministic gates and observed provider token/cost reporting.
+- Updated reusable ETL and recommendation-validation guidance.
+- Beta safety work sequenced after the core engine passes.
 
 Dependencies:
 
-- Stable recommendation contract from Milestone 4.
+- Milestone 4 output and legality contracts.
+- Correct canonical IDs, item identity, and Grasta acquisition cardinality.
+- Curated weak-superboss and mechanics data.
 
 Exit criteria:
 
-- The system has measurable legality, factuality, recommendation-quality, latency, and cost baselines.
-- Paid model usage is bounded and explainable.
-- Evaluation reports show which provider generated and judged each run.
-- Live-site persistence and rate-limit decisions are documented before deployment work begins.
-- Controlled beta planning can support roughly 20-30 testers without exposing an unlimited paid endpoint.
+- Production recommendations generate legal backend candidates without PLAN, generated Cypher, or LLM retrieval validation.
+- Identical input and policy versions produce reproducible role metadata, scoring, pruning, and candidate order.
+- Golden feasible cases return at least one legal coverage-valid lineup; infeasible cases return typed diagnostics.
+- Analyzer sees only compact referenced candidates and cannot introduce out-of-bundle IDs.
+- Paid golden runs remain below the 40k cumulative analyzer-token ceiling and demonstrate at least a 90% reduction from the recorded ~601k-token failed baseline.
+- Provider/model metadata, usage, cost, validation, and degradation are auditable.
+- No numeric win probability or guaranteed-clear claim is produced.
 
 ### Milestone 6: Frontend Portfolio Experience
 
-Status: Planned
+Status: Planned.
 
 Purpose:
 
-- Make the site impressive and legible to recruiters and senior managers without hiding the technical substance.
+- Make deterministic recommendation evidence and the exploratory graph experience impressive and legible to recruiters and players.
 
 Expected artifacts:
 
-- Polished web UI for roster input, boss selection, recommendation results, source attribution, and pipeline progress.
-- Clear demo flows for ETL, graph facts, AI reasoning, and evaluation reports.
+- Polished input for roster, boss, sidekicks, SA state, and recommendation preferences.
+- Clear separation between production recommender and exploratory GraphRAG.
+- Candidate score explanations, assumptions, sources, risks, degradation, and pipeline progress.
 - Admin/status views for data freshness and system health.
 
 Dependencies:
 
-- Recommendation flow and evaluation artifacts from prior milestones.
+- Milestone 5 recommendation engine and evaluation artifacts.
 
 Exit criteria:
 
-- A recruiter can understand the project value within a short demo.
-- A senior engineer can inspect evidence, constraints, and failure handling.
-- UI communicates cost-aware AI engineering, not only game fandom.
+- A recruiter understands the backend/LLM boundary quickly.
+- A player can distinguish legal recommendations from assumptions and incomplete data.
+- A senior engineer can inspect constraints, evidence, failure handling, and cost controls.
 
 ### Milestone 7: Cost-Controlled Deployment
 
-Status: Planned
+Status: Planned.
 
 Purpose:
 
-- Deploy the project only when needed for job hunting, interviews, freelancing, or demos.
+- Deploy the project only when needed for job hunting, interviews, freelancing, controlled beta, or demos.
 
 Expected artifacts:
 
-- Deployment guide for a low-cost VPS or AWS option.
-- Start/stop operational workflow.
-- Local Neo4j by default, Dockerized Neo4j for demo deployment where practical.
-- Manual or scheduled data refresh that can be disabled.
-- Environment documentation using placeholders only, never checked-in secrets.
+- Deployment and start/stop guidance.
+- Authentication, persistence, per-user/global rate limits, and monthly budget enforcement.
+- Local Neo4j by default and practical demo deployment.
+- Disableable refresh and paid-recommendation paths.
+- Placeholder-only environment documentation.
 
 Dependencies:
 
-- Stable app and frontend demo.
+- Stable app, frontend, recommendation gates, and beta safety plan.
 
 Exit criteria:
 
-- The site can be switched on for portfolio campaigns and switched off afterward.
-- Monthly cost remains reasonable for an RM3800/month income constraint.
-- The deployment story is credible to recruiters without requiring always-on cloud spend.
+- The site can be switched on and off for portfolio campaigns.
+- Paid endpoints cannot run as unlimited anonymous services.
+- Monthly spend remains bounded and explainable.
+- Secrets and credentials remain outside repository documents and source.
 
 ## Cross-Milestone Constraints
 
-- Facts scraped from the wiki should remain separate from AI-derived judgments.
-- Hard official associations belong in ETL; soft strategic synergy belongs in later agent/evaluation layers.
-- Schema changes must update `SCHEMA.md` and schema assertions.
-- ETL behavior changes must update `guides/ETL_GUIDE.md`.
-- Recommendation features must preserve roster legality and avoid hallucinated mechanics.
-- Development should prefer local/offline workflows and cached artifacts.
-- Deployment should be optional, easy to stop, and designed around low recurring cost.
-- Secrets and credentials must never be committed or documented directly.
+- Facts scraped from sources remain separate from derived recommendation judgments.
+- Versioned repository artifacts are canonical for role taxonomy, tagging rules, overrides, and scoring policy.
+- Neo4j role metadata is reproducible materialized data, not the sole source of truth.
+- Hard official associations belong in ETL; contextual role scores and strategy belong in the recommendation engine.
+- Production recommendation retrieval is typed and deterministic.
+- Dynamic GraphRAG remains a separate exploratory mode.
+- Hard legality precedes scoring; backend validation follows every analyzer refinement.
+- Scores are ranking/navigation signals, never win probabilities.
+- Same parsed data plus the same artifact versions must reproduce role metadata and deterministic candidate output.
+- Golden baseline/current comparisons should use captured artifacts or isolated worktrees when code branches must be compared; the 601k paid failure is not rerun merely to recreate a baseline.
+- Schema changes update `docs/core/SCHEMA.md` and schema assertions during implementation.
+- ETL behavior changes update `docs/guides/ETL_GUIDE.md`.
+- Recommendation behavior changes update `docs/guides/recommendation-validation.md`.
+- Development defaults to local/offline fixtures and free/local models; paid tests run only after deterministic gates pass.
+- Deployment remains optional and easy to stop.
 
 ## Deferred Or Out-Of-Scope Work
 
-- Full all-superboss scrape before weak-boss seed data is stable.
-- Sidekick equipment ingestion before sidekick identity and abilities are useful.
-- AI-derived sidekick synergy before official associations are modeled.
-- Exact damage calculation before Grasta/Ore/equipment data and evaluation are mature.
-- Full battle mechanics ontology before text-rich RAG fields reveal repeated reasoning failures.
-- Always-on production deployment before job-hunting or demo need.
+- Exact deterministic damage or healing simulation.
+- Full turn-by-turn battle simulation.
+- Numeric win probability or clear-rate prediction.
+- Full inventory and best-in-slot optimization.
+- Required `declared_owned_only` item mode in the first implementation.
+- Two or more analyzer hero swaps per lineup until evaluation proves value without cost or legality regression.
+- Live AI role tagging during ETL or recommendation.
+- Mandatory AI-assisted role labeling for initial acceptance.
+- Full all-superboss coverage and intermediate/strong evaluation tiers.
+- Sidekick equipment optimization.
+- Paid judge calls on normal live requests.
+- Always-on production deployment before a controlled need exists.
 
 ## Open Questions
 
-- Which low-cost deployment target will be selected first: a budget VPS, AWS Lightsail, small EC2, or another provider?
-- Which model/provider mix gives the best quality/cost tradeoff after the recommendation contract exists?
-- How much of the damage formula should become deterministic code versus RAG-supported explanation?
+No architecture-blocking questions remain for the active Milestone 5 plan. Provider choice, scoring-weight tuning, AI-assisted curation, and beta limits remain evidence-driven follow-up decisions recorded as research gaps.

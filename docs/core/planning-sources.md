@@ -193,6 +193,30 @@ This file stores source references used during planning discussions. It separate
   Relevance: Public metadata inspected on 2026-06-25 showed `moonshotai/kimi-k2.6` available with structured outputs and tool support, 262144-token context, input pricing around USD 0.66 per 1M tokens, output pricing around USD 3.41 per 1M tokens, and cached-input pricing around USD 0.144 per 1M tokens.
   Caveats/open questions: Pricing, availability, context windows, provider routing, and supported parameters can change. Recheck immediately before release testing or public beta.
 
+- Title: Usage Accounting
+  URL: https://openrouter.ai/docs/cookbook/administration/usage-accounting
+  Source type: official OpenRouter documentation
+  Date added: 2026-06-30
+  Related area: Milestone 5 recommendation-run observability, token accounting, and cost gates
+  Relevance: Documents that OpenRouter responses automatically include native-tokenizer prompt, completion, reasoning, cached-token, and total-token counts plus charged cost; streaming responses carry usage in the final SSE message, and generation IDs can support later usage audits.
+  Caveats/open questions: The application still needs to verify which LangChain response metadata fields preserve this provider usage object, how transport retries are aggregated, and how a missing final streaming usage message is classified.
+
+- Title: Structured Outputs
+  URL: https://openrouter.ai/docs/guides/features/structured-outputs
+  Source type: official OpenRouter documentation
+  Date added: 2026-06-30
+  Related area: Milestone 5 analyzer response contract and bounded correction loop
+  Relevance: Documents JSON Schema response enforcement for compatible models through response_format, recommends strict schemas, and supports streaming structured output. It also documents explicit failure cases for unsupported models and invalid schemas.
+  Caveats/open questions: Structured-output support is model/provider dependent. Release configuration must verify the selected model's supported parameters and require compatible routing; schema enforcement reduces formatting failures but does not replace backend semantic and legality validation.
+
+- Title: Models
+  URL: https://openrouter.ai/docs/guides/overview/models
+  Source type: official OpenRouter documentation
+  Date added: 2026-06-30
+  Related area: Milestone 5 model capability filtering, pricing snapshots, and release qualification
+  Relevance: Documents the Models API fields for stable model identity, context and completion limits, pricing, supported parameters, and provider metadata. It also supports filtering by capabilities such as structured outputs and sorting by price, latency, throughput, or context size.
+  Caveats/open questions: Model inventory, pricing, limits, and supported parameters are mutable external facts. Milestone acceptance should require a captured release-time metadata snapshot rather than hard-code today's catalog claims.
+
 
 #### Feature B/C Grasta Legality And Build Strategy
 
@@ -294,11 +318,64 @@ This file stores source references used during planning discussions. It separate
   Relevance: Akane Alter exists as `Akane (Alter),Blooming Blade`; analyzer output shortened it to `Akane (Alter)`, which final legality treated as unknown. This is canonical-name drift, not missing parsed coverage.
   Caveats/open questions: Candidate output should use stable IDs or exact canonical names; fuzzy normalization should remain an input convenience rather than an output repair mechanism.
 
+#### Candidate-Constrained Architecture Replan
+
+- Title: Broad candidate preparation and analyzer projection audit
+  URL: local `src/workflow/candidates.py`, local `src/workflow/nodes/analyze.py`
+  Source type: repository source files
+  Date added: 2026-07-01
+  Related area: Milestone 5 deterministic candidate engine rewrite
+  Relevance: Current code retrieves the complete eligible roster, all character skills/passives, and all Grasta before prompt projection; the analyzer path permits a 450,000-byte payload and an initial call plus two correction rounds. This proves stable-ID validation concepts exist but does not satisfy the compact scored-candidate architecture.
+  Caveats/open questions: The implementation is a superseded prototype. Reusable identity and validation helpers may survive only if they pass the rewritten acceptance gates.
+
+- Title: Generated-Cypher recommendation retrieval audit
+  URL: local `src/workflow/nodes/cypher.py`, local `src/workflow/nodes/validate.py`, local `src/workflow/graph.py`
+  Source type: repository source files
+  Date added: 2026-07-01
+  Related area: production recommender retrieval boundary
+  Relevance: Shows that current lineup requests still pass through generated Cypher and LLM semantic validation before candidate analysis, adding cost and nondeterministic retrieval to a legality-critical path.
+  Caveats/open questions: Dynamic GraphRAG remains useful for exploratory questions but must be separated from production lineup generation.
+
+- Title: Existing legality, candidate, correction, and partial-output tests
+  URL: local `src/workflow/legality.py`, local `tests/workflow/test_candidates.py`, local `tests/workflow/test_feature_c_correction.py`, local `tests/workflow/test_feature_c_partial_output.py`
+  Source type: repository source and test files
+  Date added: 2026-07-01
+  Related area: reusable guardrails and regression starting point
+  Relevance: Existing tests cover ownership, skills, SA gates, Grasta/equipment legality, stable candidate IDs, independent validation, correction caps, and partial output. They provide regression assets but not role scoring, template generation, bounded beam search, compact-projection leakage, or deterministic degraded fallback coverage.
+  Caveats/open questions: Test fixtures must be rewritten or extended around the new full-backend and compact-analyzer contracts.
+
+- Title: Observed failed OpenRouter recommendation run
+  URL: unavailable; user-supplied incident measurement
+  Source type: user-provided operational observation
+  Date added: 2026-07-01
+  Related area: Milestone 5 token and cost baseline
+  Relevance: A broad-context run with retries consumed approximately 601,000 tokens and ended with no fully valid lineup. It motivates the project policy requiring at least 90% paid-run reduction and a 40,000-token hard analyzer ceiling.
+  Caveats/open questions: The run artifact and exact per-attempt usage breakdown were not provided. Preserve it as an approximate baseline and do not rerun the expensive failure merely to recreate it.
+
 #### Planning Decisions
+
+- Planning decision on 2026-07-01: Rewrite and resequence Milestone 5 around deterministic candidate generation and cost control rather than create a new milestone. Preserve completed sidekick cleanup, treat identity/cardinality work as awaiting verification, and classify the current broad candidate implementation as a superseded prototype.
+- Planning decision on 2026-07-01: Production lineup recommendations use deterministic typed Neo4j retrieval and do not call PLAN, generated Cypher, or LLM retrieval validation. Dynamic GraphRAG remains a separate exploratory mode.
+- Planning decision on 2026-07-01: Backend owns hard rejection, contextual role and skill scoring, build packages, candidate generation, full-lineup scoring, validation, and cost gates. Analyzer owns ranking, bounded strategy refinement, supplied skill choice, and explanation.
+- Planning decision on 2026-07-01: Analyzer may propose at most one hero swap per lineup from backend-supplied `allowed_swaps`. Backend re-scores and revalidates it, rejects invalid or lower-scoring swaps, and restores the original candidate.
+- Planning decision on 2026-07-01: Use a hybrid role model. A versioned local artifact is canonical for taxonomy, deterministic rules, evidence, confidence, and curated overrides; ETL materializes reproducible Skill/PassiveSkill evidence into Neo4j; query time computes contextual RoleScores.
+- Planning decision on 2026-07-01: Initial role labeling uses deterministic rules plus curated overrides. Optional OpenRouter-assisted developer batch suggestions require human review and never run during live recommendations or normal ETL.
+- Planning decision on 2026-07-01: Maintain a full internal backend candidate object and a compact analyzer projection containing only referenced legal lineups, shortlists, packages, swaps, constraints, and compact catalogs.
+- Planning decision on 2026-07-01: Use a maximum of two analyzer calls: initial plus one fragment-only correction. Invalid analyzer choices fall back to legal backend defaults; total analyzer failure may return clearly labeled legal backend candidates in degraded mode.
+- Planning decision on 2026-07-01: Confirmed no-weakness bosses use neutral-matchup scoring without a missing-weakness penalty. Unknown/incomplete affinity lowers confidence; null/absorb primary plans are rejected; primary DPS requires neutral-or-better usable damage.
+- Planning decision on 2026-07-01: Skill selection is two-stage: four-to-six per-role shortlists before lineup generation and lineup-aware default three-to-four-skill packages used to prove capability coverage and readiness.
+- Planning decision on 2026-07-01: `late_game_assumed` is the required MVP item policy. Backend emits legality-checked build packages with transparent unverified-ownership labels. `declared_owned_only` is deferred; `generic_only` remains fallback-compatible.
+- Planning decision on 2026-07-01: Versioned scoring uses top-eight role pools with bounded boss-counter exceptions, capability templates, beam width at most 50 per expansion, full-lineup scoring, deduplication, and diversity filtering to retain up to ten legal candidates.
+- Planning decision on 2026-07-01: Burst, sustain, and hybrid templates express mandatory/optional capability coverage rather than rigid hero-role slots. Selected skill/build evidence, legal reserves, and legal sidekick behavior prove coverage.
+- Planning decision on 2026-07-01: Sparse inputs produce diagnostics; partial viability returns partial valid results; one to four candidates may reach the analyzer; zero candidates return structured causes without an analyzer call.
+- Planning decision on 2026-07-01: Initial analyzer gates are 25k input/4k output for the initial call, 8k input/2k output for correction, 30k cumulative target, and 40k cumulative hard acceptance ceiling. Budget failure uses deterministic degraded fallback.
+- Planning decision on 2026-07-01: Paid testing is blocked until deterministic legality, scoring, packages, templates, beam bounds, projection, swaps, partial-output, and offline golden cases pass. Paid judge use is offline and only after deterministic validity.
+- Planning decision on 2026-07-01: Plan updates to `docs/guides/ETL_GUIDE.md` and `docs/guides/recommendation-validation.md` during implementation. Authentication, persistence, rate limiting, and deployment safeguards follow the proven recommendation core.
+
 
 - Planning decision on 2026-06-29: Expanded Feature C must create and maintain docs/guides/recommendation-validation.md covering schema/ETL readiness, candidate inspection, Mimi smoke tests, correction-round diagnostics, partial-result behavior, failure classification, and manual-verification reporting.
 - Planning decision on 2026-06-29: Until gamer beta feedback provides stronger role-by-role build evidence, candidate ranking should prefer Pain/Poison Grasta on active damage dealers when a reliable status setter exists and distinct Dormant-shareable Grasta on reserve mules. This is a transparent default heuristic, not hard legality; boss-, role-, or skill-specific exceptions are allowed when explained.
-- Planning decision on 2026-06-29: Recommendation correction is capped at two conditional batched rounds after initial analysis, for at most three analyzer calls per request. Valid lineups are frozen between rounds; only remaining invalid lineups and precise allowed-candidate feedback are sent for correction. No correction call runs when initial output is fully valid.
+- Superseded planning decision from 2026-06-29: Recommendation correction was capped at two conditional batched rounds after initial analysis, for at most three analyzer calls per request. Superseded on 2026-07-01 by the maximum-two-call policy: initial analysis plus one fragment-only correction. Valid lineups are frozen between rounds; only remaining invalid lineups and precise allowed-candidate feedback are sent for correction. No correction call runs when initial output is fully valid.
 - Planning decision on 2026-06-29: Hard recommendation fields must use backend-provided stable candidate IDs rather than model-authored names. Candidate bundles must constrain characters, skills, passives, sidekicks, equipment assumptions, Grasta variants, citations, and boss facts; display names are resolved after validation. Fuzzy name normalization remains an input convenience and must not repair analyzer output.
 - Planning decision on 2026-06-29: Every displayed lineup must pass all hard legality checks. After targeted correction retries, invalid lineups are discarded; warnings may explain rejected or replaced proposals but must not present incompatible characters, skills, equipment, or Grasta as part of a valid lineup. Valid lineups may still be returned as a partial result set.
 - Planning decision on 2026-06-29: Reopen Feature B as a data-contract prerequisite. Feature B must preserve distinct Grasta variants, personality/weapon discriminators, finite-versus-repeatable acquisition cardinality, and canonical character identities. Feature C will consume those corrected facts for candidate-constrained generation, independent lineup validation, targeted retries, partial valid results, and warnings.
@@ -308,7 +385,7 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-06-25: Start public demo or controlled Discord beta planning with an RM50/month OpenRouter ceiling. If usage hits the ceiling, pause or disable paid calls first, then decide whether increasing the ceiling is worth the portfolio value.
 - Planning decision on 2026-06-25: Backend deterministic validation should own fixed guardrails such as 4-frontline/2-reserve shape, no duplicate heroes, sidekick slot legality, owned roster enforcement, skill/passive existence, Stellar Awakening gates, skill-count limits, boss-affinity fidelity, equipment uniqueness when named, and no win-probability claims.
 - Planning decision on 2026-06-25: User clarification promoted Feature B from prose-only equipment policy into a build-slot output contract: each character should carry one weapon, one armor, and three Grasta assumptions; weapon and armor uniqueness is per lineup only; Grasta may be reused, including repeated copies; Grasta compatibility and pain/poison-dependent damage setup need deterministic validation where graph data supports it or explicit caveats where it does not. Superseded in part on 2026-06-29: reuse is now governed by exact-variant acquisition cardinality, so unique Tier 3 variants cannot repeat within one lineup.
-- Planning decision on 2026-06-25: AI should focus on dynamic judgment such as hero selection, archetype viability, synergy, skill priority, build usefulness, risk explanation, and subjective quality review.
+- Superseded in part on 2026-07-01: The 2026-06-25 policy assigned dynamic hero selection to AI. The backend now generates and scores legal lineups; AI ranks them, chooses from supplied skill shortlists, proposes at most one bounded swap, and explains strategy.
 - Planning decision on 2026-06-25: Milestone 5 implementation order should start with sidekick/character cleanup, weapon/armor/Grasta policy, and backend guardrail audit before golden evals and paid OpenRouter/Kimi setup, because deterministic correctness makes paid staging tests cheaper and more meaningful.
 
 #### Research Gaps
@@ -345,6 +422,8 @@ This file stores source references used during planning discussions. It separate
 - Determine whether additional ETL is needed for character stats, badges, manifest weapons, VC grastas, or sidekick equipment before recommendation quality can be evaluated fairly.
 
 ## Source Quality Notes
+
+- Historical Milestone 5 decisions remain in this log for auditability. Where the 2026-07-01 candidate-constrained rewrite conflicts with earlier three-call correction, broad-context generation, or AI-owned hero-search policy, the 2026-07-01 locked decisions supersede the earlier policy.
 
 - The Another Eden Wiki is a community-maintained source. It is appropriate for this portfolio project's game-mechanics planning, but recommendations should cite retrieved source facts and carry uncertainty when data is incomplete.
 - Exact damage, healing, speed, and AF calculations are complex and depend on stats, equipment, buffs, debuffs, enemy defenses, and player inventory. Milestone 4 should avoid promising exact battle simulation unless additional data and tests are planned.

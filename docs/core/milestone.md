@@ -2,340 +2,662 @@
 
 ## Executive Summary
 
-Status: Active.
+Status: Active; rewritten and resequenced around deterministic recommendation generation.
 
-Milestone 5 turns the completed Milestone 4 recommendation contract into a measurable, cost-controlled portfolio system. The epic starts with graph hygiene and deterministic recommendation policy, then adds evaluation, paid-provider reporting, and live-site safeguards before public beta or deployment.
+Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
-The guiding product outcome is a controlled Discord beta for roughly 20-30 Another Eden players. The beta should generate useful feedback and portfolio case-study evidence without allowing uncontrolled LLM spend. The starter OpenRouter budget target is RM50/month for public demo or beta periods, with warning thresholds and a hard stop before the ceiling is exceeded.
+The production recommender will use deterministic typed Neo4j retrieval rather than PLAN, generated Cypher, or LLM semantic retrieval validation. It will hard-reject impossible choices, compute contextual role and skill scores, generate capability-coverage lineups through bounded search, and validate all analyzer refinements. Normal paid usage is one analyzer call; the worst case is one initial call plus one fragment-only correction. A legal backend fallback prevents analyzer format, budget, or refinement failures from destroying otherwise valid recommendations.
+
+This rewrite preserves verified prior work but does not credit the current broad candidate-bundle prototype as completed architecture. Candidate/team scoring and legality are implemented and proven before paid analyzer-quality work.
 
 ## Scope And Intended User Outcome
 
-The system owner should be able to run recommendations locally with free/local models, promote the same flows through staging and release tests with the intended paid OpenRouter model, and produce evaluation reports that show legality, factuality, quality, latency, and cost evidence.
+A late-game or near-endgame Another Eden player should be able to submit:
 
-Beta testers should receive legal, boss-aware top-three lineup recommendations without seeing internal guardrail complexity. The app should reject impossible recommendations before display, preserve transparent risks and assumptions, and prevent repeated public requests from creating runaway bills.
+- An owned roster.
+- Optional owned sidekicks.
+- Optional per-character Stellar Awakening state.
+- A canonical selected boss.
+- Optional natural-language strategy preferences.
+- The default `late_game_assumed` item policy.
 
-Portfolio reviewers should see a credible AI engineering story: deterministic backend validation handles fixed constraints, paid AI is reserved for dynamic recommendation judgment and release-quality evidence, and public demo operations are bounded by authentication, rate limits, and monthly cost controls.
+The user should receive one to three legal, boss-aware lineup recommendations when viable, preferably representing burst, sustain, and hybrid strategies without fabricating missing archetypes. Each result should include selected heroes, contextual roles, three or four recommended skills, an assumption-labeled build package, optional legal sidekicks, boss counterplay, setup dependencies, risks, uncertainty, tradeoffs, and citations.
+
+Sparse data should produce diagnostics, reduced confidence, fewer candidates, or a typed zero-candidate result. It must never produce silent roster drops, fabricated ownership, invented mechanics, illegal skills/items, or padded lineups.
+
+The owner should be able to inspect why candidates were rejected, how survivors scored, which policy versions were used, what the analyzer saw, which refinements were accepted or rejected, and how many tokens and how much provider-reported cost each call consumed.
+
+## Architecture Boundary
+
+### Production Recommender
+
+The production path is:
+
+1. Normalize canonical request IDs and report unresolved/ambiguous inputs.
+2. Retrieve typed roster, boss, mechanics, sidekick, skill/passive, Grasta, and equipment facts.
+3. Apply hard legality and matchup rejection.
+4. Compute contextual role and per-role skill scores.
+5. Build role-specific top-K pools with boss-counter exceptions.
+6. Construct lineup-aware skill and build packages.
+7. Generate burst, sustain, and hybrid candidates from capability templates using bounded beam search.
+8. Validate, score, deduplicate, and diversity-filter legal candidates.
+9. Project only referenced facts for up to ten candidates to the analyzer.
+10. Accept ranking, skill choices, explanations, and at most one backend-bounded hero swap per lineup.
+11. Re-score and revalidate all refinements.
+12. Run at most one fragment-only correction when required.
+13. Return valid refined results or legal backend candidates in clearly labeled degraded mode.
+
+### Exploratory GraphRAG
+
+The existing PLAN -> GENERATE_CYPHER -> VALIDATE -> ANALYZE -> FORMAT flow may remain for exploratory graph questions. It is not responsible for production lineup legality and is never a fallback for missing production boss or roster data.
+
+Natural-language query text may adjust soft preferences or explanations, but it cannot expand the legal candidate universe or control legality-critical retrieval.
 
 ## Explicit Non-Goals
 
 - No exact deterministic damage simulator.
-- No numeric win-probability or clear-rate prediction.
 - No full turn-by-turn battle simulator.
-- No full all-superboss evaluation tier.
+- No numeric win probability, clear rate, or guaranteed victory.
+- No full player inventory optimizer.
+- No exact best-in-slot optimizer.
+- No required weapon, armor, Grasta, Ore, badge, or sidekick-equipment inventory entry for MVP.
+- No required `declared_owned_only` item mode in the first implementation.
+- No all-superboss evaluation tier.
 - No intermediate or strong superboss evaluation tier.
-- No complete player inventory optimizer for weapons, armor, Grasta, Ores, badges, or sidekick equipment.
-- No sidekick equipment ingestion or optimization.
-- No always-on production deployment.
-- No public unauthenticated unlimited recommendation endpoint.
-- No paid judge model call on every live user recommendation.
-- No replacement of the Milestone 4 recommendation UI beyond targeted status, error, cost, or limit messaging needed for this milestone.
+- No live AI role tagging during requests or normal ETL.
+- No mandatory AI-assisted labeling in initial acceptance.
+- No free-form analyzer lineup assembly.
+- No more than one analyzer-proposed hero swap per lineup.
+- No paid judge on every live request.
+- No rerun of the historical ~601k-token failure merely to recreate its baseline.
+- No major frontend redesign beyond status, diagnostics, assumptions, degradation, and cost visibility required by this milestone.
+- No deployment implementation beyond the beta-safety decisions explicitly retained after the core recommendation gates.
 
 ## Dependencies And Assumptions
 
-- Milestone 4 Features A-E are complete and remain the recommendation contract baseline.
-- The graph contains `Character`, `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, `MechanicReference`, `Grasta`, `Ore`, and baseline `Equipment` data as documented in `docs/core/SCHEMA.md`.
-- Existing curated weak superboss crawl scope includes: Zennon Ogre's Shadow, Flame Eater, Flame Eater female variant, Nameless Girl, Mimi, Cradle System, and Insula Ventorum.
-- Development can continue with free/local providers, including `nvidia/nemotron-3-super-120b-a12b:free` through OpenRouter or local Ollama models.
-- Staging, evaluation, and release testing should use `moonshotai/kimi-k2.6` as the intended paid OpenRouter production model unless evaluation evidence shows another paid model is materially better within budget.
-- The RM50/month starter ceiling is a public demo or Discord beta budget, not a commitment to always-on production spend.
-- Budget increases should require evidence from usage reports, beta feedback, and portfolio value.
-- Secrets, real API keys, and user credentials must stay out of docs and repository files.
+- Milestone 4 recommendation shape, final legality concepts, curated weak bosses, MechanicReference corpus, and current UI remain the baseline.
+- Sidekick/Character overlap cleanup is complete and must remain replay-safe.
+- Grasta exact-variant identity, compatibility, acquisition class, and maximum-copy metadata must pass verification before build-package scoring is trusted.
+- Canonical Character IDs and aliases must round-trip through request, graph, candidate, analyzer, validation, and display boundaries.
+- Skills and passives require stable backend candidate IDs. Implementation may extend the schema if current composite identity is insufficient.
+- Schema changes require a version bump, ETL replay/migration, schema assertions, and planned ETL-guide updates.
+- The default target player has broad late-game item access; item ownership is not verified unless a future policy says otherwise.
+- Curated boss and mechanics data may be incomplete. Unknown data lowers confidence and must remain distinct from confirmed facts.
+- OpenRouter usage and model metadata are mutable external facts and must be captured at paid release-evaluation time.
+- The historical ~601k-token failed run is a user-observed baseline for reduction reporting.
+- The RM50/month public demo/beta ceiling remains a later operational constraint.
+- Secrets, credentials, API keys, and real user authentication data remain outside documentation and repository files.
 
 ## Research References And Source Grounding
 
-Detailed source notes live in `docs/core/planning-sources.md`.
+Detailed entries live in `docs/core/planning-sources.md`.
 
-Repository-grounded planning inputs:
+Repository-grounded inputs include:
 
-- `docs/core/roadmap.md` defines Milestone 5 as evaluation, optimization, graph cleanup, equipment policy, and live-site cost control.
-- `docs/core/milestone.md` Milestone 4 closeout deferred Feature F evaluation gates and seeded sidekick cleanup, equipment policy, authentication, persistence, and rate limiting.
-- `docs/core/architecture.md` identifies the ETL, workflow, LLM provider, validation, and web boundaries.
-- `docs/core/SCHEMA.md` documents the current graph contract and confirms Equipment nodes are baseline context, not optimizer relationships.
-- `src/workflow/llm.py` already centralizes provider/model selection.
-- `src/workflow/legality.py` and `src/workflow/nodes/format.py` already enforce core lineup legality and final recommendation validation.
-- `src/etl/scraper.py` defines the existing curated weak superboss scope.
+- `src/workflow/candidates.py` currently retrieves the full eligible roster, every owned character's skills/passives, and all Grasta before prompt projection.
+- `src/workflow/nodes/analyze.py` currently permits a 450,000-byte analyzer payload and up to two correction rounds after the initial call.
+- `src/workflow/nodes/cypher.py` and `src/workflow/nodes/validate.py` show the current generated-Cypher recommendation path and separate retry cost.
+- `src/workflow/legality.py` contains reusable ownership, sidekick, skill/passive, SA, equipment, Grasta, and setup legality concepts.
+- Existing candidate, correction, partial-output, matchup, legality, and eval tests provide regression starting points but do not prove the rewritten architecture.
 
-External/current planning inputs:
+External/current inputs include:
 
-- OpenRouter public model metadata inspected on 2026-06-25 confirms `moonshotai/kimi-k2.6` availability, structured-output support, tool support, 262144-token context, and public pricing at the time of inspection.
-- OpenRouter pricing and model availability are current external facts and must be rechecked before release decisions or budget estimates are finalized.
-- The Another Eden Wiki Grasta overview and Attack Grasta list ground personality matching, Dormant sharing, Tier 3 uniqueness defaults, repeatable exceptions, and Pain/Poison conditions.
-- Community Reddit, GameFAQs, and Steam discussions inform the temporary role-based build heuristic only; they are not hard legality sources and require later gamer-beta validation.
+- OpenRouter Usage Accounting documents automatic per-response usage and cost fields, including reasoning and cache details where available.
+- OpenRouter Structured Outputs documents strict JSON Schema output for compatible models; schema enforcement does not replace semantic legality validation.
+- OpenRouter Models documentation provides model capability, pricing, context, completion, and supported-parameter metadata that must be snapshotted for paid qualification.
+- Existing Another Eden wiki and mechanics references ground affinity, status, zone, SA, sidekick, and Grasta constraints.
+- Community build references remain heuristic evidence only and require fixture or beta validation before tuning weights.
 
 Open research gaps:
 
-- Actual average prompt and completion token usage for one recommendation run after Milestone 5 context compression.
-- Actual paid-model quality comparison for free/local model output versus `moonshotai/kimi-k2.6`.
-- Whether Kimi K2.6 remains the best paid default after staging evals, or whether another paid OpenRouter model gives better quality per RM.
-- Exact Discord beta traffic pattern: number of users, expected recommendations per user per day, and whether testers need saved roster profiles.
+- Actual compact-projection token and cost distributions.
+- Initial scoring-weight quality across the curated weak-boss fixtures.
+- Experienced-player validation for high-impact role overrides and counter exceptions.
+- Best paid analyzer model at release time.
+- Value of optional OpenRouter-assisted low-confidence tag suggestions.
+- Authentication, persistence, and per-user/global limits for beta.
 
-## Guardrail Ownership Policy
+No unsupported external performance or pricing claim is used as a fixed acceptance criterion. Token ceilings are project policy; observed provider usage measures compliance.
 
-Backend deterministic checks own fixed constraints. These checks should run before paid AI judging and before user-visible output:
+## Locked Ownership Policy
 
-- Exactly four frontline heroes and two reserve heroes.
-- No duplicate heroes.
-- Sidekicks cannot occupy hero slots.
-- Main and sub sidekick slots must be different.
-- Heroes must be owned or explicitly free-to-play available.
-- Sidekicks must be owned or explicitly assumption-available.
-- Recommended skills and passives must exist on the selected character.
-- Stellar Awakening-gated skills/passives must respect known roster state or be labeled as upgrade assumptions.
-- Recommended skill counts must stay within the supported 3/4-skill display contract.
-- Boss affinity output must match graph-backed boss facts.
-- Recommendation text must not claim numeric win probability, win rate, clear chance, or deterministic victory.
-- Weapon and armor recommendations must not assign the same specific weapon or armor to more than one character in the same lineup when the recommendation names specific equipment.
-- Grasta compatibility and exact-variant acquisition cardinality are deterministic backend constraints; only variants marked repeatable may reuse copies beyond their recorded limit.
+### Backend Deterministic Authority
 
-AI dynamic checks own subjective or contextual judgment:
+The backend owns:
 
-- Hero selection quality for the selected boss and owned roster.
-- Burst, sustain, and hybrid archetype viability.
-- Skill priority and role fit when multiple legal choices exist.
-- Synergy across zones, buffs, debuffs, pain/poison setup, AF support, sustain, and sidekick auras.
-- Role-aware ranking that prefers Pain/Poison on active damage dealers and distinct Dormant-shareable Grasta on reserve mules while allowing explained exceptions.
-- Whether build notes are useful, specific, and honestly caveated.
-- Whether risks and uncertainty are clear enough for a real player.
-- Whether recommendation quality improved or regressed between providers, prompts, or retrieval strategies.
+- Canonical identity and normalization diagnostics.
+- Owned/F2P and sidekick eligibility.
+- Stellar Awakening availability and assumption labeling.
+- Typed boss, roster, mechanics, skill/passive, sidekick, and build retrieval.
+- Hard rejection before scoring.
+- Role taxonomy application and evidence materialization.
+- Contextual role and skill scoring.
+- Role-specific top-K pools and must-include counter exceptions.
+- Skill and build package construction.
+- Template and bounded beam candidate generation.
+- Full-lineup scoring, deduplication, and diversity.
+- Sidekick main/sub legality.
+- Grasta compatibility, exact identity, and copy cardinality.
+- Specific equipment allocation when named.
+- Final validation, re-scoring, fallback, and partial-result classification.
+- Preflight token budgets and observed usage accounting.
+
+### Analyzer Dynamic Authority
+
+The analyzer may:
+
+- Rank supplied backend candidates.
+- Choose exactly three or four skill IDs from supplied shortlists.
+- Explain strategy, counterplay, risks, assumptions, uncertainty, and tradeoffs.
+- Propose at most one hero swap per lineup from `allowed_swaps`.
+- Explain the required-role reason for a proposed swap.
+
+The analyzer may not invent or introduce any character, skill, passive, build package, Grasta, equipment, sidekick, boss fact, mechanic, or citation ID. It may not freely assemble a lineup from the owned roster.
+
+Every proposed swap and skill change is re-scored. An invalid or lower-scoring swap falls back to the original candidate. An invalid or lower-scoring skill package falls back to the backend default.
+
+## Role Taxonomy And Evidence Policy
+
+A versioned local artifact such as `role_taxonomy.json` is the source of truth for:
+
+- The role vocabulary.
+- Deterministic keyword/pattern rules.
+- Confidence levels.
+- Evidence fields.
+- Curated overrides.
+- Taxonomy/artifact version.
+
+Initial roles include:
+
+- Primary DPS.
+- Secondary DPS.
+- Zone/stance setter.
+- Buffer.
+- Debuffer.
+- Pain/Poison setter.
+- Break/setup support.
+- Healer/recovery.
+- Tank/taunt/rage.
+- Mitigation/shield/barrier.
+- Cleanse/status protection.
+- MP sustain.
+- AF/burst support.
+- Reserve Grasta mule.
+- Sidekick/value support where applicable.
+
+ETL or parsed-artifact replay deterministically materializes role tags and evidence mainly on Skill and PassiveSkill records. Every tag carries enough evidence to identify the matched rule or curated override, source skill/passive, confidence, and artifact version. Optional Character summaries are derived retrieval caches, not permanent identity labels.
+
+Query-time `RoleScores` combine roster state, SA availability, boss affinity/mechanics, proven skill candidates, build/sidekick assumptions, and lineup coverage needs. One character may score highly for different roles in different lineups.
+
+Identical parsed data plus identical role artifacts must reproduce Neo4j role metadata. Drift tests fail when materialized metadata differs from artifact-generated output.
+
+### Optional AI-Assisted Curation
+
+OpenRouter may later support a developer/admin-only batch that reads parsed artifacts and emits suggestion files for untagged, low-confidence, or selected high-impact records. It never runs during live recommendations or normal ETL, never directly mutates Neo4j or canonical artifacts, and is safe to skip.
+
+Suggestion records include evidence, confidence, model, prompt version, timestamp, and source reference. Human review is mandatory. Accepted suggestions become ordinary versioned curated overrides, after which runtime materialization is deterministic without OpenRouter.
+
+This optional batch is not required for first implementation acceptance.
+
+## Skill Selection Policy
+
+### Stage 1: Per-Role Shortlisting
+
+Before lineup generation, the backend scores each available skill per character against contextual role, boss matchup, affinity, mechanic tags, SA state, setup value, and MP/long-fight pressure.
+
+Unavailable choices are excluded. SA-gated choices require known availability or an explicit upgrade-assumption branch. The normal shortlist contains four to six role-relevant skills per character, not the full skill list.
+
+### Stage 2: Lineup-Aware Packages
+
+During lineup scoring, the backend creates one or more default three-to-four-skill packages for each selected hero and assigned contextual role. Packages consider:
+
+- Required setup dependencies.
+- Capability coverage.
+- Redundancy.
+- MP pressure.
+- Affinity.
+- Pain/Poison/Break requirements.
+- Zone/stance application.
+- Sustain, mitigation, cleanse, taunt, or other mandatory functions.
+
+A lineup receives no capability credit unless the selected/default package proves that capability. Analyzer-selected packages are validated by stable ID and fall back to the backend default when invalid, incomplete, or lower-scoring.
+
+## Item And Build-Package Policy
+
+The required MVP policy is `late_game_assumed`.
+
+The backend may use compatible catalog Grasta, weapons, armor, and supported Ore/build-intent context as late-game assumptions. Specific ownership is not verified. Output clearly labels packages as assumed late-game builds and treats unavailable items as farming/build targets.
+
+Each compact build package contains:
+
+- One weapon or weapon-category assumption.
+- One armor or armor-category assumption.
+- Three Grasta choices.
+- Optional Ore/build-intent notes when supported.
+- Compatibility evidence.
+- Copy/cardinality allocation.
+- Setup dependencies.
+- Assumption labels.
+- Source/citation IDs.
+
+The backend enforces exact Grasta identity, personality/weapon compatibility, unique/finite/repeatable cardinality, lineup-scoped allocation, named equipment duplication, and Pain/Poison/Break/zone dependencies. The analyzer sees only referenced build-package IDs and compact explanations.
+
+`generic_only` remains a fallback design. `declared_owned_only` is future-compatible but not an MVP requirement.
+
+## Affinity And No-Weakness Policy
+
+The backend distinguishes:
+
+- Confirmed weakness.
+- Confirmed no weakness.
+- Weakness unknown.
+- Incomplete affinity data.
+
+A confirmed no-weakness boss receives no missing-weakness penalty. Primary damage that is nullified or absorbed is rejected. Resisted primary damage is penalized unless a validated bypass, affinity change, or alternate neutral plan exists. Primary DPS requires at least one neutral-or-better usable damage skill.
+
+When weakness is unavailable, scoring shifts toward a neutral damage engine: role coverage, mechanic counterplay, zone/damage-type synergy, buffs/debuffs, setup, AF support, sustain, mitigation, status protection, MP stability, sidekick value, reserve utility, setup reliability, uncertainty, and assumption burden.
+
+Unknown or incomplete affinity lowers confidence but is not treated as confirmed no weakness. Scores remain internal ranking signals only.
+
+## Capability-Coverage Templates
+
+Templates express required and optional capabilities, not rigid one-role-per-hero slots. A hero satisfies multiple requirements only when selected skill/passive/build evidence proves them.
+
+### Burst
+
+Requires credible primary damage, damage enablement, complete required setup, and enough survival or mandatory counterplay for the boss. Healer/tank coverage is required only when boss mechanics demand it.
+
+### Sustain
+
+Requires credible primary damage, defensive or recovery stability, offensive enablement, and MP/long-fight stability when relevant. Sustain candidates must still have a clear progress/damage plan.
+
+### Hybrid
+
+Requires credible damage, setup, support/enablement, and defensive reliability. Hybrid is the balanced default when it carries fewer assumptions or lower risk.
+
+Missing mandatory coverage rejects a lineup. Missing optional coverage lowers score, confidence, or rank. Reserve heroes score swap value, passive utility, and legal Grasta-mule contribution. Sidekick packages contribute only through legal main/sub behavior.
+
+## Candidate Generation And Scoring
+
+A versioned scoring-policy artifact owns initial weights, component definitions, penalties, diversity rules, and policy version.
+
+The backend:
+
+- Applies hard rejection before scoring.
+- Retains the top eight candidates per role by default.
+- Adds bounded must-include exceptions for rare boss counters or required enablers outside the top eight.
+- Expands burst, sustain, and hybrid capability templates without random shuffle.
+- Retains at most 50 partial combinations at each beam-search step.
+- Scores complete six-hero lineups.
+- Deduplicates equivalent rosters and near-identical strategies.
+- Preserves strategic diversity.
+- Sends only five to ten diverse legal candidates when available.
+
+Must-include exceptions may cover mandatory cleanse/immunity, unique bypass, required zone, rare setup, boss-specific mitigation, affinity change, or other proven counterplay.
+
+Full-lineup scoring includes:
+
+- Capability/role coverage.
+- Boss matchup.
+- Setup completeness.
+- Synergy.
+- Sustain and mitigation.
+- Skill-package readiness.
+- Sidekick contribution.
+- Reserve utility and Grasta-mule value.
+- Item/build assumption burden.
+- Role overlap.
+- Missing setup.
+- Uncertainty.
+
+Each candidate retains scoring-policy version, component breakdown, major penalties, assumptions, validation status, and pruning-survival reason. Initial weights may be heuristic, but tuning requires golden fixtures, regression evidence, documented evaluation, or beta feedback.
+
+## Candidate Contracts
+
+### Full Backend Candidate Object
+
+Internal only. It may contain full evidence, rejected candidates, detailed scores, validation metadata, intermediate signals, debugging data, and correction authority. It is never sent directly to the analyzer.
+
+### Compact Analyzer Projection
+
+Contains only:
+
+- Schema, role-taxonomy, role-artifact, and scoring-policy versions.
+- Assumption policy.
+- Compact boss facts and referenced mechanic summaries/IDs.
+- One to ten legal scored candidates, normally five to ten.
+- Six assigned hero IDs per lineup.
+- Role-score summaries and evidence for selected heroes.
+- Four-to-six-skill shortlists and default packages only for selected heroes.
+- Referenced build-package IDs.
+- Selected sidekick package and limited legal alternatives.
+- `allowed_swaps` grouped by slot and required capability.
+- Component score breakdown.
+- Setup dependencies.
+- Uncertainty and risk flags.
+- Deduplicated catalogs resolving referenced IDs only.
+- Citation IDs.
+- Immutable validation constraints.
+
+It excludes rejected heroes, the full owned roster after pruning, broad skill/passive lists, full item catalogs, raw boss pages, and unlimited replacements.
+
+## Analyzer Refinement And Correction
+
+The analyzer may keep a candidate unchanged or propose at most one hero swap per lineup from supplied `allowed_swaps`. It explains the capability reason. The backend re-scores and revalidates the result. Invalid swaps or swaps scoring below the original are rejected, and the original candidate is restored.
+
+Valid lineups are frozen. Correction targets only invalid fragments and never regenerates the entire answer.
+
+Maximum analyzer calls per request:
+
+- Normal: one initial analyzer call.
+- Worst case: one initial call plus one batched fragment-only correction.
+- No third analyzer call.
+
+Invalid skill selections fall back to backend defaults where safe. Invalid refinements are discarded after correction. Return one to three valid results. If analyzer output entirely fails, budget is exhausted, or refinement is skipped, legal coverage-valid backend candidates may be returned in clearly labeled degraded mode.
+
+## Token And Cost-Control Gates
+
+### Initial Call
+
+- Target input: at most 20,000 tokens.
+- Hard input cap: 25,000 tokens.
+- Completion hard cap: 4,000 tokens.
+
+### Correction Call
+
+- Target input: at most 6,000 tokens.
+- Hard input cap: 8,000 tokens.
+- Completion hard cap: 2,000 tokens.
+- Never resend the full projection.
+- Send only invalid fragments, error codes, relevant allowed IDs, fallback defaults, and immutable constraints.
+
+### Cumulative Analyzer Budget
+
+- Target total usage across all analyzer attempts: at most 30,000 tokens.
+- Hard acceptance ceiling: 40,000 total analyzer tokens.
+- Include provider-reported prompt, completion, reasoning, cached, total, and other available token categories.
+- Estimate input before a paid request and skip calls that exceed the per-call budget.
+- Budget exhaustion returns legal backend candidates in degraded mode.
+- Paid golden acceptance requires at least 90% reduction from the observed ~601k-token failed run.
+
+For each attempt record provider, model, prompt, completion, reasoning, cached, total tokens, provider-reported cost, and estimated cost when needed. Model pricing and currency conversion remain configurable and are snapshotted for release evaluation.
+
+## Sparse Input And Failure Policy
+
+- Unknown, misspelled, or ambiguous roster names produce diagnostics, suggestions, and eligible-count reporting; they are never silently dropped.
+- Fewer than six eligible heroes after owned/F2P policy returns typed `insufficient_roster`.
+- Missing skill/passive data removes unsupported capabilities but may leave other proven roles usable.
+- No owned sidekicks keeps both slots empty and surfaces risk where relevant.
+- One or two viable archetypes return as partial success with missing-archetype reasons.
+- One to four backend candidates may reach the analyzer when no more legal diverse candidates exist.
+- Zero candidates produce structured dominant rejection causes and no analyzer call.
+- Incomplete boss/mechanics data lowers confidence and creates readiness warnings.
+- Degraded mode returns only legal, coverage-valid backend candidates.
+
+Dominant zero-candidate causes include insufficient heroes, no usable primary damage, null/absorb conflicts, missing mandatory defense/setup, missing source data, build incompatibility, Grasta cardinality conflicts, and boss-data unreadiness.
 
 ## Prioritized Feature Checklist
 
-Implementation order matters for this milestone. Work starts with graph/data correctness and deterministic backend rules before paid-model setup, because clean data and backend validation make later Kimi K2.6 staging tests cheaper and more meaningful.
+Implementation order is mandatory. Deterministic legality, scoring, and candidate quality precede analyzer refinement and paid tests.
 
-### Feature A: Sidekick/Character Graph Cleanup
+### Feature A: Data Identity And Readiness Foundation
 
-Status: Completed.
+Status: In progress.
 
-Goal: Remove sidekick records incorrectly represented as `Character` nodes without damaging legitimate character data.
+Prior work status:
 
-Technical requirements:
-
-- Add a dry-run cleanup query that finds exact name overlap between `Character.name` and `Sidekick.name`.
-- Report all matched names before deletion.
-- Verify each matched `Character` node has sidekick-like origin or lacks required character detail data where possible.
-- Add a safe cleanup command or ETL migration path that removes only confirmed duplicate `Character` nodes.
-- Preserve `Sidekick` nodes, `SidekickSkill`, `SidekickAura`, and official `UNLOCKS_SIDEKICK` relationships.
-- Add post-cleanup schema or data assertions that sidekick names no longer appear as character nodes.
-- Document the cleanup workflow if it becomes a repeated operator task.
-
-Acceptance criteria:
-
-- Dry run lists the expected overlapping sidekick/character names without modifying the graph.
-- Cleanup removes confirmed duplicate `Character` nodes only.
-- Legitimate character nodes and sidekick association relationships remain intact.
-- Recommendation legality tests continue to reject sidekick-as-hero output.
-- ETL replay does not reintroduce the duplicate records.
-
-### Feature B: Build Item Identity, Cardinality, And Recommendation Policy
-
-Status: Reopened; implementation incomplete after failed manual verification.
-
-Goal: Correct the graph and recommendation data contract so weapon, armor, and Grasta assumptions use distinct, compatible, cardinality-aware records without requiring player inventory entry.
-
-Why this feature was reopened:
-
-- Manual Feature B verification exposed that multiple Almighty Power and Enhance if Max HP variants are collapsed into one Neo4j node because the current loader merges Grasta by name alone.
-- The collapsed node can accumulate unrelated personality requirements, causing valid and invalid compatibility decisions to become indistinguishable.
-- Akane Alter is present in parsed artifacts as Akane (Alter),Blooming Blade, but analyzer output shortened the canonical name and failed final legality.
-- Feature C cannot build trustworthy constrained candidates until these data identities are corrected.
+- Sidekick/Character cleanup is completed and must remain regression-covered.
+- Grasta identity/cardinality and canonical-character changes are implemented but await focused automated and manual verification.
+- The broad candidate-bundle/correction implementation is a superseded prototype and carries no completion credit into later features.
 
 Technical requirements:
 
-- Preserve the existing recommendation shape of exactly one weapon assumption, one armor assumption, and three Grasta assumptions per character.
-- Keep build items assumption-based even when the player has not entered item ownership; this is not a full inventory optimizer.
-- Introduce a stable grasta_id that distinguishes variants by the fields required for legality, including category, tier, base name, personality requirement, weapon requirement or weapon group, and any source variant needed to prevent collisions.
-- Extend parsed Grasta data with source-grounded compatibility, sharing, acquisition, and display fields needed by recommendation logic, including personality/weapon discriminator, source_url, obtain/source text where available, finite-versus-repeatable acquisition classification, and maximum theoretical copies when known.
-- Distinguish regular Attack Grasta such as Almighty Power (Dragon) from Personality Special Grasta and other special-slot records.
-- Replace name-only Grasta MERGE identity and uniqueness constraints, increment SCHEMA_VERSION, update schema assertions, and require parsed/live ETL replay or a safe migration that removes collapsed legacy nodes.
-- Preserve separate REQUIRES_TRAIT relationships per exact Grasta variant so one variant never accumulates unrelated personality requirements.
-- Enforce theoretical account cardinality per lineup even without inventory input: a unique exact Tier 3 variant may appear at most once in one lineup, while variants explicitly marked repeatable may reuse copies according to their metadata.
-- Reset account-cardinality allocation between alternative lineups because each recommendation is an independent plan.
-- Allow one character to equip multiple distinct personality Grasta when the character matches every required trait and each exact variant remains within its copy limit.
-- Preserve weapon-compatible repeatable Pain/Poison Grasta choices and require a skill, passive, sidekick, or explicit supported assumption that applies the corresponding status.
-- Keep specific weapon and armor uniqueness scoped to one lineup; treat weapon/armor category labels as repeatable generic assumptions.
-- Introduce stable canonical character candidate identity and display aliases so analyzer output cannot shorten Akane (Alter),Blooming Blade into an unknown character.
-- Add a character coverage/readiness audit that compares parsed character targets, Neo4j Character nodes, and frontend-selectable roster entries; missing or stale identities must fail visibly.
-- Preserve Equipment as retrieval context only and keep exact best-in-slot ranking, badges, Ores, Light/Shadow slot expansion, and full inventory ownership outside this feature.
-- Update docs/guides/ETL_GUIDE.md during implementation because the schema change requires repeatable migration/replay and verification steps.
+- Verify stable Character and Grasta IDs across parsed artifacts, Neo4j, request normalization, frontend entities, and output.
+- Verify Grasta exact variants, compatibility, acquisition classes, and maximum copies.
+- Verify sidekick cleanup does not regress on ETL replay.
+- Define stable Skill and PassiveSkill candidate identity or plan the required schema extension.
+- Add readiness reporting for missing character, skill, passive, boss, mechanics, and item facts.
+- Update schema version/assertions and plan ETL replay/migration if identity or role-evidence properties change.
+- Preserve unrelated existing user changes while replacing only the superseded recommendation path during implementation.
 
 Acceptance criteria:
 
-- Distinct Almighty Power personality variants and Enhance-if-Max-HP variants load as distinct graph records with stable IDs.
-- No Grasta node has personality requirements belonging to another variant.
-- The graph records whether an exact variant is unique, finite, repeatable, or unknown; legality uses that metadata instead of assuming all Grasta are infinitely reusable.
-- The same unique exact Grasta cannot be assigned twice inside one lineup but may appear in separate alternative lineups.
-- Distinct compatible personality variants may coexist on one matching character.
-- Repeatable weapon-compatible Pain/Poison Grasta may fill multiple slots when the lineup has a supported status source.
-- Akane (Alter),Blooming Blade and other alias/style characters round-trip from parsed data through Neo4j, frontend selection, candidate generation, and final display without canonical-name drift.
-- Readiness checks identify any parsed or frontend-selectable character missing from Neo4j.
-- Schema assertions and focused ETL tests fail against the old name-collapsing behavior.
-- Feature B automated tests pass, then its manual verification remains pending until expanded Feature C can produce a valid end-to-end recommendation.
+- Sidekick-only names cannot enter hero pools.
+- Canonical alias/style identities round-trip without analyzer-authored names.
+- Exact Grasta variants do not collapse or accumulate unrelated requirements.
+- Unique/finite variants enforce known limits.
+- Missing/stale graph identities fail readiness visibly.
+- Focused automated tests pass before Feature B.
+- Manual readiness verification is repeatable using planned guide updates.
 
-### Feature C: Candidate-Constrained Generation, Guardrail Ownership, And Correction Loop
-
-Status: Expanded and planned; blocked on Feature B data-contract correction.
-
-Goal: Replace free-text hard-field generation with backend-provided candidates, validate each lineup independently, and correct only invalid lineups under a bounded cost policy.
-
-Technical requirements:
-
-- Audit prompts, state, Pydantic models, graph retrieval, legality code, formatter behavior, UI error handling, and tests; classify every rule as deterministic backend, dynamic AI judgment, or documentation-only caveat.
-- Add a deterministic candidate-preparation boundary after successful graph retrieval and before analysis.
-- Build compact candidate bundles with stable IDs and display metadata for canonical characters, character-owned skills/passives, owned sidekicks, compatible Grasta variants, equipment assumptions, graph-backed citations, and boss affinity/mechanics facts.
-- Preserve candidate coverage for the eligible roster; remove the arbitrary first-12-record behavior as a legality source and report when context selection omits an eligible candidate.
-- Require the analyzer to select backend-provided IDs for all hard fields. The analyzer may author roles, strategy, tradeoffs, risks, and explanations, but may not invent character, skill, passive, sidekick, item, citation, or boss-fact identifiers.
-- Resolve IDs to display names only after deterministic validation.
-- Validate burst, sustain, and hybrid lineups independently for shape, ownership, canonical identity, skill/passive existence, Stellar Awakening gates, sidekick legality, equipment uniqueness, Grasta compatibility/cardinality, Pain/Poison source, citations, and boss-affinity fidelity.
-- Freeze valid lineups between correction rounds.
-- Return invalid lineup diagnostics as structured error codes and paths plus the exact allowed replacement candidate IDs; do not rely on prose-only retry feedback.
-- Correct all remaining invalid lineups together in at most two conditional batched rounds after initial analysis, for no more than three analyzer calls per request.
-- Skip correction calls when initial output is fully valid.
-- Discard lineups that remain invalid after the correction cap. Never render an incompatible character, skill, item, or Grasta as part of a valid lineup.
-- Return one to three fully valid lineups as a partial result set with warnings that identify missing archetypes and rejected/corrected proposals; return graceful failure only when zero valid lineups remain.
-- Distinguish Cypher retrieval retries, provider transport retries, analyzer correction rounds, structured-output normalization, and final legality failures in state, logs, SSE progress, UI messages, and future eval reports.
-- Use the current beta build heuristic as a ranking preference: favor Pain/Poison Grasta on active damage dealers when a reliable setter exists and favor distinct Dormant-shareable Grasta on reserve mules.
-- Keep that build heuristic non-mandatory; allow support, tank, AF, farming, or boss-specific exceptions when the recommendation explains the tradeoff.
-- Keep exact damage simulation, exact best-in-slot claims, and automatic substitution outside the approved candidate set out of scope.
-- Add docs/guides/recommendation-validation.md with local setup, ETL/schema readiness checks, candidate inspection, Mimi smoke tests, correction-round diagnostics, partial-result expectations, failure classification, and what manual testers should report.
-- Require later Features D, E, and G to update the guide when eval commands, provider/cost reporting, or context compression changes validation behavior.
-
-Acceptance criteria:
-
-- Analyzer output cannot reference a hard-field ID absent from the backend candidate bundle.
-- Canonical alias/style identities such as Akane Alter cannot fail because the model shortened their display name.
-- Incompatible personality/weapon Grasta and exhausted unique-copy variants are excluded from allowed replacements.
-- A correction request receives structured validation errors and allowed candidates, not merely the original prompt.
-- A fully valid first response performs no correction call.
-- A request performs at most two correction rounds and at most three analyzer calls total.
-- Valid lineups survive correction of other lineups unchanged.
-- Invalid lineups remaining after the cap are absent from rendered recommendations and represented only by warnings.
-- One or two valid lineups render successfully with explicit missing-archetype warnings; zero valid lineups render a graceful classified error.
-- Cypher retry counters and analyzer correction counters are separate and visibly distinguishable.
-- The default frontline Pain/Poison and reserve-mule preference is tested as ranking guidance, while hard compatibility/cardinality remains deterministic.
-- Existing fixed guardrails remain backend-owned and have modular tests.
-- The exact Mimi prompt used during Feature B verification returns at least one fully valid owned-roster lineup without incompatible Grasta, hallucinated characters, unsupported skills/passives, missing citations, or boss-affinity drift.
-- docs/guides/recommendation-validation.md is sufficient for another developer or tester to repeat schema readiness, automated checks, and manual smoke verification.
-
-### Feature D: Golden Weak-Boss Evaluation Harness
+### Feature B: Typed Production Request And Retrieval Boundary
 
 Status: Planned.
 
-Goal: Promote the deferred Milestone 4 Feature F into a repeatable eval workflow for legality, factuality, recommendation quality, latency, and cost.
-
 Technical requirements:
 
-- Define a golden evaluation set of five weak superboss cases selected from the existing curated weak superboss scope.
-- Store eval fixtures with boss name, roster, optional owned sidekicks, optional Stellar Awakening state, query, expected hard constraints, and human-readable quality expectations.
-- Run deterministic backend gates before any paid judge call.
-- Separate hard failures from subjective quality feedback.
-- Record provider, model ID, prompt token estimate or observed usage where available, completion token estimate or observed usage, latency, and run timestamp.
-- Support free/local development evals and paid staging/release evals using the same fixture shape.
-- Add a reusable guide if the eval workflow requires repeated commands, report interpretation, fixture updates, or artifact cleanup.
+- Define typed request fields for canonical boss ID, roster, optional sidekicks, SA state, `late_game_assumed` policy, and natural-language preferences.
+- Add deterministic service methods for boss, roster, skills/passives, mechanics, sidekicks, Grasta/build, and equipment context.
+- Keep natural-language preferences outside legality-critical retrieval.
+- Return typed missing/unsupported boss and normalization errors.
+- Detect conflicts between selected boss ID and query text rather than guessing.
+- Ensure production recommendation does not invoke PLAN, generated Cypher, or LLM retrieval validation.
+- Preserve exploratory GraphRAG as a separate path or mode without using it as production fallback.
 
 Acceptance criteria:
 
-- A developer can run the golden weak-boss eval set without paid model calls by default.
-- Paid eval mode is explicit and requires the intended paid model configuration.
-- Deterministic legality and factuality failures stop before subjective judge scoring.
-- Eval output identifies which provider generated each recommendation and which provider judged it, if any.
-- Reports distinguish backend hard-gate failures, model-output format failures, and subjective recommendation-quality concerns.
-- The five-boss eval set is documented and can be extended later to intermediate and strong tiers.
+- Backend candidate preparation runs with zero retrieval/planner LLM calls.
+- Invalid boss IDs fail deterministically.
+- Typed retrieval returns only requested/eligible facts with coverage metadata.
+- Natural-language preferences cannot expand ownership or candidate universe.
+- Tests assert dynamic Cypher generation is not called.
 
-### Feature E: Provider Strategy, Cost Reporting, And RM50 Budget Gate
+### Feature C: Versioned Role Taxonomy And Reproducible Materialization
 
 Status: Planned.
 
-Goal: Make OpenRouter the primary/default production AI path while keeping paid usage bounded and explainable.
-
 Technical requirements:
 
-- Keep free/local development as the default low-friction workflow.
-- Configure `moonshotai/kimi-k2.6` as the intended paid staging/evaluation/release model through environment-driven settings.
-- Preserve role-based provider/model overrides for future generator, validator, and judge experiments.
-- Add per-run provider/model metadata to recommendation and eval artifacts.
-- Add token and cost estimation using current configured model prices, with a clear caveat when usage is estimated rather than provider-reported.
-- Define RM50/month as the starter public demo/beta ceiling.
-- Add warning thresholds, recommended at 50%, 80%, and 95% of the RM50 ceiling.
-- Add a hard stop or admin-disable mechanism when the monthly ceiling is reached.
-- Include scenario estimates for controlled beta usage, such as 20-30 testers with bounded requests per tester.
+- Create a versioned taxonomy/rules/overrides artifact.
+- Define role vocabulary, deterministic rules, confidence, evidence, and override schema.
+- Tag Skill and PassiveSkill parsed records deterministically.
+- Materialize tags/evidence and taxonomy version into Neo4j or a documented normalized graph representation.
+- Treat optional Character summaries as derived caches.
+- Add drift detection between artifact-derived results and Neo4j.
+- Plan ETL-guide updates for artifact bump, replay, diagnostics, and drift repair.
+- Keep optional OpenRouter suggestion batch out of first acceptance.
 
 Acceptance criteria:
 
-- The system can run with free/local models during development and Kimi K2.6 during staging/release without code changes.
-- Eval reports include provider/model, latency, estimated or observed tokens, and estimated RM cost.
-- Documentation explains when paid model usage is allowed: staging, evaluation, release testing, and controlled beta/demo traffic.
-- Documentation explains when paid judge usage is not allowed: normal live requests by default.
-- The RM50 monthly ceiling is visible in planning docs and operator guidance.
-- The app or planned deployment flow has a clear way to stop recommendation calls before the ceiling is exceeded.
+- Same parsed data and artifact version reproduce identical tags/evidence.
+- Every materialized tag cites rule/override and source fact.
+- One character can support multiple contextual roles.
+- Neo4j is not the sole source of truth.
+- Drift tests fail on mismatched materialization.
+- No live AI tagging occurs.
 
-### Feature F: Authentication, Persistence, Rate Limiting, And Beta Safety Plan
+### Feature D: Hard Filters, RoleScores, And Skill Shortlists
 
 Status: Planned.
 
-Goal: Prepare live-site cost protection and useful beta feedback capture before deployment work.
-
 Technical requirements:
 
-- Decide the minimum authentication model for controlled beta, such as invite-only login, magic links, Discord OAuth, or admin-issued access codes.
-- Decide what user data should persist: roster, owned sidekicks, Stellar Awakening state, recent recommendation history, feedback, and consent state.
-- Add a rate-limit policy for anonymous, authenticated, and admin users.
-- Add monthly and per-user budget protections around paid recommendation calls.
-- Plan request deduplication or caching for repeated identical roster/boss/query inputs where practical.
-- Add feedback capture fields suitable for portfolio case studies, such as usefulness rating, issue category, free-text feedback, and permission to quote anonymized feedback.
-- Keep deployment implementation in Milestone 7 unless a minimal local/staging persistence feature is required for beta preparation.
+- Implement ownership/F2P, sidekick, SA, skill/passive, affinity, item, and setup hard filters.
+- Hard-reject null/absorb primary damage and require neutral-or-better usable primary damage.
+- Distinguish no weakness, unknown weakness, and incomplete affinity.
+- Compute per-character per-role scores with evidence and policy version.
+- Keep top eight per role plus bounded must-include exceptions.
+- Score four-to-six skills per contextual role.
+- Construct default three-to-four-skill packages for later lineup scoring.
+- Add component breakdowns, penalties, confidence, and deterministic tie-breaking.
 
 Acceptance criteria:
 
-- Public beta cannot run as an unlimited unauthenticated paid endpoint.
-- The RM50 monthly ceiling has a concrete enforcement plan.
-- User data persistence scope is documented before schema or database work begins.
-- Rate limits include per-user and global budget controls.
-- Feedback capture supports portfolio case-study evidence without collecting unnecessary personal data.
-- Deployment secrets and credentials remain out of repository docs and source files.
+- Impossible candidates never enter normal role pools.
+- Required boss counters survive top-eight pruning through explicit exceptions.
+- Role scores vary by boss and available package.
+- Missing data cannot create capabilities.
+- Skill shortlists exclude unavailable choices and remain bounded.
+- Identical inputs/policy versions reproduce ordered pools and packages.
 
-### Feature G: Context Compression, Prompt Cleanup, And Release Comparison Report
+### Feature E: Late-Game Build Packages And Allocation
 
 Status: Planned.
 
-Goal: Improve recommendation latency, cost, and stability while producing evidence for portfolio case studies.
-
 Technical requirements:
 
-- Measure baseline latency, prompt size, completion size, and estimated cost for the golden weak-boss eval set.
-- Review retrieved graph context for redundant boss, skill, passive, mechanics, Grasta, Ore, and Equipment text.
-- Compress or prioritize context before paid model calls.
-- Compare free/local development model output against Kimi K2.6 staging/release output.
-- Add an evaluation summary report suitable for README, portfolio screenshots, or interview discussion.
-- Preserve source citations and uncertainty labels after compression.
+- Implement `late_game_assumed` as the default and required item policy.
+- Generate compact weapon, armor, three-Grasta, and optional Ore/build-intent packages.
+- Validate exact compatibility, cardinality, named equipment allocation, and setup dependencies.
+- Label ownership as unverified and provide farming/build-target wording.
+- Retain `generic_only` as fallback-compatible design.
+- Keep `declared_owned_only` deferred.
 
 Acceptance criteria:
 
-- Baseline and current reports show latency and cost movement across at least one optimization pass.
-- Kimi K2.6 release eval results are captured separately from free/local development results.
-- Context compression does not remove required legality, boss-affinity, mechanics, or citation evidence.
-- The final report explains quality/cost tradeoffs in portfolio-friendly language without hiding failures.
+- Users need not enter inventory for MVP.
+- Unique/finite Grasta cannot be illegally reused within a lineup.
+- Specific named equipment cannot be duplicated illegally.
+- Every package has evidence, assumptions, allocation, setup dependencies, and citations.
+- Analyzer never receives full item catalogs.
+
+### Feature F: Capability Templates, Beam Generation, And Lineup Scoring
+
+Status: Planned.
+
+Technical requirements:
+
+- Express burst, sustain, and hybrid as mandatory/optional capability coverage.
+- Use selected skill/build packages as proof of coverage.
+- Generate from role pools without random shuffle.
+- Cap beam expansion at 50 partial combinations per step.
+- Score full lineups using the locked components and penalties.
+- Score reserves and legal main/sub sidekick contributions.
+- Deduplicate equivalent and near-identical strategies.
+- Preserve diversity and retain up to ten legal candidates.
+- Return partial candidates or structured zero-candidate causes.
+
+Acceptance criteria:
+
+- Candidate generation does not enumerate all six-hero combinations.
+- All-DPS teams fail when mandatory coverage is missing.
+- Multifunction heroes can satisfy multiple proven requirements.
+- Burst, sustain, and hybrid remain distinct.
+- Identical input reproduces candidates, scores, pruning reasons, and order.
+- One to four candidates remain valid output when that is all that survives.
+- Zero candidates skip the analyzer.
+
+### Feature G: Compact Analyzer Projection And Bounded Refinement
+
+Status: Planned.
+
+Technical requirements:
+
+- Maintain separate full backend and compact analyzer contracts.
+- Project only referenced candidates, catalogs, shortlists, packages, boss/mechanics facts, swaps, constraints, and citations.
+- Use strict structured output on supported provider routes.
+- Allow ranking, explanations, skill choice, and one supplied swap per lineup.
+- Re-score/revalidate refinements and restore defaults when worse or invalid.
+- Freeze valid lineups.
+- Permit one fragment-only correction call.
+- Return legal backend candidates in labeled degraded mode when analyzer work fails or is skipped.
+
+Acceptance criteria:
+
+- Projection contains no rejected roster or broad catalogs.
+- Analyzer cannot introduce out-of-bundle IDs.
+- No request exceeds two analyzer calls.
+- Correction does not resend the full projection.
+- Lower-scoring swaps/packages fall back to originals.
+- One to three valid lineups may return.
+- Analyzer failure cannot invalidate legal backend candidates.
+
+### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
+
+Status: Planned.
+
+Technical requirements:
+
+- Build layered tests for taxonomy, materialization, normalization, hard filters, role/skill scoring, packages, templates, beam bounds, no-weakness affinity, projection leakage/budgets, swaps, partial output, and zero candidates.
+- Define feasible and infeasible golden weak-boss fixtures with expected constraints and quality notes.
+- Require all deterministic gates before paid analyzer or judge calls.
+- Capture provider/model metadata snapshot for paid runs.
+- Record attempt-level usage, cost, latency, validation, fallback, and degradation.
+- Enforce locked per-call and cumulative budgets.
+- Preserve the ~601k failure as a recorded baseline artifact.
+- Use paid judge only offline on deterministically valid output.
+
+Acceptance criteria:
+
+- Hard legality and out-of-bundle ID gates pass 100%.
+- Identical fixture input produces deterministic backend results.
+- Every feasible fixture returns at least one legal coverage-valid candidate.
+- Infeasible fixtures return classified diagnostics without analyzer calls.
+- Paid golden runs remain under 40k cumulative analyzer tokens and reduce baseline usage by at least 90%.
+- Reports distinguish backend failures, analyzer structure/refinement failures, provider transport failures, budget degradation, and subjective quality.
+- Provider generation and judging roles are explicit.
+
+### Feature I: Reusable Guidance And Beta Safeguards
+
+Status: Planned after Features A-H.
+
+Technical requirements:
+
+- Plan updates to `docs/guides/ETL_GUIDE.md` for taxonomy/rule versions, replay, evidence materialization, drift tests, and migration.
+- Plan updates to `docs/guides/recommendation-validation.md` for readiness, score breakdowns, pool pruning, beam diagnostics, projection inspection, token budgets, swaps, degraded mode, and golden evals.
+- Require later related features to maintain these guides when commands, diagnostics, artifacts, or contracts change.
+- Decide authentication, persistence, feedback, caching/deduplication, rate limits, and monthly budget enforcement before controlled beta.
+- Preserve RM50/month as the starter beta/demo ceiling unless later evidence changes it.
+
+Acceptance criteria:
+
+- Another developer can reproduce role materialization and diagnose drift.
+- Another tester can inspect candidate generation and repeat golden validation.
+- Public beta cannot expose an unlimited unauthenticated paid endpoint.
+- Beta safety decisions are documented before deployment implementation.
+- Guide maintenance is part of later feature acceptance when behavior changes.
+
+## Pre-Paid Evaluation Ladder
+
+Paid OpenRouter testing is blocked until these gates pass in order:
+
+1. Role artifact schema and reproducibility.
+2. Canonical identity, ownership, SA, affinity, sidekick, and hard rejection.
+3. Contextual RoleScores and bounded skill shortlists.
+4. Skill-package dependency and fallback.
+5. Build compatibility, cardinality, and allocation.
+6. Capability templates, beam bounds, lineup invariants, and determinism.
+7. No-weakness, unknown, resist, null, and absorb cases.
+8. Projection schema, leakage prevention, and token preflight.
+9. Swap re-scoring, rejection, fallback, frozen output, partial results, and degraded mode.
+10. Offline end-to-end feasible and infeasible golden cases.
+11. Paid analyzer with captured model metadata and observed usage.
+12. Optional paid judge only for deterministically valid release-evaluation outputs.
+
+Hard gates require 100% legality, zero out-of-bundle IDs, deterministic backend output for identical inputs, at least one valid candidate for every feasible fixture, typed diagnostics for infeasible fixtures, and budget compliance.
 
 ## Planned Guide Updates
 
-- Add or update `docs/guides/` evaluation guidance if the golden weak-boss eval workflow requires repeated commands, fixtures, paid-mode toggles, report interpretation, or cleanup steps.
-- Add or update operator guidance for paid-model configuration, RM50 budget thresholds, and public beta safety if those steps become repeated procedures.
-- Update ETL guidance for the reopened Grasta identity/cardinality schema migration and character coverage checks.
-- Add and maintain docs/guides/recommendation-validation.md for candidate inspection, correction-loop diagnostics, Mimi smoke testing, partial-result verification, and failure classification.
+Implementation must update, but this architect-planner session does not edit:
+
+- `docs/guides/ETL_GUIDE.md` for role artifact versioning, replay/materialization, schema migration, evidence diagnostics, and drift repair.
+- `docs/guides/recommendation-validation.md` for candidate readiness, score inspection, pruning, beam tracing, build/skill packages, analyzer projection, correction, degraded mode, usage reports, and golden evaluation.
+
+Later changes to the taxonomy, scoring policy, candidate contract, provider usage, evaluation commands, or operator workflow must maintain the relevant guide.
 
 ## Current Completion Status
 
-- Milestone 5: active; Feature A is complete, Feature B is reopened, and later features remain pending.
-- Feature A, Sidekick/Character Graph Cleanup: completed.
-- Feature B, Build Item Identity, Cardinality, And Recommendation Policy: reopened; implementation incomplete after failed manual verification.
-- Feature C, Candidate-Constrained Generation, Guardrail Ownership, And Correction Loop: expanded and planned; blocked on Feature B.
-- Feature D, Golden Weak-Boss Evaluation Harness: planned.
-- Feature E, Provider Strategy, Cost Reporting, And RM50 Budget Gate: planned.
-- Feature F, Authentication, Persistence, Rate Limiting, And Beta Safety Plan: planned.
-- Feature G, Context Compression, Prompt Cleanup, And Release Comparison Report: planned.
+- Milestone 5: active and rewritten.
+- Feature A: in progress; sidekick cleanup completed, identity/cardinality implementation awaiting verification, broad candidate prototype superseded.
+- Features B-I: planned.
+- No new deterministic role-scoring, beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
 ## Open Questions
 
-- Which exact five bosses from the existing curated weak superboss scope should become the golden eval set?
-- Which authentication approach best fits the controlled Discord beta: Discord OAuth, magic link, admin-issued access code, or another lightweight option?
-- What per-user request limit should the beta start with under the RM50/month ceiling?
-- Should beta feedback be stored in the app database, exported manually, or captured through a separate form for the first test round?
+No architecture-blocking questions remain. The following are evidence-driven tuning or later operational decisions:
+
+- Exact initial scoring weights within the locked component model.
+- Exact five weak bosses in the golden release set.
+- Paid analyzer model at release time.
+- Whether optional AI-assisted curation earns its cost.
+- Beta authentication, persistence, feedback storage, per-user limits, and caching policy.
