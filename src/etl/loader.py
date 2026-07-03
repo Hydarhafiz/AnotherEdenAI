@@ -16,6 +16,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 import logging
 from typing import Union
 
+from .constants import ETL_SCHEMA_VERSION
 from .models import (
     CharacterRow,
     EquipmentRow,
@@ -130,7 +131,9 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT grasta_id IF NOT EXISTS FOR (g:Grasta) REQUIRE g.grasta_id IS UNIQUE",
         "CREATE CONSTRAINT ore_name IF NOT EXISTS FOR (o:Ore) REQUIRE o.name IS UNIQUE",
         "CREATE CONSTRAINT equipment_identity IF NOT EXISTS FOR (e:Equipment) REQUIRE (e.equipment_slot, e.name) IS UNIQUE",
+        "CREATE CONSTRAINT skill_id IF NOT EXISTS FOR (s:Skill) REQUIRE s.skill_id IS UNIQUE",
         "CREATE CONSTRAINT skill_identity IF NOT EXISTS FOR (s:Skill) REQUIRE (s.character_name, s.name) IS UNIQUE",
+        "CREATE CONSTRAINT passive_skill_id IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE p.passive_skill_id IS UNIQUE",
         "CREATE CONSTRAINT passive_skill_identity IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE (p.character_name, p.name) IS UNIQUE",
         "CREATE CONSTRAINT sidekick_name IF NOT EXISTS FOR (s:Sidekick) REQUIRE s.name IS UNIQUE",
         "CREATE CONSTRAINT sidekick_skill_identity IF NOT EXISTS FOR (s:SidekickSkill) REQUIRE (s.sidekick_name, s.name, s.skill_kind) IS UNIQUE",
@@ -174,6 +177,7 @@ async def load_characters(driver, rows: list[CharacterRow]) -> None:
             "light_shadow": r.light_shadow,
             "personalities": r.personalities,
             "is_SA": r.is_SA,
+            "schema_version": r.schema_version,
         }
         for r in rows
     ]
@@ -189,7 +193,8 @@ SET c.character_id = row.character_id,
     c.element = row.element,
     c.weapon = row.weapon,
     c.light_shadow = row.light_shadow,
-    c.is_SA = row.is_SA
+    c.is_SA = row.is_SA,
+    c.schema_version = row.schema_version
 """
     # Load Trait nodes and HAS_TRAIT edges
     cypher_traits = """
@@ -233,6 +238,74 @@ RETURN graph_names, [name IN selectable_names WHERE name IS NOT NULL] AS selecta
     return report
 
 
+async def report_graph_readiness(driver) -> dict:
+    """Return visible identity and fact-coverage gaps after an ETL replay."""
+    records, _, _ = await driver.execute_query(
+        """
+MATCH (c:Character)
+OPTIONAL MATCH (c)-[:HAS_SKILL]->(skill:Skill)
+WITH c, count(skill) AS skill_count
+OPTIONAL MATCH (c)-[:HAS_PASSIVE_SKILL]->(passive:PassiveSkill)
+WITH c, skill_count, count(passive) AS passive_count
+WITH collect(CASE WHEN skill_count = 0 THEN c.name END) AS no_skills,
+     collect(CASE WHEN passive_count = 0 THEN c.name END) AS no_passives,
+     sum(CASE WHEN c.character_id IS NULL OR c.character_id = '' THEN 1 ELSE 0 END) AS missing_character_ids
+CALL {
+  MATCH (b:Superboss)
+  RETURN count(b) AS boss_count,
+         sum(CASE WHEN b.mechanics_text IS NULL OR b.mechanics_text = '' THEN 1 ELSE 0 END) AS bosses_without_mechanics
+}
+CALL {
+  MATCH (g:Grasta)
+  RETURN count(g) AS grasta_count,
+         sum(CASE WHEN g.grasta_id IS NULL OR g.grasta_id = '' THEN 1 ELSE 0 END) AS missing_grasta_ids
+}
+CALL {
+  MATCH (s:Skill)
+  RETURN sum(CASE WHEN s.skill_id IS NULL OR s.skill_id = '' THEN 1 ELSE 0 END) AS missing_skill_ids
+}
+CALL {
+  MATCH (p:PassiveSkill)
+  RETURN sum(CASE WHEN p.passive_skill_id IS NULL OR p.passive_skill_id = '' THEN 1 ELSE 0 END) AS missing_passive_skill_ids
+}
+CALL {
+  MATCH (n)
+  WHERE (n:Character OR n:Skill OR n:PassiveSkill OR n:Grasta)
+    AND (n.schema_version IS NULL OR n.schema_version <> $schema_version)
+  RETURN count(n) AS stale_schema_nodes
+}
+CALL { MATCH (e:Equipment) RETURN count(e) AS equipment_count }
+CALL { MATCH (m:MechanicReference) RETURN count(m) AS mechanic_reference_count }
+RETURN [name IN no_skills WHERE name IS NOT NULL] AS characters_without_skills,
+       [name IN no_passives WHERE name IS NOT NULL] AS characters_without_passives,
+       missing_character_ids, missing_skill_ids, missing_passive_skill_ids,
+       stale_schema_nodes, boss_count, bosses_without_mechanics, grasta_count,
+       missing_grasta_ids, equipment_count, mechanic_reference_count
+""",
+        schema_version=ETL_SCHEMA_VERSION,
+        database_="neo4j",
+    )
+    report = dict(records[0]) if records else {}
+    report["ready"] = not any(
+        (
+            report.get("missing_character_ids", 0),
+            report.get("missing_skill_ids", 0),
+            report.get("missing_passive_skill_ids", 0),
+            report.get("stale_schema_nodes", 0),
+            report.get("characters_without_skills", []),
+            report.get("characters_without_passives", []),
+            report.get("bosses_without_mechanics", 0),
+            report.get("missing_grasta_ids", 0),
+            not report.get("boss_count", 0),
+            not report.get("grasta_count", 0),
+            not report.get("equipment_count", 0),
+            not report.get("mechanic_reference_count", 0),
+        )
+    )
+    logger.info("Graph readiness report: %s", report)
+    return report
+
+
 async def load_skills(driver, rows: list[SkillRow]) -> None:
     """Load Skill nodes and Character-HAS_SKILL edges using UNWIND+MERGE."""
     if not rows:
@@ -241,6 +314,7 @@ async def load_skills(driver, rows: list[SkillRow]) -> None:
 
     skill_data = [
         {
+            "skill_id": r.skill_id,
             "character_name": r.character_name,
             "name": r.name,
             "element": r.element,
@@ -259,7 +333,8 @@ async def load_skills(driver, rows: list[SkillRow]) -> None:
 UNWIND $rows AS row
 MATCH (c:Character {name: row.character_name})
 MERGE (s:Skill {character_name: row.character_name, name: row.name})
-SET s.element = row.element,
+SET s.skill_id = row.skill_id,
+    s.element = row.element,
     s.skill_type = row.skill_type,
     s.mp = row.mp,
     s.description = row.description,
@@ -284,6 +359,7 @@ async def load_passive_skills(driver, rows: list[PassiveSkillRow]) -> None:
 
     passive_data = [
         {
+            "passive_skill_id": r.passive_skill_id,
             "character_name": r.character_name,
             "name": r.name,
             "description": r.description,
@@ -299,7 +375,8 @@ async def load_passive_skills(driver, rows: list[PassiveSkillRow]) -> None:
 UNWIND $rows AS row
 MATCH (c:Character {name: row.character_name})
 MERGE (p:PassiveSkill {character_name: row.character_name, name: row.name})
-SET p.description = row.description,
+SET p.passive_skill_id = row.passive_skill_id,
+    p.description = row.description,
     p.source_url = row.source_url,
     p.section = row.section,
     p.passive_type = row.passive_type,

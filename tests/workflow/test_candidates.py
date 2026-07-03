@@ -253,6 +253,28 @@ async def test_candidate_preparation_preserves_full_roster_and_reports_missing_c
     assert driver.execute_query.call_count == 6
 
 
+@pytest.mark.asyncio
+async def test_candidate_preparation_preserves_persisted_skill_and_passive_ids():
+    driver = MagicMock()
+    driver.execute_query = AsyncMock(side_effect=[
+        ([{"id": "character:aldo", "name": "Aldo", "display_name": "Aldo", "aliases": ["Aldo"], "weapon": "Sword", "has_stellar_awakening": False}], None, None),
+        ([], None, None),
+        ([{"character_name": "Aldo", "id": "skill:persisted", "name": "X Slash", "description": "Slash attack"}], None, None),
+        ([{"character_name": "Aldo", "id": "passive:persisted", "name": "Dragon God", "description": "Battle passive"}], None, None),
+        ([], None, None),
+        ([], None, None),
+    ])
+
+    result = await prepare_candidates_node(
+        {"roster": ["Aldo"], "owned_sidekicks": [], "boss_context": "", "stellar_awakened": {}},
+        driver,
+    )
+
+    character = result["candidate_bundle"]["characters"][0]
+    assert character["skills"][0]["id"] == "skill:persisted"
+    assert character["passives"][0]["id"] == "passive:persisted"
+
+
 def test_ranking_policy_keeps_status_and_reserve_preferences_non_mandatory():
     bundle = candidate_bundle()
     policy = json.dumps(bundle["ranking_policy"])

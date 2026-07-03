@@ -60,7 +60,7 @@ RETURN c.name AS character_name, collect(DISTINCT t.name) AS traits
         """
 MATCH (c:Character)-[:HAS_SKILL]->(s:Skill)
 WHERE c.name IN $roster
-RETURN c.name AS character_name, s.name AS name, s.description AS description,
+RETURN c.name AS character_name, s.skill_id AS id, s.name AS name, s.description AS description,
        s.element AS element, s.skill_type AS skill_type,
        coalesce(s.requires_stellar_awakened, false) AS requires_stellar_awakened,
        s.source_url AS source_url
@@ -73,7 +73,7 @@ ORDER BY c.name, s.name
         """
 MATCH (c:Character)-[:HAS_PASSIVE_SKILL]->(p:PassiveSkill)
 WHERE c.name IN $roster
-RETURN c.name AS character_name, p.name AS name, p.description AS description,
+RETURN c.name AS character_name, p.passive_skill_id AS id, p.name AS name, p.description AS description,
        p.passive_type AS passive_type,
        coalesce(p.requires_stellar_awakened, false) AS requires_stellar_awakened,
        p.source_url AS source_url
@@ -121,13 +121,13 @@ ORDER BY g.display_name
     skills_by_character: dict[str, list[dict]] = {}
     for row in skills:
         owner = row.pop("character_name")
-        row["id"] = _candidate_id("skill", owner, row.get("name"))
+        row["id"] = row.get("id") or _candidate_id("skill", owner, row.get("name"))
         row["description"] = _compact_text(row.get("description"))
         skills_by_character.setdefault(owner, []).append(row)
     passives_by_character: dict[str, list[dict]] = {}
     for row in passives:
         owner = row.pop("character_name")
-        row["id"] = _candidate_id("passive", owner, row.get("name"))
+        row["id"] = row.get("id") or _candidate_id("passive", owner, row.get("name"))
         row["description"] = _compact_text(row.get("description"))
         passives_by_character.setdefault(owner, []).append(row)
 

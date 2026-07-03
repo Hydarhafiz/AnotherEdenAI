@@ -9,6 +9,7 @@ from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
 from .loader import (
     cleanup_duplicate_sidekick_characters,
     audit_character_readiness,
+    report_graph_readiness,
     ensure_constraints,
     load_characters,
     load_equipment,
@@ -97,6 +98,7 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         await load_grastas(driver, grastas)
         await load_ores(driver, ores)
         await load_equipment(driver, equipment)
+        manifest["graph_readiness"] = await report_graph_readiness(driver)
         mark_loaded(manifest, data)
 
         print(

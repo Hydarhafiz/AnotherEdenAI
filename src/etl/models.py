@@ -111,6 +111,7 @@ class CharacterRow(BaseModel):
     character_id: str = ""
     display_name: str = ""
     aliases: list[str] = Field(default_factory=list)
+    schema_version: str = Field(default=ETL_SCHEMA_VERSION)
 
     @field_validator("personalities", mode="before")
     @classmethod
@@ -149,7 +150,12 @@ class SkillRow(BaseModel):
     source_url: str | None = None
     section: str | None = None
     requires_stellar_awakened: bool = Field(default=False)
+    skill_id: str = ""
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    def model_post_init(self, __context) -> None:
+        if not self.skill_id:
+            object.__setattr__(self, "skill_id", _stable_id("skill", self.character_name, self.name))
 
     @field_validator("mp", mode="before")
     @classmethod
@@ -192,7 +198,16 @@ class PassiveSkillRow(BaseModel):
     section: str | None = None
     passive_type: str | None = None
     requires_stellar_awakened: bool = Field(default=False)
+    passive_skill_id: str = ""
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    def model_post_init(self, __context) -> None:
+        if not self.passive_skill_id:
+            object.__setattr__(
+                self,
+                "passive_skill_id",
+                _stable_id("passive", self.character_name, self.name),
+            )
 
     @field_validator("requires_stellar_awakened", mode="before")
     @classmethod

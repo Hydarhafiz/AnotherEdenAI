@@ -402,7 +402,7 @@ Implementation order is mandatory. Deterministic legality, scoring, and candidat
 
 ### Feature A: Data Identity And Readiness Foundation
 
-Status: In progress.
+Status: Completed.
 
 Prior work status:
 
@@ -648,7 +648,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 ## Current Completion Status
 
 - Milestone 5: active and rewritten.
-- Feature A: in progress; sidekick cleanup completed, identity/cardinality implementation awaiting verification, broad candidate prototype superseded.
+- Feature A: completed; identity, cardinality, readiness, and replay-safe sidekick cleanup verified.
 - Features B-I: planned.
 - No new deterministic role-scoring, beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 

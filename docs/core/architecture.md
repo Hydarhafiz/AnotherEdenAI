@@ -82,6 +82,14 @@ Feature A sidekick graph behavior:
 - Small and fallback sidekick scope cover the full current sidekick detail set because the total sidekick list is small.
 - The manual Feature A smoke runner clears generated sidekick detail artifacts and stale sidekick-detail manifest entries before live smoke runs to keep reused smoke roots honest.
 
+Milestone 5 Feature A identity and readiness behavior:
+
+- Character, Skill, PassiveSkill, and exact Grasta variants carry stable backend candidate IDs across parsed artifacts, Neo4j replay, and recommendation projection.
+- Schema 1.2 records schema freshness on Character identity rows and adds unique `skill_id` and `passive_skill_id` constraints while retaining composite owner/name constraints for replay-safe merges.
+- Post-load graph readiness reports missing character, skill, passive, boss, mechanics, Grasta, and equipment facts plus stale identity/schema metadata.
+- Candidate preparation consumes persisted Skill and PassiveSkill IDs and falls back to deterministic IDs only for legacy graph rows pending replay.
+- Integration database cleanup removes static fixtures after idempotency tests so mock names cannot leak into the normal roster graph.
+
 Feature B curated superboss graph behavior:
 
 - The canonical Superbosses page discovers weak-boss candidates as index metadata, including difficulty tier, refight status, version, characteristics, and detail URLs.

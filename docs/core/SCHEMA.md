@@ -1,5 +1,5 @@
 # Graph Schema Contract
-**SCHEMA_VERSION: 1.1.0**
+**SCHEMA_VERSION: 1.2.0**
 **Status:** Stable — do not modify without incrementing SCHEMA_VERSION and running ETL
 
 ## Node Labels and Properties
@@ -14,6 +14,7 @@
 - `light_shadow` (STRING) — "Light" or "Shadow"
 - `is_SA` (BOOLEAN) — true when Stellar Awakening exists for the game character
 - `detail_url` (STRING, nullable) — canonical wiki detail page URL discovered from the Characters index
+- `schema_version` (STRING) — ETL schema version used for this row
 
 ### Trait
 - `name` (STRING, unique) — personality trait name shared by Characters and Grastas
@@ -63,6 +64,7 @@ Uniqueness: `(equipment_slot, name)`.
 Equipment nodes provide baseline context only. They do not encode best-in-slot ranking, optimizer scores, exact damage math, or survivability calculations.
 
 ### Skill
+- `skill_id` (STRING, unique) — stable backend candidate identity derived from canonical owner and skill name
 - `character_name` (STRING) — owning Character name from the parsed character row
 - `name` (STRING) — skill display name
 - `element` (STRING, nullable) — parsed skill element when available
@@ -75,9 +77,10 @@ Equipment nodes provide baseline context only. They do not encode best-in-slot r
 - `requires_stellar_awakened` (BOOLEAN) — true when the skill is gated behind Stellar Awakening
 - `schema_version` (STRING) — ETL schema version used for this row
 
-Uniqueness: `(character_name, name)`.
+Uniqueness: `skill_id` and `(character_name, name)`.
 
 ### PassiveSkill
+- `passive_skill_id` (STRING, unique) — stable backend candidate identity derived from canonical owner and passive name
 - `character_name` (STRING) — owning Character name from the parsed character row
 - `name` (STRING) — passive or mechanic display name
 - `description` (STRING) — rich Option A text description
@@ -87,7 +90,7 @@ Uniqueness: `(character_name, name)`.
 - `requires_stellar_awakened` (BOOLEAN) — true when the passive is gated behind Stellar Awakening
 - `schema_version` (STRING) — ETL schema version used for this row
 
-Uniqueness: `(character_name, name)`.
+Uniqueness: `passive_skill_id` and `(character_name, name)`.
 
 ### Sidekick
 - `name` (STRING, unique) — canonical wiki sidekick name
@@ -216,6 +219,8 @@ After ETL, `python assert_schema.py` must exit 0.
 `get_schema()` from langchain_neo4j.Neo4jGraph must match this document.
 
 The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
+- stable, unique `character_id`, `skill_id`, `passive_skill_id`, and `grasta_id` values
+- schema 1.2 identity freshness and visible missing character, skill, passive, boss, mechanics, and item coverage
 - minimum loaded counts for `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, and `Equipment`
 - minimum loaded count for `MechanicReference`
 - `schema_version` presence on milestone-added structured labels

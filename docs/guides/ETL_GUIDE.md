@@ -304,6 +304,47 @@ The ETL must report removal of collapsed legacy Grasta nodes before loading exac
 
 The same ETL run performs the character coverage gate. Any parsed character missing from Neo4j or excluded from the frontend roster list aborts visibly; alias/style inputs such as Akane Alter must resolve to the full canonical display name.
 
+## Milestone 5 Feature A Identity Replay
+
+Schema 1.2.0 adds persisted `skill_id` and `passive_skill_id` candidate identities and records `schema_version` on Character nodes. Refresh or reparse older artifacts before replay because artifacts from an earlier schema version are intentionally rejected.
+
+Run a current parsed replay and the post-load assertions:
+
+```bash
+ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
+uv run python assert_schema.py
+```
+
+The ETL log must include a graph readiness report. `ready` is `true` only when identity properties and schema versions are current, boss mechanics exist, and Grasta, Equipment, and MechanicReference facts are present. The report also lists characters without skills or passives so intentionally sparse crawl scopes remain visible.
+
+In Neo4j Browser, verify persisted identities and replay-safe sidekick cleanup:
+
+```cypher
+MATCH (c:Character)-[:HAS_SKILL]->(s:Skill)
+RETURN c.character_id, c.name, s.skill_id, s.name, c.schema_version, s.schema_version
+LIMIT 20;
+
+MATCH (c:Character)-[:HAS_PASSIVE_SKILL]->(p:PassiveSkill)
+RETURN c.character_id, c.name, p.passive_skill_id, p.name, p.schema_version
+LIMIT 20;
+
+MATCH (c:Character)
+MATCH (:Sidekick {name: c.name})
+RETURN c.name;
+```
+
+The identity columns must be non-empty and schema versions must be `1.2.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
+
+If assertions identify a stale integration fixture such as `Aina`, confirm it is absent from the current parsed artifacts and remove only that fixture node before replaying ETL:
+
+```cypher
+MATCH (c:Character {name: 'Aina'})
+WHERE c.character_id IS NULL AND c.schema_version IS NULL
+DETACH DELETE c;
+```
+
+Do not generalize this into a broad deletion query: an unidentified stale node should be investigated before removal.
+
 ## Maintenance Rule
 
 When an implementation changes ETL stages, crawl controls, manifest shape, operator workflow, artifact layout, or debugging steps, update this guide in the same feature.

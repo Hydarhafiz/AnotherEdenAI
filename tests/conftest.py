@@ -79,4 +79,5 @@ async def clean_db(async_driver):
     """
     await async_driver.execute_query("MATCH (n) DETACH DELETE n", database_="neo4j")
     yield
-    # No teardown needed — next test will clean before it runs
+    # Do not leave static integration fixtures (for example Aina) in the graph.
+    await async_driver.execute_query("MATCH (n) DETACH DELETE n", database_="neo4j")

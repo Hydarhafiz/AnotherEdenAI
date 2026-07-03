@@ -36,6 +36,7 @@ READINESS_NODE_MINIMUMS = {
 }
 
 SCHEMA_VERSION_LABELS = [
+    "Character",
     "Skill",
     "Grasta",
     "PassiveSkill",
@@ -181,6 +182,10 @@ def _count(session, cypher: str) -> int:
     return record["cnt"] if record else 0
 
 
+def _sample_values(session, cypher: str) -> list[str]:
+    return [str(record["value"]) for record in session.run(cypher)]
+
+
 failed = False
 try:
     with driver.session() as session:
@@ -207,6 +212,12 @@ try:
             )
             if missing:
                 print(f"FAIL: {label} missing schema_version on {missing} node(s)")
+                samples = _sample_values(
+                    session,
+                    f"MATCH (n:{label}) WHERE n.schema_version IS NULL OR n.schema_version = '' "
+                    "RETURN coalesce(n.name, n.id, '<unnamed>') AS value ORDER BY value LIMIT 20",
+                )
+                print(f"  Offending nodes: {samples}")
                 failed = True
             else:
                 print(f"OK: {label} schema_version present")
@@ -249,6 +260,34 @@ try:
             failed = True
         else:
             print("OK: exact Grasta identities and trait isolation")
+
+        identity_checks = {
+            "Character": "character_id",
+            "Skill": "skill_id",
+            "PassiveSkill": "passive_skill_id",
+        }
+        for label, property_name in identity_checks.items():
+            missing = _count(
+                session,
+                f"MATCH (n:{label}) WHERE n.{property_name} IS NULL OR n.{property_name} = '' RETURN count(n) AS cnt",
+            )
+            duplicates = _count(
+                session,
+                f"MATCH (n:{label}) WITH n.{property_name} AS identity, count(*) AS uses "
+                "WHERE identity IS NOT NULL AND identity <> '' AND uses > 1 RETURN count(*) AS cnt",
+            )
+            if missing or duplicates:
+                print(f"FAIL: {label} identity missing={missing}, duplicated={duplicates}")
+                if missing:
+                    samples = _sample_values(
+                        session,
+                        f"MATCH (n:{label}) WHERE n.{property_name} IS NULL OR n.{property_name} = '' "
+                        "RETURN coalesce(n.name, '<unnamed>') AS value ORDER BY value LIMIT 20",
+                    )
+                    print(f"  Missing {property_name}: {samples}")
+                failed = True
+            else:
+                print(f"OK: {label}.{property_name} identities are present and unique")
 
         overlap_count = _count(
             session,
