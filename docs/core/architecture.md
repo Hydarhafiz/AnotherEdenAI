@@ -90,6 +90,15 @@ Milestone 5 Feature A identity and readiness behavior:
 - Candidate preparation consumes persisted Skill and PassiveSkill IDs and falls back to deterministic IDs only for legacy graph rows pending replay.
 - Integration database cleanup removes static fixtures after idempotency tests so mock names cannot leak into the normal roster graph.
 
+Milestone 5 Feature C role taxonomy behavior:
+
+- `src/etl/role_taxonomy.json` is the versioned source of truth for the role vocabulary, deterministic rules, confidence levels, and curated overrides.
+- Skill and PassiveSkill models reproduce `role_tags`, canonical evidence JSON, and the taxonomy version from parsed source facts without live AI calls.
+- Neo4j stores the derived role metadata for retrieval, but the graph is not its source of truth.
+- Every materialized role cites its rule or override ID and stable source fact ID.
+- ETL replay compares graph materialization with artifact-derived values and aborts on missing or mismatched tags, evidence, or taxonomy versions.
+- Character-level role summaries remain derived query-time caches; a character may support multiple contextual roles through different skills and passives.
+
 Feature B curated superboss graph behavior:
 
 - The canonical Superbosses page discovers weak-boss candidates as index metadata, including difficulty tier, refight status, version, characteristics, and detail URLs.

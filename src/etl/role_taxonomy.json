@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "roles": [
+    "primary_dps", "secondary_dps", "zone_setter", "buffer", "debuffer",
+    "pain_poison_setter", "break_setup_support", "healer_recovery",
+    "tank_taunt_rage", "mitigation_shield_barrier", "cleanse_status_protection",
+    "mp_sustain", "af_burst_support", "reserve_grasta_mule"
+  ],
+  "rules": [
+    {"id": "damage-active", "record_types": ["skill"], "role": "primary_dps", "confidence": "medium", "pattern": "\\b(damage|attack)\\b|multiplier"},
+    {"id": "damage-passive", "record_types": ["passive"], "role": "secondary_dps", "confidence": "low", "pattern": "\\b(damage|attack)\\b"},
+    {"id": "zone-stance", "record_types": ["skill", "passive"], "role": "zone_setter", "confidence": "high", "pattern": "\\b(zone|stance)\\b"},
+    {"id": "buff-support", "record_types": ["skill", "passive"], "role": "buffer", "confidence": "medium", "pattern": "\\b(buff|increase|boost)\\b"},
+    {"id": "debuff-support", "record_types": ["skill", "passive"], "role": "debuffer", "confidence": "medium", "pattern": "\\b(debuff|reduce|down)\\b"},
+    {"id": "pain-poison", "record_types": ["skill", "passive"], "role": "pain_poison_setter", "confidence": "high", "pattern": "\\b(pain|poison)\\b"},
+    {"id": "break-setup", "record_types": ["skill", "passive"], "role": "break_setup_support", "confidence": "high", "pattern": "\\bbreak\\b"},
+    {"id": "healing", "record_types": ["skill", "passive"], "role": "healer_recovery", "confidence": "high", "pattern": "\\b(heal|restore hp|hp recovery|revive)\\b"},
+    {"id": "tank", "record_types": ["skill", "passive"], "role": "tank_taunt_rage", "confidence": "high", "pattern": "\\b(taunt|rage|redirect)\\b"},
+    {"id": "mitigation", "record_types": ["skill", "passive"], "role": "mitigation_shield_barrier", "confidence": "high", "pattern": "\\b(barrier|shield|damage reduction|resistance)\\b"},
+    {"id": "cleanse", "record_types": ["skill", "passive"], "role": "cleanse_status_protection", "confidence": "high", "pattern": "\\b(cleanse|status immunity|status resistance|remove status)\\b"},
+    {"id": "mp-sustain", "record_types": ["skill", "passive"], "role": "mp_sustain", "confidence": "high", "pattern": "\\b(restore mp|mp recovery|mp regen)\\b"},
+    {"id": "af-support", "record_types": ["skill", "passive"], "role": "af_burst_support", "confidence": "high", "pattern": "\\b(another force|af combo|af gauge)\\b"},
+    {"id": "reserve-share", "record_types": ["passive"], "role": "reserve_grasta_mule", "confidence": "medium", "pattern": "\\b(grasta|personality share)\\b"}
+  ],
+  "overrides": []
+}

@@ -326,6 +326,9 @@ async def load_skills(driver, rows: list[SkillRow]) -> None:
             "section": r.section,
             "requires_stellar_awakened": r.requires_stellar_awakened,
             "schema_version": r.schema_version,
+            "role_tags": r.role_tags,
+            "role_evidence_json": r.role_evidence_json,
+            "role_taxonomy_version": r.role_taxonomy_version,
         }
         for r in rows
     ]
@@ -342,7 +345,10 @@ SET s.skill_id = row.skill_id,
     s.source_url = row.source_url,
     s.section = row.section,
     s.requires_stellar_awakened = row.requires_stellar_awakened,
-    s.schema_version = row.schema_version
+    s.schema_version = row.schema_version,
+    s.role_tags = row.role_tags,
+    s.role_evidence_json = row.role_evidence_json,
+    s.role_taxonomy_version = row.role_taxonomy_version
 MERGE (c)-[:HAS_SKILL]->(s)
 """
     async with driver.session() as session:
@@ -368,6 +374,9 @@ async def load_passive_skills(driver, rows: list[PassiveSkillRow]) -> None:
             "passive_type": r.passive_type,
             "requires_stellar_awakened": r.requires_stellar_awakened,
             "schema_version": r.schema_version,
+            "role_tags": r.role_tags,
+            "role_evidence_json": r.role_evidence_json,
+            "role_taxonomy_version": r.role_taxonomy_version,
         }
         for r in rows
     ]
@@ -381,7 +390,10 @@ SET p.passive_skill_id = row.passive_skill_id,
     p.section = row.section,
     p.passive_type = row.passive_type,
     p.requires_stellar_awakened = row.requires_stellar_awakened,
-    p.schema_version = row.schema_version
+    p.schema_version = row.schema_version,
+    p.role_tags = row.role_tags,
+    p.role_evidence_json = row.role_evidence_json,
+    p.role_taxonomy_version = row.role_taxonomy_version
 MERGE (c)-[:HAS_PASSIVE_SKILL]->(p)
 """
     async with driver.session() as session:

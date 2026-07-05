@@ -454,7 +454,7 @@ Acceptance criteria:
 
 ### Feature C: Versioned Role Taxonomy And Reproducible Materialization
 
-Status: Planned.
+Status: Completed.
 
 Technical requirements:
 

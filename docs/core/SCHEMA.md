@@ -1,5 +1,5 @@
 # Graph Schema Contract
-**SCHEMA_VERSION: 1.2.0**
+**SCHEMA_VERSION: 1.3.0**
 **Status:** Stable — do not modify without incrementing SCHEMA_VERSION and running ETL
 
 ## Node Labels and Properties
@@ -75,6 +75,9 @@ Equipment nodes provide baseline context only. They do not encode best-in-slot r
 - `source_url` (STRING, nullable) — source character detail page
 - `section` (STRING, nullable) — source page section, e.g. Active Skills or Stellar Awakened Skills
 - `requires_stellar_awakened` (BOOLEAN) — true when the skill is gated behind Stellar Awakening
+- `role_tags` (LIST<STRING>) — deterministic roles derived from the versioned local taxonomy artifact
+- `role_evidence_json` (STRING) — canonical JSON evidence citing the matched rule or override and source Skill fact
+- `role_taxonomy_version` (STRING) — taxonomy artifact version used for materialization
 - `schema_version` (STRING) — ETL schema version used for this row
 
 Uniqueness: `skill_id` and `(character_name, name)`.
@@ -88,6 +91,9 @@ Uniqueness: `skill_id` and `(character_name, name)`.
 - `section` (STRING, nullable) — source page section, e.g. Stances/Zones
 - `passive_type` (STRING, nullable) — best-effort category such as zone, stance, stack, battle-start, stellar awakening, valor chant, or passive
 - `requires_stellar_awakened` (BOOLEAN) — true when the passive is gated behind Stellar Awakening
+- `role_tags` (LIST<STRING>) — deterministic roles derived from the versioned local taxonomy artifact
+- `role_evidence_json` (STRING) — canonical JSON evidence citing the matched rule or override and source PassiveSkill fact
+- `role_taxonomy_version` (STRING) — taxonomy artifact version used for materialization
 - `schema_version` (STRING) — ETL schema version used for this row
 
 Uniqueness: `passive_skill_id` and `(character_name, name)`.
@@ -227,6 +233,7 @@ After ETL, `python assert_schema.py` must exit 0.
 
 The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - stable, unique `character_id`, `skill_id`, `passive_skill_id`, and `grasta_id` values
+- Skill and PassiveSkill role tags, canonical evidence, and taxonomy versions match deterministic materialization from `src/etl/role_taxonomy.json`
 - schema 1.2 identity freshness and visible missing character, skill, passive, boss, mechanics, and item coverage
 - minimum loaded counts for `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, and `Equipment`
 - minimum loaded count for `MechanicReference`

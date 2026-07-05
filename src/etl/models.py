@@ -12,6 +12,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 
 from .constants import ETL_SCHEMA_VERSION, STRICT
+from .role_taxonomy import canonical_evidence_json, materialize_roles
 
 logger = logging.getLogger(__name__)
 
@@ -151,11 +152,18 @@ class SkillRow(BaseModel):
     section: str | None = None
     requires_stellar_awakened: bool = Field(default=False)
     skill_id: str = ""
+    role_tags: list[str] = Field(default_factory=list)
+    role_evidence_json: str = ""
+    role_taxonomy_version: str = ""
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
 
     def model_post_init(self, __context) -> None:
         if not self.skill_id:
             object.__setattr__(self, "skill_id", _stable_id("skill", self.character_name, self.name))
+        tags, evidence, version = materialize_roles("skill", self.model_dump())
+        object.__setattr__(self, "role_tags", tags)
+        object.__setattr__(self, "role_evidence_json", canonical_evidence_json(evidence))
+        object.__setattr__(self, "role_taxonomy_version", version)
 
     @field_validator("mp", mode="before")
     @classmethod
@@ -199,6 +207,9 @@ class PassiveSkillRow(BaseModel):
     passive_type: str | None = None
     requires_stellar_awakened: bool = Field(default=False)
     passive_skill_id: str = ""
+    role_tags: list[str] = Field(default_factory=list)
+    role_evidence_json: str = ""
+    role_taxonomy_version: str = ""
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
 
     def model_post_init(self, __context) -> None:
@@ -208,6 +219,10 @@ class PassiveSkillRow(BaseModel):
                 "passive_skill_id",
                 _stable_id("passive", self.character_name, self.name),
             )
+        tags, evidence, version = materialize_roles("passive", self.model_dump())
+        object.__setattr__(self, "role_tags", tags)
+        object.__setattr__(self, "role_evidence_json", canonical_evidence_json(evidence))
+        object.__setattr__(self, "role_taxonomy_version", version)
 
     @field_validator("requires_stellar_awakened", mode="before")
     @classmethod

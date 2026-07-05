@@ -335,6 +335,35 @@ RETURN c.name;
 
 The identity columns must be non-empty and schema versions must be `1.2.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
 
+### Schema 1.3 Role Taxonomy Replay And Drift Repair
+
+Schema 1.3.0 derives Skill and PassiveSkill roles from `src/etl/role_taxonomy.json`. After changing the taxonomy version, rules, or overrides, refresh current parsed artifacts when necessary and replay them:
+
+```bash
+ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
+```
+
+The replay writes `role_tags`, `role_evidence_json`, and `role_taxonomy_version`, then aborts if Neo4j differs from the artifact-derived values. Verify that evidence-bearing records always have tags:
+
+```cypher
+MATCH (n)
+WHERE (n:Skill OR n:PassiveSkill)
+  AND n.role_evidence_json <> "[]"
+  AND size(n.role_tags) = 0
+RETURN count(n) AS inconsistent_records;
+```
+
+The expected count is zero. Inspect a sample with:
+
+```cypher
+MATCH (n)
+WHERE n:Skill OR n:PassiveSkill
+RETURN n.name, n.role_tags, n.role_evidence_json, n.role_taxonomy_version
+LIMIT 20;
+```
+
+Each evidence entry must cite a rule or override ID, the stable source fact ID, and confidence. To repair drift, do not edit role properties directly in Neo4j; correct the local taxonomy artifact or parsed source fact, bump the taxonomy version when semantics change, and rerun ETL.
+
 If assertions identify a stale integration fixture such as `Aina`, confirm it is absent from the current parsed artifacts and remove only that fixture node before replaying ETL:
 
 ```cypher

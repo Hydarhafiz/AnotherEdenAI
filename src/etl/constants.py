@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-SCHEMA_VERSION = "1.2.0"
+SCHEMA_VERSION = "1.3.0"
 ETL_SCHEMA_VERSION = os.getenv("ETL_SCHEMA_VERSION", SCHEMA_VERSION)
 
 
