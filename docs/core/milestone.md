@@ -183,7 +183,11 @@ Review proceeds in three ordered phases:
 2. Offensive/support capabilities: direct damage, buffs, debuffs, Pain/Poison, Break, AF support, and Links.
 3. Dependencies and conditions: zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, and similar qualifiers.
 
-Each phase generates stratified batches of approximately 40-50 proposed decisions. The loop is review -> approve/reject/correct/ambiguous -> identify repeated failure pattern -> update rules/overrides -> rerun all accumulated fixtures -> generate the next batch. A phase passes only after all accumulated fixtures pass and two consecutive stratified batches reveal no new critical false-positive pattern. Rejected fixtures and untagged facts are expected; zero rejected records and full-corpus tagging are not goals.
+Each phase generates deterministic stratified batches of exactly 45 new proposed decisions. Every row requires an explicit `approve`, `reject`, `correct`, or `ambiguous` decision before import; blank decisions fail validation. The generated reviewer template constrains decision, capability, dependency, direction, and target values and includes source text, source URL, and concise field guidance. Reviewers consult the linked wiki source only when the captured evidence is unclear; they do not manually reconstruct the corpus or assign contextual character roles.
+
+The loop is generate batch -> pause at `Awaiting human review` -> edit CSV -> validate/import canonical JSON -> identify repeated failure patterns -> update rules/overrides -> rerun all accumulated fixtures -> generate the next batch. New targeted reproductions join the automatic regression set rather than inflating the next 45-row human batch. A phase passes only after every accumulated fixture passes and two consecutive fully reviewed batches reveal no new critical false-positive pattern.
+
+A critical false-positive pattern is a repeatable rule error that could falsely satisfy mandatory lineup coverage, reverse ally/enemy or grant/require semantics, omit a gating zone/SA/status/stack dependency, or misclassify damage, defense, sustain, or setup across multiple facts. Discovery resets the phase's clean-batch streak. Rejected fixtures and untagged facts are expected; ambiguous facts remain non-proven; zero rejected records and full-corpus tagging are not goals.
 
 ### Optional AI-Assisted Curation
 
@@ -448,35 +452,105 @@ Acceptance criteria:
 
 ### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: Reopened; the reproducible broad-role prototype is verified but semantically insufficient and must be replaced before Feature D.
+Status: Reopened and split into C1-C5; Feature D remains blocked until C5 completes.
+
+#### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
+
+Status: Planned.
 
 Technical requirements:
 
-- Replace Skill/PassiveSkill `role_tags` materialization with versioned atomic `capability` and `dependency` contracts; do not retain both active systems.
+- Replace Skill/PassiveSkill `role_tags` materialization immediately with versioned atomic `capability` and `dependency` contracts; do not retain both active systems during the review period.
 - Define direction-aware and target-aware capability rules, explicit negative patterns, review states, evidence schema, overrides, and artifact version.
-- Generate deterministic stratified CSV review batches from parsed facts and canonical JSON review/gold artifacts keyed by stable skill/passive IDs.
-- Preserve approved, corrected, ambiguous, and rejected decisions with reviewer notes and source text/URL attribution.
-- Execute the three ordered review phases and keep rejected decisions as negative regression fixtures.
-- Materialize only proven capabilities into Neo4j; candidate and untagged facts remain visible diagnostics but cannot prove mandatory coverage.
-- Remove stale broad role properties during the schema migration, bump the schema version, replay ETL, and add graph/artifact drift detection.
-- Report per-capability proposed, proven, candidate, rejected, untagged, and reviewed counts without hiding sparse coverage.
-- Update `docs/guides/ETL_GUIDE.md` with artifact bump, batch generation, review import, replay, diagnostics, and drift repair procedures.
-- Keep live/request-time AI tagging and direct AI mutation of canonical review artifacts out of scope.
+- Bump the schema version, remove stale broad-role graph properties, permit initially sparse proven materialization, and make candidate/rejected/ambiguous/untagged states non-authoritative.
+- Generate deterministic stratified 45-row CSV batches from parsed facts and canonical JSON review/gold artifacts keyed by stable skill/passive IDs.
+- Provide a constrained reviewer template, allowed-value reference, field guidance, source text/URL attribution, and validation that rejects blanks or invalid corrections before import.
+- Preserve approved, corrected, ambiguous, and rejected decisions with reviewer notes; keep rejected decisions as permanent negative regression fixtures.
+- Add deterministic diagnostics for proposed, proven, candidate, rejected, ambiguous, untagged, and reviewed counts per capability without hiding sparse coverage.
+- Add artifact and graph drift detection over capabilities, dependencies, evidence, diagnostics, and artifact/schema versions.
+- Keep live/request-time AI tagging, contextual role assignment, and direct AI mutation of canonical review artifacts out of scope.
 
 Acceptance criteria:
 
-- Sign of Collapse proves enemy resistance debuffs, Link/Break effects, and its awakened-zone dependency without proving zone deployment or party mitigation.
-- Every proven graph capability cites its matched phrase, direction/target, rule or override, source fact ID, review provenance, and artifact version.
-- Every rejected fixture remains rejected after full-corpus replay and future rule changes.
-- All accumulated fixtures pass, and each of the three review phases ends with two consecutive 40-50-decision stratified batches containing no new critical false-positive pattern.
-- Same parsed data, review artifacts, and taxonomy version reproduce identical capabilities, dependencies, evidence, and diagnostics.
-- Candidate, rejected, and untagged records cannot satisfy mandatory Feature D coverage.
-- Neo4j is not the sole source of truth; graph drift fails visibly.
+- The old active Skill/PassiveSkill broad-role properties and materializer are removed rather than maintained beside the atomic system.
+- Every proven graph fact cites its matched phrase, direction/target, rule or override, source fact ID, review provenance, and artifact version.
+- Review exports are deterministic for identical parsed facts, taxonomy version, phase, batch number, and sampling seed.
+- Review import fails on blank decisions, unknown vocabulary values, malformed corrections, source-ID drift, or edited immutable evidence fields.
+- Candidate, rejected, ambiguous, dependency-only, and untagged records cannot satisfy mandatory Feature D coverage.
+- Neo4j is not the sole source of truth; artifact/graph drift fails visibly.
 - No live AI tagging occurs.
+
+#### Feature C2: Defensive And Setup Human-Review Gate
+
+Status: Planned; blocked until C1 is verified.
+
+Technical requirements:
+
+- Review zone deployment, mitigation, healing, cleanse/status protection, tanking, MP sustain, and required setup in deterministic 45-row stratified batches.
+- Pause at `Awaiting human review` for every batch; require an explicit decision for every row before import.
+- After import, correct repeated rule/override failures, add targeted regression fixtures, rerun all accumulated fixtures, and reset the clean-batch streak after any critical false-positive pattern.
+- Continue until two consecutive fully reviewed batches reveal no new critical false-positive pattern.
+
+Acceptance criteria:
+
+- All accumulated C2 fixtures pass after every correction.
+- Two consecutive 45-row batches complete with no new critical false-positive pattern.
+- Rejected and ambiguous defensive/setup claims remain non-proven after full-corpus replay.
+
+#### Feature C3: Offensive And Support Human-Review Gate
+
+Status: Planned; blocked until C2 completes.
+
+Technical requirements:
+
+- Review direct damage, buffs, debuffs, Pain/Poison, Break, AF support, and Links in deterministic 45-row stratified batches.
+- Use the same explicit-decision, human-review pause, correction, accumulated-regression, and clean-streak reset contract as C2.
+- Preserve all earlier C2 decisions and prove that C3 rule changes do not regress them.
+
+Acceptance criteria:
+
+- Sign of Collapse proves enemy resistance debuffs and granted Link/Break effects without proving zone deployment or party mitigation.
+- All accumulated C2-C3 fixtures pass after every correction.
+- Two consecutive 45-row C3 batches complete with no new critical false-positive pattern.
+
+#### Feature C4: Dependencies And Conditions Human-Review Gate
+
+Status: Planned; blocked until C3 completes.
+
+Technical requirements:
+
+- Review zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, and similar qualifiers in deterministic 45-row stratified batches.
+- Use the same explicit-decision, human-review pause, correction, accumulated-regression, and clean-streak reset contract as C2-C3.
+- Preserve all earlier decisions and verify that dependency rules cannot be promoted as standalone mandatory capabilities.
+
+Acceptance criteria:
+
+- Sign of Collapse proves its awakened-zone dependency without proving zone deployment.
+- All accumulated C2-C4 fixtures pass after every correction.
+- Two consecutive 45-row C4 batches complete with no new critical false-positive pattern.
+
+#### Feature C5: Full Replay, Materialization, Drift Gate, And Handoff
+
+Status: Planned; blocked until C2-C4 each pass their human-review gate.
+
+Technical requirements:
+
+- Replay the full parsed corpus using the locked taxonomy and canonical review artifacts, materializing only proven capabilities and their dependencies into Neo4j.
+- Verify identical inputs reproduce identical capabilities, dependencies, evidence, diagnostics, and graph state.
+- Verify every rejected fixture remains rejected and every ambiguous/candidate/untagged fact remains non-authoritative.
+- Update `docs/guides/ETL_GUIDE.md` with artifact bump, batch generation, human-review handoff, validation/import, correction loop, replay, diagnostics, and drift-repair procedures.
+- Record the final taxonomy, artifact, schema, review-corpus, and diagnostics versions required by Feature D.
+
+Acceptance criteria:
+
+- Same parsed data, review artifacts, taxonomy version, and schema version reproduce identical materialization and diagnostics across repeated clean replays.
+- Graph drift, artifact drift, stale broad-role properties, incomplete review imports, and rejected-fixture regressions fail visibly.
+- The ETL guide makes the complete C1-C5 workflow repeatable without relying on chat history.
+- Feature D consumes only proven atomic capabilities from the locked C5 handoff and remains unable to treat any other review state as coverage.
 
 ### Feature D: Hard Filters, RoleScores, And Skill Shortlists
 
-Status: Planned; blocked until reopened Feature C passes all three review phases.
+Status: Planned; blocked until Feature C5 completes the reviewed materialization handoff.
 
 Technical requirements:
 

@@ -179,7 +179,8 @@ Purpose:
 Expected artifacts:
 
 - Typed production retrieval independent of PLAN and generated Cypher.
-- Versioned atomic capability/dependency taxonomy, CSV/JSON human-review loop, negative fixtures, curated overrides, and reproducible Neo4j materialization.
+- A five-gate capability program: C1 atomic contracts/review tooling/schema cutover; C2 defensive/setup review; C3 offensive/support review; C4 dependency/condition review; and C5 full replay/drift verification/handoff.
+- Deterministic 45-row CSV review batches, constrained reviewer fields, canonical JSON decisions, negative fixtures, curated overrides, and reproducible Neo4j materialization.
 - Contextual RoleScores and role-aware skill shortlists.
 - `late_game_assumed` build packages with legality and cardinality evidence.
 - Hard filters, capability templates, top-8 role pools, must-include counter exceptions, and beam width capped at 50.
@@ -196,7 +197,7 @@ Dependencies:
 - Milestone 4 output and legality contracts.
 - Correct canonical IDs, item identity, and Grasta acquisition cardinality.
 - Curated weak-superboss and mechanics data.
-- Completion of the reopened capability-quality gate before contextual RoleScores or skill shortlists.
+- Completion of Feature C5 after all three human-review phases achieve two consecutive clean 45-row batches before contextual RoleScores or skill shortlists.
 
 Exit criteria:
 
