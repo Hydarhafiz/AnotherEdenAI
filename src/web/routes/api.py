@@ -18,6 +18,10 @@ class QueryRequest(BaseModel):
     query: str
     roster: list[str]
     owned_sidekicks: list[str] = Field(default_factory=list)
+    stellar_awakened: dict = Field(default_factory=dict)
+    boss_id: str | None = None
+    item_policy: str = "late_game_assumed"
+    mode: str = "exploratory"
 
 
 @router.get("/entities")
@@ -58,6 +62,10 @@ async def post_query(body: QueryRequest, request: Request):
         "query": body.query,
         "roster": body.roster,
         "owned_sidekicks": body.owned_sidekicks,
+        "stellar_awakened": body.stellar_awakened,
+        "boss_id": body.boss_id,
+        "item_policy": body.item_policy,
+        "mode": body.mode,
     }
     return templates.TemplateResponse(
         request=request,
@@ -92,5 +100,9 @@ async def stream_job(job_id: str, request: Request, driver=Depends(get_driver)):
         templates=templates,
         request=request,
         owned_sidekicks=job_data.get("owned_sidekicks", []),
+        stellar_awakened=job_data.get("stellar_awakened", {}),
+        boss_id=job_data.get("boss_id"),
+        item_policy=job_data.get("item_policy", "late_game_assumed"),
+        mode=job_data.get("mode", "exploratory"),
     ):
         yield event

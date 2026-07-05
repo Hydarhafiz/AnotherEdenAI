@@ -432,7 +432,7 @@ Acceptance criteria:
 
 ### Feature B: Typed Production Request And Retrieval Boundary
 
-Status: Planned.
+Status: Completed.
 
 Technical requirements:
 

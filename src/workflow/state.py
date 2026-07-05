@@ -35,6 +35,10 @@ class WorkflowState(TypedDict):
     roster: list[str]
     owned_sidekicks: list[str]
     stellar_awakened: dict
+    boss_id: str
+    item_policy: str
+    workflow_mode: str
+    typed_retrieval: dict
 
     # --- PLAN node output ---
     plan_strategy: str

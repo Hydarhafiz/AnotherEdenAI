@@ -33,7 +33,7 @@ At a high level:
 - Wiki data is scraped and normalized into Pydantic ETL models.
 - The ETL pipeline loads Characters, Traits, Skills, PassiveSkills, Sidekicks, SidekickSkills, SidekickAuras, curated Superbosses, Grastas, Ores, and baseline Equipment into Neo4j with idempotent MERGE behavior.
 - User roster input is normalized and augmented with free-to-play units.
-- A five-node LangGraph pipeline plans the query, generates Cypher, validates it, analyzes results, and formats the output.
+- Exploratory GraphRAG uses the five-node PLAN/Cypher/validation pipeline, while typed production recommendations use deterministic retrieval before candidate preparation, analysis, and formatting.
 - FastAPI exposes query and admin routes, while SSE streams progress back to the browser.
 
 ## Runtime Components
@@ -139,6 +139,24 @@ Current workflow sequence:
 3. `VALIDATE`
 4. `ANALYZE`
 5. `FORMAT`
+
+Milestone 5 Feature B adds a separate typed production sequence:
+
+1. `PRODUCTION_RETRIEVE`
+2. `PREPARE_CANDIDATES`
+3. `ANALYZE`
+4. `FORMAT`
+
+Production requests carry a canonical `boss_id`, roster, optional owned sidekicks,
+per-character Stellar Awakening state, the `late_game_assumed` item policy, and
+natural-language preferences. Deterministic Neo4j services retrieve boss, roster,
+skill/passive, mechanics, sidekick, Grasta, and compatible equipment context.
+Production character ownership accepts only exact canonical names or exact aliases;
+substring matching remains exploratory-only. Preferences may cause a typed boss
+conflict but cannot expand ownership or the candidate universe. Missing or unsupported
+bosses and unresolved or ambiguous ownership inputs stop at retrieval with typed SSE
+diagnostics. The production graph contains no PLAN, generated-Cypher, or retrieval-LLM
+validation nodes, and the exploratory graph is not used as a production fallback.
 
 Routing notes:
 

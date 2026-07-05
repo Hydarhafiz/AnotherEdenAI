@@ -25,7 +25,8 @@ from collections.abc import AsyncIterable
 from fastapi.sse import ServerSentEvent
 from fastapi.templating import Jinja2Templates
 
-from src.workflow.graph import build_graph
+from src.workflow.graph import build_graph, build_production_graph
+from src.workflow.production import ProductionRequestError
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,23 @@ NODE_LABELS: dict[str, str] = {
     "prepare_candidates": "CANDIDATES",
     "analyze": "ANALYZE",
     "format": "FORMAT",
+    "production_retrieve": "RETRIEVE",
 }
+
+
+def pipeline_error_payload(exc: Exception) -> dict:
+    """Return a safe SSE failure payload, preserving typed request diagnostics."""
+    payload = {
+        "event": "node_status",
+        "node": "ERROR",
+        "attempt": 1,
+        "max": 1,
+    }
+    if isinstance(exc, ProductionRequestError):
+        payload["failure_type"] = exc.issues[0].code if exc.issues else "request.invalid"
+        payload["message"] = str(exc)
+        payload["issues"] = [issue.model_dump() for issue in exc.issues]
+    return payload
 
 
 async def pipeline_sse_generator(
@@ -49,6 +66,10 @@ async def pipeline_sse_generator(
     templates: Jinja2Templates,
     request,
     owned_sidekicks: list[str] | None = None,
+    stellar_awakened: dict | None = None,
+    boss_id: str | None = None,
+    item_policy: str = "late_game_assumed",
+    mode: str = "exploratory",
 ) -> AsyncIterable[ServerSentEvent]:
     """Async generator: run LangGraph pipeline, emit SSE events per node completion.
 
@@ -68,7 +89,8 @@ async def pipeline_sse_generator(
         templates: Jinja2Templates instance from the route's templates variable.
         request:   FastAPI Request (used for is_disconnected() check).
     """
-    graph = build_graph(driver=driver)
+    use_production = mode == "production"
+    graph = build_production_graph(driver=driver) if use_production else build_graph(driver=driver)
     initial_state = {
         "user_query": query,
         "roster": roster,
@@ -79,7 +101,11 @@ async def pipeline_sse_generator(
         "db_results": [],
         "validation_errors": [],
         "retry_count": 0,
-        "stellar_awakened": {},
+        "stellar_awakened": stellar_awakened or {},
+        "boss_id": boss_id or "",
+        "item_policy": item_policy,
+        "workflow_mode": "production" if use_production else "exploratory",
+        "typed_retrieval": {},
         "cypher_retry_count": 0,
         "candidate_bundle": {},
         "candidate_warnings": [],
@@ -146,12 +172,7 @@ async def pipeline_sse_generator(
 
     except Exception as exc:  # noqa: BLE001
         logger.exception("Pipeline error during SSE stream: %s", exc)
-        error_data = json.dumps({
-            "event": "node_status",
-            "node": "ERROR",
-            "attempt": 1,
-            "max": 1,
-        })
+        error_data = json.dumps(pipeline_error_payload(exc))
         yield ServerSentEvent(data=error_data, event="node_status")
 
     finally:

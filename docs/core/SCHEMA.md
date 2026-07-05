@@ -108,7 +108,14 @@ Sidekicks are separate from `Character` nodes. They do not count as frontline or
 Query-time ownership contract:
 
 - `GET /api/entities` returns separate `characters`, `sidekicks`, and `grastas` name lists.
-- `POST /api/query` accepts `query`, `roster`, and optional `owned_sidekicks`.
+- `POST /api/query` accepts `query`, `roster`, optional `owned_sidekicks`, optional
+  `stellar_awakened`, optional `boss_id`, `item_policy`, and `mode`.
+- `mode: production` requires a canonical `boss_id` and supports only the
+  `late_game_assumed` item policy. Production character and sidekick normalization is
+  exact; unresolved or ambiguous values return typed retrieval errors rather than
+  being silently dropped or resolved by substring.
+- `mode: exploratory` preserves the PLAN/generated-Cypher GraphRAG path for general
+  graph questions. It is not a fallback for production retrieval failures.
 - Selected sidekick names are normalized against `Sidekick` nodes before retrieval.
 - Recommendation retrieval and output may use only selected owned sidekicks. An empty selection keeps main/sub sidekick slots empty and must be represented as a risk or assumption rather than inferred ownership.
 

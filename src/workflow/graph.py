@@ -21,6 +21,7 @@ from .nodes.plan import plan_node
 from .superboss import retrieve_superboss_context_node
 from .nodes.validate import validate_node
 from .state import WorkflowState
+from .production import retrieve_production_context_node
 
 
 def route_after_validate(
@@ -93,6 +94,31 @@ def build_graph(driver=None):
         ["generate_cypher", "prepare_candidates", "format"],
     )
 
+    return builder.compile()
+
+
+def build_production_graph(driver=None):
+    """Build the typed production path with no PLAN or generated-Cypher nodes."""
+    builder = StateGraph(WorkflowState)
+
+    async def _retrieve(s):
+        return await retrieve_production_context_node(s, driver)
+
+    async def _prepare(s):
+        return await prepare_candidates_node(s, driver)
+
+    async def _format(s):
+        return await format_and_validate_node(s, driver)
+
+    builder.add_node("production_retrieve", _retrieve)
+    builder.add_node("prepare_candidates", _prepare)
+    builder.add_node("analyze", analyze_node)
+    builder.add_node("format", _format)
+    builder.add_edge(START, "production_retrieve")
+    builder.add_edge("production_retrieve", "prepare_candidates")
+    builder.add_edge("prepare_candidates", "analyze")
+    builder.add_edge("analyze", "format")
+    builder.add_edge("format", END)
     return builder.compile()
 
 
