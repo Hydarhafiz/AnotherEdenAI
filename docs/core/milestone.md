@@ -456,7 +456,7 @@ Status: Reopened and split into C1-C5; Feature D remains blocked until C5 comple
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
-Status: Planned.
+Status: Completed.
 
 Technical requirements:
 

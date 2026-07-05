@@ -90,14 +90,15 @@ Milestone 5 Feature A identity and readiness behavior:
 - Candidate preparation consumes persisted Skill and PassiveSkill IDs and falls back to deterministic IDs only for legacy graph rows pending replay.
 - Integration database cleanup removes static fixtures after idempotency tests so mock names cannot leak into the normal roster graph.
 
-Milestone 5 Feature C role taxonomy behavior:
+Milestone 5 Feature C1 atomic capability behavior:
 
-- `src/etl/role_taxonomy.json` is the versioned source of truth for the role vocabulary, deterministic rules, confidence levels, and curated overrides.
-- Skill and PassiveSkill models reproduce `role_tags`, canonical evidence JSON, and the taxonomy version from parsed source facts without live AI calls.
-- Neo4j stores the derived role metadata for retrieval, but the graph is not its source of truth.
-- Every materialized role cites its rule or override ID and stable source fact ID.
-- ETL replay compares graph materialization with artifact-derived values and aborts on missing or mismatched tags, evidence, or taxonomy versions.
-- Character-level role summaries remain derived query-time caches; a character may support multiple contextual roles through different skills and passives.
+- `src/etl/capability_taxonomy.json` is the versioned source of truth for atomic capability and dependency vocabularies, direction/target semantics, deterministic positive and negative rules, and curated overrides.
+- `src/etl/capability_reviews.json` preserves canonical human decisions and reviewer notes, while `src/etl/capability_gold.json` holds stable regression fixtures keyed by Skill or PassiveSkill IDs.
+- Repository tooling deterministically exports stratified 45-row CSV review batches plus constrained allowed-value and field-guidance references, and rejects incomplete, invalid, drifted, or evidence-edited imports.
+- Skill and PassiveSkill models materialize only reviewed `approve` and `correct` decisions as active capabilities or dependencies. Candidate, rejected, ambiguous, dependency-only, and untagged records cannot satisfy capability coverage.
+- Every proven fact cites its matched phrase, direction and target, rule or override ID, stable source fact ID, reviewer provenance, and artifact version without live AI calls.
+- Neo4j stores proven atomic metadata and deterministic diagnostics, but repository artifacts remain authoritative. ETL loading removes retired broad-role properties and aborts on capability, dependency, evidence, diagnostics, artifact-version, or schema-version drift.
+- Contextual character roles remain deferred until the reviewed C2-C5 capability handoff is complete.
 
 Feature B curated superboss graph behavior:
 

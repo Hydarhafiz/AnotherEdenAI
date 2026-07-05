@@ -20,10 +20,11 @@ from .loader import (
     load_sidekicks,
     load_skills,
     remove_collapsed_legacy_grastas,
+    remove_stale_role_materialization,
     load_superbosses,
 )
 from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
-from .role_taxonomy import assert_role_materialization
+from .capability_taxonomy import assert_capability_materialization
 
 logging.basicConfig(
     level=logging.INFO,
@@ -74,11 +75,12 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         )
 
         await load_characters(driver, characters)
+        await remove_stale_role_materialization(driver)
         skills = [skill for character in characters for skill in character.skills]
         passive_skills = [passive for character in characters for passive in character.passive_skills]
         await load_skills(driver, skills)
         await load_passive_skills(driver, passive_skills)
-        await assert_role_materialization(driver, skills, passive_skills)
+        await assert_capability_materialization(driver, skills, passive_skills)
         await load_sidekicks(driver, sidekicks)
         overlap_report = await cleanup_duplicate_sidekick_characters(driver)
         overlap_names = [row["name"] for row in overlap_report]

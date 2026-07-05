@@ -1,0 +1,44 @@
+{
+  "artifact_version": "1.0.0",
+  "review_schema_version": "1.0.0",
+  "capabilities": [
+    "deploy_zone", "awaken_zone", "ally_damage_reduction", "ally_resistance_up",
+    "enemy_resistance_down", "heal_hp", "cleanse_status", "grant_status_immunity",
+    "taunt", "barrier", "recover_mp", "direct_damage", "ally_damage_up",
+    "inflict_pain", "inflict_poison", "inflict_break", "af_support", "grant_link"
+  ],
+  "dependencies": [
+    "requires_zone", "requires_awakened_zone", "requires_status", "requires_stack",
+    "requires_stellar_awakened", "end_of_turn", "party_composition", "limited_use"
+  ],
+  "directions": ["ally", "enemy", "self", "field", "none"],
+  "targets": ["single", "party", "all_enemies", "single_enemy", "zone", "none"],
+  "review_states": ["approve", "reject", "correct", "ambiguous"],
+  "rules": [
+    {"id":"cap-zone-deploy","phase":"defensive_setup","kind":"capability","value":"deploy_zone","record_types":["skill","passive"],"pattern":"\\b(?:deploy|set|establish|activate)s? (?:an? )?(?:[a-z]+ )?(?:zone|stance)\\b","negative_patterns":["\\bawaken(?:s|ed|ing)? (?:the )?(?:[a-z]+ )?(?:zone|stance)","requires? (?:an? )?(?:awakened )?(?:zone|stance)","while (?:an? )?(?:zone|stance)"],"direction":"field","target":"zone"},
+    {"id":"cap-zone-awaken","phase":"defensive_setup","kind":"capability","value":"awaken_zone","record_types":["skill","passive"],"pattern":"\\bawaken(?:s|ing)? (?:the )?(?:[a-z]+ )?(?:zone|stance)\\b","negative_patterns":["requires? awakened"],"direction":"field","target":"zone"},
+    {"id":"cap-mitigation","phase":"defensive_setup","kind":"capability","value":"ally_damage_reduction","record_types":["skill","passive"],"pattern":"\\b(?:damage (?:taken )?(?:reduced|reduction)|reduce(?:s)? damage (?:taken )?by)\\b","negative_patterns":["enemy damage reduction"],"direction":"ally","target":"party"},
+    {"id":"cap-ally-resistance","phase":"defensive_setup","kind":"capability","value":"ally_resistance_up","record_types":["skill","passive"],"pattern":"\\b(?:type|physical|magic|elemental) resistance (?:of )?(?:all party members|party|all allies|allies|user) (?:up|increased)|(?:all party members|party|all allies|allies) (?:type|physical|magic|elemental) resistance [+-]?\\d+%","negative_patterns":["enemy|foe"],"direction":"ally","target":"party"},
+    {"id":"cap-heal","phase":"defensive_setup","kind":"capability","value":"heal_hp","record_types":["skill","passive"],"pattern":"\\b(?:restore|recover)s? (?:all party members' |all allies' |party )?hp|\\bheal(?:s|ing)?\\b","negative_patterns":["healing power"],"direction":"ally","target":"party"},
+    {"id":"cap-cleanse","phase":"defensive_setup","kind":"capability","value":"cleanse_status","record_types":["skill","passive"],"pattern":"\\b(?:remove|cleans)e?s? (?:all )?(?:status effects|ailments|debuffs)\\b","negative_patterns":[],"direction":"ally","target":"party"},
+    {"id":"cap-status-immunity","phase":"defensive_setup","kind":"capability","value":"grant_status_immunity","record_types":["skill","passive"],"pattern":"\\b(?:status immunity|immunity to status|block(?:s)? status)\\b","negative_patterns":[],"direction":"ally","target":"party"},
+    {"id":"cap-taunt","phase":"defensive_setup","kind":"capability","value":"taunt","record_types":["skill","passive"],"pattern":"\\b(?:taunt|rage|redirect attacks)\\b","negative_patterns":[],"direction":"enemy","target":"all_enemies"},
+    {"id":"cap-barrier","phase":"defensive_setup","kind":"capability","value":"barrier","record_types":["skill","passive"],"pattern":"\\b(?:barrier|shield)\\b","negative_patterns":["barrier pierc"],"direction":"ally","target":"party"},
+    {"id":"cap-mp","phase":"defensive_setup","kind":"capability","value":"recover_mp","record_types":["skill","passive"],"pattern":"\\b(?:restore|recover|regen(?:erate)?)s? (?:all party members' |all allies' |party )?mp\\b","negative_patterns":["mp cost"],"direction":"ally","target":"party"},
+    {"id":"cap-damage","phase":"offensive_support","kind":"capability","value":"direct_damage","record_types":["skill"],"pattern":"\\b(?:deals?|inflicts?) .{0,40} damage\\b|\\b\\d+% damage\\b","negative_patterns":["damage reduction","damage taken"],"direction":"enemy","target":"single_enemy"},
+    {"id":"cap-debuff-resistance","phase":"offensive_support","kind":"capability","value":"enemy_resistance_down","record_types":["skill","passive"],"pattern":"\\b(?:type|physical|magic|elemental|fire|water|wind|earth|shade|thunder|crystal) resistance (?:of )?(?:all enemies|enemy|enemies) (?:down|decreased)|(?:all enemies|enemy|enemies) (?:type|physical|magic|elemental|fire|water|wind|earth|shade|thunder|crystal) resistance -\\d+%","negative_patterns":["party|allies"],"direction":"enemy","target":"all_enemies"},
+    {"id":"cap-pain","phase":"offensive_support","kind":"capability","value":"inflict_pain","record_types":["skill","passive"],"pattern":"\\binflict(?:s)? pain\\b","negative_patterns":["when in pain","pain damage"],"direction":"enemy","target":"single_enemy"},
+    {"id":"cap-poison","phase":"offensive_support","kind":"capability","value":"inflict_poison","record_types":["skill","passive"],"pattern":"\\binflict(?:s)? poison\\b","negative_patterns":["when poisoned","poison damage"],"direction":"enemy","target":"single_enemy"},
+    {"id":"cap-break","phase":"offensive_support","kind":"capability","value":"inflict_break","record_types":["skill","passive"],"pattern":"\\b(?:inflict|grant)s? break\\b","negative_patterns":["break resistance"],"direction":"enemy","target":"single_enemy"},
+    {"id":"cap-link","phase":"offensive_support","kind":"capability","value":"grant_link","record_types":["skill","passive"],"pattern":"\\bgrant(?:s)? .{0,30}link\\b","negative_patterns":["requires? link"],"direction":"ally","target":"party"},
+    {"id":"dep-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_zone","record_types":["skill","passive"],"pattern":"\\b(?:requires?|while|when|if) .{0,30}(?:zone|stance)(?: is active)?\\b","negative_patterns":["deploy|set|establish"],"direction":"field","target":"zone"},
+    {"id":"dep-awakened-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_awakened_zone","record_types":["skill","passive"],"pattern":"\\b(?:requires?|while|when|if) .{0,20}awakened (?:zone|stance)\\b","negative_patterns":[],"direction":"field","target":"zone"},
+    {"id":"dep-stack","phase":"dependencies_conditions","kind":"dependency","value":"requires_stack","record_types":["skill","passive"],"pattern":"\\b(?:requires?|consumes?|when|if) .{0,30}stack","negative_patterns":[],"direction":"self","target":"single"},
+    {"id":"dep-status","phase":"dependencies_conditions","kind":"dependency","value":"requires_status","record_types":["skill","passive"],"pattern":"\\b(?:when|if) .{0,25}(?:pain|poison|status|debuff)","negative_patterns":["inflict"],"direction":"enemy","target":"single_enemy"},
+    {"id":"dep-sa","phase":"dependencies_conditions","kind":"dependency","value":"requires_stellar_awakened","record_types":["skill","passive"],"pattern":"\\bstellar awaken","negative_patterns":[],"direction":"self","target":"single"},
+    {"id":"dep-eot","phase":"dependencies_conditions","kind":"dependency","value":"end_of_turn","record_types":["skill","passive"],"pattern":"\\bend of turn\\b","negative_patterns":[],"direction":"none","target":"none"},
+    {"id":"dep-party","phase":"dependencies_conditions","kind":"dependency","value":"party_composition","record_types":["skill","passive"],"pattern":"\\b(?:for each|number of) .{0,30}(?:party member|ally|character)","negative_patterns":[],"direction":"ally","target":"party"},
+    {"id":"dep-limited","phase":"dependencies_conditions","kind":"dependency","value":"limited_use","record_types":["skill","passive"],"pattern":"\\b(?:once per battle|usable [0-9]+ times?|limited use)\\b","negative_patterns":[],"direction":"self","target":"single"}
+  ],
+  "overrides": []
+}

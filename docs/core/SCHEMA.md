@@ -1,5 +1,5 @@
 # Graph Schema Contract
-**SCHEMA_VERSION: 1.3.0**
+**SCHEMA_VERSION: 1.4.0**
 **Status:** Stable — do not modify without incrementing SCHEMA_VERSION and running ETL
 
 ## Node Labels and Properties
@@ -75,9 +75,11 @@ Equipment nodes provide baseline context only. They do not encode best-in-slot r
 - `source_url` (STRING, nullable) — source character detail page
 - `section` (STRING, nullable) — source page section, e.g. Active Skills or Stellar Awakened Skills
 - `requires_stellar_awakened` (BOOLEAN) — true when the skill is gated behind Stellar Awakening
-- `role_tags` (LIST<STRING>) — deterministic roles derived from the versioned local taxonomy artifact
-- `role_evidence_json` (STRING) — canonical JSON evidence citing the matched rule or override and source Skill fact
-- `role_taxonomy_version` (STRING) — taxonomy artifact version used for materialization
+- `capabilities` (LIST<STRING>) — reviewed, proven atomic capabilities only; candidate, rejected, ambiguous, and untagged proposals are excluded
+- `dependencies` (LIST<STRING>) — reviewed, proven setup or condition dependencies kept separate from standalone capabilities
+- `capability_evidence_json` (STRING) — canonical evidence containing matched phrase, direction, target, rule or override, stable source fact ID, review provenance, and artifact version
+- `capability_artifact_version` (STRING) — atomic taxonomy artifact version used for materialization
+- `capability_diagnostics_json` (STRING) — deterministic proposed, proven, candidate, rejected, ambiguous, untagged, and reviewed counts
 - `schema_version` (STRING) — ETL schema version used for this row
 
 Uniqueness: `skill_id` and `(character_name, name)`.
@@ -91,9 +93,11 @@ Uniqueness: `skill_id` and `(character_name, name)`.
 - `section` (STRING, nullable) — source page section, e.g. Stances/Zones
 - `passive_type` (STRING, nullable) — best-effort category such as zone, stance, stack, battle-start, stellar awakening, valor chant, or passive
 - `requires_stellar_awakened` (BOOLEAN) — true when the passive is gated behind Stellar Awakening
-- `role_tags` (LIST<STRING>) — deterministic roles derived from the versioned local taxonomy artifact
-- `role_evidence_json` (STRING) — canonical JSON evidence citing the matched rule or override and source PassiveSkill fact
-- `role_taxonomy_version` (STRING) — taxonomy artifact version used for materialization
+- `capabilities` (LIST<STRING>) — reviewed, proven atomic capabilities only; candidate, rejected, ambiguous, and untagged proposals are excluded
+- `dependencies` (LIST<STRING>) — reviewed, proven setup or condition dependencies kept separate from standalone capabilities
+- `capability_evidence_json` (STRING) — canonical evidence containing matched phrase, direction, target, rule or override, stable source fact ID, review provenance, and artifact version
+- `capability_artifact_version` (STRING) — atomic taxonomy artifact version used for materialization
+- `capability_diagnostics_json` (STRING) — deterministic proposed, proven, candidate, rejected, ambiguous, untagged, and reviewed counts
 - `schema_version` (STRING) — ETL schema version used for this row
 
 Uniqueness: `passive_skill_id` and `(character_name, name)`.
@@ -233,7 +237,8 @@ After ETL, `python assert_schema.py` must exit 0.
 
 The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - stable, unique `character_id`, `skill_id`, `passive_skill_id`, and `grasta_id` values
-- Skill and PassiveSkill role tags, canonical evidence, and taxonomy versions match deterministic materialization from `src/etl/role_taxonomy.json`
+- Skill and PassiveSkill atomic capabilities, dependencies, canonical evidence, diagnostics, artifact versions, and schema versions match deterministic materialization from the repository taxonomy and review artifacts
+- retired Skill and PassiveSkill `role_tags`, `role_evidence_json`, and `role_taxonomy_version` properties are absent
 - schema 1.2 identity freshness and visible missing character, skill, passive, boss, mechanics, and item coverage
 - minimum loaded counts for `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, and `Equipment`
 - minimum loaded count for `MechanicReference`
