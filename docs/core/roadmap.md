@@ -32,7 +32,7 @@ Milestone 5 maps to `docs/core/milestone.md` and is ordered around:
 
 - Completing and verifying identity, cardinality, and canonical-ID prerequisites.
 - Deterministic typed retrieval for the production recommender.
-- Reproducible role taxonomy and evidence materialization.
+- Reviewed atomic capability/dependency taxonomy, negative fixtures, and reproducible evidence materialization before contextual role scoring.
 - Hard filtering, contextual role scoring, and role-aware skill packaging.
 - Assumption-based late-game build packages.
 - Capability-coverage templates, top-8 role pools, and bounded beam search.
@@ -179,7 +179,7 @@ Purpose:
 Expected artifacts:
 
 - Typed production retrieval independent of PLAN and generated Cypher.
-- Versioned role taxonomy, tagging rules, curated overrides, and reproducible Neo4j materialization.
+- Versioned atomic capability/dependency taxonomy, CSV/JSON human-review loop, negative fixtures, curated overrides, and reproducible Neo4j materialization.
 - Contextual RoleScores and role-aware skill shortlists.
 - `late_game_assumed` build packages with legality and cardinality evidence.
 - Hard filters, capability templates, top-8 role pools, must-include counter exceptions, and beam width capped at 50.
@@ -196,11 +196,12 @@ Dependencies:
 - Milestone 4 output and legality contracts.
 - Correct canonical IDs, item identity, and Grasta acquisition cardinality.
 - Curated weak-superboss and mechanics data.
+- Completion of the reopened capability-quality gate before contextual RoleScores or skill shortlists.
 
 Exit criteria:
 
 - Production recommendations generate legal backend candidates without PLAN, generated Cypher, or LLM retrieval validation.
-- Identical input and policy versions produce reproducible role metadata, scoring, pruning, and candidate order.
+- Identical parsed facts, review artifacts, and policy versions produce reproducible capability metadata, contextual role scoring, pruning, and candidate order.
 - Golden feasible cases return at least one legal coverage-valid lineup; infeasible cases return typed diagnostics.
 - Analyzer sees only compact referenced candidates and cannot introduce out-of-bundle IDs.
 - Paid golden runs remain below the 40k cumulative analyzer-token ceiling and demonstrate at least a 90% reduction from the recorded ~601k-token failed baseline.
@@ -262,9 +263,9 @@ Exit criteria:
 ## Cross-Milestone Constraints
 
 - Facts scraped from sources remain separate from derived recommendation judgments.
-- Versioned repository artifacts are canonical for role taxonomy, tagging rules, overrides, and scoring policy.
-- Neo4j role metadata is reproducible materialized data, not the sole source of truth.
-- Hard official associations belong in ETL; contextual role scores and strategy belong in the recommendation engine.
+- Versioned repository artifacts are canonical for atomic capability/dependency rules, reviewed decisions, negative fixtures, overrides, and scoring policy.
+- Neo4j capability metadata is reproducible materialized data, not the sole source of truth.
+- Hard official associations and proven atomic skill/passive capabilities belong in ETL; contextual character role scores and strategy belong in the recommendation engine.
 - Production recommendation retrieval is typed and deterministic.
 - Dynamic GraphRAG remains a separate exploratory mode.
 - Hard legality precedes scoring; backend validation follows every analyzer refinement.
@@ -294,4 +295,4 @@ Exit criteria:
 
 ## Open Questions
 
-No architecture-blocking questions remain for the active Milestone 5 plan. Provider choice, scoring-weight tuning, AI-assisted curation, and beta limits remain evidence-driven follow-up decisions recorded as research gaps.
+Feature D remains architecture-blocked until the reopened Feature C capability review passes its three ordered phases. Provider choice, scoring-weight tuning, optional AI-assisted suggestions, and beta limits remain evidence-driven follow-up decisions recorded as research gaps.

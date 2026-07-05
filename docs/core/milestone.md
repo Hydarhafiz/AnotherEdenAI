@@ -4,7 +4,7 @@
 
 Status: Active; rewritten and resequenced around deterministic recommendation generation.
 
-Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
+Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
 The production recommender will use deterministic typed Neo4j retrieval rather than PLAN, generated Cypher, or LLM semantic retrieval validation. It will hard-reject impossible choices, compute contextual role and skill scores, generate capability-coverage lineups through bounded search, and validate all analyzer refinements. Normal paid usage is one analyzer call; the worst case is one initial call plus one fragment-only correction. A legal backend fallback prevents analyzer format, budget, or refinement failures from destroying otherwise valid recommendations.
 
@@ -130,7 +130,7 @@ The backend owns:
 - Stellar Awakening availability and assumption labeling.
 - Typed boss, roster, mechanics, skill/passive, sidekick, and build retrieval.
 - Hard rejection before scoring.
-- Role taxonomy application and evidence materialization.
+- Atomic capability/dependency taxonomy application, review status, and evidence materialization.
 - Contextual role and skill scoring.
 - Role-specific top-K pools and must-include counter exceptions.
 - Skill and build package construction.
@@ -156,40 +156,34 @@ The analyzer may not invent or introduce any character, skill, passive, build pa
 
 Every proposed swap and skill change is re-scored. An invalid or lower-scoring swap falls back to the original candidate. An invalid or lower-scoring skill package falls back to the backend default.
 
-## Role Taxonomy And Evidence Policy
+## Capability Taxonomy, Review, And Role-Derivation Policy
 
-A versioned local artifact such as `role_taxonomy.json` is the source of truth for:
+A versioned local capability artifact replaces broad ETL-level role assignment. It is the source of truth for:
 
-- The role vocabulary.
-- Deterministic keyword/pattern rules.
-- Confidence levels.
-- Evidence fields.
-- Curated overrides.
-- Taxonomy/artifact version.
+- Atomic capability and dependency vocabularies.
+- Direction and target semantics, such as ally versus enemy and grant/deploy versus require/consume.
+- Deterministic positive rules and explicit negative/rejected patterns.
+- Evidence fields, curated overrides, review status, and artifact version.
 
-Initial roles include:
+Representative atomic facts include `deploy_zone`, `awaken_zone`, `requires_zone`, `ally_resistance_up`, `enemy_resistance_down`, `inflict_break`, `direct_damage`, `grant_link`, healing, cleanse, taunt, barrier, MP recovery, and SA/stack/status/setup dependencies. The final vocabulary is locked through reviewed fixtures rather than inferred from this illustrative list.
 
-- Primary DPS.
-- Secondary DPS.
-- Zone/stance setter.
-- Buffer.
-- Debuffer.
-- Pain/Poison setter.
-- Break/setup support.
-- Healer/recovery.
-- Tank/taunt/rage.
-- Mitigation/shield/barrier.
-- Cleanse/status protection.
-- MP sustain.
-- AF/burst support.
-- Reserve Grasta mule.
-- Sidekick/value support where applicable.
+ETL or parsed-artifact replay materializes only reviewed `proven` capabilities as active Skill and PassiveSkill graph facts. `candidate` matches remain review diagnostics and cannot satisfy mandatory coverage. `rejected` matches are preserved as negative regression fixtures so later taxonomy changes cannot reintroduce known false positives. Untagged facts are valid and reported.
 
-ETL or parsed-artifact replay deterministically materializes role tags and evidence mainly on Skill and PassiveSkill records. Every tag carries enough evidence to identify the matched rule or curated override, source skill/passive, confidence, and artifact version. Optional Character summaries are derived retrieval caches, not permanent identity labels.
+Every proven capability cites the matched source phrase, direction/target semantics, rule or override, stable source skill/passive ID, review provenance, and artifact version. Neo4j is materialized output rather than the source of truth. Identical parsed data, review artifacts, and taxonomy versions must reproduce identical graph facts, and drift tests fail on differences.
 
-Query-time `RoleScores` combine roster state, SA availability, boss affinity/mechanics, proven skill candidates, build/sidekick assumptions, and lineup coverage needs. One character may score highly for different roles in different lineups.
+Character roles are not permanent ETL labels. Feature D derives contextual `RoleScores` from proven Skill/PassiveSkill capabilities, selected package, SA state, boss matchup, build/sidekick assumptions, and lineup coverage. One character may support different roles in different contexts.
 
-Identical parsed data plus identical role artifacts must reproduce Neo4j role metadata. Drift tests fail when materialized metadata differs from artifact-generated output.
+### Human Review Loop
+
+The repository-native review workflow uses generated CSV batches for editing and canonical JSON for stable IDs, decisions, reviewer notes, gold fixtures, and regression history. No review UI is required.
+
+Review proceeds in three ordered phases:
+
+1. Mandatory defensive/setup capabilities: zone deployment, mitigation, healing, cleanse/status protection, tanking, MP sustain, and required setup.
+2. Offensive/support capabilities: direct damage, buffs, debuffs, Pain/Poison, Break, AF support, and Links.
+3. Dependencies and conditions: zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, and similar qualifiers.
+
+Each phase generates stratified batches of approximately 40-50 proposed decisions. The loop is review -> approve/reject/correct/ambiguous -> identify repeated failure pattern -> update rules/overrides -> rerun all accumulated fixtures -> generate the next batch. A phase passes only after all accumulated fixtures pass and two consecutive stratified batches reveal no new critical false-positive pattern. Rejected fixtures and untagged facts are expected; zero rejected records and full-corpus tagging are not goals.
 
 ### Optional AI-Assisted Curation
 
@@ -452,40 +446,44 @@ Acceptance criteria:
 - Natural-language preferences cannot expand ownership or candidate universe.
 - Tests assert dynamic Cypher generation is not called.
 
-### Feature C: Versioned Role Taxonomy And Reproducible Materialization
+### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: Completed.
+Status: Reopened; the reproducible broad-role prototype is verified but semantically insufficient and must be replaced before Feature D.
 
 Technical requirements:
 
-- Create a versioned taxonomy/rules/overrides artifact.
-- Define role vocabulary, deterministic rules, confidence, evidence, and override schema.
-- Tag Skill and PassiveSkill parsed records deterministically.
-- Materialize tags/evidence and taxonomy version into Neo4j or a documented normalized graph representation.
-- Treat optional Character summaries as derived caches.
-- Add drift detection between artifact-derived results and Neo4j.
-- Plan ETL-guide updates for artifact bump, replay, diagnostics, and drift repair.
-- Keep optional OpenRouter suggestion batch out of first acceptance.
+- Replace Skill/PassiveSkill `role_tags` materialization with versioned atomic `capability` and `dependency` contracts; do not retain both active systems.
+- Define direction-aware and target-aware capability rules, explicit negative patterns, review states, evidence schema, overrides, and artifact version.
+- Generate deterministic stratified CSV review batches from parsed facts and canonical JSON review/gold artifacts keyed by stable skill/passive IDs.
+- Preserve approved, corrected, ambiguous, and rejected decisions with reviewer notes and source text/URL attribution.
+- Execute the three ordered review phases and keep rejected decisions as negative regression fixtures.
+- Materialize only proven capabilities into Neo4j; candidate and untagged facts remain visible diagnostics but cannot prove mandatory coverage.
+- Remove stale broad role properties during the schema migration, bump the schema version, replay ETL, and add graph/artifact drift detection.
+- Report per-capability proposed, proven, candidate, rejected, untagged, and reviewed counts without hiding sparse coverage.
+- Update `docs/guides/ETL_GUIDE.md` with artifact bump, batch generation, review import, replay, diagnostics, and drift repair procedures.
+- Keep live/request-time AI tagging and direct AI mutation of canonical review artifacts out of scope.
 
 Acceptance criteria:
 
-- Same parsed data and artifact version reproduce identical tags/evidence.
-- Every materialized tag cites rule/override and source fact.
-- One character can support multiple contextual roles.
-- Neo4j is not the sole source of truth.
-- Drift tests fail on mismatched materialization.
+- Sign of Collapse proves enemy resistance debuffs, Link/Break effects, and its awakened-zone dependency without proving zone deployment or party mitigation.
+- Every proven graph capability cites its matched phrase, direction/target, rule or override, source fact ID, review provenance, and artifact version.
+- Every rejected fixture remains rejected after full-corpus replay and future rule changes.
+- All accumulated fixtures pass, and each of the three review phases ends with two consecutive 40-50-decision stratified batches containing no new critical false-positive pattern.
+- Same parsed data, review artifacts, and taxonomy version reproduce identical capabilities, dependencies, evidence, and diagnostics.
+- Candidate, rejected, and untagged records cannot satisfy mandatory Feature D coverage.
+- Neo4j is not the sole source of truth; graph drift fails visibly.
 - No live AI tagging occurs.
 
 ### Feature D: Hard Filters, RoleScores, And Skill Shortlists
 
-Status: Planned.
+Status: Planned; blocked until reopened Feature C passes all three review phases.
 
 Technical requirements:
 
 - Implement ownership/F2P, sidekick, SA, skill/passive, affinity, item, and setup hard filters.
 - Hard-reject null/absorb primary damage and require neutral-or-better usable primary damage.
 - Distinguish no weakness, unknown weakness, and incomplete affinity.
-- Compute per-character per-role scores with evidence and policy version.
+- Derive per-character per-role scores only from proven atomic Skill/PassiveSkill capabilities, with evidence and policy version.
 - Keep top eight per role plus bounded must-include exceptions.
 - Score four-to-six skills per contextual role.
 - Construct default three-to-four-skill packages for later lineup scoring.
@@ -497,6 +495,7 @@ Acceptance criteria:
 - Required boss counters survive top-eight pruning through explicit exceptions.
 - Role scores vary by boss and available package.
 - Missing data cannot create capabilities.
+- Candidate, rejected, dependency-only, and untagged facts cannot satisfy mandatory role or lineup coverage.
 - Skill shortlists exclude unavailable choices and remain bounded.
 - Identical inputs/policy versions reproduce ordered pools and packages.
 

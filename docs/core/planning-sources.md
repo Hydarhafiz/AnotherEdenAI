@@ -318,6 +318,24 @@ This file stores source references used during planning discussions. It separate
   Relevance: Akane Alter exists as `Akane (Alter),Blooming Blade`; analyzer output shortened it to `Akane (Alter)`, which final legality treated as unknown. This is canonical-name drift, not missing parsed coverage.
   Caveats/open questions: Candidate output should use stable IDs or exact canonical names; fuzzy normalization should remain an input convenience rather than an output repair mechanism.
 
+#### Feature C Capability False-Positive Audit
+
+- Title: Skill/passive taxonomy distribution and Sign of Collapse audit
+  URL: local `data/parsed/v1.3.0/characters/*.json`, local `src/etl/role_taxonomy.json`, local `src/etl/role_taxonomy.py`
+  Source type: repository source and parsed wiki artifacts
+  Date added: 2026-07-05
+  Related area: Milestone 5 Feature C capability quality gate and Feature D dependency
+  Relevance: The 2,255 parsed Skill/PassiveSkill facts contain 1,850 tagged facts, including 577 `zone_setter`, 477 `mitigation_shield_barrier`, and 1,399 `primary_dps` assignments. Sign of Collapse was falsely labeled as zone setting and mitigation because broad patterns matched an awakened-zone prerequisite and enemy resistance reductions. The same description also shows that incidental words inside Link and conditional clauses can create false direct-role evidence.
+  Caveats/open questions: Counts describe the current broad-rule prototype, not ground-truth prevalence. Human-reviewed stratified fixtures are required before precision or coverage can be claimed.
+
+- Title: Sign of Collapse source fact
+  URL: https://anothereden.wiki/w/Sign_of_Collapse
+  Source type: community wiki skill reference and repository-cached parsed fact
+  Date added: 2026-07-05
+  Related area: direction-aware capability extraction
+  Relevance: Grounds the distinction between enemy resistance debuffs, granted Link/Break behavior, and a prerequisite requiring Awakened Torn Earth Stance. It does not prove that the skill deploys a zone or grants party mitigation.
+  Caveats/open questions: The repository-cached character artifact is the reproducible test input; the live wiki can change and should be refreshed through normal ETL source attribution.
+
 #### Candidate-Constrained Architecture Replan
 
 - Title: Broad candidate preparation and analyzer projection audit
@@ -371,6 +389,12 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-07-01: Initial analyzer gates are 25k input/4k output for the initial call, 8k input/2k output for correction, 30k cumulative target, and 40k cumulative hard acceptance ceiling. Budget failure uses deterministic degraded fallback.
 - Planning decision on 2026-07-01: Paid testing is blocked until deterministic legality, scoring, packages, templates, beam bounds, projection, swaps, partial-output, and offline golden cases pass. Paid judge use is offline and only after deterministic validity.
 - Planning decision on 2026-07-01: Plan updates to `docs/guides/ETL_GUIDE.md` and `docs/guides/recommendation-validation.md` during implementation. Authentication, persistence, rate limiting, and deployment safeguards follow the proven recommendation core.
+
+- Planning decision on 2026-07-05: Reopen Feature C and block Feature D. Replace broad ETL role assignment with reviewed atomic capability and dependency extraction; contextual character roles are derived only at query time from proven capabilities and matchup/package context.
+- Planning decision on 2026-07-05: Replace rather than retain the current Skill/PassiveSkill `role_tags` graph contract. Schema migration removes stale broad-role properties and materializes proven capabilities, dependencies, direction/target evidence, review provenance, and artifact versions.
+- Planning decision on 2026-07-05: Use repository-native generated CSV review batches and canonical JSON decisions/gold fixtures. No local review webpage is required.
+- Planning decision on 2026-07-05: Preserve approved, corrected, ambiguous, and rejected decisions. Rejected matches are permanent negative regressions; candidate, rejected, dependency-only, and untagged facts cannot satisfy mandatory Feature D coverage.
+- Planning decision on 2026-07-05: Review in three phases: mandatory defensive/setup capabilities, offensive/support capabilities, then dependencies/conditions. Each phase uses approximately 40-50 decisions per stratified batch and passes after all accumulated fixtures pass plus two consecutive batches reveal no new critical false-positive pattern.
 
 
 - Planning decision on 2026-06-29: Expanded Feature C must create and maintain docs/guides/recommendation-validation.md covering schema/ETL readiness, candidate inspection, Mimi smoke tests, correction-round diagnostics, partial-result behavior, failure classification, and manual-verification reporting.
