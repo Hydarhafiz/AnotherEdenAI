@@ -1,6 +1,6 @@
 {
-  "artifact_version": "1.0.0",
-  "review_schema_version": "1.0.0",
+  "artifact_version": "1.1.0",
+  "review_schema_version": "1.1.0",
   "capabilities": [
     "deploy_zone", "awaken_zone", "ally_damage_reduction", "ally_resistance_up",
     "enemy_resistance_down", "heal_hp", "cleanse_status", "grant_status_immunity",
@@ -12,7 +12,10 @@
     "requires_stellar_awakened", "end_of_turn", "party_composition", "limited_use"
   ],
   "directions": ["ally", "enemy", "self", "field", "none"],
-  "targets": ["single", "party", "all_enemies", "single_enemy", "zone", "none"],
+  "targets": ["self", "one_ally", "adjacent_allies", "self_and_adjacent_allies", "frontline", "main_and_reserve", "single", "party", "all_enemies", "single_enemy", "enemy", "field", "zone", "none"],
+  "availability": ["not_applicable", "main_only", "main_or_sub"],
+  "magnitude_units": ["percent", "flat_hp", "flat_mp", "multiplier", "stacks"],
+  "triggers": ["none", "battle_start", "turn_start", "turn_end", "on_hit", "on_damage", "on_skill_use", "on_zone_deploy", "on_stellar_burst", "on_death"],
   "review_states": ["approve", "reject", "correct", "ambiguous"],
   "rules": [
     {"id":"cap-zone-deploy","phase":"defensive_setup","kind":"capability","value":"deploy_zone","record_types":["skill","passive"],"pattern":"\\b(?:deploy|set|establish|activate)s? (?:an? )?(?:[a-z]+ )?(?:zone|stance)\\b","negative_patterns":["\\bawaken(?:s|ed|ing)? (?:the )?(?:[a-z]+ )?(?:zone|stance)","requires? (?:an? )?(?:awakened )?(?:zone|stance)","while (?:an? )?(?:zone|stance)"],"direction":"field","target":"zone"},

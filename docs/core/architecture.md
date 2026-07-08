@@ -93,11 +93,12 @@ Milestone 5 Feature A identity and readiness behavior:
 Milestone 5 Feature C1 atomic capability behavior:
 
 - `src/etl/capability_taxonomy.json` is the versioned source of truth for atomic capability and dependency vocabularies, direction/target semantics, deterministic positive and negative rules, and curated overrides.
-- `src/etl/capability_reviews.json` preserves canonical human decisions and reviewer notes, while `src/etl/capability_gold.json` holds stable regression fixtures keyed by Skill or PassiveSkill IDs.
+- `src/etl/capability_reviews.json` preserves canonical human decisions and reviewer notes, while `src/etl/capability_gold.json` holds stable regression fixtures keyed by stable source-fact IDs across Skill, PassiveSkill, SidekickSkill, and SidekickAura records.
 - Repository tooling deterministically exports stratified 45-row CSV review batches plus constrained allowed-value and field-guidance references, and rejects incomplete, invalid, drifted, or evidence-edited imports.
-- Skill and PassiveSkill models materialize only reviewed `approve` and `correct` decisions as active capabilities or dependencies. Candidate, rejected, ambiguous, dependency-only, and untagged records cannot satisfy capability coverage.
+- Skill, PassiveSkill, SidekickSkill, and SidekickAura models materialize only reviewed `approve` and `correct` decisions as active capabilities or dependencies. Sidekick skills are `main_only`; auras are `main_or_sub`. Candidate, rejected, ambiguous, dependency-only, and untagged records cannot satisfy capability coverage.
+- Proposal IDs remain stable across taxonomy-version changes, while evidence retains exact taxonomy, review-artifact, and schema versions plus constrained target, placement, magnitude, timing, and trigger fields.
 - Every proven fact cites its matched phrase, direction and target, rule or override ID, stable source fact ID, reviewer provenance, and artifact version without live AI calls.
-- Neo4j stores proven atomic metadata and deterministic diagnostics, but repository artifacts remain authoritative. ETL loading removes retired broad-role properties and aborts on capability, dependency, evidence, diagnostics, artifact-version, or schema-version drift.
+- Neo4j stores proven atomic metadata and deterministic diagnostics, but repository artifacts remain authoritative. Schema 1.5 removes retired broad-role properties from all combat fact types and aborts on capability, dependency, evidence, diagnostics, artifact-version, or schema-version drift.
 - Contextual character roles remain deferred until the reviewed C2-C5 capability handoff is complete.
 
 Feature B curated superboss graph behavior:

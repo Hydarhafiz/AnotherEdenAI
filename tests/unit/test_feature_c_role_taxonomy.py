@@ -1,6 +1,7 @@
 """Milestone 5 Feature C1 atomic capability and review regressions."""
 
 import csv
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -20,8 +21,8 @@ from src.etl.capability_taxonomy import (
     propose,
 )
 from src.etl.constants import SCHEMA_VERSION
-from src.etl.loader import load_passive_skills, load_skills, remove_stale_role_materialization
-from src.etl.models import PassiveSkillRow, SkillRow
+from src.etl.loader import load_passive_skills, load_sidekicks, load_skills, remove_stale_role_materialization
+from src.etl.models import PassiveSkillRow, SidekickAuraRow, SidekickRow, SidekickSkillRow, SkillRow
 
 
 class AsyncRows:
@@ -104,7 +105,8 @@ def test_safety_cutover_removes_old_materializer_and_bumps_schema():
     assert importlib.util.find_spec("src.etl.role_taxonomy") is None
     assert "role_tags" not in SkillRow.model_fields
     assert "role_tags" not in PassiveSkillRow.model_fields
-    assert SCHEMA_VERSION == "1.4.0"
+    assert "role_tags" not in SidekickRow.model_fields
+    assert SCHEMA_VERSION == "1.5.0"
 
 
 def test_direction_aware_rules_distinguish_grant_from_dependency_and_negative_patterns():
@@ -151,11 +153,14 @@ def test_only_approved_or_corrected_reviews_become_authoritative(tmp_path, decis
     assert counts[diagnostic] == 1
     if evidence:
         assert evidence[0] == {
+            "activation_count": "", "availability": "not_applicable",
             "artifact_version": load_capability_taxonomy()["artifact_version"],
             "direction": "ally", "kind": "capability", "matched_phrase": "Heals",
+            "duration_turns": "", "magnitude_unit": "", "magnitude_value": "",
             "review_decision": "approve", "reviewer": "alice", "reviewer_notes": "checked",
+            "review_artifact_version": "test",
             "source": "reviewed_rule", "source_fact_id": "skill-0",
-            "source_id": "cap-heal", "target": "party", "value": "heal_hp",
+            "source_id": "cap-heal", "target": "party", "trigger": "none", "value": "heal_hp",
         }
 
 
@@ -189,7 +194,10 @@ def test_batch_export_is_deterministic_stratified_and_has_reference(tmp_path):
     assert len(rows) == BATCH_SIZE
     assert first.read_bytes() == second.read_bytes()
     reference = json.loads((tmp_path / "first.reference.json").read_text(encoding="utf-8"))
-    assert set(reference["allowed_values"]) == {"decision", "kind", "capability", "dependency", "direction", "target"}
+    assert set(reference["allowed_values"]) == {
+        "decision", "kind", "capability", "dependency", "direction", "target",
+        "availability", "magnitude_unit", "trigger",
+    }
     assert "source_url" in reference["field_guidance"]
     with first.open(encoding="utf-8", newline="") as handle:
         exported = list(csv.DictReader(handle))
@@ -331,3 +339,111 @@ async def test_graph_drift_detection_fails_for_each_contract_field(changed):
 
     with pytest.raises(RuntimeError, match="Atomic capability graph drift detected"):
         await assert_capability_materialization(Driver([graph_row]), [skill], [])
+
+
+def test_sidekick_facts_have_stable_ids_placement_and_qualifier_proposals():
+    skill = SidekickSkillRow(
+        sidekick_name="Tetra", name="Restorative Ray", skill_kind="auto",
+        description="Heals all allies by 30% for 3 turns.",
+    )
+    aura = SidekickAuraRow(
+        sidekick_name="Tetra", name="Evening Recovery",
+        activation_condition="At turn end", effect_text="Restore party MP.",
+    )
+
+    skill_proposal = propose(skill.model_dump())[0]
+    aura_proposal = propose(aura.model_dump())[0]
+    expected = hashlib.sha256(
+        f"sidekick_skill|{skill.sidekick_skill_id}|{skill_proposal['rule_id']}".encode()
+    ).hexdigest()[:24]
+
+    assert skill.sidekick_skill_id.startswith("sidekick_skill:")
+    assert aura.sidekick_aura_id.startswith("sidekick_aura:")
+    assert skill_proposal["proposal_id"] == expected
+    assert skill_proposal["proposed_availability"] == "main_only"
+    assert skill_proposal["proposed_magnitude_value"] == "30"
+    assert skill_proposal["proposed_magnitude_unit"] == "percent"
+    assert skill_proposal["proposed_duration_turns"] == "3"
+    assert aura_proposal["proposed_availability"] == "main_or_sub"
+    assert aura_proposal["proposed_trigger"] == "turn_end"
+
+
+def test_legacy_taxonomy_version_proposal_id_remains_reviewed(tmp_path):
+    proposal = propose(fact())[0]
+    legacy = {**proposal, "proposal_id": "legacy-version-bound-id", "decision": "approve"}
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews, [legacy])
+
+    capabilities, _, evidence, _, diagnostics_count = materialize_atomic(fact(), reviews)
+
+    assert capabilities == ["heal_hp"]
+    assert evidence[0]["source_fact_id"] == fact()["skill_id"]
+    assert diagnostics_count["reviewed"] == 1
+
+
+def test_review_import_validates_sidekick_placement_and_qualifier_corrections(tmp_path):
+    records = [
+        SidekickSkillRow(
+            sidekick_name=f"Sidekick {index}", name="Heal", skill_kind="auto",
+            description="Heals all allies by 20% for 2 turns.",
+        ).model_dump()
+        for index in range(BATCH_SIZE)
+    ]
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews)
+    batch = tmp_path / "sidekick.csv"
+    generate_review_batch(records, phase="defensive_setup", batch_number=1, seed=3, output=batch, reviews_path=reviews)
+
+    def complete(rows):
+        for row in rows:
+            row.update(
+                decision="correct", corrected_kind="capability", corrected_value="heal_hp",
+                corrected_direction="ally", corrected_target="frontline",
+                corrected_availability="main_only", corrected_magnitude_value="25",
+                corrected_magnitude_unit="percent", corrected_activation_count="2",
+                corrected_duration_turns="3", corrected_trigger="turn_end", reviewer="alice",
+            )
+
+    review_csv(batch, complete)
+    artifact = import_review_batch(batch, records, reviews_path=reviews)
+    assert len(artifact["decisions"]) == BATCH_SIZE
+
+    review_csv(batch, lambda rows: rows[0].update(corrected_availability="reserve_only"))
+    with pytest.raises(ValueError, match="Invalid corrected availability"):
+        import_review_batch(batch, records, reviews_path=reviews)
+
+
+@pytest.mark.asyncio
+async def test_sidekick_loader_and_drift_gate_cover_atomic_contract():
+    sidekick = SidekickRow(
+        name="Tetra", source_url="https://example.test/tetra",
+        auto_skills=[SidekickSkillRow(
+            sidekick_name="Tetra", name="Heal", skill_kind="auto", description="Heals all allies",
+        )],
+        auras=[SidekickAuraRow(
+            sidekick_name="Tetra", name="Aura", effect_text="Restore MP at turn end",
+        )],
+    )
+    driver = Driver()
+    await load_sidekicks(driver, [sidekick])
+
+    sidekick_query, _ = driver.session_instance.calls[0]
+    skill_query, skill_params = driver.session_instance.calls[1]
+    aura_query, aura_params = driver.session_instance.calls[2]
+    assert "s.role_tags = row.role_tags" not in sidekick_query
+    assert "skill.sidekick_skill_id = row.sidekick_skill_id" in skill_query
+    assert "aura.sidekick_aura_id = row.sidekick_aura_id" in aura_query
+    assert skill_params["rows"][0]["capability_artifact_version"]
+    assert aura_params["rows"][0]["capability_diagnostics_json"]
+
+    rows = []
+    for record_id, row in (
+        (sidekick.auto_skills[0].sidekick_skill_id, sidekick.auto_skills[0]),
+        (sidekick.auras[0].sidekick_aura_id, sidekick.auras[0]),
+    ):
+        rows.append({
+            "id": record_id, "capabilities": row.capabilities, "dependencies": row.dependencies,
+            "evidence": row.capability_evidence_json, "version": row.capability_artifact_version,
+            "diagnostics": row.capability_diagnostics_json, "schema_version": row.schema_version,
+        })
+    await assert_capability_materialization(Driver(rows), [], [], [sidekick])

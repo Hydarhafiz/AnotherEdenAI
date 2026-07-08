@@ -252,7 +252,23 @@ class SidekickSkillRow(BaseModel):
     description: str = ""
     source_url: str | None = None
     section: str | None = None
+    sidekick_skill_id: str = ""
+    capabilities: list[str] = Field(default_factory=list)
+    dependencies: list[str] = Field(default_factory=list)
+    capability_evidence_json: str = "[]"
+    capability_artifact_version: str = ""
+    capability_diagnostics_json: str = "{}"
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    def model_post_init(self, __context) -> None:
+        if not self.sidekick_skill_id:
+            object.__setattr__(self, "sidekick_skill_id", _stable_id("sidekick_skill", self.sidekick_name, self.skill_kind, self.name))
+        capabilities, dependencies, evidence, version, diagnostics = materialize_atomic(self.model_dump())
+        object.__setattr__(self, "capabilities", capabilities)
+        object.__setattr__(self, "dependencies", dependencies)
+        object.__setattr__(self, "capability_evidence_json", _canonical(evidence))
+        object.__setattr__(self, "capability_artifact_version", version)
+        object.__setattr__(self, "capability_diagnostics_json", _canonical(diagnostics))
 
     @field_validator("skill_kind")
     @classmethod
@@ -281,7 +297,23 @@ class SidekickAuraRow(BaseModel):
     effect_text: str = ""
     source_url: str | None = None
     section: str | None = None
+    sidekick_aura_id: str = ""
+    capabilities: list[str] = Field(default_factory=list)
+    dependencies: list[str] = Field(default_factory=list)
+    capability_evidence_json: str = "[]"
+    capability_artifact_version: str = ""
+    capability_diagnostics_json: str = "{}"
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
+
+    def model_post_init(self, __context) -> None:
+        if not self.sidekick_aura_id:
+            object.__setattr__(self, "sidekick_aura_id", _stable_id("sidekick_aura", self.sidekick_name, self.name))
+        capabilities, dependencies, evidence, version, diagnostics = materialize_atomic(self.model_dump())
+        object.__setattr__(self, "capabilities", capabilities)
+        object.__setattr__(self, "dependencies", dependencies)
+        object.__setattr__(self, "capability_evidence_json", _canonical(evidence))
+        object.__setattr__(self, "capability_artifact_version", version)
+        object.__setattr__(self, "capability_diagnostics_json", _canonical(diagnostics))
 
 
 class SidekickRow(BaseModel):
@@ -291,7 +323,6 @@ class SidekickRow(BaseModel):
     source_url: str
     acquisition_text: str | None = None
     rarity: str | None = None
-    role_tags: list[str] = Field(default_factory=list)
     main_slot_behavior: str = "Main sidekick can use auto skills, charge skills, and aura effects."
     sub_slot_behavior: str = "Sub sidekick contributes aura-only effects."
     associated_character_names: list[str] = Field(default_factory=list)
@@ -301,7 +332,7 @@ class SidekickRow(BaseModel):
     auras: list[SidekickAuraRow] = Field(default_factory=list)
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
 
-    @field_validator("role_tags", "associated_character_names", mode="before")
+    @field_validator("associated_character_names", mode="before")
     @classmethod
     def parse_string_list(cls, v):
         if isinstance(v, str):

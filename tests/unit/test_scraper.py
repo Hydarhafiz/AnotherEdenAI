@@ -498,7 +498,7 @@ def test_parse_sidekick_index_discovers_only_sidekick_rows():
     assert [row.name for row in rows] == ["Tetra (Another Style)"]
     assert rows[0].source_url == "https://anothereden.wiki/w/Tetra_(Another_Style)"
     assert rows[0].rarity == "AS"
-    assert rows[0].role_tags == ["SR_Bud_Healer_NATK", "SR_Aura_Bud_NATK"]
+    assert "role_tags" not in type(rows[0]).model_fields
     assert rows[0].schema_version
 
 

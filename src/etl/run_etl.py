@@ -80,8 +80,8 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         passive_skills = [passive for character in characters for passive in character.passive_skills]
         await load_skills(driver, skills)
         await load_passive_skills(driver, passive_skills)
-        await assert_capability_materialization(driver, skills, passive_skills)
         await load_sidekicks(driver, sidekicks)
+        await assert_capability_materialization(driver, skills, passive_skills, sidekicks)
         overlap_report = await cleanup_duplicate_sidekick_characters(driver)
         overlap_names = [row["name"] for row in overlap_report]
         cleanup_names = [row["name"] for row in overlap_report if row["cleanup_candidate"]]

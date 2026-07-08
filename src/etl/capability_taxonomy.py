@@ -21,12 +21,19 @@ PHASES = {"defensive_setup", "offensive_support", "dependencies_conditions"}
 IMMUTABLE_COLUMNS = (
     "proposal_id", "record_type", "source_fact_id", "character_name", "fact_name",
     "source_text", "source_url", "rule_id", "proposed_kind", "proposed_value",
-    "proposed_direction", "proposed_target", "matched_phrase", "artifact_version",
+    "proposed_direction", "proposed_target", "proposed_availability",
+    "proposed_magnitude_value", "proposed_magnitude_unit",
+    "proposed_activation_count", "proposed_duration_turns", "proposed_trigger",
+    "matched_phrase", "artifact_version",
 )
 REVIEW_COLUMNS = (
     "decision", "corrected_kind", "corrected_value", "corrected_direction",
-    "corrected_target", "reviewer", "reviewer_notes",
+    "corrected_target", "corrected_availability", "corrected_magnitude_value",
+    "corrected_magnitude_unit", "corrected_activation_count",
+    "corrected_duration_turns", "corrected_trigger", "reviewer", "reviewer_notes",
 )
+
+RECORD_TYPES = {"skill", "passive", "sidekick_skill", "sidekick_aura"}
 
 
 def _canonical(value: Any) -> str:
@@ -36,10 +43,18 @@ def _canonical(value: Any) -> str:
 @lru_cache(maxsize=1)
 def load_capability_taxonomy() -> dict[str, Any]:
     artifact = json.loads(TAXONOMY_PATH.read_text(encoding="utf-8"))
-    required = ("artifact_version", "capabilities", "dependencies", "directions", "targets", "review_states")
+    required = (
+        "artifact_version", "review_schema_version", "capabilities", "dependencies",
+        "directions", "targets", "availability", "magnitude_units", "triggers",
+        "review_states",
+    )
     if any(not artifact.get(key) for key in required):
         raise ValueError("Capability taxonomy is missing required vocabulary or version fields")
-    for key in required[1:]:
+    vocabulary_keys = (
+        "capabilities", "dependencies", "directions", "targets", "availability",
+        "magnitude_units", "triggers", "review_states",
+    )
+    for key in vocabulary_keys:
         if len(artifact[key]) != len(set(artifact[key])):
             raise ValueError(f"Capability taxonomy has duplicate {key}")
     ids: set[str] = set()
@@ -49,7 +64,7 @@ def load_capability_taxonomy() -> dict[str, Any]:
             not rule.get("id") or rule["id"] in ids or rule.get("phase") not in PHASES
             or rule.get("kind") not in vocab or rule.get("value") not in vocab.get(rule.get("kind"), set())
             or rule.get("direction") not in artifact["directions"] or rule.get("target") not in artifact["targets"]
-            or not set(rule.get("record_types", ())).issubset({"skill", "passive"})
+            or not set(rule.get("record_types", ())).issubset(RECORD_TYPES)
             or not rule.get("record_types") or not rule.get("pattern")
         ):
             raise ValueError(f"Invalid atomic capability rule: {rule!r}")
@@ -62,7 +77,7 @@ def load_capability_taxonomy() -> dict[str, Any]:
         vocabulary = {"capability": artifact["capabilities"], "dependency": artifact["dependencies"]}
         if (
             not override.get("id") or override["id"] in ids or not override.get("record_id")
-            or override.get("record_type") not in {"skill", "passive"} or kind not in vocabulary
+            or override.get("record_type") not in RECORD_TYPES or kind not in vocabulary
             or override.get("value") not in vocabulary.get(kind, [])
             or override.get("direction") not in artifact["directions"]
             or override.get("target") not in artifact["targets"]
@@ -96,27 +111,56 @@ def load_gold_fixtures(path: Path = GOLD_PATH) -> dict[str, Any]:
 
 
 def _source(record: dict[str, Any]) -> tuple[str, str]:
-    source_id = str(record.get("skill_id") or record.get("passive_skill_id") or "")
-    record_type = "skill" if record.get("skill_id") else "passive"
+    candidates = (
+        ("skill", record.get("skill_id")),
+        ("passive", record.get("passive_skill_id")),
+        ("sidekick_skill", record.get("sidekick_skill_id")),
+        ("sidekick_aura", record.get("sidekick_aura_id")),
+    )
+    record_type, raw_id = next(((kind, value) for kind, value in candidates if value), ("", ""))
+    source_id = str(raw_id or "")
     if not source_id:
-        raise ValueError("Atomic capability records require a stable skill/passive ID")
+        raise ValueError("Atomic capability records require a stable source fact ID")
     return record_type, source_id
+
+
+def _rule_record_type(record_type: str) -> str:
+    """Let sidekick facts reuse objective rules without losing their own identity."""
+    return {"sidekick_skill": "skill", "sidekick_aura": "passive"}.get(record_type, record_type)
+
+
+def _qualifiers(text: str, taxonomy: dict[str, Any]) -> dict[str, str]:
+    percent = re.search(r"(?<!\w)(\d+(?:\.\d+)?)\s*%", text)
+    turns = re.search(r"\bfor\s+(\d+)\s+turns?\b", text, re.IGNORECASE)
+    activations = re.search(r"\b(\d+)\s+(?:times?|activations?|uses?)\b", text, re.IGNORECASE)
+    trigger = next((value for value in taxonomy["triggers"] if value != "none" and re.search(rf"\b{re.escape(value.replace('_', ' '))}\b", text, re.IGNORECASE)), "none")
+    return {
+        "proposed_magnitude_value": percent.group(1) if percent else "",
+        "proposed_magnitude_unit": "percent" if percent else "",
+        "proposed_activation_count": activations.group(1) if activations else "",
+        "proposed_duration_turns": turns.group(1) if turns else "",
+        "proposed_trigger": trigger,
+    }
 
 
 def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[str, str]]:
     taxonomy = load_capability_taxonomy()
     record_type, source_id = _source(record)
-    source_text = " ".join(str(record.get(field) or "") for field in ("name", "description", "skill_type", "passive_type", "section"))
+    source_text = " ".join(str(record.get(field) or "") for field in (
+        "name", "description", "effect_text", "activation_condition", "skill_type",
+        "passive_type", "section",
+    ))
     proposals: list[dict[str, str]] = []
     for rule in taxonomy["rules"]:
         if phase and rule["phase"] != phase:
             continue
-        if record_type not in rule["record_types"]:
+        if record_type not in rule["record_types"] and _rule_record_type(record_type) not in rule["record_types"]:
             continue
         match = re.search(rule["pattern"], source_text, re.IGNORECASE)
         if not match or any(re.search(p, source_text, re.IGNORECASE) for p in rule.get("negative_patterns", [])):
             continue
-        identity = f"{taxonomy['artifact_version']}|{source_id}|{rule['id']}"
+        identity = f"{record_type}|{source_id}|{rule['id']}"
+        availability = "main_only" if record_type == "sidekick_skill" else "main_or_sub" if record_type == "sidekick_aura" else "not_applicable"
         proposals.append({
             "proposal_id": hashlib.sha256(identity.encode()).hexdigest()[:24],
             "record_type": record_type, "source_fact_id": source_id,
@@ -125,13 +169,15 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
             "source_url": str(record.get("source_url") or ""), "rule_id": rule["id"],
             "phase": rule["phase"], "proposed_kind": rule["kind"], "proposed_value": rule["value"],
             "proposed_direction": rule["direction"], "proposed_target": rule["target"],
+            "proposed_availability": availability, **_qualifiers(source_text, taxonomy),
             "matched_phrase": match.group(0), "artifact_version": taxonomy["artifact_version"],
             "proposal_origin": "rule",
         })
     for override in taxonomy.get("overrides", []):
         if override["record_type"] != record_type or override["record_id"] != source_id or (phase and override["phase"] != phase):
             continue
-        identity = f"{taxonomy['artifact_version']}|{source_id}|{override['id']}"
+        identity = f"{record_type}|{source_id}|{override['id']}"
+        availability = "main_only" if record_type == "sidekick_skill" else "main_or_sub" if record_type == "sidekick_aura" else "not_applicable"
         proposals.append({
             "proposal_id": hashlib.sha256(identity.encode()).hexdigest()[:24],
             "record_type": record_type, "source_fact_id": source_id,
@@ -140,6 +186,8 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
             "source_url": str(record.get("source_url") or ""), "rule_id": override["id"],
             "phase": override["phase"], "proposed_kind": override["kind"], "proposed_value": override["value"],
             "proposed_direction": override["direction"], "proposed_target": override["target"],
+            "proposed_availability": override.get("availability", availability),
+            **_qualifiers(source_text, taxonomy),
             "matched_phrase": str(override.get("matched_phrase") or source_text).strip(),
             "artifact_version": taxonomy["artifact_version"], "proposal_origin": "override",
         })
@@ -148,12 +196,14 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
 
 def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH) -> tuple[list[str], list[str], list[dict[str, str]], str, dict[str, int]]:
     taxonomy = load_capability_taxonomy()
-    decisions = {row["proposal_id"]: row for row in load_reviews(reviews_path)["decisions"]}
+    review_rows = load_reviews(reviews_path)["decisions"]
+    decisions = {row["proposal_id"]: row for row in review_rows}
+    legacy_decisions = {(row.get("record_type"), row.get("source_fact_id"), row.get("rule_id")): row for row in review_rows}
     all_proposals = propose(record)
     states = Counter()
     evidence: list[dict[str, str]] = []
     for proposal in all_proposals:
-        decision = decisions.get(proposal["proposal_id"])
+        decision = decisions.get(proposal["proposal_id"]) or legacy_decisions.get((proposal["record_type"], proposal["source_fact_id"], proposal["rule_id"]))
         state = decision.get("decision") if decision else "candidate"
         states["proposed"] += 1
         states["reviewed"] += int(decision is not None)
@@ -164,13 +214,22 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
         value = decision.get("corrected_value") if state == "correct" else proposal["proposed_value"]
         direction = decision.get("corrected_direction") if state == "correct" else proposal["proposed_direction"]
         target = decision.get("corrected_target") if state == "correct" else proposal["proposed_target"]
+        def reviewed(field: str) -> str:
+            corrected = decision.get(f"corrected_{field}") if state == "correct" else None
+            return str(corrected if corrected not in (None, "") else proposal.get(f"proposed_{field}", ""))
         evidence.append({
             "kind": kind, "value": value, "direction": direction, "target": target,
+            "availability": reviewed("availability"),
+            "magnitude_value": reviewed("magnitude_value"),
+            "magnitude_unit": reviewed("magnitude_unit"),
+            "activation_count": reviewed("activation_count"),
+            "duration_turns": reviewed("duration_turns"), "trigger": reviewed("trigger"),
             "matched_phrase": proposal["matched_phrase"], "source": f"reviewed_{proposal.get('proposal_origin', 'rule')}",
             "source_id": proposal["rule_id"], "source_fact_id": proposal["source_fact_id"],
             "review_decision": state, "reviewer": str(decision.get("reviewer") or ""),
             "reviewer_notes": str(decision.get("reviewer_notes") or ""),
             "artifact_version": taxonomy["artifact_version"],
+            "review_artifact_version": load_reviews(reviews_path)["artifact_version"],
         })
     evidence.sort(key=lambda row: (row["kind"], row["value"], row["source_id"]))
     capabilities = sorted({row["value"] for row in evidence if row["kind"] == "capability"})
@@ -189,13 +248,28 @@ def _iter_records(paths: Iterable[Path]) -> Iterable[dict[str, Any]]:
         for row in payload.get("passive_rows", []):
             if row.get("passive_skill_id"):
                 yield row
+        for sidekick in payload.get("rows", []):
+            for row in (*sidekick.get("auto_skills", []), *sidekick.get("charge_skills", [])):
+                if row.get("sidekick_skill_id"):
+                    yield row
+            for row in sidekick.get("auras", []):
+                if row.get("sidekick_aura_id"):
+                    yield row
 
 
 def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batch_number: int, seed: int, output: Path, reviews_path: Path = REVIEWS_PATH) -> list[dict[str, str]]:
     if phase not in PHASES or batch_number < 1:
         raise ValueError("A valid phase and positive batch number are required")
-    reviewed = {row["proposal_id"] for row in load_reviews(reviews_path)["decisions"]}
-    unique = {row["proposal_id"]: row for record in records for row in propose(record, phase=phase) if row["proposal_id"] not in reviewed}
+    review_rows = load_reviews(reviews_path)["decisions"]
+    reviewed = {row["proposal_id"] for row in review_rows}
+    reviewed_semantics = {(row.get("record_type"), row.get("source_fact_id"), row.get("rule_id")) for row in review_rows}
+    unique = {
+        row["proposal_id"]: row
+        for record in records
+        for row in propose(record, phase=phase)
+        if row["proposal_id"] not in reviewed
+        and (row["record_type"], row["source_fact_id"], row["rule_id"]) not in reviewed_semantics
+    }
     buckets: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in unique.values():
         buckets[row["proposed_value"]].append(row)
@@ -227,11 +301,13 @@ def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batc
             "kind": ["capability", "dependency"],
             "capability": taxonomy["capabilities"], "dependency": taxonomy["dependencies"],
             "direction": taxonomy["directions"], "target": taxonomy["targets"],
+            "availability": taxonomy["availability"],
+            "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"],
         },
         "field_guidance": {
             "approve": "Accept the proposed atomic fact and its direction/target semantics.",
             "reject": "The source text does not prove the proposed atomic fact.",
-            "correct": "Supply all four corrected kind/value/direction/target fields.",
+            "correct": "Supply corrected kind/value/direction/target and any changed placement or qualifier fields.",
             "ambiguous": "Evidence is insufficient; this remains non-authoritative.",
             "immutable": list(IMMUTABLE_COLUMNS),
             "source_url": "Consult the linked source only when captured source_text is unclear."
@@ -273,7 +349,16 @@ def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, re
                 raise ValueError(f"Malformed correction for {row['proposal_id']}")
             if row.get("corrected_direction") not in taxonomy["directions"] or row.get("corrected_target") not in taxonomy["targets"]:
                 raise ValueError(f"Invalid correction semantics for {row['proposal_id']}")
-        elif any(row.get(key, "").strip() for key in ("corrected_kind", "corrected_value", "corrected_direction", "corrected_target")):
+            if row.get("corrected_availability") and row["corrected_availability"] not in taxonomy["availability"]:
+                raise ValueError(f"Invalid corrected availability for {row['proposal_id']}")
+            if row.get("corrected_magnitude_unit") and row["corrected_magnitude_unit"] not in taxonomy["magnitude_units"]:
+                raise ValueError(f"Invalid corrected magnitude unit for {row['proposal_id']}")
+            if row.get("corrected_trigger") and row["corrected_trigger"] not in taxonomy["triggers"]:
+                raise ValueError(f"Invalid corrected trigger for {row['proposal_id']}")
+            for field in ("corrected_magnitude_value", "corrected_activation_count", "corrected_duration_turns"):
+                if row.get(field) and not re.fullmatch(r"\d+(?:\.\d+)?", row[field]):
+                    raise ValueError(f"Invalid numeric qualifier for {row['proposal_id']}")
+        elif any(row.get(key, "").strip() for key in REVIEW_COLUMNS if key.startswith("corrected_")):
             raise ValueError(f"Correction fields require decision=correct for {row['proposal_id']}")
     artifact = load_reviews(reviews_path)
     existing = {row["proposal_id"]: row for row in artifact["decisions"]}
@@ -300,13 +385,16 @@ def diagnostics(records: Iterable[dict[str, Any]], reviews_path: Path = REVIEWS_
     return {"totals": dict(sorted(totals.items())), "per_value": {key: dict(sorted(value.items())) for key, value in sorted(per_value.items())}}
 
 
-async def assert_capability_materialization(driver, skills: list[Any], passives: list[Any]) -> None:
+async def assert_capability_materialization(driver, skills: list[Any], passives: list[Any], sidekicks: list[Any] | None = None) -> None:
     expected = {row.skill_id: (row.capabilities, row.dependencies, row.capability_evidence_json, row.capability_artifact_version, row.capability_diagnostics_json, row.schema_version) for row in skills}
     expected.update({row.passive_skill_id: (row.capabilities, row.dependencies, row.capability_evidence_json, row.capability_artifact_version, row.capability_diagnostics_json, row.schema_version) for row in passives})
+    for sidekick in sidekicks or []:
+        expected.update({row.sidekick_skill_id: (row.capabilities, row.dependencies, row.capability_evidence_json, row.capability_artifact_version, row.capability_diagnostics_json, row.schema_version) for row in [*sidekick.auto_skills, *sidekick.charge_skills]})
+        expected.update({row.sidekick_aura_id: (row.capabilities, row.dependencies, row.capability_evidence_json, row.capability_artifact_version, row.capability_diagnostics_json, row.schema_version) for row in sidekick.auras})
     if not expected:
         return
-    query = """MATCH (n) WHERE (n:Skill OR n:PassiveSkill) AND coalesce(n.skill_id,n.passive_skill_id) IN $ids
-RETURN coalesce(n.skill_id,n.passive_skill_id) AS id, n.capabilities AS capabilities,
+    query = """MATCH (n) WHERE (n:Skill OR n:PassiveSkill OR n:SidekickSkill OR n:SidekickAura) AND coalesce(n.skill_id,n.passive_skill_id,n.sidekick_skill_id,n.sidekick_aura_id) IN $ids
+RETURN coalesce(n.skill_id,n.passive_skill_id,n.sidekick_skill_id,n.sidekick_aura_id) AS id, n.capabilities AS capabilities,
 n.dependencies AS dependencies, n.capability_evidence_json AS evidence,
 n.capability_artifact_version AS version, n.capability_diagnostics_json AS diagnostics,
 n.schema_version AS schema_version"""

@@ -1,5 +1,5 @@
 # Graph Schema Contract
-**SCHEMA_VERSION: 1.4.0**
+**SCHEMA_VERSION: 1.5.0**
 **Status:** Stable — do not modify without incrementing SCHEMA_VERSION and running ETL
 
 ## Node Labels and Properties
@@ -107,7 +107,6 @@ Uniqueness: `passive_skill_id` and `(character_name, name)`.
 - `source_url` (STRING) — canonical wiki detail page URL
 - `acquisition_text` (STRING, nullable) — wiki encounter/acquisition text when available
 - `rarity` (STRING, nullable) — sidekick rank such as `3★`, `4★`, `5★`, or style marker when available
-- `role_tags` (LIST<STRING>) — raw index role tags when available
 - `main_slot_behavior` (STRING) — main sidekick can use auto skills, charge skills, and aura effects
 - `sub_slot_behavior` (STRING) — sub sidekick contributes aura-only effects
 - `diagnostics_text` (STRING, nullable) — irregular parsed sidekick sections preserved for review
@@ -130,6 +129,7 @@ Query-time ownership contract:
 - Recommendation retrieval and output may use only selected owned sidekicks. An empty selection keeps main/sub sidekick slots empty and must be represented as a risk or assumption rather than inferred ownership.
 
 ### SidekickSkill
+- `sidekick_skill_id` (STRING, stable candidate identity) — derived from sidekick owner, skill kind, and skill name
 - `sidekick_name` (STRING) — owning Sidekick name
 - `name` (STRING) — skill display name
 - `skill_kind` (STRING) — `auto` or `charge`
@@ -139,20 +139,23 @@ Query-time ownership contract:
 - `description` (STRING) — source-grounded skill text
 - `source_url` (STRING, nullable) — source sidekick detail page
 - `section` (STRING, nullable) — source page section
+- `capabilities`, `dependencies`, `capability_evidence_json`, `capability_artifact_version`, `capability_diagnostics_json` — reviewed atomic materialization using the same authority and drift contract as character facts; placement availability is `main_only`
 - `schema_version` (STRING) — ETL schema version used for this row
 
-Uniqueness: `(sidekick_name, name, skill_kind)`.
+Uniqueness: `sidekick_skill_id` and `(sidekick_name, name, skill_kind)`.
 
 ### SidekickAura
+- `sidekick_aura_id` (STRING, stable candidate identity) — derived from sidekick owner and aura name
 - `sidekick_name` (STRING) — owning Sidekick name
 - `name` (STRING) — aura display name
 - `activation_condition` (STRING, nullable) — best-effort parsed activation condition
 - `effect_text` (STRING) — source-grounded aura effect text
 - `source_url` (STRING, nullable) — source sidekick detail page
 - `section` (STRING, nullable) — source page section
+- `capabilities`, `dependencies`, `capability_evidence_json`, `capability_artifact_version`, `capability_diagnostics_json` — reviewed atomic materialization using the same authority and drift contract as character facts; placement availability is `main_or_sub`
 - `schema_version` (STRING) — ETL schema version used for this row
 
-Uniqueness: `(sidekick_name, name)`.
+Uniqueness: `sidekick_aura_id` and `(sidekick_name, name)`.
 
 ### Superboss
 - `name` (STRING, unique) — canonical curated superboss name
@@ -237,8 +240,8 @@ After ETL, `python assert_schema.py` must exit 0.
 
 The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - stable, unique `character_id`, `skill_id`, `passive_skill_id`, and `grasta_id` values
-- Skill and PassiveSkill atomic capabilities, dependencies, canonical evidence, diagnostics, artifact versions, and schema versions match deterministic materialization from the repository taxonomy and review artifacts
-- retired Skill and PassiveSkill `role_tags`, `role_evidence_json`, and `role_taxonomy_version` properties are absent
+- Skill, PassiveSkill, SidekickSkill, and SidekickAura atomic capabilities, dependencies, canonical evidence, diagnostics, artifact versions, and schema versions match deterministic materialization from the repository taxonomy and review artifacts
+- retired broad-role properties are absent from Skill, PassiveSkill, Sidekick, SidekickSkill, and SidekickAura nodes
 - schema 1.2 identity freshness and visible missing character, skill, passive, boss, mechanics, and item coverage
 - minimum loaded counts for `Skill`, `PassiveSkill`, `Sidekick`, `SidekickSkill`, `SidekickAura`, `Superboss`, and `Equipment`
 - minimum loaded count for `MechanicReference`

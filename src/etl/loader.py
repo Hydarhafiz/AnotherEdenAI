@@ -365,12 +365,12 @@ MERGE (c)-[:HAS_SKILL]->(s)
 async def remove_stale_role_materialization(driver) -> None:
     """Remove the retired broad-role authority from every combat fact node."""
     cypher = """
-MATCH (n) WHERE n:Skill OR n:PassiveSkill
+MATCH (n) WHERE n:Skill OR n:PassiveSkill OR n:Sidekick OR n:SidekickSkill OR n:SidekickAura
 REMOVE n.role_tags, n.role_evidence_json, n.role_taxonomy_version
 """
     async with driver.session() as session:
         await session.run(cypher)
-    logger.info("Removed stale broad-role properties from Skill and PassiveSkill nodes")
+    logger.info("Removed stale broad-role properties from all combat fact nodes")
 
 
 async def load_passive_skills(driver, rows: list[PassiveSkillRow]) -> None:
@@ -435,7 +435,6 @@ async def load_sidekicks(driver, rows: list[SidekickRow]) -> None:
             "source_url": r.source_url,
             "acquisition_text": r.acquisition_text,
             "rarity": r.rarity,
-            "role_tags": r.role_tags,
             "main_slot_behavior": r.main_slot_behavior,
             "sub_slot_behavior": r.sub_slot_behavior,
             "diagnostics_text": r.diagnostics_text,
@@ -447,6 +446,7 @@ async def load_sidekicks(driver, rows: list[SidekickRow]) -> None:
     skill_data = [
         {
             "sidekick_name": r.name,
+            "sidekick_skill_id": skill.sidekick_skill_id,
             "name": skill.name,
             "skill_kind": skill.skill_kind,
             "element": skill.element,
@@ -456,6 +456,11 @@ async def load_sidekicks(driver, rows: list[SidekickRow]) -> None:
             "source_url": skill.source_url,
             "section": skill.section,
             "schema_version": skill.schema_version,
+            "capabilities": skill.capabilities,
+            "dependencies": skill.dependencies,
+            "capability_evidence_json": skill.capability_evidence_json,
+            "capability_artifact_version": skill.capability_artifact_version,
+            "capability_diagnostics_json": skill.capability_diagnostics_json,
         }
         for r in rows
         for skill in [*r.auto_skills, *r.charge_skills]
@@ -463,12 +468,18 @@ async def load_sidekicks(driver, rows: list[SidekickRow]) -> None:
     aura_data = [
         {
             "sidekick_name": r.name,
+            "sidekick_aura_id": aura.sidekick_aura_id,
             "name": aura.name,
             "activation_condition": aura.activation_condition,
             "effect_text": aura.effect_text,
             "source_url": aura.source_url,
             "section": aura.section,
             "schema_version": aura.schema_version,
+            "capabilities": aura.capabilities,
+            "dependencies": aura.dependencies,
+            "capability_evidence_json": aura.capability_evidence_json,
+            "capability_artifact_version": aura.capability_artifact_version,
+            "capability_diagnostics_json": aura.capability_diagnostics_json,
         }
         for r in rows
         for aura in r.auras
@@ -480,11 +491,11 @@ MERGE (s:Sidekick {name: row.name})
 SET s.source_url = row.source_url,
     s.acquisition_text = row.acquisition_text,
     s.rarity = row.rarity,
-    s.role_tags = row.role_tags,
     s.main_slot_behavior = row.main_slot_behavior,
     s.sub_slot_behavior = row.sub_slot_behavior,
     s.diagnostics_text = row.diagnostics_text,
     s.schema_version = row.schema_version
+REMOVE s.role_tags, s.role_evidence_json, s.role_taxonomy_version
 WITH row, s
 UNWIND row.associated_character_names AS character_name
 MATCH (c:Character {name: character_name})
@@ -494,13 +505,20 @@ MERGE (c)-[:UNLOCKS_SIDEKICK]->(s)
 UNWIND $rows AS row
 MATCH (sidekick:Sidekick {name: row.sidekick_name})
 MERGE (skill:SidekickSkill {sidekick_name: row.sidekick_name, name: row.name, skill_kind: row.skill_kind})
-SET skill.element = row.element,
+SET skill.sidekick_skill_id = row.sidekick_skill_id,
+    skill.element = row.element,
     skill.skill_type = row.skill_type,
     skill.charge_cost = row.charge_cost,
     skill.description = row.description,
     skill.source_url = row.source_url,
     skill.section = row.section,
-    skill.schema_version = row.schema_version
+    skill.schema_version = row.schema_version,
+    skill.capabilities = row.capabilities,
+    skill.dependencies = row.dependencies,
+    skill.capability_evidence_json = row.capability_evidence_json,
+    skill.capability_artifact_version = row.capability_artifact_version,
+    skill.capability_diagnostics_json = row.capability_diagnostics_json
+REMOVE skill.role_tags, skill.role_evidence_json, skill.role_taxonomy_version
 WITH sidekick, skill, row
 FOREACH (_ IN CASE WHEN row.skill_kind = 'auto' THEN [1] ELSE [] END |
     MERGE (sidekick)-[:HAS_AUTO_SKILL]->(skill)
@@ -513,11 +531,18 @@ FOREACH (_ IN CASE WHEN row.skill_kind = 'charge' THEN [1] ELSE [] END |
 UNWIND $rows AS row
 MATCH (sidekick:Sidekick {name: row.sidekick_name})
 MERGE (aura:SidekickAura {sidekick_name: row.sidekick_name, name: row.name})
-SET aura.activation_condition = row.activation_condition,
+SET aura.sidekick_aura_id = row.sidekick_aura_id,
+    aura.activation_condition = row.activation_condition,
     aura.effect_text = row.effect_text,
     aura.source_url = row.source_url,
     aura.section = row.section,
-    aura.schema_version = row.schema_version
+    aura.schema_version = row.schema_version,
+    aura.capabilities = row.capabilities,
+    aura.dependencies = row.dependencies,
+    aura.capability_evidence_json = row.capability_evidence_json,
+    aura.capability_artifact_version = row.capability_artifact_version,
+    aura.capability_diagnostics_json = row.capability_diagnostics_json
+REMOVE aura.role_tags, aura.role_evidence_json, aura.role_taxonomy_version
 MERGE (sidekick)-[:HAS_AURA]->(aura)
 """
     async with driver.session() as session:

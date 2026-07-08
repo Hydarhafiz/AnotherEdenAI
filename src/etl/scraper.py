@@ -273,7 +273,6 @@ def parse_sidekick_index(soup: BeautifulSoup) -> list[SidekickRow]:
                 f"https://anothereden.wiki/w/{quote(_wiki_page_title(name).replace(' ', '_'), safe='(),')}"
             ),
             "rarity": _clean_cell_text(tr.get("data-rarity", "")) or None,
-            "role_tags": tr.get("data-role_strict", ""),
         }
         try:
             rows.append(SidekickRow.model_validate(raw))
