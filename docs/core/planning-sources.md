@@ -300,6 +300,64 @@ This file stores source references used during planning discussions. It separate
   Relevance: Shows practical build examples combining elemental Grasta with Bull's Eye and enemy-count Ores.
   Caveats/open questions: Focused on auto-attack farming rather than superboss lineups; retain only as weak contextual evidence.
 
+#### Feature C2 Defensive Capability Expansion
+
+- Title: Status Effects
+  URL: https://www.anothereden.wiki/w/Status_Effects
+  Source type: user-provided community wiki mechanics reference
+  Date added: 2026-07-08
+  Related area: Milestone 5 Feature C2 mitigation, Shield, Barrier, healing/regen, status restoration, debuff removal, immunity, Hold Ground, Guard, Cover, dodge, Stalk, knockback, and revival vocabulary
+  Relevance: Grounds the proposed split between distinct defensive mechanics that may satisfy overlapping contextual mitigation, sustain, or tanking requirements.
+  Caveats/open questions: The page could not be retrieved through the available browsing path during this planning session. Exact mechanic wording and edge cases must therefore be verified from captured corpus text and human-reviewed fixtures before they become acceptance criteria.
+
+- Title: Tank Role
+  URL: https://anothereden.wiki/w/Tank_Role
+  Source type: user-provided community wiki role/reference page
+  Date added: 2026-07-08
+  Related area: Milestone 5 Feature C2 Rage/taunt, Cover, Guard, Hold Ground, dodge, Stalk, knockback immunity, and contextual tank-role derivation
+  Relevance: Provides candidate examples for expanding atomic tanking capabilities while keeping permanent character-role labels out of ETL.
+  Caveats/open questions: The page could not be retrieved through the available browsing path during this planning session. The page is a role-oriented index, so individual Skill/PassiveSkill source text remains authoritative for atomic proof and target semantics.
+
+- Title: Revival Role
+  URL: https://anothereden.wiki/w/Revival_Role
+  Source type: user-provided community wiki role/reference page
+  Date added: 2026-07-08
+  Related area: Milestone 5 Feature C2 ally revival, self revival, and sidekick revival coverage
+  Relevance: Identifies revival as a defensive recovery mechanic that can materially change lineup recovery but must remain distinct from prevention mechanics such as Hold Ground.
+  Caveats/open questions: The page could not be retrieved through the available browsing path during this planning session. Character Skill/PassiveSkill and SidekickSkill review coverage may require separate record-type support, which the current C1 tooling does not provide for sidekicks.
+
+- Title: Sacrificial Heart Stacking
+  URL: https://www.anothereden.wiki/w/Sacrificial_Heart_Stacking
+  Source type: user-provided community wiki character/mechanics reference
+  Date added: 2026-07-08
+  Related area: Milestone 5 Feature C2 self and adjacent-ally target scopes
+  Relevance: User identified it as evidence that effects may distinguish self, adjacent allies, and combined self-plus-adjacent targeting.
+  Caveats/open questions: The page could not be retrieved through the available browsing path; exact source text must be verified from parsed facts or human review before materialization.
+
+- Title: Guiding Vow Rite
+  URL: https://www.anothereden.wiki/w/Guiding_Vow_Rite
+  Source type: user-provided community wiki character/mechanics reference
+  Date added: 2026-07-08
+  Related area: Milestone 5 Feature C2 adjacent-ally target scopes
+  Relevance: User identified it as another targeted example for effects involving left/right adjacent allies.
+  Caveats/open questions: The page could not be retrieved through the available browsing path; exact source text must be verified from parsed facts or human review before materialization.
+
+- Title: Lady Vesper
+  URL: https://www.anothereden.wiki/w/Lady_Vesper
+  Source type: user-provided community wiki character reference
+  Date added: 2026-07-08
+  Related area: Milestone 5 Feature C2 self and adjacent-ally target scopes
+  Relevance: User identified this character page as containing effects whose target scope is self, adjacent allies, or both.
+  Caveats/open questions: The page could not be retrieved through the available browsing path; individual Skill/PassiveSkill text remains the atomic source of truth.
+
+- Title: Assemble
+  URL: https://www.anothereden.wiki/w/Assemble
+  Source type: user-provided community wiki skill/mechanics reference
+  Date added: 2026-07-08
+  Related area: Milestone 5 Features C2-C4 conditional target eligibility
+  Relevance: User identified it as evidence that an additional effect may apply only when an ally satisfies a condition such as weapon type.
+  Caveats/open questions: The page could not be retrieved through the available browsing path. Conditional target eligibility should be reviewed against captured source text and kept separate from basic target scope.
+
 #### Feature C Repository Failure Grounding
 
 - Title: Grasta row identity and loader merge audit
@@ -372,6 +430,22 @@ This file stores source references used during planning discussions. It separate
 
 #### Planning Decisions
 
+- Planning decision on 2026-07-08: Feature C2 will model distinct, source-provable defensive mechanics rather than ETL-level umbrella labels such as `mitigation`, `healing`, or permanent tank/healer roles. Feature D will deterministically derive contextual coverage and RoleScores from the proven atomic mechanics; the analyzer LLM may explain or rank supplied candidates but may not invent or independently certify mandatory defensive coverage.
+- Planning decision on 2026-07-08: Feature C2 will expand atomic capability review and materialization to `SidekickSkill` records so sidekick revive, healing, cleanse, and defensive support can participate in deterministic candidate coverage. This reopens the affected C1 record-type, stable-ID, evidence, diagnostics, graph-materialization, and drift contracts before C2 review resumes; the previously generated C2 batch 2 is superseded and must be regenerated after the vocabulary/tooling revision.
+- Planning decision on 2026-07-08: C2 will also review and materialize `SidekickAura` capabilities. Sidekick evidence will record `main_only` availability for auto/charge-skill effects and `main_or_sub` availability for aura effects, together with captured activation conditions; Feature D must respect this placement availability when deriving coverage and scoring sidekick value.
+- Planning decision on 2026-07-08: A single Skill, PassiveSkill, SidekickSkill, or SidekickAura may prove multiple distinct atomic facts when its source text independently supports each effect. Barrier and Shield are mutually distinct single capabilities rather than umbrella-plus-subtype duplicates: a Barrier proves `damage_reduction_barrier`, while a temporary HP pool proves `shield`; neither also emits generic `damage_reduction` merely because both reduce HP loss.
+- Planning decision on 2026-07-08: Retire the ambiguous `cleanse_status` capability. Use `remove_status_ailment` for removing ailments such as sleep, stun, confusion, betrayal, Poison, or Pain, and `remove_debuff` for removing reductions such as PWR/INT/SPD, defense, or resistance down. A source that explicitly performs both may prove both atomic facts.
+- Planning decision on 2026-07-08: Keep immediate HP restoration as `heal_hp` and add `regen_hp` for recurring end-of-turn HP restoration over a stated duration. Do not emit an umbrella `healing` fact. Timing, duration, activation, and other gating conditions remain evidence and dependency concerns rather than additional healing categories.
+- Planning decision on 2026-07-08: Model lethal-damage prevention as `hold_ground` and restoration after death as `revive`. Use one direction-aware and target-aware `revive` capability for self, single-ally, and party revival rather than separate capability names; preserve target cardinality in evidence because single-target and team revival have different contextual value. A Guard source also proves `hold_ground` only when its text explicitly grants that mechanic.
+- Planning decision on 2026-07-08: Keep `taunt`, `cover`, `guard`, `dodge`, `stalk`, and `knockback_immunity` as distinct C2 atomic capabilities. Taunt increases enemy targeting, Cover intercepts attacks for allies, Guard records the stronger named interception mechanic, dodge avoids incoming attacks, Stalk lowers user target priority, and knockback immunity prevents forced movement into reserve. Guard emits `hold_ground` as an additional fact only when the source explicitly proves it.
+- Planning decision on 2026-07-08: Split mitigation into `damage_reduction` for non-Barrier direct reduction, `damage_reduction_barrier` for hit-limited Barrier reduction, and `shield` for temporary HP depleted before normal HP. Resistance-up capabilities remain separate because they modify specific damage categories rather than representing these direct mitigation mechanisms.
+- Planning decision on 2026-07-08: Migrate C2 to a new taxonomy/review artifact version without discarding unaffected batch-1 decisions. Proposal identity must be stable across artifact-version changes and evidence must separately record the exact taxonomy version. Decisions whose semantics changed, including Barrier, cleanse, and healing splits, return through a targeted migration-review artifact outside the normal 45-new-proposal batch. The existing batch 2 is superseded and regenerated only after migration and regression gates pass.
+- Planning decision on 2026-07-08: Reset C2's clean-batch streak after the vocabulary/tooling migration. Migrated batch-1 decisions remain accumulated evidence but do not count as a clean batch under the expanded contract. After targeted migration review and regressions pass, C2 still requires two fresh consecutive fully reviewed 45-row batches with no new critical false-positive pattern.
+- Planning decision on 2026-07-08: Add optional structured evidence qualifiers `magnitude_value`, `magnitude_unit`, `activation_count`, `duration_turns`, and `trigger` for explicit source-backed parameters. Missing values remain unknown rather than zero or inferred. Capability presence determines atomic coverage; Feature D may use reviewed qualifiers for contextual RoleScores and provider ranking without claiming exact damage, healing, or survival simulation.
+- Planning decision on 2026-07-08: Replacement C2 review rows will prefill deterministically parsed qualifier proposals and provide constrained correction fields for reviewers. Explicit source values must be approved or corrected rather than silently omitted; genuinely absent values remain blank/unknown. Qualifier validation follows the same immutable-evidence and constrained-import discipline as capability, direction, and target review.
+- Planning decision on 2026-07-08: Replace vague ally target scopes with explicit reviewed values for `self`, `single_ally`, `frontline`, and `main_and_reserve`, while retaining applicable enemy, field, zone, and none targets. Whole-lineup effects that include reserve must not be conflated with frontline-only effects; target scope changes contextual coverage and ranking without requiring separate capability names.
+- Planning decision on 2026-07-08: Add distinct `self_and_adjacent_allies` and `adjacent_allies` target scopes for left/right formation effects. Conditional recipient requirements such as weapon, element, personality, status, or stack should not create target enum variants; they require separate reviewed eligibility/dependency evidence.
+
 - Planning decision on 2026-07-01: Rewrite and resequence Milestone 5 around deterministic candidate generation and cost control rather than create a new milestone. Preserve completed sidekick cleanup, treat identity/cardinality work as awaiting verification, and classify the current broad candidate implementation as a superseded prototype.
 - Planning decision on 2026-07-01: Production lineup recommendations use deterministic typed Neo4j retrieval and do not call PLAN, generated Cypher, or LLM retrieval validation. Dynamic GraphRAG remains a separate exploratory mode.
 - Planning decision on 2026-07-01: Backend owns hard rejection, contextual role and skill scoring, build packages, candidate generation, full-lineup scoring, validation, and cost gates. Analyzer owns ranking, bounded strategy refinement, supplied skill choice, and explanation.
@@ -418,6 +492,7 @@ This file stores source references used during planning discussions. It separate
 
 #### Research Gaps
 
+- Verify exact wording and edge cases from the user-provided Status Effects, Tank Role, Revival Role, Sacrificial Heart Stacking, Guiding Vow Rite, Lady Vesper, and Assemble pages through normal cached ETL artifacts or manual review because the live pages were not retrievable through the available planning browser. No acceptance criterion depends on unverified live-page wording.
 - Validate the frontline Pain/Poison and reserve Grasta-mule default with experienced Another Eden players during the planned beta; record counterexamples and revise ranking heuristics without weakening hard compatibility or acquisition-cardinality rules.
 - Determine actual token usage and RM cost per recommendation run after context compression.
 - Determine whether `moonshotai/kimi-k2.6` remains the best paid model after comparing staging eval outputs against at least one cheaper or stronger OpenRouter alternative.

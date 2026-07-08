@@ -79,7 +79,7 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - Sidekick/Character overlap cleanup is complete and must remain replay-safe.
 - Grasta exact-variant identity, compatibility, acquisition class, and maximum-copy metadata must pass verification before build-package scoring is trusted.
 - Canonical Character IDs and aliases must round-trip through request, graph, candidate, analyzer, validation, and display boundaries.
-- Skills and passives require stable backend candidate IDs. Implementation may extend the schema if current composite identity is insufficient.
+- Skills, passives, sidekick skills, and sidekick auras require stable backend candidate IDs. Sidekick IDs must include owner plus skill kind/name or aura name and remain reproducible across replay.
 - Schema changes require a version bump, ETL replay/migration, schema assertions, and planned ETL-guide updates.
 - The default target player has broad late-game item access; item ownership is not verified unless a future policy says otherwise.
 - Curated boss and mechanics data may be incomplete. Unknown data lowers confidence and must remain distinct from confirmed facts.
@@ -161,17 +161,17 @@ Every proposed swap and skill change is re-scored. An invalid or lower-scoring s
 A versioned local capability artifact replaces broad ETL-level role assignment. It is the source of truth for:
 
 - Atomic capability and dependency vocabularies.
-- Direction and target semantics, such as ally versus enemy and grant/deploy versus require/consume.
+- Direction and explicit target scopes, including self, one ally, adjacent allies, self plus adjacent allies, frontline, main plus reserve, enemy, field, and zone semantics.
 - Deterministic positive rules and explicit negative/rejected patterns.
-- Evidence fields, curated overrides, review status, and artifact version.
+- Evidence fields, optional reviewed magnitude/timing qualifiers, sidekick placement availability, curated overrides, review status, and artifact version.
 
-Representative atomic facts include `deploy_zone`, `awaken_zone`, `requires_zone`, `ally_resistance_up`, `enemy_resistance_down`, `inflict_break`, `direct_damage`, `grant_link`, healing, cleanse, taunt, barrier, MP recovery, and SA/stack/status/setup dependencies. The final vocabulary is locked through reviewed fixtures rather than inferred from this illustrative list.
+Defensive/setup facts distinguish `damage_reduction`, `damage_reduction_barrier`, `shield`, `heal_hp`, `regen_hp`, `remove_status_ailment`, `remove_debuff`, `grant_status_immunity`, `knockback_immunity`, `hold_ground`, `taunt`, `cover`, `guard`, `dodge`, `stalk`, and direction-aware/target-aware `revive`. Barrier and Shield each emit one distinct fact; neither also emits generic damage reduction. Compound sources may emit multiple facts only when each is independently proven. Zone, resistance, MP recovery, offensive/support, and dependency facts remain separate atomic concepts.
 
-ETL or parsed-artifact replay materializes only reviewed `proven` capabilities as active Skill and PassiveSkill graph facts. `candidate` matches remain review diagnostics and cannot satisfy mandatory coverage. `rejected` matches are preserved as negative regression fixtures so later taxonomy changes cannot reintroduce known false positives. Untagged facts are valid and reported.
+ETL or parsed-artifact replay materializes only reviewed `proven` capabilities as active Skill, PassiveSkill, SidekickSkill, and SidekickAura graph facts. Sidekick skill facts are `main_only`; aura facts are `main_or_sub`, with activation conditions retained. `candidate` matches remain review diagnostics and cannot satisfy mandatory coverage. `rejected` matches are preserved as negative regression fixtures so later taxonomy changes cannot reintroduce known false positives. Untagged facts are valid and reported.
 
-Every proven capability cites the matched source phrase, direction/target semantics, rule or override, stable source skill/passive ID, review provenance, and artifact version. Neo4j is materialized output rather than the source of truth. Identical parsed data, review artifacts, and taxonomy versions must reproduce identical graph facts, and drift tests fail on differences.
+Every proven capability cites the matched source phrase, direction/target semantics, rule or override, stable source fact ID, review provenance, and artifact version. When source text explicitly provides them, reviewed evidence may include `magnitude_value`, constrained `magnitude_unit`, `activation_count`, `duration_turns`, and constrained `trigger`; absent values remain unknown, never zero or inferred. Neo4j is materialized output rather than the source of truth. Identical parsed data, review artifacts, and taxonomy versions must reproduce identical graph facts, and drift tests fail on differences.
 
-Character roles are not permanent ETL labels. Feature D derives contextual `RoleScores` from proven Skill/PassiveSkill capabilities, selected package, SA state, boss matchup, build/sidekick assumptions, and lineup coverage. One character may support different roles in different contexts.
+Character and sidekick roles are not permanent ETL labels. Feature D deterministically derives contextual `RoleScores` and coverage from proven atomic facts, reviewed qualifiers, selected package, sidekick main/sub placement, SA state, boss matchup, build assumptions, and lineup coverage. The analyzer may explain or rank supplied candidates but may not independently certify mandatory coverage.
 
 ### Human Review Loop
 
@@ -183,9 +183,11 @@ Review proceeds in three ordered phases:
 2. Offensive/support capabilities: direct damage, buffs, debuffs, Pain/Poison, Break, AF support, and Links.
 3. Dependencies and conditions: zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, and similar qualifiers.
 
-Each phase generates deterministic stratified batches of exactly 45 new proposed decisions. Every row requires an explicit `approve`, `reject`, `correct`, or `ambiguous` decision before import; blank decisions fail validation. The generated reviewer template constrains decision, capability, dependency, direction, and target values and includes source text, source URL, and concise field guidance. Reviewers consult the linked wiki source only when the captured evidence is unclear; they do not manually reconstruct the corpus or assign contextual character roles.
+Each phase generates deterministic stratified batches of exactly 45 new proposed decisions. Every row requires an explicit `approve`, `reject`, `correct`, or `ambiguous` decision before import; blank decisions fail validation. The generated reviewer template constrains decision, capability, dependency, direction, target, sidekick availability, qualifier units, and triggers, and includes source text, source URL, and concise field guidance. Explicit qualifier proposals must be approved or corrected; genuinely absent qualifiers remain unknown. Reviewers consult the linked wiki source only when captured evidence is unclear; they do not manually reconstruct the corpus or assign contextual roles.
 
 The loop is generate batch -> pause at `Awaiting human review` -> edit CSV -> validate/import canonical JSON -> identify repeated failure patterns -> update rules/overrides -> rerun all accumulated fixtures -> generate the next batch. New targeted reproductions join the automatic regression set rather than inflating the next 45-row human batch. A phase passes only after every accumulated fixture passes and two consecutive fully reviewed batches reveal no new critical false-positive pattern.
+
+Artifact migrations preserve unaffected decisions through proposal IDs that are stable independently of taxonomy version; evidence still records the exact version used. Renamed, split, or semantically changed facts return through a targeted migration-review artifact outside the 45-new-proposal batches. Superseded generated batches remain audit artifacts and cannot be imported under the replacement vocabulary.
 
 A critical false-positive pattern is a repeatable rule error that could falsely satisfy mandatory lineup coverage, reverse ally/enemy or grant/require semantics, omit a gating zone/SA/status/stack dependency, or misclassify damage, defense, sustain, or setup across multiple facts. Discovery resets the phase's clean-batch streak. Rejected fixtures and untagged facts are expected; ambiguous facts remain non-proven; zero rejected records and full-corpus tagging are not goals.
 
@@ -456,7 +458,7 @@ Status: Reopened and split into C1-C5; Feature D remains blocked until C5 comple
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
-Status: Completed.
+Status: Baseline completed; targeted contract amendment required before C2 review resumes.
 
 Technical requirements:
 
@@ -469,6 +471,9 @@ Technical requirements:
 - Add deterministic diagnostics for proposed, proven, candidate, rejected, ambiguous, untagged, and reviewed counts per capability without hiding sparse coverage.
 - Add artifact and graph drift detection over capabilities, dependencies, evidence, diagnostics, and artifact/schema versions.
 - Keep live/request-time AI tagging, contextual role assignment, and direct AI mutation of canonical review artifacts out of scope.
+- Amend record-type support, stable IDs, evidence, diagnostics, materialization, and drift checks for `SidekickSkill` and `SidekickAura` without restoring broad role tags.
+- Make proposal IDs stable independently of taxonomy version while retaining exact taxonomy/review/schema versions in canonical evidence.
+- Add constrained review fields for explicit target scopes, sidekick placement availability, optional magnitude/timing qualifiers, and qualifier corrections.
 
 Acceptance criteria:
 
@@ -479,23 +484,38 @@ Acceptance criteria:
 - Candidate, rejected, ambiguous, dependency-only, and untagged records cannot satisfy mandatory Feature D coverage.
 - Neo4j is not the sole source of truth; artifact/graph drift fails visibly.
 - No live AI tagging occurs.
+- Sidekick skill/aura facts and taxonomy-version migrations obey the same immutable-evidence, review-state, reproducibility, and drift guarantees as character skills/passives.
 
 #### Feature C2: Defensive And Setup Human-Review Gate
 
-Status: Planned; blocked until C1 is verified.
+Status: Replanned and locked; blocked until the targeted C1 contract amendment is implemented and verified. Batch 1 then requires targeted migration review, generated batch 2 is superseded, and the clean-batch streak resets to zero.
 
 Technical requirements:
 
-- Review zone deployment, mitigation, healing, cleanse/status protection, tanking, MP sustain, and required setup in deterministic 45-row stratified batches.
+- Version and implement the expanded defensive/setup vocabulary across Skill, PassiveSkill, SidekickSkill, and SidekickAura records before review resumes.
+- Keep objective atomic facts rather than ETL-level `mitigation`, `healing`, tank, healer, or sidekick-role labels; Feature D owns deterministic contextual grouping and RoleScores.
+- Review zone deployment, resistance, `damage_reduction`, `damage_reduction_barrier`, `shield`, `heal_hp`, `regen_hp`, `remove_status_ailment`, `remove_debuff`, status and knockback immunity, `hold_ground`, `taunt`, `cover`, `guard`, `dodge`, `stalk`, direction-aware/target-aware `revive`, MP sustain, and required setup.
+- Treat Barrier, Shield, and non-Barrier damage reduction as mutually distinct facts. Permit multiple facts from one source only when each effect is independently proven; Guard additionally proves Hold Ground only when source text explicitly says so.
+- Review explicit ally scopes for self, one ally, adjacent allies, self plus adjacent allies, frontline, and main plus reserve, retaining relevant enemy/field/zone/none scopes.
+- Record SidekickSkill capability availability as `main_only` and SidekickAura availability as `main_or_sub`, with captured activation conditions.
+- Review explicit optional `magnitude_value`, constrained `magnitude_unit`, `activation_count`, `duration_turns`, and constrained `trigger` qualifiers. Unknown values remain unknown and cannot be invented or treated as zero.
+- Preserve target scope separately from recipient eligibility. Weapon, element, personality, status, stack, position, and similar recipient requirements are condition evidence reviewed in C4 rather than target enum variants.
+- Bump taxonomy/review/schema contracts as required, use version-independent proposal IDs, migrate unaffected batch-1 decisions, and produce a targeted migration-review artifact for renamed, split, or otherwise changed decisions.
+- Preserve the original generated batch 2 as superseded audit history; reject its import under the replacement vocabulary and generate a replacement only after migration fixtures pass.
 - Pause at `Awaiting human review` for every batch; require an explicit decision for every row before import.
 - After import, correct repeated rule/override failures, add targeted regression fixtures, rerun all accumulated fixtures, and reset the clean-batch streak after any critical false-positive pattern.
-- Continue until two consecutive fully reviewed batches reveal no new critical false-positive pattern.
+- After migration review passes, complete two fresh consecutive 45-row batches with no new critical false-positive pattern.
+- Plan the expanded migration, review, qualifier, sidekick, diagnostics, and recovery procedure for `docs/guides/ETL_GUIDE.md`; Feature C5 writes/finalizes the reusable guide after verification.
 
 Acceptance criteria:
 
-- All accumulated C2 fixtures pass after every correction.
-- Two consecutive 45-row batches complete with no new critical false-positive pattern.
-- Rejected and ambiguous defensive/setup claims remain non-proven after full-corpus replay.
+- Stable source IDs cover all four record types, and identical inputs reproduce identical proposals, qualifiers, review state, diagnostics, and materialized evidence.
+- Unaffected batch-1 decisions survive migration; changed decisions cannot become proven until explicit targeted migration review passes.
+- The superseded batch 2 fails import under the new contract, and its deterministic replacement contains exactly 45 new proposals using the expanded vocabulary and reference constraints.
+- All accumulated C2 positive, corrected, rejected, ambiguous, migration, sidekick-placement, target-scope, compound-effect, and qualifier fixtures pass after every correction.
+- Barrier, Shield, generic damage reduction, direct heal, Regen, ailment removal, debuff removal, status immunity, knockback immunity, Hold Ground, revive, taunt, Cover, Guard, dodge, and Stalk cannot satisfy one another unless Feature D later groups them through explicit deterministic policy.
+- Missing qualifiers remain unknown; candidate, rejected, ambiguous, dependency-only, and untagged facts remain non-proven.
+- Two fresh consecutive 45-row batches complete after migration with no new critical false-positive pattern.
 
 #### Feature C3: Offensive And Support Human-Review Gate
 
@@ -519,13 +539,14 @@ Status: Planned; blocked until C3 completes.
 
 Technical requirements:
 
-- Review zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, and similar qualifiers in deterministic 45-row stratified batches.
+- Review zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, sidekick activation conditions, and structured recipient eligibility such as weapon, element, personality, status, stack, or position in deterministic 45-row stratified batches.
 - Use the same explicit-decision, human-review pause, correction, accumulated-regression, and clean-streak reset contract as C2-C3.
 - Preserve all earlier decisions and verify that dependency rules cannot be promoted as standalone mandatory capabilities.
 
 Acceptance criteria:
 
 - Sign of Collapse proves its awakened-zone dependency without proving zone deployment.
+- Conditional enhanced effects prove coverage only for recipients satisfying their reviewed eligibility predicates; eligibility never mutates the basic target-scope vocabulary.
 - All accumulated C2-C4 fixtures pass after every correction.
 - Two consecutive 45-row C4 batches complete with no new critical false-positive pattern.
 
@@ -535,7 +556,7 @@ Status: Planned; blocked until C2-C4 each pass their human-review gate.
 
 Technical requirements:
 
-- Replay the full parsed corpus using the locked taxonomy and canonical review artifacts, materializing only proven capabilities and their dependencies into Neo4j.
+- Replay the full parsed corpus using the locked taxonomy and canonical review artifacts, materializing only proven Skill, PassiveSkill, SidekickSkill, and SidekickAura capabilities and their dependencies into Neo4j.
 - Verify identical inputs reproduce identical capabilities, dependencies, evidence, diagnostics, and graph state.
 - Verify every rejected fixture remains rejected and every ambiguous/candidate/untagged fact remains non-authoritative.
 - Update `docs/guides/ETL_GUIDE.md` with artifact bump, batch generation, human-review handoff, validation/import, correction loop, replay, diagnostics, and drift-repair procedures.
@@ -557,7 +578,7 @@ Technical requirements:
 - Implement ownership/F2P, sidekick, SA, skill/passive, affinity, item, and setup hard filters.
 - Hard-reject null/absorb primary damage and require neutral-or-better usable primary damage.
 - Distinguish no weakness, unknown weakness, and incomplete affinity.
-- Derive per-character per-role scores only from proven atomic Skill/PassiveSkill capabilities, with evidence and policy version.
+- Derive per-character and per-sidekick contextual scores only from proven atomic Skill, PassiveSkill, SidekickSkill, and SidekickAura capabilities, reviewed qualifiers, placement availability, evidence, and policy version.
 - Keep top eight per role plus bounded must-include exceptions.
 - Score four-to-six skills per contextual role.
 - Construct default three-to-four-skill packages for later lineup scoring.
