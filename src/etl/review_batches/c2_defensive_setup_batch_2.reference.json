@@ -1,0 +1,86 @@
+{
+  "allowed_values": {
+    "capability": [
+      "deploy_zone",
+      "awaken_zone",
+      "ally_damage_reduction",
+      "ally_resistance_up",
+      "enemy_resistance_down",
+      "heal_hp",
+      "cleanse_status",
+      "grant_status_immunity",
+      "taunt",
+      "barrier",
+      "recover_mp",
+      "direct_damage",
+      "ally_damage_up",
+      "inflict_pain",
+      "inflict_poison",
+      "inflict_break",
+      "af_support",
+      "grant_link"
+    ],
+    "decision": [
+      "approve",
+      "reject",
+      "correct",
+      "ambiguous"
+    ],
+    "dependency": [
+      "requires_zone",
+      "requires_awakened_zone",
+      "requires_status",
+      "requires_stack",
+      "requires_stellar_awakened",
+      "end_of_turn",
+      "party_composition",
+      "limited_use"
+    ],
+    "direction": [
+      "ally",
+      "enemy",
+      "self",
+      "field",
+      "none"
+    ],
+    "kind": [
+      "capability",
+      "dependency"
+    ],
+    "target": [
+      "single",
+      "party",
+      "all_enemies",
+      "single_enemy",
+      "zone",
+      "none"
+    ]
+  },
+  "artifact_version": "1.0.0",
+  "batch_number": 2,
+  "field_guidance": {
+    "ambiguous": "Evidence is insufficient; this remains non-authoritative.",
+    "approve": "Accept the proposed atomic fact and its direction/target semantics.",
+    "correct": "Supply all four corrected kind/value/direction/target fields.",
+    "immutable": [
+      "proposal_id",
+      "record_type",
+      "source_fact_id",
+      "character_name",
+      "fact_name",
+      "source_text",
+      "source_url",
+      "rule_id",
+      "proposed_kind",
+      "proposed_value",
+      "proposed_direction",
+      "proposed_target",
+      "matched_phrase",
+      "artifact_version"
+    ],
+    "reject": "The source text does not prove the proposed atomic fact.",
+    "source_url": "Consult the linked source only when captured source_text is unclear."
+  },
+  "phase": "defensive_setup",
+  "sampling_seed": 0
+}

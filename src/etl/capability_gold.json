@@ -1,4 +1,17 @@
 {
   "artifact_version": "1.0.0",
-  "fixtures": []
+  "fixtures": [
+    {"proposal_id":"2e1daab0a06bb1c0c0bd9579","source_fact_id":"skill:2ef089f74051cbf0b127","rule_id":"cap-cleanse","expected_state":"rejected"},
+    {"proposal_id":"3c6f7a6509f44980117bf62c","source_fact_id":"skill:9a5682c26ed198bfea5c","rule_id":"cap-barrier","expected_state":"rejected"},
+    {"proposal_id":"45671bf4c22a83fc27542f70","source_fact_id":"skill:f07f8ed796263a140bf3","rule_id":"cap-heal","expected_state":"rejected"},
+    {"proposal_id":"68ec8d7168fffc179b395be9","source_fact_id":"skill:2fcd8536093f3b3251c3","rule_id":"cap-taunt","expected_state":"rejected"},
+    {"proposal_id":"7f7879fd22320cda0aa0102a","source_fact_id":"skill:7ac44d613de1caa3ba20","rule_id":"cap-status-immunity","expected_state":"rejected"},
+    {"proposal_id":"854700a38d30dbf4377f1af5","source_fact_id":"skill:72d1df510d5be1748cee","rule_id":"cap-heal","expected_state":"rejected"},
+    {"proposal_id":"8986850df995d1d47413910b","source_fact_id":"skill:dd5d8aeafbe006084b3b","rule_id":"cap-heal","expected_state":"rejected"},
+    {"proposal_id":"93128844af2c37055eaf4db7","source_fact_id":"skill:2ebd3a90208038207fa9","rule_id":"cap-mitigation","expected_state":"rejected"},
+    {"proposal_id":"9bb7f4f948e822b7965d0662","source_fact_id":"skill:9942f4429220335d2c4f","rule_id":"cap-status-immunity","expected_state":"rejected"},
+    {"proposal_id":"c0aa9876e3eb5557d55638d8","source_fact_id":"skill:7bc178e3b285aeab4e7f","rule_id":"cap-taunt","expected_state":"rejected"},
+    {"proposal_id":"d4bf47b0a00e7288b851a939","source_fact_id":"skill:fe79530a0e28264dc406","rule_id":"cap-cleanse","expected_state":"rejected"},
+    {"proposal_id":"dd6fcf8cca3b9daf650b4d62","source_fact_id":"skill:83509cc8dd8458a37900","rule_id":"cap-taunt","expected_state":"rejected"}
+  ]
 }
