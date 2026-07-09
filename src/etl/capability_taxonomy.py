@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 import random
 import re
@@ -18,6 +19,11 @@ REVIEWS_PATH = Path(__file__).with_name("capability_reviews.json")
 GOLD_PATH = Path(__file__).with_name("capability_gold.json")
 BATCH_SIZE = 45
 PHASES = {"defensive_setup", "offensive_support", "dependencies_conditions"}
+SUPERSEDED_BATCHES = {"c2_defensive_setup_batch_2.csv"}
+MIGRATED_RULES = {
+    "cap-barrier": {"cap-damage-reduction-barrier", "cap-shield"},
+    "cap-cleanse": {"cap-remove-status-ailment", "cap-remove-debuff"},
+}
 IMMUTABLE_COLUMNS = (
     "proposal_id", "record_type", "source_fact_id", "character_name", "fact_name",
     "source_text", "source_url", "rule_id", "proposed_kind", "proposed_value",
@@ -34,6 +40,51 @@ REVIEW_COLUMNS = (
 )
 
 RECORD_TYPES = {"skill", "passive", "sidekick_skill", "sidekick_aura"}
+
+
+def _read_review_csv(path: Path) -> list[dict[str, str]]:
+    """Read human-edited review CSVs from common spreadsheet encodings."""
+    payload = path.read_bytes()
+    try:
+        text = payload.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = payload.decode("utf-8-sig", errors="surrogateescape")
+        text = "".join(
+            bytes([ord(char) - 0xDC00]).decode("cp1252")
+            if "\udc80" <= char <= "\udc9f"
+            else char
+            for char in text
+        )
+    return list(csv.DictReader(io.StringIO(text), dialect="excel"))
+
+
+def _normalize_corrected_fields(row: dict[str, str]) -> dict[str, str]:
+    """Normalize safe spreadsheet-review aliases into constrained importer values."""
+    normalized = dict(row)
+    for key in REVIEW_COLUMNS:
+        normalized[key] = normalized.get(key, "").strip()
+    trigger_aliases = {
+        "stellar_burst": "on_stellar_burst",
+        "stellar burst": "on_stellar_burst",
+        "in duel only(feature in 1 of another eden episode": "none",
+    }
+    unit_aliases = {
+        "hp": "flat_hp",
+        "percent of user max hp": "percent",
+        "percent of max hp": "percent",
+    }
+    target_aliases = {
+        "user, left_and_right_of_the_user": "self_and_adjacent_allies",
+        "user, left and right of the user": "self_and_adjacent_allies",
+    }
+    for key, aliases in (
+        ("corrected_trigger", trigger_aliases),
+        ("corrected_magnitude_unit", unit_aliases),
+        ("corrected_target", target_aliases),
+    ):
+        value = normalized.get(key, "")
+        normalized[key] = aliases.get(value.lower(), value)
+    return normalized
 
 
 def _canonical(value: Any) -> str:
@@ -98,6 +149,26 @@ def load_reviews(path: Path = REVIEWS_PATH) -> dict[str, Any]:
     if None in ids or len(ids) != len(set(ids)):
         raise ValueError("Review artifact contains missing or duplicate proposal IDs")
     return artifact
+
+
+def _decision_matches_taxonomy(decision: dict[str, Any], proposal: dict[str, Any]) -> bool:
+    """Never promote a decision whose reviewed semantics predate the current proposal."""
+    if decision.get("artifact_version") == proposal["artifact_version"]:
+        return True
+    if decision.get("decision") == "correct":
+        kind = decision.get("corrected_kind")
+        value = decision.get("corrected_value")
+        direction = decision.get("corrected_direction")
+        target = decision.get("corrected_target")
+    else:
+        kind = decision.get("proposed_kind")
+        value = decision.get("proposed_value")
+        direction = decision.get("proposed_direction")
+        target = decision.get("proposed_target")
+    return (kind, value, direction, target) == (
+        proposal["proposed_kind"], proposal["proposed_value"],
+        proposal["proposed_direction"], proposal["proposed_target"],
+    )
 
 
 def load_gold_fixtures(path: Path = GOLD_PATH) -> dict[str, Any]:
@@ -204,6 +275,8 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
     evidence: list[dict[str, str]] = []
     for proposal in all_proposals:
         decision = decisions.get(proposal["proposal_id"]) or legacy_decisions.get((proposal["record_type"], proposal["source_fact_id"], proposal["rule_id"]))
+        if decision and not _decision_matches_taxonomy(decision, proposal):
+            decision = None
         state = decision.get("decision") if decision else "candidate"
         states["proposed"] += 1
         states["reviewed"] += int(decision is not None)
@@ -318,13 +391,70 @@ def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batc
     return chosen
 
 
-def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, reviews_path: Path = REVIEWS_PATH) -> dict[str, Any]:
+def generate_migration_review(*, output: Path, reviews_path: Path = REVIEWS_PATH) -> list[dict[str, str]]:
+    """Export changed legacy decisions for explicit review under the current vocabulary."""
     taxonomy = load_capability_taxonomy()
-    proposals = {row["proposal_id"]: row for record in records for row in propose(record)}
-    with csv_path.open(encoding="utf-8", newline="") as handle:
-        rows = list(csv.DictReader(handle))
-    if len(rows) != BATCH_SIZE:
-        raise ValueError(f"Review import requires exactly {BATCH_SIZE} rows")
+    changed = _migration_review_rows(reviews_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=[*IMMUTABLE_COLUMNS, *REVIEW_COLUMNS], extrasaction="ignore")
+        writer.writeheader()
+        for row in changed:
+            writer.writerow({**row, **{key: "" for key in REVIEW_COLUMNS}})
+    output.with_name(f"{output.stem}.reference.json").write_text(json.dumps({
+        "artifact_type": "targeted_migration_review", "artifact_version": taxonomy["artifact_version"],
+        "review_schema_version": taxonomy["review_schema_version"], "row_count": len(changed),
+        "allowed_values": {"decision": taxonomy["review_states"], "capability": taxonomy["capabilities"],
+                           "dependency": taxonomy["dependencies"], "direction": taxonomy["directions"],
+                           "target": taxonomy["targets"], "availability": taxonomy["availability"],
+                           "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"]},
+        "field_guidance": {"migration": "Re-review every changed atomic fact; no prior approval is carried forward.",
+                           "immutable": list(IMMUTABLE_COLUMNS)},
+    }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return changed
+
+
+def _migration_review_rows(reviews_path: Path = REVIEWS_PATH) -> list[dict[str, str]]:
+    """Rebuild the targeted migration proposal set from existing legacy decisions."""
+    changed: list[dict[str, str]] = []
+    for decision in load_reviews(reviews_path)["decisions"]:
+        record = {
+            {"skill": "skill_id", "passive": "passive_skill_id", "sidekick_skill": "sidekick_skill_id", "sidekick_aura": "sidekick_aura_id"}[decision["record_type"]]: decision["source_fact_id"],
+            "character_name": decision.get("character_name", ""), "name": decision.get("fact_name", ""),
+            "description": decision.get("source_text", ""), "source_url": decision.get("source_url", ""),
+        }
+        proposals = propose(record, phase="defensive_setup")
+        current = {row["rule_id"]: row for row in proposals}.get(decision["rule_id"])
+        if current and not _decision_matches_taxonomy(decision, current):
+            changed.append(current)
+        for row in proposals:
+            if row["rule_id"] in MIGRATED_RULES.get(decision["rule_id"], set()):
+                changed.append(row)
+    if not changed:
+        raise ValueError("No changed decisions require migration review")
+    changed = list({row["proposal_id"]: row for row in changed}.values())
+    changed.sort(key=lambda row: (row["proposed_value"], row["source_fact_id"], row["rule_id"]))
+    return changed
+
+
+def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, reviews_path: Path = REVIEWS_PATH) -> dict[str, Any]:
+    if csv_path.name in SUPERSEDED_BATCHES:
+        raise ValueError(f"Superseded review batch cannot be imported: {csv_path.name}")
+    taxonomy = load_capability_taxonomy()
+    reference_path = csv_path.with_name(f"{csv_path.stem}.reference.json")
+    reference = json.loads(reference_path.read_text(encoding="utf-8")) if reference_path.exists() else {}
+    proposals = {
+        row["proposal_id"]: row
+        for row in (
+            _migration_review_rows(reviews_path)
+            if reference.get("artifact_type") == "targeted_migration_review"
+            else [proposal for record in records for proposal in propose(record)]
+        )
+    }
+    rows = [_normalize_corrected_fields(row) for row in _read_review_csv(csv_path)]
+    expected_rows = reference.get("row_count", BATCH_SIZE)
+    if len(rows) != expected_rows:
+        raise ValueError(f"Review import requires exactly {expected_rows} rows")
     seen: set[str] = set()
     for row in rows:
         proposal = proposals.get(row.get("proposal_id", ""))
@@ -361,6 +491,7 @@ def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, re
         elif any(row.get(key, "").strip() for key in REVIEW_COLUMNS if key.startswith("corrected_")):
             raise ValueError(f"Correction fields require decision=correct for {row['proposal_id']}")
     artifact = load_reviews(reviews_path)
+    artifact["artifact_version"] = taxonomy["review_schema_version"]
     existing = {row["proposal_id"]: row for row in artifact["decisions"]}
     for row in rows:
         existing[row["proposal_id"]] = {key: row.get(key, "") for key in (*IMMUTABLE_COLUMNS, *REVIEW_COLUMNS)}
@@ -408,20 +539,27 @@ n.schema_version AS schema_version"""
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate/import deterministic atomic capability review batches")
-    parser.add_argument("command", choices=("generate", "import", "diagnostics"))
-    parser.add_argument("--parsed-dir", type=Path, required=True)
+    parser.add_argument("command", choices=("generate", "generate-migration", "import", "diagnostics"))
+    parser.add_argument("--parsed-dir", type=Path)
     parser.add_argument("--csv", type=Path)
     parser.add_argument("--phase", choices=sorted(PHASES))
     parser.add_argument("--batch-number", type=int, default=1)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--reviews", type=Path, default=REVIEWS_PATH)
     args = parser.parse_args()
-    paths = list(args.parsed_dir.rglob("*.json"))
+    if args.command != "generate-migration" and not args.parsed_dir:
+        parser.error(f"{args.command} requires --parsed-dir")
+    paths = list(args.parsed_dir.rglob("*.json")) if args.parsed_dir else []
     records = list(_iter_records(paths))
     if args.command == "generate":
         if not args.csv or not args.phase:
             parser.error("generate requires --csv and --phase")
         generate_review_batch(records, phase=args.phase, batch_number=args.batch_number, seed=args.seed, output=args.csv, reviews_path=args.reviews)
+        print(f"Awaiting human review: {args.csv}")
+    elif args.command == "generate-migration":
+        if not args.csv:
+            parser.error("generate-migration requires --csv")
+        generate_migration_review(output=args.csv, reviews_path=args.reviews)
         print(f"Awaiting human review: {args.csv}")
     elif args.command == "import":
         if not args.csv:

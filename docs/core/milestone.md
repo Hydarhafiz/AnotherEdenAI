@@ -488,7 +488,7 @@ Acceptance criteria:
 
 #### Feature C2: Defensive And Setup Human-Review Gate
 
-Status: Replanned and locked; blocked until the targeted C1 contract amendment is implemented and verified. Batch 1 then requires targeted migration review, generated batch 2 is superseded, and the clean-batch streak resets to zero.
+Status: Targeted migration review imported and human-verified; ready to resume fresh C2 batch review. Generated batch 2 is superseded, and the clean-batch streak remains zero.
 
 Technical requirements:
 

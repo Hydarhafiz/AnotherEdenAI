@@ -12,6 +12,7 @@ from src.etl.capability_taxonomy import (
     BATCH_SIZE,
     assert_capability_materialization,
     diagnostics,
+    generate_migration_review,
     generate_review_batch,
     import_review_batch,
     load_capability_taxonomy,
@@ -160,7 +161,7 @@ def test_only_approved_or_corrected_reviews_become_authoritative(tmp_path, decis
             "review_decision": "approve", "reviewer": "alice", "reviewer_notes": "checked",
             "review_artifact_version": "test",
             "source": "reviewed_rule", "source_fact_id": "skill-0",
-            "source_id": "cap-heal", "target": "party", "trigger": "none", "value": "heal_hp",
+            "source_id": "cap-heal", "target": "main_and_reserve", "trigger": "none", "value": "heal_hp",
         }
 
 
@@ -248,7 +249,7 @@ def test_review_import_preserves_all_decisions_notes_and_excludes_reviewed_propo
         for index, row in enumerate(rows):
             row.update(decision=states[index % 4], reviewer="reviewer", reviewer_notes=f"note-{index}")
             if row["decision"] == "correct":
-                row.update(corrected_kind="capability", corrected_value="barrier", corrected_direction="ally", corrected_target="party")
+                row.update(corrected_kind="capability", corrected_value="shield", corrected_direction="ally", corrected_target="party")
 
     review_csv(batch, complete)
     artifact = import_review_batch(batch, records, reviews_path=reviews)
@@ -258,6 +259,57 @@ def test_review_import_preserves_all_decisions_notes_and_excludes_reviewed_propo
     assert all(row["reviewer_notes"] for row in artifact["decisions"])
     with pytest.raises(ValueError, match="only 0 unreviewed proposals"):
         generate_review_batch(records, phase="defensive_setup", batch_number=2, seed=0, output=tmp_path / "next.csv", reviews_path=reviews)
+
+
+def test_review_import_accepts_spreadsheet_encoding_and_safe_correction_aliases(tmp_path):
+    records = [fact(index) for index in range(BATCH_SIZE)]
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews)
+    batch = tmp_path / "batch.csv"
+    generate_review_batch(records, phase="defensive_setup", batch_number=1, seed=0, output=batch, reviews_path=reviews)
+
+    def complete(rows):
+        for row in rows:
+            row.update(
+                decision="correct", corrected_kind="capability", corrected_value="heal_hp",
+                corrected_direction="ally", corrected_target="user, left_and_right_of_the_user",
+                corrected_availability="not_applicable", corrected_magnitude_value="500",
+                corrected_magnitude_unit="HP", corrected_trigger="stellar_burst",
+                reviewer="alice", reviewer_notes="it is checked",
+            )
+
+    review_csv(batch, complete)
+    batch.write_bytes(batch.read_bytes().replace(b"it is checked", b"it\x92s checked", 1))
+
+    artifact = import_review_batch(batch, records, reviews_path=reviews)
+    imported = next(row for row in artifact["decisions"] if row["reviewer_notes"] == "it’s checked")
+    assert imported["corrected_target"] == "self_and_adjacent_allies"
+    assert imported["corrected_magnitude_unit"] == "flat_hp"
+    assert imported["corrected_trigger"] == "on_stellar_burst"
+    assert imported["reviewer_notes"] == "it’s checked"
+
+
+def test_targeted_migration_import_validates_generated_migration_rows_without_parsed_records(tmp_path):
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews, [{
+        "proposal_id": "legacy-cleanse", "record_type": "skill", "source_fact_id": "skill-migrate",
+        "character_name": "Tester", "fact_name": "Cleanse",
+        "source_text": "Restore statuses and remove debuffs.", "source_url": "https://example.test",
+        "rule_id": "cap-cleanse", "proposed_kind": "capability", "proposed_value": "cleanse_status",
+        "proposed_direction": "ally", "proposed_target": "party", "proposed_availability": "not_applicable",
+        "proposed_magnitude_value": "", "proposed_magnitude_unit": "", "proposed_activation_count": "",
+        "proposed_duration_turns": "", "proposed_trigger": "none", "matched_phrase": "Restore statuses",
+        "artifact_version": "1.0.0", "decision": "approve", "reviewer": "alice", "reviewer_notes": "legacy",
+    }])
+    migration = tmp_path / "migration.csv"
+    generate_migration_review(output=migration, reviews_path=reviews)
+    review_csv(migration, lambda rows: [row.update(decision="approve", reviewer="alice") for row in rows])
+
+    artifact = import_review_batch(migration, [], reviews_path=reviews)
+
+    assert len(artifact["decisions"]) == 3
+    imported_values = {row["proposed_value"] for row in artifact["decisions"] if row["proposal_id"] != "legacy-cleanse"}
+    assert imported_values == {"remove_debuff", "remove_status_ailment"}
 
 
 def test_diagnostics_report_review_states_per_capability(tmp_path):
