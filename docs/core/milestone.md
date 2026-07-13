@@ -488,7 +488,7 @@ Acceptance criteria:
 
 #### Feature C2: Defensive And Setup Human-Review Gate
 
-Status: Targeted migration review imported and human-verified; ready to resume fresh C2 batch review. Generated batch 2 is superseded, and the clean-batch streak remains zero.
+Status: Completed.
 
 Technical requirements:
 

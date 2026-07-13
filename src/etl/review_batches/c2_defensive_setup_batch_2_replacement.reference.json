@@ -1,0 +1,134 @@
+{
+  "allowed_values": {
+    "availability": [
+      "not_applicable",
+      "main_only",
+      "main_or_sub"
+    ],
+    "capability": [
+      "deploy_zone",
+      "awaken_zone",
+      "damage_reduction",
+      "damage_reduction_barrier",
+      "shield",
+      "ally_resistance_up",
+      "enemy_resistance_down",
+      "heal_hp",
+      "regen_hp",
+      "remove_status_ailment",
+      "remove_debuff",
+      "grant_status_immunity",
+      "knockback_immunity",
+      "hold_ground",
+      "revive",
+      "taunt",
+      "cover",
+      "guard",
+      "dodge",
+      "stalk",
+      "recover_mp",
+      "direct_damage",
+      "ally_damage_up",
+      "inflict_pain",
+      "inflict_poison",
+      "inflict_break",
+      "af_support",
+      "grant_link"
+    ],
+    "decision": [
+      "approve",
+      "reject",
+      "correct",
+      "ambiguous"
+    ],
+    "dependency": [
+      "requires_zone",
+      "requires_awakened_zone",
+      "requires_status",
+      "requires_stack",
+      "requires_stellar_awakened",
+      "end_of_turn",
+      "party_composition",
+      "limited_use"
+    ],
+    "direction": [
+      "ally",
+      "enemy",
+      "self",
+      "field",
+      "none"
+    ],
+    "kind": [
+      "capability",
+      "dependency"
+    ],
+    "magnitude_unit": [
+      "percent",
+      "flat_hp",
+      "flat_mp",
+      "multiplier",
+      "stacks"
+    ],
+    "target": [
+      "self",
+      "one_ally",
+      "adjacent_allies",
+      "self_and_adjacent_allies",
+      "frontline",
+      "main_and_reserve",
+      "single",
+      "party",
+      "all_enemies",
+      "single_enemy",
+      "enemy",
+      "field",
+      "zone",
+      "none"
+    ],
+    "trigger": [
+      "none",
+      "battle_start",
+      "turn_start",
+      "turn_end",
+      "on_hit",
+      "on_damage",
+      "on_skill_use",
+      "on_zone_deploy",
+      "on_stellar_burst",
+      "on_death"
+    ]
+  },
+  "artifact_version": "2.0.0",
+  "batch_number": 2,
+  "field_guidance": {
+    "ambiguous": "Evidence is insufficient; this remains non-authoritative.",
+    "approve": "Accept the proposed atomic fact and its direction/target semantics.",
+    "correct": "Supply corrected kind/value/direction/target and any changed placement or qualifier fields.",
+    "immutable": [
+      "proposal_id",
+      "record_type",
+      "source_fact_id",
+      "character_name",
+      "fact_name",
+      "source_text",
+      "source_url",
+      "rule_id",
+      "proposed_kind",
+      "proposed_value",
+      "proposed_direction",
+      "proposed_target",
+      "proposed_availability",
+      "proposed_magnitude_value",
+      "proposed_magnitude_unit",
+      "proposed_activation_count",
+      "proposed_duration_turns",
+      "proposed_trigger",
+      "matched_phrase",
+      "artifact_version"
+    ],
+    "reject": "The source text does not prove the proposed atomic fact.",
+    "source_url": "Consult the linked source only when captured source_text is unclear."
+  },
+  "phase": "defensive_setup",
+  "sampling_seed": 0
+}

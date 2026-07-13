@@ -465,6 +465,21 @@ def test_review_import_validates_sidekick_placement_and_qualifier_corrections(tm
         import_review_batch(batch, records, reviews_path=reviews)
 
 
+def test_c2_reviewed_replacement_decisions_use_constrained_semantics():
+    decisions = {row["proposal_id"]: row for row in load_reviews()["decisions"]}
+
+    assert decisions["4357f1bdf2f26003434be7ad"]["decision"] == "reject"
+    assert decisions["0bd89d2d8913cb8cd4b4166c"]["corrected_target"] == "one_ally"
+    assert decisions["2e6bc9eb3447d8d9ac20710d"]["corrected_target"] == "self_and_adjacent_allies"
+    assert decisions["770d81680dacb74e18323129"]["corrected_target"] == "self_and_adjacent_allies"
+    assert decisions["42171882b9cd7a53d8aeb108"]["corrected_trigger"] == "turn_start"
+    assert decisions["ebc1622e6e3f09da9064d9b6"]["corrected_trigger"] == "on_damage"
+    assert decisions["4cd4644914044be410f509d5"]["corrected_trigger"] == "on_stellar_burst"
+    assert decisions["07f1abbf3e0ac40173fb20c8"]["corrected_magnitude_value"] == "75"
+    assert decisions["3ac15b8ccec0dc523d5f1b47"]["corrected_duration_turns"] == "1"
+    assert decisions["3ac15b8ccec0dc523d5f1b47"]["corrected_magnitude_value"] == ""
+
+
 @pytest.mark.asyncio
 async def test_sidekick_loader_and_drift_gate_cover_atomic_contract():
     sidekick = SidekickRow(
