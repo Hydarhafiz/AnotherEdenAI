@@ -306,9 +306,9 @@ This file stores source references used during planning discussions. It separate
   URL: https://www.anothereden.wiki/w/Status_Effects
   Source type: user-provided community wiki mechanics reference
   Date added: 2026-07-08
-  Related area: Milestone 5 Feature C2 mitigation, Shield, Barrier, healing/regen, status restoration, debuff removal, immunity, Hold Ground, Guard, Cover, dodge, Stalk, knockback, and revival vocabulary
-  Relevance: Grounds the proposed split between distinct defensive mechanics that may satisfy overlapping contextual mitigation, sustain, or tanking requirements.
-  Caveats/open questions: The page could not be retrieved through the available browsing path during this planning session. Exact mechanic wording and edge cases must therefore be verified from captured corpus text and human-reviewed fixtures before they become acceptance criteria.
+  Related area: Milestone 5 Features C2-C4 defensive, offensive/support, and dependency vocabulary
+  Relevance: Grounds distinct defensive mechanics and the C3 concepts Buff Reversal, Debuff Reversal, Break variants, Expose, Invert, Eagle Eyes, Kaleido, Link, Lunatic Copy/Charge/Mind's Eye, Mental Focus, Overcritical, Overthrow, Singular Focus, and Barrier Pierce. It also records mechanic-specific conditions and consumption behavior that must remain separate from the atomic capability identity.
+  Caveats/open questions: Successfully inspected on 2026-07-14. This community-maintained index is suitable for taxonomy planning, but individual Skill/PassiveSkill/Sidekick source text remains the proof for recipient, direction, target, magnitude, duration, stacking, trigger, and dependencies. The page labels some effects as statuses while its own descriptions call some of them buffs; the capability taxonomy must not infer removal/transfer behavior from the page category alone.
 
 - Title: Tank Role
   URL: https://anothereden.wiki/w/Tank_Role
@@ -357,6 +357,120 @@ This file stores source references used during planning discussions. It separate
   Related area: Milestone 5 Features C2-C4 conditional target eligibility
   Relevance: User identified it as evidence that an additional effect may apply only when an ally satisfies a condition such as weapon type.
   Caveats/open questions: The page could not be retrieved through the available browsing path. Conditional target eligibility should be reviewed against captured source text and kept separate from basic target scope.
+
+#### Feature C3 Offensive And Support Taxonomy Replan
+
+- Title: Mental Focus (Status Effect)
+  URL: https://www.anothereden.wiki/w/Mental_Focus_(Status_Effect)
+  Source type: user-provided community wiki mechanics reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 Mental Focus and Max MP scaling
+  Relevance: User identified this as the dedicated source for Mental Focus. The accessible Status Effects and Damage Formula pages corroborate that it raises magic damage based on each recipient's Max MP and that the effect has its own stacking/cap behavior.
+  Caveats/open questions: The dedicated page could not be retrieved through the available browsing path. Do not lock its exact coefficient, cap, stacking, transfer, or overwrite behavior beyond what the accessible Damage Formula page supports; skill-level magnitude and recipient scope still require captured source evidence.
+
+- Title: Singular Focus
+  URL: https://www.anothereden.wiki/w/Singular_Focus
+  Source type: user-provided community wiki mechanics reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 Singular Focus and Max MP scaling
+  Relevance: User identified this as the dedicated source for Singular Focus. The accessible Status Effects page corroborates the atomic distinction from Mental Focus: Singular Focus increases physical rather than magical damage based on Max MP.
+  Caveats/open questions: The dedicated page returned HTTP 403 through the available browsing path, and the accessible Damage Formula page did not contain a Singular Focus section. Exact coefficient, cap, stacking, transfer, and overwrite behavior remain a research gap; skill-level recipient scope and magnitude require captured source evidence.
+
+- Title: Damage Formula
+  URL: https://anothereden.wiki/w/Damage_Formula
+  Source type: user-provided community wiki mechanics/formula reference already present in this source log
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 weakness multiplier, Mental Focus, Eagle Eyes, Overthrow, Copy, and attack-again semantics
+  Relevance: The inspected page distinguishes weakness-multiplier modification from general damage amplification; describes Mental Focus, Eagle Eyes, and Overthrow as separate effects; and distinguishes repeat moves from Copy and conditionally triggered attack-again behavior. These distinctions support atomic capability identities without requiring exact damage simulation.
+  Caveats/open questions: The formulas contain mechanic-specific stacking and calculation details that are out of scope for C3 materialization. C3 should capture capability, explicit magnitude/qualifiers, and dependencies only; it must not implement formula evaluation or turn-by-turn simulation. Singular Focus and Overcritical are not detailed on this page.
+
+- Title: Kaleido
+  URL: https://www.anothereden.wiki/w/Kaleido
+  Source type: user-provided community wiki mechanics reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 element conversion
+  Relevance: User identified this as the dedicated Kaleido reference. The accessible Status Effects page corroborates that Kaleido changes a recipient's attacks to a specified element and distinguishes it from attack-type conversion and weakness/resistance changes.
+  Caveats/open questions: The dedicated page could not be retrieved through the available browsing path. Exact exclusions, overwrite rules, eligible attack sources, and interactions with Link/Charge must be proven from accessible reference text or captured source fixtures before they become locked mechanics.
+
+- Title: Barrier Piercing
+  URL: https://anothereden.wiki/w/Barrier_Piercing
+  Source type: user-provided community wiki mechanics reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 barrier bypass, fixed damage, and target-defense bypass boundaries
+  Relevance: User identified this as the dedicated source for Barrier Pierce and noted adjacent but distinct fixed-damage and ignore-target-defense topics. The accessible Status Effects page corroborates that Barrier Pierce ignores an enemy Barrier and that barriers have multiple reduction/consumption forms.
+  Caveats/open questions: The dedicated page could not be retrieved through the available browsing path. Barrier Pierce, fixed damage, and ignore-target-defense must remain separate capabilities unless source text independently proves each one; exact status-immunity bypass and barrier-consumption interactions require targeted fixtures.
+
+- Title: Divine Vessel
+  URL: https://www.anothereden.wiki/w/Divine_Vessel
+  Source type: user-provided community wiki skill reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 enemy-directed Buff Reversal
+  Relevance: User identified this skill as an example of Buff Reversal applied to enemies, converting supported enemy buffs into corresponding debuffs. The accessible Status Effects page lists the affected classes as non-HP/MP stat increases, type resistance up, type/non-type attack up, equipped-character damage up, and critical damage up.
+  Caveats/open questions: The dedicated skill page could not be retrieved through the available browsing path. Captured skill text must prove direction, target, duration, and prerequisites; C3 must not synthesize the converted debuffs as independent facts.
+
+- Title: Lapine Heureuse
+  URL: https://anothereden.wiki/w/Lapine_Heureuse
+  Source type: user-provided community wiki skill reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 self/ally-directed Debuff Reversal
+  Relevance: User identified this skill as an example of Debuff Reversal applied to self or party members, converting supported debuffs into corresponding buffs. The accessible Status Effects page lists the affected classes as non-HP/MP stat decreases, type resistance down, type/non-type attack down, equipped-character damage down, and critical damage down.
+  Caveats/open questions: The dedicated skill page could not be retrieved through the available browsing path. Captured skill text must prove direction, target, duration, and prerequisites; C3 must not synthesize the converted buffs as independent facts.
+
+- Title: Kaleidoscope
+  URL: https://www.anothereden.wiki/w/Kaleidoscope
+  Source type: user-provided community wiki skill reference and repository-cached parsed fact
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 Link/add-on attack semantics
+  Relevance: The skill describes Link as a Crystal add-on attack after each attacking move, including attack-again moves. This supports a named Link capability with its own element/attack-type qualifiers, recipient scope, duration, and trigger relationship.
+  Caveats/open questions: The live page request did not complete through the available browsing path, but equivalent Kaleidoscope text exists in the repository review corpus. Link must not be treated as Copy, attack again, or Chain merely because all may produce additional attacks or moves.
+
+- Title: Lunatic - Copy
+  URL: https://www.anothereden.wiki/w/Lunatic_-_Copy
+  Source type: user-provided community wiki mechanics reference and repository-cached parsed fact
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 copied skill execution
+  Relevance: The supplied reference and cached character facts state that Copy executes skills twice, with the copied execution having distinct MP, AF-gain, combo, move-counting, animation, and retarget behavior. C3 needs the named Copy capability without simulating those consequences.
+  Caveats/open questions: The live page request did not complete through the available browsing path. Other effects with similar execution behavior require their own captured evidence and must not be labeled Lunatic Copy solely because they repeat a move.
+
+- Title: Crimson Fire Claw
+  URL: https://www.anothereden.wiki/w/Crimson_Fire_Claw
+  Source type: user-provided community wiki skill reference and repository-cached parsed fact
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 Chain attacks
+  Relevance: The supplied reference and cached Meryt fact identify a Chain Ability that activates when another ally uses a Fire attack, performs a Fire blunt attack, and has a per-turn activation limit. This distinguishes an ally-action-triggered Chain from Link, Copy, and attack-again effects.
+  Caveats/open questions: The live page request did not complete through the available browsing path. Element/attack-type trigger eligibility and activation count are orthogonal evidence fields; Chain must not collapse them into its capability identity.
+
+- Title: Turn Order
+  URL: https://www.anothereden.wiki/w/Turn_Order
+  Source type: user-provided community wiki mechanics/counting reference
+  Date added: 2026-07-14
+  Related area: Milestone 5 Features C3-C4 move counting, Copy, attack again, Link, and triggered additional moves
+  Relevance: User identified this as the cross-cutting counting reference: Copy executions count twice, attack-again executions count as repeated moves, and Link is counted as an additional move. Repository-cached facts independently preserve examples of Copy and attack-again counting behavior.
+  Caveats/open questions: The live page request did not complete through the available browsing path. C3 records named capabilities and explicit counting qualifiers only; it does not implement a turn engine, move counter, AF simulation, or trigger scheduler.
+
+- Title: Doomsday Peace and Abaddon's Call
+  URL: https://www.anothereden.wiki/w/Doomsday_Peace ; https://www.anothereden.wiki/w/Abaddon%27s_Call
+  Source type: user-provided community wiki skill references and repository-cached parsed facts
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 Magic Overcritical
+  Relevance: User identified these Mighty AC skills as the current Magic Overcritical examples and supplied the mechanic definition: its chance to double magical critical damage scales with magic critical rate above 100%, becoming guaranteed at the documented threshold. Cached Abaddon's Call text independently contains the same Magic Overcritical behavior.
+  Caveats/open questions: The dedicated skill pages could not be retrieved through the available browsing path, and the accessible Status Effects snapshot exposed only physical Overcritical. Treat physical and magical Overcritical as separate capabilities, but preserve this source discrepancy and use captured skill text as the review evidence. C3 does not calculate proc probability or resulting critical damage.
+
+- Title: Lunatic family references
+  URL: https://anothereden.wiki/w/Lunatic#Lunatics_type_.28by_source.29 ; https://anothereden.wiki/w/Lunatic/Lunatics ; https://anothereden.wiki/w/Lunatic_-_Charge ; https://anothereden.wiki/w/Lunatic_-_Copy ; https://anothereden.wiki/w/Lunatic_-_Static ; https://anothereden.wiki/w/Lunatic_-_Mind%27s_Eye ; https://anothereden.wiki/w/Lunatic_-_Risktaker ; https://anothereden.wiki/w/Lunatic_-_Sacrifice
+  Source type: user-provided community wiki mechanics references
+  Date added: 2026-07-14
+  Related area: Milestone 5 Features C3-C4 Lunatic activation, type, effects, timing, and limited-use dependencies
+  Relevance: The accessible Status Effects page corroborates distinct Charge, Copy, Mind's Eye, Risktaker, Sacrifice, and Static/Discharge variants. Each variant has different explicit effects, while Lunatic activation itself may come from a basic-attack replacement, skill, passive, battle-start effect, or other source.
+  Caveats/open questions: The dedicated pages were not retrievable through the available browsing path. C3 should capture Lunatic activation and separately proven atomic outcomes; C4 should own activation prerequisites, source restrictions, limited use, and timing. Exact damage, AF, combo, stat-conversion, self-damage, and turn execution remain outside simulation scope.
+
+- Title: Oh No Help
+  URL: https://www.anothereden.wiki/w/Oh_No_Help
+  Source type: user-provided community wiki skill reference and repository-cached parsed fact
+  Date added: 2026-07-14
+  Related area: Milestone 5 Feature C3 channel-agnostic outgoing-damage and healing-effectiveness amplification
+  Relevance: The cached source explicitly says that damage and healing of all party members increase by a percentage. This proves a narrow general outgoing-damage increase and a separate healing-effectiveness increase; it does not prove that the skill directly heals HP.
+  Caveats/open questions: The dedicated live page could not be retrieved through the available browsing path. Prayer activation, interruption, party-composition scaling, duration, and other gates remain orthogonal C3/C4 evidence and must not be folded into either amplification capability.
 
 #### Feature C Repository Failure Grounding
 
@@ -473,6 +587,26 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-07-05: Each human batch contains exactly 45 new deterministic stratified decisions. Every row requires `approve`, `reject`, `correct`, or `ambiguous`; blank or invalid decisions fail import. Prior decisions and targeted bug reproductions run separately as the complete accumulated regression set.
 - Planning decision on 2026-07-05: Each C2-C4 batch pauses at `Awaiting human review`. Codex may propose and import decisions but cannot self-approve them. The human reviews atomic claims from captured source text and consults linked wiki pages only when evidence is unclear; contextual character roles are not assigned in these CSVs.
 - Planning decision on 2026-07-05: A critical false-positive pattern is a repeatable error that can falsely satisfy mandatory coverage, reverse ally/enemy or grant/require meaning, omit a zone/SA/status/stack gate, or misclassify damage, defense, sustain, or setup across multiple facts. Discovery resets the phase's two-clean-batch streak.
+- Planning decision on 2026-07-14: Feature C3 models `barrier_pierce`, `fixed_damage`, and `ignore_target_defense` as three independent atomic offensive capabilities. None implies either of the others, and C3 records evidence and explicit qualifiers without calculating resulting damage.
+- Planning decision on 2026-07-14: Feature C3 reviews each offensive/support capability plus independently evidenced target scope, magnitude, duration, trigger, and stacking fields. Feature C4 separately reviews recipient eligibility and activation dependencies such as weapon/personality/status eligibility, zone, stack, Stellar Awakening, or party-composition requirements. A C3-approved capability with unresolved gating evidence cannot satisfy unconditional mandatory coverage before C4 validates those predicates.
+- Planning decision on 2026-07-14: Feature C3 uses distinct capability identities for materially different offensive/support effects while keeping self/party/enemy scope in the orthogonal target field. Weapon, stat, element, and similar bounded variants use constrained qualifiers where the source identifies which weapon type, stat, or element is affected; those qualifiers do not become compound capability names.
+- Planning decision on 2026-07-14: Feature C3 emits only the named transformation capabilities for Buff Reversal, Debuff Reversal, Expose, and weakness/resistance inversion. Buff Reversal is enemy-directed and Debuff Reversal is self/ally-directed; neither has a magnitude field unless a source independently provides one. Their possible converted buffs/debuffs or resulting affinity state are descriptive side effects, not synthesized capability facts.
+- Planning decision on 2026-07-14: Replanned Feature C3 uses a breaking taxonomy/review-schema `3.0.0` boundary. Proposal IDs remain stable independently of version, unaffected C2 decisions and C2 completion remain preserved, and renamed, split, or semantically changed facts require targeted migration review. The generated unreviewed C3 batch 1 under the narrow draft vocabulary is a superseded non-importable audit artifact; C3 begins at a zero clean-batch streak and requires two fresh consecutive clean 45-row batches after migration review passes.
+- Planning decision on 2026-07-14: Feature C3 separates `grant_link`, `grant_copy`, `attack_again`, `chain_attack`, and residual `follow_up_attack` capabilities. The residual follow-up capability applies only when source text explicitly proves a follow-up that is not one of the four named mechanics. Element, attack type, triggering action, activation limit, duration, and recipient are orthogonal evidence; no move-order, AF-gain, chain, or turn execution is simulated.
+- Planning decision on 2026-07-14: Feature C3 separates physical and magical Overcritical capabilities because they depend on distinct critical-rate channels. Review captures the named effect, target, duration, trigger, and explicit threshold evidence but does not calculate proc probability or resulting critical damage.
+- Planning decision on 2026-07-14: Feature C3 adds `activate_lunatic` with a constrained Lunatic-type qualifier for Charge, Copy, Static/Discharge, Mind's Eye, Risktaker, and Sacrifice. Separately proven outcomes may emit their own atomic capabilities, but Lunatic never becomes a permanent ETL role label. Feature C4 owns activation prerequisites, limited use, SA/source restrictions, and conditional timing; exact damage, AF, combo, stat conversion, self-damage, and turn execution are not simulated.
+- Planning decision on 2026-07-14: Feature C3 emits `direct_damage` only when the reviewed source fact itself executes an attack or explicitly deals damage. Pure grants or enablers such as Link, Copy, Kaleido, or attack-again status do not imply direct damage. Compound facts may emit multiple capabilities only when separate source clauses independently prove each effect.
+- Planning decision on 2026-07-14: Replace the narrow draft's `ally_damage_up` with `outgoing_damage_up`, emitted only for explicit channel-agnostic outgoing-damage amplification. Target scope represents self, one ally, or party. Power/Intelligence, critical, weapon/element, Focus, Eagle Eyes, Overthrow, weakness multiplier, Overcritical, and AF-specific effects do not imply this capability.
+- Planning decision on 2026-07-14: Feature C3 adds `healing_effectiveness_up` for explicit amplification of healing output. A compound phrase such as "damage and healing +20%" may emit both `outgoing_damage_up` and `healing_effectiveness_up`, but neither implies `heal_hp` or `regen_hp`. Prayer/song activation and interruption conditions remain separate dependency evidence.
+- Planning decision on 2026-07-14: Taxonomy/review schema 3.0 adds a minimal capture-only stacking contract: optional constrained `stacking_behavior` (`not_applicable`, `stackable`, `overwrites`, or `unknown`) and optional explicit `max_stacks`. Reviewers populate these only when source evidence proves them. Applied stack quantities may use the existing magnitude unit `stacks`; C3 does not calculate accumulated magnitude, schedule consumption, track turns, or simulate rotations.
+- Planning decision on 2026-07-14: Feature C3 owns capture and validation of stacking evidence; Feature D owns any deterministic scoring use. Initial scoring must be explicit, conservative, and policy-versioned rather than assuming maximum stacks are reached. The analyzer may explain backend-supplied reviewed stacking facts but cannot invent stack totals, setup turns, or rotation outcomes.
+- Planning decision on 2026-07-14: Replace generic `af_support` with four independent Feature C3 capabilities: `af_gauge_restore` for immediate gauge addition, `af_gauge_gain_up` for increased future gauge charging, `af_combo_gain_up` for increased AF combo growth, and `af_damage_up` for explicit damage amplification during AF. None implies another, and no AF duration, combo, or damage simulation is introduced.
+- Planning decision on 2026-07-14: Feature C3 retains exactly two consecutive clean deterministic batches of 45 new proposals each. Rare/high-risk named mechanics and misleading negative cases receive explicit decisions in a separate targeted migration/seed-review artifact, then become permanent automatic regression fixtures. These targeted cases do not count toward either 45-row batch or the clean-batch streak, and every targeted fixture must pass before a batch can count as clean.
+- Planning decision on 2026-07-14: Feature C3 updates `docs/guides/ETL_GUIDE.md` before generating replacement batch 1, documenting taxonomy 3.0 migration, superseded-batch rejection, targeted seed review, constrained qualifier review, import/correction, and clean-streak recovery. Feature C5 later verifies and finalizes that guide against full replay and materialization.
+- Planning decision on 2026-07-14: Feature C3 completion is correctness-based rather than exhaustive-tagging-based. Every defined capability family needs reviewed positive and negative coverage; targeted migration/seed fixtures and all accumulated C2-C3 regressions must pass; and two consecutive clean 45-row batches must complete. Genuinely ambiguous, unsupported, and untagged facts remain reported and non-proven rather than blocking completion or receiving guessed capabilities.
+- Planning decision on 2026-07-14: Feature C3 adds `element_damage_up` with a constrained element qualifier and a separate `non_type_damage_up`; neither is Kaleido, channel-agnostic outgoing damage, or equipped-weapon/attack-type amplification.
+- Planning clarification on 2026-07-14: Equipment classes (Staff, Sword, Katana, Axe, Lance, Bow, Fists, Hammer), attack types (Slash, Pierce, Blunt, Magic), and elements (Fire, Water, Wind, Earth, Thunder, Shade, Crystal, plus explicit non-type where valid) are separate qualifier domains. Weakness, resistance, Expose, and matching Break semantics use attack type or element as proven by source text, not equipped weapon class. Wiki labels such as "Weapon Break" must not cause the qualifier to be stored as an equipment class.
+- Planning decision on 2026-07-14: Feature C3 uses `equipped_weapon_damage_up` for Staff/Sword/Katana/Axe/Lance/Bow/Fists/Hammer eligibility, `attack_type_damage_up` for Slash/Pierce/Blunt/Magic amplification, and `element_damage_up` for elemental amplification. Resistance reduction separates broader physical and magic resistance from attack-type-specific and element-specific resistance. Expose and Break qualifiers use attack type or element, never equipped weapon class.
 
 
 - Planning decision on 2026-06-29: Expanded Feature C must create and maintain docs/guides/recommendation-validation.md covering schema/ETL readiness, candidate inspection, Mimi smoke tests, correction-round diagnostics, partial-result behavior, failure classification, and manual-verification reporting.
@@ -492,6 +626,10 @@ This file stores source references used during planning discussions. It separate
 
 #### Research Gaps
 
+- Verify the dedicated Mental Focus, Singular Focus, Kaleido, Barrier Piercing, reversal skill, Link/Copy/Chain, Magic Overcritical, and Lunatic pages through normal cached ETL refresh or manual review where the planning browser returned 403, cache, safety, or timeout failures. The accessible Status Effects/Damage Formula pages and repository-cached facts support the locked capability identities, but unresolved coefficients, overwrite rules, exclusions, and interaction details remain non-authoritative.
+- Resolve the accessible Status Effects snapshot's omission of Magic Overcritical against the user-provided wording and cached Abaddon's Call evidence. Until refreshed source material resolves the page discrepancy, physical and magical Overcritical remain separate reviewed capabilities and no proc probability is calculated.
+- Identify at least one captured positive and one misleading negative example for residual `follow_up_attack` that is neither Link, Copy, attack again, nor Chain before that residual capability can become proven; otherwise leave residual follow-up facts candidate/ambiguous without blocking the named execution capabilities.
+- Define Feature D's initial conservative, policy-versioned treatment of reviewed stacking evidence. C3 stores explicit stacking behavior and limits but does not assume maximum stacks or mandate a scoring bonus.
 - Verify exact wording and edge cases from the user-provided Status Effects, Tank Role, Revival Role, Sacrificial Heart Stacking, Guiding Vow Rite, Lady Vesper, and Assemble pages through normal cached ETL artifacts or manual review because the live pages were not retrievable through the available planning browser. No acceptance criterion depends on unverified live-page wording.
 - Validate the frontline Pain/Poison and reserve Grasta-mule default with experienced Another Eden players during the planned beta; record counterexamples and revise ranking heuristics without weakening hard compatibility or acquisition-cardinality rules.
 - Determine actual token usage and RM cost per recommendation run after context compression.

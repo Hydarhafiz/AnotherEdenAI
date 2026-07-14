@@ -106,6 +106,7 @@ External/current inputs include:
 - OpenRouter Structured Outputs documents strict JSON Schema output for compatible models; schema enforcement does not replace semantic legality validation.
 - OpenRouter Models documentation provides model capability, pricing, context, completion, and supported-parameter metadata that must be snapshotted for paid qualification.
 - Existing Another Eden wiki and mechanics references ground affinity, status, zone, SA, sidekick, and Grasta constraints.
+- Feature C3 references now ground Status Effects, Damage Formula, Focus effects, reversal, Kaleido, barrier pierce, Link/Copy/Chain/counting behavior, Magic Overcritical, Lunatic variants, and the Oh No Help compound amplification case; detailed entries and retrieval caveats live in `docs/core/planning-sources.md`.
 - Community build references remain heuristic evidence only and require fixture or beta validation before tuning weights.
 
 Open research gaps:
@@ -116,6 +117,8 @@ Open research gaps:
 - Best paid analyzer model at release time.
 - Value of optional OpenRouter-assisted low-confidence tag suggestions.
 - Authentication, persistence, and per-user/global limits for beta.
+- Exact dedicated-page wording for several C3 mechanics that the planning browser could not retrieve; cached source facts and the accessible Status Effects/Damage Formula pages ground the current taxonomy, while unresolved formula or interaction details remain non-authoritative.
+- The initial conservative Feature D policy for using reviewed stacking evidence; C3 captures it but does not require maximum-stack scoring.
 
 No unsupported external performance or pricing claim is used as a fixed acceptance criterion. Token ceilings are project policy; observed provider usage measures compliance.
 
@@ -163,13 +166,13 @@ A versioned local capability artifact replaces broad ETL-level role assignment. 
 - Atomic capability and dependency vocabularies.
 - Direction and explicit target scopes, including self, one ally, adjacent allies, self plus adjacent allies, frontline, main plus reserve, enemy, field, and zone semantics.
 - Deterministic positive rules and explicit negative/rejected patterns.
-- Evidence fields, optional reviewed magnitude/timing qualifiers, sidekick placement availability, curated overrides, review status, and artifact version.
+- Evidence fields, constrained effect subtypes, optional reviewed magnitude/timing/scaling/stacking qualifiers, sidekick placement availability, curated overrides, review status, and artifact version.
 
 Defensive/setup facts distinguish `damage_reduction`, `damage_reduction_barrier`, `shield`, `heal_hp`, `regen_hp`, `remove_status_ailment`, `remove_debuff`, `grant_status_immunity`, `knockback_immunity`, `hold_ground`, `taunt`, `cover`, `guard`, `dodge`, `stalk`, and direction-aware/target-aware `revive`. Barrier and Shield each emit one distinct fact; neither also emits generic damage reduction. Compound sources may emit multiple facts only when each is independently proven. Zone, resistance, MP recovery, offensive/support, and dependency facts remain separate atomic concepts.
 
 ETL or parsed-artifact replay materializes only reviewed `proven` capabilities as active Skill, PassiveSkill, SidekickSkill, and SidekickAura graph facts. Sidekick skill facts are `main_only`; aura facts are `main_or_sub`, with activation conditions retained. `candidate` matches remain review diagnostics and cannot satisfy mandatory coverage. `rejected` matches are preserved as negative regression fixtures so later taxonomy changes cannot reintroduce known false positives. Untagged facts are valid and reported.
 
-Every proven capability cites the matched source phrase, direction/target semantics, rule or override, stable source fact ID, review provenance, and artifact version. When source text explicitly provides them, reviewed evidence may include `magnitude_value`, constrained `magnitude_unit`, `activation_count`, `duration_turns`, and constrained `trigger`; absent values remain unknown, never zero or inferred. Neo4j is materialized output rather than the source of truth. Identical parsed data, review artifacts, and taxonomy versions must reproduce identical graph facts, and drift tests fail on differences.
+Every proven capability cites the matched source phrase, direction/target semantics, rule or override, stable source fact ID, review provenance, and artifact version. When source text explicitly provides them, reviewed evidence may include `magnitude_value`, constrained `magnitude_unit`, `activation_count`, `duration_turns`, constrained `trigger`, bounded effect qualifiers, capture-only scaling evidence, `stacking_behavior`, and `max_stacks`; absent values remain unknown, never zero or inferred. Capture-only qualifiers do not calculate accumulated magnitude, proc probability, damage, healing, AF behavior, turn order, or rotations. Neo4j is materialized output rather than the source of truth. Identical parsed data, review artifacts, and taxonomy versions must reproduce identical graph facts, and drift tests fail on differences.
 
 Character and sidekick roles are not permanent ETL labels. Feature D deterministically derives contextual `RoleScores` and coverage from proven atomic facts, reviewed qualifiers, selected package, sidekick main/sub placement, SA state, boss matchup, build assumptions, and lineup coverage. The analyzer may explain or rank supplied candidates but may not independently certify mandatory coverage.
 
@@ -180,12 +183,12 @@ The repository-native review workflow uses generated CSV batches for editing and
 Review proceeds in three ordered phases:
 
 1. Mandatory defensive/setup capabilities: zone deployment, mitigation, healing, cleanse/status protection, tanking, MP sustain, and required setup.
-2. Offensive/support capabilities: direct damage, buffs, debuffs, Pain/Poison, Break, AF support, and Links.
+2. Offensive/support capabilities: direct damage, atomic amplification and stat/critical/resistance effects, Pain/Poison/Break, named transformations and focus effects, AF effects, affinity conversion, attack bypass, Lunatic activation, Links, Copy/repeat/Chain/follow-up attacks, and independently reviewed qualifiers.
 3. Dependencies and conditions: zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, and similar qualifiers.
 
 Each phase generates deterministic stratified batches of exactly 45 new proposed decisions. Every row requires an explicit `approve`, `reject`, `correct`, or `ambiguous` decision before import; blank decisions fail validation. The generated reviewer template constrains decision, capability, dependency, direction, target, sidekick availability, qualifier units, and triggers, and includes source text, source URL, and concise field guidance. Explicit qualifier proposals must be approved or corrected; genuinely absent qualifiers remain unknown. Reviewers consult the linked wiki source only when captured evidence is unclear; they do not manually reconstruct the corpus or assign contextual roles.
 
-The loop is generate batch -> pause at `Awaiting human review` -> edit CSV -> validate/import canonical JSON -> identify repeated failure patterns -> update rules/overrides -> rerun all accumulated fixtures -> generate the next batch. New targeted reproductions join the automatic regression set rather than inflating the next 45-row human batch. A phase passes only after every accumulated fixture passes and two consecutive fully reviewed batches reveal no new critical false-positive pattern.
+The loop is generate batch -> pause at `Awaiting human review` -> edit CSV -> validate/import canonical JSON -> identify repeated failure patterns -> update rules/overrides -> rerun all accumulated fixtures -> generate the next batch. New targeted reproductions join the automatic regression set rather than inflating the next 45-row human batch. Rare or high-risk additions first receive explicit decisions in a targeted migration/seed-review artifact outside the 45-row batches, then become permanent automatic positive or negative regressions. A phase passes only after every accumulated fixture passes and two consecutive fully reviewed batches reveal no new critical false-positive pattern.
 
 Artifact migrations preserve unaffected decisions through proposal IDs that are stable independently of taxonomy version; evidence still records the exact version used. Renamed, split, or semantically changed facts return through a targeted migration-review artifact outside the 45-new-proposal batches. Superseded generated batches remain audit artifacts and cannot be imported under the replacement vocabulary.
 
@@ -519,19 +522,51 @@ Acceptance criteria:
 
 #### Feature C3: Offensive And Support Human-Review Gate
 
-Status: Planned; blocked until C2 completes.
+Status: Planned; C3 review is paused and the current application changes/generated batch 1 are superseded by this taxonomy 3.0 execution contract.
 
 Technical requirements:
 
-- Review direct damage, buffs, debuffs, Pain/Poison, Break, AF support, and Links in deterministic 45-row stratified batches.
-- Use the same explicit-decision, human-review pause, correction, accumulated-regression, and clean-streak reset contract as C2.
-- Preserve all earlier C2 decisions and prove that C3 rule changes do not regress them.
+- Freeze the current C3 CSV review. Preserve the generated narrow-vocabulary batch 1 as a superseded audit artifact and make it non-importable under the replacement contract; it earns no clean-batch credit.
+- Introduce a breaking taxonomy/review-schema `3.0.0` boundary while keeping proposal IDs stable independently of taxonomy version and retaining exact taxonomy, review, and schema versions in evidence.
+- Preserve every unaffected C2 decision and C2's completed gate. Route renamed, split, or semantically changed facts through an explicit targeted migration-review artifact; never silently promote them under new semantics.
+- Replace `ally_damage_up` with narrowly proven `outgoing_damage_up`; add `healing_effectiveness_up` without allowing either to prove `heal_hp` or `regen_hp`.
+- Review the following atomic offensive/support families across Skill, PassiveSkill, SidekickSkill, and SidekickAura facts:
+  - Damage and bypass: `direct_damage`, `outgoing_damage_up`, `healing_effectiveness_up`, `fixed_damage`, `barrier_pierce`, and `ignore_target_defense`.
+  - Stats and critical effects: `power_up`, `intelligence_up`, `speed_up`, `luck_up`, `power_down`, `intelligence_down`, `speed_down`, `luck_down`, `physical_critical_rate_up`, `magic_critical_rate_up`, `physical_critical_damage_up`, and `magic_critical_damage_up`.
+  - Damage channels: `equipped_weapon_damage_up`, `attack_type_damage_up`, `element_damage_up`, and `non_type_damage_up`.
+  - Resistance reduction: `physical_resistance_down`, `magic_resistance_down`, `attack_type_resistance_down`, and `element_resistance_down`.
+  - Named amplification and transformations: `grant_mental_focus`, `grant_singular_focus`, `grant_eagle_eyes`, `grant_overthrow`, `weakness_multiplier_up`, `grant_physical_overcritical`, `grant_magic_overcritical`, `apply_buff_reversal`, `apply_debuff_reversal`, `inflict_expose`, and `invert_weakness_resistance`.
+  - Status/setup and AF: `inflict_pain`, `inflict_poison`, generic/elemental/weapon `inflict_break`, `af_gauge_restore`, `af_gauge_gain_up`, `af_combo_gain_up`, and `af_damage_up`.
+  - Conversion and additional execution: `apply_kaleido`, `grant_link`, `grant_copy`, `attack_again`, `chain_attack`, residual explicitly named `follow_up_attack`, and `activate_lunatic`.
+- Use constrained qualifier domains rather than compound capability names: equipment class is Staff/Sword/Katana/Axe/Lance/Bow/Fists/Hammer; attack type is Slash/Pierce/Blunt/Magic; element is Fire/Water/Wind/Earth/Thunder/Shade/Crystal with explicit non-type only where valid. `Weapon Break` uses an attack-type qualifier, not an equipment-class qualifier.
+- Represent Break through its named family plus constrained generic/elemental/weapon kind and matching attack-type or element qualifier. Preserve applied stack count as magnitude when explicit; do not execute its consumption behavior.
+- Represent Lunatic as `activate_lunatic` plus a constrained Charge, Copy, Static/Discharge, Mind's Eye, Risktaker, or Sacrifice qualifier. Emit separately proven outcomes as independent facts; never introduce a permanent Lunatic role label.
+- Keep `grant_link`, `grant_copy`, `attack_again`, `chain_attack`, and residual `follow_up_attack` distinct. The residual capability applies only to explicit follow-up wording not covered by the four named mechanics.
+- Emit `direct_damage` only when the reviewed fact itself executes an attack or explicitly deals damage. Pure grants or enablers do not imply direct damage; compound facts emit multiple capabilities only when separate clauses prove each one.
+- Emit only the named Buff Reversal, Debuff Reversal, Expose, and weakness/resistance inversion facts. Do not synthesize the buffs, debuffs, weakness, or resistance states they could produce. Buff Reversal is enemy-directed; Debuff Reversal is self/ally-directed.
+- Keep target scope, recipient eligibility, condition/dependency, duration, magnitude, stacking, and trigger orthogonal. C3 reviews capability, target, explicit magnitude, duration, trigger, bounded scaling evidence, and stacking; C4 reviews recipient eligibility and activation dependencies. A C3-approved fact with unresolved gating evidence cannot satisfy unconditional mandatory coverage before C4.
+- Add minimal capture-only `stacking_behavior` values `not_applicable`, `stackable`, `overwrites`, and `unknown`, plus explicit `max_stacks` when proven. Do not calculate accumulated magnitude or assume maximum stacks are reached.
+- Capture Max MP, enemy-level, excess-critical-rate, or similar scaling only as cited bounded evidence when explicitly stated. Do not implement formula evaluation, proc probability, damage/healing totals, move counting, AF simulation, turn scheduling, or rotations.
+- Expand constrained trigger and qualifier references enough to distinguish battle/turn/skill activation, own-action Link/follow-up behavior, ally-action Chain behavior, on-hit behavior, Stellar Burst, and other explicitly reviewed triggers without executing them.
+- Create and explicitly review a targeted migration/seed artifact for rare/high-risk positive and negative cases, including reversal, Expose/inversion, both Overcritical channels, Focus effects, Lunatic variants, Chain, Copy, Link, attack again, barrier pierce, fixed damage, defense bypass, and misleading damage/healing/AF/resistance phrases. These decisions become permanent accumulated regressions and do not count toward either 45-row batch.
+- Update `docs/guides/ETL_GUIDE.md` before replacement batch 1 with taxonomy 3.0 migration, superseded-batch rejection, targeted seed review, constrained qualifier and stacking review, import/correction, accumulated regression, and clean-streak recovery. Feature C5 verifies and finalizes the guide after full replay.
+- Generate two fresh deterministic stratified batches of exactly 45 new proposals each across capability families and all four record types. Use the same explicit-decision, `Awaiting human review`, correction, accumulated-regression, and critical-pattern clean-streak reset contract as C2.
+- Treat Feature C3 as correctness-based rather than exhaustive-tagging-based. Ambiguous, unsupported, candidate, rejected, and untagged facts remain reported and non-proven.
 
 Acceptance criteria:
 
-- Sign of Collapse proves enemy resistance debuffs and granted Link/Break effects without proving zone deployment or party mitigation.
-- All accumulated C2-C3 fixtures pass after every correction.
-- Two consecutive 45-row C3 batches complete with no new critical false-positive pattern.
+- Taxonomy/review-schema 3.0 validates every new capability and qualifier domain, rejects unknown values and invalid combinations, and reproduces identical proposals/evidence for identical inputs.
+- Every unaffected C2 decision and fixture remains unchanged and passing; every semantic rename or split returns through targeted migration review before it can become proven.
+- The superseded C3 batch 1 fails import under taxonomy 3.0, and its deterministic replacement contains exactly 45 new proposals after migration/seed review and regressions pass.
+- Every defined C3 capability family has reviewed positive coverage and a relevant negative or cross-family fixture; every targeted rare/high-risk seed decision passes as an accumulated regression before a batch counts as clean.
+- Direct damage, channel-agnostic outgoing damage, healing effectiveness, stats, critical effects, damage channels, resistance reductions, Focus effects, AF effects, bypass effects, transformations, conversion, and additional-execution mechanics cannot satisfy one another unless Feature D later groups them through explicit deterministic policy.
+- Equipment class, attack type, element, target scope, recipient eligibility, dependency, duration, magnitude/scaling, stacking, and trigger round-trip independently through CSV, canonical JSON, evidence materialization, diagnostics, and drift checks.
+- Missing magnitude, scaling, stacking, duration, trigger, or eligibility remains unknown rather than zero, maximum, unconditional, or inferred. C3-approved condition-sensitive facts remain ineligible for unconditional mandatory coverage until C4 validates their predicates.
+- Sign of Collapse proves its enemy resistance reduction and granted Link/Break effects without proving zone deployment or party mitigation. Oh No Help proves outgoing-damage and healing-effectiveness amplification without proving a direct heal. Buff/Debuff Reversal, Expose/inversion, Link, Copy, attack again, Chain, Lunatic, barrier pierce, fixed damage, and defense bypass each prove only independently evidenced atomic facts.
+- All accumulated C2-C3 positive, corrected, rejected, ambiguous, migration, seed, sidekick, target, compound, qualifier, stacking, and negative fixtures pass after every correction.
+- `docs/guides/ETL_GUIDE.md` documents the replacement workflow before human batch review resumes and remains marked for C5 replay-aligned finalization.
+- Two fresh consecutive 45-row C3 batches complete with no new critical false-positive pattern; any critical pattern resets the C3 streak to zero.
+- Ambiguous and untagged facts are allowed, but no unsupported external mechanic, exact damage/healing result, proc probability, maximum-stack assumption, AF total, or turn-by-turn outcome becomes authoritative.
 
 #### Feature C4: Dependencies And Conditions Human-Review Gate
 
