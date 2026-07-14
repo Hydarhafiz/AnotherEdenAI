@@ -235,7 +235,7 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
         proposals.append({
             "proposal_id": hashlib.sha256(identity.encode()).hexdigest()[:24],
             "record_type": record_type, "source_fact_id": source_id,
-            "character_name": str(record.get("character_name") or ""),
+            "character_name": str(record.get("character_name") or record.get("sidekick_name") or ""),
             "fact_name": str(record.get("name") or ""), "source_text": source_text.strip(),
             "source_url": str(record.get("source_url") or ""), "rule_id": rule["id"],
             "phase": rule["phase"], "proposed_kind": rule["kind"], "proposed_value": rule["value"],
@@ -252,7 +252,7 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
         proposals.append({
             "proposal_id": hashlib.sha256(identity.encode()).hexdigest()[:24],
             "record_type": record_type, "source_fact_id": source_id,
-            "character_name": str(record.get("character_name") or ""),
+            "character_name": str(record.get("character_name") or record.get("sidekick_name") or ""),
             "fact_name": str(record.get("name") or ""), "source_text": source_text.strip(),
             "source_url": str(record.get("source_url") or ""), "rule_id": override["id"],
             "phase": override["phase"], "proposed_kind": override["kind"], "proposed_value": override["value"],
@@ -313,21 +313,26 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
 
 
 def _iter_records(paths: Iterable[Path]) -> Iterable[dict[str, Any]]:
+    """Yield canonical capability records, deriving stable IDs from parsed rows."""
+    # Imported lazily: models use this module for capability materialization.
+    from .models import PassiveSkillRow, SidekickAuraRow, SidekickSkillRow, SkillRow
+
     for path in sorted(paths, key=str):
         payload = json.loads(path.read_text(encoding="utf-8"))
         for row in payload.get("rows", []):
-            if row.get("skill_id"):
-                yield row
+            if row.get("character_name") and row.get("name") and "description" in row:
+                yield SkillRow.model_validate(row).model_dump()
         for row in payload.get("passive_rows", []):
-            if row.get("passive_skill_id"):
-                yield row
+            if row.get("character_name") and row.get("name"):
+                yield PassiveSkillRow.model_validate(row).model_dump()
         for sidekick in payload.get("rows", []):
+            sidekick_name = sidekick.get("name")
             for row in (*sidekick.get("auto_skills", []), *sidekick.get("charge_skills", [])):
-                if row.get("sidekick_skill_id"):
-                    yield row
+                if sidekick_name and row.get("name"):
+                    yield SidekickSkillRow.model_validate(row).model_dump()
             for row in sidekick.get("auras", []):
-                if row.get("sidekick_aura_id"):
-                    yield row
+                if sidekick_name and row.get("name"):
+                    yield SidekickAuraRow.model_validate(row).model_dump()
 
 
 def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batch_number: int, seed: int, output: Path, reviews_path: Path = REVIEWS_PATH) -> list[dict[str, str]]:
