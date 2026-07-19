@@ -472,6 +472,16 @@ This file stores source references used during planning discussions. It separate
   Relevance: The cached source explicitly says that damage and healing of all party members increase by a percentage. This proves a narrow general outgoing-damage increase and a separate healing-effectiveness increase; it does not prove that the skill directly heals HP.
   Caveats/open questions: The dedicated live page could not be retrieved through the available browsing path. Prayer activation, interruption, party-composition scaling, duration, and other gates remain orthogonal C3/C4 evidence and must not be folded into either amplification capability.
 
+#### Feature C3 Seed-Coverage Recovery
+
+- Title: C3 taxonomy/corpus seed-coverage audit
+  URL: local `src/etl/capability_taxonomy.json`, local `src/etl/capability_taxonomy.py`, local `data/parsed/**/*.json`, local `src/etl/review_batches/c3_offensive_support_batch_1_replacement.csv`
+  Source type: repository implementation and parsed-artifact audit
+  Date added: 2026-07-19
+  Related area: Milestone 5 Feature C3 targeted seed review, strict atomic coverage, and batch recovery
+  Relevance: The current review tooling can export/import generic and legacy migration batches, while the reviewed C3 replacement batch exists outside the canonical review artifact. A targeted C3 seed generator, explicit coverage diagnostics, and overlap-preserving batch refill are required before the reviewed batch can receive clean-batch credit.
+  Caveats/open questions: Several C3 families have no usable parsed proposal in the audited corpus. Each gap requires a human-supplied canonical character or sidekick wiki page, exact fact name, and intended atomic capability; a general mechanics page may define semantics but cannot prove a skill-level fixture. No Neo4j materialization is planned until Feature C5.
+
 #### Feature C Repository Failure Grounding
 
 - Title: Grasta row identity and loader merge audit
