@@ -124,6 +124,17 @@ def test_direction_aware_rules_distinguish_grant_from_dependency_and_negative_pa
     assert "awaken_zone" not in dependencies
 
 
+def test_c3_qualifiers_do_not_cross_compound_effect_clauses():
+    proposals = propose(fact(description=(
+        "Physical Resistance of all enemies -50% and Type Resistance of all enemies -50%. "
+        "Activate Lunatic with Status Lunatic - Mind's Eye on all party members (1 turn)."
+    )), phase="offensive_support")
+    lunatic = next(row for row in proposals if row["proposed_value"] == "activate_lunatic")
+
+    assert lunatic["proposed_magnitude_value"] == ""
+    assert lunatic["proposed_magnitude_unit"] == ""
+
+
 def test_models_are_initially_sparse_and_replay_deterministically():
     first = SkillRow.model_validate(fact())
     replay = SkillRow.model_validate(first.model_dump())

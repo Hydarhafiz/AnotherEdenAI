@@ -28,12 +28,56 @@
       "stalk",
       "recover_mp",
       "direct_damage",
-      "ally_damage_up",
+      "outgoing_damage_up",
+      "healing_effectiveness_up",
+      "fixed_damage",
+      "barrier_pierce",
+      "ignore_target_defense",
+      "power_up",
+      "intelligence_up",
+      "speed_up",
+      "luck_up",
+      "power_down",
+      "intelligence_down",
+      "speed_down",
+      "luck_down",
+      "physical_critical_rate_up",
+      "magic_critical_rate_up",
+      "physical_critical_damage_up",
+      "magic_critical_damage_up",
+      "equipped_weapon_damage_up",
+      "attack_type_damage_up",
+      "element_damage_up",
+      "non_type_damage_up",
+      "physical_resistance_down",
+      "magic_resistance_down",
+      "attack_type_resistance_down",
+      "element_resistance_down",
+      "grant_mental_focus",
+      "grant_singular_focus",
+      "grant_eagle_eyes",
+      "grant_overthrow",
+      "weakness_multiplier_up",
+      "grant_physical_overcritical",
+      "grant_magic_overcritical",
+      "apply_buff_reversal",
+      "apply_debuff_reversal",
+      "inflict_expose",
+      "invert_weakness_resistance",
       "inflict_pain",
       "inflict_poison",
       "inflict_break",
-      "af_support",
-      "grant_link"
+      "af_gauge_restore",
+      "af_gauge_gain_up",
+      "af_combo_gain_up",
+      "af_damage_up",
+      "apply_kaleido",
+      "grant_link",
+      "grant_copy",
+      "attack_again",
+      "chain_attack",
+      "follow_up_attack",
+      "activate_lunatic"
     ],
     "decision": [
       "approve",
@@ -69,6 +113,54 @@
       "multiplier",
       "stacks"
     ],
+    "qualifier_domains": {
+      "attack_type": [
+        "Slash",
+        "Pierce",
+        "Blunt",
+        "Magic"
+      ],
+      "break_kind": [
+        "generic",
+        "elemental",
+        "weapon"
+      ],
+      "element": [
+        "Fire",
+        "Water",
+        "Wind",
+        "Earth",
+        "Thunder",
+        "Shade",
+        "Crystal",
+        "non-type"
+      ],
+      "equipment_class": [
+        "Staff",
+        "Sword",
+        "Katana",
+        "Axe",
+        "Lance",
+        "Bow",
+        "Fists",
+        "Hammer"
+      ],
+      "lunatic_variant": [
+        "Charge",
+        "Copy",
+        "Static",
+        "Discharge",
+        "Mind's Eye",
+        "Risktaker",
+        "Sacrifice"
+      ]
+    },
+    "stacking_behavior": [
+      "not_applicable",
+      "stackable",
+      "overwrites",
+      "unknown"
+    ],
     "target": [
       "self",
       "one_ally",
@@ -95,13 +187,14 @@
       "on_skill_use",
       "on_zone_deploy",
       "on_stellar_burst",
-      "on_death"
+      "on_death",
+      "own_action",
+      "ally_action",
+      "battle_activation"
     ]
   },
-  "artifact_version": "2.1.0",
+  "artifact_version": "3.0.0",
   "batch_number": 1,
-  "superseded": true,
-  "superseded_by_taxonomy_version": "3.0.0",
   "field_guidance": {
     "ambiguous": "Evidence is insufficient; this remains non-authoritative.",
     "approve": "Accept the proposed atomic fact and its direction/target semantics.",
@@ -125,6 +218,9 @@
       "proposed_activation_count",
       "proposed_duration_turns",
       "proposed_trigger",
+      "proposed_stacking_behavior",
+      "proposed_max_stacks",
+      "proposed_qualifiers_json",
       "matched_phrase",
       "artifact_version"
     ],

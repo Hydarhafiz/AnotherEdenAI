@@ -522,7 +522,7 @@ Acceptance criteria:
 
 #### Feature C3: Offensive And Support Human-Review Gate
 
-Status: Planned; C3 review is paused and the current application changes/generated batch 1 are superseded by this taxonomy 3.0 execution contract.
+Status: Implemented, awaiting testing; taxonomy/review-schema 3.0 tooling is in place, and the C3 human-review gate remains paused pending targeted seed review and two fresh clean batches.
 
 Technical requirements:
 

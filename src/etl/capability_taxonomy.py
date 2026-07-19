@@ -19,7 +19,10 @@ REVIEWS_PATH = Path(__file__).with_name("capability_reviews.json")
 GOLD_PATH = Path(__file__).with_name("capability_gold.json")
 BATCH_SIZE = 45
 PHASES = {"defensive_setup", "offensive_support", "dependencies_conditions"}
-SUPERSEDED_BATCHES = {"c2_defensive_setup_batch_2.csv"}
+SUPERSEDED_BATCHES = {
+    "c2_defensive_setup_batch_2.csv",
+    "c3_offensive_support_batch_1.csv",
+}
 MIGRATED_RULES = {
     "cap-barrier": {"cap-damage-reduction-barrier", "cap-shield"},
     "cap-cleanse": {"cap-remove-status-ailment", "cap-remove-debuff"},
@@ -30,13 +33,15 @@ IMMUTABLE_COLUMNS = (
     "proposed_direction", "proposed_target", "proposed_availability",
     "proposed_magnitude_value", "proposed_magnitude_unit",
     "proposed_activation_count", "proposed_duration_turns", "proposed_trigger",
+    "proposed_stacking_behavior", "proposed_max_stacks", "proposed_qualifiers_json",
     "matched_phrase", "artifact_version",
 )
 REVIEW_COLUMNS = (
     "decision", "corrected_kind", "corrected_value", "corrected_direction",
     "corrected_target", "corrected_availability", "corrected_magnitude_value",
     "corrected_magnitude_unit", "corrected_activation_count",
-    "corrected_duration_turns", "corrected_trigger", "reviewer", "reviewer_notes",
+    "corrected_duration_turns", "corrected_trigger", "corrected_stacking_behavior",
+    "corrected_max_stacks", "corrected_qualifiers_json", "reviewer", "reviewer_notes",
 )
 
 RECORD_TYPES = {"skill", "passive", "sidekick_skill", "sidekick_aura"}
@@ -97,13 +102,13 @@ def load_capability_taxonomy() -> dict[str, Any]:
     required = (
         "artifact_version", "review_schema_version", "capabilities", "dependencies",
         "directions", "targets", "availability", "magnitude_units", "triggers",
-        "review_states",
+        "stacking_behaviors", "qualifier_domains", "review_states",
     )
     if any(not artifact.get(key) for key in required):
         raise ValueError("Capability taxonomy is missing required vocabulary or version fields")
     vocabulary_keys = (
         "capabilities", "dependencies", "directions", "targets", "availability",
-        "magnitude_units", "triggers", "review_states",
+        "magnitude_units", "triggers", "stacking_behaviors", "review_states",
     )
     for key in vocabulary_keys:
         if len(artifact[key]) != len(set(artifact[key])):
@@ -205,12 +210,26 @@ def _qualifiers(text: str, taxonomy: dict[str, Any]) -> dict[str, str]:
     turns = re.search(r"\bfor\s+(\d+)\s+turns?\b", text, re.IGNORECASE)
     activations = re.search(r"\b(\d+)\s+(?:times?|activations?|uses?)\b", text, re.IGNORECASE)
     trigger = next((value for value in taxonomy["triggers"] if value != "none" and re.search(rf"\b{re.escape(value.replace('_', ' '))}\b", text, re.IGNORECASE)), "none")
+    max_stacks = re.search(r"\bmax(?:imum)?\s+(\d+)\s+stacks?\b|\bup to\s+(\d+)\s+stacks?\b", text, re.IGNORECASE)
+    stacking_behavior = (
+        "overwrites" if re.search(r"\b(?:overwrite|replaces?)\b", text, re.IGNORECASE)
+        else "stackable" if re.search(r"\bstacks?\b", text, re.IGNORECASE)
+        else "not_applicable"
+    )
+    qualifiers: dict[str, list[str]] = {}
+    for domain, values in taxonomy["qualifier_domains"].items():
+        matched = [value for value in values if re.search(rf"\b{re.escape(value)}\b", text, re.IGNORECASE)]
+        if matched:
+            qualifiers[domain] = matched
     return {
         "proposed_magnitude_value": percent.group(1) if percent else "",
         "proposed_magnitude_unit": "percent" if percent else "",
         "proposed_activation_count": activations.group(1) if activations else "",
         "proposed_duration_turns": turns.group(1) if turns else "",
         "proposed_trigger": trigger,
+        "proposed_stacking_behavior": stacking_behavior,
+        "proposed_max_stacks": next((value for value in (max_stacks.groups() if max_stacks else ()) if value), ""),
+        "proposed_qualifiers_json": _canonical(qualifiers),
     }
 
 
@@ -240,7 +259,12 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
             "source_url": str(record.get("source_url") or ""), "rule_id": rule["id"],
             "phase": rule["phase"], "proposed_kind": rule["kind"], "proposed_value": rule["value"],
             "proposed_direction": rule["direction"], "proposed_target": rule["target"],
-            "proposed_availability": availability, **_qualifiers(source_text, taxonomy),
+            # C3 qualifiers must be attributable to this atomic match, rather than
+            # borrowing percentages or durations from another clause in a compound fact.
+            "proposed_availability": availability, **_qualifiers(
+                match.group(0) if rule["phase"] == "offensive_support" else source_text,
+                taxonomy,
+            ),
             "matched_phrase": match.group(0), "artifact_version": taxonomy["artifact_version"],
             "proposal_origin": "rule",
         })
@@ -290,7 +314,7 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
         def reviewed(field: str) -> str:
             corrected = decision.get(f"corrected_{field}") if state == "correct" else None
             return str(corrected if corrected not in (None, "") else proposal.get(f"proposed_{field}", ""))
-        evidence.append({
+        evidence_row = {
             "kind": kind, "value": value, "direction": direction, "target": target,
             "availability": reviewed("availability"),
             "magnitude_value": reviewed("magnitude_value"),
@@ -303,7 +327,14 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
             "reviewer_notes": str(decision.get("reviewer_notes") or ""),
             "artifact_version": taxonomy["artifact_version"],
             "review_artifact_version": load_reviews(reviews_path)["artifact_version"],
-        })
+        }
+        if proposal["phase"] == "offensive_support":
+            evidence_row.update({
+                "stacking_behavior": reviewed("stacking_behavior"),
+                "max_stacks": reviewed("max_stacks"),
+                "qualifiers": json.loads(reviewed("qualifiers_json") or "{}"),
+            })
+        evidence.append(evidence_row)
     evidence.sort(key=lambda row: (row["kind"], row["value"], row["source_id"]))
     capabilities = sorted({row["value"] for row in evidence if row["kind"] == "capability"})
     dependencies = sorted({row["value"] for row in evidence if row["kind"] == "dependency"})
@@ -373,14 +404,22 @@ def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batc
         for row in chosen:
             writer.writerow({**row, **{key: "" for key in REVIEW_COLUMNS}})
     reference_path = output.with_name(f"{output.stem}.reference.json")
+    allowed_values = {
+        "decision": taxonomy["review_states"] if (taxonomy := load_capability_taxonomy()) else [],
+        "kind": ["capability", "dependency"],
+        "capability": taxonomy["capabilities"], "dependency": taxonomy["dependencies"],
+        "direction": taxonomy["directions"], "target": taxonomy["targets"],
+        "availability": taxonomy["availability"],
+        "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"],
+    }
+    if phase == "offensive_support":
+        allowed_values.update({
+            "stacking_behavior": taxonomy["stacking_behaviors"],
+            "qualifier_domains": taxonomy["qualifier_domains"],
+        })
     reference_path.write_text(json.dumps({
         "allowed_values": {
-            "decision": taxonomy["review_states"] if (taxonomy := load_capability_taxonomy()) else [],
-            "kind": ["capability", "dependency"],
-            "capability": taxonomy["capabilities"], "dependency": taxonomy["dependencies"],
-            "direction": taxonomy["directions"], "target": taxonomy["targets"],
-            "availability": taxonomy["availability"],
-            "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"],
+            **allowed_values,
         },
         "field_guidance": {
             "approve": "Accept the proposed atomic fact and its direction/target semantics.",
@@ -412,7 +451,9 @@ def generate_migration_review(*, output: Path, reviews_path: Path = REVIEWS_PATH
         "allowed_values": {"decision": taxonomy["review_states"], "capability": taxonomy["capabilities"],
                            "dependency": taxonomy["dependencies"], "direction": taxonomy["directions"],
                            "target": taxonomy["targets"], "availability": taxonomy["availability"],
-                           "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"]},
+                           "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"],
+                           "stacking_behavior": taxonomy["stacking_behaviors"],
+                           "qualifier_domains": taxonomy["qualifier_domains"]},
         "field_guidance": {"migration": "Re-review every changed atomic fact; no prior approval is carried forward.",
                            "immutable": list(IMMUTABLE_COLUMNS)},
     }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -490,9 +531,22 @@ def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, re
                 raise ValueError(f"Invalid corrected magnitude unit for {row['proposal_id']}")
             if row.get("corrected_trigger") and row["corrected_trigger"] not in taxonomy["triggers"]:
                 raise ValueError(f"Invalid corrected trigger for {row['proposal_id']}")
-            for field in ("corrected_magnitude_value", "corrected_activation_count", "corrected_duration_turns"):
+            if row.get("corrected_stacking_behavior") and row["corrected_stacking_behavior"] not in taxonomy["stacking_behaviors"]:
+                raise ValueError(f"Invalid corrected stacking behavior for {row['proposal_id']}")
+            for field in ("corrected_magnitude_value", "corrected_activation_count", "corrected_duration_turns", "corrected_max_stacks"):
                 if row.get(field) and not re.fullmatch(r"\d+(?:\.\d+)?", row[field]):
                     raise ValueError(f"Invalid numeric qualifier for {row['proposal_id']}")
+            if row.get("corrected_qualifiers_json"):
+                try:
+                    qualifiers = json.loads(row["corrected_qualifiers_json"])
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"Invalid corrected qualifiers for {row['proposal_id']}") from exc
+                if not isinstance(qualifiers, dict) or any(
+                    domain not in taxonomy["qualifier_domains"] or not isinstance(values, list)
+                    or any(value not in taxonomy["qualifier_domains"][domain] for value in values)
+                    for domain, values in qualifiers.items()
+                ):
+                    raise ValueError(f"Invalid corrected qualifiers for {row['proposal_id']}")
         elif any(row.get(key, "").strip() for key in REVIEW_COLUMNS if key.startswith("corrected_")):
             raise ValueError(f"Correction fields require decision=correct for {row['proposal_id']}")
     artifact = load_reviews(reviews_path)
