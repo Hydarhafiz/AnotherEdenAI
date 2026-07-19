@@ -290,6 +290,7 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
             continue
         identity = f"{record_type}|{source_id}|{override['id']}"
         availability = "main_only" if record_type == "sidekick_skill" else "main_or_sub" if record_type == "sidekick_aura" else "not_applicable"
+        matched_phrase = str(override.get("matched_phrase") or source_text).strip()
         proposals.append({
             "proposal_id": hashlib.sha256(identity.encode()).hexdigest()[:24],
             "record_type": record_type, "source_fact_id": source_id,
@@ -299,8 +300,8 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
             "phase": override["phase"], "proposed_kind": override["kind"], "proposed_value": override["value"],
             "proposed_direction": override["direction"], "proposed_target": override["target"],
             "proposed_availability": override.get("availability", availability),
-            **_qualifiers(source_text, taxonomy),
-            "matched_phrase": str(override.get("matched_phrase") or source_text).strip(),
+            **_qualifiers(matched_phrase, taxonomy),
+            "matched_phrase": matched_phrase,
             "artifact_version": taxonomy["artifact_version"], "proposal_origin": "override",
         })
     return sorted(proposals, key=lambda row: (row["proposed_value"], row["source_fact_id"], row["rule_id"]))
@@ -464,19 +465,24 @@ def c3_seed_coverage(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
         proposal for record in records for proposal in propose(record, phase="offensive_support")
         if proposal["proposed_value"] in active and proposal["source_url"]
     ]
-    by_value: dict[str, list[dict[str, str]]] = defaultdict(list)
+    by_value: dict[str, dict[str, dict[str, str]]] = defaultdict(dict)
     for proposal in proposals:
-        by_value[proposal["proposed_value"]].append(proposal)
-    for rows in by_value.values():
+        # The parsed corpus can contain repeated renderings of the same stable fact.
+        # One stable proposal is one seed candidate, regardless of duplicate payload rows.
+        by_value[proposal["proposed_value"]].setdefault(proposal["proposal_id"], proposal)
+    normalized: dict[str, list[dict[str, str]]] = {}
+    for value, rows_by_id in by_value.items():
+        rows = list(rows_by_id.values())
         rows.sort(key=lambda row: (row["source_fact_id"], row["rule_id"], row["proposal_id"]))
-    missing = [value for value in active if not by_value[value]]
+        normalized[value] = rows
+    missing = [value for value in active if not normalized.get(value)]
     return {
         "artifact_version": load_capability_taxonomy()["artifact_version"],
         "active_capabilities": active,
         "reserved_capabilities": sorted(C3_RESERVED_CAPABILITIES),
-        "coverage": {value: [row["proposal_id"] for row in by_value[value]] for value in active},
+        "coverage": {value: [row["proposal_id"] for row in normalized.get(value, [])] for value in active},
         "missing": missing,
-        "proposals": by_value,
+        "proposals": normalized,
     }
 
 

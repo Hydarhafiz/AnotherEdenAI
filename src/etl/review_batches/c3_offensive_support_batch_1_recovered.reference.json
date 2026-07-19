@@ -1,0 +1,47 @@
+{
+  "active_capabilities": [
+    "activate_lunatic",
+    "af_combo_gain_up",
+    "af_damage_up",
+    "af_gauge_restore",
+    "apply_buff_reversal",
+    "apply_debuff_reversal",
+    "apply_kaleido",
+    "attack_again",
+    "barrier_pierce",
+    "chain_attack",
+    "direct_damage",
+    "element_resistance_down",
+    "fixed_damage",
+    "grant_link",
+    "grant_magic_overcritical",
+    "grant_mental_focus",
+    "grant_physical_overcritical",
+    "grant_singular_focus",
+    "healing_effectiveness_up",
+    "ignore_target_defense",
+    "inflict_break",
+    "inflict_expose",
+    "inflict_pain",
+    "inflict_poison",
+    "outgoing_damage_up"
+  ],
+  "artifact_type": "c3_recovery_batch",
+  "artifact_version": "3.0.0",
+  "new_proposal_count": 5,
+  "phase": "offensive_support",
+  "preserved_proposal_ids": [
+    "0f2bf3569624da05d723d57b",
+    "3cfddc40642ceb93f134aa86",
+    "72c0dc4d386561e4c520ac87",
+    "c9596421d9c9347211e3eaf3",
+    "df6ecd54f6c1227fe81d1111"
+  ],
+  "reserved_capabilities": [
+    "af_gauge_gain_up",
+    "follow_up_attack",
+    "grant_copy",
+    "invert_weakness_resistance"
+  ],
+  "row_count": 45
+}

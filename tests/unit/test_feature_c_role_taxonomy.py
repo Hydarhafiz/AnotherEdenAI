@@ -186,6 +186,72 @@ def test_c3_seed_coverage_reports_named_source_gaps_without_substitution(monkeyp
     ]
 
 
+@pytest.mark.parametrize(
+    ("record", "expected_value", "expected_direction", "expected_target", "expected_phrase", "expected_magnitude"),
+    [
+        (
+            fact(
+                index="hiten-ranbu",
+                description="Fire type resistance of all enemies -30% (3 turns)",
+            ) | {
+                "skill_id": "skill:f75f8b84c4753e63ef04",
+                "name": "Hiten Ranbu",
+                "source_url": "https://anothereden.wiki/w/Noble_Blossom_(Another_Style)",
+            },
+            "element_resistance_down", "enemy", "all_enemies",
+            "Fire type resistance of all enemies -30%", "30",
+        ),
+        (
+            fact(
+                index="superb-act",
+                description=(
+                    "Apply Overcritical (4 turns) Overcritical : Grants a chance to double "
+                    "the user's physical critical damage. Critical rate +100%"
+                ),
+            ) | {
+                "skill_id": "skill:5d7d0eb7f3ef7d819488",
+                "name": "Superb Act",
+                "source_url": "https://anothereden.wiki/w/Forlorn_Thespian",
+            },
+            "grant_physical_overcritical", "self", "self",
+            "Apply Overcritical (4 turns) Overcritical : Grants a chance to double the user's physical critical damage", "",
+        ),
+        (
+            fact(
+                index="over-kill",
+                description="Consumes 10% HP and ignores target's defense (Def=0 in Damage Formula)",
+            ) | {
+                "skill_id": "skill:2dd0b2614c25347f04eb",
+                "name": "Over Kill",
+                "source_url": "https://anothereden.wiki/w/Minalca_(Another_Style)",
+            },
+            "ignore_target_defense", "enemy", "single_enemy",
+            "ignores target's defense (Def=0 in Damage Formula)", "",
+        ),
+    ],
+)
+def test_c3_seed_gap_overrides_are_exact_and_clause_scoped(
+    record, expected_value, expected_direction, expected_target, expected_phrase, expected_magnitude,
+):
+    proposals = propose(record, phase="offensive_support")
+    proposal = next(row for row in proposals if row["proposed_value"] == expected_value)
+
+    assert (proposal["proposed_direction"], proposal["proposed_target"]) == (expected_direction, expected_target)
+    assert proposal["matched_phrase"] == expected_phrase
+    assert proposal["proposed_magnitude_value"] == expected_magnitude
+
+
+def test_c3_seed_coverage_deduplicates_repeated_stable_source_facts(monkeypatch):
+    proposal = c3_proposal("direct_damage", 1)
+    records = [{"proposals": [proposal]}, {"proposals": [proposal.copy()]}]
+    monkeypatch.setattr(capability_taxonomy, "propose", lambda record, **_: record["proposals"])
+
+    coverage = c3_seed_coverage(records)
+
+    assert coverage["coverage"]["direct_damage"] == [proposal["proposal_id"]]
+    assert coverage["proposals"]["direct_damage"] == [proposal]
+
+
 def test_c3_seed_review_is_deterministic_and_artifact_only(tmp_path, monkeypatch):
     active = active_capabilities(phase="offensive_support")
     records = [{"proposals": [c3_proposal(value, index)]} for index, value in enumerate(active)]

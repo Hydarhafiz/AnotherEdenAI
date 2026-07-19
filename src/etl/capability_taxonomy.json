@@ -99,5 +99,39 @@
     {"id":"dep-party","phase":"dependencies_conditions","kind":"dependency","value":"party_composition","record_types":["skill","passive"],"pattern":"\\b(?:for each|number of) .{0,30}(?:party member|ally|character)","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"dep-limited","phase":"dependencies_conditions","kind":"dependency","value":"limited_use","record_types":["skill","passive"],"pattern":"\\b(?:once per battle|usable [0-9]+ times?|limited use)\\b","negative_patterns":[],"direction":"self","target":"single"}
   ],
-  "overrides": []
+  "overrides": [
+    {
+      "id": "c3-seed-element-resistance-down-hiten-ranbu",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "element_resistance_down",
+      "record_type": "skill",
+      "record_id": "skill:f75f8b84c4753e63ef04",
+      "direction": "enemy",
+      "target": "all_enemies",
+      "matched_phrase": "Fire type resistance of all enemies -30%"
+    },
+    {
+      "id": "c3-seed-physical-overcritical-superb-act",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "grant_physical_overcritical",
+      "record_type": "skill",
+      "record_id": "skill:5d7d0eb7f3ef7d819488",
+      "direction": "self",
+      "target": "self",
+      "matched_phrase": "Apply Overcritical (4 turns) Overcritical : Grants a chance to double the user's physical critical damage"
+    },
+    {
+      "id": "c3-seed-ignore-target-defense-over-kill",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "ignore_target_defense",
+      "record_type": "skill",
+      "record_id": "skill:2dd0b2614c25347f04eb",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "ignores target's defense (Def=0 in Damage Formula)"
+    }
+  ]
 }
