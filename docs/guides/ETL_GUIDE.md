@@ -335,44 +335,31 @@ RETURN c.name;
 
 The identity columns must be non-empty and schema versions must be `1.2.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
 
-### Schema 1.3 Role Taxonomy Replay And Drift Repair
+### Feature C Atomic Capability Review
 
-Schema 1.3.0 derives Skill and PassiveSkill roles from `src/etl/role_taxonomy.json`. After changing the taxonomy version, rules, or overrides, refresh current parsed artifacts when necessary and replay them:
+`src/etl/capability_taxonomy.json` and the canonical review/gold artifacts are the source of truth. Do not edit capability fields in Neo4j. C3 uses taxonomy/review schema 3.0.0 and exposes 25 active offensive/support families; `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` are reserved, non-authoritative vocabulary.
+
+Generate a targeted C3 seed review from parsed character and sidekick facts:
 
 ```bash
-ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
+.venv/bin/python -m src.etl.capability_taxonomy generate-c3-seed \
+  --parsed-dir data/parsed \
+  --csv src/etl/review_batches/c3_offensive_support_seed_review.csv
 ```
 
-The replay writes `role_tags`, `role_evidence_json`, and `role_taxonomy_version`, then aborts if Neo4j differs from the artifact-derived values. Verify that evidence-bearing records always have tags:
+The command either writes a deterministic CSV and reference JSON or stops with named coverage gaps. A general mechanics page cannot fill a gap: add a human-supplied canonical character or sidekick page, exact fact name, and intended atomic capability first.
 
-```cypher
-MATCH (n)
-WHERE (n:Skill OR n:PassiveSkill)
-  AND n.role_evidence_json <> "[]"
-  AND size(n.role_tags) = 0
-RETURN count(n) AS inconsistent_records;
+After human seed decisions exist, recover the reviewed replacement batch while preserving seed evidence and refilling only overlaps:
+
+```bash
+.venv/bin/python -m src.etl.capability_taxonomy recover-c3-batch \
+  --parsed-dir data/parsed \
+  --reviewed-batch src/etl/review_batches/c3_offensive_support_batch_1_replacement.csv \
+  --seed-csv src/etl/review_batches/c3_offensive_support_seed_review.csv \
+  --csv src/etl/review_batches/c3_offensive_support_batch_1_recovered.csv
 ```
 
-The expected count is zero. Inspect a sample with:
-
-```cypher
-MATCH (n)
-WHERE n:Skill OR n:PassiveSkill
-RETURN n.name, n.role_tags, n.role_evidence_json, n.role_taxonomy_version
-LIMIT 20;
-```
-
-Each evidence entry must cite a rule or override ID, the stable source fact ID, and confidence. To repair drift, do not edit role properties directly in Neo4j; correct the local taxonomy artifact or parsed source fact, bump the taxonomy version when semantics change, and rerun ETL.
-
-If assertions identify a stale integration fixture such as `Aina`, confirm it is absent from the current parsed artifacts and remove only that fixture node before replaying ETL:
-
-```cypher
-MATCH (c:Character {name: 'Aina'})
-WHERE c.character_id IS NULL AND c.schema_version IS NULL
-DETACH DELETE c;
-```
-
-Do not generalize this into a broad deletion query: an unidentified stale node should be investigated before removal.
+Review every new row explicitly, then import it with the same parsed directory. C3 remains artifact-only: do not run an ETL replay or inspect Neo4j capability materialization until Feature C5.
 
 ## Maintenance Rule
 

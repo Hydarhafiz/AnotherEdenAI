@@ -8,10 +8,15 @@ from pathlib import Path
 
 import pytest
 
+import src.etl.capability_taxonomy as capability_taxonomy
 from src.etl.capability_taxonomy import (
     BATCH_SIZE,
+    active_capabilities,
     assert_capability_materialization,
+    c3_seed_coverage,
     diagnostics,
+    generate_c3_recovery_batch,
+    generate_c3_seed_review,
     generate_migration_review,
     generate_review_batch,
     import_review_batch,
@@ -91,6 +96,24 @@ def review_csv(path: Path, transform):
         writer.writerows(rows)
 
 
+def c3_proposal(value, index):
+    """Minimal stable C3 proposal used to isolate artifact-only review tooling."""
+    return {
+        "proposal_id": f"c3-{index:03d}", "record_type": "skill",
+        "source_fact_id": f"skill:c3-{index:03d}", "character_name": "Tester",
+        "fact_name": f"C3 Fact {index}", "source_text": f"Evidence for {value}",
+        "source_url": f"https://example.test/c3/{index}", "rule_id": f"cap-{value}",
+        "phase": "offensive_support", "proposed_kind": "capability", "proposed_value": value,
+        "proposed_direction": "ally", "proposed_target": "party",
+        "proposed_availability": "not_applicable", "proposed_magnitude_value": "",
+        "proposed_magnitude_unit": "", "proposed_activation_count": "",
+        "proposed_duration_turns": "", "proposed_trigger": "none",
+        "proposed_stacking_behavior": "not_applicable", "proposed_max_stacks": "",
+        "proposed_qualifiers_json": "{}", "matched_phrase": value,
+        "artifact_version": "3.0.0", "proposal_origin": "rule",
+    }
+
+
 def test_taxonomy_declares_atomic_vocabularies_semantics_and_negative_patterns():
     taxonomy = load_capability_taxonomy()
 
@@ -133,6 +156,76 @@ def test_c3_qualifiers_do_not_cross_compound_effect_clauses():
 
     assert lunatic["proposed_magnitude_value"] == ""
     assert lunatic["proposed_magnitude_unit"] == ""
+
+
+def test_c3_mvp_activates_exactly_25_families_and_reserves_four():
+    taxonomy = load_capability_taxonomy()
+    active = active_capabilities(phase="offensive_support")
+
+    assert len(active) == 25
+    assert set(taxonomy["reserved_capabilities"]) == {
+        "af_gauge_gain_up", "invert_weakness_resistance", "grant_copy", "follow_up_attack",
+    }
+    assert not (set(active) & set(taxonomy["reserved_capabilities"]))
+    assert not any(
+        rule["phase"] == "offensive_support" and rule["value"] in taxonomy["reserved_capabilities"]
+        for rule in taxonomy["rules"]
+    )
+
+
+def test_c3_seed_coverage_reports_named_source_gaps_without_substitution(monkeypatch):
+    active = active_capabilities(phase="offensive_support")
+    records = [{"proposals": [c3_proposal(value, index)]} for index, value in enumerate(active[:-3])]
+    monkeypatch.setattr(capability_taxonomy, "propose", lambda record, **_: record["proposals"])
+
+    coverage = c3_seed_coverage(records)
+
+    assert coverage["missing"] == active[-3:]
+    assert coverage["reserved_capabilities"] == [
+        "af_gauge_gain_up", "follow_up_attack", "grant_copy", "invert_weakness_resistance",
+    ]
+
+
+def test_c3_seed_review_is_deterministic_and_artifact_only(tmp_path, monkeypatch):
+    active = active_capabilities(phase="offensive_support")
+    records = [{"proposals": [c3_proposal(value, index)]} for index, value in enumerate(active)]
+    monkeypatch.setattr(capability_taxonomy, "propose", lambda record, **_: record["proposals"])
+    first, second = tmp_path / "seed-1.csv", tmp_path / "seed-2.csv"
+
+    generate_c3_seed_review(records, output=first)
+    generate_c3_seed_review(reversed(records), output=second)
+
+    assert first.read_bytes() == second.read_bytes()
+    with first.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 25
+    assert {row["fixture_role"] for row in rows} == {"positive_with_cross_family"}
+    assert all(row["cross_family_value"] != row["fixture_capability"] for row in rows)
+    assert not list(tmp_path.glob("*.json")) or (tmp_path / "seed-1.reference.json").exists()
+
+
+def test_c3_recovery_refills_seed_overlap_without_rewriting_its_decision(tmp_path, monkeypatch):
+    proposals = [c3_proposal("direct_damage", index) for index in range(BATCH_SIZE + 1)]
+    records = [{"proposals": [proposal]} for proposal in proposals]
+    monkeypatch.setattr(capability_taxonomy, "propose", lambda record, **_: record["proposals"])
+    reviewed = tmp_path / "reviewed.csv"
+    with reviewed.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(
+            handle, fieldnames=list(capability_taxonomy.IMMUTABLE_COLUMNS) + list(capability_taxonomy.REVIEW_COLUMNS),
+            extrasaction="ignore",
+        )
+        writer.writeheader()
+        for proposal in proposals[:BATCH_SIZE]:
+            writer.writerow({**proposal, "decision": "approve", "reviewer": "reviewer"})
+    recovered = tmp_path / "recovered.csv"
+
+    rows = generate_c3_recovery_batch(records, reviewed_batch=reviewed, output=recovered, seed_proposal_ids={proposals[0]["proposal_id"]})
+
+    assert len(rows) == BATCH_SIZE
+    assert proposals[0]["proposal_id"] not in {row["proposal_id"] for row in rows}
+    replacement = next(row for row in rows if row["proposal_id"] == proposals[-1]["proposal_id"])
+    assert replacement["decision"] == ""
+    assert sum(row["decision"] == "approve" for row in rows) == BATCH_SIZE - 1
 
 
 def test_models_are_initially_sparse_and_replay_deterministically():

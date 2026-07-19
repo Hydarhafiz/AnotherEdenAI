@@ -82,6 +82,8 @@ Equipment nodes provide baseline context only. They do not encode best-in-slot r
 - `capability_diagnostics_json` (STRING) — deterministic proposed, proven, candidate, rejected, ambiguous, untagged, and reviewed counts
 - `schema_version` (STRING) — ETL schema version used for this row
 
+Taxonomy review artifacts may define active and reserved capability vocabulary, but C3 seed and recovery artifacts do not alter these graph fields. No C3 review action materializes to Neo4j before the Feature C5 replay gate.
+
 Uniqueness: `skill_id` and `(character_name, name)`.
 
 ### PassiveSkill

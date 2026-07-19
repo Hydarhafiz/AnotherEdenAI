@@ -45,6 +45,9 @@ REVIEW_COLUMNS = (
 )
 
 RECORD_TYPES = {"skill", "passive", "sidekick_skill", "sidekick_aura"}
+C3_RESERVED_CAPABILITIES = {
+    "af_gauge_gain_up", "invert_weakness_resistance", "grant_copy", "follow_up_attack",
+}
 
 
 def _read_review_csv(path: Path) -> list[dict[str, str]]:
@@ -102,7 +105,7 @@ def load_capability_taxonomy() -> dict[str, Any]:
     required = (
         "artifact_version", "review_schema_version", "capabilities", "dependencies",
         "directions", "targets", "availability", "magnitude_units", "triggers",
-        "stacking_behaviors", "qualifier_domains", "review_states",
+        "stacking_behaviors", "qualifier_domains", "review_states", "reserved_capabilities",
     )
     if any(not artifact.get(key) for key in required):
         raise ValueError("Capability taxonomy is missing required vocabulary or version fields")
@@ -113,6 +116,8 @@ def load_capability_taxonomy() -> dict[str, Any]:
     for key in vocabulary_keys:
         if len(artifact[key]) != len(set(artifact[key])):
             raise ValueError(f"Capability taxonomy has duplicate {key}")
+    if set(artifact["reserved_capabilities"]) != C3_RESERVED_CAPABILITIES:
+        raise ValueError("Capability taxonomy must retain exactly the four deferred C3 capabilities as reserved")
     ids: set[str] = set()
     vocab = {"capability": set(artifact["capabilities"]), "dependency": set(artifact["dependencies"])}
     for rule in artifact.get("rules", []):
@@ -125,6 +130,8 @@ def load_capability_taxonomy() -> dict[str, Any]:
         ):
             raise ValueError(f"Invalid atomic capability rule: {rule!r}")
         ids.add(rule["id"])
+        if rule["phase"] == "offensive_support" and rule["value"] in C3_RESERVED_CAPABILITIES:
+            raise ValueError("Reserved C3 capabilities cannot have active rules")
         re.compile(rule["pattern"], re.IGNORECASE)
         for pattern in rule.get("negative_patterns", []):
             re.compile(pattern, re.IGNORECASE)
@@ -142,6 +149,16 @@ def load_capability_taxonomy() -> dict[str, Any]:
             raise ValueError(f"Invalid atomic capability override: {override!r}")
         ids.add(override["id"])
     return artifact
+
+
+def active_capabilities(*, phase: str | None = None) -> list[str]:
+    """Return capability values which can be proposed in the requested review phase."""
+    taxonomy = load_capability_taxonomy()
+    values = {
+        rule["value"] for rule in taxonomy["rules"]
+        if rule["kind"] == "capability" and (phase is None or rule["phase"] == phase)
+    }
+    return sorted(values)
 
 
 def load_reviews(path: Path = REVIEWS_PATH) -> dict[str, Any]:
@@ -435,6 +452,119 @@ def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batc
     return chosen
 
 
+def c3_seed_coverage(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    """Diagnose source-backed seed candidates without treating a general mechanic page as evidence.
+
+    A usable candidate is an atomic proposal from a parsed character or sidekick fact with
+    a stable fact ID and its captured canonical wiki URL.  Reserved vocabulary is excluded
+    completely: it remains a future extension rather than an unreviewed coverage hole.
+    """
+    active = active_capabilities(phase="offensive_support")
+    proposals = [
+        proposal for record in records for proposal in propose(record, phase="offensive_support")
+        if proposal["proposed_value"] in active and proposal["source_url"]
+    ]
+    by_value: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for proposal in proposals:
+        by_value[proposal["proposed_value"]].append(proposal)
+    for rows in by_value.values():
+        rows.sort(key=lambda row: (row["source_fact_id"], row["rule_id"], row["proposal_id"]))
+    missing = [value for value in active if not by_value[value]]
+    return {
+        "artifact_version": load_capability_taxonomy()["artifact_version"],
+        "active_capabilities": active,
+        "reserved_capabilities": sorted(C3_RESERVED_CAPABILITIES),
+        "coverage": {value: [row["proposal_id"] for row in by_value[value]] for value in active},
+        "missing": missing,
+        "proposals": by_value,
+    }
+
+
+def generate_c3_seed_review(records: Iterable[dict[str, Any]], *, output: Path) -> list[dict[str, str]]:
+    """Export deterministic source-backed positive/cross-family C3 seed fixtures.
+
+    This intentionally writes only review artifacts.  It neither imports decisions nor
+    invokes ETL/Neo4j materialization; Feature C5 remains the graph replay boundary.
+    """
+    report = c3_seed_coverage(records)
+    if report["missing"]:
+        raise ValueError(
+            "C3 seed coverage gap: " + ", ".join(report["missing"])
+            + ". Supply a canonical character or sidekick fact; mechanics pages cannot fill this gap."
+        )
+    all_rows = [row for value in report["active_capabilities"] for row in report["proposals"][value]]
+    selected: list[dict[str, str]] = []
+    for value in report["active_capabilities"]:
+        positive = report["proposals"][value][0]
+        # A different active family is an explicit cross-family regression fixture.
+        cross = next(row for row in all_rows if row["proposed_value"] != value)
+        selected.append({
+            **positive, "fixture_role": "positive_with_cross_family", "fixture_capability": value,
+            "cross_family_proposal_id": cross["proposal_id"],
+            "cross_family_value": cross["proposed_value"],
+        })
+    rows = sorted(selected, key=lambda row: (row["fixture_capability"], row["proposal_id"]))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = [*IMMUTABLE_COLUMNS, "fixture_role", "fixture_capability", "cross_family_proposal_id", "cross_family_value", *REVIEW_COLUMNS]
+    with output.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({**row, **{key: "" for key in REVIEW_COLUMNS}})
+    taxonomy = load_capability_taxonomy()
+    output.with_name(f"{output.stem}.reference.json").write_text(json.dumps({
+        "artifact_type": "targeted_c3_seed_review", "artifact_version": taxonomy["artifact_version"],
+        "review_schema_version": taxonomy["review_schema_version"], "row_count": len(rows),
+        "active_capabilities": report["active_capabilities"],
+        "reserved_capabilities": sorted(C3_RESERVED_CAPABILITIES),
+        "coverage": report["coverage"],
+        "field_guidance": {
+            "positive_with_cross_family": "Review the positive assertion; the named cross-family source is a permanent non-substitution regression.",
+            "immutable": list(IMMUTABLE_COLUMNS),
+        },
+    }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return rows
+
+
+def generate_c3_recovery_batch(records: Iterable[dict[str, Any]], *, reviewed_batch: Path, output: Path, seed_proposal_ids: Iterable[str] = ()) -> list[dict[str, str]]:
+    """Preserve reviewed replacement rows and deterministically refill seed overlaps to 45."""
+    preserved = _read_review_csv(reviewed_batch)
+    if len(preserved) != BATCH_SIZE or any(row.get("decision", "") not in load_capability_taxonomy()["review_states"] for row in preserved):
+        raise ValueError("Reviewed C3 replacement batch must contain exactly 45 explicit decisions")
+    active = set(active_capabilities(phase="offensive_support"))
+    preserved = [row for row in preserved if row.get("proposed_value") in active]
+    seed_ids = set(seed_proposal_ids)
+    overlap = [row for row in preserved if row["proposal_id"] in seed_ids]
+    # Overlapping decisions remain in the seed artifact/regression history.  They are
+    # deliberately removed from the clean batch and replaced one-for-one below.
+    preserved = [row for row in preserved if row["proposal_id"] not in seed_ids]
+    # A seed overlap is already preserved as seed evidence.  Do not silently add the
+    # same proposal back as an unreviewed refill row.
+    used = {row["proposal_id"] for row in preserved} | seed_ids
+    candidates = sorted({
+        proposal["proposal_id"]: proposal
+        for record in records for proposal in propose(record, phase="offensive_support")
+        if proposal["proposed_value"] in active and proposal["proposal_id"] not in used
+    }.values(), key=lambda row: (row["proposed_value"], row["source_fact_id"], row["rule_id"]))
+    needed = BATCH_SIZE - len(preserved)
+    if len(candidates) < needed:
+        raise ValueError(f"C3 replacement recovery needs {needed} new proposals but found {len(candidates)}")
+    rows = [*preserved, *({**row, **{key: "" for key in REVIEW_COLUMNS}} for row in candidates[:needed])]
+    rows.sort(key=lambda row: (row["proposed_value"], row["source_fact_id"], row["rule_id"]))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=[*IMMUTABLE_COLUMNS, *REVIEW_COLUMNS], extrasaction="ignore")
+        writer.writeheader(); writer.writerows(rows)
+    output.with_name(f"{output.stem}.reference.json").write_text(json.dumps({
+        "artifact_type": "c3_recovery_batch", "artifact_version": load_capability_taxonomy()["artifact_version"],
+        "phase": "offensive_support", "row_count": BATCH_SIZE,
+        "preserved_proposal_ids": sorted(row["proposal_id"] for row in overlap),
+        "new_proposal_count": needed, "active_capabilities": sorted(active),
+        "reserved_capabilities": sorted(C3_RESERVED_CAPABILITIES),
+    }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return rows
+
+
 def generate_migration_review(*, output: Path, reviews_path: Path = REVIEWS_PATH) -> list[dict[str, str]]:
     """Export changed legacy decisions for explicit review under the current vocabulary."""
     taxonomy = load_capability_taxonomy()
@@ -598,7 +728,9 @@ n.schema_version AS schema_version"""
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate/import deterministic atomic capability review batches")
-    parser.add_argument("command", choices=("generate", "generate-migration", "import", "diagnostics"))
+    parser.add_argument("command", choices=("generate", "generate-migration", "generate-c3-seed", "recover-c3-batch", "import", "diagnostics"))
+    parser.add_argument("--reviewed-batch", type=Path)
+    parser.add_argument("--seed-csv", type=Path)
     parser.add_argument("--parsed-dir", type=Path)
     parser.add_argument("--csv", type=Path)
     parser.add_argument("--phase", choices=sorted(PHASES))
@@ -619,6 +751,19 @@ def main() -> None:
         if not args.csv:
             parser.error("generate-migration requires --csv")
         generate_migration_review(output=args.csv, reviews_path=args.reviews)
+        print(f"Awaiting human review: {args.csv}")
+    elif args.command == "generate-c3-seed":
+        if not args.csv:
+            parser.error("generate-c3-seed requires --csv")
+        generate_c3_seed_review(records, output=args.csv)
+        print(f"Awaiting human review: {args.csv}")
+    elif args.command == "recover-c3-batch":
+        if not args.csv or not args.reviewed_batch:
+            parser.error("recover-c3-batch requires --csv and --reviewed-batch")
+        seed_ids: list[str] = []
+        if args.seed_csv:
+            seed_ids = [row["proposal_id"] for row in _read_review_csv(args.seed_csv)]
+        generate_c3_recovery_batch(records, reviewed_batch=args.reviewed_batch, output=args.csv, seed_proposal_ids=seed_ids)
         print(f"Awaiting human review: {args.csv}")
     elif args.command == "import":
         if not args.csv:

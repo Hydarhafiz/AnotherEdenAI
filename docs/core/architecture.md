@@ -101,6 +101,12 @@ Milestone 5 Feature C1 atomic capability behavior:
 - Neo4j stores proven atomic metadata and deterministic diagnostics, but repository artifacts remain authoritative. Schema 1.5 removes retired broad-role properties from all combat fact types and aborts on capability, dependency, evidence, diagnostics, artifact-version, or schema-version drift.
 - Contextual character roles remain deferred until the reviewed C2-C5 capability handoff is complete.
 
+Milestone 5 Feature C3 MVP review behavior:
+
+- The 3.0 taxonomy activates exactly 25 offensive/support families. `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` remain reserved vocabulary only, with no active rules, batches, seed coverage, scoring, or graph authority.
+- C3 seed coverage inspects only parsed character and sidekick combat facts with stable source IDs and source URLs. It refuses partial seeds and reports each missing family by name rather than substituting a mechanics-page claim.
+- Seed and recovery commands write CSV/reference artifacts only. A reviewed replacement-batch row overlapping a seed remains seed evidence, is excluded from the clean batch, and is replaced one-for-one by a distinct unreviewed proposal. C3 performs no Neo4j materialization; Feature C5 retains the replay and graph-drift boundary.
+
 Feature B curated superboss graph behavior:
 
 - The canonical Superbosses page discovers weak-boss candidates as index metadata, including difficulty tier, refight status, version, characteristics, and detail URLs.

@@ -1,6 +1,12 @@
 {
   "artifact_version": "3.0.0",
   "review_schema_version": "3.0.0",
+  "reserved_capabilities": [
+    "af_gauge_gain_up",
+    "invert_weakness_resistance",
+    "grant_copy",
+    "follow_up_attack"
+  ],
   "capabilities": [
     "deploy_zone", "awaken_zone", "damage_reduction", "damage_reduction_barrier",
     "shield", "ally_resistance_up", "enemy_resistance_down", "heal_hp", "regen_hp",
@@ -67,7 +73,6 @@
     {"id":"cap-poison","phase":"offensive_support","kind":"capability","value":"inflict_poison","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\binflict(?:s)? poison\\b","negative_patterns":["when poisoned","poison damage"],"direction":"enemy","target":"single_enemy"},
     {"id":"cap-break","phase":"offensive_support","kind":"capability","value":"inflict_break","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:inflict|grant|give)s? (?:\\d+ stacks? of )?(?:elemental )?break\\b","negative_patterns":["break resistance"],"direction":"enemy","target":"single_enemy"},
     {"id":"cap-af-gauge-restore","phase":"offensive_support","kind":"capability","value":"af_gauge_restore","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:restore|recover) (?:the )?(?:another force |af )?(?:gauge|bar)\\b","negative_patterns":["gauge is charged per move","gauge reaches 0"],"direction":"ally","target":"party"},
-    {"id":"cap-af-gauge-gain","phase":"offensive_support","kind":"capability","value":"af_gauge_gain_up","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:another force |af )?(?:gauge|bar) gain (?:up|increase)\\b","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"cap-af-combo-gain","phase":"offensive_support","kind":"capability","value":"af_combo_gain_up","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\banother force combo gain\\b","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"cap-af-damage","phase":"offensive_support","kind":"capability","value":"af_damage_up","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bdamage done during another force\\b","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"cap-link","phase":"offensive_support","kind":"capability","value":"grant_link","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:grant|give|apply)s? .{0,30}link\\b","negative_patterns":["requires? link"],"direction":"ally","target":"party"},
@@ -81,12 +86,9 @@
     {"id":"cap-buff-reversal","phase":"offensive_support","kind":"capability","value":"apply_buff_reversal","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bbuff reversal\\b","negative_patterns":[],"direction":"enemy","target":"all_enemies"},
     {"id":"cap-debuff-reversal","phase":"offensive_support","kind":"capability","value":"apply_debuff_reversal","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bdebuff reversal\\b","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"cap-expose","phase":"offensive_support","kind":"capability","value":"inflict_expose","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\binflict(?:s)? expose\\b","negative_patterns":[],"direction":"enemy","target":"single_enemy"},
-    {"id":"cap-invert-weakness","phase":"offensive_support","kind":"capability","value":"invert_weakness_resistance","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\binvert(?:s)? (?:weakness|resistance)\\b","negative_patterns":[],"direction":"enemy","target":"single_enemy"},
     {"id":"cap-kaleido","phase":"offensive_support","kind":"capability","value":"apply_kaleido","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:apply|grant) kaleido\\b","negative_patterns":[],"direction":"ally","target":"party"},
-    {"id":"cap-copy","phase":"offensive_support","kind":"capability","value":"grant_copy","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:grant|apply) copy\\b","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"cap-attack-again","phase":"offensive_support","kind":"capability","value":"attack_again","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\battack(?:s)? again\\b","negative_patterns":[],"direction":"self","target":"self"},
     {"id":"cap-chain","phase":"offensive_support","kind":"capability","value":"chain_attack","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bchain ability|\\bchain attack\\b","negative_patterns":[],"direction":"ally","target":"party"},
-    {"id":"cap-follow-up","phase":"offensive_support","kind":"capability","value":"follow_up_attack","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bfollow-up attack\\b","negative_patterns":["link","copy","chain"],"direction":"self","target":"self"},
     {"id":"cap-lunatic","phase":"offensive_support","kind":"capability","value":"activate_lunatic","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bactivate lunatic\\b","negative_patterns":[],"direction":"self","target":"self"},
     {"id":"dep-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_zone","record_types":["skill","passive"],"pattern":"\\b(?:requires?|while|when|if) .{0,30}(?:zone|stance)(?: is active)?\\b","negative_patterns":["deploy|set|establish"],"direction":"field","target":"zone"},
     {"id":"dep-awakened-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_awakened_zone","record_types":["skill","passive"],"pattern":"\\b(?:requires?|while|when|if) .{0,20}awakened (?:zone|stance)\\b","negative_patterns":[],"direction":"field","target":"zone"},
