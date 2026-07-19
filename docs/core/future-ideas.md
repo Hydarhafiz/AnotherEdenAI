@@ -2,6 +2,22 @@
 
 This document captures promising ideas intentionally deferred from the active milestone. It is not an implementation contract. Promote items into `milestone.md` only after they are scoped and prioritized.
 
+## Offensive Taxonomy Extension After MVP Evaluation
+
+Deferred from Milestone 5 Feature C3 to keep the first recommender limited to source-backed, reviewable offensive/support facts.
+
+Idea:
+
+- Reintroduce `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` as a dedicated taxonomy extension.
+- Add the still-unimplemented MVP-deferred offensive/support families only after expert beta evidence identifies that they materially affect recommendation quality.
+- Keep every deferred effect untagged and excluded from role scoring and mandatory coverage until it is explicitly reviewed.
+
+Readiness signals:
+
+- MVP golden and expert-beta evaluation identifies a recurring quality gap attributable to an untagged effect.
+- Each proposed family has at least two parsed canonical character or sidekick facts, including a positive and a misleading/cross-family example.
+- The source evidence settles its narrow atomic meaning, direction, target, qualifiers, and separation from existing capabilities.
+
 ## Battle Mechanics Knowledge Base
 
 Deferred from Milestone 2 because boss and character ETL already expands the data surface significantly.

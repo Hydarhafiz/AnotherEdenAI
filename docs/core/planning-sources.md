@@ -482,6 +482,16 @@ This file stores source references used during planning discussions. It separate
   Relevance: The current review tooling can export/import generic and legacy migration batches, while the reviewed C3 replacement batch exists outside the canonical review artifact. A targeted C3 seed generator, explicit coverage diagnostics, and overlap-preserving batch refill are required before the reviewed batch can receive clean-batch credit.
   Caveats/open questions: Several C3 families have no usable parsed proposal in the audited corpus. Each gap requires a human-supplied canonical character or sidekick wiki page, exact fact name, and intended atomic capability; a general mechanics page may define semantics but cannot prove a skill-level fixture. No Neo4j materialization is planned until Feature C5.
 
+#### Feature C3 MVP Scope Decision
+
+- Title: C3 MVP taxonomy and expert-beta feedback decision
+  URL: local `src/etl/capability_taxonomy.json`, local `src/etl/review_batches/c3_offensive_support_batch_1_replacement.csv`, local `data/parsed/**/*.json`
+  Source type: repository audit and user planning decision
+  Date added: 2026-07-19
+  Related area: Milestone 5 Feature C3 MVP scope and post-MVP taxonomy extension
+  Relevance: The active C3 implementation exposes 29 rule families, but four lack unambiguous source-backed seed coverage. The MVP retains 25 active families, retains the four vocabulary names only as reserved terms, and displays selected-lineup untagged facts as non-authoritative diagnostics for expert beta feedback.
+  Caveats/open questions: `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` are deliberately deferred. They need at least two parsed canonical character or sidekick facts and a misleading/cross-family example before a future taxonomy extension can review them.
+
 #### Feature C Repository Failure Grounding
 
 - Title: Grasta row identity and loader merge audit
