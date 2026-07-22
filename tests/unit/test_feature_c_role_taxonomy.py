@@ -437,8 +437,10 @@ def test_review_import_accepts_spreadsheet_encoding_and_safe_correction_aliases(
     write_reviews(reviews)
     batch = tmp_path / "batch.csv"
     generate_review_batch(records, phase="defensive_setup", batch_number=1, seed=0, output=batch, reviews_path=reviews)
+    alias_proposal_id = ""
 
     def complete(rows):
+        nonlocal alias_proposal_id
         for row in rows:
             row.update(
                 decision="correct", corrected_kind="capability", corrected_value="heal_hp",
@@ -447,6 +449,8 @@ def test_review_import_accepts_spreadsheet_encoding_and_safe_correction_aliases(
                 corrected_magnitude_unit="HP", corrected_trigger="stellar_burst",
                 reviewer="alice", reviewer_notes="it is checked",
             )
+        rows[0]["corrected_qualifiers_json"] = "{kaleido_type: fire}"
+        alias_proposal_id = rows[0]["proposal_id"]
 
     review_csv(batch, complete)
     batch.write_bytes(batch.read_bytes().replace(b"it is checked", b"it\x92s checked", 1))
@@ -457,6 +461,48 @@ def test_review_import_accepts_spreadsheet_encoding_and_safe_correction_aliases(
     assert imported["corrected_magnitude_unit"] == "flat_hp"
     assert imported["corrected_trigger"] == "on_stellar_burst"
     assert imported["reviewer_notes"] == "it’s checked"
+    alias_row = next(row for row in artifact["decisions"] if row["proposal_id"] == alias_proposal_id)
+    assert json.loads(alias_row["corrected_qualifiers_json"]) == {"element": ["Fire"]}
+
+
+def test_review_import_discards_empty_qualifier_residue_for_non_corrections(tmp_path):
+    records = [fact(index) for index in range(BATCH_SIZE)]
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews)
+    batch = tmp_path / "batch.csv"
+    generate_review_batch(records, phase="defensive_setup", batch_number=1, seed=0, output=batch, reviews_path=reviews)
+    residue_proposal_id = ""
+
+    def complete(rows):
+        nonlocal residue_proposal_id
+        for row in rows:
+            row.update(decision="approve", reviewer="alice")
+        rows[0]["corrected_qualifiers_json"] = "{}"
+        residue_proposal_id = rows[0]["proposal_id"]
+
+    review_csv(batch, complete)
+    artifact = import_review_batch(batch, records, reviews_path=reviews)
+    imported = next(row for row in artifact["decisions"] if row["proposal_id"] == residue_proposal_id)
+    assert imported["corrected_qualifiers_json"] == ""
+
+
+def test_review_import_normalizes_single_ally_target_alias(tmp_path):
+    records = [fact(index) for index in range(BATCH_SIZE)]
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews)
+    batch = tmp_path / "batch.csv"
+    generate_review_batch(records, phase="defensive_setup", batch_number=1, seed=0, output=batch, reviews_path=reviews)
+
+    def complete(rows):
+        for row in rows:
+            row.update(
+                decision="correct", corrected_kind="capability", corrected_value="heal_hp",
+                corrected_direction="ally", corrected_target="single_ally", reviewer="alice",
+            )
+
+    review_csv(batch, complete)
+    artifact = import_review_batch(batch, records, reviews_path=reviews)
+    assert {row["corrected_target"] for row in artifact["decisions"]} == {"one_ally"}
 
 
 def test_targeted_migration_import_validates_generated_migration_rows_without_parsed_records(tmp_path):

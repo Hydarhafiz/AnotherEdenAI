@@ -75,15 +75,25 @@ def _normalize_corrected_fields(row: dict[str, str]) -> dict[str, str]:
         "stellar_burst": "on_stellar_burst",
         "stellar burst": "on_stellar_burst",
         "in duel only(feature in 1 of another eden episode": "none",
+        "velette in frontline": "battle_activation",
+        "time breakup environmental effect": "battle_activation",
+        "any ally used fire attack": "ally_action",
+        "own_ability": "own_action",
+        "user_into_frontline": "battle_activation",
+        "any)type_effect_active": "battle_activation",
     }
     unit_aliases = {
         "hp": "flat_hp",
         "percent of user max hp": "percent",
         "percent of max hp": "percent",
+        "stack": "stacks",
     }
     target_aliases = {
         "user, left_and_right_of_the_user": "self_and_adjacent_allies",
         "user, left and right of the user": "self_and_adjacent_allies",
+        "single_ally": "one_ally",
+        "all thunder element allies": "party",
+        "all katana weapon allies": "party",
     }
     for key, aliases in (
         ("corrected_trigger", trigger_aliases),
@@ -92,6 +102,20 @@ def _normalize_corrected_fields(row: dict[str, str]) -> dict[str, str]:
     ):
         value = normalized.get(key, "")
         normalized[key] = aliases.get(value.lower(), value)
+    if normalized.get("corrected_max_stacks", "").lower() == "reject":
+        normalized["corrected_max_stacks"] = ""
+    kaleido_qualifier = re.fullmatch(
+        r"\{\s*kaleido_type\s*:\s*(fire|water|wind|earth|thunder|shade|crystal|non-type)\s*\}",
+        normalized.get("corrected_qualifiers_json", ""),
+        re.IGNORECASE,
+    )
+    if kaleido_qualifier:
+        element = kaleido_qualifier.group(1)
+        normalized["corrected_qualifiers_json"] = _canonical({
+            "element": ["non-type" if element.lower() == "non-type" else element.title()],
+        })
+    if normalized.get("decision") != "correct" and normalized.get("corrected_qualifiers_json") == "{}":
+        normalized["corrected_qualifiers_json"] = ""
     return normalized
 
 

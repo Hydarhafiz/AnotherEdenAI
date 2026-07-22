@@ -522,7 +522,7 @@ Acceptance criteria:
 
 #### Feature C3: Offensive And Support Human-Review Gate
 
-Status: Completed; the MVP review tooling limits C3 to 25 active, source-backed families and remains paused pending targeted seed review and two clean batches.
+Status: Completed; the MVP review tooling limits C3 to 25 active, source-backed families. The targeted seed review and two clean 45-row batches have passed their accumulated artifact regressions; C3 remains artifact-only until Feature C5's replay gate.
 
 Technical requirements:
 
