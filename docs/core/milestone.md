@@ -572,7 +572,7 @@ Acceptance criteria:
 
 #### Feature C4: Dependencies And Conditions Human-Review Gate
 
-Status: Planned; blocked until C3 completes.
+Status: Completed.
 
 Technical requirements:
 

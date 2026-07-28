@@ -48,6 +48,7 @@ RECORD_TYPES = {"skill", "passive", "sidekick_skill", "sidekick_aura"}
 C3_RESERVED_CAPABILITIES = {
     "af_gauge_gain_up", "invert_weakness_resistance", "grant_copy", "follow_up_attack",
 }
+EXPLICIT_CLEAR = "__clear__"
 
 
 def _read_review_csv(path: Path) -> list[dict[str, str]]:
@@ -71,6 +72,12 @@ def _normalize_corrected_fields(row: dict[str, str]) -> dict[str, str]:
     normalized = dict(row)
     for key in REVIEW_COLUMNS:
         normalized[key] = normalized.get(key, "").strip()
+    # Spreadsheet reviewers use the human-readable ``clear`` shorthand.  Keep the
+    # canonical artifact sentinel so materialization never falls through to a
+    # proposed optional qualifier.
+    for key in REVIEW_COLUMNS:
+        if key.startswith("corrected_") and normalized[key].lower() == "clear":
+            normalized[key] = EXPLICIT_CLEAR
     trigger_aliases = {
         "stellar_burst": "on_stellar_burst",
         "stellar burst": "on_stellar_burst",
@@ -262,6 +269,21 @@ def _qualifiers(text: str, taxonomy: dict[str, Any]) -> dict[str, str]:
         matched = [value for value in values if re.search(rf"\b{re.escape(value)}\b", text, re.IGNORECASE)]
         if matched:
             qualifiers[domain] = matched
+    eligibility_kinds: list[str] = []
+    if any(value in qualifiers.get("equipment_class", []) for value in taxonomy["qualifier_domains"]["equipment_class"]):
+        eligibility_kinds.append("weapon_class")
+    if any(value in qualifiers.get("element", []) for value in taxonomy["qualifier_domains"]["element"]):
+        eligibility_kinds.append("element")
+    if re.search(r"\b[A-Za-z' -]+ personality\b", text, re.IGNORECASE):
+        eligibility_kinds.append("personality")
+    if qualifiers.get("recipient_status"):
+        eligibility_kinds.append("status")
+    if re.search(r"\b(?:stack|stacks)\b", text, re.IGNORECASE):
+        eligibility_kinds.append("stack")
+    if qualifiers.get("recipient_position"):
+        eligibility_kinds.append("position")
+    if eligibility_kinds:
+        qualifiers["recipient_eligibility_kind"] = eligibility_kinds
     return {
         "proposed_magnitude_value": percent.group(1) if percent else "",
         "proposed_magnitude_unit": "percent" if percent else "",
@@ -355,6 +377,8 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
         target = decision.get("corrected_target") if state == "correct" else proposal["proposed_target"]
         def reviewed(field: str) -> str:
             corrected = decision.get(f"corrected_{field}") if state == "correct" else None
+            if corrected == EXPLICIT_CLEAR:
+                return ""
             return str(corrected if corrected not in (None, "") else proposal.get(f"proposed_{field}", ""))
         evidence_row = {
             "kind": kind, "value": value, "direction": direction, "target": target,
@@ -370,7 +394,7 @@ def materialize_atomic(record: dict[str, Any], reviews_path: Path = REVIEWS_PATH
             "artifact_version": taxonomy["artifact_version"],
             "review_artifact_version": load_reviews(reviews_path)["artifact_version"],
         }
-        if proposal["phase"] == "offensive_support":
+        if proposal["phase"] in {"offensive_support", "dependencies_conditions"}:
             evidence_row.update({
                 "stacking_behavior": reviewed("stacking_behavior"),
                 "max_stacks": reviewed("max_stacks"),
@@ -454,7 +478,7 @@ def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batc
         "availability": taxonomy["availability"],
         "magnitude_unit": taxonomy["magnitude_units"], "trigger": taxonomy["triggers"],
     }
-    if phase == "offensive_support":
+    if phase in {"offensive_support", "dependencies_conditions"}:
         allowed_values.update({
             "stacking_behavior": taxonomy["stacking_behaviors"],
             "qualifier_domains": taxonomy["qualifier_domains"],
@@ -468,6 +492,7 @@ def generate_review_batch(records: Iterable[dict[str, Any]], *, phase: str, batc
             "reject": "The source text does not prove the proposed atomic fact.",
             "correct": "Supply corrected kind/value/direction/target and any changed placement or qualifier fields.",
             "ambiguous": "Evidence is insufficient; this remains non-authoritative.",
+            "explicit_clear": f"Use `{EXPLICIT_CLEAR}` in a corrected optional field to remove a leaked proposal value.",
             "immutable": list(IMMUTABLE_COLUMNS),
             "source_url": "Consult the linked source only when captured source_text is unclear."
         },
@@ -678,6 +703,8 @@ def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, re
         if decision == "correct":
             kind = row.get("corrected_kind", "").strip()
             value = row.get("corrected_value", "").strip()
+            if proposal["phase"] == "dependencies_conditions" and kind != "dependency":
+                raise ValueError(f"C4 dependency corrections cannot become capabilities: {row['proposal_id']}")
             if kind not in {"capability", "dependency"}:
                 raise ValueError(f"Malformed correction for {row['proposal_id']}")
             vocabulary_key = "capabilities" if kind == "capability" else "dependencies"
@@ -685,18 +712,18 @@ def import_review_batch(csv_path: Path, records: Iterable[dict[str, Any]], *, re
                 raise ValueError(f"Malformed correction for {row['proposal_id']}")
             if row.get("corrected_direction") not in taxonomy["directions"] or row.get("corrected_target") not in taxonomy["targets"]:
                 raise ValueError(f"Invalid correction semantics for {row['proposal_id']}")
-            if row.get("corrected_availability") and row["corrected_availability"] not in taxonomy["availability"]:
+            if row.get("corrected_availability") and row["corrected_availability"] != EXPLICIT_CLEAR and row["corrected_availability"] not in taxonomy["availability"]:
                 raise ValueError(f"Invalid corrected availability for {row['proposal_id']}")
-            if row.get("corrected_magnitude_unit") and row["corrected_magnitude_unit"] not in taxonomy["magnitude_units"]:
+            if row.get("corrected_magnitude_unit") and row["corrected_magnitude_unit"] != EXPLICIT_CLEAR and row["corrected_magnitude_unit"] not in taxonomy["magnitude_units"]:
                 raise ValueError(f"Invalid corrected magnitude unit for {row['proposal_id']}")
-            if row.get("corrected_trigger") and row["corrected_trigger"] not in taxonomy["triggers"]:
+            if row.get("corrected_trigger") and row["corrected_trigger"] != EXPLICIT_CLEAR and row["corrected_trigger"] not in taxonomy["triggers"]:
                 raise ValueError(f"Invalid corrected trigger for {row['proposal_id']}")
-            if row.get("corrected_stacking_behavior") and row["corrected_stacking_behavior"] not in taxonomy["stacking_behaviors"]:
+            if row.get("corrected_stacking_behavior") and row["corrected_stacking_behavior"] != EXPLICIT_CLEAR and row["corrected_stacking_behavior"] not in taxonomy["stacking_behaviors"]:
                 raise ValueError(f"Invalid corrected stacking behavior for {row['proposal_id']}")
             for field in ("corrected_magnitude_value", "corrected_activation_count", "corrected_duration_turns", "corrected_max_stacks"):
-                if row.get(field) and not re.fullmatch(r"\d+(?:\.\d+)?", row[field]):
+                if row.get(field) and row[field] != EXPLICIT_CLEAR and not re.fullmatch(r"\d+(?:\.\d+)?", row[field]):
                     raise ValueError(f"Invalid numeric qualifier for {row['proposal_id']}")
-            if row.get("corrected_qualifiers_json"):
+            if row.get("corrected_qualifiers_json") and row["corrected_qualifiers_json"] != EXPLICIT_CLEAR:
                 try:
                     qualifiers = json.loads(row["corrected_qualifiers_json"])
                 except json.JSONDecodeError as exc:

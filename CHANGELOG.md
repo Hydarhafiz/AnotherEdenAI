@@ -6,6 +6,18 @@ All notable changes to this project are documented here, grouped by development 
 
 ## [Unreleased] Root Pillar Docs
 
+## [Milestone 5 C4] Dependencies And Conditions Review Gate - 2026-07-28
+
+### Added
+- Taxonomy/review schema 3.1.0 dependency and recipient-eligibility review coverage across skills, passives, sidekick skills, and sidekick auras.
+- Two completed 45-row C4 review batches with canonical decisions and auditable batch reference artifacts.
+
+### Fixed
+- The review importer now treats spreadsheet `clear` entries as explicit qualifier removal, preventing proposed optional values from leaking into reviewed evidence.
+
+### Tests
+- Focused Feature C taxonomy and accumulated regression suite: 46 passed.
+
 ### Added
 - Root `architecture.md` documenting the current ETL, workflow, web, and schema boundaries for future milestone planning
 - Root `milestone.md` establishing a living baseline for post-v1 roadmap planning

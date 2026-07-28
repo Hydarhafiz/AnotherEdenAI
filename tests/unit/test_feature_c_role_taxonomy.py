@@ -11,6 +11,7 @@ import pytest
 import src.etl.capability_taxonomy as capability_taxonomy
 from src.etl.capability_taxonomy import (
     BATCH_SIZE,
+    EXPLICIT_CLEAR,
     active_capabilities,
     assert_capability_materialization,
     c3_seed_coverage,
@@ -463,6 +464,57 @@ def test_review_import_accepts_spreadsheet_encoding_and_safe_correction_aliases(
     assert imported["reviewer_notes"] == "it’s checked"
     alias_row = next(row for row in artifact["decisions"] if row["proposal_id"] == alias_proposal_id)
     assert json.loads(alias_row["corrected_qualifiers_json"]) == {"element": ["Fire"]}
+
+
+def test_corrected_explicit_clear_removes_a_leaked_qualifier_without_rejecting_the_fact(tmp_path):
+    record = fact(description="End of Turn Restore all allies' HP +50%")
+    proposal = next(row for row in propose(record) if row["proposed_value"] == "end_of_turn")
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews, [{
+        **proposal,
+        "decision": "correct",
+        "corrected_kind": "dependency",
+        "corrected_value": "end_of_turn",
+        "corrected_direction": "none",
+        "corrected_target": "none",
+        "corrected_magnitude_value": EXPLICIT_CLEAR,
+        "corrected_magnitude_unit": EXPLICIT_CLEAR,
+    }])
+
+    capabilities, dependencies, evidence, _, _ = materialize_atomic(record, reviews)
+
+    assert capabilities == []
+    assert dependencies == ["end_of_turn"]
+    assert evidence[0]["magnitude_value"] == ""
+    assert evidence[0]["magnitude_unit"] == ""
+
+
+def test_review_import_accepts_explicit_clear_for_optional_correction_fields(tmp_path):
+    records = [fact(index) for index in range(BATCH_SIZE)]
+    reviews = tmp_path / "reviews.json"
+    write_reviews(reviews)
+    batch = tmp_path / "batch.csv"
+    generate_review_batch(records, phase="defensive_setup", batch_number=1, seed=0, output=batch, reviews_path=reviews)
+
+    proposal_id = ""
+
+    def complete(rows):
+        nonlocal proposal_id
+        for row in rows:
+            row.update(decision="approve", reviewer="alice")
+        proposal_id = rows[0]["proposal_id"]
+        rows[0].update(
+            decision="correct", corrected_kind="capability", corrected_value="heal_hp",
+            corrected_direction="ally", corrected_target="party",
+            corrected_magnitude_value=EXPLICIT_CLEAR,
+            corrected_magnitude_unit=EXPLICIT_CLEAR,
+        )
+
+    review_csv(batch, complete)
+    artifact = import_review_batch(batch, records, reviews_path=reviews)
+    imported = next(row for row in artifact["decisions"] if row["proposal_id"] == proposal_id)
+    assert imported["corrected_magnitude_value"] == EXPLICIT_CLEAR
+    assert imported["corrected_magnitude_unit"] == EXPLICIT_CLEAR
 
 
 def test_review_import_discards_empty_qualifier_residue_for_non_corrections(tmp_path):

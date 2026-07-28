@@ -337,7 +337,7 @@ The identity columns must be non-empty and schema versions must be `1.2.0`. The 
 
 ### Feature C Atomic Capability Review
 
-`src/etl/capability_taxonomy.json` and the canonical review/gold artifacts are the source of truth. Do not edit capability fields in Neo4j. C3 uses taxonomy/review schema 3.0.0 and exposes 25 active offensive/support families; `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` are reserved, non-authoritative vocabulary.
+`src/etl/capability_taxonomy.json` and the canonical review/gold artifacts are the source of truth. Do not edit capability fields in Neo4j. C4 uses taxonomy/review schema 3.1.0: it retains C3's 25 active offensive/support families, adds reviewed dependency and recipient-eligibility vocabulary across all four fact types, and keeps `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` reserved and non-authoritative.
 
 Generate a targeted C3 seed review from parsed character and sidekick facts:
 
@@ -360,6 +360,16 @@ After human seed decisions exist, recover the reviewed replacement batch while p
 ```
 
 Review every new row explicitly, then import it with the same parsed directory. C3 remains artifact-only: do not run an ETL replay or inspect Neo4j capability materialization until Feature C5.
+
+After C4 dependency/condition batch review, import the reviewed CSV with the same parsed facts:
+
+```bash
+.venv/bin/python -m src.etl.capability_taxonomy import \
+  --parsed-dir data/parsed \
+  --csv src/etl/review_batches/c4_dependencies_conditions_batch_N.csv
+```
+
+Use `clear` in an optional corrected qualifier field when the proposed value must not be retained; the importer canonicalizes it to `__clear__`, and materialized evidence records the value as unknown/blank. C4 remains artifact-only: do not replay Neo4j until Feature C5.
 
 ## Maintenance Rule
 

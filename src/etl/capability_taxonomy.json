@@ -1,6 +1,6 @@
 {
-  "artifact_version": "3.0.0",
-  "review_schema_version": "3.0.0",
+  "artifact_version": "3.1.0",
+  "review_schema_version": "3.1.0",
   "reserved_capabilities": [
     "af_gauge_gain_up",
     "invert_weakness_resistance",
@@ -28,7 +28,8 @@
   ],
   "dependencies": [
     "requires_zone", "requires_awakened_zone", "requires_status", "requires_stack",
-    "requires_stellar_awakened", "end_of_turn", "party_composition", "limited_use"
+    "requires_stellar_awakened", "end_of_turn", "party_composition", "limited_use",
+    "requires_recipient_eligibility", "requires_sidekick_activation"
   ],
   "directions": ["ally", "enemy", "self", "field", "none"],
   "targets": ["self", "one_ally", "adjacent_allies", "self_and_adjacent_allies", "frontline", "main_and_reserve", "single", "party", "all_enemies", "single_enemy", "enemy", "field", "zone", "none"],
@@ -41,7 +42,10 @@
     "attack_type": ["Slash", "Pierce", "Blunt", "Magic"],
     "element": ["Fire", "Water", "Wind", "Earth", "Thunder", "Shade", "Crystal", "non-type"],
     "break_kind": ["generic", "elemental", "weapon"],
-    "lunatic_variant": ["Charge", "Copy", "Static", "Discharge", "Mind's Eye", "Risktaker", "Sacrifice"]
+    "lunatic_variant": ["Charge", "Copy", "Static", "Discharge", "Mind's Eye", "Risktaker", "Sacrifice"],
+    "recipient_eligibility_kind": ["weapon_class", "element", "personality", "status", "stack", "position"],
+    "recipient_status": ["Pain", "Poison", "Break", "Awakened", "Lunatic"],
+    "recipient_position": ["frontline", "reserve", "main", "sub"]
   },
   "review_states": ["approve", "reject", "correct", "ambiguous"],
   "rules": [
@@ -90,14 +94,16 @@
     {"id":"cap-attack-again","phase":"offensive_support","kind":"capability","value":"attack_again","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\battack(?:s)? again\\b","negative_patterns":[],"direction":"self","target":"self"},
     {"id":"cap-chain","phase":"offensive_support","kind":"capability","value":"chain_attack","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bchain ability|\\bchain attack\\b","negative_patterns":[],"direction":"ally","target":"party"},
     {"id":"cap-lunatic","phase":"offensive_support","kind":"capability","value":"activate_lunatic","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bactivate lunatic\\b","negative_patterns":[],"direction":"self","target":"self"},
-    {"id":"dep-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_zone","record_types":["skill","passive"],"pattern":"\\b(?:requires?|while|when|if) .{0,30}(?:zone|stance)(?: is active)?\\b","negative_patterns":["deploy|set|establish"],"direction":"field","target":"zone"},
-    {"id":"dep-awakened-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_awakened_zone","record_types":["skill","passive"],"pattern":"\\b(?:requires?|while|when|if) .{0,20}awakened (?:zone|stance)\\b","negative_patterns":[],"direction":"field","target":"zone"},
-    {"id":"dep-stack","phase":"dependencies_conditions","kind":"dependency","value":"requires_stack","record_types":["skill","passive"],"pattern":"\\b(?:requires?|consumes?|when|if) .{0,30}stack","negative_patterns":[],"direction":"self","target":"single"},
-    {"id":"dep-status","phase":"dependencies_conditions","kind":"dependency","value":"requires_status","record_types":["skill","passive"],"pattern":"\\b(?:when|if) .{0,25}(?:pain|poison|status|debuff)","negative_patterns":["inflict"],"direction":"enemy","target":"single_enemy"},
-    {"id":"dep-sa","phase":"dependencies_conditions","kind":"dependency","value":"requires_stellar_awakened","record_types":["skill","passive"],"pattern":"\\bstellar awaken","negative_patterns":[],"direction":"self","target":"single"},
-    {"id":"dep-eot","phase":"dependencies_conditions","kind":"dependency","value":"end_of_turn","record_types":["skill","passive"],"pattern":"\\bend of turn\\b","negative_patterns":[],"direction":"none","target":"none"},
-    {"id":"dep-party","phase":"dependencies_conditions","kind":"dependency","value":"party_composition","record_types":["skill","passive"],"pattern":"\\b(?:for each|number of) .{0,30}(?:party member|ally|character)","negative_patterns":[],"direction":"ally","target":"party"},
-    {"id":"dep-limited","phase":"dependencies_conditions","kind":"dependency","value":"limited_use","record_types":["skill","passive"],"pattern":"\\b(?:once per battle|usable [0-9]+ times?|limited use)\\b","negative_patterns":[],"direction":"self","target":"single"}
+    {"id":"dep-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_zone","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:requires?|while|when|if) .{0,30}(?:zone|stance)(?: is active)?\\b","negative_patterns":["deploy|set|establish"],"direction":"field","target":"zone"},
+    {"id":"dep-awakened-zone","phase":"dependencies_conditions","kind":"dependency","value":"requires_awakened_zone","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:requires?|while|when|if) .{0,20}awakened .{0,25}(?:zone|stance)\\b","negative_patterns":[],"direction":"field","target":"zone"},
+    {"id":"dep-stack","phase":"dependencies_conditions","kind":"dependency","value":"requires_stack","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:requires?|consumes?|when|if) .{0,30}stack","negative_patterns":[],"direction":"self","target":"single"},
+    {"id":"dep-status","phase":"dependencies_conditions","kind":"dependency","value":"requires_status","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:when|if) .{0,25}(?:pain|poison|status|debuff)","negative_patterns":["inflict"],"direction":"enemy","target":"single_enemy"},
+    {"id":"dep-sa","phase":"dependencies_conditions","kind":"dependency","value":"requires_stellar_awakened","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bstellar awaken","negative_patterns":[],"direction":"self","target":"single"},
+    {"id":"dep-eot","phase":"dependencies_conditions","kind":"dependency","value":"end_of_turn","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\bend of turn\\b","negative_patterns":[],"direction":"none","target":"none"},
+    {"id":"dep-party","phase":"dependencies_conditions","kind":"dependency","value":"party_composition","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:for each|number of) .{0,30}(?:party member|ally|character)","negative_patterns":[],"direction":"ally","target":"party"},
+    {"id":"dep-limited","phase":"dependencies_conditions","kind":"dependency","value":"limited_use","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:once per battle|usable [0-9]+ times?|limited use)\\b","negative_patterns":[],"direction":"self","target":"single"},
+    {"id":"dep-recipient-eligibility","phase":"dependencies_conditions","kind":"dependency","value":"requires_recipient_eligibility","record_types":["skill","passive","sidekick_skill","sidekick_aura"],"pattern":"\\b(?:all|each) (?:[a-z]+ ){0,3}(?:Staff|Sword|Katana|Axe|Lance|Bow|Fists|Hammer|Fire|Water|Wind|Earth|Thunder|Shade|Crystal|[A-Za-z' -]+ personality|allies? with (?:Pain|Poison|Break)|frontline|reserve)\\b","negative_patterns":[],"direction":"ally","target":"party"},
+    {"id":"dep-sidekick-activation","phase":"dependencies_conditions","kind":"dependency","value":"requires_sidekick_activation","record_types":["sidekick_skill","sidekick_aura"],"pattern":"\\b(?:at|when|if|while) .{1,80}\\b","negative_patterns":[],"direction":"self","target":"self"}
   ],
   "overrides": [
     {
