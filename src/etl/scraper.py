@@ -237,6 +237,9 @@ def parse_characters(soup: BeautifulSoup) -> list[CharacterRow]:
     for tr in soup.select("tr.character-row-entry"):
         if tr.get("data-accessory", "").strip().lower() == "sidekick":
             continue
+        # Upcoming-content placeholders have no usable combat-detail page.
+        if tr.get("data-released", "").strip() == "1":
+            continue
         detail_link = tr.select_one('a[href^="/w/"]')
         raw = {
             "name": tr.get("data-name", ""),

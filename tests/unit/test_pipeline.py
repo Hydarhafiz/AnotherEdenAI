@@ -51,6 +51,52 @@ def test_build_character_targets_respects_small_scope(monkeypatch, tmp_path):
     assert targets[1]["url"].endswith("/Dark_Devourer")
 
 
+def test_unreleased_characters_are_excluded_from_target_and_aggregation(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    targets = pipeline._build_character_targets(
+        [
+            {"name": "Aldo", "detail_url": "https://example.test/Aldo"},
+            {"name": "Caromina", "detail_url": "https://example.test/Caromina"},
+            {"name": "Rajah", "detail_url": "https://example.test/Rajah"},
+        ],
+        pipeline.CrawlConfig(crawl_scope="full"),
+    )
+    assert [target["metadata"]["character_name"] for target in targets] == ["Aldo"]
+
+    manifest = pipeline._base_manifest()
+    index_target = next(target for target in pipeline._build_index_targets() if target["id"] == "characters")
+    entry = pipeline._ensure_target_entry(manifest, index_target)
+    entry["state"] = "parsed"
+    _write_json(Path(entry["parsed_path"]), {
+        "schema_version": pipeline.ETL_SCHEMA_VERSION,
+        "kind": "characters_index",
+        "rows": [
+            {"name": "Aldo", "element": "Fire", "weapon": "Sword", "light_shadow": "Light", "personalities": []},
+            {"name": "Caromina", "element": "", "weapon": "Bow", "light_shadow": "", "personalities": []},
+        ],
+        "parsed_counts": {"characters": 2},
+    })
+
+    data = pipeline._aggregate_parsed_data(manifest)
+    assert [character.name for character in data["characters"]] == ["Aldo"]
+
+
+def test_build_character_targets_deduplicates_repeated_character_identity(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+
+    targets = pipeline._build_character_targets(
+        [
+            {"name": "Strawboy", "detail_url": "https://example.test/Strawboy_(Blunt)"},
+            {"name": "Strawboy", "detail_url": "https://example.test/Strawboy_(Magic)"},
+        ],
+        pipeline.CrawlConfig(crawl_scope="full"),
+    )
+
+    assert len(targets) == 1
+    assert targets[0]["id"] == "character::strawboy"
+    assert targets[0]["url"].endswith("/Strawboy_(Magic)")
+
+
 def test_build_sidekick_targets_respects_small_scope(monkeypatch, tmp_path):
     pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
 
@@ -208,6 +254,30 @@ def test_ensure_target_entry_resets_when_url_or_selector_changes(monkeypatch, tm
     assert refreshed["quality_status"] == "pending"
     assert refreshed["parsed_counts"] == {}
     assert refreshed["url"] == "https://example.test/Canonical"
+
+
+def test_ensure_target_entry_reactivates_a_previously_inactive_target(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    manifest = pipeline._base_manifest()
+    target = pipeline._make_target(
+        target_id="character::aldo",
+        url="https://example.test/Aldo",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "characters" / "aldo.html",
+        parsed_path=tmp_path / "parsed" / "characters" / "aldo.json",
+        kind="character_detail",
+        metadata={"character_name": "Aldo"},
+    )
+    entry = pipeline._ensure_target_entry(manifest, target)
+    entry.update(state="inactive", quality_status="inactive", last_error="Target not selected by current crawl scope")
+
+    Path(target["raw_path"]).parent.mkdir(parents=True)
+    Path(target["raw_path"]).write_text("<html></html>", encoding="utf-8")
+    reactivated = pipeline._ensure_target_entry(manifest, target)
+
+    assert reactivated["state"] == "cached"
+    assert reactivated["quality_status"] == "cached"
+    assert reactivated["last_error"] is None
 
 
 @pytest.mark.asyncio
@@ -652,6 +722,36 @@ async def test_parsed_mode_skips_missing_detail_artifacts_without_fetch(monkeypa
     }
     assert loaded_manifest["targets"]["character::akane_alter_blooming_blade"]["state"] == "inactive"
     assert "not available in parsed source mode" in loaded_manifest["targets"]["character::akane_alter_blooming_blade"]["last_error"]
+
+
+def test_parsed_mode_activates_current_detail_artifact_from_pending_state(monkeypatch, tmp_path):
+    pipeline = _set_pipeline_paths(monkeypatch, tmp_path)
+    target = pipeline._make_target(
+        target_id="character::strawboy",
+        url="https://example.test/Strawboy",
+        expected_selector="body",
+        raw_path=tmp_path / "raw" / "characters" / "strawboy.html",
+        parsed_path=tmp_path / "parsed" / "characters" / "strawboy.json",
+        kind="character_detail",
+        metadata={"character_name": "Strawboy"},
+    )
+    manifest = pipeline._base_manifest()
+    entry = pipeline._ensure_target_entry(manifest, target)
+    assert entry["state"] == "pending"
+    _write_json(Path(target["parsed_path"]), {
+        "schema_version": pipeline.ETL_SCHEMA_VERSION,
+        "kind": "character_detail",
+        "character_name": "Strawboy",
+        "rows": [],
+        "passive_rows": [],
+    })
+
+    selected = pipeline._filter_parsed_ready_detail_targets(manifest, [target])
+
+    assert selected == [target]
+    assert entry["state"] == "parsed"
+    assert entry["quality_status"] == "parsed"
+    assert entry["last_error"] is None
 
 
 def test_validate_character_detail_rejects_partial_page_without_skills(monkeypatch, tmp_path):

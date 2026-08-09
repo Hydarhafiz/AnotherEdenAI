@@ -20,11 +20,12 @@ from .loader import (
     load_sidekicks,
     load_skills,
     remove_collapsed_legacy_grastas,
+    remove_unreleased_character_placeholders,
     remove_stale_role_materialization,
     load_superbosses,
 )
-from .pipeline import CrawlConfig, mark_loaded, prepare_parsed_data
-from .capability_taxonomy import assert_capability_materialization
+from .pipeline import CrawlConfig, UNRELEASED_CHARACTER_NAMES, mark_loaded, prepare_parsed_data
+from .capability_taxonomy import assert_capability_materialization, validate_c5_handoff
 
 logging.basicConfig(
     level=logging.INFO,
@@ -74,10 +75,27 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
             len(equipment),
         )
 
-        await load_characters(driver, characters)
-        await remove_stale_role_materialization(driver)
         skills = [skill for character in characters for skill in character.skills]
         passive_skills = [passive for character in characters for passive in character.passive_skills]
+        capability_records = [
+            *(skill.model_dump() for skill in skills),
+            *(passive.model_dump() for passive in passive_skills),
+            *(skill.model_dump() for sidekick in sidekicks for skill in [*sidekick.auto_skills, *sidekick.charge_skills]),
+            *(aura.model_dump() for sidekick in sidekicks for aura in sidekick.auras),
+        ]
+        manifest["capability_handoff"] = validate_c5_handoff(
+            capability_records,
+            schema_version=SCHEMA_VERSION,
+        )
+        logger.info(
+            "Feature C5 handoff verified: taxonomy=%s review=%s parsed_facts=%d",
+            manifest["capability_handoff"]["taxonomy_version"],
+            manifest["capability_handoff"]["review_corpus_version"],
+            manifest["capability_handoff"]["parsed_fact_count"],
+        )
+        await load_characters(driver, characters)
+        await remove_unreleased_character_placeholders(driver, list(UNRELEASED_CHARACTER_NAMES))
+        await remove_stale_role_materialization(driver)
         await load_skills(driver, skills)
         await load_passive_skills(driver, passive_skills)
         await load_sidekicks(driver, sidekicks)

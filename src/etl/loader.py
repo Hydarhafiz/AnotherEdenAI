@@ -212,6 +212,25 @@ MERGE (c)-[:HAS_TRAIT]->(t)
         await session.run(cypher_traits, rows=char_data)
 
     logger.info("Loaded %d Character nodes", len(rows))
+
+
+async def remove_unreleased_character_placeholders(driver, names: list[str]) -> None:
+    """Remove legacy Character nodes for known unreleased index placeholders."""
+    names = sorted(set(names))
+    if not names:
+        return
+
+    cypher = """
+UNWIND $names AS name
+MATCH (c:Character {name: name})
+DETACH DELETE c
+"""
+    async with driver.session() as session:
+        await session.run(cypher, names=names)
+
+    logger.info("Removed %d unreleased Character placeholders", len(names))
+
+
 async def audit_character_readiness(driver, parsed_names: list[str]) -> dict[str, list[str]]:
     """Fail visibly when parsed canonical identities are absent or not roster-selectable."""
     records, _, _ = await driver.execute_query(

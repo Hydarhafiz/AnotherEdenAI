@@ -77,6 +77,12 @@ from .scraper import (
 
 logger = logging.getLogger(__name__)
 
+# Compatibility fence for schema-1.5 snapshots created before the parser
+# excluded `data-released="1"` upcoming-content placeholders.
+UNRELEASED_CHARACTER_NAMES = frozenset({
+    "Caromina", "Kekelle", "Miriam", "Misner", "Moyna", "Rajah",
+})
+
 INDEX_SELECTORS = {
     "characters": "tr.character-row-entry",
     "sidekick": "#Released_Sidekicks",
@@ -249,6 +255,11 @@ def _build_character_targets(character_records: list[str | dict[str, Any]], conf
     if not config.include_character_pages:
         return []
 
+    character_records = [
+        record for record in character_records
+        if _character_target_identity(record)[0] not in UNRELEASED_CHARACTER_NAMES
+    ]
+
     if config.crawl_scope == "small":
         selected = character_records[: config.small_character_limit]
     elif config.crawl_scope == "fallback":
@@ -258,23 +269,22 @@ def _build_character_targets(character_records: list[str | dict[str, Any]], conf
     else:
         raise ValueError(f"Unsupported ETL_CRAWL_SCOPE={config.crawl_scope!r}")
 
-    targets = []
+    targets_by_id = {}
     for record in selected:
         name, detail_url = _character_target_identity(record)
         slug = _slugify_title(name)
         page_title = _wiki_page_title(name).replace(" ", "_")
-        targets.append(
-            _make_target(
-                target_id=f"character::{slug}",
-                url=detail_url or f"https://anothereden.wiki/w/{quote(page_title, safe='(),')}",
-                expected_selector="div.character-skills, div.character-skill-grid-container",
-                raw_path=RAW_CHARACTER_DIR / f"{slug}.html",
-                parsed_path=PARSED_CHARACTER_DIR / f"{slug}.json",
-                kind="character_detail",
-                metadata={"character_name": name},
-            )
+        target = _make_target(
+            target_id=f"character::{slug}",
+            url=detail_url or f"https://anothereden.wiki/w/{quote(page_title, safe='(),')}",
+            expected_selector="div.character-skills, div.character-skill-grid-container",
+            raw_path=RAW_CHARACTER_DIR / f"{slug}.html",
+            parsed_path=PARSED_CHARACTER_DIR / f"{slug}.json",
+            kind="character_detail",
+            metadata={"character_name": name},
         )
-    return targets
+        targets_by_id[target["id"]] = target
+    return list(targets_by_id.values())
 
 
 def _build_sidekick_targets(sidekick_records: list[dict[str, Any]], config: CrawlConfig) -> list[dict[str, Any]]:
@@ -376,6 +386,16 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
         entry["state"] = "pending"
         entry["quality_status"] = "pending"
         entry["parsed_counts"] = {}
+        entry["last_error"] = None
+        entry["failure_stage"] = None
+        entry["quality_gate_reason"] = None
+    elif entry.get("state") == "inactive":
+        # An earlier narrower/parsed run can mark a detail target inactive.  A
+        # later live run that selects it again must reactivate it; otherwise a
+        # requested full refresh silently replays only the previously active
+        # subset.  Reuse cached HTML when possible and fetch only when absent.
+        entry["state"] = "cached" if Path(target["raw_path"]).exists() else "pending"
+        entry["quality_status"] = "cached" if entry["state"] == "cached" else "pending"
         entry["last_error"] = None
         entry["failure_stage"] = None
         entry["quality_gate_reason"] = None
@@ -703,6 +723,8 @@ def _aggregate_parsed_data(
         if kind == "characters_index":
             for row in rows:
                 character = CharacterRow.model_validate(row)
+                if character.name in UNRELEASED_CHARACTER_NAMES:
+                    continue
                 characters_by_name[character.name] = character
         elif kind == "sidekick_index":
             for row in rows:
@@ -780,6 +802,11 @@ def _filter_parsed_ready_detail_targets(
     for target in targets:
         entry = _ensure_target_entry(manifest, target)
         if _parsed_is_current(entry):
+            entry["state"] = "parsed"
+            entry["quality_status"] = "parsed"
+            entry["last_error"] = None
+            entry["failure_stage"] = None
+            entry["quality_gate_reason"] = None
             ready_targets.append(target)
             continue
         entry["state"] = "inactive"

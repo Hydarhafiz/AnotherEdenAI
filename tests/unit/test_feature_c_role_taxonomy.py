@@ -26,6 +26,7 @@ from src.etl.capability_taxonomy import (
     load_reviews,
     materialize_atomic,
     propose,
+    validate_c5_handoff,
 )
 from src.etl.constants import SCHEMA_VERSION
 from src.etl.loader import load_passive_skills, load_sidekicks, load_skills, remove_stale_role_materialization
@@ -598,6 +599,95 @@ def test_diagnostics_report_review_states_per_capability(tmp_path):
     assert report["per_value"]["heal_hp"] == {
         "candidate": 1, "proposed": 3, "proven": 1, "rejected": 1, "reviewed": 2,
     }
+
+
+def test_c5_cli_record_replay_excludes_unreleased_placeholder_details(tmp_path):
+    path = tmp_path / "placeholder.json"
+    path.write_text(json.dumps({
+        "rows": [fact() | {"character_name": "Caromina"}],
+        "passive_rows": [{
+            "character_name": "Rajah",
+            "name": "Placeholder Passive",
+            "description": "No released detail page",
+        }],
+    }), encoding="utf-8")
+
+    assert list(capability_taxonomy._iter_records([path])) == []
+
+
+def test_c5_handoff_records_reproducible_versions_and_rejected_fixture(tmp_path):
+    record = fact()
+    proposal = propose(record)[0]
+    reviews = tmp_path / "reviews.json"
+    gold = tmp_path / "gold.json"
+    write_reviews(reviews, [{**proposal, "decision": "reject", "reviewer": "alice"}])
+    gold.write_text(json.dumps({
+        "artifact_version": "test-gold",
+        "fixtures": [{**proposal, "expected_state": "rejected"}],
+    }), encoding="utf-8")
+
+    report = validate_c5_handoff(
+        [record], reviews_path=reviews, gold_path=gold, schema_version="test-schema",
+    )
+
+    assert report["taxonomy_version"] == load_capability_taxonomy()["artifact_version"]
+    assert report["review_corpus_version"] == "test"
+    assert report["gold_fixture_version"] == "test-gold"
+    assert report["schema_version"] == "test-schema"
+    assert report["parsed_fact_count"] == report["review_decision_count"] == 1
+    assert report["diagnostics"]["totals"]["rejected"] == 1
+
+
+def test_c5_handoff_reports_archived_decisions_without_materializing_them(tmp_path):
+    record = fact()
+    proposal = propose(record)[0]
+    archived = {**proposal, "proposal_id": "archived-proposal", "source_fact_id": "retired-fact", "decision": "reject"}
+    reviews = tmp_path / "reviews.json"
+    gold = tmp_path / "gold.json"
+    write_reviews(reviews, [
+        {**proposal, "decision": "approve", "reviewer": "alice"},
+        archived,
+    ])
+    gold.write_text(json.dumps({
+        "artifact_version": "test-gold",
+        "fixtures": [{"proposal_id": "archived-proposal", "expected_state": "rejected"}],
+    }), encoding="utf-8")
+
+    report = validate_c5_handoff(
+        [record], reviews_path=reviews, gold_path=gold, schema_version="test-schema",
+    )
+
+    assert report["orphaned_review_decision_count"] == 1
+    assert report["orphaned_review_decision_ids"] == ["archived-proposal"]
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (lambda review: review.update(source_fact_id="drifted"), "immutable review evidence drifted"),
+        (
+            lambda review: review.update(
+                decision="correct", corrected_kind="", corrected_value="",
+                corrected_direction="", corrected_target="",
+            ),
+            "incomplete correction semantics",
+        ),
+    ],
+)
+def test_c5_handoff_rejects_artifact_drift_and_incomplete_review(tmp_path, mutate, message):
+    record = fact()
+    proposal = propose(record)[0]
+    review = {**proposal, "decision": "approve", "reviewer": "alice"}
+    mutate(review)
+    reviews = tmp_path / "reviews.json"
+    gold = tmp_path / "gold.json"
+    write_reviews(reviews, [review])
+    gold.write_text(json.dumps({"artifact_version": "test-gold", "fixtures": []}), encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match=message):
+        validate_c5_handoff(
+            [record], reviews_path=reviews, gold_path=gold, schema_version="test-schema",
+        )
 
 
 def test_review_and_gold_artifacts_validate_stable_unique_ids(tmp_path):

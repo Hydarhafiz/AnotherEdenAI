@@ -333,7 +333,7 @@ MATCH (:Sidekick {name: c.name})
 RETURN c.name;
 ```
 
-The identity columns must be non-empty and schema versions must be `1.2.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
+The identity columns must be non-empty and schema versions must be `1.5.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
 
 ### Feature C Atomic Capability Review
 
@@ -359,7 +359,7 @@ After human seed decisions exist, recover the reviewed replacement batch while p
   --csv src/etl/review_batches/c3_offensive_support_batch_1_recovered.csv
 ```
 
-Review every new row explicitly, then import it with the same parsed directory. C3 remains artifact-only: do not run an ETL replay or inspect Neo4j capability materialization until Feature C5.
+Review every new row explicitly, then import it with the same parsed directory. C3 remains artifact-only until the C5 handoff is ready; do not treat a CSV decision as graph materialization.
 
 After C4 dependency/condition batch review, import the reviewed CSV with the same parsed facts:
 
@@ -369,7 +369,42 @@ After C4 dependency/condition batch review, import the reviewed CSV with the sam
   --csv src/etl/review_batches/c4_dependencies_conditions_batch_N.csv
 ```
 
-Use `clear` in an optional corrected qualifier field when the proposed value must not be retained; the importer canonicalizes it to `__clear__`, and materialized evidence records the value as unknown/blank. C4 remains artifact-only: do not replay Neo4j until Feature C5.
+Use `clear` in an optional corrected qualifier field when the proposed value must not be retained; the importer canonicalizes it to `__clear__`, and materialized evidence records the value as unknown/blank. C4 remains artifact-only until the C5 replay gate runs.
+
+### Feature C5 Full Replay And Drift Repair
+
+Run C5 only with a current full parsed corpus. The replay validates the locked taxonomy, canonical review corpus, rejected gold fixtures, materialization diagnostics, and version handoff before it writes any character capability facts to Neo4j. Candidate, ambiguous, rejected, and untagged proposals remain non-authoritative by design.
+
+First inspect the complete parsed corpus's review-state diagnostics:
+
+```bash
+.venv/bin/python -m src.etl.capability_taxonomy diagnostics \
+  --parsed-dir data/parsed/v1.5.0
+```
+
+Then run the current full replay and schema assertion:
+
+```bash
+ETL_SOURCE_MODE=parsed ETL_CRAWL_SCOPE=full uv run python -m src.etl.run_etl
+uv run python assert_schema.py
+```
+
+The ETL log must include `Feature C5 handoff verified`. Its crawl manifest records `capability_handoff` with the taxonomy, review-corpus, gold-fixture, and schema versions, parsed-fact and review-decision counts, and deterministic diagnostics. Historical decisions whose source facts have since disappeared from the wiki remain audit records under `orphaned_review_decision_*`; they cannot materialize into the current graph. Inspect it without exposing connection credentials:
+
+```bash
+jq '.capability_handoff' data/etl/crawl_manifest.json
+```
+
+Run the same parsed replay a second time. The handoff diagnostics and the Skill, PassiveSkill, SidekickSkill, and SidekickAura capability/dependency/evidence fields must remain unchanged. `assert_schema.py` and the ETL's graph-drift assertion must both pass.
+
+If C5 fails, do not edit Neo4j capability properties manually. Repair the repository artifact that the failure names:
+
+- Refresh stale parsed facts with a full live parse when the current schema-versioned corpus is absent or outdated.
+- Correct or import the affected CSV review decision when the handoff reports incomplete review semantics or immutable-evidence drift.
+- Update the relevant rejected/positive regression artifact when a reviewed rule correction changes expected behavior.
+- Re-run diagnostics, the full parsed replay, and `assert_schema.py` after every correction.
+
+The final C5 handoff versions in the manifest are the only capability inputs Feature D may use; it must consume only materialized proven facts.
 
 ## Maintenance Rule
 

@@ -37,6 +37,16 @@ CHARACTER_HTML = """
         data-personality="">
       <td>Hameow</td>
     </tr>
+    <tr class="character-row-entry"
+        data-name="Caromina"
+        data-element=""
+        data-weapon="Bow"
+        data-type=""
+        data-accessory="Ring"
+        data-released="1"
+        data-personality="">
+      <td><a href="/w/Caromina" title="Caromina">Caromina</a></td>
+    </tr>
   </tbody>
 </table>
 """
@@ -349,7 +359,7 @@ SUPERBOSS_DETAIL_HTML = """
 # ---------------------------------------------------------------------------
 
 def test_parse_character():
-    """Parse character rows while excluding sidekick-only records."""
+    """Parse released character rows while excluding sidekick and upcoming rows."""
     from src.etl.scraper import parse_characters
     soup = BeautifulSoup(CHARACTER_HTML, "html.parser")
     rows = parse_characters(soup)

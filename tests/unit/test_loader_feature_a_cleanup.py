@@ -5,6 +5,7 @@ import pytest
 from src.etl.loader import (
     cleanup_duplicate_sidekick_characters,
     find_sidekick_character_overlaps,
+    remove_unreleased_character_placeholders,
 )
 
 
@@ -113,3 +114,16 @@ async def test_cleanup_duplicate_sidekick_characters_skips_delete_when_no_candid
     assert [row["name"] for row in rows] == ["Minalca"]
     assert len(driver.calls) == 1
     assert "DETACH DELETE" not in driver.calls[0][0]
+
+
+@pytest.mark.asyncio
+async def test_remove_unreleased_character_placeholders_uses_known_names_only():
+    driver = RecordingDriver([])
+
+    await remove_unreleased_character_placeholders(driver, ["Rajah", "Caromina", "Rajah"])
+
+    assert len(driver.calls) == 1
+    cypher, params = driver.calls[0]
+    assert "MATCH (c:Character {name: name})" in cypher
+    assert "DETACH DELETE c" in cypher
+    assert params == {"names": ["Caromina", "Rajah"]}

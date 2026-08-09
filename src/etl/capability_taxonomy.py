@@ -192,16 +192,22 @@ def active_capabilities(*, phase: str | None = None) -> list[str]:
     return sorted(values)
 
 
-def load_reviews(path: Path = REVIEWS_PATH) -> dict[str, Any]:
-    if not path.exists():
-        return {"artifact_version": "1.0.0", "decisions": []}
-    artifact = json.loads(path.read_text(encoding="utf-8"))
+@lru_cache(maxsize=64)
+def _load_reviews_cached(path: str, modified_ns: int) -> dict[str, Any]:
+    artifact = json.loads(Path(path).read_text(encoding="utf-8"))
     if not artifact.get("artifact_version") or not isinstance(artifact.get("decisions"), list):
         raise ValueError("Review artifact requires artifact_version and a decisions list")
     ids = [row.get("proposal_id") for row in artifact["decisions"]]
     if None in ids or len(ids) != len(set(ids)):
         raise ValueError("Review artifact contains missing or duplicate proposal IDs")
     return artifact
+
+
+def load_reviews(path: Path = REVIEWS_PATH) -> dict[str, Any]:
+    if not path.exists():
+        return {"artifact_version": "1.0.0", "decisions": []}
+    resolved = path.resolve()
+    return _load_reviews_cached(str(resolved), resolved.stat().st_mtime_ns)
 
 
 def _decision_matches_taxonomy(decision: dict[str, Any], proposal: dict[str, Any]) -> bool:
@@ -413,14 +419,24 @@ def _iter_records(paths: Iterable[Path]) -> Iterable[dict[str, Any]]:
     """Yield canonical capability records, deriving stable IDs from parsed rows."""
     # Imported lazily: models use this module for capability materialization.
     from .models import PassiveSkillRow, SidekickAuraRow, SidekickSkillRow, SkillRow
+    from .pipeline import UNRELEASED_CHARACTER_NAMES
 
     for path in sorted(paths, key=str):
         payload = json.loads(path.read_text(encoding="utf-8"))
         for row in payload.get("rows", []):
-            if row.get("character_name") and row.get("name") and "description" in row:
+            if (
+                row.get("character_name")
+                and row.get("character_name") not in UNRELEASED_CHARACTER_NAMES
+                and row.get("name")
+                and "description" in row
+            ):
                 yield SkillRow.model_validate(row).model_dump()
         for row in payload.get("passive_rows", []):
-            if row.get("character_name") and row.get("name"):
+            if (
+                row.get("character_name")
+                and row.get("character_name") not in UNRELEASED_CHARACTER_NAMES
+                and row.get("name")
+            ):
                 yield PassiveSkillRow.model_validate(row).model_dump()
         for sidekick in payload.get("rows", []):
             sidekick_name = sidekick.get("name")
@@ -760,6 +776,114 @@ def diagnostics(records: Iterable[dict[str, Any]], reviews_path: Path = REVIEWS_
             per_value[proposal["proposed_value"]][state] += 1
             per_value[proposal["proposed_value"]]["reviewed"] += int(decision is not None)
     return {"totals": dict(sorted(totals.items())), "per_value": {key: dict(sorted(value.items())) for key, value in sorted(per_value.items())}}
+
+
+def validate_c5_handoff(
+    records: Iterable[dict[str, Any]],
+    *,
+    reviews_path: Path = REVIEWS_PATH,
+    gold_path: Path = GOLD_PATH,
+    schema_version: str,
+) -> dict[str, Any]:
+    """Validate the locked review corpus before C5 materialization reaches Neo4j.
+
+    Parsed facts remain deliberately allowed to be candidate, ambiguous, rejected, or
+    untagged.  This gate instead proves that every *imported* decision and regression
+    fixture still resolves to the current deterministic proposal set, and that only
+    proven facts enter materialized evidence.
+    """
+    records = list(records)
+    taxonomy = load_capability_taxonomy()
+    reviews = load_reviews(reviews_path)
+    gold = load_gold_fixtures(gold_path)
+    proposals = {
+        proposal["proposal_id"]: (record, proposal)
+        for record in records
+        for proposal in propose(record)
+    }
+    decisions = {row["proposal_id"]: row for row in reviews["decisions"]}
+    errors: list[str] = []
+    orphaned_decisions: list[str] = []
+
+    for proposal_id, decision in decisions.items():
+        pair = proposals.get(proposal_id)
+        if pair is None:
+            # Parsed wiki facts may be retired or renamed after their review
+            # batch has become audit history.  They cannot materialize into the
+            # current graph, so retain and report the decision rather than
+            # blocking a clean replay of the active corpus.
+            orphaned_decisions.append(proposal_id)
+            continue
+        _, proposal = pair
+        if decision.get("decision") not in taxonomy["review_states"]:
+            errors.append(f"incomplete review decision: {proposal_id}")
+        # A preserved decision may predate a taxonomy bump that adds proposal
+        # qualifiers or normalizes source whitespace.  Proposal identity and
+        # semantic compatibility are the replay contract; only a changed fact
+        # identity/rule is unsafe to carry forward.
+        elif any(
+            decision.get(key, "") != proposal.get(key, "")
+            for key in ("record_type", "source_fact_id", "rule_id")
+        ):
+            errors.append(f"immutable review evidence drifted: {proposal_id}")
+        elif decision["decision"] == "correct":
+            kind = decision.get("corrected_kind", "")
+            vocabulary = "capabilities" if kind == "capability" else "dependencies" if kind == "dependency" else ""
+            if (
+                not vocabulary
+                or decision.get("corrected_value") not in taxonomy[vocabulary]
+                or decision.get("corrected_direction") not in taxonomy["directions"]
+                or decision.get("corrected_target") not in taxonomy["targets"]
+            ):
+                errors.append(f"incomplete correction semantics: {proposal_id}")
+        elif not _decision_matches_taxonomy(decision, proposal):
+            errors.append(f"review semantics drifted: {proposal_id}")
+
+    materialized = {
+        proposal_id: materialize_atomic(record, reviews_path)
+        for proposal_id, (record, _) in proposals.items()
+    }
+    for fixture in gold["fixtures"]:
+        proposal_id = fixture["proposal_id"]
+        pair = proposals.get(proposal_id)
+        decision = decisions.get(proposal_id)
+        if decision is None:
+            errors.append(f"gold fixture is absent from canonical review: {proposal_id}")
+            continue
+        expected_state = fixture.get("expected_state")
+        actual_state = {"approve": "proven", "correct": "proven", "reject": "rejected"}.get(
+            decision.get("decision"), decision.get("decision")
+        )
+        if actual_state != expected_state:
+            errors.append(f"gold fixture state mismatch: {proposal_id} expected {expected_state}, got {actual_state}")
+            continue
+        if pair is None:
+            # The decision remains a valid archived regression even when the
+            # corresponding source fact no longer exists in the live corpus.
+            continue
+        _, proposal = pair
+        _, _, evidence, _, _ = materialized[proposal_id]
+        if expected_state != "proven" and any(row["source_id"] == proposal["rule_id"] for row in evidence):
+            errors.append(f"non-authoritative fixture materialized evidence: {proposal_id}")
+
+    replay_one = diagnostics(records, reviews_path)
+    replay_two = diagnostics(records, reviews_path)
+    if _canonical(replay_one) != _canonical(replay_two):
+        errors.append("capability diagnostics are not reproducible")
+    if errors:
+        raise RuntimeError("Feature C5 capability handoff failed: " + "; ".join(errors[:10]))
+
+    return {
+        "taxonomy_version": taxonomy["artifact_version"],
+        "review_corpus_version": reviews["artifact_version"],
+        "schema_version": schema_version,
+        "gold_fixture_version": gold["artifact_version"],
+        "parsed_fact_count": len(records),
+        "review_decision_count": len(decisions),
+        "orphaned_review_decision_count": len(orphaned_decisions),
+        "orphaned_review_decision_ids": sorted(orphaned_decisions),
+        "diagnostics": replay_one,
+    }
 
 
 async def assert_capability_materialization(driver, skills: list[Any], passives: list[Any], sidekicks: list[Any] | None = None) -> None:

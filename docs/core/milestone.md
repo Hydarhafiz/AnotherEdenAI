@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, and C1-C4 are complete. Feature C5 is implemented in the current working tree and remains the active verification gate before Feature D.
+Status: Active; Features A, B, and C1-C5 are complete. Feature D is the next admitted feature.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -435,7 +435,7 @@ Before a feature is complete:
 - Permanent tests must protect supported capabilities rather than milestone letters, workflow bookkeeping, or historical SHAs unless compatibility requires that history.
 - The milestone status, relevant guide, and durable evidence must describe current behavior rather than projected completion.
 
-Current audit verdict is `Conditional pass`: committed evidence supports Features A, B, and C1-C4. Feature C5 has an implementation and focused unit evidence in the working tree, but only the C5 acceptance gate can promote it to completed. The existing broad candidate/analyzer flow is legacy compatibility evidence, not proof that Features D-G are implemented.
+Current audit verdict is `C5 complete`: committed evidence supports Features A, B, and C1-C5. The existing broad candidate/analyzer flow is legacy compatibility evidence, not proof that Features D-G are implemented.
 
 ## Prioritized Feature Checklist
 
@@ -499,7 +499,7 @@ Acceptance criteria:
 
 ### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: C1-C4 completed; C5 verification is active. Feature D remains blocked until C5 completes.
+Status: C1-C5 completed. Feature D is now admitted from the reviewed materialization handoff.
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
@@ -568,7 +568,7 @@ Acceptance criteria:
 
 #### Feature C3: Offensive And Support Human-Review Gate
 
-Status: Completed; the MVP review tooling limits C3 to 25 active, source-backed families. The targeted seed review and two clean 45-row batches have passed their accumulated artifact regressions; C3 remains artifact-only until Feature C5's replay gate.
+Status: Completed; the MVP review tooling limits C3 to 25 active, source-backed families. The targeted seed review and two clean 45-row batches have passed their accumulated artifact regressions; C3 remains the artifact-only review boundary, with its reviewed output materialized by C5.
 
 Route: `builder-executor -> tdd-loop` with required human review (completed feature boundary).
 
@@ -639,7 +639,9 @@ Acceptance criteria:
 
 #### Feature C5: Full Replay, Materialization, Drift Gate, And Handoff
 
-Status: Implemented; focused automated checks pass, but full replay/graph/manual verification remains pending.
+Status: Completed; two clean full parsed replays, graph drift checks, schema assertions, and manual operator checks pass.
+
+Evidence: Both replays produced taxonomy/review corpus `3.1.0`, gold fixture `1.0.0`, schema `1.5.0`, and 5,791 parsed facts with diagnostics totals of candidate 6,166, proposed 6,422, proven 229, reviewed 256, rejected 27, ambiguous 0, and untagged 2,310. The 5,103-record capability projection reproduced SHA-256 `0bcea9febee8118b4e2d49ea4fd525e84bd177be9e711eed2f66e8692e607dfa`; post-load schema and operator checks found zero stale schema nodes, broad-role properties, unreleased placeholders, or Character/Sidekick name overlap. The readiness report continues to expose sparse passive coverage as a visible data-completeness condition.
 
 Route: `tdd-loop` for verification, durable evidence curation, milestone/guide reconciliation, and the single C5 feature commit. Return to `builder-executor` only if verification exposes a contained implementation defect.
 
@@ -660,7 +662,7 @@ Acceptance criteria:
 
 ### Feature D: Hard Filters, RoleScores, And Skill Shortlists
 
-Status: Planned; blocked until Feature C5 completes the reviewed materialization handoff.
+Status: Planned; admitted after Feature C5 completed the reviewed materialization handoff.
 
 Route: `builder-executor -> tdd-loop`. Use `contract-auditor` first only for a disputed capability source, formula, compatibility boundary, or removal decision.
 
@@ -876,7 +878,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature A: completed; identity, cardinality, readiness, and replay-safe sidekick cleanup verified.
 - Feature B: completed; typed production retrieval exists without PLAN or generated Cypher.
 - Features C1-C4: completed with canonical review artifacts and accumulated regression evidence.
-- Feature C5: implemented in the current working tree and awaiting its full replay, graph-drift, schema, guide, and commit gate; Feature D remains blocked.
+- Feature C5: completed; two clean full parsed replays, graph-drift, schema, guide, and manual operator gates pass; Feature D is admitted.
 - Features D-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
 - The current production candidate/analyzer implementation remains a superseded broad-context prototype for D-G scope and must not be credited as the target RoleScore, beam-generation, compact-projection, or two-call architecture.
 - No new deterministic role-scoring, beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
@@ -895,7 +897,7 @@ Milestone 5 completes only when:
 
 ## Open Questions
 
-Feature D has no unresolved authority decision once C5 passes. The following are scheduled evidence-driven decisions rather than permission to widen current scope:
+Feature D has no unresolved authority decision after C5. The following are scheduled evidence-driven decisions rather than permission to widen current scope:
 
 - Exact initial scoring weights within the locked component model.
 - Exact weak-boss golden set and whether post-G evidence justifies staged all-boss expansion.
