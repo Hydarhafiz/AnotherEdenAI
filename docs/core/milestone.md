@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; rewritten and resequenced around deterministic recommendation generation.
+Status: Active; Features A, B, and C1-C4 are complete. Feature C5 is implemented in the current working tree and remains the active verification gate before Feature D.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -62,7 +62,7 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - No exact best-in-slot optimizer.
 - No required weapon, armor, Grasta, Ore, badge, or sidekick-equipment inventory entry for MVP.
 - No required `declared_owned_only` item mode in the first implementation.
-- No all-superboss evaluation tier.
+- No all-superboss ingestion or evaluation expansion before the required post-Feature-G architecture checkpoint.
 - No intermediate or strong superboss evaluation tier.
 - No live AI role tagging during requests or normal ETL.
 - No mandatory AI-assisted labeling in initial acceptance.
@@ -83,7 +83,7 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - Schema changes require a version bump, ETL replay/migration, schema assertions, and planned ETL-guide updates.
 - The default target player has broad late-game item access; item ownership is not verified unless a future policy says otherwise.
 - Curated boss and mechanics data may be incomplete. Unknown data lowers confidence and must remain distinct from confirmed facts.
-- OpenRouter usage and model metadata are mutable external facts and must be captured at paid release-evaluation time.
+- DeepSeek direct-API and OpenRouter usage, model, price, structured-output, and limit metadata are mutable external facts and must be captured at paid release-evaluation time.
 - The historical ~601k-token failed run is a user-observed baseline for reduction reporting.
 - The RM50/month public demo/beta ceiling remains a later operational constraint.
 - Secrets, credentials, API keys, and real user authentication data remain outside documentation and repository files.
@@ -105,6 +105,7 @@ External/current inputs include:
 - OpenRouter Usage Accounting documents automatic per-response usage and cost fields, including reasoning and cache details where available.
 - OpenRouter Structured Outputs documents strict JSON Schema output for compatible models; schema enforcement does not replace semantic legality validation.
 - OpenRouter Models documentation provides model capability, pricing, context, completion, and supported-parameter metadata that must be snapshotted for paid qualification.
+- Direct DeepSeek API behavior is a release-time provider qualification concern. The implementation must use sanitized configuration only and snapshot official model, usage, structured-output, and pricing metadata before paid acceptance; no current mutable model claim is locked into this milestone.
 - Existing Another Eden wiki and mechanics references ground affinity, status, zone, SA, sidekick, and Grasta constraints.
 - Feature C3 references now ground Status Effects, Damage Formula, Focus effects, reversal, Kaleido, barrier pierce, Link/Copy/Chain/counting behavior, Magic Overcritical, Lunatic variants, and the Oh No Help compound amplification case; detailed entries and retrieval caveats live in `docs/core/planning-sources.md`.
 - Community build references remain heuristic evidence only and require fixture or beta validation before tuning weights.
@@ -114,8 +115,9 @@ Open research gaps:
 - Actual compact-projection token and cost distributions.
 - Initial scoring-weight quality across the curated weak-boss fixtures.
 - Experienced-player validation for high-impact role overrides and counter exceptions.
-- Best paid analyzer model at release time.
-- Value of optional OpenRouter-assisted low-confidence tag suggestions.
+- Best paid analyzer route and model at release time, comparing a direct DeepSeek route with an OpenRouter alternative.
+- Whether curated weak-boss coverage remains sufficient after Feature G or an explicit all-boss data-expansion feature is worth its parser, curation, fixture, and evaluation burden.
+- Value of optional provider-assisted low-confidence tag suggestions.
 - Authentication, persistence, and per-user/global limits for beta.
 - Exact dedicated-page wording for several C3 mechanics that the planning browser could not retrieve; cached source facts and the accessible Status Effects/Damage Formula pages ground the current taxonomy, while unresolved formula or interaction details remain non-authoritative.
 - The initial conservative Feature D policy for using reviewed stacking evidence; C3 captures it but does not require maximum-stack scoring.
@@ -144,6 +146,22 @@ The backend owns:
 - Specific equipment allocation when named.
 - Final validation, re-scoring, fallback, and partial-result classification.
 - Preflight token budgets and observed usage accounting.
+
+### Role Taxonomy Ownership
+
+The word `role` refers to three different contracts and must not collapse them into one field:
+
+| Contract | Examples | Authority | Persistence |
+| --- | --- | --- | --- |
+| Atomic combat facts | `direct_damage`, `heal_hp`, `guard`, `deploy_zone`, `af_combo_gain_up`, `requires_zone` | Reviewed taxonomy plus deterministic ETL materialization | Canonical review/taxonomy artifacts and reproducible graph fields |
+| Contextual role dimensions | primary damage, offensive enablement, zone/setup, defense/mitigation, recovery/protection, tank/control, AF support, MP sustain, boss counter, reserve utility | Feature D backend policy computed from proven facts, boss, SA state, placement, and selected package | Versioned scoring policy and per-request score/evidence output; never permanent Character labels |
+| Strategic interpretation | candidate ordering, execution complexity, strategic coherence, matchup nuance, tradeoff wording, and a concise display-role phrase grounded in backend role IDs | Analyzer advice over supplied legal candidates | Request result and evaluation evidence only; never capability or coverage authority |
+
+`DPS`, `healer`, `tank`, `support`, `zone setter`, `cleanser`, and similar player-facing labels are deterministic groupings over the contextual dimensions when used for filtering, scoring, or coverage. Their scores change with boss and package context, but the AI does not verify or certify them. Burst, sustain, and hybrid are likewise backend candidate-template IDs, not analyzer-invented archetypes.
+
+The analyzer may describe a hero as, for example, “Fire primary damage with AF support,” only when the projection supplies those backend role IDs and evidence. Soft judgments that the backend cannot prove—such as execution difficulty or strategic elegance—must remain explicitly advisory and cannot create mandatory coverage, rescue an illegal candidate, or change a score.
+
+The current broad candidate prototype still accepts analyzer-authored free-text `role` values. Feature D introduces the fixed contextual role-score contract, and Feature G must retire free-text role authority from the production path while preserving any legacy shape only for exploratory compatibility.
 
 ### Analyzer Dynamic Authority
 
@@ -196,9 +214,9 @@ A critical false-positive pattern is a repeatable rule error that could falsely 
 
 ### Optional AI-Assisted Curation
 
-OpenRouter may later support a developer/admin-only batch that reads parsed artifacts and emits suggestion files for untagged, low-confidence, or selected high-impact records. It never runs during live recommendations or normal ETL, never directly mutates Neo4j or canonical artifacts, and is safe to skip.
+A configured DeepSeek-direct or OpenRouter route may later support a developer/admin-only batch that reads parsed artifacts and emits suggestion files for untagged, low-confidence, or selected high-impact records. It never runs during live recommendations or normal ETL, never directly mutates Neo4j or canonical artifacts, and is safe to skip.
 
-Suggestion records include evidence, confidence, model, prompt version, timestamp, and source reference. Human review is mandatory. Accepted suggestions become ordinary versioned curated overrides, after which runtime materialization is deterministic without OpenRouter.
+Suggestion records include evidence, confidence, provider, model, prompt version, timestamp, and source reference. Human review is mandatory. Accepted suggestions become ordinary versioned curated overrides, after which runtime materialization is deterministic without an AI provider.
 
 This optional batch is not required for first implementation acceptance.
 
@@ -399,6 +417,26 @@ For each attempt record provider, model, prompt, completion, reasoning, cached, 
 
 Dominant zero-candidate causes include insufficient heroes, no usable primary damage, null/absorb conflicts, missing mandatory defense/setup, missing source data, build incompatibility, Grasta cardinality conflicts, and boss-data unreadiness.
 
+## Execution Workflow And Evidence Policy
+
+Repository behavior and authoritative test/evidence paths outrank milestone status text; this document owns approved scope and ordering; ignored `.sdd/` handoffs are reconstructable execution cache only.
+
+Each planned feature below records a compact route from the current SDD routing matrix. Execution uses an ignored `.sdd/active/milestone-5/<feature>.json` handoff for exact paths, current role, known dirty files, temporary blockers, and command results. The handoff is never committed and never proves completion.
+
+Implementation-bearing work follows `builder-executor -> tdd-loop`. Verification/evidence remediation may enter `tdd-loop` directly. Important source authority, compatibility, destructive removal, formula, or disputed completion claims route through `contract-auditor` before the owning role. Milestone, shared-boundary, boss-coverage, provider-policy, or cross-feature sequence decisions return to `architect-planner` and require the named human checkpoint.
+
+Every feature has one completion boundary and one detailed feature commit containing all durable code, tests, fixtures/evidence, required documentation, and the milestone status update. There are no separate routing, planning-approval, preflight, evidence-seal, progress-sync, SHA-recording, or handoff-cleanup commits. A standalone planning/research deliverable may use one planning feature commit when explicitly completed as the deliverable.
+
+Before a feature is complete:
+
+- Acceptance must execute the authoritative production path with an independent fixture, oracle, or invariant where one exists; a green suite that only repeats implementation logic is insufficient.
+- Required manual product, graph, provider, or operator checks must pass and be recorded, or the feature must state truthfully that none are required.
+- Temporary tests, review batches, prompts, scenarios, command logs, generated reports, and handoff notes must be promoted to a durable semantic home or purged.
+- Permanent tests must protect supported capabilities rather than milestone letters, workflow bookkeeping, or historical SHAs unless compatibility requires that history.
+- The milestone status, relevant guide, and durable evidence must describe current behavior rather than projected completion.
+
+Current audit verdict is `Conditional pass`: committed evidence supports Features A, B, and C1-C4. Feature C5 has an implementation and focused unit evidence in the working tree, but only the C5 acceptance gate can promote it to completed. The existing broad candidate/analyzer flow is legacy compatibility evidence, not proof that Features D-G are implemented.
+
 ## Prioritized Feature Checklist
 
 Implementation order is mandatory. Deterministic legality, scoring, and candidate quality precede analyzer refinement and paid tests.
@@ -406,6 +444,8 @@ Implementation order is mandatory. Deterministic legality, scoring, and candidat
 ### Feature A: Data Identity And Readiness Foundation
 
 Status: Completed.
+
+Route: `builder-executor -> tdd-loop` (completed feature boundary).
 
 Prior work status:
 
@@ -437,6 +477,8 @@ Acceptance criteria:
 
 Status: Completed.
 
+Route: `builder-executor -> tdd-loop` (completed feature boundary).
+
 Technical requirements:
 
 - Define typed request fields for canonical boss ID, roster, optional sidekicks, SA state, `late_game_assumed` policy, and natural-language preferences.
@@ -457,11 +499,13 @@ Acceptance criteria:
 
 ### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: Reopened and split into C1-C5; Feature D remains blocked until C5 completes.
+Status: C1-C4 completed; C5 verification is active. Feature D remains blocked until C5 completes.
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
 Status: Completed.
+
+Route: `builder-executor -> tdd-loop` (completed feature boundary).
 
 Technical requirements:
 
@@ -493,6 +537,8 @@ Acceptance criteria:
 
 Status: Completed.
 
+Route: `builder-executor -> tdd-loop` with required human review (completed feature boundary).
+
 Technical requirements:
 
 - Version and implement the expanded defensive/setup vocabulary across Skill, PassiveSkill, SidekickSkill, and SidekickAura records before review resumes.
@@ -523,6 +569,8 @@ Acceptance criteria:
 #### Feature C3: Offensive And Support Human-Review Gate
 
 Status: Completed; the MVP review tooling limits C3 to 25 active, source-backed families. The targeted seed review and two clean 45-row batches have passed their accumulated artifact regressions; C3 remains artifact-only until Feature C5's replay gate.
+
+Route: `builder-executor -> tdd-loop` with required human review (completed feature boundary).
 
 Technical requirements:
 
@@ -574,6 +622,8 @@ Acceptance criteria:
 
 Status: Completed.
 
+Route: `builder-executor -> tdd-loop` with required human review (completed feature boundary).
+
 Technical requirements:
 
 - Review zone/status/stack/SA requirements, EOT effects, party-composition conditions, limited-use activation, sidekick activation conditions, and structured recipient eligibility such as weapon, element, personality, status, stack, or position in deterministic 45-row stratified batches.
@@ -589,7 +639,9 @@ Acceptance criteria:
 
 #### Feature C5: Full Replay, Materialization, Drift Gate, And Handoff
 
-Status: Planned; blocked until C2-C4 each pass their human-review gate.
+Status: Implemented; focused automated checks pass, but full replay/graph/manual verification remains pending.
+
+Route: `tdd-loop` for verification, durable evidence curation, milestone/guide reconciliation, and the single C5 feature commit. Return to `builder-executor` only if verification exposes a contained implementation defect.
 
 Technical requirements:
 
@@ -601,21 +653,25 @@ Technical requirements:
 
 Acceptance criteria:
 
-- Same parsed data, review artifacts, taxonomy version, and schema version reproduce identical materialization and diagnostics across repeated clean replays.
-- Graph drift, artifact drift, stale broad-role properties, incomplete review imports, and rejected-fixture regressions fail visibly.
-- The ETL guide makes the complete C1-C5 workflow repeatable without relying on chat history.
-- Feature D consumes only proven atomic capabilities from the locked C5 handoff and remains unable to treat any other review state as coverage.
+- **C5-01:** Same parsed data, review artifacts, taxonomy version, and schema version reproduce identical materialization and diagnostics across two clean full parsed replays.
+- **C5-02:** Graph drift, artifact drift, stale broad-role properties, incomplete review imports, and rejected-fixture regressions fail visibly; the focused automated suite and post-load schema assertion pass.
+- **C5-03:** The ETL guide makes the complete C1-C5 workflow repeatable without relying on chat history, and a manual operator follows its diagnostics/handoff inspection successfully.
+- **C5-04:** The durable handoff records the exact taxonomy, review-corpus, gold-fixture, schema, and diagnostic contract that Feature D consumes, while every non-proven review state remains ineligible for coverage.
 
 ### Feature D: Hard Filters, RoleScores, And Skill Shortlists
 
 Status: Planned; blocked until Feature C5 completes the reviewed materialization handoff.
+
+Route: `builder-executor -> tdd-loop`. Use `contract-auditor` first only for a disputed capability source, formula, compatibility boundary, or removal decision.
 
 Technical requirements:
 
 - Implement ownership/F2P, sidekick, SA, skill/passive, affinity, item, and setup hard filters.
 - Hard-reject null/absorb primary damage and require neutral-or-better usable primary damage.
 - Distinguish no weakness, unknown weakness, and incomplete affinity.
-- Derive per-character and per-sidekick contextual scores only from proven atomic Skill, PassiveSkill, SidekickSkill, and SidekickAura capabilities, reviewed qualifiers, placement availability, evidence, and policy version.
+- Version the fixed contextual role dimensions `primary_damage`, `offensive_enablement`, `zone_setup`, `defense_mitigation`, `recovery_protection`, `tank_control`, `af_support`, `mp_sustain`, `boss_counter`, and `reserve_utility`.
+- Derive per-character and per-sidekick contextual scores for those dimensions only from proven atomic Skill, PassiveSkill, SidekickSkill, and SidekickAura capabilities, reviewed qualifiers, placement availability, evidence, selected package, boss context, SA state, and policy version.
+- Emit backend-owned primary/secondary role IDs and evidence. Keep any player-facing free-text role phrase non-authoritative and constrained to those IDs.
 - Keep top eight per role plus bounded must-include exceptions.
 - Score four-to-six skills per contextual role.
 - Construct default three-to-four-skill packages for later lineup scoring.
@@ -623,17 +679,19 @@ Technical requirements:
 
 Acceptance criteria:
 
-- Impossible candidates never enter normal role pools.
-- Required boss counters survive top-eight pruning through explicit exceptions.
-- Role scores vary by boss and available package.
-- Missing data cannot create capabilities.
-- Candidate, rejected, dependency-only, and untagged facts cannot satisfy mandatory role or lineup coverage.
-- Skill shortlists exclude unavailable choices and remain bounded.
-- Identical inputs/policy versions reproduce ordered pools and packages.
+- **D-01:** Impossible candidates never enter normal role pools.
+- **D-02:** Required boss counters survive top-eight pruning through explicit exceptions.
+- **D-03:** Fixed role dimension IDs remain schema-valid while their scores vary deterministically by boss, SA state, placement, and selected package.
+- **D-04:** Missing data cannot create capabilities, and candidate, rejected, dependency-only, ambiguous, or untagged facts cannot satisfy role or lineup coverage.
+- **D-05:** Backend role IDs and evidence, rather than AI-authored role text, own filtering, top-K membership, and mandatory coverage.
+- **D-06:** Skill shortlists exclude unavailable choices and remain bounded.
+- **D-07:** Identical inputs and policy/artifact versions reproduce ordered pools, scores, role assignments, evidence, and packages.
 
 ### Feature E: Late-Game Build Packages And Allocation
 
 Status: Planned.
+
+Route: `builder-executor -> tdd-loop`.
 
 Technical requirements:
 
@@ -655,6 +713,8 @@ Acceptance criteria:
 ### Feature F: Capability Templates, Beam Generation, And Lineup Scoring
 
 Status: Planned.
+
+Route: `builder-executor -> tdd-loop`.
 
 Technical requirements:
 
@@ -682,12 +742,17 @@ Acceptance criteria:
 
 Status: Planned.
 
+Route: `builder-executor -> tdd-loop`.
+
 Technical requirements:
 
 - Maintain separate full backend and compact analyzer contracts.
 - Project only referenced candidates, catalogs, shortlists, packages, boss/mechanics facts, swaps, constraints, and citations.
+- Introduce a provider-neutral analyzer port with a direct DeepSeek route as the intended primary paid candidate and an independently selectable OpenRouter route as the alternative. Configuration may name providers/models but never store keys or credential values.
+- Keep provider selection explicit per run. Automatic cross-provider retry is out of scope until Feature H proves shared call-count, usage, cost, and degradation semantics.
 - Use strict structured output on supported provider routes.
 - Allow ranking, explanations, skill choice, and one supplied swap per lineup.
+- Permit advisory execution-complexity, strategic-coherence, and matchup-nuance judgments, plus concise display-role wording grounded in supplied backend role IDs; do not accept AI-authored RoleScores, role IDs, or coverage claims.
 - Re-score/revalidate refinements and restore defaults when worse or invalid.
 - Freeze valid lineups.
 - Permit one fragment-only correction call.
@@ -695,24 +760,49 @@ Technical requirements:
 
 Acceptance criteria:
 
-- Projection contains no rejected roster or broad catalogs.
-- Analyzer cannot introduce out-of-bundle IDs.
-- No request exceeds two analyzer calls.
-- Correction does not resend the full projection.
-- Lower-scoring swaps/packages fall back to originals.
-- One to three valid lineups may return.
-- Analyzer failure cannot invalidate legal backend candidates.
+- **G-01:** Projection contains no rejected roster, broad catalogs, non-proven coverage, or hidden free-text role authority.
+- **G-02:** Analyzer cannot introduce out-of-bundle IDs, RoleScores, role IDs, or mandatory coverage claims.
+- **G-03:** Direct DeepSeek and OpenRouter routes satisfy the same provider-neutral request, response, usage, validation, and error envelope in offline adapter tests.
+- **G-04:** No request exceeds two analyzer calls; correction does not resend the full projection, and no automatic cross-provider retry adds an unbudgeted call.
+- **G-05:** Lower-scoring swaps/packages fall back to originals, and AI advisory judgments never override deterministic score or legality results.
+- **G-06:** One to three valid lineups may return.
+- **G-07:** Analyzer or provider failure cannot invalidate legal backend candidates.
+
+### Required Post-Feature-G Human Checkpoint: Boss Coverage And Paid Provider Admission
+
+Status: Planned; this is the next milestone/architecture decision after Feature G, not an implementation phase or bookkeeping commit.
+
+Route: `contract-auditor -> architect-planner` for the decision only. If approved, a new implementation feature is inserted with its own `builder-executor -> tdd-loop` boundary before Feature H.
+
+Decision evidence:
+
+- Audit the curated weak-boss set against the real Feature G retrieval, role, candidate, projection, and fallback contracts.
+- Measure how many additional boss pages have canonical identity, parseable affinity, mechanics text, section boundaries, source attribution, and enough independent fixtures to support deterministic acceptance.
+- Estimate the parser, curation, regression, evaluation, and runtime-cost burden of all-boss coverage; do not treat index discovery as recommendation readiness.
+- Choose exactly one disposition: keep the curated weak-boss scope for Milestone 5; add a staged boss-corpus expansion feature before H; or defer all-boss coverage to a later milestone.
+- Review direct DeepSeek and OpenRouter adapter evidence, current official provider/model metadata, structured-output compatibility, observed usage availability, and projected RM cost. Choose the paid qualification routes and models for Feature H.
+- Keep API keys and credential values outside the repository. Human authorization is required before any paid provider call or live all-boss scrape.
+
+Checkpoint acceptance:
+
+- **PG-01:** The boss-coverage decision names its source authority, supported corpus boundary, fixture/evidence burden, non-goals, and insertion/defer route.
+- **PG-02:** The provider decision names direct DeepSeek and/or OpenRouter qualification targets without hard-coding mutable prices, limits, or credentials.
+- **PG-03:** Feature H does not start paid evaluation until both decisions are recorded in the canonical planning source and reflected here.
 
 ### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
 
 Status: Planned.
 
+Route: `tdd-loop` for deterministic/evaluation evidence, with `builder-executor -> tdd-loop` only for provider-accounting implementation discovered to be missing. Paid calls remain a human checkpoint.
+
 Technical requirements:
 
 - Build layered tests for taxonomy, materialization, normalization, hard filters, role/skill scoring, packages, templates, beam bounds, no-weakness affinity, projection leakage/budgets, swaps, partial output, and zero candidates.
 - Define feasible and infeasible golden weak-boss fixtures with expected constraints and quality notes.
+- Use the boss corpus admitted by the post-G checkpoint; an approved expansion must complete its own implementation/verification feature before H consumes it.
 - Require all deterministic gates before paid analyzer or judge calls.
-- Capture provider/model metadata snapshot for paid runs.
+- Qualify the approved direct DeepSeek and OpenRouter routes independently; never infer that one provider's structured-output or usage behavior proves the other's.
+- Capture provider/model metadata snapshot for every paid run.
 - Record attempt-level usage, cost, latency, validation, fallback, and degradation.
 - Enforce locked per-call and cumulative budgets.
 - Preserve the ~601k failure as a recorded baseline artifact.
@@ -720,22 +810,24 @@ Technical requirements:
 
 Acceptance criteria:
 
-- Hard legality and out-of-bundle ID gates pass 100%.
-- Identical fixture input produces deterministic backend results.
-- Every feasible fixture returns at least one legal coverage-valid candidate.
-- Infeasible fixtures return classified diagnostics without analyzer calls.
-- Paid golden runs remain under 40k cumulative analyzer tokens and reduce baseline usage by at least 90%.
-- Reports distinguish backend failures, analyzer structure/refinement failures, provider transport failures, budget degradation, and subjective quality.
-- Provider generation and judging roles are explicit.
+- **H-01:** Hard legality and out-of-bundle ID gates pass 100%.
+- **H-02:** Identical fixture input produces deterministic backend results.
+- **H-03:** Every feasible fixture returns at least one legal coverage-valid candidate; infeasible fixtures return classified diagnostics without analyzer calls.
+- **H-04:** Each admitted DeepSeek/OpenRouter route reports or truthfully classifies unavailable prompt, completion, reasoning, cached, total-token, cost, latency, and generation metadata without mixing providers.
+- **H-05:** Paid golden runs remain under 40k cumulative analyzer tokens and reduce baseline usage by at least 90%.
+- **H-06:** Reports distinguish backend failures, analyzer structure/refinement failures, provider transport failures, budget degradation, provider fallback/selection, and subjective quality.
+- **H-07:** Provider generation and judging roles are explicit, and paid judge use remains offline and human-authorized.
 
 ### Feature I: Reusable Guidance And Beta Safeguards
 
 Status: Planned after Features A-H.
 
+Route: `architect-planner` for the beta safeguard decision, then `release-manager-sync` only after repository evidence proves the milestone implementation and verification are complete. Deployment implementation remains Milestone 7.
+
 Technical requirements:
 
-- Plan updates to `docs/guides/ETL_GUIDE.md` for taxonomy/rule versions, replay, evidence materialization, drift tests, and migration.
-- Plan updates to `docs/guides/recommendation-validation.md` for readiness, score breakdowns, pool pruning, beam diagnostics, projection inspection, token budgets, swaps, degraded mode, and golden evals.
+- Reconcile `docs/guides/ETL_GUIDE.md` with the verified taxonomy/rule versions, replay, evidence materialization, drift tests, migration, and C5 handoff behavior.
+- Rewrite stale portions of `docs/guides/recommendation-validation.md` for typed production readiness, backend role IDs/scores, pool pruning, beam diagnostics, projection inspection, the two-call cap, DeepSeek/OpenRouter provider evidence, swaps, degraded mode, and golden evals.
 - Require later related features to maintain these guides when commands, diagnostics, artifacts, or contracts change.
 - Decide authentication, persistence, feedback, caching/deduplication, rate limits, and monthly budget enforcement before controlled beta.
 - Show selected-lineup untagged skill/passive diagnostics with stable fact IDs, names, source URLs, and short captured snippets. Explicitly exclude them from scoring and coverage; collect expert beta feedback outside the app through a form whose required fields are fact ID, name, source URL, optional suggested capability, and explanation.
@@ -743,17 +835,17 @@ Technical requirements:
 
 Acceptance criteria:
 
-- Another developer can reproduce role materialization and diagnose drift.
-- Another tester can inspect candidate generation and repeat golden validation.
-- Public beta cannot expose an unlimited unauthenticated paid endpoint.
-- Beta safety decisions are documented before deployment implementation.
-- Guide maintenance is part of later feature acceptance when behavior changes.
+- **I-01:** Another developer can reproduce capability materialization and diagnose drift.
+- **I-02:** Another tester can inspect deterministic role derivation and candidate generation, then repeat offline and approved paid-provider validation.
+- **I-03:** The guides contain no stale three-call, broad-Cypher production, free-text role-authority, or single-provider instructions.
+- **I-04:** Public beta cannot expose an unlimited unauthenticated paid endpoint.
+- **I-05:** Beta safety decisions are documented before deployment implementation, and guide maintenance remains part of later feature acceptance when behavior changes.
 
 ## Pre-Paid Evaluation Ladder
 
-Paid OpenRouter testing is blocked until these gates pass in order:
+Paid DeepSeek or OpenRouter testing is blocked until these gates pass in order:
 
-1. Role artifact schema and reproducibility.
+1. Capability artifact schema, C5 materialization, and reproducibility.
 2. Canonical identity, ownership, SA, affinity, sidekick, and hard rejection.
 3. Contextual RoleScores and bounded skill shortlists.
 4. Skill-package dependency and fallback.
@@ -763,33 +855,51 @@ Paid OpenRouter testing is blocked until these gates pass in order:
 8. Projection schema, leakage prevention, and token preflight.
 9. Swap re-scoring, rejection, fallback, frozen output, partial results, and degraded mode.
 10. Offline end-to-end feasible and infeasible golden cases.
-11. Paid analyzer with captured model metadata and observed usage.
-12. Optional paid judge only for deterministically valid release-evaluation outputs.
+11. Post-Feature-G boss-coverage and provider-admission decisions.
+12. Separately qualified direct DeepSeek and/or OpenRouter analyzer runs with captured model metadata and observed usage.
+13. Optional paid judge only for deterministically valid release-evaluation outputs.
 
 Hard gates require 100% legality, zero out-of-bundle IDs, deterministic backend output for identical inputs, at least one valid candidate for every feasible fixture, typed diagnostics for infeasible fixtures, and budget compliance.
 
 ## Planned Guide Updates
 
-Implementation must update, but this architect-planner session does not edit:
+The owning implementation or release feature must update:
 
-- `docs/guides/ETL_GUIDE.md` for role artifact versioning, replay/materialization, schema migration, evidence diagnostics, and drift repair.
-- `docs/guides/recommendation-validation.md` for candidate readiness, score inspection, pruning, beam tracing, build/skill packages, analyzer projection, correction, degraded mode, usage reports, and golden evaluation.
+- `docs/guides/ETL_GUIDE.md` for capability artifact versioning, replay/materialization, schema migration, evidence diagnostics, and drift repair.
+- `docs/guides/recommendation-validation.md` for candidate readiness, backend role-score inspection, pruning, beam tracing, build/skill packages, analyzer projection, the two-call correction contract, DeepSeek/OpenRouter selection, degraded mode, usage reports, and golden evaluation.
 
 Later changes to the taxonomy, scoring policy, candidate contract, provider usage, evaluation commands, or operator workflow must maintain the relevant guide.
 
 ## Current Completion Status
 
-- Milestone 5: active and rewritten.
+- Milestone 5: active under the current lightweight SDD workflow.
 - Feature A: completed; identity, cardinality, readiness, and replay-safe sidekick cleanup verified.
-- Features B-I: planned.
+- Feature B: completed; typed production retrieval exists without PLAN or generated Cypher.
+- Features C1-C4: completed with canonical review artifacts and accumulated regression evidence.
+- Feature C5: implemented in the current working tree and awaiting its full replay, graph-drift, schema, guide, and commit gate; Feature D remains blocked.
+- Features D-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
+- The current production candidate/analyzer implementation remains a superseded broad-context prototype for D-G scope and must not be credited as the target RoleScore, beam-generation, compact-projection, or two-call architecture.
 - No new deterministic role-scoring, beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
+
+## Milestone Exit Criteria
+
+Milestone 5 completes only when:
+
+- Features A-I and any post-G boss-expansion feature admitted by the human checkpoint meet their acceptance criteria and each owns one detailed completion commit.
+- C5 proves reproducible reviewed materialization, D-F prove deterministic legal candidate generation, G proves bounded provider-neutral refinement and fallback, and H proves the admitted corpus and paid-provider gates.
+- Production recommendation uses no PLAN, generated Cypher, retrieval-validation LLM, AI-authored RoleScores, or unbounded roster/catalog projection.
+- Every feasible golden case yields at least one legal coverage-valid backend candidate; every infeasible case returns typed diagnostics without an analyzer call.
+- Direct DeepSeek and/or OpenRouter paid evidence stays within the locked call/token budgets, is provider-attributed, and never depends on repository-stored credentials.
+- Required operator/manual checks pass; ETL and recommendation guides match current commands, counters, contracts, and failure classifications.
+- Temporary handoffs, generated outputs, obsolete scenarios, superseded workflow artifacts, and duplicate tests have been promoted or purged, and release reconciliation leaves the living roadmap accurate.
 
 ## Open Questions
 
-No architecture-blocking questions remain. The following are evidence-driven tuning or later operational decisions:
+Feature D has no unresolved authority decision once C5 passes. The following are scheduled evidence-driven decisions rather than permission to widen current scope:
 
 - Exact initial scoring weights within the locked component model.
-- Exact five weak bosses in the golden release set.
-- Paid analyzer model at release time.
+- Exact weak-boss golden set and whether post-G evidence justifies staged all-boss expansion.
+- Direct DeepSeek and OpenRouter models/routes admitted for paid Feature H evaluation.
+- Whether cross-provider automatic fallback earns its extra failure and budget complexity; it is off by default in Feature G.
 - Whether optional AI-assisted curation earns its cost.
 - Beta authentication, persistence, feedback storage, per-user limits, and caching policy.
