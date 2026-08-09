@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from .legality import SAState, build_roster_input
 from .mechanics import retrieve_mechanic_references
+from .role_scoring import derive_contextual_role_scores
 from .state import WorkflowState
 from .superboss import find_superboss_context
 
@@ -61,6 +62,7 @@ class ProductionRetrieval(BaseModel):
     grastas: list[dict[str, Any]]
     equipment: list[dict[str, Any]]
     coverage: dict[str, Any]
+    role_scores: dict[str, Any] = Field(default_factory=dict)
 
 
 class ProductionRetrievalService:
@@ -285,6 +287,15 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
         grastas = await self.grastas()
         equipment = await self.equipment(sorted({row.get("weapon") for row in characters if row.get("weapon")}))
         mechanics = await self.mechanics(boss)
+        role_scores = derive_contextual_role_scores(
+            boss=boss,
+            characters=characters,
+            skills=skills,
+            passives=passives,
+            sidekicks=sidekicks,
+            stellar_awakened=roster_input.stellar_awakened,
+            mechanics=mechanics,
+        )
         normalized_request = request.model_copy(update={
             "boss_id": boss["id"], "roster": normalized,
             "owned_sidekicks": roster_input.owned_sidekicks,
@@ -305,6 +316,7 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
                 "boss_complete": bool(boss.get("mechanics_text")),
                 "complete": not missing,
             },
+            role_scores=role_scores,
         )
 
 

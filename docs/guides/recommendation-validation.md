@@ -1,7 +1,10 @@
 # Recommendation Validation Guide
 
-Use this guide to verify the Feature C candidate boundary, bounded correction
-loop, partial-result behavior, and final graph legality checks.
+Use this guide to verify typed production retrieval, deterministic Feature D
+hard filtering and contextual role scoring, plus the legacy exploratory
+candidate boundary and final graph legality checks. The broad-context
+candidate/analyzer path remains superseded for Features D-G; it is not evidence
+of production RoleScores or coverage.
 
 ## 1. Prepare the local services
 
@@ -46,19 +49,38 @@ With Neo4j running and the schema loaded, run the full suite:
 uv run pytest --tb=short
 ```
 
-Feature C's focused tests are:
+Feature D's focused deterministic checks are:
 
 ```bash
 uv run pytest \
-  tests/workflow/test_candidates.py \
-  tests/workflow/test_feature_c_correction.py \
-  tests/workflow/test_feature_c_partial_output.py \
-  tests/workflow/test_graph.py \
-  tests/workflow/test_format.py \
-  tests/web/unit/test_streaming.py
+  tests/workflow/test_role_scoring.py \
+  tests/workflow/test_feature_b_production.py \
+  tests/workflow/test_matchup.py \
+  tests/workflow/test_legality.py
 ```
 
-## 3. Inspect graph readiness
+## 3. Inspect Feature D role-score output
+
+`ProductionRetrieval.role_scores` is backend-owned output for later candidate
+generation. It records the `policy_version`, capability artifact versions, the
+only valid role IDs, per-entity score breakdowns, reviewed evidence, explicit
+rejection reasons, and deterministic role pools. Its fixed dimensions are
+`primary_damage`, `offensive_enablement`, `zone_setup`,
+`defense_mitigation`, `recovery_protection`, `tank_control`, `af_support`,
+`mp_sustain`, `boss_counter`, and `reserve_utility`.
+
+Check that null/absorb-only and no-neutral-or-better primary damage candidates
+are rejected before a normal pool is built. A required recorded boss counter
+may appear after position eight only with `counter_exception: true`. Each
+character shortlist contains no unavailable or non-proven skill and is capped
+at six choices; the backend default package selects three or four IDs when that
+many legal choices exist. Candidate, rejected, ambiguous, dependency-only, and
+untagged facts are diagnostics, not score or coverage evidence.
+
+The analyzer is not an input to this contract: it cannot author role IDs,
+RoleScores, evidence, pool membership, or coverage.
+
+## 4. Inspect graph readiness
 
 In Neo4j Browser, confirm Mimi has a source and affinity/mechanics facts:
 
@@ -101,7 +123,7 @@ The relationship is the normalized graph constraint. A raw
 `personality_req = 'Amnesia'` with an empty projected array is not sufficient
 to prove compatibility unless the candidate builder can resolve the requirement.
 
-## 4. Run the Mimi smoke test
+## 5. Run the Mimi smoke test
 
 Start the app:
 
@@ -127,7 +149,7 @@ Pass conditions:
 - Mimi affinity claims match the graph and citations are present.
 - No numeric win probability or unsupported exact damage claim appears.
 
-## 5. Read correction and partial-result diagnostics
+## 6. Read correction and partial-result diagnostics
 
 Progress distinguishes these counters and phases:
 
@@ -146,7 +168,7 @@ render; missing archetypes are named. Zero valid lineups returns a classified
 error such as `analyzer_correction_exhausted`,
 `final_legality_exhausted`, or `cypher_retrieval_exhausted`.
 
-## 6. Report the result
+## 7. Report the result
 
 Record the prompt, roster, sidekicks, SA states, ETL source mode, schema-check
 result, rendered archetypes, all counters, warnings/error type, and any rejected

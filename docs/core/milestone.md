@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, and C1-C5 are complete. Feature D is the next admitted feature.
+Status: Active; Features A, B, C1-C5, and D are complete. Feature E is the next admitted feature.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -499,7 +499,7 @@ Acceptance criteria:
 
 ### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: C1-C5 completed. Feature D is now admitted from the reviewed materialization handoff.
+Status: C1-C5 completed. Feature D consumes the reviewed materialization handoff; Feature E is now admitted.
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
@@ -662,7 +662,7 @@ Acceptance criteria:
 
 ### Feature D: Hard Filters, RoleScores, And Skill Shortlists
 
-Status: Planned; admitted after Feature C5 completed the reviewed materialization handoff.
+Status: Completed. The typed production retrieval now derives deterministic backend-only Feature D policy output (`feature-d-role-score-v1`) from reviewed materialized facts: rejected characters never enter normal pools; required boss counters receive bounded explicit top-eight exceptions; all ten fixed role dimensions emit scores and source evidence; unavailable/SA-gated/non-proven facts never contribute; shortlists contain at most six legal skills and default packages contain three or four skills when available. Focused scoring, production retrieval, matchup, and legality suites pass (58 focused tests; workflow suite passes).
 
 Route: `builder-executor -> tdd-loop`. Use `contract-auditor` first only for a disputed capability source, formula, compatibility boundary, or removal decision.
 
@@ -878,8 +878,9 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature A: completed; identity, cardinality, readiness, and replay-safe sidekick cleanup verified.
 - Feature B: completed; typed production retrieval exists without PLAN or generated Cypher.
 - Features C1-C4: completed with canonical review artifacts and accumulated regression evidence.
-- Feature C5: completed; two clean full parsed replays, graph-drift, schema, guide, and manual operator gates pass; Feature D is admitted.
-- Features D-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
+- Feature C5: completed; two clean full parsed replays, graph-drift, schema, guide, and manual operator gates pass.
+- Feature D: completed; hard filters, backend-owned contextual RoleScores/evidence, deterministic top-eight pools with boss-counter exceptions, and bounded skill/package output are verified. Feature E is admitted.
+- Features E-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
 - The current production candidate/analyzer implementation remains a superseded broad-context prototype for D-G scope and must not be credited as the target RoleScore, beam-generation, compact-projection, or two-call architecture.
 - No new deterministic role-scoring, beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
