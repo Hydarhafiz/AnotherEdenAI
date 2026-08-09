@@ -30,6 +30,9 @@ async def _query(driver, cypher: str, **parameters) -> list[dict]:
 
 async def prepare_candidates_node(state: WorkflowState, driver) -> dict:
     """Build the complete roster candidate boundary after retrieval succeeds."""
+    if state.get("typed_retrieval"):
+        return _prepare_typed_candidates(state)
+
     roster = list(dict.fromkeys(state.get("roster", [])))
     owned_sidekicks = list(dict.fromkeys(state.get("owned_sidekicks", [])))
 
@@ -225,6 +228,228 @@ ORDER BY g.display_name
     }
     logger.info("Prepared candidate bundle: characters=%d sidekicks=%d complete=%s", len(character_candidates), len(sidekick_candidates), coverage["complete"])
     return {"candidate_bundle": bundle, "candidate_warnings": warnings}
+
+
+def _prepare_typed_candidates(state: WorkflowState) -> dict:
+    """Project typed production retrieval into a compact analyzer boundary.
+
+    Production retrieval has already inspected the full item catalogs on the
+    backend.  Only each character's selected package and bounded skill choices
+    cross this boundary; the analyzer never receives the source catalogs.
+    """
+    retrieval = state.get("typed_retrieval") or {}
+    role_scores = retrieval.get("role_scores") or {}
+    entities = {
+        str(entity.get("id")): entity
+        for entity in role_scores.get("entities", [])
+        if isinstance(entity, dict) and entity.get("entity_type") == "character"
+    }
+    packages = role_scores.get("build_packages") or retrieval.get("build_packages") or {}
+    characters_by_name = {
+        str(character.get("name")): character
+        for character in retrieval.get("characters", [])
+        if isinstance(character, dict) and character.get("name")
+    }
+    skills_by_owner: dict[str, list[dict]] = {}
+    for skill in retrieval.get("skills", []):
+        if isinstance(skill, dict) and skill.get("character_name"):
+            skills_by_owner.setdefault(str(skill["character_name"]), []).append(skill)
+    passives_by_owner: dict[str, list[dict]] = {}
+    for passive in retrieval.get("passives", []):
+        if isinstance(passive, dict) and passive.get("character_name"):
+            passives_by_owner.setdefault(str(passive["character_name"]), []).append(passive)
+
+    character_candidates = []
+    for character in sorted(characters_by_name.values(), key=lambda value: str(value.get("name") or "")):
+        character_id = str(character.get("id") or _candidate_id("character", character.get("name")))
+        entity = entities.get(character_id, {})
+        package = packages.get(character_id) or entity.get("build_package")
+        if not package:
+            continue
+        skills = _typed_skill_options(skills_by_owner.get(character["name"], []), entity)
+        passives = _typed_passive_options(passives_by_owner.get(character["name"], []))
+        character_candidates.append({
+            "id": character_id,
+            "name": character.get("name"),
+            "display_name": character.get("display_name") or character.get("name"),
+            "aliases": list(character.get("aliases") or []),
+            "weapon": character.get("weapon"),
+            "traits": list(character.get("traits") or []),
+            "has_stellar_awakening": character.get("has_stellar_awakening", False),
+            "skills": skills,
+            "passives": passives,
+            "weapon_options": [_typed_package_item(package.get("weapon"), slot="weapon")],
+            "armor_options": [_typed_package_item(package.get("armor"), slot="armor")],
+            "grastas": _typed_grasta_options(package.get("grastas", [])),
+            "build_package": package,
+            "role_ids": list(entity.get("role_ids") or package.get("role_ids") or []),
+            "role_scores": dict(entity.get("role_scores") or {}),
+            "role_evidence": dict(entity.get("evidence") or {}),
+            "default_package": dict(entity.get("default_package") or {}),
+        })
+
+    sidekick_candidates = []
+    for sidekick in sorted(retrieval.get("sidekicks", []), key=lambda value: str(value.get("name") or "")):
+        if not isinstance(sidekick, dict) or not sidekick.get("name"):
+            continue
+        sidekick_candidates.append({
+            "id": _candidate_id("sidekick", sidekick.get("name")),
+            "name": sidekick.get("name"),
+            "source_url": sidekick.get("source_url"),
+            "skills": [
+                {"id": item.get("id") or _candidate_id("sidekick-skill", sidekick.get("name"), item.get("name")),
+                 "name": item.get("name"), "description": _compact_text(item.get("description") or item.get("effect_text"))}
+                for item in sidekick.get("skills", []) if isinstance(item, dict) and item.get("name")
+            ],
+            "auras": [
+                {"id": item.get("id") or _candidate_id("sidekick-aura", sidekick.get("name"), item.get("name")),
+                 "name": item.get("name"), "description": _compact_text(item.get("description") or item.get("effect_text"))}
+                for item in sidekick.get("auras", []) if isinstance(item, dict) and item.get("name")
+            ],
+        })
+
+    boss = retrieval.get("boss") or {}
+    citations = []
+    if boss.get("source_url"):
+        citations.append({
+            "id": _candidate_id("citation", boss.get("name"), boss.get("source_url")),
+            "label": boss.get("name") or "Boss source",
+            "source_url": boss["source_url"],
+        })
+    for character in character_candidates:
+        for citation in character.get("build_package", {}).get("citations", []):
+            if not citation.get("source_url"):
+                continue
+            if any(existing["source_url"] == citation["source_url"] for existing in citations):
+                continue
+            citations.append({
+                "id": citation.get("id") or _candidate_id("citation", citation.get("source_url")),
+                "label": citation.get("label") or "Item source",
+                "source_url": citation["source_url"],
+            })
+    boss_facts = [{
+        "id": _candidate_id("boss-fact", boss.get("name"), "affinities"),
+        "kind": "affinities",
+        "value": {key: list(boss.get(key, [])) for key in ("weak", "resist", "null", "absorb")},
+    }] if boss else []
+    if boss.get("mechanics_text") or boss.get("characteristics"):
+        boss_facts.append({
+            "id": _candidate_id("boss-fact", boss.get("name"), "mechanics"),
+            "kind": "mechanics",
+            "value": boss.get("mechanics_text") or boss.get("characteristics"),
+        })
+
+    retrieval_coverage = retrieval.get("coverage") or {}
+    missing = list(retrieval_coverage.get("missing_character_names") or [])
+    coverage = {
+        "eligible_roster_count": len(state.get("roster", [])),
+        "candidate_character_count": len(character_candidates),
+        "missing_character_names": missing,
+        "complete": bool(retrieval_coverage.get("complete", not missing)),
+    }
+    warnings = []
+    if not coverage["complete"]:
+        warnings.append("Typed production retrieval coverage is incomplete: " + ", ".join(missing or ["unknown entries"]))
+    bundle = {
+        "version": "feature-e-v1",
+        "item_policy": (retrieval.get("request") or {}).get("item_policy", state.get("item_policy", "late_game_assumed")),
+        "characters": character_candidates,
+        "sidekicks": sidekick_candidates,
+        "stellar_awakened": retrieval.get("request", {}).get("stellar_awakened", state.get("stellar_awakened", {})),
+        "boss": {
+            "name": boss.get("name"),
+            "affinities": {key: list(boss.get(key, [])) for key in ("weak", "resist", "null", "absorb")},
+            "facts": boss_facts,
+            "citations": citations,
+        },
+        "coverage": coverage,
+        "ranking_policy": {
+            "items": "Use only the backend-selected compact package; item ownership remains unverified.",
+            "allocation": "Finite Grasta and named equipment are validated per lineup.",
+        },
+    }
+    logger.info("Prepared typed candidate bundle: characters=%d sidekicks=%d complete=%s", len(character_candidates), len(sidekick_candidates), coverage["complete"])
+    return {"candidate_bundle": bundle, "candidate_warnings": warnings}
+
+
+def _typed_skill_options(skills, entity):
+    scores = {}
+    for role_choices in (entity.get("skill_shortlists") or {}).values():
+        for choice in role_choices:
+            skill_id = choice.get("skill_id")
+            if skill_id:
+                scores[skill_id] = max(scores.get(skill_id, 0), int(choice.get("score") or 0))
+    ordered = sorted(skills, key=lambda value: (-scores.get(str(value.get("id")), 0), str(value.get("id") or value.get("name") or "")))
+    return [
+        {
+            "id": item.get("id") or _candidate_id("skill", item.get("character_name"), item.get("name")),
+            "name": item.get("name"),
+            "description": _compact_text(item.get("description")),
+            "element": item.get("element"),
+            "skill_type": item.get("skill_type"),
+            "requires_stellar_awakened": bool(item.get("requires_stellar_awakened")),
+            "source_url": item.get("source_url"),
+        }
+        for item in ordered[:6]
+    ]
+
+
+def _typed_passive_options(passives):
+    return [
+        {
+            "id": item.get("id") or _candidate_id("passive", item.get("character_name"), item.get("name")),
+            "name": item.get("name"),
+            "description": _compact_text(item.get("description")),
+            "passive_type": item.get("passive_type"),
+            "requires_stellar_awakened": bool(item.get("requires_stellar_awakened")),
+            "source_url": item.get("source_url"),
+        }
+        for item in passives[:4]
+    ]
+
+
+def _typed_package_item(item, *, slot):
+    item = item if isinstance(item, dict) else {}
+    return {
+        "id": item.get("id") or _candidate_id("generic-item", slot, "available"),
+        "display_name": item.get("display_name") or f"available {slot}",
+        "name": item.get("name") or item.get("display_name") or f"available {slot}",
+        "generic": bool(item.get("generic")),
+        "slot": slot,
+        "equipment_slot": slot,
+        "category": item.get("category"),
+        "copy_limit": item.get("copy_limit"),
+        "source_url": item.get("source_url"),
+    }
+
+
+def _typed_grasta_options(items):
+    options = []
+    seen = set()
+    for item in items:
+        if not isinstance(item, dict) or not item.get("id") or item["id"] in seen:
+            continue
+        seen.add(item["id"])
+        options.append({
+            "id": item["id"],
+            "display_name": item.get("display_name") or item.get("name"),
+            "name": item.get("name") or item.get("display_name"),
+            "category": item.get("category"),
+            "tier": item.get("tier"),
+            "stats": _compact_text(item.get("stats"), 120),
+            "effect_text": _compact_text(item.get("effect_text")),
+            "personality_req": item.get("personality_req"),
+            "required_trait": item.get("required_trait"),
+            "weapon_req": item.get("weapon_req"),
+            "weapon_group": list(item.get("weapon_group") or []),
+            "acquisition_class": item.get("acquisition_class", "unknown"),
+            "max_theoretical_copies": item.get("max_theoretical_copies"),
+            "copy_limit": item.get("copy_limit"),
+            "generic": bool(item.get("generic")),
+            "source_url": item.get("source_url"),
+            "ranking_tags": list(item.get("effect_tags") or []),
+        })
+    return options
 
 
 def _compact_text(value: object, limit: int = 240) -> str:
@@ -568,7 +793,7 @@ def _resolve_hero(entry: dict, characters: dict[str, dict]) -> dict:
     grastas = {item["id"]: item for item in character.get("grastas", [])}
     weapons = {item["id"]: item for item in character.get("weapon_options", [])}
     armors = {item["id"]: item for item in character.get("armor_options", [])}
-    return {
+    resolved = {
         "name": character["display_name"],
         "role": entry.get("role", "unspecified role"),
         "weapon": weapons[entry["weapon_id"]]["display_name"],
@@ -578,3 +803,9 @@ def _resolve_hero(entry: dict, characters: dict[str, dict]) -> dict:
         "recommended_passives": [passives[value]["name"] for value in entry.get("passive_ids", [])],
         "upgrade_assumptions": entry.get("upgrade_assumptions", []),
     }
+    if character.get("build_package"):
+        resolved["build_package"] = character["build_package"]
+        resolved["build_assumptions"] = list(character["build_package"].get("assumptions") or [])
+        resolved["setup_dependencies"] = list(character["build_package"].get("setup_dependencies") or [])
+        resolved["item_ownership_status"] = character["build_package"].get("ownership_status", "unverified")
+    return resolved

@@ -14,7 +14,7 @@ from .state import WorkflowState
 from .superboss import find_superboss_context
 
 
-ItemPolicy = Literal["late_game_assumed"]
+ItemPolicy = Literal["late_game_assumed", "generic_only"]
 
 
 class ProductionRecommendationRequest(BaseModel):
@@ -63,6 +63,7 @@ class ProductionRetrieval(BaseModel):
     equipment: list[dict[str, Any]]
     coverage: dict[str, Any]
     role_scores: dict[str, Any] = Field(default_factory=dict)
+    build_packages: dict[str, Any] = Field(default_factory=dict)
 
 
 class ProductionRetrievalService:
@@ -142,7 +143,8 @@ RETURN DISTINCT s.name AS name ORDER BY name
         rows = await self._query(
             """
 MATCH (c:Character) WHERE c.name IN $roster
-RETURN c{.*, id: c.character_id} AS fact ORDER BY fact.name
+OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)
+RETURN c{.*, id: c.character_id, traits: collect(DISTINCT t.name)} AS fact ORDER BY fact.name
 """,
             roster=roster,
         )
@@ -295,6 +297,9 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             sidekicks=sidekicks,
             stellar_awakened=roster_input.stellar_awakened,
             mechanics=mechanics,
+            grastas=grastas,
+            equipment=equipment,
+            item_policy=request.item_policy,
         )
         normalized_request = request.model_copy(update={
             "boss_id": boss["id"], "roster": normalized,
@@ -317,6 +322,7 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
                 "complete": not missing,
             },
             role_scores=role_scores,
+            build_packages=role_scores.get("build_packages", {}),
         )
 
 

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, and D are complete. Feature E is the next admitted feature.
+Status: Active; Features A, B, C1-C5, D, and E are complete. Feature F is the next admitted feature.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -435,7 +435,7 @@ Before a feature is complete:
 - Permanent tests must protect supported capabilities rather than milestone letters, workflow bookkeeping, or historical SHAs unless compatibility requires that history.
 - The milestone status, relevant guide, and durable evidence must describe current behavior rather than projected completion.
 
-Current audit verdict is `C5 complete`: committed evidence supports Features A, B, and C1-C5. The existing broad candidate/analyzer flow is legacy compatibility evidence, not proof that Features D-G are implemented.
+Current audit verdict is `E complete`: committed evidence supports Features A, B, C1-C5, D, and E. The existing broad candidate/analyzer flow remains legacy compatibility evidence for the not-yet-implemented F-G architecture.
 
 ## Prioritized Feature Checklist
 
@@ -499,7 +499,7 @@ Acceptance criteria:
 
 ### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: C1-C5 completed. Feature D consumes the reviewed materialization handoff; Feature E is now admitted.
+Status: C1-C5 completed. Feature D consumes the reviewed materialization handoff; Features D and E are complete and Feature F is now admitted.
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
@@ -691,9 +691,11 @@ Acceptance criteria:
 
 ### Feature E: Late-Game Build Packages And Allocation
 
-Status: Planned.
+Status: Completed. The backend now emits deterministic compact build packages under the `late_game_assumed` default (with `generic_only` fallback-compatible output), labels all item ownership as unverified, carries exact compatibility/evidence/assumption/setup/citation metadata, and validates finite Grasta and named-equipment allocation per lineup. Production candidate projection includes only selected package choices and bounded skill facts; it does not pass full Grasta or equipment catalogs to the analyzer.
 
-Route: `builder-executor -> tdd-loop`.
+Route: `builder-executor -> tdd-loop` (completed feature boundary).
+
+Evidence: `.venv/bin/pytest -q tests/workflow/test_build_packages.py tests/workflow/test_role_scoring.py tests/workflow/test_feature_b_production.py tests/workflow/test_candidates.py` passes 34 tests, and `.venv/bin/pytest -q tests/unit` passes 141 tests. No manual or external-provider test is required for this deterministic backend feature.
 
 Technical requirements:
 
@@ -706,11 +708,11 @@ Technical requirements:
 
 Acceptance criteria:
 
-- Users need not enter inventory for MVP.
-- Unique/finite Grasta cannot be illegally reused within a lineup.
-- Specific named equipment cannot be duplicated illegally.
-- Every package has evidence, assumptions, allocation, setup dependencies, and citations.
-- Analyzer never receives full item catalogs.
+- **E-01:** Users need not enter inventory for MVP; every package labels item ownership as unverified under `late_game_assumed`.
+- **E-02:** Exact personality/trait and weapon compatibility is enforced, and unique/finite Grasta cannot be illegally reused within a lineup.
+- **E-03:** Specific named equipment is allocated at most once per lineup unless its source metadata explicitly permits reuse.
+- **E-04:** Every package has compact weapon, armor, three-Grasta, optional Ore/build-intent, evidence, assumptions, allocation, setup dependencies, and citation fields; `generic_only` remains a safe fallback.
+- **E-05:** Production analyzer projection contains only bounded package choices and never a full item catalog.
 
 ### Feature F: Capability Templates, Beam Generation, And Lineup Scoring
 
@@ -879,10 +881,11 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature B: completed; typed production retrieval exists without PLAN or generated Cypher.
 - Features C1-C4: completed with canonical review artifacts and accumulated regression evidence.
 - Feature C5: completed; two clean full parsed replays, graph-drift, schema, guide, and manual operator gates pass.
-- Feature D: completed; hard filters, backend-owned contextual RoleScores/evidence, deterministic top-eight pools with boss-counter exceptions, and bounded skill/package output are verified. Feature E is admitted.
-- Features E-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
-- The current production candidate/analyzer implementation remains a superseded broad-context prototype for D-G scope and must not be credited as the target RoleScore, beam-generation, compact-projection, or two-call architecture.
-- No new deterministic role-scoring, beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
+- Feature D: completed; hard filters, backend-owned contextual RoleScores/evidence, deterministic top-eight pools with boss-counter exceptions, and bounded skill/package output are verified.
+- Feature E: completed; late-game assumed compact build packages, exact item compatibility, finite/named allocation validation, assumption/evidence/citation metadata, and catalog-free production projection are verified.
+- Features F-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
+- The current production candidate/analyzer implementation remains a superseded broad-context prototype for F-G scope and must not be credited as the target beam-generation, compact-projection, or two-call architecture.
+- No new beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
 ## Milestone Exit Criteria
 

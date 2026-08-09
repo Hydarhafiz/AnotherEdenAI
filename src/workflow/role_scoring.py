@@ -11,6 +11,8 @@ import json
 from collections import defaultdict
 from typing import Any
 
+from .build_packages import DEFAULT_ITEM_POLICY, build_build_package
+
 
 ROLE_SCORE_POLICY_VERSION = "feature-d-role-score-v1"
 ROLE_DIMENSIONS = (
@@ -70,6 +72,10 @@ def derive_contextual_role_scores(
     sidekicks: list[dict[str, Any]],
     stellar_awakened: dict[str, Any],
     mechanics: list[dict[str, Any]] | None = None,
+    grastas: list[dict[str, Any]] | None = None,
+    equipment: list[dict[str, Any]] | None = None,
+    ores: list[dict[str, Any]] | None = None,
+    item_policy: str = DEFAULT_ITEM_POLICY,
     policy_version: str = ROLE_SCORE_POLICY_VERSION,
 ) -> dict[str, Any]:
     """Build reproducible Feature D score/output records from typed retrieval facts."""
@@ -96,6 +102,10 @@ def derive_contextual_role_scores(
             sa_state=state,
             required_counters=counters,
             policy_version=policy_version,
+            grastas=grastas or [],
+            equipment=equipment or [],
+            ores=ores or [],
+            item_policy=item_policy,
         ))
     for sidekick in sorted(sidekicks, key=_entity_key):
         entities.extend(_sidekick_entities(sidekick, boss, counters, policy_version))
@@ -112,10 +122,15 @@ def derive_contextual_role_scores(
         "required_boss_counters": counters,
         "entities": sorted(entities, key=lambda value: value["id"]),
         "role_pools": pools,
+        "build_packages": {
+            entity["id"]: entity["build_package"]
+            for entity in entities
+            if entity.get("entity_type") == "character" and entity.get("build_package")
+        },
     }
 
 
-def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], facts: list[dict[str, Any]], boss: dict[str, Any], sa_state: str, required_counters: list[str], policy_version: str) -> dict[str, Any]:
+def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], facts: list[dict[str, Any]], boss: dict[str, Any], sa_state: str, required_counters: list[str], policy_version: str, grastas: list[dict[str, Any]], equipment: list[dict[str, Any]], ores: list[dict[str, Any]], item_policy: str) -> dict[str, Any]:
     executable = [fact for fact in facts if _is_skill(fact) and _available(fact, sa_state)]
     passive = [fact for fact in facts if not _is_skill(fact) and _available(fact, sa_state)]
     shortlist_by_role = _shortlists(executable, boss, required_counters)
@@ -130,7 +145,7 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         rejection_reasons = ["character.ownership_or_item_illegal", *rejection_reasons]
     eligible = not rejection_reasons
     role_ids = _role_ids(scores) if eligible else []
-    return {
+    entity = {
         "id": entity_id,
         "name": name,
         "entity_type": "character",
@@ -149,6 +164,16 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         "policy_version": policy_version,
         "source_character_id": character.get("id"),
     }
+    entity["build_package"] = build_build_package(
+        character,
+        role_entity=entity,
+        grastas=grastas,
+        equipment=equipment,
+        ores=ores,
+        selected_facts=[*selected_facts, *passive],
+        item_policy=item_policy,
+    )
+    return entity
 
 
 def _sidekick_entities(sidekick: dict[str, Any], boss: dict[str, Any], required_counters: list[str], policy_version: str) -> list[dict[str, Any]]:
