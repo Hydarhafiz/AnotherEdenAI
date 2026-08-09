@@ -16,6 +16,7 @@ from ..candidates import (
     ARCHETYPES, parse_candidate_response, resolve_candidate_recommendations,
     validate_candidate_response,
 )
+from ..analyzer import run_bounded_analyzer
 from ..context_compaction import compact_records
 from ..llm import get_llm
 from ..state import WorkflowState
@@ -512,6 +513,26 @@ def _invoke_candidate_analyzer(llm, messages):
 def _analyze_candidate_bundle(state: WorkflowState) -> dict:
     """Run initial selection plus at most two batched correction rounds."""
     bundle = state["candidate_bundle"]
+    if "backend_candidates" in bundle:
+        generation = bundle.get("candidate_generation")
+        if isinstance(generation, dict) and not generation.get("candidates"):
+            return {
+                "analysis_failure": {
+                    "type": "no_backend_candidates",
+                    "message": "No legal coverage-valid backend candidate was generated; analyzer work was skipped.",
+                    "details": generation.get("diagnostics", {}),
+                },
+                "cypher_retry_count": state.get("retry_count", 0),
+                "analyzer_provider": state.get("analyzer_provider", "openrouter"),
+                "analyzer_model": state.get("analyzer_model"),
+                "analyzer_call_count": 0,
+                "analyzer_correction_rounds": 0,
+                "provider_transport_retries": 0,
+                "analyzer_usage": [],
+                "structured_output_errors": [],
+                "candidate_validation_errors": [],
+            }
+        return run_bounded_analyzer(state, bundle, state.get("analyzer_port"))
     coverage = bundle.get("coverage", {})
     generation = bundle.get("candidate_generation")
     if isinstance(generation, dict) and not generation.get("candidates"):

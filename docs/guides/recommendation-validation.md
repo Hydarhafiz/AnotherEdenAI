@@ -2,7 +2,8 @@
 
 Use this guide to verify typed production retrieval, deterministic Feature D
 hard filtering and contextual role scoring, Feature F backend lineup generation,
-plus the legacy exploratory candidate boundary and final graph legality checks.
+the Feature G compact analyzer boundary, plus the legacy exploratory candidate
+boundary and final graph legality checks.
 The broad-context candidate/analyzer path is not evidence of production
 RoleScores, coverage, beam bounds, or backend candidate legality.
 
@@ -54,6 +55,7 @@ Feature D's focused deterministic checks are:
 ```bash
 uv run pytest \
   tests/workflow/test_lineup_generation.py \
+  tests/workflow/test_analyzer.py \
   tests/workflow/test_role_scoring.py \
   tests/workflow/test_feature_b_production.py \
   tests/workflow/test_matchup.py \
@@ -113,9 +115,37 @@ Pass conditions:
 
 No analyzer response can add a hero, package, skill, sidekick, capability, or
 coverage claim to this backend result. Compact projection and bounded analyzer
-refinement remain the subsequent Feature G boundary.
+refinement are the subsequent Feature G boundary.
 
-## 5. Inspect graph readiness
+## 5. Inspect Feature G compact projection and refinement
+
+Run the offline Feature G contract checks:
+
+```bash
+.venv/bin/pytest -q tests/workflow/test_analyzer.py
+```
+
+Pass conditions:
+
+- The projection contains only referenced backend candidates, selected hero
+  skill/passive/package facts, boss facts, legal swaps, constraints, and
+  citations; rejected roster entries and broad catalogs are absent.
+- DeepSeek and OpenRouter adapters emit the same structured-output request and
+  normalized response/usage/error envelope. The provider and model are
+  explicit per run, and no key or credential is read or stored by the adapter.
+- Analyzer responses cannot author candidate IDs, RoleScores, role IDs,
+  mandatory coverage, or out-of-bundle skill/swap IDs. Display-role wording is
+  advisory only.
+- One initial call plus one fragment-only correction is the hard cap. Valid
+  fragments are frozen; lower-scoring or invalid swaps/packages restore the
+  deterministic backend default.
+- Provider failure or skipped refinement returns one to three legal backend
+  candidates with a clear degraded label and zero transport retries.
+
+No paid provider call or live all-boss scrape is part of Feature G. Those
+actions require the named Post-Feature-G Human Checkpoint.
+
+## 6. Inspect graph readiness
 
 In Neo4j Browser, confirm Mimi has a source and affinity/mechanics facts:
 
@@ -158,7 +188,7 @@ The relationship is the normalized graph constraint. A raw
 `personality_req = 'Amnesia'` with an empty projected array is not sufficient
 to prove compatibility unless the candidate builder can resolve the requirement.
 
-## 6. Run the Mimi smoke test
+## 7. Run the Mimi smoke test
 
 Start the app:
 
@@ -184,7 +214,7 @@ Pass conditions:
 - Mimi affinity claims match the graph and citations are present.
 - No numeric win probability or unsupported exact damage claim appears.
 
-## 7. Read correction and partial-result diagnostics
+## 8. Read correction and partial-result diagnostics
 
 Progress distinguishes these counters and phases:
 
@@ -193,7 +223,8 @@ Progress distinguishes these counters and phases:
 - `analyzer_call_count`: provider calls made after backend candidate generation;
   a Feature F zero-candidate result must leave this at 0. The later compact
   projection/refinement feature owns the final analyzer call cap.
-- `analyzer_correction_rounds`: maximum 2.
+- `analyzer_correction_rounds`: Feature G maximum 1; the legacy exploratory
+  correction path may still report its historical maximum of 2.
 - `structured_output_errors`: JSON/normalization failures.
 - `candidate_validation_errors`: hard-field code, path, and allowed IDs.
 - `final_legality_errors`: graph-backed rejection after formatting.
@@ -205,7 +236,7 @@ render; missing archetypes are named. Zero valid lineups returns a classified
 error such as `analyzer_correction_exhausted`,
 `final_legality_exhausted`, or `cypher_retrieval_exhausted`.
 
-## 8. Report the result
+## 9. Report the result
 
 Record the prompt, roster, sidekicks, SA states, ETL source mode, schema-check
 result, rendered archetypes, all counters, warnings/error type, and any rejected

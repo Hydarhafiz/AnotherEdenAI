@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, E, and F are complete. Feature G is the next admitted feature.
+Status: Active; Features A, B, C1-C5, D, E, F, and G are complete. The required Post-Feature-G human checkpoint is next before Feature H.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -760,7 +760,14 @@ Acceptance criteria:
 
 ### Feature G: Compact Analyzer Projection And Bounded Refinement
 
-Status: Planned.
+Status: Completed. The typed production path now separates its full backend
+candidate authority from a closed-world compact analyzer projection. Explicit
+DeepSeek and OpenRouter adapters share an offline structured-output envelope;
+the selected provider/model is carried per run without credentials. Analyzer
+ranking and advisory refinements are bounded to one initial call plus one
+fragment-only correction, while swaps and skill packages are re-scored and
+revalidated against backend legality. Provider failure returns the legal
+backend candidates in labeled degraded mode.
 
 Route: `builder-executor -> tdd-loop`.
 
@@ -777,6 +784,19 @@ Technical requirements:
 - Freeze valid lineups.
 - Permit one fragment-only correction call.
 - Return legal backend candidates in labeled degraded mode when analyzer work fails or is skipped.
+
+Evidence: `.venv/bin/pytest -q tests/workflow/test_analyzer.py
+tests/workflow/test_lineup_generation.py tests/workflow/test_build_packages.py
+tests/workflow/test_candidates.py tests/workflow/test_feature_b_production.py
+tests/workflow/test_state.py` passes 45 tests; `.venv/bin/pytest -q
+tests/workflow --ignore=tests/workflow/test_graph.py` passes 242 tests; and
+`.venv/bin/pytest -q tests/unit tests/web/unit/test_feature_e_result_ui.py`
+passes 145 tests with one existing Starlette/httpx deprecation warning. The
+Feature G evidence includes independent offline adapter parity, projection
+isolation, forbidden-authority rejection, two-call correction/freeze behavior,
+lower-score fallback, and degraded provider fallback. No paid provider call,
+live scrape, or credential-bearing manual check is authorized or required
+before the named post-G human checkpoint.
 
 Acceptance criteria:
 
@@ -899,8 +919,9 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature C5: completed; two clean full parsed replays, graph-drift, schema, guide, and manual operator gates pass.
 - Feature D: completed; hard filters, backend-owned contextual RoleScores/evidence, deterministic top-eight pools with boss-counter exceptions, and bounded skill/package output are verified.
 - Feature E: completed; late-game assumed compact build packages, exact item compatibility, finite/named allocation validation, assumption/evidence/citation metadata, and catalog-free production projection are verified.
-- Feature F: completed; deterministic capability-template beam generation, full-lineup scoring, build/sidekick legality, diversity, partial/zero diagnostics, and analyzer zero-call handling are verified. Features G-I remain planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
-- The current production analyzer implementation remains a superseded broad-context prototype for G scope and must not be credited as the target compact-projection or two-call architecture.
+- Feature F: completed; deterministic capability-template beam generation, full-lineup scoring, build/sidekick legality, diversity, partial/zero diagnostics, and analyzer zero-call handling are verified.
+- Feature G: completed; compact closed-world projection, provider-neutral DeepSeek/OpenRouter offline adapters, strict authority validation, two-call fragment correction, deterministic refinement fallback, and labeled degraded backend output are verified. The required boss/provider architecture checkpoint is next; Features H-I remain planned until that decision is recorded.
+- The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
 ## Milestone Exit Criteria

@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.sse import EventSourceResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
+from typing import Literal
 
 from ..dependencies import get_driver
 from ..streaming import pipeline_sse_generator
@@ -22,6 +23,8 @@ class QueryRequest(BaseModel):
     boss_id: str | None = None
     item_policy: str = "late_game_assumed"
     mode: str = "exploratory"
+    analyzer_provider: Literal["deepseek", "openrouter"] = "openrouter"
+    analyzer_model: str | None = None
 
 
 @router.get("/entities")
@@ -66,6 +69,8 @@ async def post_query(body: QueryRequest, request: Request):
         "boss_id": body.boss_id,
         "item_policy": body.item_policy,
         "mode": body.mode,
+        "analyzer_provider": body.analyzer_provider,
+        "analyzer_model": body.analyzer_model,
     }
     return templates.TemplateResponse(
         request=request,
@@ -104,5 +109,7 @@ async def stream_job(job_id: str, request: Request, driver=Depends(get_driver)):
         boss_id=job_data.get("boss_id"),
         item_policy=job_data.get("item_policy", "late_game_assumed"),
         mode=job_data.get("mode", "exploratory"),
+        analyzer_provider=job_data.get("analyzer_provider", "openrouter"),
+        analyzer_model=job_data.get("analyzer_model"),
     ):
         yield event

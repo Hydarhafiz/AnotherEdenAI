@@ -238,6 +238,35 @@ def score_lineup_candidate(
     )
 
 
+def evaluate_backend_lineup(
+    *,
+    archetype: str,
+    character_ids: list[str],
+    sidekick_pair: tuple[str | None, str | None] = (None, None),
+    entities: dict[str, dict[str, Any]],
+    sidekick_entities: dict[str, dict[str, Any]] | None = None,
+    role_scores: dict[str, Any] | None = None,
+    boss: dict[str, Any] | None = None,
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """Re-run complete backend legality and scoring gates for one lineup."""
+    role_scores = role_scores or {}
+    sidekick_entities = sidekick_entities or {}
+    boss = boss or {}
+    template = CAPABILITY_TEMPLATES.get(archetype)
+    if template is None:
+        return None, ["archetype.invalid"]
+    return _evaluate_candidate(
+        archetype=archetype,
+        character_ids=list(character_ids),
+        sidekick_pair=sidekick_pair,
+        template=template,
+        entities=entities,
+        sidekick_entities=sidekick_entities,
+        role_scores=role_scores,
+        boss=boss,
+    )
+
+
 def _result(candidates, diagnostics, *, status, missing_archetypes):
     return {
         "policy_version": LINEUP_GENERATION_POLICY_VERSION,

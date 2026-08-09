@@ -70,6 +70,8 @@ async def pipeline_sse_generator(
     boss_id: str | None = None,
     item_policy: str = "late_game_assumed",
     mode: str = "exploratory",
+    analyzer_provider: str = "openrouter",
+    analyzer_model: str | None = None,
 ) -> AsyncIterable[ServerSentEvent]:
     """Async generator: run LangGraph pipeline, emit SSE events per node completion.
 
@@ -105,12 +107,17 @@ async def pipeline_sse_generator(
         "boss_id": boss_id or "",
         "item_policy": item_policy,
         "workflow_mode": "production" if use_production else "exploratory",
+        "analyzer_provider": analyzer_provider,
+        "analyzer_model": analyzer_model,
+        "analyzer_port": None,
+        "analyzer_transport": None,
         "typed_retrieval": {},
         "cypher_retry_count": 0,
         "candidate_bundle": {},
         "candidate_warnings": [],
         "analyzer_call_count": 0,
         "analyzer_correction_rounds": 0,
+        "analyzer_usage": [],
         "provider_transport_retries": 0,
         "structured_output_errors": [],
         "candidate_validation_errors": [],
@@ -143,7 +150,7 @@ async def pipeline_sse_generator(
                     max_attempts = 3
                 elif node_name == "analyze":
                     attempt = max(1, state_update.get("analyzer_call_count", 1))
-                    max_attempts = 3
+                    max_attempts = 2 if "analyzer_provider" in state_update else 3
                 else:
                     attempt = 1
                     max_attempts = 1

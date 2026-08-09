@@ -64,6 +64,11 @@ class WorkflowState(TypedDict):
     alternatives: str      # written by ANALYZE only (empty db_results path; raw LLM JSON string)
     analyzer_call_count: int
     analyzer_correction_rounds: int
+    analyzer_provider: str
+    analyzer_model: str | None
+    analyzer_port: object
+    analyzer_transport: object
+    analyzer_usage: list[dict]
     provider_transport_retries: int
     structured_output_errors: list[dict]
     candidate_validation_errors: list[dict]

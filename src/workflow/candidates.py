@@ -361,7 +361,7 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
             coverage=retrieval_coverage,
         )
     bundle = {
-        "version": "feature-f-v1",
+        "version": "feature-g-backend-bundle-v1",
         "item_policy": (retrieval.get("request") or {}).get("item_policy", state.get("item_policy", "late_game_assumed")),
         "characters": character_candidates,
         "sidekicks": sidekick_candidates,
@@ -375,6 +375,19 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
         "coverage": coverage,
         "backend_candidates": list(lineup_generation.get("candidates", [])),
         "candidate_generation": lineup_generation,
+        "backend_role_scores": role_scores,
+        "policy_versions": {
+            "candidate_generation": lineup_generation.get("policy_version"),
+            "role_scoring": role_scores.get("policy_version"),
+            "build_packages": next(
+                (
+                    (character.get("build_package") or {}).get("version")
+                    for character in character_candidates
+                    if (character.get("build_package") or {}).get("version")
+                ),
+                None,
+            ),
+        },
         "ranking_policy": {
             "lineups": "Use only deterministic, coverage-valid backend candidates; analyzer refinement is a later bounded phase.",
             "items": "Use only the backend-selected compact package; item ownership remains unverified.",

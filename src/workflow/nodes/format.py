@@ -132,6 +132,7 @@ class RecommendationSetOutput(BaseModel):
     boss_affinity: BossAffinityOutput = Field(default_factory=BossAffinityOutput)
     archetype_viability_notes: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
+    degraded: bool = False
     error: Optional[str] = None
 
     @model_validator(mode="after")
