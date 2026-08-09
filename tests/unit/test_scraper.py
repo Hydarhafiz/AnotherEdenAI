@@ -9,6 +9,7 @@ Requirements covered:
 """
 import pytest
 from bs4 import BeautifulSoup
+from unittest.mock import AsyncMock, patch
 
 
 # ---------------------------------------------------------------------------
@@ -149,6 +150,22 @@ ARMOR_HTML = """
   </tbody>
 </table>
 """
+
+
+@pytest.mark.asyncio
+async def test_scrape_all_preserves_complete_pipeline_contract():
+    """The legacy convenience wrapper must not drop current pipeline collections."""
+    expected = {
+        "characters": [], "sidekicks": [], "superbosses": [], "grastas": [],
+        "ores": [], "equipment": [], "mechanic_references": [],
+    }
+    with patch(
+        "src.etl.pipeline.prepare_parsed_data",
+        new=AsyncMock(return_value=(expected, {})),
+    ):
+        from src.etl.scraper import scrape_all
+
+        assert await scrape_all() == expected
 
 CHARACTER_COMBAT_HTML = """
 <article class="tabber__panel" title="Active Skills">

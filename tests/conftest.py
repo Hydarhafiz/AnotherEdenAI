@@ -2,7 +2,7 @@
 
 Provides:
 - async_driver: Session-scoped async Neo4j driver (reused across all tests in a session)
-- loaded_db: Session-scoped fixture that ensures the DB is populated exactly once per session
+- loaded_db: Session-scoped fixture that requires a populated integration graph
 - clean_db: Function-scoped fixture that wipes the DB before each test (used only by idempotency tests)
 
 Pitfall avoided: Use @pytest_asyncio.fixture(loop_scope="session") for session-scoped async
@@ -12,7 +12,6 @@ See: https://github.com/pytest-dev/pytest-asyncio/issues/706
 asyncio_default_test_loop_scope = session in pytest.ini ensures all tests share the same
 event loop as the session-scoped async_driver, eliminating the "different loop" RuntimeError.
 """
-import logging
 import os
 import pytest
 import pytest_asyncio
@@ -48,22 +47,23 @@ async def db_has_characters(driver, minimum: int = 100) -> bool:
 
 @pytest_asyncio.fixture(scope="session", loop_scope="session")
 async def loaded_db(async_driver):
-    """Session-scoped fixture that ensures Neo4j DB is populated.
+    """Require a loaded graph without silently triggering live scraping.
 
-    Checks if data already exists; if not, runs the full ETL pipeline (scraper + loader).
-    Runs at most once per test session. ETL failures are caught and logged — the fixture
-    yields regardless so individual tests can decide whether to skip.
-
-    Use this fixture in integration tests that query known graph nodes.
-    Do NOT use in idempotency tests (they manage their own DB state).
+    Integration tests must not turn an ordinary test run into a third-party
+    browser scrape. Operators load the reviewed parsed corpus explicitly;
+    dependent tests skip with an actionable reason when it is unavailable.
     """
     try:
-        if not await db_has_characters(async_driver):
-            from src.etl.run_etl import main as run_etl_main
-            await run_etl_main(driver=async_driver)
+        populated = await db_has_characters(async_driver)
     except Exception as e:
-        logging.getLogger(__name__).warning(
-            "DB check or ETL failed — skipping load: %s", e
+        pytest.skip(
+            f"Neo4j integration graph is unavailable ({type(e).__name__}); "
+            "start the service and load the reviewed parsed corpus before running integration tests."
+        )
+    if not populated:
+        pytest.skip(
+            "Neo4j integration graph has fewer than 100 Character nodes; "
+            "load the reviewed parsed corpus before running integration tests."
         )
     yield
 

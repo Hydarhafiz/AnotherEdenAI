@@ -5,11 +5,10 @@ These tests require:
   - Linux Chromium at CHROMIUM_PATH (installed via Playwright)
   - DISPLAY environment variable set (non-headless Chrome requires X display)
 
-Run with:
-    pytest tests/integration/test_etl_scraper.py -x -m integration
+These are opt-in external checks. The ordinary suite excludes this file because
+Cloudflare and the live wiki are third-party dependencies. Run it deliberately:
 
-Skip condition: these tests are excluded from the default pytest run
-(pytest --ignore=tests/integration).
+    xvfb-run -a .venv/bin/pytest -o addopts='' tests/integration/test_etl_scraper.py -m external -q
 """
 import pytest
 from bs4 import BeautifulSoup
@@ -20,6 +19,7 @@ CHROMIUM_PATH = "/home/shogunix/.cache/ms-playwright/chromium-1187/chrome-linux/
 
 @pytest.mark.integration
 @pytest.mark.scraper
+@pytest.mark.external
 async def test_fetch_page_returns_beautifulsoup():
     """fetch_page() retrieves the Characters wiki page via nodriver.
 
@@ -50,11 +50,12 @@ async def test_fetch_page_returns_beautifulsoup():
 
 @pytest.mark.integration
 @pytest.mark.scraper
+@pytest.mark.external
 async def test_scrape_all_returns_expected_structure():
-    """scrape_all() returns a dict with characters, grastas, ores keys.
+    """scrape_all() returns the current complete parsed-data contract.
 
     Asserts:
-    - All three keys present
+    - All current pipeline keys present
     - characters list has >= 300 entries (EXPECTED_NODE_COUNTS["Character"] = 300)
     - grastas list has >= 460 entries (EXPECTED_NODE_COUNTS["Grasta"] = 460)
     - ores list has >= 50 entries (EXPECTED_NODE_COUNTS["Ore"] = 50)
@@ -64,7 +65,10 @@ async def test_scrape_all_returns_expected_structure():
 
     data = await scrape_all()
 
-    assert set(data.keys()) == {"characters", "grastas", "ores"}
+    assert set(data.keys()) == {
+        "characters", "sidekicks", "superbosses", "grastas", "ores",
+        "equipment", "mechanic_references",
+    }
     assert len(data["characters"]) >= EXPECTED_NODE_COUNTS["Character"], (
         f"Expected >= {EXPECTED_NODE_COUNTS['Character']} characters, "
         f"got {len(data['characters'])}"
