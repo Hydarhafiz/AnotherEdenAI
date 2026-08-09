@@ -9,6 +9,7 @@ import logging
 from collections import Counter
 from typing import Any
 
+from .lineup_generation import generate_lineup_candidates
 from .state import WorkflowState
 
 logger = logging.getLogger(__name__)
@@ -350,8 +351,17 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
     warnings = []
     if not coverage["complete"]:
         warnings.append("Typed production retrieval coverage is incomplete: " + ", ".join(missing or ["unknown entries"]))
+    lineup_generation = retrieval.get("lineup_candidates")
+    if not isinstance(lineup_generation, dict):
+        lineup_generation = generate_lineup_candidates(
+            characters=list(characters_by_name.values()),
+            sidekicks=list(retrieval.get("sidekicks", [])),
+            boss=boss,
+            role_scores=role_scores,
+            coverage=retrieval_coverage,
+        )
     bundle = {
-        "version": "feature-e-v1",
+        "version": "feature-f-v1",
         "item_policy": (retrieval.get("request") or {}).get("item_policy", state.get("item_policy", "late_game_assumed")),
         "characters": character_candidates,
         "sidekicks": sidekick_candidates,
@@ -363,7 +373,10 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
             "citations": citations,
         },
         "coverage": coverage,
+        "backend_candidates": list(lineup_generation.get("candidates", [])),
+        "candidate_generation": lineup_generation,
         "ranking_policy": {
+            "lineups": "Use only deterministic, coverage-valid backend candidates; analyzer refinement is a later bounded phase.",
             "items": "Use only the backend-selected compact package; item ownership remains unverified.",
             "allocation": "Finite Grasta and named equipment are validated per lineup.",
         },

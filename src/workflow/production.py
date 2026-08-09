@@ -8,6 +8,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from .legality import SAState, build_roster_input
+from .lineup_generation import generate_lineup_candidates
 from .mechanics import retrieve_mechanic_references
 from .role_scoring import derive_contextual_role_scores
 from .state import WorkflowState
@@ -64,6 +65,7 @@ class ProductionRetrieval(BaseModel):
     coverage: dict[str, Any]
     role_scores: dict[str, Any] = Field(default_factory=dict)
     build_packages: dict[str, Any] = Field(default_factory=dict)
+    lineup_candidates: dict[str, Any] = Field(default_factory=dict)
 
 
 class ProductionRetrievalService:
@@ -301,6 +303,13 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             equipment=equipment,
             item_policy=request.item_policy,
         )
+        lineup_candidates = generate_lineup_candidates(
+            characters=characters,
+            sidekicks=sidekicks,
+            boss=boss,
+            role_scores=role_scores,
+            coverage={"requested_character_count": len(normalized)},
+        )
         normalized_request = request.model_copy(update={
             "boss_id": boss["id"], "roster": normalized,
             "owned_sidekicks": roster_input.owned_sidekicks,
@@ -323,6 +332,7 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             },
             role_scores=role_scores,
             build_packages=role_scores.get("build_packages", {}),
+            lineup_candidates=lineup_candidates,
         )
 
 

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, and E are complete. Feature F is the next admitted feature.
+Status: Active; Features A, B, C1-C5, D, E, and F are complete. Feature G is the next admitted feature.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -499,7 +499,7 @@ Acceptance criteria:
 
 ### Feature C: Reviewed Atomic Capability Taxonomy And Reproducible Materialization
 
-Status: C1-C5 completed. Feature D consumes the reviewed materialization handoff; Features D and E are complete and Feature F is now admitted.
+Status: C1-C5 completed. Feature D consumes the reviewed materialization handoff; Features D, E, and F are complete and Feature G is now admitted.
 
 #### Feature C1: Atomic Contracts, Review Tooling, And Safety Cutover
 
@@ -716,9 +716,25 @@ Acceptance criteria:
 
 ### Feature F: Capability Templates, Beam Generation, And Lineup Scoring
 
-Status: Planned.
+Status: Completed. The typed production path now generates deterministic,
+coverage-valid backend lineups from burst, sustain, and hybrid capability
+templates. Beam expansion is capped at 50 partial combinations per step;
+full-lineup build allocation, sidekick placement, reserve utility, scoring,
+deduplication, diversity, partial output, zero-candidate diagnostics, and the
+analyzer zero-call gate are covered by durable regression tests.
 
-Route: `builder-executor -> tdd-loop`.
+Route: `builder-executor -> tdd-loop` (completed feature boundary).
+
+Evidence: `.venv/bin/pytest -q tests/workflow/test_lineup_generation.py
+tests/workflow/test_role_scoring.py tests/workflow/test_build_packages.py
+tests/workflow/test_candidates.py tests/workflow/test_feature_b_production.py`
+passes 40 tests; `.venv/bin/pytest -q tests/workflow --ignore=tests/workflow/test_graph.py`
+passes 235 tests; and `.venv/bin/pytest -q tests/unit
+tests/web/unit/test_feature_e_result_ui.py` passes 145 tests with one existing
+dependency deprecation warning. The legacy graph happy-path test did not
+complete in the local test environment and does not exercise the typed Feature
+F generation path. No manual or external-provider test is required for this
+deterministic backend feature.
 
 Technical requirements:
 
@@ -883,9 +899,9 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature C5: completed; two clean full parsed replays, graph-drift, schema, guide, and manual operator gates pass.
 - Feature D: completed; hard filters, backend-owned contextual RoleScores/evidence, deterministic top-eight pools with boss-counter exceptions, and bounded skill/package output are verified.
 - Feature E: completed; late-game assumed compact build packages, exact item compatibility, finite/named allocation validation, assumption/evidence/citation metadata, and catalog-free production projection are verified.
-- Features F-I: planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
-- The current production candidate/analyzer implementation remains a superseded broad-context prototype for F-G scope and must not be credited as the target beam-generation, compact-projection, or two-call architecture.
-- No new beam-generation, compact-projection, or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
+- Feature F: completed; deterministic capability-template beam generation, full-lineup scoring, build/sidekick legality, diversity, partial/zero diagnostics, and analyzer zero-call handling are verified. Features G-I remain planned. The required boss/provider architecture checkpoint occurs after G and before H paid admission.
+- The current production analyzer implementation remains a superseded broad-context prototype for G scope and must not be credited as the target compact-projection or two-call architecture.
+- No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
 ## Milestone Exit Criteria
 

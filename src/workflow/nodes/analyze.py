@@ -513,6 +513,21 @@ def _analyze_candidate_bundle(state: WorkflowState) -> dict:
     """Run initial selection plus at most two batched correction rounds."""
     bundle = state["candidate_bundle"]
     coverage = bundle.get("coverage", {})
+    generation = bundle.get("candidate_generation")
+    if isinstance(generation, dict) and not generation.get("candidates"):
+        return {
+            "analysis_failure": {
+                "type": "no_backend_candidates",
+                "message": "No legal coverage-valid backend candidate was generated; analyzer work was skipped.",
+                "details": generation.get("diagnostics", {}),
+            },
+            "cypher_retry_count": state.get("retry_count", 0),
+            "analyzer_call_count": 0,
+            "analyzer_correction_rounds": 0,
+            "provider_transport_retries": 0,
+            "structured_output_errors": [],
+            "candidate_validation_errors": [],
+        }
     if not coverage.get("complete", False):
         return {
             "analysis_failure": {
