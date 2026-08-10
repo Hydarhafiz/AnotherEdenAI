@@ -85,12 +85,32 @@ class ProductionRetrievalService:
             """
 MATCH (b:Superboss)
 WHERE toLower(b.name) = toLower($boss_id)
-RETURN b.name AS id, b.name AS name, b.source_url AS source_url,
+RETURN coalesce(b.canonical_id, b.name) AS id,
+       b.name AS name, coalesce(b.aliases, []) AS aliases,
+       b.source_url AS source_url,
+       coalesce(b.citation_url, b.source_url) AS citation_url,
+       b.cohort AS cohort,
+       b.variant_relationship AS variant_relationship,
+       coalesce(b.selection_rationale, {}) AS selection_rationale,
+       coalesce(b.section_anchor, '') AS section_anchor,
+       coalesce(b.section_end_anchor, '') AS section_end_anchor,
+       coalesce(b.source_section, '') AS source_section,
+       coalesce(b.section_bounded, false) AS section_bounded,
        coalesce(b.weak, []) AS weak, coalesce(b.resist, []) AS resist,
        coalesce(b.null, []) AS null, coalesce(b.absorb, []) AS absorb,
+       coalesce(b.weak_state, 'unknown') AS weak_state,
+       coalesce(b.resist_state, 'unknown') AS resist_state,
+       coalesce(b.null_state, 'unknown') AS null_state,
+       coalesce(b.absorb_state, 'unknown') AS absorb_state,
+       coalesce(b.affinity_evidence, {}) AS affinity_evidence,
+       coalesce(b.affinity_observations, []) AS affinity_observations,
+       coalesce(b.provenance, {}) AS provenance,
+       coalesce(b.mechanics_evidence, {}) AS mechanics_evidence,
        coalesce(b.characteristics, '') AS characteristics,
        coalesce(b.mechanic_tags, []) AS mechanic_tags,
-       coalesce(b.mechanics_text, '') AS mechanics_text
+       coalesce(b.mechanics_text, '') AS mechanics_text,
+       coalesce(b.support_status, 'unknown') AS support_status,
+       coalesce(b.recommendation_ready, false) AS recommendation_ready
 LIMIT 1
 """,
             boss_id=boss_id,
@@ -223,6 +243,13 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
                 code="boss.unsupported", field="boss_id", value=request.boss_id,
                 message=f"Unsupported boss ID: {request.boss_id}",
             )])
+        if boss.get("recommendation_ready") is False and "recommendation_ready" in boss:
+            raise ProductionRequestError([RetrievalIssue(
+                code="boss.unready",
+                field="boss_id",
+                value=request.boss_id,
+                message=f"Boss is not recommendation-ready: {request.boss_id}",
+            )])
 
         conflicts = await self.conflicting_bosses(request.boss_id, request.preferences)
         if conflicts:
@@ -351,7 +378,13 @@ async def retrieve_production_context_node(state: WorkflowState, driver) -> dict
         "boss": result.boss,
         "mechanic_references": result.mechanics,
         "citations": [
-            {"label": result.boss["name"], "source_url": result.boss.get("source_url")}
+            {
+                "label": result.boss["name"],
+                "source_url": result.boss.get("source_url"),
+                "citation_url": result.boss.get("citation_url") or result.boss.get("source_url"),
+                "section_anchor": result.boss.get("section_anchor"),
+                "source_section": result.boss.get("source_section"),
+            }
         ] if result.boss.get("source_url") else [],
     }
     return {

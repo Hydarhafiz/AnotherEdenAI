@@ -312,10 +312,14 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
     boss = retrieval.get("boss") or {}
     citations = []
     if boss.get("source_url"):
+        boss_citation_url = boss.get("citation_url") or boss["source_url"]
         citations.append({
-            "id": _candidate_id("citation", boss.get("name"), boss.get("source_url")),
+            "id": _candidate_id("citation", boss.get("name"), boss_citation_url),
             "label": boss.get("name") or "Boss source",
             "source_url": boss["source_url"],
+            "citation_url": boss_citation_url,
+            "section_anchor": boss.get("section_anchor"),
+            "source_section": boss.get("source_section"),
         })
     for character in character_candidates:
         for citation in character.get("build_package", {}).get("citations", []):
@@ -331,13 +335,23 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
     boss_facts = [{
         "id": _candidate_id("boss-fact", boss.get("name"), "affinities"),
         "kind": "affinities",
-        "value": {key: list(boss.get(key, [])) for key in ("weak", "resist", "null", "absorb")},
+        "value": {
+            **{key: list(boss.get(key, [])) for key in ("weak", "resist", "null", "absorb")},
+            "states": {
+                field: boss.get(f"{field}_state", "unknown")
+                for field in ("weak", "resist", "null", "absorb")
+            },
+        },
     }] if boss else []
     if boss.get("mechanics_text") or boss.get("characteristics"):
         boss_facts.append({
             "id": _candidate_id("boss-fact", boss.get("name"), "mechanics"),
             "kind": "mechanics",
             "value": boss.get("mechanics_text") or boss.get("characteristics"),
+            "source_url": boss.get("source_url"),
+            "citation_url": boss.get("citation_url") or boss.get("source_url"),
+            "source_section": boss.get("source_section"),
+            "evidence": boss.get("mechanics_evidence") or {},
         })
 
     retrieval_coverage = retrieval.get("coverage") or {}
@@ -368,7 +382,26 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
         "stellar_awakened": retrieval.get("request", {}).get("stellar_awakened", state.get("stellar_awakened", {})),
         "boss": {
             "name": boss.get("name"),
+            "id": boss.get("id") or boss.get("canonical_id") or boss.get("name"),
+            "aliases": list(boss.get("aliases") or []),
+            "cohort": boss.get("cohort"),
+            "variant_relationship": boss.get("variant_relationship"),
             "affinities": {key: list(boss.get(key, [])) for key in ("weak", "resist", "null", "absorb")},
+            "affinity_states": {
+                field: boss.get(f"{field}_state", "unknown")
+                for field in ("weak", "resist", "null", "absorb")
+            },
+            "affinity_observations": list(boss.get("affinity_observations") or []),
+            "section": {
+                "anchor": boss.get("section_anchor"),
+                "end_anchor": boss.get("section_end_anchor"),
+                "label": boss.get("source_section"),
+                "bounded": boss.get("section_bounded", False),
+            },
+            "support_status": boss.get("support_status"),
+            "recommendation_ready": boss.get("recommendation_ready"),
+            "provenance": boss.get("provenance") or {},
+            "mechanics_evidence": boss.get("mechanics_evidence") or {},
             "facts": boss_facts,
             "citations": citations,
         },

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, E, F, and G are complete. The required Post-Feature-G human checkpoint is next before Feature H.
+Status: Active; Features A, B, C1-C5, D, E, F, G, and G1 are complete. Feature H remains the next planned feature and is not started.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -62,13 +62,13 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - No exact best-in-slot optimizer.
 - No required weapon, armor, Grasta, Ore, badge, or sidekick-equipment inventory entry for MVP.
 - No required `declared_owned_only` item mode in the first implementation.
-- No all-superboss ingestion or evaluation expansion before the required post-Feature-G architecture checkpoint.
-- No intermediate or strong superboss evaluation tier.
+- No unbounded all-superboss ingestion or evaluation expansion; the post-Feature-G checkpoint admits only the bounded Feature G1 stages and their per-boss readiness gates.
+- No more than thirty recommendation-ready superbosses in Milestone 5: ten weak at wiki difficulty 1.0-4.0, ten medium at 4.5-8.8, and ten strong at 9.0-12.0.
 - No live AI role tagging during requests or normal ETL.
 - No mandatory AI-assisted labeling in initial acceptance.
 - No free-form analyzer lineup assembly.
 - No more than one analyzer-proposed hero swap per lineup.
-- No paid judge on every live request.
+- No AI judge in live or offline evaluation; deterministic gates and Discord player-reviewer feedback own beta quality evidence.
 - No rerun of the historical ~601k-token failure merely to recreate its baseline.
 - No major frontend redesign beyond status, diagnostics, assumptions, degradation, and cost visibility required by this milestone.
 - No deployment implementation beyond the beta-safety decisions explicitly retained after the core recommendation gates.
@@ -83,7 +83,7 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - Schema changes require a version bump, ETL replay/migration, schema assertions, and planned ETL-guide updates.
 - The default target player has broad late-game item access; item ownership is not verified unless a future policy says otherwise.
 - Curated boss and mechanics data may be incomplete. Unknown data lowers confidence and must remain distinct from confirmed facts.
-- DeepSeek direct-API and OpenRouter usage, model, price, structured-output, and limit metadata are mutable external facts and must be captured at paid release-evaluation time.
+- OpenRouter model, provider-routing, usage, price, structured-output, and limit metadata are mutable external facts and must be captured at paid release-evaluation time. Direct DeepSeek remains an offline adapter compatibility path and is deferred from Milestone 5 paid qualification.
 - The historical ~601k-token failed run is a user-observed baseline for reduction reporting.
 - The RM50/month public demo/beta ceiling remains a later operational constraint.
 - Secrets, credentials, API keys, and real user authentication data remain outside documentation and repository files.
@@ -105,7 +105,7 @@ External/current inputs include:
 - OpenRouter Usage Accounting documents automatic per-response usage and cost fields, including reasoning and cache details where available.
 - OpenRouter Structured Outputs documents strict JSON Schema output for compatible models; schema enforcement does not replace semantic legality validation.
 - OpenRouter Models documentation provides model capability, pricing, context, completion, and supported-parameter metadata that must be snapshotted for paid qualification.
-- Direct DeepSeek API behavior is a release-time provider qualification concern. The implementation must use sanitized configuration only and snapshot official model, usage, structured-output, and pricing metadata before paid acceptance; no current mutable model claim is locked into this milestone.
+- OpenRouter model fallback documentation permits one ordered `models` array and reports the model that ultimately answers. The post-G revision targets `deepseek/deepseek-v4-flash-0731`, then `openai/gpt-5.6-luna`, then `z-ai/glm-5.2`; all three currently advertise structured outputs, but release-time fixtures and metadata—not leaderboard position—govern qualification.
 - Existing Another Eden wiki and mechanics references ground affinity, status, zone, SA, sidekick, and Grasta constraints.
 - Feature C3 references now ground Status Effects, Damage Formula, Focus effects, reversal, Kaleido, barrier pierce, Link/Copy/Chain/counting behavior, Magic Overcritical, Lunatic variants, and the Oh No Help compound amplification case; detailed entries and retrieval caveats live in `docs/core/planning-sources.md`.
 - Community build references remain heuristic evidence only and require fixture or beta validation before tuning weights.
@@ -115,8 +115,8 @@ Open research gaps:
 - Actual compact-projection token and cost distributions.
 - Initial scoring-weight quality across the curated weak-boss fixtures.
 - Experienced-player validation for high-impact role overrides and counter exceptions.
-- Best paid analyzer route and model at release time, comparing a direct DeepSeek route with an OpenRouter alternative.
-- Whether curated weak-boss coverage remains sufficient after Feature G or an explicit all-boss data-expansion feature is worth its parser, curation, fixture, and evaluation burden.
+- Release-time metadata, fallback behavior, and paid quality evidence for the admitted OpenRouter model chain.
+- Per-boss readiness and independent golden-fixture quality across Feature G1's ten weak, ten medium, and ten strong cohorts.
 - Value of optional provider-assisted low-confidence tag suggestions.
 - Authentication, persistence, and per-user/global limits for beta.
 - Exact dedicated-page wording for several C3 mechanics that the planning browser could not retrieve; cached source facts and the accessible Status Effects/Damage Formula pages ground the current taxonomy, while unresolved formula or interaction details remain non-authoritative.
@@ -775,8 +775,8 @@ Technical requirements:
 
 - Maintain separate full backend and compact analyzer contracts.
 - Project only referenced candidates, catalogs, shortlists, packages, boss/mechanics facts, swaps, constraints, and citations.
-- Introduce a provider-neutral analyzer port with a direct DeepSeek route as the intended primary paid candidate and an independently selectable OpenRouter route as the alternative. Configuration may name providers/models but never store keys or credential values.
-- Keep provider selection explicit per run. Automatic cross-provider retry is out of scope until Feature H proves shared call-count, usage, cost, and degradation semantics.
+- Introduce a provider-neutral analyzer port with independently selectable direct DeepSeek and OpenRouter routes. The post-G checkpoint owns paid admission; configuration may name providers/models but never store keys or credential values.
+- Keep provider selection explicit per run. Application-managed cross-provider retry remains out of scope; Feature H may prove OpenRouter's server-managed ordered model fallback while preserving the application call cap, usage, cost, and degradation semantics.
 - Use strict structured output on supported provider routes.
 - Allow ranking, explanations, skill choice, and one supplied swap per lineup.
 - Permit advisory execution-complexity, strategic-coherence, and matchup-nuance judgments, plus concise display-role wording grounded in supplied backend role IDs; do not accept AI-authored RoleScores, role IDs, or coverage claims.
@@ -810,53 +810,93 @@ Acceptance criteria:
 
 ### Required Post-Feature-G Human Checkpoint: Boss Coverage And Paid Provider Admission
 
-Status: Planned; this is the next milestone/architecture decision after Feature G, not an implementation phase or bookkeeping commit.
+Status: Completed on 2026-08-09 and revised with human direction on 2026-08-10 as a read-only architecture decision after Feature G. Disposition 2 remains selected: insert a staged boss-corpus expansion feature before H. This checkpoint is not implementation authorization, paid-call authorization, or live-scrape authorization.
 
-Route: `contract-auditor -> architect-planner` for the decision only. If approved, a new implementation feature is inserted with its own `builder-executor -> tdd-loop` boundary before Feature H.
+Route: `contract-auditor -> architect-planner` completed for the decision only. Feature G1 has its own `builder-executor -> tdd-loop` boundary before Feature H.
 
-Decision evidence:
+Audit verdict: `Conditional pass`. Feature G correctly keeps deterministic retrieval, RoleScores, candidate generation, compact projection, refinement validation, and degraded fallback closed-world. Its tests use synthetic boss facts, however, and do not establish an independent recommendation-ready boss corpus. The current parser configuration names seven weak bosses, while the checked-in v1.5.0 cache materializes only five. Those five retain source URLs and mechanics text, but all five have unknown weakness/null/absorb values, one has contaminated resistance text, whole-page mechanics fallback can cross boss/section boundaries, and no current fixture independently proves each boss's identity, affinity, mechanics, and citations through the Feature G path.
 
-- Audit the curated weak-boss set against the real Feature G retrieval, role, candidate, projection, and fallback contracts.
-- Measure how many additional boss pages have canonical identity, parseable affinity, mechanics text, section boundaries, source attribution, and enough independent fixtures to support deterministic acceptance.
-- Estimate the parser, curation, regression, evaluation, and runtime-cost burden of all-boss coverage; do not treat index discovery as recommendation readiness.
-- Choose exactly one disposition: keep the curated weak-boss scope for Milestone 5; add a staged boss-corpus expansion feature before H; or defer all-boss coverage to a later milestone.
-- Review direct DeepSeek and OpenRouter adapter evidence, current official provider/model metadata, structured-output compatibility, observed usage availability, and projected RM cost. Choose the paid qualification routes and models for Feature H.
-- Keep API keys and credential values outside the repository. Human authorization is required before any paid provider call or live all-boss scrape.
+The cached Superbosses index exposes 178 rows and 176 distinct names, with 177 linked rows, but only five detail pages are cached. Its decimal difficulty values provide enough candidates for a stratified pilot: 35 unique names at 1.0-4.0, 33 rows at 4.5-8.8, and 109 unique names at 9.0-12.0. One name appears at two tiers, so no cross-band row may count twice without an explicit variant identity. Therefore 171 additional distinct identities have discovery metadata but no inspected detail-page evidence, and zero of 176 bosses currently meet the complete recommendation-readiness contract. An all-boss cutover would require source-manifest identity decisions, section/variant handling, affinity and mechanics parsing, source attribution, independent fixtures, deterministic replay, regression coverage, and evaluation cases for every admitted boss. Selected-boss retrieval keeps per-request runtime projection bounded, but crawl, curation, fixture, and paid-evaluation burden grows approximately linearly with admitted bosses. Index discovery and difficulty are selection metadata, not recommendation readiness.
+
+Provider audit: Feature G proves only transport-injected offline envelope parity. Current official OpenRouter metadata lists `response_format` and `structured_outputs` for `deepseek/deepseek-v4-flash-0731`, `openai/gpt-5.6-luna`, and `z-ai/glm-5.2`. OpenRouter's ordered `models` fallback is one gateway request: it advances only when a model returns a routing-eligible error, charges the model that ultimately answers, and returns that served model in the response. It does not retry a successful HTTP response that later fails local schema or authority validation. The current application accepts one model string and has not yet proven ordered-model transport, served-model attribution, or fallback-aware usage/cost reporting. Direct DeepSeek remains useful offline adapter evidence but is not a Milestone 5 paid beta route.
 
 Checkpoint acceptance:
 
-- **PG-01:** The boss-coverage decision names its source authority, supported corpus boundary, fixture/evidence burden, non-goals, and insertion/defer route.
-- **PG-02:** The provider decision names direct DeepSeek and/or OpenRouter qualification targets without hard-coding mutable prices, limits, or credentials.
-- **PG-03:** Feature H does not start paid evaluation until both decisions are recorded in the canonical planning source and reflected here.
+- **PG-01 — revised and recorded with human approval:** Use the cached Another Eden Wiki Superbosses index/detail pages plus explicit per-boss source manifests as source authority. Feature G1 must produce exactly thirty recommendation-ready bosses: ten weak at wiki difficulty 1.0-4.0, ten medium at 4.5-8.8, and ten strong at 9.0-12.0. The five cached weak bosses count toward the weak cohort only after their affinity/mechanics/provenance defects are repaired, so twenty-five additional unique boss identities require admitted detail sources. Within each band, selection must maximize mechanics, affinity, parser, page-section, and beta-review diversity rather than choosing rows by difficulty alone. Every admitted boss needs canonical identity/aliases, exact source URL and section boundary, independently expected affinity/mechanics facts, parser regression fixtures, replay evidence, and a feasible or infeasible recommendation fixture; no canonical identity counts twice across bands. Flame Eater variants remain outside the supported boundary until their shared-section identity and independent mechanics evidence are resolved. All-boss coverage, live scraping without a separate checkpoint, automatic admission from index rows, and comprehensive coverage claims remain non-goals. Feature G1 remains before H with its own `builder-executor -> tdd-loop` boundary.
+- **PG-02 — revised and recorded:** Milestone 5 paid beta qualification uses OpenRouter only, with the ordered model chain `deepseek/deepseek-v4-flash-0731` primary, `openai/gpt-5.6-luna` first fallback, and `z-ai/glm-5.2` final fallback. Direct DeepSeek paid qualification and Moonshot Kimi are deferred. Feature H must qualify all three models individually against the same strict projection/schema/authority fixtures before enabling OpenRouter's server-managed fallback array, capture the actual served model, and truthfully retain available prompt, completion, reasoning, cache, total, charged cost, latency, generation, and fallback metadata. Server-managed fallback counts as one application analyzer call; a locally invalid successful response may use the one fragment-correction call but cannot trigger an unbounded model retry loop. The 2026-08-10 hard-budget snapshot projects roughly RM0.02 for DeepSeek V4 Flash, RM0.03 for GPT-5.6 Luna, or RM0.02 for GLM-5.2 per worst-case logical request; the chain is conservatively below about RM0.03 per request, RM0.90 for thirty one-run boss cases, or RM2.70 for one worst-case run per boss against each of the three models. These are mutable planning estimates, exclude payment fees, and are not acceptance prices. No credential value is stored in the repository.
+- **PG-03 — revised and recorded:** Feature H remains blocked until Feature G1 completes, deterministic boss fixtures pass, the three OpenRouter routes and ordered fallback/accounting behavior pass offline verification, and the human separately authorizes paid calls. Subjective recommendation quality will be collected from Discord players through structured beta feedback; no AI judge is admitted. No paid call, live boss scrape, Feature G1 implementation, or Feature H work is authorized by this checkpoint record.
+
+### Feature G1: Thirty-Boss Stratified Corpus Readiness
+
+Status: Completed; admitted by the post-Feature-G checkpoint and completed before Feature H. The bounded live fetch used the separately authorized exact thirty-page scope; no all-boss discovery or recursive crawl was used.
+
+Route: `builder-executor -> tdd-loop` with a required human checkpoint before any live boss-page fetch.
+
+Scope:
+
+- Stage 1 repairs and independently fixtures the five cached weak bosses: Zennon Ogre's Shadow, Mimi, Cradle System, Insula Ventorum, and Nameless Girl.
+- Stage 1 replaces implicit index-name authority with an explicit versioned boss source manifest containing canonical ID/name, aliases, source URL, optional section anchor, variant relationship, and support status.
+- Stage 1 makes affinity parsing distinguish confirmed empty/neutral from unknown, rejects contaminated narrative fields, constrains mechanics extraction to the owned boss section, and retains source attribution for every projected boss fact.
+- Stage 2 adds five unique weak bosses from difficulty 1.0-4.0, completing a ten-boss weak cohort that includes the repaired Stage-1 bosses.
+- Stage 3 adds ten unique medium bosses from difficulty 4.5-8.8.
+- Stage 4 adds ten unique strong bosses from difficulty 9.0-12.0.
+- Every cohort must deliberately cover different affinity states and recommendation triggers, including combinations of weakness/resistance/null/absorb, zones, stoppers or phases, status pressure, summons or multiple targets, turn limits, sustain or MP pressure, AF constraints, and shared-page/section shapes where authoritative evidence permits them.
+- Each boss is admitted individually only after parser, provenance, replay, and production recommendation fixtures pass. A failed selection remains unsupported and must be replaced by another unique candidate in the same band before Feature H; it cannot weaken the thirty-boss exit gate.
+
+Non-goals:
+
+- No automatic admission of all 176 discovered identities.
+- No unbounded or recursive crawl, full all-boss scrape, claim of comprehensive coverage within any difficulty band, or claim that an index row or tier proves recommendation support.
+- No LLM-authored boss facts, source repair, affinity inference, fixture oracle, or automatic curation.
+- No Feature H paid provider call and no AI judge.
+
+Acceptance criteria:
+
+- **G1-01:** Every admitted boss round-trips through an explicit canonical identity/alias and source-section manifest; shared pages and variants cannot collapse or inherit one another's mechanics silently.
+- **G1-02:** Weak, resist, null, and absorb fields preserve `confirmed values`, `confirmed none/neutral`, and `unknown` as distinct states, and independent fixtures catch narrative contamination or cross-section leakage.
+- **G1-03:** Mechanics facts and compact projection cite the exact boss source and owned section; raw whole-page fallbacks cannot mark a boss recommendation-ready.
+- **G1-04:** The ten weak bosses, including all five repaired cached bosses, each have independent parser and production fixtures that exercise retrieval, contextual roles/counters, candidate outcomes or typed infeasibility, compact boss projection, citations, and degraded fallback.
+- **G1-05:** Exactly ten unique bosses in each approved band pass the same admission gates; eval metadata records `weak`, `medium`, or `strong`, and no canonical identity is counted in more than one cohort.
+- **G1-06:** Deterministic replay and focused regression suites pass across all thirty bosses, permanent fixtures have documented authority independent of implementation, temporary crawl/evaluation outputs are promoted or purged, and one detailed Feature G1 commit owns implementation, evidence, guide/milestone updates, and handoff cleanup.
+
+G1 completion evidence: `src/etl/superboss_manifest.json` validates the fixed
+30-record exit gate; `tests/fixtures/superbosses/` contains the five repaired
+cached fixtures, twenty-five bounded live section fixtures, independent
+expected facts, and offline production outcomes; `tests/unit/test_superboss_corpus.py`
+replays identity, affinity state, section, mechanics, provenance, production,
+compact-projection, citation, and degraded-fallback gates. The unit suite and
+G1-focused ETL/workflow suites pass; a broader workflow run remains subject to
+an existing graph happy-path stall and is not used as G1 completion evidence.
 
 ### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
 
-Status: Planned.
+Status: Planned after Feature G1; no work or paid call is authorized by the post-G decision alone.
 
-Route: `tdd-loop` for deterministic/evaluation evidence, with `builder-executor -> tdd-loop` only for provider-accounting implementation discovered to be missing. Paid calls remain a human checkpoint.
+Route: `tdd-loop` for deterministic/evaluation evidence, with `builder-executor -> tdd-loop` for the OpenRouter ordered-model transport, structured-output, served-model attribution, or accounting implementation proven missing by the post-G audit. Paid calls remain a separate human checkpoint.
 
 Technical requirements:
 
 - Build layered tests for taxonomy, materialization, normalization, hard filters, role/skill scoring, packages, templates, beam bounds, no-weakness affinity, projection leakage/budgets, swaps, partial output, and zero candidates.
-- Define feasible and infeasible golden weak-boss fixtures with expected constraints and quality notes.
+- Define feasible and infeasible golden fixtures across all three difficulty cohorts with expected constraints and quality notes.
 - Use the boss corpus admitted by the post-G checkpoint; an approved expansion must complete its own implementation/verification feature before H consumes it.
-- Require all deterministic gates before paid analyzer or judge calls.
-- Qualify the approved direct DeepSeek and OpenRouter routes independently; never infer that one provider's structured-output or usage behavior proves the other's.
+- Require all deterministic gates before paid analyzer calls.
+- Qualify `deepseek/deepseek-v4-flash-0731`, `openai/gpt-5.6-luna`, and `z-ai/glm-5.2` individually against the same fixtures before enabling their ordered OpenRouter fallback chain.
+- Keep the application-level maximum at two OpenRouter requests: initial analysis plus at most one fragment-only correction. OpenRouter's internal model/provider attempts do not grant additional application retries, and a locally invalid successful response does not trigger a fresh unbounded model chain.
 - Capture provider/model metadata snapshot for every paid run.
-- Record attempt-level usage, cost, latency, validation, fallback, and degradation.
+- Record attempt-level usage, cost, latency, validation, actual served model, fallback, and degradation.
 - Enforce locked per-call and cumulative budgets.
 - Preserve the ~601k failure as a recorded baseline artifact.
-- Use paid judge only offline on deterministically valid output.
+- Export sanitized, deterministically valid recommendation samples for the later Feature I Discord reviewer-feedback contract; do not use an AI judge.
 
 Acceptance criteria:
 
 - **H-01:** Hard legality and out-of-bundle ID gates pass 100%.
 - **H-02:** Identical fixture input produces deterministic backend results.
 - **H-03:** Every feasible fixture returns at least one legal coverage-valid candidate; infeasible fixtures return classified diagnostics without analyzer calls.
-- **H-04:** Each admitted DeepSeek/OpenRouter route reports or truthfully classifies unavailable prompt, completion, reasoning, cached, total-token, cost, latency, and generation metadata without mixing providers.
+- **H-04:** Each admitted OpenRouter model and every served fallback response reports or truthfully classifies unavailable prompt, completion, reasoning, cached, total-token, cost, latency, generation, and actual-model metadata without mixing model identities.
 - **H-05:** Paid golden runs remain under 40k cumulative analyzer tokens and reduce baseline usage by at least 90%.
-- **H-06:** Reports distinguish backend failures, analyzer structure/refinement failures, provider transport failures, budget degradation, provider fallback/selection, and subjective quality.
-- **H-07:** Provider generation and judging roles are explicit, and paid judge use remains offline and human-authorized.
+- **H-06:** Reports distinguish backend failures, analyzer structure/refinement failures, OpenRouter transport failures, model/provider fallback selection, local validation failure, budget degradation, and readiness for later human review.
+- **H-07:** The ordered fallback chain is exercised only after all three models pass independent strict-output and authority gates; no AI judge call exists in the evaluation or beta path.
 
 ### Feature I: Reusable Guidance And Beta Safeguards
 
@@ -867,9 +907,10 @@ Route: `architect-planner` for the beta safeguard decision, then `release-manage
 Technical requirements:
 
 - Reconcile `docs/guides/ETL_GUIDE.md` with the verified taxonomy/rule versions, replay, evidence materialization, drift tests, migration, and C5 handoff behavior.
-- Rewrite stale portions of `docs/guides/recommendation-validation.md` for typed production readiness, backend role IDs/scores, pool pruning, beam diagnostics, projection inspection, the two-call cap, DeepSeek/OpenRouter provider evidence, swaps, degraded mode, and golden evals.
+- Rewrite stale portions of `docs/guides/recommendation-validation.md` for typed production readiness, backend role IDs/scores, pool pruning, beam diagnostics, projection inspection, the two-call cap, OpenRouter model fallback/served-model evidence, swaps, degraded mode, and golden evals.
 - Require later related features to maintain these guides when commands, diagnostics, artifacts, or contracts change.
 - Decide authentication, persistence, feedback, caching/deduplication, rate limits, and monthly budget enforcement before controlled beta.
+- Define a Discord player-review form for sanitized recommendation runs with run ID, boss ID, issue category (`boss_fact`, `lineup_legality`, `counterplay`, `skill_or_build`, `explanation`, or `usability`), observed problem, expected improvement, and optional supporting source. Reviewer votes guide tuning and bug discovery but never override deterministic legality or source authority directly.
 - Show selected-lineup untagged skill/passive diagnostics with stable fact IDs, names, source URLs, and short captured snippets. Explicitly exclude them from scoring and coverage; collect expert beta feedback outside the app through a form whose required fields are fact ID, name, source URL, optional suggested capability, and explanation.
 - Preserve RM50/month as the starter beta/demo ceiling unless later evidence changes it.
 
@@ -880,10 +921,11 @@ Acceptance criteria:
 - **I-03:** The guides contain no stale three-call, broad-Cypher production, free-text role-authority, or single-provider instructions.
 - **I-04:** Public beta cannot expose an unlimited unauthenticated paid endpoint.
 - **I-05:** Beta safety decisions are documented before deployment implementation, and guide maintenance remains part of later feature acceptance when behavior changes.
+- **I-06:** Discord recommendation feedback is tied to sanitized run/boss evidence, separates factual or legality defects from subjective strategy/usability feedback, and cannot mutate canonical facts or scoring automatically.
 
 ## Pre-Paid Evaluation Ladder
 
-Paid DeepSeek or OpenRouter testing is blocked until these gates pass in order:
+Paid OpenRouter testing is blocked until these gates pass in order:
 
 1. Capability artifact schema, C5 materialization, and reproducibility.
 2. Canonical identity, ownership, SA, affinity, sidekick, and hard rejection.
@@ -896,8 +938,8 @@ Paid DeepSeek or OpenRouter testing is blocked until these gates pass in order:
 9. Swap re-scoring, rejection, fallback, frozen output, partial results, and degraded mode.
 10. Offline end-to-end feasible and infeasible golden cases.
 11. Post-Feature-G boss-coverage and provider-admission decisions.
-12. Separately qualified direct DeepSeek and/or OpenRouter analyzer runs with captured model metadata and observed usage.
-13. Optional paid judge only for deterministically valid release-evaluation outputs.
+12. Separately qualified DeepSeek V4 Flash, GPT-5.6 Luna, and GLM-5.2 OpenRouter analyzer runs with captured model metadata and observed usage.
+13. Ordered OpenRouter fallback verification and sanitized sample export for the later controlled Discord player-review contract; no AI judge.
 
 Hard gates require 100% legality, zero out-of-bundle IDs, deterministic backend output for identical inputs, at least one valid candidate for every feasible fixture, typed diagnostics for infeasible fixtures, and budget compliance.
 
@@ -906,7 +948,7 @@ Hard gates require 100% legality, zero out-of-bundle IDs, deterministic backend 
 The owning implementation or release feature must update:
 
 - `docs/guides/ETL_GUIDE.md` for capability artifact versioning, replay/materialization, schema migration, evidence diagnostics, and drift repair.
-- `docs/guides/recommendation-validation.md` for candidate readiness, backend role-score inspection, pruning, beam tracing, build/skill packages, analyzer projection, the two-call correction contract, DeepSeek/OpenRouter selection, degraded mode, usage reports, and golden evaluation.
+- `docs/guides/recommendation-validation.md` for candidate readiness, backend role-score inspection, pruning, beam tracing, build/skill packages, analyzer projection, the two-call correction contract, OpenRouter model fallback and served-model attribution, degraded mode, usage reports, and golden evaluation.
 
 Later changes to the taxonomy, scoring policy, candidate contract, provider usage, evaluation commands, or operator workflow must maintain the relevant guide.
 
@@ -920,7 +962,9 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature D: completed; hard filters, backend-owned contextual RoleScores/evidence, deterministic top-eight pools with boss-counter exceptions, and bounded skill/package output are verified.
 - Feature E: completed; late-game assumed compact build packages, exact item compatibility, finite/named allocation validation, assumption/evidence/citation metadata, and catalog-free production projection are verified.
 - Feature F: completed; deterministic capability-template beam generation, full-lineup scoring, build/sidekick legality, diversity, partial/zero diagnostics, and analyzer zero-call handling are verified.
-- Feature G: completed; compact closed-world projection, provider-neutral DeepSeek/OpenRouter offline adapters, strict authority validation, two-call fragment correction, deterministic refinement fallback, and labeled degraded backend output are verified. The required boss/provider architecture checkpoint is next; Features H-I remain planned until that decision is recorded.
+- Feature G: completed; compact closed-world projection, provider-neutral DeepSeek/OpenRouter offline adapters, strict authority validation, two-call fragment correction, deterministic refinement fallback, and labeled degraded backend output are verified.
+- Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
+- Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
@@ -932,7 +976,7 @@ Milestone 5 completes only when:
 - C5 proves reproducible reviewed materialization, D-F prove deterministic legal candidate generation, G proves bounded provider-neutral refinement and fallback, and H proves the admitted corpus and paid-provider gates.
 - Production recommendation uses no PLAN, generated Cypher, retrieval-validation LLM, AI-authored RoleScores, or unbounded roster/catalog projection.
 - Every feasible golden case yields at least one legal coverage-valid backend candidate; every infeasible case returns typed diagnostics without an analyzer call.
-- Direct DeepSeek and/or OpenRouter paid evidence stays within the locked call/token budgets, is provider-attributed, and never depends on repository-stored credentials.
+- OpenRouter paid evidence for each admitted model and the ordered fallback chain stays within the locked call/token budgets, records the actual served model, and never depends on repository-stored credentials.
 - Required operator/manual checks pass; ETL and recommendation guides match current commands, counters, contracts, and failure classifications.
 - Temporary handoffs, generated outputs, obsolete scenarios, superseded workflow artifacts, and duplicate tests have been promoted or purged, and release reconciliation leaves the living roadmap accurate.
 
@@ -941,8 +985,8 @@ Milestone 5 completes only when:
 Feature D has no unresolved authority decision after C5. The following are scheduled evidence-driven decisions rather than permission to widen current scope:
 
 - Exact initial scoring weights within the locked component model.
-- Exact weak-boss golden set and whether post-G evidence justifies staged all-boss expansion.
-- Direct DeepSeek and OpenRouter models/routes admitted for paid Feature H evaluation.
-- Whether cross-provider automatic fallback earns its extra failure and budget complexity; it is off by default in Feature G.
+- Which twenty-five additional unique bosses best satisfy the fixed 5-weak, 10-medium, and 10-strong vacancies while maximizing affinity, mechanic, page-section, parser, and Discord beta-review diversity.
+- Which reasoning setting for each admitted OpenRouter model gives the best structured recommendation quality within the locked token budget; model qualification must decide this before the fallback chain is enabled.
+- How Discord reviewer feedback should be aggregated into scoring, parser, explanation, and usability changes without treating subjective votes as legality authority.
 - Whether optional AI-assisted curation earns its cost.
 - Beta authentication, persistence, feedback storage, per-user limits, and caching policy.

@@ -156,21 +156,25 @@ Readiness signals:
 - The recommendation contract can distinguish usable-now picks from upgrade assumptions.
 - The UI has room to present upgrade suggestions without confusing them with legal current-lineup recommendations.
 
-## Intermediate And Strong Superboss Evaluation Tiers
+## Full Superboss Corpus Expansion And Continuous Admission
 
-Deferred from Milestone 4 because the first navigator should prove legality, mechanics grounding, and useful top-3 recommendations on weak superbosses before expanding difficulty coverage.
+The earlier intermediate/strong evaluation idea was promoted into Milestone 5 Feature G1 as a fixed thirty-boss corpus: ten weak, ten medium, and ten strong recommendation-ready bosses. Comprehensive coverage of the remaining Superbosses index is deferred to a later roadmap milestone so Discord beta evidence can guide priority and the current milestone can still finish evaluation, frontend, and deployment work.
 
 Idea:
 
-- Add intermediate and strong superboss eval groups after the weak-boss golden set is reliable.
-- Use tier labels such as `weak`, `intermediate`, and `strong` in eval metadata.
-- Increase expectations around boss-specific mechanics, stoppers, status handling, turn order, sustain, and execution caveats as tiers get harder.
+- Expand beyond the approved thirty bosses in bounded, versioned batches; never turn index discovery or a live beta request into automatic recommendation support.
+- Track each identity through explicit states such as discovered, source-cached, parsed, fixture-proven, recommendation-ready, unsupported, and stale.
+- Prioritize later batches using Discord-requested bosses, uncovered affinity/mechanics combinations, parser/section shapes, and source freshness rather than difficulty or popularity alone.
+- Add richer phase, stopper, turn-script, status, summon/multi-target, AF, sustain, and execution modeling where the thirty-boss beta reveals that current facts are insufficient.
+- Detect wiki-source drift and revalidate affected bosses without invalidating unrelated supported identities.
+- Keep every expansion batch behind its own `builder-executor -> tdd-loop` boundary and promote only authoritative source manifests, fixtures, and permanent regressions.
 
 Readiness signals:
 
-- The 5 weak-boss eval set passes deterministic legality and factuality gates.
-- Recommendation quality judge feedback is stable enough to compare improvements across releases.
-- Additional boss data has enough mechanics text and affinity coverage to support trustworthy recommendations.
+- All thirty Milestone 5 bosses pass identity, affinity, section, mechanics, provenance, deterministic recommendation, compact-projection, and fallback gates.
+- Discord feedback across weak, medium, and strong cohorts identifies concrete missing bosses or mechanics rather than only requesting a larger count.
+- Feature H establishes stable evaluation, provider accounting, and regression reporting that can compare later corpus batches.
+- Source-refresh policy, crawl limits, identity/variant rules, and per-boss support status are operationally clear.
 
 ## Deterministic Battle Simulation And Win-Probability Estimation
 

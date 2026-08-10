@@ -54,6 +54,7 @@ from .models import (
     SuperbossRow,
     parse_mechanic_reference,
 )
+from .superboss_manifest import manifest_records
 from .scraper import (
     CHROMIUM_PATH,
     _read_soup,
@@ -348,6 +349,11 @@ def _build_superboss_targets(superboss_records: list[dict[str, Any]], config: Cr
     return targets
 
 
+def _build_manifest_superboss_targets(config: CrawlConfig, *, statuses: set[str] | None = None) -> list[dict[str, Any]]:
+    """Build targets only from the explicit G1 allowlist; this is never implicit ETL discovery."""
+    return _build_superboss_targets(manifest_records(statuses=statuses), config)
+
+
 def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]:
     entry = manifest["targets"].setdefault(
         target["id"],
@@ -399,6 +405,7 @@ def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> di
         entry["last_error"] = None
         entry["failure_stage"] = None
         entry["quality_gate_reason"] = None
+    entry["metadata"] = target["metadata"]
     entry["url"] = target["url"]
     entry["expected_selector"] = target["expected_selector"]
     entry["kind"] = target["kind"]
@@ -575,6 +582,8 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
             "parsed_counts": {
                 "superbosses": 1,
                 "mechanics_text_chars": len(row.mechanics_text),
+                "section_bounded": int(row.section_bounded),
+                "recommendation_ready": int(row.recommendation_ready),
             },
             "quality_status": "ok" if row.mechanics_text else "empty",
         }

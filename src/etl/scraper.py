@@ -24,12 +24,14 @@ Critical column mappings (verified against live wiki — see 01-RESEARCH.md):
     col[3] = source/location
 """
 import asyncio
+import hashlib
+import html
 import logging
 import random
 import re
 from pathlib import Path
 from typing import Optional
-from urllib.parse import quote, urljoin
+from urllib.parse import quote, unquote, urljoin
 
 try:
     import nodriver as uc
@@ -395,8 +397,15 @@ def parse_superboss_index(soup: BeautifulSoup) -> list[SuperbossIndexRow]:
     return rows
 
 
-def _fragment_section_nodes(soup: BeautifulSoup, source_url: str):
-    fragment = source_url.rsplit("#", 1)[1] if "#" in source_url else ""
+def _fragment_section_nodes(
+    soup: BeautifulSoup,
+    source_url: str,
+    *,
+    section_anchor: str | None = None,
+    section_end_anchor: str | None = None,
+):
+    fragment = section_anchor or (source_url.rsplit("#", 1)[1] if "#" in source_url else "")
+    fragment = unquote(html.unescape(fragment)).lstrip("#")
     if not fragment:
         return []
     anchor = soup.find(id=fragment) or soup.find("span", id=fragment)
@@ -404,20 +413,64 @@ def _fragment_section_nodes(soup: BeautifulSoup, source_url: str):
         return []
     heading = anchor.find_parent(["h2", "h3", "h4"]) or anchor
     heading_rank = int(heading.name[1]) if getattr(heading, "name", "").startswith("h") else 2
+
+    def boundary_node(value):
+        parent = value.parent
+        classes = parent.get("class", []) if parent and hasattr(parent, "get") else []
+        if parent is not None and "EnemyLocationHeader" in classes:
+            return parent
+        return value
+
+    start_node = boundary_node(heading)
+    end_anchor = None
+    if section_end_anchor:
+        end_fragment = unquote(html.unescape(section_end_anchor)).lstrip("#")
+        end_anchor = soup.find(id=end_fragment) or soup.find("span", id=end_fragment)
+        end_heading = end_anchor.find_parent(["h2", "h3", "h4"]) if end_anchor else None
+        end_node = boundary_node(end_heading) if end_heading else None
+    else:
+        end_heading = None
+        end_node = None
+
+    def next_section_sibling(value):
+        sibling = value.find_next_sibling()
+        if sibling is not None:
+            return sibling
+        parent = value.parent
+        if parent is not None and getattr(parent, "name", None) not in {"body", "html"}:
+            return parent.find_next_sibling()
+        return None
+
     nodes = []
-    sibling = heading.find_next_sibling()
+    sibling = next_section_sibling(start_node)
     while sibling is not None:
+        if end_node is not None and sibling is end_node:
+            break
         if sibling.name in {"h2", "h3", "h4"} and int(sibling.name[1]) <= heading_rank:
             break
         nodes.append(sibling)
-        sibling = sibling.find_next_sibling()
+        sibling = next_section_sibling(sibling)
     return nodes
 
 
-def _boss_search_nodes(soup: BeautifulSoup, source_url: str):
-    section_nodes = _fragment_section_nodes(soup, source_url)
+def _boss_search_nodes(
+    soup: BeautifulSoup,
+    source_url: str,
+    *,
+    section_anchor: str | None = None,
+    section_end_anchor: str | None = None,
+    allow_unbounded: bool = True,
+):
+    section_nodes = _fragment_section_nodes(
+        soup,
+        source_url,
+        section_anchor=section_anchor,
+        section_end_anchor=section_end_anchor,
+    )
     if section_nodes:
         return section_nodes
+    if not allow_unbounded:
+        return []
     content = soup.select_one("#mw-content-text") or soup.select_one("main") or soup.body or soup
     return list(content.find_all(["table", "p", "ul", "ol", "article", "div"], recursive=True))
 
@@ -440,14 +493,13 @@ def _extract_labeled_boss_fields(nodes) -> dict[str, str]:
             if len(cells) < 2:
                 continue
             label = _clean_cell_text(cells[0].get_text(" ", strip=True)).lower().strip(":")
-            for needle, field in label_map.items():
-                if needle in label:
-                    fields.setdefault(field, _cell_text_with_media(cells[1]))
-                    break
+            field = label_map.get(label)
+            if field is not None:
+                fields.setdefault(field, _cell_text_with_media(cells[1]))
     return fields
 
 
-def _boss_mechanics_text(nodes, fallback_soup: BeautifulSoup) -> str:
+def _boss_mechanics_text(nodes, fallback_soup: BeautifulSoup | None = None) -> str:
     parts: list[str] = []
     allowed_terms = re.compile(
         r"skill|move|action|turn|hp|weak|resist|null|absorb|battle|strategy|stopper|summon|"
@@ -462,11 +514,73 @@ def _boss_mechanics_text(nodes, fallback_soup: BeautifulSoup) -> str:
             continue
         if allowed_terms.search(text):
             parts.append(text)
-    if not parts:
+    if not parts and fallback_soup is not None:
         content = fallback_soup.select_one("#mw-content-text") or fallback_soup.body or fallback_soup
         text = _clean_cell_text(content.get_text(" ", strip=True))
         parts.append(text)
     return _clean_cell_text(" ".join(parts))[:5000]
+
+
+_AFFINITY_STATUS_BY_IMAGE = {
+    "weakness.png": "weak",
+    "resistance.png": "resist",
+    "invalid.png": "null",
+    "absorb.png": "absorb",
+    "absorption.png": "absorb",
+}
+_ELEMENT_VALUES = {"Fire", "Water", "Wind", "Earth", "Thunder", "Shade", "Crystal", "Null"}
+_ATTACK_VALUES = {"Slash", "Blunt", "Pierce", "Magic"}
+_AFFINITY_VALUES = _ELEMENT_VALUES | _ATTACK_VALUES
+
+
+def _affinity_from_enemy_details(
+    nodes,
+) -> tuple[dict[str, list[str]], dict[str, str], list[dict[str, str | list[str]]]]:
+    """Read icon-backed affinity rows without treating nearby narrative as data."""
+    values = {field: [] for field in ("weak", "resist", "null", "absorb")}
+    observations: list[dict[str, str | list[str]]] = []
+    observed = False
+    for container_index, container in enumerate(
+        [node for parent in nodes if hasattr(parent, "find_all") for node in parent.find_all("div", class_="EnemyDetailsContainer")]
+    ):
+        titles = container.select(":scope > .EnemyDetailsColTitle > .tooltip")
+        rows = container.select(":scope > .EnemyDetailsCol > .EnemyDetailsRow")
+        if not titles or not rows:
+            continue
+        observed = True
+        local_values = {field: [] for field in ("weak", "resist", "null", "absorb")}
+        for title_index, title in enumerate(titles):
+            image = title.find("img")
+            if image is None:
+                continue
+            field = _AFFINITY_STATUS_BY_IMAGE.get((image.get("alt") or "").lower())
+            if field is None or title_index >= len(rows):
+                continue
+            for value in rows[title_index].find_all("img"):
+                label = (value.get("alt") or "").replace("Wing", "Wind").strip()
+                if label in _AFFINITY_VALUES:
+                    if label not in local_values[field]:
+                        local_values[field].append(label)
+                    if label not in values[field]:
+                        values[field].append(label)
+        observations.append({
+            "observation_index": str(container_index),
+            **local_values,
+        })
+    states = {
+        field: "confirmed_values" if entries else "confirmed_empty" if observed else "unknown"
+        for field, entries in values.items()
+    }
+    return values, states, observations
+
+
+def _section_heading_text(soup: BeautifulSoup, source_url: str, section_anchor: str | None) -> str | None:
+    fragment = section_anchor or (source_url.rsplit("#", 1)[1] if "#" in source_url else "")
+    if not fragment:
+        return None
+    anchor = soup.find(id=unquote(html.unescape(fragment)).lstrip("#"))
+    heading = anchor.find_parent(["h2", "h3", "h4"]) if anchor else None
+    return _clean_cell_text(heading.get_text(" ", strip=True)) if heading else None
 
 
 def parse_superboss_detail(
@@ -476,22 +590,84 @@ def parse_superboss_detail(
 ) -> SuperbossRow:
     """Parse a curated superboss detail page into a RAG-grounded graph row."""
     source_url = source_url or candidate.source_url
-    nodes = _boss_search_nodes(soup, source_url)
+    nodes = _boss_search_nodes(
+        soup,
+        source_url,
+        section_anchor=candidate.section_anchor,
+        section_end_anchor=candidate.section_end_anchor,
+        allow_unbounded=False,
+    )
+    section_bounded = bool(nodes)
     fields = _extract_labeled_boss_fields(nodes)
-    mechanics_text = _boss_mechanics_text(nodes, soup)
+    icon_values, icon_states, affinity_observations = _affinity_from_enemy_details(nodes)
+    parsed_values = {
+        field: _split_boss_values(fields.get(field)) if field in fields else icon_values[field]
+        for field in ("weak", "resist", "null", "absorb")
+    }
+    parsed_states = {
+        field: (
+            "unknown"
+            if parsed_values[field] == ["unknown"]
+            else "confirmed_values"
+            if parsed_values[field]
+            else icon_states[field]
+        )
+        for field in ("weak", "resist", "null", "absorb")
+    }
+    mechanics_text = _boss_mechanics_text(nodes)
+    source_section = _section_heading_text(soup, source_url, candidate.section_anchor)
+    section_anchor = candidate.section_anchor or (source_url.rsplit("#", 1)[1] if "#" in source_url else None)
+    citation_url = source_url if "#" in source_url or not section_anchor else f"{source_url}#{section_anchor}"
+    bounded_text = _clean_cell_text(" ".join(
+        _cell_text_with_media(node) for node in nodes if hasattr(node, "get_text")
+    ))
     raw = {
         "name": candidate.name,
         "source_url": source_url,
         "difficulty_tier": candidate.difficulty_tier,
+        "cohort": candidate.cohort,
         "level": candidate.level,
         "hp": fields.get("hp"),
-        "weak": _split_boss_values(fields.get("weak")),
-        "resist": _split_boss_values(fields.get("resist")),
-        "null": _split_boss_values(fields.get("null")),
-        "absorb": _split_boss_values(fields.get("absorb")),
+        "weak": parsed_values["weak"] or (["unknown"] if parsed_states["weak"] == "unknown" else []),
+        "resist": parsed_values["resist"] or (["unknown"] if parsed_states["resist"] == "unknown" else []),
+        "null": parsed_values["null"] or (["unknown"] if parsed_states["null"] == "unknown" else []),
+        "absorb": parsed_values["absorb"] or (["unknown"] if parsed_states["absorb"] == "unknown" else []),
         "characteristics": candidate.characteristics,
         "mechanic_tags": _mechanic_tags(candidate.characteristics, mechanics_text),
         "mechanics_text": mechanics_text,
+        "canonical_id": candidate.canonical_id or "",
+        "aliases": candidate.aliases,
+        "section_anchor": section_anchor,
+        "section_end_anchor": candidate.section_end_anchor,
+        "source_section": source_section,
+        "section_bounded": section_bounded,
+        "affinity_state": parsed_states,
+        "affinity_evidence": {
+            field: source_section or "section unavailable"
+            for field in ("weak", "resist", "null", "absorb")
+        },
+        "affinity_observations": affinity_observations,
+        "provenance": {
+            "authority": "Another Eden Wiki detail page",
+            "source_url": source_url,
+            "citation_url": citation_url,
+            "source_section": source_section or "",
+            "capture_scope": "explicit section anchor and bounded end anchor",
+            "whole_page_fallback": "false",
+        },
+        "mechanics_evidence": {
+            "source_url": source_url,
+            "source_section": source_section or "",
+            "section_anchor": section_anchor or "",
+            "section_end_anchor": candidate.section_end_anchor or "",
+            "section_text_sha256": hashlib.sha256(bounded_text.encode("utf-8")).hexdigest(),
+            "mechanics_text_truncated": str(len(bounded_text) > len(mechanics_text)).lower(),
+        },
+        "citation_url": citation_url,
+        "variant_relationship": candidate.variant_relationship,
+        "selection_rationale": candidate.selection_rationale,
+        "support_status": candidate.support_status,
+        "recommendation_ready": candidate.support_status == "recommendation_ready" and section_bounded,
     }
     return SuperbossRow.model_validate(raw)
 

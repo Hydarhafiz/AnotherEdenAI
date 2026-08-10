@@ -242,3 +242,38 @@ Record the prompt, roster, sidekicks, SA states, ETL source mode, schema-check
 result, rendered archetypes, all counters, warnings/error type, and any rejected
 diagnostic code/path/allowed IDs. For each rendered lineup, report any suspect
 hero, skill, passive, equipment, Grasta, citation, or Mimi affinity claim.
+
+## 10. Verify the Feature G1 thirty-boss corpus
+
+Feature G1 is a fixed, explicit corpus rather than an all-boss crawl. The
+authoritative source manifest is `src/etl/superboss_manifest.json`; its final
+state contains exactly ten weak (1.0-4.0), ten medium (4.5-8.8), and ten
+strong (9.0-12.0) canonical IDs. Each record carries aliases, an exact detail
+URL, a section anchor, cohort, variant relationship, five selection-rationale
+fields, and `recommendation_ready` status. A canonical ID may appear in only
+one cohort.
+
+Run the deterministic corpus checks:
+
+```bash
+.venv/bin/pytest -q tests/unit/test_superboss_corpus.py
+```
+
+The parser fixtures in `tests/fixtures/superbosses/` are durable source-bound
+replays: `cached_weak_expected.json` covers the five repaired cached bosses,
+`live_expected.json` covers the twenty-five authorized detail captures, and
+`production_expected.json` covers feasible, typed-infeasible, compact, cited,
+and degraded offline outcomes. These fixtures are independent of parser output
+and remain under the same single feature commit as the manifest.
+
+Pass conditions for every boss are canonical identity/alias resolution,
+explicit bounded section ownership, affinity state separation
+(`confirmed_values`, `confirmed_empty`, or `unknown`), mechanics evidence and
+source citation, deterministic replay, production readiness, compact projection
+of the boss facts, and a typed degraded fallback. Unknown affinity is preserved
+as uncertainty; it is never promoted to a weakness or resistance by inference.
+Whole-page mechanics fallback cannot make a boss recommendation-ready.
+
+Do not refresh or expand this corpus from the index during ordinary validation.
+Live refreshes require a new bounded human checkpoint, and Feature H / paid
+provider calls remain outside this gate.

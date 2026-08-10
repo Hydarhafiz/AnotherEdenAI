@@ -1,0 +1,622 @@
+{
+  "manifest_version": "g1-1.0",
+  "source_authority": "Cached Another Eden Wiki Superbosses index/detail pages; index rows are discovery metadata only.",
+  "identity_policy": "canonical_id is the only cohort identity; aliases and variants never create a second cohort count.",
+  "fetch_policy": {
+    "live_fetch_authorization_required": true,
+    "bounded_detail_page_limit": 30,
+    "new_candidate_fetch_limit": 25,
+    "cached_refresh_limit": 5,
+    "allowed_urls_are_exact": true,
+    "recursive_crawl": false,
+    "all_boss_index_admission": false,
+    "fetch_scope": "Exactly these 30 records: 25 proposed_pending_live_fetch candidates plus the five cached_pending_repair weak bosses, one bounded detail-page fetch per canonical identity; no index discovery, all-boss admission, or recursive crawl."
+  },
+  "cohorts": {
+    "weak": {"difficulty_min": 1.0, "difficulty_max": 4.0, "required_count": 10},
+    "medium": {"difficulty_min": 4.5, "difficulty_max": 8.8, "required_count": 10},
+    "strong": {"difficulty_min": 9.0, "difficulty_max": 12.0, "required_count": 10}
+  },
+  "bosses": [
+    {
+      "canonical_id": "zennon-ogres-shadow",
+      "name": "Zennon Ogre's Shadow",
+      "aliases": ["Zennon Ogre's Shadow"],
+      "source_url": "https://anothereden.wiki/w/Zennon_Ogre%27s_Shadow#Ogres_Spike_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_anchor": "Ogres_Spike_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "1.5",
+      "characteristics": "Has resistance to all attributes, Summon Companions",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Companion summoning and all-attribute resistance exercise summon and broad-affinity counterplay.",
+        "affinity": "Cached resistance icons provide an independently parseable all-element sample; remaining states stay explicit.",
+        "parser": "Single-boss enemy-details container with icon-backed elemental rows.",
+        "page_section": "Dedicated Ogres Spike location section.",
+        "discord_beta_review": "High review priority for a recognizable early superboss with summon handling."
+      }
+    },
+    {
+      "canonical_id": "mimi",
+      "name": "Mimi",
+      "aliases": ["Mimi"],
+      "source_url": "https://anothereden.wiki/w/Mimi#Toto_Dreamland_-_Ferris_Wheel_.28Lv.100.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_anchor": "Toto_Dreamland_-_Ferris_Wheel_.28Lv.100.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "1.5",
+      "characteristics": "Random actions / High firepower",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random actions, stacking self-buffs, healing, and high firepower exercise sustain and status-safe fallback.",
+        "affinity": "The cached page has no trustworthy elemental icon state, so unknown is retained rather than inferred.",
+        "parser": "Dedicated location plus skill-table section without an affinity table.",
+        "page_section": "Toto Dreamland Ferris Wheel location section.",
+        "discord_beta_review": "High review priority as a familiar low-tier sustain/readability case."
+      }
+    },
+    {
+      "canonical_id": "cradle-system",
+      "name": "Cradle System",
+      "aliases": ["Cradle System", "Awaken: Saki AS"],
+      "source_url": "https://anothereden.wiki/w/Cradle_System#Procedure",
+      "section_anchor": "Procedure",
+      "section_end_anchor": "Tips",
+      "variant_relationship": "multi-encounter system; one canonical identity",
+      "difficulty_tier": "1.5",
+      "characteristics": "Multiple attack types required",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Multi-unit encounters, multiple attack types, status effects, blow-away, and phase variants exercise compound mechanics.",
+        "affinity": "Per-encounter icon observations must remain section-scoped; aggregate fields cannot silently merge units.",
+        "parser": "Shared page with repeated h3/h4 encounter sections and a bounded Procedure-to-Tips range.",
+        "page_section": "Procedure owns the encounter mechanics; Tips is the explicit boundary.",
+        "discord_beta_review": "High review priority for a multi-boss page where section leakage is especially harmful."
+      }
+    },
+    {
+      "canonical_id": "insula-ventorum",
+      "name": "Insula Ventorum",
+      "aliases": ["Insula Ventorum"],
+      "source_url": "https://anothereden.wiki/w/Insula_Ventorum#Macminal_Museum_-_Off_Limits_Floor_.28Lv.90.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_anchor": "Macminal_Museum_-_Off_Limits_Floor_.28Lv.90.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "1.5",
+      "characteristics": "Random action, large percentage damage, high magnification resistance buff",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random actions, fixed damage, confusion, percentage damage, and resistance buffs exercise degraded-risk explanations.",
+        "affinity": "No trustworthy elemental state is present in the cached detail; unknown remains distinct.",
+        "parser": "Dedicated location section with a compact random-skill table.",
+        "page_section": "Macminal Museum Off Limits Floor location section.",
+        "discord_beta_review": "High review priority for fixed/percentage damage and confusion counterplay."
+      }
+    },
+    {
+      "canonical_id": "nameless-girl",
+      "name": "Nameless Girl",
+      "aliases": ["Nameless Girl", "Sophie"],
+      "source_url": "https://anothereden.wiki/w/Nameless_Girl#Spacetime_Rift_.28Lv.90.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_anchor": "Spacetime_Rift_.28Lv.90.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "1.0",
+      "characteristics": "Endurance Battle for 15 turns, need to win by Turn 20",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Another Force lock, turn-15 endurance, HP-to-one action, full weakness window, and unmitigable damage exercise timing gates.",
+        "affinity": "Attack-type resistance icons and a phase-specific weakness are kept separate from static affinity fields.",
+        "parser": "Dedicated location section with phase text and skill tables.",
+        "page_section": "Spacetime Rift location section, excluding Strategy and Dialogues.",
+        "discord_beta_review": "High review priority for a scripted timing and endurance case."
+      }
+    },
+    {
+      "canonical_id": "imbrium-basin",
+      "name": "Imbrium Basin",
+      "aliases": ["Imbrium Basin"],
+      "source_url": "https://anothereden.wiki/w/Imbrium_Basin",
+      "characteristics": "Random action, high firepower, high magnification resistance buff",
+      "section_anchor": "Last_Island_.28Lv.80.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "1.0",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random action, high firepower, and resistance-buff pressure add a simple burst-versus-sustain case.",
+        "affinity": "Proposed as a low-tier elemental-state candidate; exact states require the bounded detail fetch.",
+        "parser": "Ordinary dedicated-page candidate, contrasting shared-page and fragment candidates.",
+        "page_section": "Section anchor intentionally pending independent inspection.",
+        "discord_beta_review": "Medium review priority for an accessible baseline case."
+      }
+    },
+    {
+      "canonical_id": "shadow-of-chronos-menas",
+      "name": "Shadow of Chronos Menas",
+      "aliases": ["Shadow of Chronos Menas"],
+      "source_url": "https://anothereden.wiki/w/Shadow_of_Chronos_Menas",
+      "characteristics": "Resistance change every turn, AF sealed, troublesome status ailments, damage at the start of turn, large percentage damage",
+      "section_anchor": "Chronos.27_Umbra_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "1.0",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Turn-by-turn resistance changes, AF seal, status pressure, start-of-turn damage, and percentage damage diversify weak mechanics.",
+        "affinity": "Dynamic resistance is an explicit state-transition target rather than a static weakness assumption.",
+        "parser": "Ordinary page candidate for phase/state-change parsing.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for AF-disabled and changing-affinity counterplay."
+      }
+    },
+    {
+      "canonical_id": "rotte-rivel",
+      "name": "Rotte Rivel",
+      "aliases": ["Rotte Rivel"],
+      "source_url": "https://anothereden.wiki/w/Rotte_Rivel",
+      "characteristics": "High speed/annoying status ailments",
+      "section_anchor": "Moonlight_Forest_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "4.0",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "High speed and status ailments exercise speed ordering and protection coverage.",
+        "affinity": "Proposed to widen weak-cohort state coverage after independent parsing.",
+        "parser": "Ordinary page candidate; exact section boundary is intentionally not assumed from the index.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "Medium review priority for status and speed pressure."
+      }
+    },
+    {
+      "canonical_id": "regenwurm",
+      "name": "Regenwurm",
+      "aliases": ["Regenwurm"],
+      "source_url": "https://anothereden.wiki/w/Regenwurm",
+      "characteristics": "Companion summoning, multiple attack types required, special gimmick",
+      "section_anchor": "Charol_Plains_-_Cat_Road_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "4.0",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Companion summoning, multiple attack types, and a special gimmick diversify weak encounter structure.",
+        "affinity": "Proposed to test mixed attack/element coverage once independently sourced.",
+        "parser": "Ordinary page candidate with likely summon or multi-entity section risk.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a summon and multi-type beginner case."
+      }
+    },
+    {
+      "canonical_id": "large-white-lie-bug",
+      "name": "Large White Lie Bug",
+      "aliases": ["Large White Lie Bug"],
+      "source_url": "https://anothereden.wiki/w/Large_White_Lie_Bug",
+      "characteristics": "High durability, many barrier times",
+      "section_anchor": "Mementos_.28Very_Hard.29_.28Lv.80.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "3.5",
+      "cohort": "weak",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "High durability and repeated barriers add a barrier-pierce and long-fight readiness case.",
+        "affinity": "Proposed to test a defensive-affinity profile distinct from summon and AF cases.",
+        "parser": "Ordinary page candidate for repeated barrier wording.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "Medium review priority for barrier handling and endurance."
+      }
+    },
+    {
+      "canonical_id": "celestial-mushroom",
+      "name": "Celestial Mushroom",
+      "aliases": ["Celestial Mushroom"],
+      "source_url": "https://anothereden.wiki/w/Celestial_Mushroom",
+      "characteristics": "Random actions/annoying status ailments",
+      "section_anchor": "Rippling_Forest_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "4.5",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random actions and status ailments bridge weak and medium uncertainty handling.",
+        "affinity": "Proposed as a status-heavy medium affinity sample pending detail verification.",
+        "parser": "Ordinary page candidate.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "Medium review priority for a recognizable transition-tier case."
+      }
+    },
+    {
+      "canonical_id": "berserk-tempered-hound",
+      "name": "Berserk Tempered Hound",
+      "aliases": ["Berserk Tempered Hound"],
+      "source_url": "https://anothereden.wiki/w/Berserk_Tempered_Hound",
+      "characteristics": "Special gimmick with high firepower and attribute attacks",
+      "section_anchor": "Parallel_Unigan_Underground_Path_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "4.5",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "A special gimmick with high firepower and attribute attacks exercises affinity-counter selection.",
+        "affinity": "Fire/attribute behavior is a targeted diversity hypothesis, not an admitted fact.",
+        "parser": "Ordinary page candidate for mechanic-specific wording.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a clear elemental-counterplay case."
+      }
+    },
+    {
+      "canonical_id": "menreiki",
+      "name": "Menreiki",
+      "aliases": ["Menreiki"],
+      "source_url": "https://anothereden.wiki/w/Menreiki",
+      "characteristics": "Troublesome status ailments, enemy splitting",
+      "section_anchor": "Funeral_Cavern_B1F_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone; paired encounter kept separate from strong candidate",
+      "difficulty_tier": "5.2",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Status ailments and enemy splitting exercise multi-target and order-sensitive counterplay.",
+        "affinity": "Proposed as a multi-target medium affinity sample pending source capture.",
+        "parser": "Ordinary single-page identity, contrasted with the shared paired strong page.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for split-enemy behavior."
+      }
+    },
+    {
+      "canonical_id": "terra-nivium",
+      "name": "Terra Nivium",
+      "aliases": ["Terra Nivium"],
+      "source_url": "https://anothereden.wiki/w/Terra_Nivium",
+      "characteristics": "Random action, high fire power, buff debuff reset, high magnification debuff, high magnification resistance buff",
+      "section_anchor": "Sky_Fortress_Eeza_.28Lv.120.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone; 20,000 B.C. identity is separate",
+      "difficulty_tier": "5.5",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random action, buff/debuff reset, and magnification pressure exercise long-fight scoring.",
+        "affinity": "Proposed as a reset/resistance profile distinct from the future 20,000 B.C. identity.",
+        "parser": "Ordinary page with explicit identity separation from a same-name-era variant.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "Medium review priority for reset and resistance management."
+      }
+    },
+    {
+      "canonical_id": "unseen",
+      "name": "Unseen",
+      "aliases": ["Unseen"],
+      "source_url": "https://anothereden.wiki/w/Unseen",
+      "characteristics": "High firepower, random action, meta to attribute zone, preemptive action, short-term decisive battle",
+      "section_anchor": "Chasselas_Crystal_Region_-_Subsector_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "6.3",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random actions, preemptive behavior, attribute-zone interaction, and short decisive battle pressure diversify medium cases.",
+        "affinity": "Zone interaction targets a state-aware affinity fixture.",
+        "parser": "Ordinary page candidate for preemptive and zone wording.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for preemptive and zone counterplay."
+      }
+    },
+    {
+      "canonical_id": "shadow-of-teyul-menas",
+      "name": "Shadow of Teyul Menas",
+      "aliases": ["Shadow of Teyul Menas"],
+      "source_url": "https://anothereden.wiki/w/Shadow_of_Teyul_Menas",
+      "characteristics": "Resistance to everything but crystal, high firepower, percentage attack at turn end",
+      "section_anchor": "Schnaud_Castle_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "6.6",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Resistance to everything but crystal, high firepower, and end-of-turn percentage damage target extreme-affinity and sustain behavior.",
+        "affinity": "Explicit crystal exception is a high-value affinity-diversity target.",
+        "parser": "Ordinary page candidate.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for an unusual crystal-only counter profile."
+      }
+    },
+    {
+      "canonical_id": "kudang",
+      "name": "Kudang",
+      "aliases": ["Kudang"],
+      "source_url": "https://anothereden.wiki/w/Kudang",
+      "characteristics": "High firepower, companion summon, MP damage, troublesome status ailments, counter when defeated",
+      "section_anchor": "Land_of_Ro:_Dungeon_Ruins_Cell_5A_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "7.5",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Companion summon, MP damage, status ailments, and a defeat counter exercise resource and fallback gates.",
+        "affinity": "Proposed as a summon/resource medium sample pending exact states.",
+        "parser": "Ordinary page candidate.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for MP pressure and defeat-counter handling."
+      }
+    },
+    {
+      "canonical_id": "true-fornjot",
+      "name": "True Fornjot",
+      "aliases": ["True Fornjot", "Fornjot (Superboss)"],
+      "source_url": "https://anothereden.wiki/w/Fornjot#Superboss",
+      "characteristics": "Many barriers, zone development, back row blow away",
+      "section_anchor": "Superboss",
+      "section_end_anchor": "Awards",
+      "variant_relationship": "page variant; explicit Superboss section",
+      "difficulty_tier": "8.6",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Repeated barriers, zone development, and back-row blow-away exercise sectioned phase and reserve handling.",
+        "affinity": "Proposed as a zone/barrier medium sample pending exact icon states.",
+        "parser": "Explicit fragment URL tests page-variant parsing.",
+        "page_section": "The index supplies a Superboss fragment; the boundary still requires independent inspection.",
+        "discord_beta_review": "High review priority for a variant-page and reserve-displacement case."
+      }
+    },
+    {
+      "canonical_id": "caroline-justine",
+      "name": "Caroline & Justine",
+      "aliases": ["Caroline & Justine"],
+      "source_url": "https://anothereden.wiki/w/Caroline_%26_Justine",
+      "characteristics": "High speed, high firepower, zone expansion, zone release, large damage when stopped",
+      "section_anchor": "Caroline_-_Lucniva_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": "Wide_Screen_Battle_Table",
+      "variant_relationship": "multi-entity encounter",
+      "difficulty_tier": "8.8",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "High speed, zone expansion/release, and stopped damage exercise paired-entity and timing behavior.",
+        "affinity": "Proposed as a paired zone-affinity sample distinct from single-entity pages.",
+        "parser": "Shared multi-entity identity tests page-section ownership.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a known paired encounter."
+      }
+    },
+    {
+      "canonical_id": "water-alter-force",
+      "name": "Water Alter Force",
+      "aliases": ["Water Alter Force"],
+      "source_url": "https://anothereden.wiki/w/Water_Alter_Force",
+      "characteristics": "High HP, status recovery, zone destruction when using stopper, zone deployment, skill gauge",
+      "section_anchor": "Farmlands_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone force variant",
+      "difficulty_tier": "8.8",
+      "cohort": "medium",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Status recovery, zone destruction at a stopper, zone deployment, and skill-gauge pressure exercise counter changes.",
+        "affinity": "Water-named force variant targets explicit elemental coverage, pending detail verification.",
+        "parser": "Ordinary dedicated-page force variant.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for stopper-driven zone changes."
+      }
+    },
+    {
+      "canonical_id": "thunder-alter-force",
+      "name": "Thunder Alter Force",
+      "aliases": ["Thunder Alter Force"],
+      "source_url": "https://anothereden.wiki/w/Thunder_Alter_Force",
+      "characteristics": "Troublesome status abnormalities, Zone destruction when using a stopper, Zone deployment, Skill gauge",
+      "section_anchor": "Farmlands_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone force variant",
+      "difficulty_tier": "9.0",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Status abnormalities, stopper-driven zone destruction, zone deployment, and skill-gauge pressure start the strong cohort with a bounded elemental case.",
+        "affinity": "Thunder-named force variant targets elemental-state diversity, pending independent evidence.",
+        "parser": "Ordinary dedicated-page force variant.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a strong but legible zone/stopper case."
+      }
+    },
+    {
+      "canonical_id": "eps-245-quadoxin",
+      "name": "EPS-245 Quadoxin",
+      "aliases": ["EPS-245 Quadoxin"],
+      "source_url": "https://anothereden.wiki/w/EPS-245_Quadoxin",
+      "characteristics": "High Speed/High Magnification Resist Buff/Stuffed by Removing Buffs/Long Battle/High Magnification Debuff/Defeat Required in 1 Turn after Stopper",
+      "section_anchor": "Nilva_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "9.2",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "High speed, resistance-buff removal, long battle, debuff pressure, and one-turn post-stopper defeat exercise strict sequencing.",
+        "affinity": "Proposed as a resistance-management strong sample pending exact values.",
+        "parser": "Ordinary page candidate for stopper and one-turn phase extraction.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a hard timing gate."
+      }
+    },
+    {
+      "canonical_id": "calamity-serpent",
+      "name": "Calamity Serpent",
+      "aliases": ["Calamity Serpent"],
+      "source_url": "https://anothereden.wiki/w/Calamity_Serpent",
+      "characteristics": "Additional resistance・High fixed damage・Have resistance to all attributes・Stopper attack",
+      "section_anchor": "Shrine_of_the_Sealed_Blade_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "9.6",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Additional/all-attribute resistance, high fixed damage, and stopper attack exercise hard affinity rejection.",
+        "affinity": "All-attribute resistance is a high-value strong affinity-diversity target.",
+        "parser": "Ordinary page candidate.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for an affinity-gated strong boss."
+      }
+    },
+    {
+      "canonical_id": "terra-nivium-20000-bc",
+      "name": "Terra Nivium 20,000 B.C.",
+      "aliases": ["Terra Nivium 20,000 B.C."],
+      "source_url": "https://anothereden.wiki/w/Terra_Nivium_20,000_B.C.",
+      "characteristics": "Random actions, companion summons, short-term decisive battles, ZONE development",
+      "section_anchor": "Hokishi_Forest_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "era variant; distinct from Terra Nivium",
+      "difficulty_tier": "9.8",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Random actions, companion summons, short decisive battle pressure, and zone development exercise compound strong behavior.",
+        "affinity": "Era variant provides a separate identity for any differing affinity set; no cross-band aliasing is permitted.",
+        "parser": "Ordinary page with explicit same-name variant identity.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for variant-aware summon and zone counterplay."
+      }
+    },
+    {
+      "canonical_id": "demon-spider-menreiki",
+      "name": "Demon Spider & Menreiki",
+      "aliases": ["Demon Spider & Menreiki"],
+      "source_url": "https://anothereden.wiki/w/Demon_Spider_%26_Menreiki",
+      "characteristics": "High speed, enemy splitting, troublesome status ailments, multi-attribute organization required",
+      "section_anchor": "Demon_Spider_-_Nazrik_Underground_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": "Rotation",
+      "variant_relationship": "multi-entity encounter; separate from Menreiki",
+      "difficulty_tier": "10.4",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "High speed, enemy splitting, status ailments, and multi-attribute formation exercise multi-entity coverage.",
+        "affinity": "Multi-attribute organization is a direct strong-cohort affinity-diversity target.",
+        "parser": "Shared multi-entity page shape, deliberately separate canonical identity from Menreiki.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for order-sensitive multi-target play."
+      }
+    },
+    {
+      "canonical_id": "shadow-of-the-scales",
+      "name": "Shadow of the Scales",
+      "aliases": ["Shadow of the Scales"],
+      "source_url": "https://anothereden.wiki/w/Shadow_of_the_Scales",
+      "characteristics": "High endurance, all resistance, large damage when stopped, preemptive attack, zone deployment, must be beaten in 15 turns or less to unlock Shadow of the Swordsman",
+      "section_anchor": "Iscariot_-_Twilight_Hour_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": "Where_to_find_Shadow_of_the_Scales",
+      "variant_relationship": "standalone",
+      "difficulty_tier": "10.9",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "All resistance, preemptive attack, zone deployment, stopped damage, and a 15-turn unlock condition exercise hard gates.",
+        "affinity": "All-resistance profile targets a distinct strong affinity state.",
+        "parser": "Ordinary page candidate for unlock and stopper timing.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a strict turn-limit case."
+      }
+    },
+    {
+      "canonical_id": "white-tiger",
+      "name": "White Tiger",
+      "aliases": ["White Tiger"],
+      "source_url": "https://anothereden.wiki/w/White_Tiger",
+      "characteristics": "High HP, high firepower, ZONE destruction, ANOTHER ZONE deployment, buff debuff reset, random target, attack avoidance, magic attacks",
+      "section_anchor": "Parallel_Time_Layer_-_Kunlun_Mountains_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "11.0",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Zone destruction, Another Zone, reset, random targeting, attack avoidance, and magic attacks exercise broad counterplay.",
+        "affinity": "Proposed as a zone/avoidance strong sample pending exact states.",
+        "parser": "Ordinary page candidate for zone and random-target sections.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for modern zone and avoidance mechanics."
+      }
+    },
+    {
+      "canonical_id": "seiryu",
+      "name": "Seiryu",
+      "aliases": ["Seiryu"],
+      "source_url": "https://anothereden.wiki/w/Seiryu",
+      "characteristics": "High HP, high damage, no zone deployment, troublesome abnormal status, buff/debuff reset, damage reduction during AF, high multiplier resistance, high multiplier resistance debuff, magic attack restriction",
+      "section_anchor": "Kamukura_Peak_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "11.2",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "No-zone restriction, status pressure, reset, AF damage reduction, resistance, and magic restriction exercise negative constraints.",
+        "affinity": "No-zone and magic-restriction behavior targets a nonstandard strong matchup profile.",
+        "parser": "Ordinary page candidate for explicit prohibitions.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for a boss that punishes default zone play."
+      }
+    },
+    {
+      "canonical_id": "time-anti-spiral",
+      "name": "Time Anti-Spiral",
+      "aliases": ["Time Anti-Spiral"],
+      "source_url": "https://anothereden.wiki/w/Time_Anti-Spiral",
+      "characteristics": "High magnification skill debuff strict prohibition, HP fixed damage, interception, accumulation management, high magnification resistance debuff, long battle, high endurance",
+      "section_anchor": "Cochlea_Kingdom_-_Nona.27s_Room_.28Lv.110.29.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": "Ease_of_Difficulty",
+      "variant_relationship": "standalone",
+      "difficulty_tier": "11.3",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "Interception, accumulation management, fixed damage, long battle, and debuff/resistance pressure exercise stateful strong behavior.",
+        "affinity": "Proposed as an accumulation/interception profile distinct from zone-heavy candidates.",
+        "parser": "Ordinary page candidate for repeated-state and long-battle extraction.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for complex state tracking."
+      }
+    },
+    {
+      "canonical_id": "aloof-wing",
+      "name": "Aloof Wing",
+      "aliases": ["Aloof Wing"],
+      "source_url": "https://anothereden.wiki/w/Aloof_Wing",
+      "characteristics": "Ultra-high HP, first-strike action, second-strike action, MP damage, ZONE destruction, high multiplier resistance, blow away, fixed damage when stopped",
+      "section_anchor": "Edax_Turialba_Top_Floor_.5B1.5D.5B2.5D_.5B3.5D",
+      "section_end_anchor": null,
+      "variant_relationship": "standalone",
+      "difficulty_tier": "11.3",
+      "cohort": "strong",
+      "support_status": "recommendation_ready",
+      "selection_rationale": {
+        "mechanics": "First/second strikes, MP damage, zone destruction, blow-away, fixed damage at stopper, and high HP diversify strong execution.",
+        "affinity": "Proposed as a resource and displacement profile pending exact affinity states.",
+        "parser": "Ordinary page candidate for multiple action sections.",
+        "page_section": "Section anchor pending independent inspection.",
+        "discord_beta_review": "High review priority for turn-order and MP-pressure feedback."
+      }
+    }
+  ]
+}

@@ -185,13 +185,13 @@ This file stores source references used during planning discussions. It separate
 
 #### External Model And Cost References
 
-- Title: OpenRouter public model metadata API
+- Title: Historical OpenRouter public model metadata API snapshot
   URL: https://openrouter.ai/api/v1/models
   Source type: provider API metadata
   Date added: 2026-06-25
   Related area: OpenRouter model selection and cost planning
   Relevance: Public metadata inspected on 2026-06-25 showed `moonshotai/kimi-k2.6` available with structured outputs and tool support, 262144-token context, input pricing around USD 0.66 per 1M tokens, output pricing around USD 3.41 per 1M tokens, and cached-input pricing around USD 0.144 per 1M tokens.
-  Caveats/open questions: Pricing, availability, context windows, provider routing, and supported parameters can change. Recheck immediately before release testing or public beta.
+  Caveats/open questions: This 2026-06-25 Kimi snapshot is superseded for model selection by revised PG-02 on 2026-08-10. Pricing, availability, context windows, provider routing, and supported parameters can change; recheck immediately before release testing or public beta.
 
 - Title: Usage Accounting
   URL: https://openrouter.ai/docs/cookbook/administration/usage-accounting
@@ -216,6 +216,54 @@ This file stores source references used during planning discussions. It separate
   Related area: Milestone 5 model capability filtering, pricing snapshots, and release qualification
   Relevance: Documents the Models API fields for stable model identity, context and completion limits, pricing, supported parameters, and provider metadata. It also supports filtering by capabilities such as structured outputs and sorting by price, latency, throughput, or context size.
   Caveats/open questions: Model inventory, pricing, limits, and supported parameters are mutable external facts. Milestone acceptance should require a captured release-time metadata snapshot rather than hard-code today's catalog claims.
+
+- Title: Post-Feature-G boss-corpus audit
+  URL: local `data/raw/indexes/superbosses.html`, local `data/parsed/v1.5.0/superbosses/`, local `src/etl/scraper.py`, local `src/workflow/production.py`, local `src/workflow/candidates.py`, local `src/workflow/analyzer.py`
+  Source type: cached source, parsed artifacts, and repository implementation
+  Date added: 2026-08-09
+  Related area: PG-01 boss readiness and Feature G1 admission
+  Relevance: The cached index has 178 rows and 176 distinct discovered names, but only five detail pages are cached. It contains 35 unique names at difficulty 1.0-4.0, 33 rows at 4.5-8.8, and 109 unique names at 9.0-12.0; Uquaji appears at both 5.5 and 10.8 and therefore illustrates why tier rows cannot bypass identity/variant review. The configured seven-name weak set materializes five bosses. All five parsed bosses retain source URLs and mechanics text but have unknown weakness/null/absorb data; one parsed resistance field contains narrative contamination. Whole-page fallback can cross section boundaries, and current Feature G tests use synthetic boss facts rather than independent per-boss fixtures.
+  Caveats/open questions: Index identity and decimal difficulty are discovery/selection metadata only. Zero bosses currently prove the complete identity, affinity, section, mechanics, attribution, independent-fixture, and production-path readiness chain. Live page content was not independently captured for this revision, so the approved 30-boss selection must use the versioned cache unless a separate live-fetch checkpoint is authorized and succeeds.
+
+- Title: DeepSeek Models, Pricing, JSON Output, and Chat Completions
+  URL: https://api-docs.deepseek.com/quick_start/pricing, https://api-docs.deepseek.com/guides/json_mode/, https://api-docs.deepseek.com/api/create-chat-completion/
+  Source type: official DeepSeek documentation
+  Date added: 2026-08-09
+  Related area: Feature G offline adapter compatibility and deferred direct-provider route
+  Relevance: Current official metadata names `deepseek-v4-flash` and `deepseek-v4-pro`. Chat Completions exposes prompt, cache-hit, cache-miss, completion, reasoning, and total-token usage. Direct JSON Output currently uses `response_format.type=json_object`, not the strict `json_schema` payload shared by the Feature G offline adapters.
+  Caveats/open questions: Direct DeepSeek paid qualification is deferred from Milestone 5 by the 2026-08-10 revision. The adapter remains compatibility evidence only; no direct credential or paid call is required for the Discord beta.
+
+- Title: OpenRouter beta analyzer model metadata
+  URL: https://openrouter.ai/api/v1/models, https://openrouter.ai/deepseek/deepseek-v4-flash-0731, https://openrouter.ai/openai/gpt-5.6-luna, https://openrouter.ai/z-ai/glm-5.2
+  Source type: official OpenRouter model metadata API
+  Date added: 2026-08-10
+  Related area: revised PG-02 OpenRouter model admission
+  Relevance: Current metadata lists `deepseek/deepseek-v4-flash-0731`, `openai/gpt-5.6-luna`, and `z-ai/glm-5.2` with `response_format` and `structured_outputs` support. The revised order is DeepSeek primary, GPT-5.6 Luna first fallback, and GLM-5.2 final fallback.
+  Caveats/open questions: Catalog metadata, ranking, pricing, reasoning defaults, and routed provider behavior are mutable. Feature H must capture each exact identity and independently verify strict schema and authority behavior; leaderboard position alone is not application evidence.
+
+- Title: OpenRouter Model Fallbacks
+  URL: https://openrouter.ai/docs/guides/routing/model-fallbacks
+  Source type: official OpenRouter documentation
+  Date added: 2026-08-10
+  Related area: revised PG-02 ordered beta fallback
+  Relevance: Documents the ordered `models` array, fallback triggers for routing errors such as downtime and rate limits, charging according to the model that ultimately answers, and response attribution through the returned `model` field. This permits three ordered models inside one OpenRouter request without adding an application-managed retry.
+  Caveats/open questions: A successful response that later fails local JSON-schema or backend-authority validation is not documented as a fallback trigger. Feature H must preserve the two-call application cap, distinguish OpenRouter-internal fallback from fragment correction, and verify actual served-model usage/cost evidence.
+
+- Title: OpenRouter Model Rankings
+  URL: https://openrouter.ai/rankings#leaderboard-table
+  Source type: official OpenRouter ranking page
+  Date added: 2026-08-10
+  Related area: beta analyzer candidate discovery
+  Relevance: Provides live rankings based on benchmarks and aggregate usage. It supports selecting models for qualification but does not measure Another Eden boss-lineup factuality, legality, structured-output reliability, or explanation quality.
+  Caveats/open questions: The ranking is mutable and must not become an acceptance oracle. Deterministic fixtures and Discord player-reviewer feedback govern project-specific quality.
+
+- Title: KL USD/MYR Reference Rate
+  URL: https://financialmarkets.bnm.gov.my/data-download-kl-usd-myr-reference-rate
+  Source type: Bank Negara Malaysia financial-markets reference data
+  Date added: 2026-08-10
+  Related area: PG-02 indicative RM cost projection
+  Relevance: Using the latest audit-visible 4.0797 MYR-per-USD reference with the locked 33k maximum input plus 6k maximum output budgets and current OpenRouter metadata yields rounded worst-case logical-request estimates of about RM0.02 for DeepSeek V4 Flash, RM0.03 for GPT-5.6 Luna, and RM0.02 for GLM-5.2. Since OpenRouter charges the model that ultimately answers, the ordered chain is conservatively below about RM0.03 per logical request, RM0.90 for thirty one-run boss cases, or RM2.70 for one worst-case run per boss against each of the three models.
+  Caveats/open questions: This is an indicative, time-bound planning snapshot, not an acceptance price. It excludes payment/credit fees and taxes. Feature H must use actual provider-reported cost and a fresh captured exchange rate; model fallback and fragment correction must remain separately observable.
 
 
 #### Feature B/C Grasta Legality And Build Strategy
@@ -564,6 +612,10 @@ This file stores source references used during planning discussions. It separate
 
 #### Planning Decisions
 
+- Planning decision revised with human approval on 2026-08-10 (PG-01): Keep post-Feature-G Disposition 2 and Feature G1 before Feature H, expanding its fixed exit gate to thirty unique recommendation-ready bosses. The cohorts are ten weak at wiki difficulty 1.0-4.0, ten medium at 4.5-8.8, and ten strong at 9.0-12.0. The five cached weak bosses count only after identity, affinity-state, section-bounded mechanics, provenance, replay, and independent production-fixture repair, leaving twenty-five additional unique identities to admit. Selection within each band prioritizes mechanics, affinity, parser, page-section, and Discord beta-review diversity. Index discovery or difficulty never grants recommendation support; all-boss scraping, duplicate cross-band counting, automatic admission, and comprehensive coverage claims remain out of scope.
+- Planning decision revised on 2026-08-10 (PG-02): Use OpenRouter only for Milestone 5 paid beta qualification. The ordered chain is `deepseek/deepseek-v4-flash-0731`, `openai/gpt-5.6-luna`, then `z-ai/glm-5.2`; direct DeepSeek and `moonshotai/kimi-k2.6` are deferred. Qualify all three models independently before enabling OpenRouter's server-managed `models` fallback array, keep at most two application calls, capture the actual served model and complete available usage/cost metadata, and retain local schema/authority validation. Model rankings guide candidate selection but are not acceptance evidence. No mutable catalog value or credential is locked into repository configuration or acceptance.
+- Planning decision revised on 2026-08-10 (PG-03): Feature H remains blocked until Feature G1 completes and the three individual OpenRouter routes plus ordered fallback/accounting behavior pass offline verification. Paid calls and live boss-page fetches require separate explicit human authorization. Discord Another Eden players, not an AI judge, provide subjective beta feedback; deterministic backend gates remain the legality/factuality authority.
+- Feature G1 completion record: the exact thirty-boss manifest, five repaired cached weak fixtures, twenty-five bounded live section fixtures, independent expected facts, production outcomes, provenance fields, compact citations, and degraded fallback checks passed the deterministic G1 gates. Temporary live-fetch outputs were kept outside the repository for fixture promotion and are not release evidence; Feature H remains unstarted.
 - Planning decision on 2026-07-08: Feature C2 will model distinct, source-provable defensive mechanics rather than ETL-level umbrella labels such as `mitigation`, `healing`, or permanent tank/healer roles. Feature D will deterministically derive contextual coverage and RoleScores from the proven atomic mechanics; the analyzer LLM may explain or rank supplied candidates but may not invent or independently certify mandatory defensive coverage.
 - Planning decision on 2026-07-08: Feature C2 will expand atomic capability review and materialization to `SidekickSkill` records so sidekick revive, healing, cleanse, and defensive support can participate in deterministic candidate coverage. This reopens the affected C1 record-type, stable-ID, evidence, diagnostics, graph-materialization, and drift contracts before C2 review resumes; the previously generated C2 batch 2 is superseded and must be regenerated after the vocabulary/tooling revision.
 - Planning decision on 2026-07-08: C2 will also review and materialize `SidekickAura` capabilities. Sidekick evidence will record `main_only` availability for auto/charge-skill effects and `main_or_sub` availability for aura effects, together with captured activation conditions; Feature D must respect this placement availability when deriving coverage and scoring sidekick value.
@@ -595,7 +647,7 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-07-01: Burst, sustain, and hybrid templates express mandatory/optional capability coverage rather than rigid hero-role slots. Selected skill/build evidence, legal reserves, and legal sidekick behavior prove coverage.
 - Planning decision on 2026-07-01: Sparse inputs produce diagnostics; partial viability returns partial valid results; one to four candidates may reach the analyzer; zero candidates return structured causes without an analyzer call.
 - Planning decision on 2026-07-01: Initial analyzer gates are 25k input/4k output for the initial call, 8k input/2k output for correction, 30k cumulative target, and 40k cumulative hard acceptance ceiling. Budget failure uses deterministic degraded fallback.
-- Planning decision on 2026-07-01: Paid testing is blocked until deterministic legality, scoring, packages, templates, beam bounds, projection, swaps, partial-output, and offline golden cases pass. Paid judge use is offline and only after deterministic validity.
+- Planning decision on 2026-07-01: Paid testing remains blocked until deterministic legality, scoring, packages, templates, beam bounds, projection, swaps, partial-output, and offline golden cases pass. Its optional paid-judge clause is superseded on 2026-08-10 by structured Discord player-reviewer feedback with no AI judge.
 - Planning decision on 2026-07-01: Plan updates to `docs/guides/ETL_GUIDE.md` and `docs/guides/recommendation-validation.md` during implementation. Authentication, persistence, rate limiting, and deployment safeguards follow the proven recommendation core.
 
 - Planning decision on 2026-07-05: Reopen Feature C and block Feature D. Replace broad ETL role assignment with reviewed atomic capability and dependency extraction; contextual character roles are derived only at query time from proven capabilities and matchup/package context.
@@ -636,13 +688,13 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-06-29: Every displayed lineup must pass all hard legality checks. After targeted correction retries, invalid lineups are discarded; warnings may explain rejected or replaced proposals but must not present incompatible characters, skills, equipment, or Grasta as part of a valid lineup. Valid lineups may still be returned as a partial result set.
 - Planning decision on 2026-06-29: Reopen Feature B as a data-contract prerequisite. Feature B must preserve distinct Grasta variants, personality/weapon discriminators, finite-versus-repeatable acquisition cardinality, and canonical character identities. Feature C will consume those corrected facts for candidate-constrained generation, independent lineup validation, targeted retries, partial valid results, and warnings.
 - Planning decision on 2026-06-25: Use free/local models for fast development, including the current `nvidia/nemotron-3-super-120b-a12b:free` OpenRouter path when useful.
-- Planning decision on 2026-06-25: Use `moonshotai/kimi-k2.6` as the intended paid OpenRouter model for staging, evaluation, release testing, and controlled beta/demo traffic unless Milestone 5 eval evidence selects a better paid default.
-- Planning decision on 2026-06-25: Paid AI judge calls should run for offline evaluation/report generation, not for every live user recommendation.
+- Superseded planning decision from 2026-06-25: `moonshotai/kimi-k2.6` was the intended paid OpenRouter model. Superseded on 2026-08-10 by the ordered DeepSeek V4 Flash, GPT-5.6 Luna, and GLM-5.2 beta chain.
+- Superseded planning decision from 2026-06-25: Paid AI judge calls were limited to offline evaluation/report generation. Superseded on 2026-08-10: Milestone 5 uses deterministic gates and structured Discord player-reviewer feedback with no AI judge.
 - Planning decision on 2026-06-25: Start public demo or controlled Discord beta planning with an RM50/month OpenRouter ceiling. If usage hits the ceiling, pause or disable paid calls first, then decide whether increasing the ceiling is worth the portfolio value.
 - Planning decision on 2026-06-25: Backend deterministic validation should own fixed guardrails such as 4-frontline/2-reserve shape, no duplicate heroes, sidekick slot legality, owned roster enforcement, skill/passive existence, Stellar Awakening gates, skill-count limits, boss-affinity fidelity, equipment uniqueness when named, and no win-probability claims.
 - Planning decision on 2026-06-25: User clarification promoted Feature B from prose-only equipment policy into a build-slot output contract: each character should carry one weapon, one armor, and three Grasta assumptions; weapon and armor uniqueness is per lineup only; Grasta may be reused, including repeated copies; Grasta compatibility and pain/poison-dependent damage setup need deterministic validation where graph data supports it or explicit caveats where it does not. Superseded in part on 2026-06-29: reuse is now governed by exact-variant acquisition cardinality, so unique Tier 3 variants cannot repeat within one lineup.
 - Superseded in part on 2026-07-01: The 2026-06-25 policy assigned dynamic hero selection to AI. The backend now generates and scores legal lineups; AI ranks them, chooses from supplied skill shortlists, proposes at most one bounded swap, and explains strategy.
-- Planning decision on 2026-06-25: Milestone 5 implementation order should start with sidekick/character cleanup, weapon/armor/Grasta policy, and backend guardrail audit before golden evals and paid OpenRouter/Kimi setup, because deterministic correctness makes paid staging tests cheaper and more meaningful.
+- Historical planning decision on 2026-06-25: Milestone 5 implementation order starts with deterministic data and guardrail work before golden evals and paid analyzer setup, because deterministic correctness makes paid staging tests cheaper and more meaningful. Its Kimi-specific wording is superseded by revised PG-02 on 2026-08-10.
 
 #### Research Gaps
 
@@ -653,7 +705,7 @@ This file stores source references used during planning discussions. It separate
 - Verify exact wording and edge cases from the user-provided Status Effects, Tank Role, Revival Role, Sacrificial Heart Stacking, Guiding Vow Rite, Lady Vesper, and Assemble pages through normal cached ETL artifacts or manual review because the live pages were not retrievable through the available planning browser. No acceptance criterion depends on unverified live-page wording.
 - Validate the frontline Pain/Poison and reserve Grasta-mule default with experienced Another Eden players during the planned beta; record counterexamples and revise ranking heuristics without weakening hard compatibility or acquisition-cardinality rules.
 - Determine actual token usage and RM cost per recommendation run after context compression.
-- Determine whether `moonshotai/kimi-k2.6` remains the best paid model after comparing staging eval outputs against at least one cheaper or stronger OpenRouter alternative.
+- Determine the reasoning setting for each admitted OpenRouter model and compare individual-model versus ordered-fallback recommendation quality, structure reliability, latency, and cost before controlled beta.
 - Determine per-user and global request limits that keep a 20-30 player Discord beta inside the RM50/month budget.
 - Determine the minimum authentication and persistence approach for controlled beta feedback collection.
 
@@ -675,7 +727,7 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-06-10: Milestone 4 may assume the target player has general late-game Grasta/Ore/equipment access because superboss recommendation users are expected to be endgame or near-endgame players. Build advice should still mark rare/specific assumptions and avoid requiring explicit full inventory entry.
 - Planning decision on 2026-06-10: Milestone 4 roster input should require owned character names and optionally accept Stellar Awakening state and sidekick ownership. Light/Shadow detail can be deferred unless a specific legality or skill-slot requirement makes it necessary.
 - Planning decision on 2026-06-10: Milestone 4 should generate detailed structured recommendation data internally while rendering a compact default result. Users should be able to expand lineup and character details to inspect recommended skills, equipment/build notes, sidekick reasoning, boss counterplay, risks, and citations.
-- Planning decision on 2026-06-10: Milestone 4 evaluation should prioritize deterministic core legality and factuality tests before recommendation quality judge tests. Quality judging should run only after the recommendation contract can reliably prevent impossible or hallucinated outputs.
+- Historical planning decision on 2026-06-10: Milestone 4 evaluation prioritized deterministic legality and factuality before optional model-judge tests. The model-judge portion is superseded for Milestone 5 on 2026-08-10; controlled Discord players provide subjective quality feedback after deterministic and analyzer gates pass.
 - Planning decision on 2026-06-10: Milestone 4 should use a small golden evaluation set of 5 curated weak superbosses. Intermediate and strong superboss evaluation tiers should be designed for future extension but explicitly deferred until the core navigator is stable.
 - Determine the minimum deterministic scoring model that can support "can plausibly defeat this superboss" without claiming exact simulation.
 - Determine what player roster fields are required beyond ownership: Stellar Awakening state, Light/Shadow amount, sidekick ownership, Grasta/Ore inventory, equipment inventory, manifest/progression unlocks, and preferred assumptions for missing inventory data.

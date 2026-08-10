@@ -38,6 +38,7 @@ Milestone 5 maps to `docs/core/milestone.md` and is ordered around:
 - Capability-coverage templates, top-8 role pools, and bounded beam search.
 - Compact analyzer projections with at most one bounded swap per lineup.
 - A maximum of two analyzer calls, deterministic fallback, and partial-result behavior.
+- A recommendation-ready thirty-boss evaluation corpus stratified into ten weak, ten medium, and ten strong wiki-difficulty cases.
 - Golden evaluation, provider usage accounting, and paid-call gates.
 - Authentication, persistence, rate limiting, and deployment safeguards only after the recommendation core is proven.
 
@@ -191,6 +192,7 @@ Expected artifacts:
 - Golden deterministic gates and observed provider token/cost reporting.
 - Updated reusable ETL and recommendation-validation guidance.
 - Beta safety work sequenced after the core engine passes.
+- Feature G1 is complete within Milestone 5: the fixed thirty-boss corpus is recommendation-ready with ten weak, ten medium, and ten strong canonical identities; Feature H remains next and unstarted.
 
 Dependencies:
 
@@ -289,7 +291,7 @@ Exit criteria:
 - Two or more analyzer hero swaps per lineup until evaluation proves value without cost or legality regression.
 - Live AI role tagging during ETL or recommendation.
 - Mandatory AI-assisted role labeling for initial acceptance.
-- Full all-superboss coverage and intermediate/strong evaluation tiers.
+- Full all-superboss coverage beyond the approved thirty-boss stratified Milestone 5 corpus; expand later in versioned batches guided by beta evidence and per-boss readiness gates.
 - Sidekick equipment optimization.
 - Paid judge calls on normal live requests.
 - Always-on production deployment before a controlled need exists.

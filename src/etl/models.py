@@ -7,7 +7,7 @@ import logging
 import hashlib
 import unicodedata
 import re
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -350,6 +350,14 @@ class SuperbossIndexRow(BaseModel):
     refight_status: str | None = None
     version: str | None = None
     characteristics: str = ""
+    canonical_id: str | None = None
+    aliases: list[str] = Field(default_factory=list)
+    section_anchor: str | None = None
+    section_end_anchor: str | None = None
+    variant_relationship: str | None = None
+    cohort: str | None = None
+    support_status: str = "discovered"
+    selection_rationale: dict[str, str] = Field(default_factory=dict)
 
 
 class SuperbossRow(BaseModel):
@@ -358,6 +366,7 @@ class SuperbossRow(BaseModel):
     name: str
     source_url: str
     difficulty_tier: str | None = None
+    cohort: str | None = None
     level: int | None = None
     hp: int | None = None
     weak: list[str] = Field(default_factory=lambda: ["unknown"])
@@ -367,6 +376,22 @@ class SuperbossRow(BaseModel):
     characteristics: str = ""
     mechanic_tags: list[str] = Field(default_factory=list)
     mechanics_text: str
+    canonical_id: str = ""
+    aliases: list[str] = Field(default_factory=list)
+    section_anchor: str | None = None
+    section_end_anchor: str | None = None
+    source_section: str | None = None
+    section_bounded: bool = False
+    affinity_state: dict[str, Literal["confirmed_values", "confirmed_empty", "unknown"]] = Field(default_factory=dict)
+    affinity_evidence: dict[str, str] = Field(default_factory=dict)
+    affinity_observations: list[dict[str, str | list[str]]] = Field(default_factory=list)
+    provenance: dict[str, str] = Field(default_factory=dict)
+    mechanics_evidence: dict[str, str] = Field(default_factory=dict)
+    citation_url: str | None = None
+    variant_relationship: str | None = None
+    selection_rationale: dict[str, str] = Field(default_factory=dict)
+    support_status: str = "parsed"
+    recommendation_ready: bool = False
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
 
     @field_validator("weak", "resist", "null", "absorb", "mechanic_tags", mode="before")
@@ -374,7 +399,7 @@ class SuperbossRow(BaseModel):
     def parse_string_list(cls, v):
         if isinstance(v, str):
             return [item.strip() for item in re.split(r"[,;/|]", v) if item.strip()] or ["unknown"]
-        return list(v) if v else ["unknown"]
+        return ["unknown"] if v is None else list(v)
 
     @field_validator("hp", mode="before")
     @classmethod
@@ -385,6 +410,25 @@ class SuperbossRow(BaseModel):
             match = re.search(r"\d[\d,]*", v)
             return int(match.group(0).replace(",", "")) if match else None
         return int(v)
+
+    def model_post_init(self, __context) -> None:
+        if not self.canonical_id:
+            object.__setattr__(self, "canonical_id", _stable_id("superboss", self.name))
+        if not self.aliases:
+            object.__setattr__(self, "aliases", [self.name])
+        states = dict(self.affinity_state)
+        for field in ("weak", "resist", "null", "absorb"):
+            if field in states:
+                continue
+            values = getattr(self, field)
+            states[field] = (
+                "unknown"
+                if values == ["unknown"]
+                else "confirmed_values"
+                if values
+                else "confirmed_empty"
+            )
+        object.__setattr__(self, "affinity_state", states)
 
 
 class MechanicReferenceRow(BaseModel):
