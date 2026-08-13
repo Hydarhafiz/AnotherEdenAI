@@ -1,5 +1,7 @@
 """Unit tests for Feature B combat graph loading."""
 
+import json
+
 import pytest
 
 
@@ -205,6 +207,11 @@ async def test_load_superbosses_writes_feature_b_rag_fields():
                     "characteristics": "Summons companions",
                     "mechanic_tags": ["companion summon", "hp stopper"],
                     "mechanics_text": "The battle has an HP stopper and summons companions.",
+                    "provenance": {"authority": "wiki", "whole_page_fallback": "false"},
+                    "mechanics_evidence": {"section_anchor": "Flame_Eater"},
+                    "affinity_evidence": {"weak": "icon-backed"},
+                    "affinity_observations": [{"field": "weak", "values": ["Water"]}],
+                    "selection_rationale": {"mechanics": "summon counterplay"},
                 }
             )
         ],
@@ -226,4 +233,9 @@ async def test_load_superbosses_writes_feature_b_rag_fields():
     assert row["absorb"] == ["unknown"]
     assert row["mechanic_tags"] == ["companion summon", "hp stopper"]
     assert "summons companions" in row["mechanics_text"]
+    assert json.loads(row["provenance"]) == {"authority": "wiki", "whole_page_fallback": "false"}
+    assert json.loads(row["mechanics_evidence"]) == {"section_anchor": "Flame_Eater"}
+    assert json.loads(row["affinity_evidence"]) == {"weak": "icon-backed"}
+    assert json.loads(row["affinity_observations"]) == [{"field": "weak", "values": ["Water"]}]
+    assert json.loads(row["selection_rationale"]) == {"mechanics": "summon counterplay"}
     assert row["schema_version"]

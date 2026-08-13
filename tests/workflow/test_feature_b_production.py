@@ -1,5 +1,6 @@
 """Milestone 5 Feature B typed production retrieval boundary tests."""
 
+import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -81,6 +82,28 @@ def test_missing_boss_uses_typed_request_error():
 
     assert exc_info.value.issues[0].code == "boss.missing"
     assert exc_info.value.issues[0].field == "boss_id"
+
+
+@pytest.mark.asyncio
+async def test_boss_decodes_json_backed_structured_evidence_properties():
+    service = ProductionRetrievalService(AsyncMock())
+    service._query = AsyncMock(return_value=[{
+        "id": "mimi",
+        "name": "Mimi",
+        "selection_rationale": json.dumps({"mechanics": "sustain"}),
+        "affinity_evidence": json.dumps({"weak": "unknown"}),
+        "affinity_observations": json.dumps([{"field": "weak", "values": ["unknown"]}]),
+        "provenance": json.dumps({"whole_page_fallback": "false"}),
+        "mechanics_evidence": json.dumps({"section_anchor": "Mimi"}),
+    }])
+
+    result = await service.boss("Mimi")
+
+    assert result["selection_rationale"] == {"mechanics": "sustain"}
+    assert result["affinity_evidence"] == {"weak": "unknown"}
+    assert result["affinity_observations"] == [{"field": "weak", "values": ["unknown"]}]
+    assert result["provenance"] == {"whole_page_fallback": "false"}
+    assert result["mechanics_evidence"] == {"section_anchor": "Mimi"}
 
 
 def test_sse_preserves_typed_retrieval_failure_details():

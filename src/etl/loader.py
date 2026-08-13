@@ -13,6 +13,7 @@ Graph schema decisions (SCHEMA.md v1.0.0):
 - REQUIRES_TRAIT edges are created ONLY for non-VC grastas that have a
   non-empty personality_req.  VC grastas never get REQUIRES_TRAIT edges.
 """
+import json
 import logging
 from typing import Union
 
@@ -30,6 +31,11 @@ from .models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def _encode_structured_property(value) -> str:
+    """Encode nested evidence as a Neo4j-compatible scalar property."""
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
 SIDEKICK_CHARACTER_OVERLAP_QUERY = """
@@ -590,8 +596,8 @@ async def load_superbosses(driver, rows: list[SuperbossRow]) -> None:
             "section_end_anchor": r.section_end_anchor,
             "source_section": r.source_section,
             "section_bounded": r.section_bounded,
-            "provenance": r.provenance,
-            "mechanics_evidence": r.mechanics_evidence,
+            "provenance": _encode_structured_property(r.provenance),
+            "mechanics_evidence": _encode_structured_property(r.mechanics_evidence),
             "citation_url": r.citation_url,
             "difficulty_tier": r.difficulty_tier,
             "cohort": r.cohort,
@@ -605,15 +611,15 @@ async def load_superbosses(driver, rows: list[SuperbossRow]) -> None:
             "null_state": r.affinity_state["null"],
             "absorb": r.absorb,
             "absorb_state": r.affinity_state["absorb"],
-            "affinity_evidence": r.affinity_evidence,
-            "affinity_observations": r.affinity_observations,
+            "affinity_evidence": _encode_structured_property(r.affinity_evidence),
+            "affinity_observations": _encode_structured_property(r.affinity_observations),
             "characteristics": r.characteristics,
             "mechanic_tags": r.mechanic_tags,
             "mechanics_text": r.mechanics_text,
             "support_status": r.support_status,
             "recommendation_ready": r.recommendation_ready,
             "variant_relationship": r.variant_relationship,
-            "selection_rationale": r.selection_rationale,
+            "selection_rationale": _encode_structured_property(r.selection_rationale),
             "schema_version": r.schema_version,
         }
         for r in rows

@@ -18,6 +18,21 @@ from .superboss import find_superboss_context
 ItemPolicy = Literal["late_game_assumed", "generic_only"]
 
 
+def _decode_structured_property(value: Any, default: dict | list) -> dict | list:
+    """Decode JSON-backed Neo4j evidence while tolerating legacy/mock maps."""
+    if isinstance(value, type(default)):
+        return value
+    if not isinstance(value, str):
+        return default.copy() if isinstance(default, (dict, list)) else default
+    try:
+        decoded = json.loads(value)
+    except (TypeError, json.JSONDecodeError):
+        return default.copy() if isinstance(default, (dict, list)) else default
+    if isinstance(decoded, type(default)):
+        return decoded
+    return default.copy() if isinstance(default, (dict, list)) else default
+
+
 class ProductionRecommendationRequest(BaseModel):
     """Legality-bearing input for the production recommender."""
 
@@ -115,7 +130,13 @@ LIMIT 1
 """,
             boss_id=boss_id,
         )
-        return rows[0] if rows else None
+        if not rows:
+            return None
+        row = rows[0]
+        for field in ("selection_rationale", "affinity_evidence", "provenance", "mechanics_evidence"):
+            row[field] = _decode_structured_property(row.get(field), {})
+        row["affinity_observations"] = _decode_structured_property(row.get("affinity_observations"), [])
+        return row
 
     async def conflicting_bosses(self, boss_id: str, preferences: str) -> list[str]:
         if not preferences:
