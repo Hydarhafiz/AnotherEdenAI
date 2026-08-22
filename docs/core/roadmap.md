@@ -26,21 +26,24 @@ Program success requires deterministic candidate generation without production P
 
 ## Current Active Milestone
 
-Milestone 4 is completed for Features A-E. The active milestone is Milestone 5, rewritten around candidate-constrained generation and production cost safety.
+Milestone 4 is completed for Features A-E. The active milestone is Milestone 5, rewritten around candidate-constrained generation and production cost safety, then corrected on 2026-08-22 after Neo4j-backed H-03 evidence exposed a shared data/package/search/allocation boundary failure.
 
 Milestone 5 maps to `docs/core/milestone.md` and is ordered around:
 
 - Completing and verifying identity, cardinality, and canonical-ID prerequisites.
 - Deterministic typed retrieval for the production recommender.
 - Reviewed atomic capability/dependency taxonomy, negative fixtures, and reproducible evidence materialization before contextual role scoring.
-- Hard filtering, contextual role scoring, and role-aware skill packaging.
-- Assumption-based late-game build packages.
-- Capability-coverage templates, top-8 role pools, and bounded beam search.
+- Full legal-kit materialization receipts for all 367 canonical MVP character forms/styles, without requiring exhaustive capability proof.
+- Hard filtering and contextual role scoring from proven capabilities, separated from legal active-skill package membership.
+- One to three boss-aware legal package variants per hero, with a fourth skill slot only for declared Light/Shadow >=80.
+- Assumption-based late-game build alternatives with deterministic finite-copy lineup allocation.
+- Capability-coverage templates, top-8 role pools, and package-first bounded beam search.
 - Compact analyzer projections with at most one bounded swap per lineup.
 - A maximum of two analyzer calls, deterministic fallback, and partial-result behavior.
 - A recommendation-ready thirty-boss evaluation corpus stratified into ten weak, ten medium, and ten strong wiki-difficulty cases.
 - Golden evaluation, provider usage accounting, and paid-call gates.
-- Authentication, persistence, rate limiting, and deployment safeguards only after the recommendation core is proven.
+- Independently witnessed boss-feasibility acceptance cases, deterministic infeasibility certificates, and a separate unchanged fixed-nine-roster stress suite.
+- A locked portfolio-preview safeguard contract after the recommendation core is proven; Discord demo and feedback collection remain a later roadmap activity.
 
 ## Research References
 
@@ -60,8 +63,7 @@ Most important current references:
 - Golden-fixture and experienced-player evidence for initial scoring weights and must-include counter exceptions.
 - Whether the intended paid model remains the best quality/cost choice at release time.
 - Whether an optional OpenRouter-assisted curation batch materially improves low-confidence role-tag coverage.
-- Per-user and global request limits for a controlled 20-30-player beta.
-- Minimum authentication and persistence design for beta feedback and budget enforcement.
+- Authentication-provider and persistence-technology selection for the approved email-verified portfolio-preview quota contract.
 
 These gaps may tune weights, providers, or later beta safeguards. They do not block deterministic architecture implementation.
 
@@ -175,16 +177,18 @@ Status: Active.
 
 Purpose:
 
-- Replace broad-context LLM lineup search with a production-safe backend candidate engine and a compact, bounded strategist LLM.
+- Replace broad-context LLM lineup search with a production-safe backend candidate engine and a compact, bounded strategist LLM, then correct the H-03 boundary so broad roster availability, legal packages, finite allocation, and evaluation claims are independently provable.
 
 Expected artifacts:
 
 - Typed production retrieval independent of PLAN and generated Cypher.
 - A five-gate capability program: C1 atomic contracts/review tooling/schema cutover; C2 defensive/setup review; C3 offensive/support review; C4 dependency/condition review; and C5 full replay/drift verification/handoff.
+- Correction C6: complete, replay-safe legal active/passive/SA kit receipts for all 367 canonical MVP character forms/styles plus selective high-value capability review.
 - Deterministic 45-row CSV review batches, constrained reviewer fields, canonical JSON decisions, negative fixtures, curated overrides, and reproducible Neo4j materialization.
-- Contextual RoleScores and role-aware skill shortlists.
-- `late_game_assumed` build packages with legality and cardinality evidence.
-- Hard filters, capability templates, top-8 role pools, must-include counter exceptions, and beam width capped at 50.
+- Contextual RoleScores from proven capabilities and legal skill selection that permits untagged fillers with zero coverage credit.
+- Up to three non-dominated boss-aware packages per character; three skill families by default and four only with declared Light/Shadow >=80.
+- `late_game_assumed` build alternatives with legality, cardinality evidence, and deterministic matching/backtracking.
+- Hard filters, capability templates, top-8 role pools, must-include counter exceptions, package-first beam search, and beam width capped at 50.
 - Five to ten diverse legal candidates when available, with partial and zero-candidate contracts.
 - Full internal candidate objects and compact analyzer projections.
 - One optional one-for-one swap per lineup from backend-supplied choices.
@@ -192,7 +196,8 @@ Expected artifacts:
 - Golden deterministic gates and observed provider token/cost reporting.
 - Updated reusable ETL and recommendation-validation guidance.
 - Beta safety work sequenced after the core engine passes.
-- Feature G1 is complete within Milestone 5: the fixed thirty-boss corpus is recommendation-ready with ten weak, ten medium, and ten strong canonical identities; Feature H remains next and unstarted.
+- Feature G1 is complete within Milestone 5: the fixed thirty-boss corpus contains ten weak, ten medium, and ten strong canonical identities. Feature H is in progress but blocked at H-03 until C6, D2, E2, and F2 complete.
+- Feature H separates independently witnessed boss acceptance from the unchanged common-nine-character stress suite; its ten strategic infeasible cases use valid data-complete requests and deterministic impossibility certificates.
 
 Dependencies:
 
@@ -200,12 +205,15 @@ Dependencies:
 - Correct canonical IDs, item identity, and Grasta acquisition cardinality.
 - Curated weak-superboss and mechanics data.
 - Completion of Feature C5 after all three human-review phases achieve two consecutive clean 45-row batches before contextual RoleScores or skill shortlists.
+- Completion of correction Features C6, D2, E2, and F2 in order before H resumes Neo4j-backed acceptance.
 
 Exit criteria:
 
 - Production recommendations generate legal backend candidates without PLAN, generated Cypher, or LLM retrieval validation.
 - Identical parsed facts, review artifacts, and policy versions produce reproducible capability metadata, contextual role scoring, pruning, and candidate order.
-- Golden feasible cases return at least one legal coverage-valid lineup; infeasible cases return typed diagnostics.
+- All 367 canonical MVP character forms/styles pass the legal-kit receipt gate.
+- Twenty independently witnessed feasible boss cases return at least one legal coverage/allocation-valid lineup; ten valid data-complete infeasible cases return typed diagnostics matching their impossibility certificates without analyzer calls.
+- The fixed common-nine-character requests remain a deterministic stress suite and are not used as an unsupported feasibility oracle.
 - Analyzer sees only compact referenced candidates and cannot introduce out-of-bundle IDs.
 - Paid golden runs remain below the 40k cumulative analyzer-token ceiling and demonstrate at least a 90% reduction from the recorded ~601k-token failed baseline.
 - Provider/model metadata, usage, cost, validation, and degradation are auditable.
@@ -222,6 +230,7 @@ Purpose:
 Expected artifacts:
 
 - Polished input for roster, boss, sidekicks, SA state, and recommendation preferences.
+- Optional per-character Light/Shadow input with clear three-slot/four-slot consequences.
 - Clear separation between production recommender and exploratory GraphRAG.
 - Candidate score explanations, assumptions, sources, risks, degradation, and pipeline progress.
 - Admin/status views for data freshness and system health.
@@ -242,12 +251,13 @@ Status: Planned.
 
 Purpose:
 
-- Deploy the project only when needed for job hunting, interviews, freelancing, controlled beta, or demos.
+- Deploy the project as a controllable portfolio preview for job hunting, interviews, freelancing, or demos; a broader Discord feedback launch follows only after the preview is stable.
 
 Expected artifacts:
 
 - Deployment and start/stop guidance.
-- Authentication, persistence, per-user/global rate limits, and monthly budget enforcement.
+- Email-verified registration and persistent atomic accounting for ten paid logical recommendation requests per user per calendar month.
+- Per-IP burst/concurrency controls, an RM50 global monthly hard ceiling, and a global paid-analysis kill switch; deterministic fallback remains available when paid analysis is unavailable.
 - Local Neo4j by default and practical demo deployment.
 - Disableable refresh and paid-recommendation paths.
 - Placeholder-only environment documentation.
@@ -295,7 +305,9 @@ Exit criteria:
 - Sidekick equipment optimization.
 - Paid judge calls on normal live requests.
 - Always-on production deployment before a controlled need exists.
+- Discord demo/reviewer recruitment and public feedback metrics before the stable portfolio preview is evaluated.
+- Exhaustive reviewed capability proof for every skill in every character kit.
 
 ## Open Questions
 
-Feature D remains architecture-blocked until the reopened Feature C capability review passes its three ordered phases. Provider choice, scoring-weight tuning, optional AI-assisted suggestions, and beta limits remain evidence-driven follow-up decisions recorded as research gaps.
+The Milestone 5 correction architecture is approved. Provider reasoning settings, scoring-weight tuning, optional AI-assisted suggestions, and the later deployment technology choice remain evidence-driven follow-up decisions; they cannot weaken legal-kit completeness, proven-capability authority, finite allocation, or witnessed H acceptance.

@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, E, F, G, and G1 are complete. Feature H remains the next planned feature and is not started.
+Status: Active; Features A, B, C1-C5, D, E, F, G, and G1 are complete. Feature H began offline verification but is blocked at H-03 by a cross-feature data, package, search, allocation, and oracle conflict. The human-approved Milestone 5 correction sequence C6 -> D2 -> E2 -> F2 must complete before H resumes. No paid call is authorized by this plan.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -17,6 +17,7 @@ A late-game or near-endgame Another Eden player should be able to submit:
 - An owned roster.
 - Optional owned sidekicks.
 - Optional per-character Stellar Awakening state.
+- Optional per-character Light/Shadow points; omission conservatively permits only three equipped active skills, while a declared value of at least 80 permits four.
 - A canonical selected boss.
 - Optional natural-language strategy preferences.
 - The default `late_game_assumed` item policy.
@@ -36,11 +37,11 @@ The production path is:
 1. Normalize canonical request IDs and report unresolved/ambiguous inputs.
 2. Retrieve typed roster, boss, mechanics, sidekick, skill/passive, Grasta, and equipment facts.
 3. Apply hard legality and matchup rejection.
-4. Compute contextual role and per-role skill scores.
-5. Build role-specific top-K pools with boss-counter exceptions.
-6. Construct lineup-aware skill and build packages.
-7. Generate burst, sustain, and hybrid candidates from capability templates using bounded beam search.
-8. Validate, score, deduplicate, and diversity-filter legal candidates.
+4. Separate legal executable skill facts from reviewed capability proof, then compute contextual role and per-role skill scores only from proven capabilities.
+5. Generate up to three distinct non-dominated, boss-aware legal skill packages per complete character.
+6. Build role-specific top-K pools with boss-counter exceptions and deterministic alternative build choices.
+7. Generate burst, sustain, and hybrid candidates from capability templates using bounded `(character, selected_package)` beam search.
+8. Resolve finite item allocation across each six-hero lineup, then validate, score, deduplicate, and diversity-filter legal candidates.
 9. Project only referenced facts for up to ten candidates to the analyzer.
 10. Accept ranking, skill choices, explanations, and at most one backend-bounded hero swap per lineup.
 11. Re-score and revalidate all refinements.
@@ -66,12 +67,14 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - No more than thirty recommendation-ready superbosses in Milestone 5: ten weak at wiki difficulty 1.0-4.0, ten medium at 4.5-8.8, and ten strong at 9.0-12.0.
 - No live AI role tagging during requests or normal ETL.
 - No mandatory AI-assisted labeling in initial acceptance.
+- No exhaustive proof or strategic classification of every skill in the 367-character MVP corpus; only high-value capabilities needed for contextual roles, mandatory coverage, and acceptance witnesses require review now.
+- No boss HP-stopper, phase, or turn-script simulation in the correction sequence.
 - No free-form analyzer lineup assembly.
 - No more than one analyzer-proposed hero swap per lineup.
-- No AI judge in live or offline evaluation; deterministic gates and Discord player-reviewer feedback own beta quality evidence.
+- No AI judge in live or offline evaluation; deterministic gates own Milestone 5 acceptance, while a controlled Discord demo and player-feedback program are deferred until after the portfolio preview is stable.
 - No rerun of the historical ~601k-token failure merely to recreate its baseline.
 - No major frontend redesign beyond status, diagnostics, assumptions, degradation, and cost visibility required by this milestone.
-- No deployment implementation beyond the beta-safety decisions explicitly retained after the core recommendation gates.
+- No deployment implementation beyond the portfolio-preview safety decisions explicitly retained after the core recommendation gates.
 
 ## Dependencies And Assumptions
 
@@ -80,12 +83,14 @@ Natural-language query text may adjust soft preferences or explanations, but it 
 - Grasta exact-variant identity, compatibility, acquisition class, and maximum-copy metadata must pass verification before build-package scoring is trusted.
 - Canonical Character IDs and aliases must round-trip through request, graph, candidate, analyzer, validation, and display boundaries.
 - Skills, passives, sidekick skills, and sidekick auras require stable backend candidate IDs. Sidekick IDs must include owner plus skill kind/name or aura name and remain reproducible across replay.
+- Every one of the 367 canonical character forms/styles in the approved MVP corpus requires a successful, non-ambiguous kit-materialization receipt before H acceptance. A verified absence of passive or SA data is an explicit state, not an empty relationship interpreted as success.
+- Legal active-skill availability and reviewed capability evidence are independent contracts. Untagged legal skills may occupy a package slot but never grant score or mandatory-coverage credit.
 - Schema changes require a version bump, ETL replay/migration, schema assertions, and planned ETL-guide updates.
 - The default target player has broad late-game item access; item ownership is not verified unless a future policy says otherwise.
 - Curated boss and mechanics data may be incomplete. Unknown data lowers confidence and must remain distinct from confirmed facts.
 - OpenRouter model, provider-routing, usage, price, structured-output, and limit metadata are mutable external facts and must be captured at paid release-evaluation time. Direct DeepSeek remains an offline adapter compatibility path and is deferred from Milestone 5 paid qualification.
 - The historical ~601k-token failed run is a user-observed baseline for reduction reporting.
-- The RM50/month public demo/beta ceiling remains a later operational constraint.
+- The live portfolio-preview contract permits paid analysis only for email-verified registered users, at ten logical paid requests per calendar month, under atomic reservation, per-IP burst/concurrency controls, a global kill switch, and an RM50 global monthly hard ceiling. Deployment implementation remains separately sequenced and no paid call is authorized here.
 - Secrets, credentials, API keys, and real user authentication data remain outside documentation and repository files.
 
 ## Research References And Source Grounding
@@ -824,7 +829,7 @@ Checkpoint acceptance:
 
 - **PG-01 — revised and recorded with human approval:** Use the cached Another Eden Wiki Superbosses index/detail pages plus explicit per-boss source manifests as source authority. Feature G1 must produce exactly thirty recommendation-ready bosses: ten weak at wiki difficulty 1.0-4.0, ten medium at 4.5-8.8, and ten strong at 9.0-12.0. The five cached weak bosses count toward the weak cohort only after their affinity/mechanics/provenance defects are repaired, so twenty-five additional unique boss identities require admitted detail sources. Within each band, selection must maximize mechanics, affinity, parser, page-section, and beta-review diversity rather than choosing rows by difficulty alone. Every admitted boss needs canonical identity/aliases, exact source URL and section boundary, independently expected affinity/mechanics facts, parser regression fixtures, replay evidence, and a feasible or infeasible recommendation fixture; no canonical identity counts twice across bands. Flame Eater variants remain outside the supported boundary until their shared-section identity and independent mechanics evidence are resolved. All-boss coverage, live scraping without a separate checkpoint, automatic admission from index rows, and comprehensive coverage claims remain non-goals. Feature G1 remains before H with its own `builder-executor -> tdd-loop` boundary.
 - **PG-02 — revised and recorded:** Milestone 5 paid beta qualification uses OpenRouter only, with the ordered model chain `deepseek/deepseek-v4-flash-0731` primary, `openai/gpt-5.6-luna` first fallback, and `z-ai/glm-5.2` final fallback. Direct DeepSeek paid qualification and Moonshot Kimi are deferred. Feature H must qualify all three models individually against the same strict projection/schema/authority fixtures before enabling OpenRouter's server-managed fallback array, capture the actual served model, and truthfully retain available prompt, completion, reasoning, cache, total, charged cost, latency, generation, and fallback metadata. Server-managed fallback counts as one application analyzer call; a locally invalid successful response may use the one fragment-correction call but cannot trigger an unbounded model retry loop. The 2026-08-10 hard-budget snapshot projects roughly RM0.02 for DeepSeek V4 Flash, RM0.03 for GPT-5.6 Luna, or RM0.02 for GLM-5.2 per worst-case logical request; the chain is conservatively below about RM0.03 per request, RM0.90 for thirty one-run boss cases, or RM2.70 for one worst-case run per boss against each of the three models. These are mutable planning estimates, exclude payment fees, and are not acceptance prices. No credential value is stored in the repository.
-- **PG-03 — revised and recorded:** Feature H remains blocked until Feature G1 completes, deterministic boss fixtures pass, the three OpenRouter routes and ordered fallback/accounting behavior pass offline verification, and the human separately authorizes paid calls. Subjective recommendation quality will be collected from Discord players through structured beta feedback; no AI judge is admitted. No paid call, live boss scrape, Feature G1 implementation, or Feature H work is authorized by this checkpoint record.
+- **PG-03 — revised and recorded:** Feature H remains blocked until Feature G1 completes, deterministic boss fixtures pass, the three OpenRouter routes and ordered fallback/accounting behavior pass offline verification, and the human separately authorizes paid calls. No AI judge is admitted. The 2026-08-22 correction further defers Discord subjective feedback until after a stable portfolio preview; it is not an H acceptance gate. No paid call or live boss scrape is authorized by this checkpoint record.
 
 ### Feature G1: Thirty-Boss Stratified Corpus Readiness
 
@@ -868,16 +873,116 @@ compact-projection, citation, and degraded-fallback gates. The unit suite and
 G1-focused ETL/workflow suites pass; a broader workflow run remains subject to
 an existing graph happy-path stall and is not used as G1 completion evidence.
 
+## Approved Milestone 5 Correction Sequence
+
+The 2026-08-22 architecture decision preserves the completed C-F commits as historical evidence while reopening their shared boundaries through new correction features. The blocking production evidence is authoritative over green synthetic tests: Neo4j retrieval completed with full requested coverage, yet a representative expected-feasible request had 17 eligible characters and zero candidates; a 65-character expansion also returned zero. Of those 65 characters only eight produced a three-to-four-skill default package. The current graph audit found 367 Character nodes, 267 with no `HAS_SKILL` relationship, only 99 with at least three Skill rows, and 288 with no passive rows. Within the explicit nine-character H roster, legal skill rows exist but only one to three capability-tagged skills per character are available, while the eight automatically added F2P characters have no skill or passive rows. This proves two distinct defects: incomplete kit materialization and an incorrect coupling between package legality and capability proof.
+
+The correction architecture has two layers:
+
+1. A complete legal-kit catalog determines which skills exist, belong to an exact character form/style, share an upgrade family, are equipable, and carry SA, manifest, equipment, or other dependencies.
+2. Conservative reviewed capability evidence determines contextual RoleScores and mandatory coverage. Untagged legal skills remain selectable but receive no capability credit.
+
+The ordered execution path is C6 -> D2 -> E2 -> F2 -> H. Each correction feature uses `feature-planner -> builder-executor -> tdd-loop`, owns one detailed feature commit, and must preserve the strict Feature C proof boundary. A source-authority or destructive migration dispute adds `contract-auditor` before implementation. Neo4j mutation, live crawling, paid-provider use, deployment, and publishing retain their separate human authorization gates.
+
+### Feature C6: Full Character Kit Readiness And Selective Capability Evidence
+
+Status: Approved and planned; first implementation feature in the correction sequence.
+
+Outcome: Every one of the 367 canonical MVP character forms/styles has a complete, replay-safe legal kit, while capability authority remains limited to reviewed proven atomic facts.
+
+Scope:
+
+- Crawl or replay the exact 367-character detail scope and normalize active skill families, passives, SA facts, dependencies, source revision, exact form/style ownership, and equipability.
+- Emit one explicit materialization receipt per character. The receipt distinguishes successful population, verified absence, not-applicable data, and failed or ambiguous extraction.
+- Treat upgrade stages and SA-enhanced forms of one equipped skill as one skill family. Ordinary basic attacks, Valor Chants, passives, and sidekick actions do not occupy active-skill package slots; legal basic-attack replacements or equipment-dependent actives must carry explicit type and dependency evidence.
+- Make authoritative replay remove or replace stale character-kit relationships rather than accumulating obsolete rows.
+- Review only high-value capabilities needed by contextual roles, mandatory boss coverage, feasible witnesses, and infeasibility certificates. Preserve every candidate, rejected, ambiguous, and untagged fact as non-authoritative.
+
+Non-goals: exhaustive proof of every skill effect, complete combat-formula interpretation, role labels stored on Character nodes, or turn/rotation simulation.
+
+Acceptance criteria:
+
+- **C6-01:** Exactly 367/367 canonical character forms/styles have successful, non-ambiguous receipts with source/version provenance and explicit active/passive/SA states.
+- **C6-02:** Every character has at least three distinct equipable active-skill families, or fails the milestone data gate with source-specific diagnostics rather than being classified as a weak or infeasible hero.
+- **C6-03:** No active skill is orphaned, attached to the wrong style, duplicated through upgrade/SA variants, or silently retained after authoritative replay.
+- **C6-04:** Identical source artifacts and policy versions reproduce identical kit facts, receipts, and graph state; schema, parser, loader, drift, and operator gates pass before H consumes the corpus.
+- **C6-05:** Only reviewed proven capabilities contribute RoleScores or mandatory coverage; untagged legal skills remain visible and package-eligible with zero capability credit.
+
+### Feature D2: Legal Skill Families And Contextual Package Frontier
+
+Status: Approved and blocked by C6.
+
+Outcome: Package legality is independent of capability proof, and each complete hero exposes useful boss-aware alternatives rather than one global default package.
+
+Scope:
+
+- Generate one to three distinct, non-dominated package options per character and request. Offensive, sustain/defense/recovery, and counter/setup profiles guide diversity but are not rigid required labels.
+- Use contextual value and boss/lineup requirements rather than raw tag count. A rare proven one-skill counter may dominate a package even when another category has more tagged skills.
+- Require three distinct equipable skill families by default. Permit four only when that character's request input explicitly declares Light/Shadow points greater than or equal to 80; SA and `late_game_assumed` never infer the fourth slot.
+- Allow legal untagged skills as fillers without granting role or coverage credit. Enforce SA, manifest, equipment, replacement, and other dependencies.
+- Deduplicate equivalent package variants and preserve deterministic package IDs, evidence, and ordering.
+
+Acceptance criteria:
+
+- **D2-01:** A complete character is package-ready when at least one legal three-skill package exists; lack of three proven capability-tagged skills is not a readiness failure.
+- **D2-02:** Every selected package contains distinct legal skill families and obeys the declared Light/Shadow slot limit and all dependencies.
+- **D2-03:** Each proven capability contribution traces to the selected package or applicable passive evidence; untagged fillers contribute exactly zero coverage.
+- **D2-04:** Representative multi-role heroes produce distinct non-dominated contextual options when evidence supports them, without forcing three artificial variants.
+
+### Feature E2: Deterministic Alternative Build Allocation
+
+Status: Approved and blocked by C6; may be implemented after D2's package dependency contract is stable.
+
+Outcome: A lineup is rejected for build incompatibility only after deterministic compatible alternatives and finite-copy allocation have been exhausted.
+
+Scope:
+
+- Define `late_game_assumed` as access to the released catalog, never as an ownership claim.
+- Enforce exact known maximum copies across one six-hero lineup. Allocation resets between alternative lineups.
+- Treat named equipment as one copy unless repeatability is proven. For unknown named Grasta cardinality, avoid duplicate named copies and use compatible labelled generic placeholders when allowed.
+- Generate deterministic per-character build alternatives and resolve lineup-wide compatibility through bounded matching or backtracking.
+- Label and penalize generic placeholders; reject only when no compatible complete allocation exists.
+
+Acceptance criteria:
+
+- **E2-01:** Every accepted lineup has a complete compatibility-valid allocation respecting known finite maxima and conservative unknown-cardinality rules.
+- **E2-02:** A greedy first choice cannot cause rejection when a deterministic alternative allocation exists.
+- **E2-03:** Allocation is deterministic, bounded, independently reset per lineup, and reports named, generic, assumed, and unavailable choices distinctly.
+- **E2-04:** `generic_only` remains legal and diagnosable but cannot hide missing skill packages or capability coverage.
+
+### Feature F2: Package-First Beam Search And Stage Diagnostics
+
+Status: Approved and blocked by C6, D2, and E2.
+
+Outcome: Beam search expands only structurally valid character-package choices while retaining complete diagnostics for excluded heroes and later constraint failures.
+
+Scope:
+
+- Precompute the valid `(character, selected_package)` frontier before lineup expansion.
+- Prevent two package variants of the same hero from occupying multiple lineup slots.
+- Exclude incomplete or structurally package-invalid choices before expansion, while naming the character and exact data/package reason in preprocessing diagnostics.
+- Continue a request after excluding incomplete optional characters when at least six complete characters remain, but never claim authoritative infeasibility from the reduced roster. Fewer than six complete characters returns a data-readiness error.
+- Keep preprocessing, mandatory coverage, affinity/matchup, allocation, and diversity/pruning diagnostics stage-accountable rather than presenting overlapping totals as independent candidate counts.
+
+Acceptance criteria:
+
+- **F2-01:** No beam state contains a character without a selected legal package or contains the same character twice.
+- **F2-02:** Complete legal untagged fillers are not filtered out as capability failures; mandatory coverage still requires proven evidence.
+- **F2-03:** `character_data_incomplete` exclusions are visible, never trigger a paid analyzer call, and never produce a definitive infeasible label.
+- **F2-04:** Identical input, corpus, and policy versions produce identical frontier, beam, allocation, candidate order, and diagnostics.
+
 ### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
 
-Status: Planned after Feature G1; no work or paid call is authorized by the post-G decision alone.
+Status: In progress but blocked at H-03. Existing offline fixture and evaluation work is incomplete and must be preserved. H returns to `feature-planner` after C6-D2-E2-F2 complete because its fixture authority and evidence contract changed materially. No paid call is authorized.
 
-Route: `tdd-loop` for deterministic/evaluation evidence, with `builder-executor -> tdd-loop` for the OpenRouter ordered-model transport, structured-output, served-model attribution, or accounting implementation proven missing by the post-G audit. Paid calls remain a separate human checkpoint.
+Route: `feature-planner -> builder-executor -> tdd-loop` for the corrected fixture/oracle and any remaining evaluation or provider transport implementation. Paid calls remain a separate human checkpoint.
 
 Technical requirements:
 
 - Build layered tests for taxonomy, materialization, normalization, hard filters, role/skill scoring, packages, templates, beam bounds, no-weakness affinity, projection leakage/budgets, swaps, partial output, and zero candidates.
-- Define feasible and infeasible golden fixtures across all three difficulty cohorts with expected constraints and quality notes.
+- Split H into two suites. The boss-specific acceptance suite contains independently reviewed feasible witnesses and deterministic infeasibility certificates. The existing common nine-character requests remain unchanged as a fixed-roster stress suite and do not become feasible merely because their fixture label says so.
+- A feasible acceptance case records a realistic owned roster plus at least one independently reviewed six-hero witness with legal selected packages, proven mandatory coverage, compatible affinity, and a valid finite-item allocation.
+- An infeasible acceptance case is a valid, data-complete request with at least six usable characters and an explicit deterministic impossibility certificate. Unknown character names are request-validation regressions; incomplete kits are data-quality regressions; neither counts toward the ten strategic infeasible cases.
 - Use the boss corpus admitted by the post-G checkpoint; an approved expansion must complete its own implementation/verification feature before H consumes it.
 - Require all deterministic gates before paid analyzer calls.
 - Qualify `deepseek/deepseek-v4-flash-0731`, `openai/gpt-5.6-luna`, and `z-ai/glm-5.2` individually against the same fixtures before enabling their ordered OpenRouter fallback chain.
@@ -886,21 +991,22 @@ Technical requirements:
 - Record attempt-level usage, cost, latency, validation, actual served model, fallback, and degradation.
 - Enforce locked per-call and cumulative budgets.
 - Preserve the ~601k failure as a recorded baseline artifact.
-- Export sanitized, deterministically valid recommendation samples for the later Feature I Discord reviewer-feedback contract; do not use an AI judge.
+- Export sanitized, deterministically valid recommendation samples for portfolio evidence and possible later Discord feedback; do not make Discord participation an H gate and do not use an AI judge.
 
 Acceptance criteria:
 
 - **H-01:** Hard legality and out-of-bundle ID gates pass 100%.
 - **H-02:** Identical fixture input produces deterministic backend results.
-- **H-03:** Every feasible fixture returns at least one legal coverage-valid candidate; infeasible fixtures return classified diagnostics without analyzer calls.
+- **H-03:** Every one of twenty independently witnessed feasible acceptance cases returns at least one legal, mandatory-coverage-valid, finite-allocation-valid backend candidate before any analyzer call. Every one of ten valid data-complete infeasible acceptance cases returns zero candidates for its recorded deterministic impossibility certificate and makes zero analyzer calls. The unchanged nine-character fixed-roster suite reports deterministic stress outcomes separately and cannot establish or invalidate the 20/10 oracle by itself.
 - **H-04:** Each admitted OpenRouter model and every served fallback response reports or truthfully classifies unavailable prompt, completion, reasoning, cached, total-token, cost, latency, generation, and actual-model metadata without mixing model identities.
 - **H-05:** Paid golden runs remain under 40k cumulative analyzer tokens and reduce baseline usage by at least 90%.
 - **H-06:** Reports distinguish backend failures, analyzer structure/refinement failures, OpenRouter transport failures, model/provider fallback selection, local validation failure, budget degradation, and readiness for later human review.
-- **H-07:** The ordered fallback chain is exercised only after all three models pass independent strict-output and authority gates; no AI judge call exists in the evaluation or beta path.
+- **H-07:** The ordered fallback chain is exercised only after all three models pass independent strict-output and authority gates; no AI judge call exists in the evaluation or public portfolio path.
+- **H-08:** H evidence records the exact kit-corpus, receipt, capability, package-policy, allocation-policy, search-policy, boss-fixture, and request-fixture versions used; fake-runner or synthetic unit success alone cannot satisfy H-03.
 
-### Feature I: Reusable Guidance And Beta Safeguards
+### Feature I: Reusable Guidance And Portfolio-Preview Safeguards
 
-Status: Planned after Features A-H.
+Status: Planned after corrected Feature H. It locks the pre-deployment operating contract for the portfolio preview; deployment implementation remains sequenced after the frontend milestone. The controlled Discord demo and feedback program are deferred.
 
 Route: `architect-planner` for the beta safeguard decision, then `release-manager-sync` only after repository evidence proves the milestone implementation and verification are complete. Deployment implementation remains Milestone 7.
 
@@ -909,37 +1015,37 @@ Technical requirements:
 - Reconcile `docs/guides/ETL_GUIDE.md` with the verified taxonomy/rule versions, replay, evidence materialization, drift tests, migration, and C5 handoff behavior.
 - Rewrite stale portions of `docs/guides/recommendation-validation.md` for typed production readiness, backend role IDs/scores, pool pruning, beam diagnostics, projection inspection, the two-call cap, OpenRouter model fallback/served-model evidence, swaps, degraded mode, and golden evals.
 - Require later related features to maintain these guides when commands, diagnostics, artifacts, or contracts change.
-- Decide authentication, persistence, feedback, caching/deduplication, rate limits, and monthly budget enforcement before controlled beta.
-- Define a Discord player-review form for sanitized recommendation runs with run ID, boss ID, issue category (`boss_fact`, `lineup_legality`, `counterplay`, `skill_or_build`, `explanation`, or `usability`), observed problem, expected improvement, and optional supporting source. Reviewer votes guide tuning and bug discovery but never override deterministic legality or source authority directly.
-- Show selected-lineup untagged skill/passive diagnostics with stable fact IDs, names, source URLs, and short captured snippets. Explicitly exclude them from scoring and coverage; collect expert beta feedback outside the app through a form whose required fields are fact ID, name, source URL, optional suggested capability, and explanation.
-- Preserve RM50/month as the starter beta/demo ceiling unless later evidence changes it.
+- Specify persistent email-verified registration, atomic monthly quota reservation, idempotent logical-request accounting, per-IP burst/concurrency protection, a global kill switch, and audit records that exclude prompts and secrets.
+- Permit ten paid logical recommendation requests per registered user per calendar month. One initial analyzer call plus its optional fragment-only correction consumes one logical request; deterministic rejection before analyzer invocation consumes none.
+- Enforce an RM50 global monthly hard ceiling. When either a user quota or the global ceiling is exhausted, paid analysis stops while deterministic candidate output remains available.
+- Show selected-lineup untagged skill/passive diagnostics with stable fact IDs, names, source URLs, and short captured snippets, explicitly excluded from scoring and coverage.
 
 Acceptance criteria:
 
 - **I-01:** Another developer can reproduce capability materialization and diagnose drift.
 - **I-02:** Another tester can inspect deterministic role derivation and candidate generation, then repeat offline and approved paid-provider validation.
 - **I-03:** The guides contain no stale three-call, broad-Cypher production, free-text role-authority, or single-provider instructions.
-- **I-04:** Public beta cannot expose an unlimited unauthenticated paid endpoint.
-- **I-05:** Beta safety decisions are documented before deployment implementation, and guide maintenance remains part of later feature acceptance when behavior changes.
-- **I-06:** Discord recommendation feedback is tied to sanitized run/boss evidence, separates factual or legality defects from subjective strategy/usability feedback, and cannot mutate canonical facts or scoring automatically.
+- **I-04:** The future public portfolio deployment cannot expose an anonymous or unlimited paid endpoint; the ten-request user quota and RM50 global ceiling have precise persistent and atomic semantics.
+- **I-05:** Portfolio-preview safety decisions are documented before deployment implementation, and guide maintenance remains part of later feature acceptance when behavior changes.
+- **I-06:** Discord demo, reviewer recruitment, feedback forms, and public feedback metrics are absent from Milestone 5 acceptance and recorded in the future roadmap.
 
 ## Pre-Paid Evaluation Ladder
 
 Paid OpenRouter testing is blocked until these gates pass in order:
 
-1. Capability artifact schema, C5 materialization, and reproducibility.
-2. Canonical identity, ownership, SA, affinity, sidekick, and hard rejection.
-3. Contextual RoleScores and bounded skill shortlists.
-4. Skill-package dependency and fallback.
-5. Build compatibility, cardinality, and allocation.
-6. Capability templates, beam bounds, lineup invariants, and determinism.
-7. No-weakness, unknown, resist, null, and absorb cases.
-8. Projection schema, leakage prevention, and token preflight.
-9. Swap re-scoring, rejection, fallback, frozen output, partial results, and degraded mode.
-10. Offline end-to-end feasible and infeasible golden cases.
+1. C6 proves 367/367 legal-kit receipts, authoritative replay, and strict proven-capability separation.
+2. Canonical identity, ownership, SA, declared Light/Shadow, affinity, sidekick, and hard rejection.
+3. D2 contextual package frontiers with three legal skill families by default and four only at declared Light/Shadow >=80.
+4. E2 build alternatives, compatibility, finite cardinality, and deterministic lineup allocation.
+5. F2 package-first beam bounds, lineup invariants, stage diagnostics, and determinism.
+6. No-weakness, unknown, resist, null, and absorb cases.
+7. Projection schema, leakage prevention, and token preflight.
+8. Swap re-scoring, rejection, fallback, frozen output, partial results, and degraded mode.
+9. Boss-specific witnessed feasible and certified infeasible acceptance cases, plus the separate fixed-nine-roster stress suite.
+10. Neo4j-backed H-03 evidence with zero pre-candidate analyzer calls.
 11. Post-Feature-G boss-coverage and provider-admission decisions.
 12. Separately qualified DeepSeek V4 Flash, GPT-5.6 Luna, and GLM-5.2 OpenRouter analyzer runs with captured model metadata and observed usage.
-13. Ordered OpenRouter fallback verification and sanitized sample export for the later controlled Discord player-review contract; no AI judge.
+13. Ordered OpenRouter fallback verification and sanitized portfolio-preview sample export; no AI judge or Discord beta gate.
 
 Hard gates require 100% legality, zero out-of-bundle IDs, deterministic backend output for identical inputs, at least one valid candidate for every feasible fixture, typed diagnostics for infeasible fixtures, and budget compliance.
 
@@ -965,6 +1071,8 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature G: completed; compact closed-world projection, provider-neutral DeepSeek/OpenRouter offline adapters, strict authority validation, two-call fragment correction, deterministic refinement fallback, and labeled degraded backend output are verified.
 - Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
 - Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
+- Correction planning: completed and human-approved on 2026-08-22; C6, D2, E2, and F2 are planned in that order before H resumes.
+- Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through correction planning and implementation.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
@@ -972,21 +1080,19 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 
 Milestone 5 completes only when:
 
-- Features A-I and any post-G boss-expansion feature admitted by the human checkpoint meet their acceptance criteria and each owns one detailed completion commit.
+- Features A-I, correction Features C6/D2/E2/F2, and any post-G boss-expansion feature admitted by the human checkpoint meet their acceptance criteria and each implementation feature owns one detailed completion commit.
 - C5 proves reproducible reviewed materialization, D-F prove deterministic legal candidate generation, G proves bounded provider-neutral refinement and fallback, and H proves the admitted corpus and paid-provider gates.
 - Production recommendation uses no PLAN, generated Cypher, retrieval-validation LLM, AI-authored RoleScores, or unbounded roster/catalog projection.
-- Every feasible golden case yields at least one legal coverage-valid backend candidate; every infeasible case returns typed diagnostics without an analyzer call.
+- The exact 367-character MVP corpus passes kit completeness, every feasible acceptance case has an independent witness and yields at least one legal coverage/allocation-valid backend candidate, and every strategic infeasible case has a deterministic impossibility certificate and returns typed diagnostics without an analyzer call.
 - OpenRouter paid evidence for each admitted model and the ordered fallback chain stays within the locked call/token budgets, records the actual served model, and never depends on repository-stored credentials.
 - Required operator/manual checks pass; ETL and recommendation guides match current commands, counters, contracts, and failure classifications.
 - Temporary handoffs, generated outputs, obsolete scenarios, superseded workflow artifacts, and duplicate tests have been promoted or purged, and release reconciliation leaves the living roadmap accurate.
 
 ## Open Questions
 
-Feature D has no unresolved authority decision after C5. The following are scheduled evidence-driven decisions rather than permission to widen current scope:
+The correction architecture has no unresolved shared-boundary decision. The following are scheduled evidence-driven refinements rather than permission to widen current scope:
 
 - Exact initial scoring weights within the locked component model.
-- Which twenty-five additional unique bosses best satisfy the fixed 5-weak, 10-medium, and 10-strong vacancies while maximizing affinity, mechanic, page-section, parser, and Discord beta-review diversity.
 - Which reasoning setting for each admitted OpenRouter model gives the best structured recommendation quality within the locked token budget; model qualification must decide this before the fallback chain is enabled.
-- How Discord reviewer feedback should be aggregated into scoring, parser, explanation, and usability changes without treating subjective votes as legality authority.
 - Whether optional AI-assisted curation earns its cost.
-- Beta authentication, persistence, feedback storage, per-user limits, and caching policy.
+- The exact authentication provider and persistence technology used later to implement the locked portfolio-preview quota and budget contract.

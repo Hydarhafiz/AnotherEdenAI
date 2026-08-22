@@ -18,6 +18,23 @@ Readiness signals:
 - Each proposed family has at least two parsed canonical character or sidekick facts, including a positive and a misleading/cross-family example.
 - The source evidence settles its narrow atomic meaning, direction, target, qualifiers, and separation from existing capabilities.
 
+## Exhaustive Character-Skill Capability Proof
+
+Deferred from the Milestone 5 correction so the MVP can make all 367 canonical character kits legally usable without guessing the strategic meaning of every skill.
+
+Idea:
+
+- Review every active, passive, SA, manifest, and equipment-dependent skill family against the atomic capability taxonomy.
+- Reconsider the stricter package rule under which every selected package skill must carry reviewed capability proof, but adopt it only when coverage is broad enough that it no longer excludes otherwise legal characters.
+- Expand contextual role and package scoring from the current high-value reviewed subset to the full character corpus.
+- Keep legal-kit identity, equipability, and upgrade-family facts separate from capability interpretation even after review becomes exhaustive.
+
+Readiness signals:
+
+- Milestone 5 proves complete legal kits for all 367 character forms/styles and records stable untagged-fact diagnostics.
+- More recommendation-ready bosses expose repeated quality gaps attributable to missing capability evidence rather than search, allocation, or boss-data defects.
+- Human review capacity and source evidence can support exhaustive coverage without weakening the proven-only authority standard.
+
 ## Battle Mechanics Knowledge Base
 
 Deferred from Milestone 2 because boss and character ETL already expands the data surface significantly.
@@ -175,6 +192,23 @@ Readiness signals:
 - Discord feedback across weak, medium, and strong cohorts identifies concrete missing bosses or mechanics rather than only requesting a larger count.
 - Feature H establishes stable evaluation, provider accounting, and regression reporting that can compare later corpus batches.
 - Source-refresh policy, crawl limits, identity/variant rules, and per-boss support status are operationally clear.
+
+## Controlled Discord Demo And Feedback Program
+
+Deferred until the deployed portfolio preview is stable. Milestone 5 deterministic acceptance and the initial portfolio launch do not depend on Discord participation or feedback metrics.
+
+Idea:
+
+- Invite a bounded Discord cohort only after the live preview has stable data-readiness, legality, quota, budget, observability, and kill-switch behavior.
+- Collect structured feedback tied to sanitized run and boss IDs, separating `boss_fact`, `lineup_legality`, `counterplay`, `skill_or_build`, `explanation`, and `usability` reports.
+- Use feedback to prioritize additional bosses, capability review, scoring changes, parser fixes, turn/stopper modeling, and portfolio case-study metrics.
+- Never let votes or free-form feedback mutate canonical facts, capability proof, or legality policy automatically.
+
+Readiness signals:
+
+- The portfolio preview is deployed and its deterministic fallback, ten-request user quota, RM50 global ceiling, and operational kill switch are verified.
+- The corrected H acceptance suite passes against the approved corpus and no material data-readiness blocker remains.
+- Feedback handling, privacy, retention, moderation, and public-metrics presentation have their own approved contract.
 
 ## Deterministic Battle Simulation And Win-Probability Estimation
 

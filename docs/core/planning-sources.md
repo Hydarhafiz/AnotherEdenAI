@@ -128,6 +128,30 @@ This file stores source references used during planning discussions. It separate
   Relevance: Needed for legality checks and recommendation output that separates usable skills from upgrade suggestions.
   Caveats/open questions: Player-specific Stellar Awakening state needs to be captured in the roster model.
 
+- Title: Light and Shadow points FAQ
+  URL: https://wfs-another-eden-global.zendesk.com/hc/en-us/articles/7583934435983-How-do-Light-and-Shadow-points-work
+  Source type: official WFS support reference
+  Date added: 2026-08-22
+  Related area: player-specific Light/Shadow request input
+  Relevance: Establishes Light/Shadow as character progression owned by the player rather than a capability that can be inferred from Stellar Awakening or item policy.
+  Caveats/open questions: The official FAQ is the general authority; the exact 80-point skill-slot threshold is corroborated by current character bonus tables and must remain independently regression-tested.
+
+- Title: Helena character bonus and skill table
+  URL: https://anothereden.wiki/Helena
+  Source type: community wiki character reference
+  Date added: 2026-08-22
+  Related area: fourth active-skill slot and skill-family normalization
+  Relevance: The character bonus table records `Skill slot +1` at 80 Shadow, while the skill table visibly separates an ordinary MP-0 basic attack, learned active skills, passive/SA facts, and normal/enhanced variants. It grounds the correction's request-level 80-point rule and the need for explicit slot eligibility and family normalization.
+  Caveats/open questions: One character page is a mechanics witness, not a 367-character completeness oracle; C6 must replay and validate the complete approved corpus.
+
+- Title: Ctos and Asia character pages
+  URL: https://anothereden.wiki/w/Ctos and https://anothereden.wiki/w/Asia
+  Source type: user-supplied community wiki character references
+  Date added: 2026-08-22
+  Related area: low-rarity legal active-skill availability
+  Relevance: These examples motivated rejection of the rule that a hero with fewer than three capability-tagged skills is inherently package-unready; legal kit availability and capability proof are separate questions.
+  Caveats/open questions: C6 must parse and validate exact skill families from cached authoritative source artifacts rather than generalizing corpus completeness from two examples.
+
 - Title: Turn Order
   URL: https://anothereden.wiki/w/Turn_Order
   Source type: community wiki mechanics reference
@@ -231,9 +255,9 @@ This file stores source references used during planning discussions. It separate
   Date added: 2026-08-09
   Related area: Feature G offline adapter compatibility and deferred direct-provider route
   Relevance: Current official metadata names `deepseek-v4-flash` and `deepseek-v4-pro`. Chat Completions exposes prompt, cache-hit, cache-miss, completion, reasoning, and total-token usage. Direct JSON Output currently uses `response_format.type=json_object`, not the strict `json_schema` payload shared by the Feature G offline adapters.
-  Caveats/open questions: Direct DeepSeek paid qualification is deferred from Milestone 5 by the 2026-08-10 revision. The adapter remains compatibility evidence only; no direct credential or paid call is required for the Discord beta.
+  Caveats/open questions: Direct DeepSeek paid qualification is deferred from Milestone 5 by the 2026-08-10 revision. The adapter remains compatibility evidence only; no direct credential or paid call is required for the portfolio preview.
 
-- Title: OpenRouter beta analyzer model metadata
+- Title: OpenRouter portfolio-preview analyzer model metadata
   URL: https://openrouter.ai/api/v1/models, https://openrouter.ai/deepseek/deepseek-v4-flash-0731, https://openrouter.ai/openai/gpt-5.6-luna, https://openrouter.ai/z-ai/glm-5.2
   Source type: official OpenRouter model metadata API
   Date added: 2026-08-10
@@ -245,7 +269,7 @@ This file stores source references used during planning discussions. It separate
   URL: https://openrouter.ai/docs/guides/routing/model-fallbacks
   Source type: official OpenRouter documentation
   Date added: 2026-08-10
-  Related area: revised PG-02 ordered beta fallback
+  Related area: revised PG-02 ordered portfolio-preview fallback
   Relevance: Documents the ordered `models` array, fallback triggers for routing errors such as downtime and rate limits, charging according to the model that ultimately answers, and response attribution through the returned `model` field. This permits three ordered models inside one OpenRouter request without adding an application-managed retry.
   Caveats/open questions: A successful response that later fails local JSON-schema or backend-authority validation is not documented as a fallback trigger. Feature H must preserve the two-call application cap, distinguish OpenRouter-internal fallback from fragment correction, and verify actual served-model usage/cost evidence.
 
@@ -253,9 +277,9 @@ This file stores source references used during planning discussions. It separate
   URL: https://openrouter.ai/rankings#leaderboard-table
   Source type: official OpenRouter ranking page
   Date added: 2026-08-10
-  Related area: beta analyzer candidate discovery
+  Related area: portfolio-preview analyzer candidate discovery
   Relevance: Provides live rankings based on benchmarks and aggregate usage. It supports selecting models for qualification but does not measure Another Eden boss-lineup factuality, legality, structured-output reliability, or explanation quality.
-  Caveats/open questions: The ranking is mutable and must not become an acceptance oracle. Deterministic fixtures and Discord player-reviewer feedback govern project-specific quality.
+  Caveats/open questions: The ranking is mutable and must not become an acceptance oracle. Deterministic fixtures govern Milestone 5 acceptance; later controlled Discord feedback may tune subjective strategy quality after the portfolio preview is stable.
 
 - Title: KL USD/MYR Reference Rate
   URL: https://financialmarkets.bnm.gov.my/data-download-kl-usd-myr-reference-rate
@@ -612,10 +636,29 @@ This file stores source references used during planning discussions. It separate
 
 #### Planning Decisions
 
+##### Milestone 5 H-03 Correction Discovery (approved 2026-08-22)
+
+- Repository grounding: `src/workflow/role_scoring.py`, `src/workflow/lineup_generation.py`, `src/workflow/build_packages.py`, `src/workflow/production.py`, `src/workflow/f2p.py`, `src/workflow/evaluation.py`, `tests/fixtures/evaluation/feature_h_requests.json`, the relevant C/E/F/H tests and fixtures, and read-only Neo4j inspection performed during the H-03 architecture discovery.
+- Observed production evidence: retrieval and mandatory-fact coverage completed, but a representative expected-feasible request returned 17 eligible characters and zero candidates. Recorded rejection totals included 1,050 `build_incompatibility`, 1,050 `skill_package.missing_or_unbounded`, and 182 `mandatory.primary_damage`; categories overlap and therefore do not represent independent candidate populations. A broader 65-character request also returned zero candidates, including under `generic_only`.
+- Observed data evidence: the inspected graph contained 367 Character nodes; 267 had no `HAS_SKILL` rows, only 99 had at least three Skill rows, and 288 had no passive rows. The explicit nine-character H roster had legal skill rows but only one to three capability-tagged skills per character. The eight automatically included F2P characters had no usable skill or passive rows. These counts are discovery evidence, not a permanent schema count, and C6 must reproduce or supersede them with versioned receipts.
+- Implementation trace: current default packages are assembled from positively scoring, proven-capability shortlists and capped at four, so legal untagged active skills cannot fill packages. Beam expansion can then admit bare eligible characters outside the role pools and reject them later for package, coverage, and allocation reasons. Build packages select one deterministic named choice per character before lineup context and have no alternative matching/backtracking.
+- Oracle trace: the current 30 request fixtures use the same explicit nine-character roster, with the normal F2P augmentation. The twenty `expected_feasible` labels have no independent six-hero witness, while the ten `expected_infeasible` cases principally add an unknown character. Synthetic/fake-runner tests prove fixture and runner contracts but do not prove Neo4j-backed H-03 feasibility.
+- Approved boundary: retain strict proven atomic capability authority. Separate executable skill legality from capability proof; legal untagged active skills may fill packages but grant zero RoleScore and mandatory-coverage credit.
+- Approved package legality: use three distinct equipable skill families by default and four only when that character's request input explicitly declares at least 80 Light/Shadow points. Upgrade stages and SA-enhanced forms of one equipped skill count as one family. Ordinary basic attacks, Valor Chants, passives, and sidekick actions do not fill active-skill slots. Manifest/equipment-dependent actives require their dependencies.
+- Approved package frontier: generate up to three distinct non-dominated boss-aware packages per complete character. Offensive, sustain/defense/recovery, and counter/setup profiles guide diversity but are not rigid requirements; contextual value and rare mandatory counters outrank raw tag count.
+- Approved data boundary: full kit completeness for all 367 canonical character forms/styles is a Milestone 5 MVP gate. Each character needs a source/versioned materialization receipt with explicit active, passive/verified-absent, SA/not-applicable, dependency, and parse states. Exhaustive human capability proof remains deferred; only high-value role, mandatory-coverage, witness, and certificate facts require review now.
+- Approved incomplete-data behavior: exclude an incomplete optional character with typed diagnostics and continue only when at least six complete characters remain. Never infer authoritative strategic infeasibility from a reduced roster, never call the paid analyzer to compensate for missing deterministic data, and fail H readiness if any acceptance-roster character is incomplete.
+- Approved search boundary: construct valid `(character, selected_package)` choices before beam expansion, prevent duplicate character identity across variants, exclude structurally invalid choices early, and preserve stage-accountable preprocessing, coverage, affinity, allocation, and diversity diagnostics.
+- Approved `late_game_assumed` boundary: assume access to the released catalog without claiming ownership; enforce exact known maximum copies within each six-hero lineup and reset allocation between alternatives. Named equipment is single-copy unless repeatability is proven. Unknown named-Grasta cardinality is conservative, compatible generic placeholders are labelled and penalized, and deterministic bounded matching/backtracking must exhaust build alternatives before rejection.
+- Approved H oracle: use twenty boss-specific feasible acceptance cases with independently reviewed legal six-hero/package/coverage/allocation witnesses, plus ten valid data-complete infeasible cases with deterministic impossibility certificates. Preserve the existing common-nine-character requests unchanged as a separate stress suite. Unknown-character and incomplete-data scenarios remain regression tests, not strategic infeasibility cases.
+- Approved product sequence: complete the stable portfolio preview before a controlled Discord demo. Discord reviewer recruitment, feedback collection, and public metrics move to a later roadmap item, alongside broader boss admission, exhaustive capability proof, and richer stopper/turn-script modeling.
+- Approved public paid-analysis contract: email-verified registered users receive ten logical paid recommendation requests per calendar month. One logical request includes the optional fragment correction; deterministic rejection before analyzer invocation consumes none. Persistent atomic reservation, per-IP burst/concurrency control, a global kill switch, sanitized audit metadata, deterministic fallback, and an RM50 global monthly hard ceiling are required before public enablement.
+- Approved correction order: C6 full kit readiness/selective evidence -> D2 contextual legal package frontier -> E2 deterministic alternative allocation -> F2 package-first search/diagnostics -> corrected H oracle/evidence -> Feature I portfolio-preview safeguards. Each implementation feature follows `feature-planner -> builder-executor -> tdd-loop` and owns one completion commit.
+
 - Planning decision revised with human approval on 2026-08-10 (PG-01): Keep post-Feature-G Disposition 2 and Feature G1 before Feature H, expanding its fixed exit gate to thirty unique recommendation-ready bosses. The cohorts are ten weak at wiki difficulty 1.0-4.0, ten medium at 4.5-8.8, and ten strong at 9.0-12.0. The five cached weak bosses count only after identity, affinity-state, section-bounded mechanics, provenance, replay, and independent production-fixture repair, leaving twenty-five additional unique identities to admit. Selection within each band prioritizes mechanics, affinity, parser, page-section, and Discord beta-review diversity. Index discovery or difficulty never grants recommendation support; all-boss scraping, duplicate cross-band counting, automatic admission, and comprehensive coverage claims remain out of scope.
 - Planning decision revised on 2026-08-10 (PG-02): Use OpenRouter only for Milestone 5 paid beta qualification. The ordered chain is `deepseek/deepseek-v4-flash-0731`, `openai/gpt-5.6-luna`, then `z-ai/glm-5.2`; direct DeepSeek and `moonshotai/kimi-k2.6` are deferred. Qualify all three models independently before enabling OpenRouter's server-managed `models` fallback array, keep at most two application calls, capture the actual served model and complete available usage/cost metadata, and retain local schema/authority validation. Model rankings guide candidate selection but are not acceptance evidence. No mutable catalog value or credential is locked into repository configuration or acceptance.
-- Planning decision revised on 2026-08-10 (PG-03): Feature H remains blocked until Feature G1 completes and the three individual OpenRouter routes plus ordered fallback/accounting behavior pass offline verification. Paid calls and live boss-page fetches require separate explicit human authorization. Discord Another Eden players, not an AI judge, provide subjective beta feedback; deterministic backend gates remain the legality/factuality authority.
-- Feature G1 completion record: the exact thirty-boss manifest, five repaired cached weak fixtures, twenty-five bounded live section fixtures, independent expected facts, production outcomes, provenance fields, compact citations, and degraded fallback checks passed the deterministic G1 gates. Temporary live-fetch outputs were kept outside the repository for fixture promotion and are not release evidence; Feature H remains unstarted.
+- Planning decision revised on 2026-08-10 (PG-03), then narrowed by the approved 2026-08-22 correction: Feature H remains blocked until Feature G1 and correction Features C6/D2/E2/F2 complete and the three individual OpenRouter routes plus ordered fallback/accounting behavior pass offline verification. Paid calls and live boss-page fetches require separate explicit human authorization. No AI judge is admitted; Discord subjective feedback is deferred until after the stable portfolio preview and is not an H acceptance gate.
+- Feature G1 completion record: the exact thirty-boss manifest, five repaired cached weak fixtures, twenty-five bounded live section fixtures, independent expected facts, production outcomes, provenance fields, compact citations, and degraded fallback checks passed the deterministic G1 gates. Temporary live-fetch outputs were kept outside the repository for fixture promotion and are not release evidence. Feature H subsequently began offline verification and is now blocked by the approved C6/D2/E2/F2 correction sequence.
 - Planning decision on 2026-07-08: Feature C2 will model distinct, source-provable defensive mechanics rather than ETL-level umbrella labels such as `mitigation`, `healing`, or permanent tank/healer roles. Feature D will deterministically derive contextual coverage and RoleScores from the proven atomic mechanics; the analyzer LLM may explain or rank supplied candidates but may not invent or independently certify mandatory defensive coverage.
 - Planning decision on 2026-07-08: Feature C2 will expand atomic capability review and materialization to `SidekickSkill` records so sidekick revive, healing, cleanse, and defensive support can participate in deterministic candidate coverage. This reopens the affected C1 record-type, stable-ID, evidence, diagnostics, graph-materialization, and drift contracts before C2 review resumes; the previously generated C2 batch 2 is superseded and must be regenerated after the vocabulary/tooling revision.
 - Planning decision on 2026-07-08: C2 will also review and materialize `SidekickAura` capabilities. Sidekick evidence will record `main_only` availability for auto/charge-skill effects and `main_or_sub` availability for aura effects, together with captured activation conditions; Feature D must respect this placement availability when deriving coverage and scoring sidekick value.
@@ -690,7 +733,7 @@ This file stores source references used during planning discussions. It separate
 - Planning decision on 2026-06-25: Use free/local models for fast development, including the current `nvidia/nemotron-3-super-120b-a12b:free` OpenRouter path when useful.
 - Superseded planning decision from 2026-06-25: `moonshotai/kimi-k2.6` was the intended paid OpenRouter model. Superseded on 2026-08-10 by the ordered DeepSeek V4 Flash, GPT-5.6 Luna, and GLM-5.2 beta chain.
 - Superseded planning decision from 2026-06-25: Paid AI judge calls were limited to offline evaluation/report generation. Superseded on 2026-08-10: Milestone 5 uses deterministic gates and structured Discord player-reviewer feedback with no AI judge.
-- Planning decision on 2026-06-25: Start public demo or controlled Discord beta planning with an RM50/month OpenRouter ceiling. If usage hits the ceiling, pause or disable paid calls first, then decide whether increasing the ceiling is worth the portfolio value.
+- Superseded in part planning decision from 2026-06-25: Start public demo or controlled Discord beta planning with an RM50/month OpenRouter ceiling. The 2026-08-22 correction retains the RM50 hard ceiling but launches a safeguarded portfolio preview first and defers the controlled Discord demo and feedback program.
 - Planning decision on 2026-06-25: Backend deterministic validation should own fixed guardrails such as 4-frontline/2-reserve shape, no duplicate heroes, sidekick slot legality, owned roster enforcement, skill/passive existence, Stellar Awakening gates, skill-count limits, boss-affinity fidelity, equipment uniqueness when named, and no win-probability claims.
 - Planning decision on 2026-06-25: User clarification promoted Feature B from prose-only equipment policy into a build-slot output contract: each character should carry one weapon, one armor, and three Grasta assumptions; weapon and armor uniqueness is per lineup only; Grasta may be reused, including repeated copies; Grasta compatibility and pain/poison-dependent damage setup need deterministic validation where graph data supports it or explicit caveats where it does not. Superseded in part on 2026-06-29: reuse is now governed by exact-variant acquisition cardinality, so unique Tier 3 variants cannot repeat within one lineup.
 - Superseded in part on 2026-07-01: The 2026-06-25 policy assigned dynamic hero selection to AI. The backend now generates and scores legal lineups; AI ranks them, chooses from supplied skill shortlists, proposes at most one bounded swap, and explains strategy.
@@ -705,9 +748,9 @@ This file stores source references used during planning discussions. It separate
 - Verify exact wording and edge cases from the user-provided Status Effects, Tank Role, Revival Role, Sacrificial Heart Stacking, Guiding Vow Rite, Lady Vesper, and Assemble pages through normal cached ETL artifacts or manual review because the live pages were not retrievable through the available planning browser. No acceptance criterion depends on unverified live-page wording.
 - Validate the frontline Pain/Poison and reserve Grasta-mule default with experienced Another Eden players during the planned beta; record counterexamples and revise ranking heuristics without weakening hard compatibility or acquisition-cardinality rules.
 - Determine actual token usage and RM cost per recommendation run after context compression.
-- Determine the reasoning setting for each admitted OpenRouter model and compare individual-model versus ordered-fallback recommendation quality, structure reliability, latency, and cost before controlled beta.
-- Determine per-user and global request limits that keep a 20-30 player Discord beta inside the RM50/month budget.
-- Determine the minimum authentication and persistence approach for controlled beta feedback collection.
+- Determine the reasoning setting for each admitted OpenRouter model and compare individual-model versus ordered-fallback recommendation quality, structure reliability, latency, and cost before paid portfolio-preview qualification.
+- Select the concrete authentication provider and persistence technology that implement the approved email-verified ten-request monthly user quota, atomic reservation, per-IP protection, RM50 global ceiling, and kill switch without storing secrets in repository artifacts.
+- Design the later controlled Discord feedback program only after the stable portfolio preview is deployed; its cohort size, privacy/retention policy, moderation, and public metrics remain future decisions.
 
 ### Milestone 5 Transition Notes
 

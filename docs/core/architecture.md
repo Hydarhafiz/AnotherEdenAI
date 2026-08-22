@@ -107,6 +107,18 @@ Milestone 5 Feature C3 MVP review behavior:
 - C3 seed coverage inspects only parsed character and sidekick combat facts with stable source IDs and source URLs. It refuses partial seeds and reports each missing family by name rather than substituting a mechanics-page claim.
 - Seed and recovery commands write CSV/reference artifacts only. A reviewed replacement-batch row overlapping a seed remains seed evidence, is excluded from the clean batch, and is replaced one-for-one by a distinct unreviewed proposal. C3 performs no Neo4j materialization; Feature C5 retains the replay and graph-drift boundary.
 
+Milestone 5 correction architecture, approved 2026-08-22:
+
+- The recommender separates a complete **legal-kit layer** from a conservative **capability-proof layer**. Legal-kit facts establish exact character form/style ownership, equipability, skill-family identity, upgrade/SA relationships, and dependencies. Only reviewed proven atomic capabilities contribute contextual RoleScores or mandatory coverage.
+- Every one of the 367 canonical MVP character forms/styles must have an explicit materialization receipt. A receipt records source/version provenance, active-skill-family completion, passive completion or verified absence, SA completion or not-applicable state, and parse/validation status. Empty graph relationships alone never prove completion.
+- Untagged legal active skills may fill equipped packages with zero capability credit. Ordinary basic attacks, Valor Chants, passives, and sidekick actions cannot fill active-skill slots. Upgrade stages and SA-enhanced variants of one equipped skill count as one family.
+- Package generation produces one to three deterministic, distinct, non-dominated boss-aware packages per complete character. A package contains three skill families by default and may contain four only when the request explicitly declares that character at 80 or more Light/Shadow points.
+- Candidate search expands `(character, selected_package)` choices and prevents duplicate character identity across package variants. Incomplete and structurally invalid choices are diagnosed before beam expansion; later coverage, affinity, allocation, and diversity outcomes remain stage-accountable.
+- An incomplete optional character may be excluded with `character_data_incomplete` diagnostics when at least six complete characters remain, but the reduced search cannot claim authoritative strategic infeasibility. Fewer than six complete characters is a data-readiness error, and deterministic data failures never invoke the paid analyzer.
+- `late_game_assumed` means access to the released item catalog, not verified ownership. Known finite maxima apply within one six-hero lineup and reset between alternative lineups. Named equipment is single-copy unless repeatability is proven; unknown named-Grasta cardinality is conservative, with compatible labelled generic placeholders allowed by policy.
+- Build selection exposes alternatives to a deterministic bounded lineup-level matcher/backtracker. A lineup fails allocation only when no compatible complete assignment exists.
+- H acceptance uses independently witnessed boss-specific feasible cases and valid data-complete infeasible cases with deterministic impossibility certificates. The unchanged common-nine-character requests are a separate stress suite, not a feasibility oracle.
+
 Feature B curated superboss graph behavior:
 
 - The canonical Superbosses page discovers weak-boss candidates as index metadata, including difficulty tier, refight status, version, characteristics, and detail URLs.
@@ -165,8 +177,10 @@ Milestone 5 Feature B adds a separate typed production sequence:
 4. `FORMAT`
 
 Production requests carry a canonical `boss_id`, roster, optional owned sidekicks,
-per-character Stellar Awakening state, the `late_game_assumed` item policy, and
-natural-language preferences. Deterministic Neo4j services retrieve boss, roster,
+per-character Stellar Awakening state, optional per-character Light/Shadow points,
+the `late_game_assumed` item policy, and natural-language preferences. Missing
+Light/Shadow values conservatively allow three equipped active skills; a fourth is
+legal only at an explicitly declared value of at least 80. Deterministic Neo4j services retrieve boss, roster,
 skill/passive, mechanics, sidekick, Grasta, and compatible equipment context.
 Production character ownership accepts only exact canonical names or exact aliases;
 substring matching remains exploratory-only. Preferences may cause a typed boss

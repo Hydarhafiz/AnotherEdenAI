@@ -226,7 +226,10 @@ Sidekick has an aura effect. Auras can be contributed by sub sidekicks.
 Official wiki association or unlock fact between a Character and Sidekick when discoverable from the Sidekick index or detail page.
 
 ## Known Counts (from wiki audit 2026-03-14)
-- Character nodes: 393
+
+These are historical loaded/raw audit counts, not the approved C6 canonical-corpus gate. C6 targets exactly 367 canonical character forms/styles and must publish its own versioned receipt count during implementation.
+
+- Character nodes: 393 in the historical raw audit
 - Grasta nodes: 647 (Attack=231, Life=46, Support=56, Special=4, VC=310)
 - Ore nodes: 61
 - Equipment nodes: 888 (weapon=664, armor=224 from verified ETL run 2026-06-09)
@@ -252,6 +255,46 @@ The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - golden retrieval paths for sidekick associations, sidekick auto/charge skills, sidekick auras, boss affinities and mechanics text, and baseline equipment context
 - no exact `Character.name`/`Sidekick.name` overlap remains after the Milestone 5 sidekick cleanup gate
 - golden retrieval paths for weakness handling, main/sub sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore setup
+
+## Approved Milestone 5 Correction Target (Not Yet Materialized)
+
+The 2026-08-22 correction plan requires a later schema-version bump, ETL migration, authoritative replay, and assertion update. The fields below are target semantics only; schema `1.5.0` and the current Neo4j graph must not be described as already satisfying them.
+
+### Character Kit Materialization Receipt
+
+Each of the 367 canonical MVP character forms/styles must have one reproducible receipt, stored in an authoritative repository artifact and projected into Neo4j only as needed for readiness queries. The receipt must record:
+
+- canonical `character_id`, exact form/style, source URL, source revision or artifact fingerprint, parser version, and schema version
+- active-skill-family state and count
+- passive state: `complete` or explicit `verified_absent`
+- Stellar Awakening state: `complete`, `not_applicable`, or a typed failure
+- manifest/equipment dependency extraction state
+- overall state: `complete`, `failed`, or `ambiguous`, with typed diagnostics
+
+An empty `HAS_SKILL` or `HAS_PASSIVE_SKILL` result does not prove a successful receipt. H acceptance requires 367/367 `complete` receipts and at least three distinct equipable active-skill families per character.
+
+### Planned Skill-Family Fields
+
+The correction migration must add or equivalently normalize:
+
+- `skill_family_id` (STRING) — stable identity shared by upgrade stages and SA-enhanced forms of one equipped skill
+- `slot_eligibility` (STRING) — at minimum `active_equipable`, `ordinary_basic_attack`, `basic_attack_replacement`, or `not_equipable`
+- `upgrade_rank` (INTEGER, nullable) — deterministic ordering within one family
+- `replaces_skill_id` (STRING, nullable) — explicit replacement/upgrade relationship when the source proves it
+- `requires_manifest` and `requires_equipment` (typed nullable dependency fields or an equivalent versioned dependency structure)
+
+Package legality uses distinct `skill_family_id` values whose slot eligibility and dependencies are satisfied. Capability fields remain unchanged in authority: only reviewed proven capabilities grant score or coverage, while a legal family with no proven capability may still fill a package slot.
+
+### Planned Production Request Extension
+
+Production requests add optional per-character `light_shadow_points`. Omission or an unknown value permits exactly three selected active-skill families. A declared value greater than or equal to 80 permits up to four. `is_SA`, `stellar_awakened`, and `late_game_assumed` cannot infer this value.
+
+### Planned Replay And Migration Gate
+
+- Authoritative replay removes stale Skill/PassiveSkill relationships and obsolete family rows for every successfully materialized character.
+- Exact form/style ownership, family uniqueness, slot eligibility, dependency integrity, and receipt completeness are asserted after replay.
+- The migration must preserve existing stable IDs when identity semantics are unchanged and provide deterministic remapping evidence when family normalization changes an ID.
+- The schema version is incremented only in the owning C6 implementation commit after parser, loader, migration, drift, and compatibility tests pass.
 
 ## Future Extensions
 
