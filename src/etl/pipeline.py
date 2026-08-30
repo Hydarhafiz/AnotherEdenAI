@@ -55,6 +55,7 @@ from .models import (
     parse_mechanic_reference,
 )
 from .superboss_manifest import manifest_records
+from .kit_readiness import artifact_fingerprint
 from .scraper import (
     CHROMIUM_PATH,
     _read_soup,
@@ -551,6 +552,15 @@ def _parse_target(entry: dict[str, Any]) -> dict[str, Any]:
             "kind": kind,
             "character_name": character_name,
             "is_SA": is_sa,
+            "source_artifact_fingerprint": artifact_fingerprint(raw_path),
+            "source_revision": artifact_fingerprint(raw_path),
+            "passive_state": "complete" if passive_skills else "verified_absent",
+            "stellar_awakening_state": (
+                "complete"
+                if is_sa or any(skill.requires_stellar_awakened for skill in skills)
+                else "not_applicable"
+            ),
+            "dependency_state": "complete",
             "rows": _serialize_models(skills),
             "passive_rows": _serialize_models(passive_skills),
             "parsed_counts": {"skills": len(skills), "passive_skills": len(passive_skills)},
@@ -719,6 +729,7 @@ def _aggregate_parsed_data(
     character_skills: dict[str, list[SkillRow]] = {}
     character_passive_skills: dict[str, list[PassiveSkillRow]] = {}
     character_detail_is_sa: dict[str, bool] = {}
+    character_kit_metadata: dict[str, dict[str, Any]] = {}
     mechanic_references = _load_curated_mechanic_references()
 
     for entry in manifest["targets"].values():
@@ -762,6 +773,7 @@ def _aggregate_parsed_data(
                 PassiveSkillRow.model_validate(row) for row in payload.get("passive_rows", [])
             ]
             character_detail_is_sa[character_name] = bool(payload.get("is_SA"))
+            character_kit_metadata[character_name] = payload
         elif kind == "sidekick_detail":
             for row in rows:
                 sidekick = SidekickRow.model_validate(row)
@@ -777,7 +789,20 @@ def _aggregate_parsed_data(
         passive_skills = character_passive_skills.get(character.name, [])
         is_sa = character.is_SA or character_detail_is_sa.get(character.name, False)
         characters.append(
-            character.model_copy(update={"skills": skills, "passive_skills": passive_skills, "is_SA": is_sa})
+            character.model_copy(update={
+                "skills": skills,
+                "passive_skills": passive_skills,
+                "is_SA": is_sa,
+                "kit_source_artifact_fingerprint": character_kit_metadata.get(character.name, {}).get(
+                    "source_artifact_fingerprint"
+                ),
+                "kit_source_revision": character_kit_metadata.get(character.name, {}).get("source_revision"),
+                "kit_passive_state": character_kit_metadata.get(character.name, {}).get("passive_state"),
+                "kit_stellar_awakening_state": character_kit_metadata.get(character.name, {}).get(
+                    "stellar_awakening_state"
+                ),
+                "kit_dependency_state": character_kit_metadata.get(character.name, {}).get("dependency_state"),
+            })
         )
 
     return {

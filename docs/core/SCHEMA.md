@@ -1,5 +1,5 @@
 # Graph Schema Contract
-**SCHEMA_VERSION: 1.5.0**
+**SCHEMA_VERSION: 1.6.0**
 **Status:** Stable — do not modify without incrementing SCHEMA_VERSION and running ETL
 
 ## Node Labels and Properties
@@ -18,6 +18,26 @@
 
 ### Trait
 - `name` (STRING, unique) — personality trait name shared by Characters and Grastas
+
+### CharacterKitReceipt
+- `character_id` (STRING, unique) — exact Character identity covered by this receipt
+- `character_name`, `display_name` (STRING) — canonical form/style names
+- `source_url` (STRING) — source detail page used for the kit replay
+- `source_artifact_fingerprint`, `source_revision` (STRING) — reproducibility evidence
+- `parser_version`, `schema_version` (STRING) — parser and graph contract versions
+- `active_skill_state` (STRING) — `complete`, `failed`, or `ambiguous`
+- `active_skill_count` (INTEGER) — distinct legal active rows after normalization
+- `active_skill_family_count` (INTEGER) — distinct equipable families available to packages
+- `active_skill_family_ids` (LIST<STRING>) — deterministic family identities
+- `passive_state` (STRING) — `complete`, `verified_absent`, `failed`, or `ambiguous`
+- `passive_count` (INTEGER) — normalized passive facts
+- `stellar_awakening_state` (STRING) — `complete`, `not_applicable`, `failed`, or `ambiguous`
+- `dependency_state` (STRING) — manifest/equipment dependency extraction state
+- `overall_state` (STRING) — typed receipt result; only `complete` is package-ready
+- `diagnostics_json` (STRING) — stable source-specific extraction/data-gate diagnostics
+
+Receipts are authoritative readiness evidence; empty `HAS_SKILL` or
+`HAS_PASSIVE_SKILL` relationships never prove a complete kit.
 
 ### Grasta
 - `grasta_id` (STRING, unique) — stable exact-variant identity
@@ -75,6 +95,11 @@ Equipment nodes provide baseline context only. They do not encode best-in-slot r
 - `source_url` (STRING, nullable) — source character detail page
 - `section` (STRING, nullable) — source page section, e.g. Active Skills or Stellar Awakened Skills
 - `requires_stellar_awakened` (BOOLEAN) — true when the skill is gated behind Stellar Awakening
+- `skill_family_id` (STRING) — shared family identity for upgrade and SA variants of one equipped skill
+- `slot_eligibility` (STRING) — `active_equipable`, `ordinary_basic_attack`, `basic_attack_replacement`, or `not_equipable`
+- `upgrade_rank` (INTEGER, nullable) — source-proven ordering within a family
+- `replaces_skill_id` (STRING, nullable) — explicit replacement identity when the source proves it
+- `requires_manifest`, `requires_equipment` (STRING, nullable) — typed legal dependencies when present
 - `capabilities` (LIST<STRING>) — reviewed, proven atomic capabilities only; candidate, rejected, ambiguous, and untagged proposals are excluded
 - `dependencies` (LIST<STRING>) — reviewed, proven setup or condition dependencies kept separate from standalone capabilities
 - `capability_evidence_json` (STRING) — canonical evidence containing matched phrase, direction, target, rule or override, stable source fact ID, review provenance, and artifact version
@@ -213,6 +238,10 @@ Character has an executable active skill or basic attack replacement. No relatio
 ### (:Character)-[:HAS_PASSIVE_SKILL]->(:PassiveSkill)
 Character has a passive skill, stance, zone, battle-start effect, Stellar Awakening passive, or other non-executable mechanic. No relationship properties.
 
+### (:Character)-[:HAS_KIT_RECEIPT]->(:CharacterKitReceipt)
+
+Character has one authoritative C6 materialization receipt. No relationship properties.
+
 ### (:Sidekick)-[:HAS_AUTO_SKILL]->(:SidekickSkill)
 Sidekick has an auto skill. Target `SidekickSkill.skill_kind` is `auto`.
 
@@ -227,7 +256,7 @@ Official wiki association or unlock fact between a Character and Sidekick when d
 
 ## Known Counts (from wiki audit 2026-03-14)
 
-These are historical loaded/raw audit counts, not the approved C6 canonical-corpus gate. C6 targets exactly 367 canonical character forms/styles and must publish its own versioned receipt count during implementation.
+These are historical loaded/raw audit counts, not the C6 canonical-corpus gate. C6 publishes its exact 367-form receipt count in `src/etl/kit_catalog.json`.
 
 - Character nodes: 393 in the historical raw audit
 - Grasta nodes: 647 (Attack=231, Life=46, Support=56, Special=4, VC=310)
@@ -256,9 +285,11 @@ The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - no exact `Character.name`/`Sidekick.name` overlap remains after the Milestone 5 sidekick cleanup gate
 - golden retrieval paths for weakness handling, main/sub sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore setup
 
-## Approved Milestone 5 Correction Target (Not Yet Materialized)
+## Milestone 5 C6 Legal-Kit Contract And Current Gate
 
-The 2026-08-22 correction plan requires a later schema-version bump, ETL migration, authoritative replay, and assertion update. The fields below are target semantics only; schema `1.5.0` and the current Neo4j graph must not be described as already satisfying them.
+Schema 1.6.0 adds the C6 receipt and normalized skill-family contract. The
+repository artifact is authoritative for replay, and the current cached corpus
+passes the complete-receipt gate.
 
 ### Character Kit Materialization Receipt
 
@@ -295,6 +326,13 @@ Production requests add optional per-character `light_shadow_points`. Omission o
 - Exact form/style ownership, family uniqueness, slot eligibility, dependency integrity, and receipt completeness are asserted after replay.
 - The migration must preserve existing stable IDs when identity semantics are unchanged and provide deterministic remapping evidence when family normalization changes an ID.
 - The schema version is incremented only in the owning C6 implementation commit after parser, loader, migration, drift, and compatibility tests pass.
+
+Current cached-corpus evidence: `src/etl/kit_catalog.json` contains 367
+deduplicated and complete receipts. The refreshed
+`Laclair (Alter),Selfless Seeker` source exposes nine distinct equipable active
+families; `Bow Strike` is classified as an ordinary basic attack and `Another
+Zone` as non-equipable. Two consecutive local Neo4j replays, the exact receipt
+count gate, and the post-load schema assertions pass.
 
 ## Future Extensions
 

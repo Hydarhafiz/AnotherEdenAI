@@ -886,7 +886,9 @@ The ordered execution path is C6 -> D2 -> E2 -> F2 -> H. Each correction feature
 
 ### Feature C6: Full Character Kit Readiness And Selective Capability Evidence
 
-Status: Approved and planned; first implementation feature in the correction sequence.
+Status: Complete. Automated verification, exact-corpus readiness, two
+consecutive local Neo4j replays, targeted Laclair checks, and post-load schema
+assertions pass.
 
 Outcome: Every one of the 367 canonical MVP character forms/styles has a complete, replay-safe legal kit, while capability authority remains limited to reviewed proven atomic facts.
 
@@ -908,9 +910,21 @@ Acceptance criteria:
 - **C6-04:** Identical source artifacts and policy versions reproduce identical kit facts, receipts, and graph state; schema, parser, loader, drift, and operator gates pass before H consumes the corpus.
 - **C6-05:** Only reviewed proven capabilities contribute RoleScores or mandatory coverage; untagged legal skills remain visible and package-eligible with zero capability credit.
 
+Current implementation evidence: schema 1.6.0 now carries explicit skill-family
+and slot-eligibility fields, passive-grid extraction, authoritative stale-kit
+replay, receipt projection, and graph readiness assertions. The durable
+`src/etl/kit_catalog.json` replay contains exactly 367 canonical receipts and
+reports 367 complete receipts with no ambiguous or failed records. The
+refreshed `Laclair (Alter),Selfless Seeker` source contains nine distinct
+equipable active families, while `Bow Strike` is an ordinary basic attack and
+`Another Zone` is non-equipable. Unit/workflow verification, exact-corpus
+validation, two consecutive local Neo4j replays, targeted Browser queries, and
+post-load schema assertions passed on 2026-08-30. D2 may now consume the
+complete corpus.
+
 ### Feature D2: Legal Skill Families And Contextual Package Frontier
 
-Status: Approved and blocked by C6.
+Status: Approved and admitted as the next correction feature after C6.
 
 Outcome: Package legality is independent of capability proof, and each complete hero exposes useful boss-aware alternatives rather than one global default package.
 
@@ -931,7 +945,7 @@ Acceptance criteria:
 
 ### Feature E2: Deterministic Alternative Build Allocation
 
-Status: Approved and blocked by C6; may be implemented after D2's package dependency contract is stable.
+Status: Approved and blocked by D2; may be implemented after D2's package dependency contract is stable.
 
 Outcome: A lineup is rejected for build incompatibility only after deterministic compatible alternatives and finite-copy allocation have been exhausted.
 
@@ -952,7 +966,7 @@ Acceptance criteria:
 
 ### Feature F2: Package-First Beam Search And Stage Diagnostics
 
-Status: Approved and blocked by C6, D2, and E2.
+Status: Approved and blocked by D2 and E2.
 
 Outcome: Beam search expands only structurally valid character-package choices while retaining complete diagnostics for excluded heroes and later constraint failures.
 
@@ -1071,7 +1085,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature G: completed; compact closed-world projection, provider-neutral DeepSeek/OpenRouter offline adapters, strict authority validation, two-call fragment correction, deterministic refinement fallback, and labeled degraded backend output are verified.
 - Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
 - Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
-- Correction planning: completed and human-approved on 2026-08-22; C6, D2, E2, and F2 are planned in that order before H resumes.
+- Correction planning: completed and human-approved on 2026-08-22; C6 is complete, D2 is the next admitted correction feature, and E2/F2 remain sequenced behind D2 and E2 respectively.
 - Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through correction planning and implementation.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.

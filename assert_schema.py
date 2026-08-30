@@ -21,6 +21,7 @@ if not os.path.isfile(schema_path):
 
 from neo4j import GraphDatabase
 from src.etl.constants import EXPECTED_NODE_COUNTS, NEO4J_URI, NEO4J_AUTH
+from src.etl.kit_readiness import EXPECTED_CANONICAL_CHARACTER_COUNT
 
 driver = GraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH)
 
@@ -33,6 +34,7 @@ READINESS_NODE_MINIMUMS = {
     "Superboss": 1,
     "Equipment": 1,
     "MechanicReference": 1,
+    "CharacterKitReceipt": EXPECTED_CANONICAL_CHARACTER_COUNT,
 }
 
 SCHEMA_VERSION_LABELS = [
@@ -46,6 +48,7 @@ SCHEMA_VERSION_LABELS = [
     "Superboss",
     "Equipment",
     "MechanicReference",
+    "CharacterKitReceipt",
 ]
 
 SOURCE_URL_LABELS = [
@@ -58,6 +61,7 @@ SOURCE_URL_LABELS = [
     "Superboss",
     "Equipment",
     "MechanicReference",
+    "CharacterKitReceipt",
 ]
 
 READINESS_QUERIES = [
@@ -265,6 +269,7 @@ try:
             "Character": "character_id",
             "Skill": "skill_id",
             "PassiveSkill": "passive_skill_id",
+            "CharacterKitReceipt": "character_id",
         }
         for label, property_name in identity_checks.items():
             missing = _count(
@@ -310,6 +315,24 @@ try:
                 failed = True
             else:
                 print(f"OK: golden retrieval query '{name}' = {cnt}")
+
+        complete_kits = _count(
+            session,
+            """
+            MATCH (r:CharacterKitReceipt)
+            WHERE r.overall_state = 'complete'
+              AND r.active_skill_family_count >= 3
+            RETURN count(r) AS cnt
+            """,
+        )
+        if complete_kits != EXPECTED_CANONICAL_CHARACTER_COUNT:
+            print(
+                "FAIL: C6 complete kit receipts "
+                f"{complete_kits} != {EXPECTED_CANONICAL_CHARACTER_COUNT}"
+            )
+            failed = True
+        else:
+            print(f"OK: C6 complete kit receipts = {complete_kits}")
 except Exception as exc:
     print(f"FAIL: Could not connect to Neo4j at {NEO4J_URI} — {exc}")
     sys.exit(1)

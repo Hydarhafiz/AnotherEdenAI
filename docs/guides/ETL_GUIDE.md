@@ -29,6 +29,7 @@ Important local artifacts:
 - `data/parsed/`: schema-versioned parsed JSON snapshots
 - `data/etl/crawl_manifest.json`: crawl state and diagnostics
 - `src/etl/mechanics_corpus.json`: curated Milestone 4 mechanics references replayed into parsed artifacts
+- `src/etl/kit_catalog.json`: authoritative C6 legal-kit receipts and normalized skill families
 
 Important behavior:
 
@@ -218,6 +219,39 @@ This checks:
 - golden retrieval paths for sidekick associations, sidekick abilities and auras, boss affinities and mechanics text, and baseline equipment context
 - golden retrieval paths for weakness handling, sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore mechanics references
 
+### 3a. Feature C6 Kit Readiness Gate
+
+C6 separates legal kit materialization from reviewed capability evidence. Build
+the exact 367-form catalog from cached HTML without fetching or writing under
+`data/`:
+
+```bash
+.venv/bin/python -m src.etl.kit_readiness build \
+  --raw-dir data/raw \
+  --catalog src/etl/kit_catalog.json
+```
+
+Inspect the deterministic receipt report:
+
+```bash
+.venv/bin/python -m src.etl.kit_readiness validate \
+  --catalog src/etl/kit_catalog.json \
+  --require-ready
+```
+
+Each receipt records source fingerprint, parser/schema versions, active skill
+families, passive and Stellar Awakening states, dependency extraction, and
+typed diagnostics. Ordinary basic attacks, Valor Chants, passives, and
+sidekick actions cannot satisfy an active package family. An untagged but legal
+active skill remains package-eligible and contributes zero capability credit.
+
+Authoritative Neo4j replay accepts only one `complete` receipt per selected
+character and removes stale skill, passive, and receipt relationships before
+loading the replacement kit. A failed or ambiguous receipt stops the replay;
+it is never converted into a weak or strategically infeasible character. Run
+`assert_schema.py` after a successful replay; it requires exactly 367 complete
+receipts with at least three equipable active families each.
+
 ### 4. Mechanics Corpus Replay
 
 The Milestone 4 mechanics corpus is curated in:
@@ -333,7 +367,7 @@ MATCH (:Sidekick {name: c.name})
 RETURN c.name;
 ```
 
-The identity columns must be non-empty and schema versions must be `1.5.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
+The identity columns must be non-empty and schema versions must be `1.6.0`. The overlap query must return no rows. Run the parsed replay a second time and confirm these results remain unchanged.
 
 ### Feature C Atomic Capability Review
 

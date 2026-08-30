@@ -29,6 +29,7 @@ from .models import (
     SkillRow,
     SuperbossRow,
 )
+from .kit_readiness import CharacterKitReceipt
 
 logger = logging.getLogger(__name__)
 
@@ -141,6 +142,7 @@ async def ensure_constraints(driver) -> None:
         "CREATE CONSTRAINT skill_identity IF NOT EXISTS FOR (s:Skill) REQUIRE (s.character_name, s.name) IS UNIQUE",
         "CREATE CONSTRAINT passive_skill_id IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE p.passive_skill_id IS UNIQUE",
         "CREATE CONSTRAINT passive_skill_identity IF NOT EXISTS FOR (p:PassiveSkill) REQUIRE (p.character_name, p.name) IS UNIQUE",
+        "CREATE CONSTRAINT kit_receipt_character_id IF NOT EXISTS FOR (r:CharacterKitReceipt) REQUIRE r.character_id IS UNIQUE",
         "CREATE CONSTRAINT sidekick_name IF NOT EXISTS FOR (s:Sidekick) REQUIRE s.name IS UNIQUE",
         "CREATE CONSTRAINT sidekick_skill_identity IF NOT EXISTS FOR (s:SidekickSkill) REQUIRE (s.sidekick_name, s.name, s.skill_kind) IS UNIQUE",
         "CREATE CONSTRAINT sidekick_aura_identity IF NOT EXISTS FOR (a:SidekickAura) REQUIRE (a.sidekick_name, a.name) IS UNIQUE",
@@ -350,6 +352,12 @@ async def load_skills(driver, rows: list[SkillRow]) -> None:
             "source_url": r.source_url,
             "section": r.section,
             "requires_stellar_awakened": r.requires_stellar_awakened,
+            "skill_family_id": r.skill_family_id,
+            "slot_eligibility": r.slot_eligibility,
+            "upgrade_rank": r.upgrade_rank,
+            "replaces_skill_id": r.replaces_skill_id,
+            "requires_manifest": r.requires_manifest,
+            "requires_equipment": r.requires_equipment,
             "schema_version": r.schema_version,
             "capabilities": r.capabilities,
             "dependencies": r.dependencies,
@@ -372,6 +380,12 @@ SET s.skill_id = row.skill_id,
     s.source_url = row.source_url,
     s.section = row.section,
     s.requires_stellar_awakened = row.requires_stellar_awakened,
+    s.skill_family_id = row.skill_family_id,
+    s.slot_eligibility = row.slot_eligibility,
+    s.upgrade_rank = row.upgrade_rank,
+    s.replaces_skill_id = row.replaces_skill_id,
+    s.requires_manifest = row.requires_manifest,
+    s.requires_equipment = row.requires_equipment,
     s.schema_version = row.schema_version,
     s.capabilities = row.capabilities,
     s.dependencies = row.dependencies,
@@ -446,6 +460,126 @@ MERGE (c)-[:HAS_PASSIVE_SKILL]->(p)
         await session.run(cypher, rows=passive_data)
 
     logger.info("Loaded %d PassiveSkill nodes", len(rows))
+
+
+async def load_kit_receipts(driver, receipts: list[CharacterKitReceipt]) -> None:
+    """Project authoritative C6 receipts for readiness inspection."""
+    if not receipts:
+        logger.warning("load_kit_receipts called with empty list -- nothing to load")
+        return
+    cypher = """
+UNWIND $rows AS row
+MATCH (c:Character {character_id: row.character_id})
+MERGE (r:CharacterKitReceipt {character_id: row.character_id})
+SET r.character_name = row.character_name,
+    r.display_name = row.display_name,
+    r.source_url = row.source_url,
+    r.source_artifact_fingerprint = row.source_artifact_fingerprint,
+    r.source_revision = row.source_revision,
+    r.parser_version = row.parser_version,
+    r.schema_version = row.schema_version,
+    r.active_skill_state = row.active_skill_state,
+    r.active_skill_count = row.active_skill_count,
+    r.active_skill_family_count = row.active_skill_family_count,
+    r.active_skill_family_ids = row.active_skill_family_ids,
+    r.passive_state = row.passive_state,
+    r.passive_count = row.passive_count,
+    r.stellar_awakening_state = row.stellar_awakening_state,
+    r.dependency_state = row.dependency_state,
+    r.overall_state = row.overall_state,
+    r.diagnostics_json = row.diagnostics_json
+MERGE (c)-[:HAS_KIT_RECEIPT]->(r)
+"""
+    rows = []
+    for receipt in receipts:
+        row = receipt.model_dump(mode="json")
+        row["diagnostics_json"] = _encode_structured_property(row.pop("diagnostics"))
+        rows.append(row)
+    async with driver.session() as session:
+        await session.run(cypher, rows=rows)
+    logger.info("Loaded %d CharacterKitReceipt nodes", len(receipts))
+
+
+async def authoritative_replay_character_kits(
+    driver,
+    characters: list[CharacterRow],
+    skills: list[SkillRow],
+    passives: list[PassiveSkillRow],
+    receipts: list[CharacterKitReceipt],
+) -> None:
+    """Replace selected character kit facts instead of accumulating stale rows."""
+    if not characters:
+        return
+    if len(receipts) != len(characters) or any(receipt.overall_state != "complete" for receipt in receipts):
+        raise RuntimeError("C6 authoritative replay requires one complete receipt per selected character")
+    names = sorted({character.name for character in characters})
+    async with driver.session() as session:
+        await session.run(
+            """
+UNWIND $names AS name
+MATCH (c:Character {name: name})-[edge:HAS_SKILL]->(s:Skill)
+DELETE edge
+WITH s
+WHERE NOT (s)--()
+DELETE s
+""",
+            names=names,
+        )
+        await session.run(
+            """
+UNWIND $names AS name
+MATCH (c:Character {name: name})-[edge:HAS_PASSIVE_SKILL]->(p:PassiveSkill)
+DELETE edge
+WITH p
+WHERE NOT (p)--()
+DELETE p
+""",
+            names=names,
+        )
+        await session.run(
+            """
+UNWIND $names AS name
+MATCH (c:Character {name: name})-[edge:HAS_KIT_RECEIPT]->(r:CharacterKitReceipt)
+DELETE edge
+WITH r
+WHERE NOT (r)--()
+DELETE r
+""",
+            names=names,
+        )
+    await load_skills(driver, skills)
+    await load_passive_skills(driver, passives)
+    await load_kit_receipts(driver, receipts)
+
+
+async def report_kit_readiness(driver, character_names: list[str]) -> dict:
+    """Return the graph-backed C6 receipt gate without treating empty edges as proof."""
+    query = """
+MATCH (c:Character)
+WHERE c.name IN $character_names
+OPTIONAL MATCH (c)-[:HAS_KIT_RECEIPT]->(r:CharacterKitReceipt)
+RETURN count(c) AS character_count,
+       count(r) AS receipt_count,
+       sum(CASE WHEN r.overall_state = 'complete' THEN 1 ELSE 0 END) AS complete_count,
+       sum(CASE WHEN coalesce(r.active_skill_family_count, 0) < 3 THEN 1 ELSE 0 END) AS insufficient_family_count,
+       collect(CASE WHEN r.overall_state <> 'complete' OR r IS NULL THEN c.name END) AS not_ready
+"""
+    records, _, _ = await driver.execute_query(query, character_names=character_names, database_="neo4j")
+    report = dict(records[0]) if records else {
+        "character_count": 0,
+        "receipt_count": 0,
+        "complete_count": 0,
+        "insufficient_family_count": 0,
+        "not_ready": [],
+    }
+    report["not_ready"] = sorted(name for name in report.get("not_ready", []) if name)
+    report["ready"] = (
+        report.get("character_count") == len(set(character_names))
+        and report.get("receipt_count") == len(set(character_names))
+        and report.get("complete_count") == len(set(character_names))
+        and not report.get("insufficient_family_count")
+    )
+    return report
 
 
 async def load_sidekicks(driver, rows: list[SidekickRow]) -> None:

@@ -132,7 +132,7 @@ def test_safety_cutover_removes_old_materializer_and_bumps_schema():
     assert "role_tags" not in SkillRow.model_fields
     assert "role_tags" not in PassiveSkillRow.model_fields
     assert "role_tags" not in SidekickRow.model_fields
-    assert SCHEMA_VERSION == "1.5.0"
+    assert SCHEMA_VERSION == "1.6.0"
 
 
 def test_direction_aware_rules_distinguish_grant_from_dependency_and_negative_patterns():

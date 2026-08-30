@@ -17,6 +17,8 @@ from .loader import (
     load_mechanic_references,
     load_ores,
     load_passive_skills,
+    authoritative_replay_character_kits,
+    report_kit_readiness,
     load_sidekicks,
     load_skills,
     remove_collapsed_legacy_grastas,
@@ -26,6 +28,7 @@ from .loader import (
 )
 from .pipeline import CrawlConfig, UNRELEASED_CHARACTER_NAMES, mark_loaded, prepare_parsed_data
 from .capability_taxonomy import assert_capability_materialization, validate_c5_handoff
+from .kit_readiness import build_receipt, artifact_fingerprint
 
 logging.basicConfig(
     level=logging.INFO,
@@ -75,6 +78,28 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
             len(equipment),
         )
 
+        normalized_characters = []
+        receipts = []
+        for character in characters:
+            receipt, normalized_skills, normalized_passives = build_receipt(
+                character,
+                character.skills,
+                character.passive_skills,
+                source_artifact_fingerprint=character.kit_source_artifact_fingerprint or artifact_fingerprint({
+                    "character": character.model_dump(mode="json"),
+                    "skills": [skill.model_dump(mode="json") for skill in character.skills],
+                    "passive_skills": [passive.model_dump(mode="json") for passive in character.passive_skills],
+                }),
+                source_revision=character.kit_source_revision,
+                passive_state=character.kit_passive_state,
+                stellar_awakening_state=character.kit_stellar_awakening_state,
+                dependency_state=character.kit_dependency_state or "complete",
+            )
+            normalized_characters.append(
+                character.model_copy(update={"skills": normalized_skills, "passive_skills": normalized_passives})
+            )
+            receipts.append(receipt)
+        characters = normalized_characters
         skills = [skill for character in characters for skill in character.skills]
         passive_skills = [passive for character in characters for passive in character.passive_skills]
         capability_records = [
@@ -96,8 +121,7 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         await load_characters(driver, characters)
         await remove_unreleased_character_placeholders(driver, list(UNRELEASED_CHARACTER_NAMES))
         await remove_stale_role_materialization(driver)
-        await load_skills(driver, skills)
-        await load_passive_skills(driver, passive_skills)
+        await authoritative_replay_character_kits(driver, characters, skills, passive_skills, receipts)
         await load_sidekicks(driver, sidekicks)
         await assert_capability_materialization(driver, skills, passive_skills, sidekicks)
         overlap_report = await cleanup_duplicate_sidekick_characters(driver)
@@ -114,6 +138,9 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
                 ", ".join(cleanup_names),
             )
         await audit_character_readiness(driver, [character.name for character in characters])
+        kit_report = await report_kit_readiness(driver, [character.name for character in characters])
+        if not kit_report["ready"]:
+            raise RuntimeError(f"C6 graph readiness gate failed: {kit_report}")
         await load_superbosses(driver, superbosses)
         await load_mechanic_references(driver, mechanic_references)
         await remove_collapsed_legacy_grastas(driver)

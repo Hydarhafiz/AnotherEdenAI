@@ -75,6 +75,51 @@ def _stable_id(prefix: str, *parts: object) -> str:
     return f"{prefix}:{hashlib.sha256(normalized.encode('utf-8')).hexdigest()[:20]}"
 
 
+SkillSlotEligibility = Literal[
+    "active_equipable",
+    "ordinary_basic_attack",
+    "basic_attack_replacement",
+    "not_equipable",
+]
+
+
+def _normalized_skill_family_name(name: str) -> str:
+    """Normalize only source-proven upgrade spellings, never combat meaning."""
+    normalized = unicodedata.normalize("NFKC", name or "").strip().casefold()
+    normalized = re.sub(r"\s+", " ", normalized)
+    normalized = re.sub(r"\s*(?:\+|＋)$", "", normalized)
+    normalized = re.sub(r"\s+\((?:sa|stellar awakened|stellar burst)\)$", "", normalized)
+    return normalized
+
+
+def infer_skill_slot_eligibility(
+    *,
+    name: str,
+    section: str | None,
+    skill_type: str | None,
+    description: str,
+) -> SkillSlotEligibility:
+    """Classify package eligibility from explicit source shape, not capabilities."""
+    section_text = (section or "").casefold()
+    type_text = (skill_type or "").casefold()
+    description_text = (description or "").casefold()
+    if "passive" in section_text or type_text == "passive":
+        return "not_equipable"
+    if "valor chant" in section_text or "valor chant" in description_text:
+        return "not_equipable"
+    if _normalized_skill_family_name(name) == "another zone":
+        return "not_equipable"
+    if "basic attack replacement" in section_text or "replaces basic attack" in description_text:
+        return "basic_attack_replacement"
+    if description_text.lstrip().startswith("basic attack:") or description_text.lstrip().startswith("basic attack "):
+        return "ordinary_basic_attack"
+    return "active_equipable"
+
+
+def stable_skill_family_id(character_name: str, name: str) -> str:
+    return _stable_id("skill_family", character_name, _normalized_skill_family_name(name))
+
+
 def _character_aliases(name: str) -> list[str]:
     aliases = [name]
     if "," in name:
@@ -112,6 +157,11 @@ class CharacterRow(BaseModel):
     character_id: str = ""
     display_name: str = ""
     aliases: list[str] = Field(default_factory=list)
+    kit_source_artifact_fingerprint: str | None = None
+    kit_source_revision: str | None = None
+    kit_passive_state: Literal["complete", "verified_absent", "failed", "ambiguous"] | None = None
+    kit_stellar_awakening_state: Literal["complete", "not_applicable", "failed", "ambiguous"] | None = None
+    kit_dependency_state: Literal["complete", "failed", "ambiguous"] | None = None
     schema_version: str = Field(default=ETL_SCHEMA_VERSION)
 
     @field_validator("personalities", mode="before")
@@ -152,6 +202,12 @@ class SkillRow(BaseModel):
     section: str | None = None
     requires_stellar_awakened: bool = Field(default=False)
     skill_id: str = ""
+    skill_family_id: str = ""
+    slot_eligibility: SkillSlotEligibility | None = None
+    upgrade_rank: int | None = None
+    replaces_skill_id: str | None = None
+    requires_manifest: str | None = None
+    requires_equipment: str | None = None
     capabilities: list[str] = Field(default_factory=list)
     dependencies: list[str] = Field(default_factory=list)
     capability_evidence_json: str = "[]"
@@ -162,6 +218,19 @@ class SkillRow(BaseModel):
     def model_post_init(self, __context) -> None:
         if not self.skill_id:
             object.__setattr__(self, "skill_id", _stable_id("skill", self.character_name, self.name))
+        if not self.skill_family_id:
+            object.__setattr__(self, "skill_family_id", stable_skill_family_id(self.character_name, self.name))
+        if self.slot_eligibility is None:
+            object.__setattr__(
+                self,
+                "slot_eligibility",
+                infer_skill_slot_eligibility(
+                    name=self.name,
+                    section=self.section,
+                    skill_type=self.skill_type,
+                    description=self.description,
+                ),
+            )
         capabilities, dependencies, evidence, version, diagnostics = materialize_atomic(self.model_dump())
         object.__setattr__(self, "capabilities", capabilities)
         object.__setattr__(self, "dependencies", dependencies)

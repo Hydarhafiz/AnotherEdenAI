@@ -981,7 +981,13 @@ def parse_sidekick_detail(
     )
 
 
-def _parse_skill_grid(soup: BeautifulSoup, character_name: str, source_url: str | None) -> list[SkillRow]:
+def _parse_skill_grid(
+    soup: BeautifulSoup,
+    character_name: str,
+    source_url: str | None,
+    *,
+    include_passive: bool = False,
+) -> list[SkillRow]:
     skills = []
     for container in soup.select("article[title*='Skills'] div.character-skill-grid-container"):
         name = _first_text(container, ".skill-name")
@@ -989,11 +995,17 @@ def _parse_skill_grid(soup: BeautifulSoup, character_name: str, source_url: str 
         if not name or name.lower() == "skill name" or not description:
             continue
         section = _article_title(container) or _section_for_row(container)
+        skill_type = _first_text(container, ".character-skill-element-type .lower-grid")
+        if not include_passive and (
+            skill_type.casefold() == "passive"
+            or "passive skills" in section.casefold()
+        ):
+            continue
         raw = {
             "character_name": character_name,
             "name": name,
             "element": _first_text(container, ".character-skill-element-type .upper-grid"),
-            "skill_type": _first_text(container, ".character-skill-element-type .lower-grid"),
+            "skill_type": skill_type,
             "mp": _first_text(container, ".character-skill-mp"),
             "description": description,
             "multiplier": _first_text(container, ".skill-mod"),
@@ -1060,6 +1072,34 @@ def parse_character_passive_skills(
 ) -> list[PassiveSkillRow]:
     """Extract passive and non-executable mechanics from one cached character page."""
     passives = []
+    for container in soup.select("article[title*='Skills'] div.character-skill-grid-container"):
+        name = _first_text(container, ".skill-name")
+        description = _first_text(container, ".skill-description")
+        section = _article_title(container) or _section_for_row(container)
+        skill_type = _first_text(container, ".character-skill-element-type .lower-grid")
+        if (
+            not name
+            or not description
+            or (
+                skill_type.casefold() != "passive"
+                and "passive skills" not in section.casefold()
+            )
+        ):
+            continue
+        raw = {
+            "character_name": character_name,
+            "name": name,
+            "description": description,
+            "source_url": source_url,
+            "section": section,
+            "passive_type": _passive_type(section, description),
+            "requires_stellar_awakened": _row_is_stellar_gated(container, section),
+        }
+        try:
+            passives.append(PassiveSkillRow.model_validate(raw))
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("Skipping passive skill grid row for %s: %s", character_name, exc)
+
     for stance in soup.select("article[title='Stances/Zones'] div.character-stance"):
         name = _first_text(stance, ".stance-title-name a") or _first_text(stance, ".stance-title-name")
         description_parts = [
