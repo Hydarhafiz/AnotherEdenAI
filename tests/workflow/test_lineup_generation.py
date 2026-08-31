@@ -158,6 +158,32 @@ def test_required_setup_and_build_allocation_are_hard_candidate_gates():
     assert "build_incompatibility" in allocation_result["diagnostics"]["zero_candidate_causes"]
 
 
+def test_lineup_generation_selects_package_alternatives_before_rejecting_finite_items():
+    characters, entities, role_scores = fixture(unique_items=True)
+    for entity in entities:
+        if entity.get("entity_type") != "character":
+            continue
+        entity["build_package_options"] = [
+            entity["build_package"],
+            package(f"{entity['id']}:alternative", unique=False),
+        ]
+
+    result = generate_lineup_candidates(
+        characters=characters,
+        boss={"name": "Mimi", "weak": ["Fire"]},
+        role_scores=role_scores,
+    )
+
+    assert result["candidate_count"] >= 1
+    candidate = result["candidates"][0]
+    assert candidate["validation"]["valid"] is True
+    assert candidate["allocation_search"]["states_explored"] > 1
+    assert any(
+        candidate["build_package_ids"][entity_id] != entity["build_package"]["id"]
+        for entity_id, entity in ((item["id"], item) for item in entities if item.get("entity_type") == "character")
+    )
+
+
 def test_legal_sidekick_main_contribution_can_satisfy_a_required_counter():
     result = generate(with_sidekick=True)
 

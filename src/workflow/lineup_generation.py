@@ -14,7 +14,7 @@ import json
 from collections import Counter
 from typing import Any, Iterable
 
-from .build_packages import validate_lineup_allocation
+from .build_packages import resolve_lineup_allocation
 
 
 LINEUP_GENERATION_POLICY_VERSION = "feature-f-lineup-v1"
@@ -235,6 +235,7 @@ def score_lineup_candidate(
         sidekick_entities,
         boss,
         candidate.get("coverage", {}),
+        selected_packages=candidate.get("build_packages") or {},
     )
 
 
@@ -413,19 +414,41 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
     if any(not entities[entity_id].get("eligible", True) for entity_id in character_ids):
         return None, ["character.ineligible"]
 
-    coverage = _coverage(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, role_scores)
-    reasons.extend(coverage["missing"])
-    packages = {
+    package_options = {
+        entity_id: _build_package_options(entities[entity_id])
+        for entity_id in character_ids
+        if _build_package_options(entities[entity_id])
+    }
+    if len(package_options) != LINEUP_SIZE:
+        reasons.append("build_package.missing")
+        allocation = {
+            "valid": False,
+            "selected_packages": {},
+            "selected_package_ids": {},
+            "allocation": {"scope": "lineup", "items": []},
+            "search": {"states_explored": 0, "max_states": 0, "bounded": True},
+        }
+    else:
+        allocation = resolve_lineup_allocation(package_options, character_ids=list(character_ids))
+        if not allocation.get("valid"):
+            reasons.append("build_incompatibility")
+
+    selected_packages = allocation.get("selected_packages") or {
         entity_id: entities[entity_id].get("build_package")
         for entity_id in character_ids
         if entities[entity_id].get("build_package")
     }
-    if len(packages) != LINEUP_SIZE:
-        reasons.append("build_package.missing")
-    else:
-        allocation = validate_lineup_allocation(packages, character_ids=list(character_ids))
-        if not allocation.get("valid"):
-            reasons.append("build_incompatibility")
+    coverage = _coverage(
+        character_ids,
+        sidekick_pair,
+        template,
+        entities,
+        sidekick_entities,
+        boss,
+        role_scores,
+        selected_packages=selected_packages,
+    )
+    reasons.extend(coverage["missing"])
 
     for entity_id in character_ids:
         if not _package_ready(entities[entity_id]):
@@ -441,11 +464,12 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         sidekick_entities,
         boss,
         coverage,
+        selected_packages=selected_packages,
     )
     main_sidekick_id = _public_sidekick_id(sidekick_pair[0], sidekick_entities)
     sub_sidekick_id = _public_sidekick_id(sidekick_pair[1], sidekick_entities)
     package_ids = {
-        entity_id: str(entities[entity_id].get("build_package", {}).get("id") or entity_id)
+        entity_id: str(selected_packages.get(entity_id, {}).get("id") or entity_id)
         for entity_id in character_ids
     }
     skills = {
@@ -453,7 +477,14 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         for entity_id in character_ids
     }
     candidate = {
-        "id": _stable_id("lineup", archetype, *character_ids, sidekick_pair[0], sidekick_pair[1]),
+        "id": _stable_id(
+            "lineup",
+            archetype,
+            *character_ids,
+            *package_ids.values(),
+            sidekick_pair[0],
+            sidekick_pair[1],
+        ),
         "archetype": archetype,
         "character_ids": list(character_ids),
         "frontline_character_ids": list(character_ids[:FRONTLINE_SIZE]),
@@ -468,6 +499,9 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         "sub_sidekick_id": sub_sidekick_id,
         "skill_package_ids": skills,
         "build_package_ids": package_ids,
+        "build_packages": selected_packages,
+        "build_allocation": allocation.get("allocation", {"scope": "lineup", "items": []}),
+        "allocation_search": allocation.get("search", {}),
         "coverage": coverage,
         "score": score["score"],
         "component_scores": score["component_scores"],
@@ -478,6 +512,7 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
             "valid": True,
             "character_count": LINEUP_SIZE,
             "build_allocation": "validated",
+            "build_package_ids": package_ids,
             "reason": "survived bounded beam expansion and full-lineup legality gates",
         },
         "pruning_survival_reason": f"{archetype} template coverage-valid candidate retained by deterministic score",
@@ -485,7 +520,8 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
     return candidate, []
 
 
-def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, role_scores):
+def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, role_scores, *, selected_packages=None):
+    selected_packages = selected_packages or {}
     selected = [entities[entity_id] for entity_id in character_ids]
     selected_sidekicks = [sidekick_entities[entity_id] for entity_id in sidekick_pair if entity_id and entity_id in sidekick_entities]
     all_entities = [*selected, *selected_sidekicks]
@@ -515,7 +551,10 @@ def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entitie
         if required not in capabilities:
             missing.append(f"mandatory.counter.{required}")
 
-    dependencies = _lineup_dependencies(entity.get("build_package") or {} for entity in selected)
+    dependencies = _lineup_dependencies(
+        selected_packages.get(entity_id, entity.get("build_package") or {})
+        for entity_id, entity in zip(character_ids, selected)
+    )
     required_setup_roles = _required_setup_roles(boss, dependencies)
     for required_role in required_setup_roles:
         if required_role not in covered_roles:
@@ -543,7 +582,8 @@ def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entitie
     }
 
 
-def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, coverage):
+def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, coverage, *, selected_packages=None):
+    selected_packages = selected_packages or {}
     selected = [entities[entity_id] for entity_id in character_ids]
     frontline = selected[:FRONTLINE_SIZE]
     reserve = selected[FRONTLINE_SIZE:]
@@ -562,7 +602,11 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
     reserve_utility = sum(_role_score(entity, "reserve_utility") + _role_score(entity, "mp_sustain") for entity in reserve)
     role_counts = Counter(role for entity in frontline for role in _role_ids(entity))
     overlap = sum(max(0, count - 2) for count in role_counts.values())
-    assumption_count = sum(len((entity.get("build_package") or {}).get("assumptions") or []) for entity in selected)
+    assumption_count = sum(
+        len((selected_packages.get(entity_id, entity.get("build_package") or {}).get("assumptions") or []))
+        + int(selected_packages.get(entity_id, entity.get("build_package") or {}).get("generic_placeholder_count") or 0)
+        for entity_id, entity in zip(character_ids, selected)
+    )
     uncertainty_count = sum(
         1 for entity in all_entities
         if entity.get("sa_state") == "unknown" or not entity.get("evidence")
@@ -594,8 +638,8 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
         penalties.append({"code": "uncertainty", "amount": uncertainty_count, "message": "One or more selected facts have unknown evidence or state."})
     assumptions = sorted({
         assumption
-        for entity in selected
-        for assumption in (entity.get("build_package") or {}).get("assumptions", [])
+        for entity_id, entity in zip(character_ids, selected)
+        for assumption in (selected_packages.get(entity_id, entity.get("build_package") or {}).get("assumptions", []))
     })
     return {
         "score": round(float(score), 4),
@@ -623,6 +667,7 @@ def _deduplicate_candidates(candidates):
                     for entity_id, skill_ids in candidate.get("skill_package_ids", {}).items()
                 )
             ),
+            tuple(sorted(candidate.get("build_package_ids", {}).items())),
         )
         exact.setdefault(key, candidate)
     unique = list(exact.values())
@@ -776,6 +821,19 @@ def _values(value):
 def _default_package(entity):
     package = entity.get("default_package")
     return package if isinstance(package, dict) else {}
+
+
+def _build_package_options(entity):
+    options = entity.get("build_package_options")
+    if isinstance(options, list):
+        valid = [option for option in options if isinstance(option, dict) and option.get("id")]
+        if valid:
+            return valid
+    package = entity.get("build_package")
+    if isinstance(package, dict) and package.get("id"):
+        alternatives = package.get("alternatives") or package.get("options") or []
+        return [package, *[option for option in alternatives if isinstance(option, dict) and option.get("id")]]
+    return []
 
 
 def _package_ready(entity):

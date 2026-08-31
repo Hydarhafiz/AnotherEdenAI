@@ -956,7 +956,10 @@ feature.
 
 ### Feature E2: Deterministic Alternative Build Allocation
 
-Status: Approved and admitted as the next correction feature after D2.
+Status: Complete. Deterministic alternative package generation and bounded
+lineup-wide finite-item allocation are verified; F2 is now admitted.
+
+Route: `feature-planner -> builder-executor -> tdd-loop`.
 
 Outcome: A lineup is rejected for build incompatibility only after deterministic compatible alternatives and finite-copy allocation have been exhausted.
 
@@ -968,6 +971,18 @@ Scope:
 - Generate deterministic per-character build alternatives and resolve lineup-wide compatibility through bounded matching or backtracking.
 - Label and penalize generic placeholders; reject only when no compatible complete allocation exists.
 
+Implementation contract: the existing default package remains the first
+deterministic option for compatibility, while each complete character may also
+expose a bounded package frontier over compatible named items and labelled
+generic placeholders. A named item with unknown cardinality is treated
+conservatively as one available copy; only explicit repeatable/shareable
+metadata permits reuse. The lineup allocator explores package options in
+stable character and option order, resets its copy ledger for every lineup,
+and returns the selected package IDs plus an allocation witness. Candidates
+carry those selected packages forward so a valid alternative cannot be lost at
+the analyzer boundary. `generic_only` produces diagnosable generic choices and
+does not alter skill-package readiness or capability-coverage gates.
+
 Acceptance criteria:
 
 - **E2-01:** Every accepted lineup has a complete compatibility-valid allocation respecting known finite maxima and conservative unknown-cardinality rules.
@@ -975,9 +990,19 @@ Acceptance criteria:
 - **E2-03:** Allocation is deterministic, bounded, independently reset per lineup, and reports named, generic, assumed, and unavailable choices distinctly.
 - **E2-04:** `generic_only` remains legal and diagnosable but cannot hide missing skill packages or capability coverage.
 
+Evidence: `.venv/bin/pytest -q tests/workflow/test_build_packages.py
+tests/workflow/test_lineup_generation.py tests/workflow/test_role_scoring.py
+tests/workflow/test_candidates.py` passes 32 tests; `.venv/bin/pytest -q
+tests/unit` passes 155 tests; and `.venv/bin/pytest -q tests/workflow
+--ignore=tests/workflow/test_graph.py` passes 254 tests. Coverage includes
+unknown-cardinality fallback, deterministic package alternatives, finite-copy
+backtracking, search bounds, per-lineup reset, generic-only diagnostics, and
+candidate propagation. No manual or external-provider test is required for
+this deterministic backend feature.
+
 ### Feature F2: Package-First Beam Search And Stage Diagnostics
 
-Status: Approved and blocked by D2 and E2.
+Status: Approved and admitted as the next correction feature after E2.
 
 Outcome: Beam search expands only structurally valid character-package choices while retaining complete diagnostics for excluded heroes and later constraint failures.
 
@@ -1097,7 +1122,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
 - Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
 - Correction Feature D2: completed; legal skill-family package frontiers, explicit Light/Shadow slot limits, dependency gates, untagged fillers, and deterministic contextual alternatives are verified.
-- Correction planning: completed and human-approved on 2026-08-22; C6 and D2 are complete, E2 is the next admitted correction feature, and F2 remains sequenced behind E2.
+- Correction planning: completed and human-approved on 2026-08-22; C6, D2, and E2 are complete, F2 is the next admitted correction feature, and H remains blocked until F2 completes.
 - Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through correction planning and implementation.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.

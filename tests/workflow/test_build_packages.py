@@ -6,7 +6,9 @@ import pytest
 
 from src.workflow.build_packages import (
     build_build_package,
+    build_build_package_options,
     build_packages_for_characters,
+    resolve_lineup_allocation,
     validate_build_package,
     validate_lineup_allocation,
 )
@@ -155,6 +157,89 @@ def test_lineup_allocation_rejects_duplicate_named_equipment_and_unique_grasta()
     assert {item["item_id"] for item in result["allocation"]["items"]}
 
 
+def test_unknown_named_grasta_is_conservative_and_uses_labelled_generic_slots():
+    package = build_build_package(
+        character(),
+        role_entity=role_entity(),
+        grastas=[{
+            "id": "grasta:unknown-cardinality",
+            "name": "Unknown Cardinality",
+            "effect_text": "Power up",
+        }],
+        equipment=[],
+    )
+
+    ids = [item["id"] for item in package["grastas"]]
+    assert ids.count("grasta:unknown-cardinality") == 1
+    assert package["generic_placeholder_count"] >= 2
+    assert sum(item["generic"] for item in package["grastas"]) == 2
+    assert all("compatible" in item["display_name"].casefold() for item in package["grastas"] if item["generic"])
+    assert validate_build_package(package, character=character(), grastas=[{
+        "id": "grasta:unknown-cardinality",
+        "name": "Unknown Cardinality",
+        "effect_text": "Power up",
+    }], equipment=[]) == []
+
+
+def test_alternative_packages_resolve_finite_copy_collisions_deterministically():
+    finite_grastas = [
+        {"id": f"grasta:finite-{index}", "name": f"Finite {index}", "acquisition_class": "unique"}
+        for index in range(1, 7)
+    ]
+    options = build_build_package_options(character(), grastas=finite_grastas, equipment=[])
+
+    assert 1 <= len(options) <= 6
+    assert options[0]["grasta_ids"] == ["grasta:finite-1", "grasta:finite-2", "grasta:finite-3"]
+    assert any(set(option["grasta_ids"]).isdisjoint(options[0]["grasta_ids"]) for option in options[1:])
+
+    result = resolve_lineup_allocation({
+        "character:aldo": options,
+        "character:ciel": options,
+    }, character_ids=["character:aldo", "character:ciel"])
+
+    assert result["valid"] is True
+    assert result["selected_package_ids"]
+    assert result["search"]["bounded"] is True
+    assert result["allocation"]["scope"] == "lineup"
+    assert all(item["copies_required"] <= item["copy_limit"] for item in result["allocation"]["items"] if item["copy_limit"] is not None)
+
+
+def test_lineup_allocation_copy_ledger_resets_between_alternative_lineups():
+    finite_grastas = [
+        {"id": f"grasta:finite-{index}", "name": f"Finite {index}", "acquisition_class": "unique"}
+        for index in range(1, 7)
+    ]
+    options = build_build_package_options(character(), grastas=finite_grastas, equipment=[])
+    packages = {"character:aldo": options, "character:ciel": options}
+
+    first = resolve_lineup_allocation(packages, character_ids=["character:aldo", "character:ciel"])
+    second = resolve_lineup_allocation(packages, character_ids=["character:aldo", "character:ciel"])
+
+    assert first == second
+
+
+def test_lineup_allocation_reports_and_honors_the_search_bound():
+    options = build_build_package_options(
+        character(),
+        grastas=[
+            {"id": f"grasta:finite-{index}", "name": f"Finite {index}", "acquisition_class": "unique"}
+            for index in range(1, 7)
+        ],
+        equipment=[],
+    )
+
+    result = resolve_lineup_allocation(
+        {"character:aldo": options, "character:ciel": options},
+        character_ids=["character:aldo", "character:ciel"],
+        max_states=1,
+    )
+
+    assert result["valid"] is False
+    assert result["search"]["states_explored"] == 1
+    assert result["search"]["exhausted"] is True
+    assert any(error["code"] == "allocation.search_bound" for error in result["errors"])
+
+
 def test_batch_generation_is_deterministic_and_preserves_unverified_status():
     characters = [character("Aldo"), character("Ciel", traits=["Eastern"], weapon="Bow")]
     first = build_packages_for_characters(
@@ -172,6 +257,7 @@ def test_batch_generation_is_deterministic_and_preserves_unverified_status():
 
     assert first == second
     assert all(package["ownership_status"] == "unverified" for package in first.values())
+    assert all("alternatives" in package for package in first.values())
 
 
 @pytest.mark.asyncio

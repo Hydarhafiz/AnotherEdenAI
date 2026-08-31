@@ -10,12 +10,16 @@ from __future__ import annotations
 import hashlib
 import re
 from collections import Counter
+from itertools import combinations_with_replacement, product
 from typing import Any
 
 
-BUILD_PACKAGE_POLICY_VERSION = "feature-e-build-package-v1"
+BUILD_PACKAGE_POLICY_VERSION = "feature-e2-build-allocation-v1"
 ITEM_POLICIES = ("late_game_assumed", "generic_only")
 DEFAULT_ITEM_POLICY = "late_game_assumed"
+MAX_BUILD_PACKAGE_OPTIONS = 6
+MAX_ALTERNATIVE_ITEM_CHOICES = 8
+MAX_ALLOCATION_STATES = 256
 
 
 class BuildPackageError(ValueError):
@@ -78,36 +82,179 @@ def build_build_package(
     )
     selected_ores = _select_ores(ore_rows, role_entity=role_entity, item_policy=item_policy)
 
-    setup_dependencies = _setup_dependencies(
-        selected_grastas,
-        selected_facts or [],
-        role_entity,
-    )
-    citations = _citations([weapon, armor, *selected_grastas, *selected_ores], item_policy)
-    assumptions = _assumptions(
-        item_policy=item_policy,
+    return _make_build_package(
+        character,
+        role_entity=role_entity,
         weapon=weapon,
         armor=armor,
         grastas=selected_grastas,
         ores=selected_ores,
-        traits=traits,
+        selected_facts=selected_facts or [],
+        item_policy=item_policy,
     )
-    allocation = _package_allocation([weapon, armor, *selected_grastas, *selected_ores])
-    evidence = _package_evidence(
-        [weapon, armor, *selected_grastas, *selected_ores],
+
+
+def generate_build_package(*args, **kwargs) -> dict[str, Any]:
+    """Compatibility alias for callers that use the feature's verb-first name."""
+    return build_build_package(*args, **kwargs)
+
+
+def build_build_package_options(
+    character: dict[str, Any],
+    *,
+    role_entity: dict[str, Any] | None = None,
+    grastas: list[dict[str, Any]] | None = None,
+    equipment: list[dict[str, Any]] | None = None,
+    ores: list[dict[str, Any]] | None = None,
+    selected_facts: list[dict[str, Any]] | None = None,
+    item_policy: str = DEFAULT_ITEM_POLICY,
+    max_options: int = MAX_BUILD_PACKAGE_OPTIONS,
+) -> list[dict[str, Any]]:
+    """Return a bounded, deterministic frontier of legal build packages.
+
+    The first option is always the legacy deterministic default.  Later
+    options vary compatible named items and generic placeholders so a lineup
+    allocator can avoid a finite-copy conflict without inventing inventory
+    ownership.  Generic choices are intentionally last in the ordering.
+    """
+    if item_policy not in ITEM_POLICIES:
+        raise BuildPackageError(f"Unsupported item policy: {item_policy}")
+
+    role_entity = role_entity or {}
+    selected_facts = selected_facts or []
+    max_options = max(1, min(int(max_options), MAX_BUILD_PACKAGE_OPTIONS))
+    character_id = _character_id(character)
+    traits = _normalised_values(
+        character.get("traits")
+        or character.get("character_traits")
+        or character.get("personalities")
+    )
+    weapon_type = str(character.get("weapon") or "unknown")
+    equipment_rows = [row for row in (equipment or []) if isinstance(row, dict)]
+    grasta_rows = [row for row in (grastas or []) if isinstance(row, dict)]
+    ore_rows = [row for row in (ores or []) if isinstance(row, dict)]
+
+    default = build_build_package(
+        character,
+        role_entity=role_entity,
+        grastas=grasta_rows,
+        equipment=equipment_rows,
+        ores=ore_rows,
+        selected_facts=selected_facts,
+        item_policy=item_policy,
+    )
+    weapon_choices = _equipment_choices(
+        equipment_rows,
+        slot="weapon",
+        category=weapon_type,
+        character_id=character_id,
+        item_policy=item_policy,
+    )
+    armor_choices = _equipment_choices(
+        equipment_rows,
+        slot="armor",
+        category="armor",
+        character_id=character_id,
+        item_policy=item_policy,
+    )
+    grasta_choices = _grasta_choices(
+        grasta_rows,
+        traits=traits,
+        weapon_type=weapon_type,
+        character_id=character_id,
         role_entity=role_entity,
         item_policy=item_policy,
     )
+    grasta_vectors = _grasta_vectors(grasta_choices, default.get("grastas", []))
+
+    packages = [default]
+    for weapon, armor, selected_grastas in product(weapon_choices, armor_choices, grasta_vectors):
+        packages.append(_make_build_package(
+            character,
+            role_entity=role_entity,
+            weapon=weapon,
+            armor=armor,
+            grastas=list(selected_grastas),
+            ores=_select_ores(ore_rows, role_entity=role_entity, item_policy=item_policy),
+            selected_facts=selected_facts,
+            item_policy=item_policy,
+        ))
+
+    default_signature = _package_item_signature(default)
+    grasta_order = {
+        tuple(str(item.get("id") or "") for item in selected): index
+        for index, selected in enumerate(grasta_vectors)
+    }
+    unique: dict[str, dict[str, Any]] = {}
+    for package in packages:
+        unique.setdefault(str(package.get("id")), package)
+    default_weapon_id = str((default.get("weapon") or {}).get("id") or "")
+    default_armor_id = str((default.get("armor") or {}).get("id") or "")
+    ordered = sorted(
+        unique.values(),
+        key=lambda package: (
+            0 if _package_item_signature(package) == default_signature else 1,
+            int(package.get("generic_placeholder_count") or 0),
+            int(str((package.get("weapon") or {}).get("id") or "") != default_weapon_id)
+            + int(str((package.get("armor") or {}).get("id") or "") != default_armor_id),
+            grasta_order.get(
+                tuple(str(item.get("id") or "") for item in package.get("grastas", [])),
+                len(grasta_order),
+            ),
+            -sum(1 for item in _package_items(package) if not item.get("generic")),
+            _package_item_signature(package),
+            str(package.get("id") or ""),
+        ),
+    )
+    return ordered[:max_options]
+
+
+def generate_build_package_options(*args, **kwargs) -> list[dict[str, Any]]:
+    """Compatibility alias for deterministic package-frontier generation."""
+    return build_build_package_options(*args, **kwargs)
+
+
+def _make_build_package(
+    character: dict[str, Any],
+    *,
+    role_entity: dict[str, Any],
+    weapon: dict[str, Any],
+    armor: dict[str, Any],
+    grastas: list[dict[str, Any]],
+    ores: list[dict[str, Any]],
+    selected_facts: list[dict[str, Any]],
+    item_policy: str,
+) -> dict[str, Any]:
+    character_id = _character_id(character)
+    character_name = str(character.get("name") or character.get("display_name") or character_id)
     role_ids = list(role_entity.get("role_ids") or [])
+    items = [weapon, armor, *grastas, *ores]
+    setup_dependencies = _setup_dependencies(grastas, selected_facts, role_entity)
+    citations = _citations(items, item_policy)
+    assumptions = _assumptions(
+        item_policy=item_policy,
+        weapon=weapon,
+        armor=armor,
+        grastas=grastas,
+        ores=ores,
+        traits=_normalised_values(
+            character.get("traits")
+            or character.get("character_traits")
+            or character.get("personalities")
+        ),
+    )
+    allocation = _package_allocation(items)
+    evidence = _package_evidence(items, role_entity=role_entity, item_policy=item_policy)
     package_id = _stable_id(
         "build-package",
         character_id,
         item_policy,
         weapon.get("id"),
         armor.get("id"),
-        *[item.get("id") for item in selected_grastas],
-        *[item.get("id") for item in selected_ores],
+        *[item.get("id") for item in grastas],
+        *[item.get("id") for item in ores],
     )
+    generic_placeholder_count = sum(1 for item in items if item.get("generic"))
     return {
         "id": package_id,
         "version": BUILD_PACKAGE_POLICY_VERSION,
@@ -118,15 +265,16 @@ def build_build_package(
         "ownership": "unverified",
         "weapon": weapon,
         "armor": armor,
-        "grastas": selected_grastas,
-        "ores": selected_ores,
+        "grastas": grastas,
+        "ores": ores,
         "weapon_id": weapon.get("id"),
         "armor_id": armor.get("id"),
-        "grasta_ids": [item.get("id") for item in selected_grastas],
-        "ore_ids": [item.get("id") for item in selected_ores],
-        "build_intent": _build_intent(role_ids, selected_ores),
+        "grasta_ids": [item.get("id") for item in grastas],
+        "ore_ids": [item.get("id") for item in ores],
+        "build_intent": _build_intent(role_ids, ores),
         "assumptions": assumptions,
         "assumption_labels": assumptions,
+        "generic_placeholder_count": generic_placeholder_count,
         "allocation": allocation,
         "setup_dependencies": setup_dependencies,
         "setup_dependency_ids": setup_dependencies,
@@ -137,9 +285,112 @@ def build_build_package(
     }
 
 
-def generate_build_package(*args, **kwargs) -> dict[str, Any]:
-    """Compatibility alias for callers that use the feature's verb-first name."""
-    return build_build_package(*args, **kwargs)
+def _equipment_choices(rows, *, slot, category, character_id, item_policy):
+    if item_policy == "generic_only":
+        return [_select_equipment([], slot=slot, category=category, character_id=character_id, item_policy=item_policy)]
+    named = []
+    for row in rows:
+        row_slot = str(row.get("equipment_slot") or row.get("slot") or "").casefold()
+        if row_slot != slot or row.get("generic"):
+            continue
+        if slot == "weapon":
+            row_category = str(row.get("category") or "")
+            if row_category and category and row_category.casefold() != category.casefold():
+                continue
+        named.append(_equipment_item(row, slot=slot))
+    named.sort(key=_equipment_sort_key)
+    choices = named[:MAX_ALTERNATIVE_ITEM_CHOICES]
+    generic = _select_equipment([], slot=slot, category=category, character_id=character_id, item_policy=item_policy)
+    if not choices or generic not in choices:
+        choices.append(generic)
+    return choices
+
+
+def _grasta_choices(rows, *, traits, weapon_type, character_id, role_entity, item_policy):
+    compatible = [
+        _grasta_item(row)
+        for row in rows
+        if _grasta_is_compatible(row, traits, weapon_type)
+    ] if item_policy != "generic_only" else []
+    compatible.sort(key=lambda item: _grasta_sort_key(item, role_entity))
+    compatible = compatible[:MAX_ALTERNATIVE_ITEM_CHOICES]
+    compatible.extend(_generic_grasta(character_id, index + 1) for index in range(3))
+    return compatible
+
+
+def _grasta_vectors(choices, default):
+    """Return legal three-item vectors in stable preference order."""
+    if not choices:
+        return [tuple(default)]
+    vectors = []
+
+    def add(selected):
+        selected = tuple(selected)
+        if _valid_grasta_vector(selected) and selected not in vectors:
+            vectors.append(selected)
+
+    # Preserve the normal package first, then add sliding named windows.  The
+    # latter deliberately reaches beyond the greedy prefix so two lineups can
+    # use disjoint finite copies when the catalog makes that possible.
+    add(default)
+    named = [item for item in choices if not item.get("generic")]
+    generics = [item for item in choices if item.get("generic")]
+    for start in range(1, max(1, len(named) - 2)):
+        add(named[start:start + 3])
+    if len(generics) >= 2:
+        for item in named:
+            add((item, generics[0], generics[1]))
+
+    # Complete the bounded frontier with all remaining legal combinations,
+    # keeping deterministic order and leaving room for generic fallbacks.
+    for indexes in combinations_with_replacement(range(len(choices)), 3):
+        selected = tuple(choices[index] for index in indexes)
+        add(selected)
+    default_signature = tuple(str(item.get("id") or "") for item in default)
+    named_ids = {str(item.get("id") or "") for item in named}
+    vectors.sort(key=lambda selected: (
+        0 if tuple(str(item.get("id") or "") for item in selected) == default_signature else 1,
+        sum(1 for item in selected if item.get("generic")),
+        -len({str(item.get("id") or "") for item in selected} & named_ids),
+        tuple(str(item.get("id") or "") for item in selected),
+    ))
+    # Reinsert the strategic windows/generic anchors ahead of lexicographic
+    # combinations after sorting, while retaining the default at index zero.
+    preferred = []
+    for selected in [tuple(default), *[
+        tuple(named[start:start + 3])
+        for start in range(1, max(1, len(named) - 2))
+    ], *[
+        (item, generics[0], generics[1])
+        for item in named
+        if len(generics) >= 2
+    ]]:
+        if _valid_grasta_vector(selected) and selected not in preferred:
+            preferred.append(selected)
+    return [*preferred, *[vector for vector in vectors if vector not in preferred]][:MAX_ALTERNATIVE_ITEM_CHOICES * 2] or [tuple(default)]
+
+
+def _valid_grasta_vector(items):
+    counts = Counter(str(item.get("id") or "") for item in items if item.get("id"))
+    for item in items:
+        item_id = str(item.get("id") or "")
+        if not item_id:
+            return False
+        if item.get("generic") and counts[item_id] > 1:
+            return False
+        limit = _copy_limit(item)
+        if limit is not None and counts[item_id] > limit:
+            return False
+    return True
+
+
+def _package_item_signature(package):
+    return (
+        str((package.get("weapon") or {}).get("id") or ""),
+        str((package.get("armor") or {}).get("id") or ""),
+        tuple(str(item.get("id") or "") for item in package.get("grastas", []) if isinstance(item, dict)),
+        tuple(str(item.get("id") or "") for item in package.get("ores", []) if isinstance(item, dict)),
+    )
 
 
 def build_packages_for_characters(
@@ -164,7 +415,7 @@ def build_packages_for_characters(
     for character in sorted(characters, key=lambda row: (_character_id(row), str(row.get("name") or ""))):
         character_id = _character_id(character)
         role_entity = entities.get(character_id) or entities.get(str(character.get("name") or ""), {})
-        package = build_build_package(
+        package_options = build_build_package_options(
             character,
             role_entity=role_entity,
             grastas=grastas,
@@ -173,6 +424,9 @@ def build_packages_for_characters(
             selected_facts=facts_by_owner.get(str(character.get("name") or ""), []),
             item_policy=item_policy,
         )
+        package = dict(package_options[0])
+        package["alternatives"] = package_options[1:]
+        package["alternative_package_ids"] = [str(option.get("id")) for option in package_options[1:]]
         packages[character_id] = package
     return packages
 
@@ -319,14 +573,136 @@ def validate_lineup_allocation(
     }
 
 
+def resolve_lineup_allocation(
+    packages: dict[str, Any] | list[dict[str, Any]],
+    *,
+    character_ids: list[str] | None = None,
+    max_states: int = MAX_ALLOCATION_STATES,
+) -> dict[str, Any]:
+    """Select one package per character with bounded deterministic search.
+
+    ``packages`` may map a character to one package, a list of package
+    options, or a package containing an ``alternatives``/``options`` list.
+    Search state is local to this call, so separate lineups never consume one
+    another's finite copies.
+    """
+    package_map = _index_packages(packages)
+    selected = list(character_ids) if character_ids is not None else sorted(package_map)
+    max_states = max(1, min(int(max_states), MAX_ALLOCATION_STATES))
+    option_map: dict[str, list[dict[str, Any]]] = {}
+    errors: list[dict[str, Any]] = []
+    for character_id in selected:
+        raw = package_map.get(character_id)
+        options = _package_options(raw)
+        if not options:
+            errors.append(_error("id.package", character_id, f"No build package for {character_id}"))
+            continue
+        option_map[character_id] = options
+
+    if errors:
+        return {
+            "valid": False,
+            "errors": errors,
+            "selected_packages": {},
+            "selected_package_ids": {},
+            "alternatives_considered": {key: len(value) for key, value in sorted(option_map.items())},
+            "search": {"states_explored": 0, "max_states": max_states, "bounded": True},
+            "allocation": {"scope": "lineup", "items": []},
+        }
+
+    search_order = sorted(selected, key=lambda character_id: (len(option_map[character_id]), str(character_id)))
+    states_explored = 0
+    bound_hit = False
+    chosen: dict[str, dict[str, Any]] = {}
+    counts: Counter[str] = Counter()
+
+    def search(index: int) -> bool:
+        nonlocal bound_hit, states_explored
+        if states_explored >= max_states:
+            bound_hit = True
+            return False
+        states_explored += 1
+        if index == len(search_order):
+            return True
+        character_id = search_order[index]
+        for option in option_map[character_id]:
+            item_counts = _item_counts(option)
+            if any(
+                not item.get("generic")
+                and _copy_limit(item) is not None
+                and counts[item_id] + count > _copy_limit(item)
+                for item_id, count in item_counts.items()
+                for item in _package_items(option)
+                if str(item.get("id") or "") == item_id
+            ):
+                continue
+            chosen[character_id] = option
+            counts.update(item_counts)
+            if search(index + 1):
+                return True
+            counts.subtract(item_counts)
+            chosen.pop(character_id, None)
+            if bound_hit:
+                break
+        return False
+
+    found = search(0)
+    search_info = {
+        "states_explored": min(states_explored, max_states),
+        "max_states": max_states,
+        "bounded": True,
+        "exhausted": bound_hit,
+    }
+    if not found:
+        defaults = {character_id: options[0] for character_id, options in option_map.items()}
+        validation = validate_lineup_allocation(defaults, character_ids=selected)
+        failure = _error(
+            "allocation.no_complete_assignment",
+            "lineup",
+            "No compatible complete build allocation exists for this lineup",
+            allowed_ids=[str(package.get("id")) for options in option_map.values() for package in options if package.get("id")],
+        )
+        if search_info["exhausted"]:
+            failure = _error(
+                "allocation.search_bound",
+                "lineup",
+                f"Allocation search reached its deterministic bound of {max_states} states",
+                allowed_ids=[str(package.get("id")) for options in option_map.values() for package in options if package.get("id")],
+            )
+        return {
+            "valid": False,
+            "errors": [*validation.get("errors", []), failure],
+            "selected_packages": {},
+            "selected_package_ids": {},
+            "alternatives_considered": {key: len(value) for key, value in sorted(option_map.items())},
+            "search": search_info,
+            "allocation": validation.get("allocation", {"scope": "lineup", "items": []}),
+        }
+
+    selected_packages = {character_id: chosen[character_id] for character_id in selected}
+    validation = validate_lineup_allocation(selected_packages, character_ids=selected)
+    return {
+        "valid": bool(validation.get("valid")),
+        "errors": list(validation.get("errors", [])),
+        "selected_packages": selected_packages,
+        "selected_package_ids": {
+            character_id: str(package.get("id") or "")
+            for character_id, package in selected_packages.items()
+        },
+        "alternatives_considered": {key: len(value) for key, value in sorted(option_map.items())},
+        "search": search_info,
+        "allocation": validation.get("allocation", {"scope": "lineup", "items": []}),
+    }
+
+
 def allocate_lineup_items(*args, **kwargs) -> dict[str, Any]:
-    """Compatibility alias for lineup allocation validation."""
-    return validate_lineup_allocation(*args, **kwargs)
+    """Resolve one compatible package per character for a lineup."""
+    return resolve_lineup_allocation(*args, **kwargs)
 
 
 def validate_lineup_packages(*args, **kwargs) -> dict[str, Any]:
     """Compatibility alias for callers that use package terminology."""
-    return validate_lineup_allocation(*args, **kwargs)
+    return resolve_lineup_allocation(*args, **kwargs)
 
 
 def _select_equipment(rows, *, slot, category, character_id, item_policy):
@@ -554,6 +930,29 @@ def _package_items(package):
     ]
 
 
+def _package_options(value):
+    if isinstance(value, list):
+        candidates = value
+    elif isinstance(value, dict):
+        candidates = [value, *(value.get("alternatives") or value.get("options") or [])]
+    else:
+        candidates = []
+    unique: dict[str, dict[str, Any]] = {}
+    for package in candidates:
+        if not isinstance(package, dict) or not package.get("id"):
+            continue
+        unique.setdefault(str(package["id"]), package)
+    return list(unique.values())
+
+
+def _item_counts(package):
+    return Counter(
+        str(item.get("id") or "")
+        for item in _package_items(package)
+        if item.get("id") and not item.get("generic")
+    )
+
+
 def _package_evidence(items, *, role_entity, item_policy):
     evidence = []
     for item in items:
@@ -689,7 +1088,9 @@ def _copy_limit(item):
         return None
     if acquisition in {"unique", "finite", "limited", "single"} or item.get("is_unique") is True or item.get("unique") is True:
         return 1
-    return None
+    # Named items with no cardinality provenance are unsafe to duplicate.
+    # Generic placeholders are explicitly repeatable and handled above.
+    return 1
 
 
 def _equipment_copy_limit(item):

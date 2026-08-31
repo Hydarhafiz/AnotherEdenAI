@@ -267,6 +267,14 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
         package = packages.get(character_id) or entity.get("build_package")
         if not package:
             continue
+        package_options = [
+            option
+            for option in entity.get("build_package_options", [])
+            if isinstance(option, dict) and option.get("id")
+        ]
+        if not package_options:
+            package_options = [package]
+        package_options = _unique_packages(package_options)
         skills = _typed_skill_options(skills_by_owner.get(character["name"], []), entity)
         passives = _typed_passive_options(passives_by_owner.get(character["name"], []))
         character_candidates.append({
@@ -279,10 +287,15 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
             "has_stellar_awakening": character.get("has_stellar_awakening", False),
             "skills": skills,
             "passives": passives,
-            "weapon_options": [_typed_package_item(package.get("weapon"), slot="weapon")],
-            "armor_options": [_typed_package_item(package.get("armor"), slot="armor")],
-            "grastas": _typed_grasta_options(package.get("grastas", [])),
+            "weapon_options": _typed_package_items(package_options, key="weapon", slot="weapon"),
+            "armor_options": _typed_package_items(package_options, key="armor", slot="armor"),
+            "grastas": _typed_grasta_options([
+                item
+                for option in package_options
+                for item in option.get("grastas", [])
+            ]),
             "build_package": package,
+            "build_package_options": [_compact_build_package(option) for option in package_options],
             "role_ids": list(entity.get("role_ids") or package.get("role_ids") or []),
             "role_scores": dict(entity.get("role_scores") or {}),
             "role_evidence": dict(entity.get("evidence") or {}),
@@ -563,6 +576,54 @@ def _typed_package_item(item, *, slot):
         "copy_limit": item.get("copy_limit"),
         "source_url": item.get("source_url"),
     }
+
+
+def _typed_package_items(packages, *, key, slot):
+    options = []
+    seen = set()
+    for package in packages:
+        item = _typed_package_item(package.get(key), slot=slot)
+        if item["id"] in seen:
+            continue
+        seen.add(item["id"])
+        options.append(item)
+    return options
+
+
+def _unique_packages(packages):
+    result = []
+    seen = set()
+    for package in packages:
+        package_id = str(package.get("id") or "")
+        if not package_id or package_id in seen:
+            continue
+        seen.add(package_id)
+        result.append(package)
+    return result
+
+
+def _compact_build_package(package):
+    return {
+        "id": package.get("id"),
+        "version": package.get("version"),
+        "item_policy": package.get("item_policy"),
+        "weapon_id": package.get("weapon_id") or _nested_item_id(package.get("weapon")),
+        "armor_id": package.get("armor_id") or _nested_item_id(package.get("armor")),
+        "grasta_ids": list(package.get("grasta_ids") or [
+            _nested_item_id(item) for item in package.get("grastas", []) if _nested_item_id(item)
+        ]),
+        "ore_ids": list(package.get("ore_ids") or [
+            _nested_item_id(item) for item in package.get("ores", []) if _nested_item_id(item)
+        ]),
+        "assumptions": list(package.get("assumptions") or []),
+        "generic_placeholder_count": int(package.get("generic_placeholder_count") or 0),
+        "setup_dependencies": list(package.get("setup_dependencies") or []),
+        "citation_ids": list(package.get("citation_ids") or []),
+    }
+
+
+def _nested_item_id(value):
+    return value.get("id") if isinstance(value, dict) else None
 
 
 def _typed_grasta_options(items):
@@ -972,6 +1033,7 @@ def resolve_candidate_recommendations(proposals: list[dict], bundle: dict, warni
 
 def _resolve_hero(entry: dict, characters: dict[str, dict]) -> dict:
     character = characters[entry["character_id"]]
+    package = _package_for_entry(character, entry)
     skills = {item["id"]: item for item in character.get("skills", [])}
     passives = {item["id"]: item for item in character.get("passives", [])}
     grastas = {item["id"]: item for item in character.get("grastas", [])}
@@ -987,9 +1049,26 @@ def _resolve_hero(entry: dict, characters: dict[str, dict]) -> dict:
         "recommended_passives": [passives[value]["name"] for value in entry.get("passive_ids", [])],
         "upgrade_assumptions": entry.get("upgrade_assumptions", []),
     }
-    if character.get("build_package"):
-        resolved["build_package"] = character["build_package"]
-        resolved["build_assumptions"] = list(character["build_package"].get("assumptions") or [])
-        resolved["setup_dependencies"] = list(character["build_package"].get("setup_dependencies") or [])
-        resolved["item_ownership_status"] = character["build_package"].get("ownership_status", "unverified")
+    if package:
+        resolved["build_package"] = package
+        resolved["build_assumptions"] = list(package.get("assumptions") or [])
+        resolved["setup_dependencies"] = list(package.get("setup_dependencies") or [])
+        resolved["item_ownership_status"] = package.get("ownership_status", "unverified")
     return resolved
+
+
+def _package_for_entry(character: dict, entry: dict) -> dict:
+    selected_weapon = entry.get("weapon_id")
+    selected_armor = entry.get("armor_id")
+    selected_grastas = tuple(entry.get("grasta_ids") or [])
+    options = character.get("build_package_options") or []
+    for package in options:
+        if not isinstance(package, dict):
+            continue
+        weapon_id = package.get("weapon_id") or _nested_item_id(package.get("weapon"))
+        armor_id = package.get("armor_id") or _nested_item_id(package.get("armor"))
+        grasta_ids = tuple(package.get("grasta_ids") or [])
+        if weapon_id == selected_weapon and armor_id == selected_armor and grasta_ids == selected_grastas:
+            return package
+    package = character.get("build_package")
+    return package if isinstance(package, dict) else {}

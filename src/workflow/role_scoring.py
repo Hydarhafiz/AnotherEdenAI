@@ -13,7 +13,10 @@ from collections import defaultdict
 from itertools import combinations
 from typing import Any
 
-from .build_packages import DEFAULT_ITEM_POLICY, build_build_package
+from .build_packages import (
+    DEFAULT_ITEM_POLICY,
+    build_build_package_options,
+)
 
 
 ROLE_SCORE_POLICY_VERSION = "feature-d-role-score-v1"
@@ -242,7 +245,7 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         "policy_version": policy_version,
         "source_character_id": character.get("id"),
     }
-    entity["build_package"] = build_build_package(
+    package_options = build_build_package_options(
         character,
         role_entity=entity,
         grastas=grastas,
@@ -251,6 +254,9 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         selected_facts=[*selected_facts, *passive],
         item_policy=item_policy,
     )
+    entity["build_package_options"] = package_options
+    entity["build_package_alternatives"] = package_options[1:]
+    entity["build_package"] = package_options[0] if package_options else None
     return entity
 
 
