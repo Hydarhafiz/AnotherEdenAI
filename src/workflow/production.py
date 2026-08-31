@@ -40,6 +40,7 @@ class ProductionRecommendationRequest(BaseModel):
     roster: list[str] = Field(min_length=1)
     owned_sidekicks: list[str] = Field(default_factory=list)
     stellar_awakened: dict[str, SAState | bool] = Field(default_factory=dict)
+    light_shadow_points: dict[str, int] = Field(default_factory=dict)
     item_policy: ItemPolicy = "late_game_assumed"
     preferences: str = ""
 
@@ -48,6 +49,13 @@ class ProductionRecommendationRequest(BaseModel):
         self.boss_id = self.boss_id.strip()
         self.roster = _dedupe(self.roster)
         self.owned_sidekicks = _dedupe(self.owned_sidekicks)
+        self.light_shadow_points = {
+            str(name).strip(): points
+            for name, points in self.light_shadow_points.items()
+            if str(name).strip()
+        }
+        if any(points < 0 for points in self.light_shadow_points.values()):
+            raise ValueError("Light/Shadow points cannot be negative")
         self.preferences = self.preferences.strip()
         return self
 
@@ -283,6 +291,7 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
         unresolved = []
         ambiguous = []
         normalized_owned = []
+        normalized_light_shadow_points = {}
         for name in request.roster:
             matches = await self.resolve_character(name)
             if not matches:
@@ -291,6 +300,15 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
                 ambiguous.append((name, matches))
             else:
                 normalized_owned.append(matches[0])
+                if name.casefold() in {key.casefold() for key in request.light_shadow_points}:
+                    normalized_light_shadow_points[matches[0]] = next(
+                        points for key, points in request.light_shadow_points.items()
+                        if key.casefold() == name.casefold()
+                    )
+        for name, points in request.light_shadow_points.items():
+            for canonical in normalized_owned:
+                if canonical.casefold() == name.casefold():
+                    normalized_light_shadow_points[canonical] = points
         if unresolved:
             raise ProductionRequestError([RetrievalIssue(
                 code="roster.unresolved", field="roster", value=name,
@@ -346,6 +364,7 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             passives=passives,
             sidekicks=sidekicks,
             stellar_awakened=roster_input.stellar_awakened,
+            light_shadow_points=normalized_light_shadow_points,
             mechanics=mechanics,
             grastas=grastas,
             equipment=equipment,
@@ -362,6 +381,7 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             "boss_id": boss["id"], "roster": normalized,
             "owned_sidekicks": roster_input.owned_sidekicks,
             "stellar_awakened": roster_input.stellar_awakened,
+            "light_shadow_points": normalized_light_shadow_points,
         })
         return ProductionRetrieval(
             request=normalized_request, boss=boss, characters=characters,
@@ -391,6 +411,7 @@ async def retrieve_production_context_node(state: WorkflowState, driver) -> dict
         "roster": state.get("roster", []),
         "owned_sidekicks": state.get("owned_sidekicks", []),
         "stellar_awakened": state.get("stellar_awakened", {}),
+        "light_shadow_points": state.get("light_shadow_points", {}),
         "item_policy": state.get("item_policy", "late_game_assumed"),
         "preferences": state.get("user_query", ""),
     })
@@ -413,6 +434,7 @@ async def retrieve_production_context_node(state: WorkflowState, driver) -> dict
         "roster": result.request.roster,
         "owned_sidekicks": result.request.owned_sidekicks,
         "stellar_awakened": result.request.stellar_awakened,
+        "light_shadow_points": result.request.light_shadow_points,
         "boss_context": json.dumps(context, ensure_ascii=False),
         "typed_retrieval": result.model_dump(),
         "candidate_warnings": [] if result.coverage["complete"] else ["Typed retrieval coverage is incomplete."],

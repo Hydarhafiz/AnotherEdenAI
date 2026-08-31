@@ -35,6 +35,7 @@ class WorkflowState(TypedDict):
     roster: list[str]
     owned_sidekicks: list[str]
     stellar_awakened: dict
+    light_shadow_points: dict
     boss_id: str
     item_policy: str
     workflow_mode: str

@@ -924,7 +924,9 @@ complete corpus.
 
 ### Feature D2: Legal Skill Families And Contextual Package Frontier
 
-Status: Approved and admitted as the next correction feature after C6.
+Status: Complete. The backend now separates legal skill-family package
+selection from reviewed capability proof and emits a deterministic bounded
+frontier of contextual package options per complete character.
 
 Outcome: Package legality is independent of capability proof, and each complete hero exposes useful boss-aware alternatives rather than one global default package.
 
@@ -943,9 +945,18 @@ Acceptance criteria:
 - **D2-03:** Each proven capability contribution traces to the selected package or applicable passive evidence; untagged fillers contribute exactly zero coverage.
 - **D2-04:** Representative multi-role heroes produce distinct non-dominated contextual options when evidence supports them, without forcing three artificial variants.
 
+Evidence: `tests/workflow/test_feature_d2_packages.py` covers legal untagged
+fillers, family deduplication, ordinary-basic/SA/manifest dependency gates,
+explicit Light/Shadow slot limits, non-dominated contextual options, stable
+request input, and API request propagation. The focused D2, role-scoring,
+candidate, production-boundary, and state suites pass; the full unit suite and
+workflow suite (excluding the pre-existing graph happy-path test) also pass.
+No manual or external-provider test is required for this deterministic backend
+feature.
+
 ### Feature E2: Deterministic Alternative Build Allocation
 
-Status: Approved and blocked by D2; may be implemented after D2's package dependency contract is stable.
+Status: Approved and admitted as the next correction feature after D2.
 
 Outcome: A lineup is rejected for build incompatibility only after deterministic compatible alternatives and finite-copy allocation have been exhausted.
 
@@ -1085,7 +1096,8 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Feature G: completed; compact closed-world projection, provider-neutral DeepSeek/OpenRouter offline adapters, strict authority validation, two-call fragment correction, deterministic refinement fallback, and labeled degraded backend output are verified.
 - Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
 - Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
-- Correction planning: completed and human-approved on 2026-08-22; C6 is complete, D2 is the next admitted correction feature, and E2/F2 remain sequenced behind D2 and E2 respectively.
+- Correction Feature D2: completed; legal skill-family package frontiers, explicit Light/Shadow slot limits, dependency gates, untagged fillers, and deterministic contextual alternatives are verified.
+- Correction planning: completed and human-approved on 2026-08-22; C6 and D2 are complete, E2 is the next admitted correction feature, and F2 remains sequenced behind E2.
 - Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through correction planning and implementation.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.

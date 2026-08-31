@@ -286,7 +286,12 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
             "role_ids": list(entity.get("role_ids") or package.get("role_ids") or []),
             "role_scores": dict(entity.get("role_scores") or {}),
             "role_evidence": dict(entity.get("evidence") or {}),
+            "skill_package_frontier": _compact_skill_package_frontier(entity),
+            "skill_packages": _compact_skill_packages(entity),
             "default_package": dict(entity.get("default_package") or {}),
+            "package_ready": bool(entity.get("package_ready")),
+            "skill_slot_limit": entity.get("skill_slot_limit", 3),
+            "light_shadow_points": entity.get("light_shadow_points"),
         })
 
     sidekick_candidates = []
@@ -412,6 +417,7 @@ def _prepare_typed_candidates(state: WorkflowState) -> dict:
         "policy_versions": {
             "candidate_generation": lineup_generation.get("policy_version"),
             "role_scoring": role_scores.get("policy_version"),
+            "skill_packages": role_scores.get("skill_package_policy_version"),
             "build_packages": next(
                 (
                     (character.get("build_package") or {}).get("version")
@@ -438,7 +444,25 @@ def _typed_skill_options(skills, entity):
             skill_id = choice.get("skill_id")
             if skill_id:
                 scores[skill_id] = max(scores.get(skill_id, 0), int(choice.get("score") or 0))
-    ordered = sorted(skills, key=lambda value: (-scores.get(str(value.get("id")), 0), str(value.get("id") or value.get("name") or "")))
+    package_skill_ids = {
+        str(skill_id)
+        for package in entity.get("skill_packages", [])
+        if isinstance(package, dict)
+        for skill_id in package.get("skill_ids", [])
+    }
+    package_skill_ids.update(
+        str(skill_id)
+        for skill_id in (entity.get("default_package") or {}).get("skill_ids", [])
+    )
+    legal = [item for item in skills if _typed_skill_is_legal(item)]
+    ordered = sorted(
+        legal,
+        key=lambda value: (
+            -int(str(value.get("id")) in package_skill_ids),
+            -scores.get(str(value.get("id")), 0),
+            str(value.get("id") or value.get("name") or ""),
+        ),
+    )
     return [
         {
             "id": item.get("id") or _candidate_id("skill", item.get("character_name"), item.get("name")),
@@ -447,10 +471,69 @@ def _typed_skill_options(skills, entity):
             "element": item.get("element"),
             "skill_type": item.get("skill_type"),
             "requires_stellar_awakened": bool(item.get("requires_stellar_awakened")),
+            "skill_family_id": item.get("skill_family_id") or item.get("id") or item.get("name"),
+            "slot_eligibility": item.get("slot_eligibility") or "active_equipable",
+            "dependencies": list(item.get("dependencies") or []),
+            "dependencies_satisfied": item.get("dependencies_satisfied", True),
+            "manifest_available": item.get("manifest_available", True),
+            "equipment_available": item.get("equipment_available", True),
             "source_url": item.get("source_url"),
         }
         for item in ordered[:6]
     ]
+
+
+def _typed_skill_is_legal(item):
+    if item.get("available") is False or item.get("legal") is False:
+        return False
+    if (
+        item.get("dependencies_satisfied") is False
+        or item.get("manifest_available") is False
+        or item.get("equipment_available") is False
+    ):
+        return False
+    return str(item.get("slot_eligibility") or "active_equipable").casefold() in {
+        "active_equipable", "basic_attack_replacement"
+    }
+
+
+def _compact_skill_packages(entity):
+    packages = entity.get("skill_packages") or []
+    result = []
+    for package in packages[:3]:
+        if not isinstance(package, dict):
+            continue
+        result.append({
+            "id": package.get("id"),
+            "profile": package.get("profile"),
+            "skill_ids": list(package.get("skill_ids") or []),
+            "skill_family_ids": list(package.get("skill_family_ids") or []),
+            "package_size": package.get("package_size"),
+            "slot_limit": package.get("slot_limit"),
+            "role_ids": list(package.get("role_ids") or []),
+            "role_scores": dict(package.get("role_scores") or {}),
+            "contextual_score": package.get("contextual_score", 0),
+            "evidence": dict(package.get("evidence") or {}),
+            "proven_capabilities": list(package.get("proven_capabilities") or []),
+            "untagged_skill_ids": list(package.get("untagged_skill_ids") or []),
+            "dependency_ids": list(package.get("dependency_ids") or []),
+        })
+    return result
+
+
+def _compact_skill_package_frontier(entity):
+    frontier = entity.get("skill_package_frontier")
+    if not isinstance(frontier, dict):
+        return {}
+    return {
+        "policy_version": frontier.get("policy_version"),
+        "slot_limit": frontier.get("slot_limit", entity.get("skill_slot_limit", 3)),
+        "legal_skill_count": frontier.get("legal_skill_count", 0),
+        "legal_family_count": frontier.get("legal_family_count", 0),
+        "package_ready": bool(frontier.get("package_ready")),
+        "rejection_reasons": list(frontier.get("rejection_reasons") or []),
+        "package_ids": [package.get("id") for package in frontier.get("options", []) if isinstance(package, dict) and package.get("id")],
+    }
 
 
 def _typed_passive_options(passives):
@@ -708,6 +791,26 @@ def _validate_candidate_lineup(lineup: Any, bundle: dict, index: int) -> list[di
                     if not choice:
                         errors.append(_diagnostic(code, f"{slot_path}.{key}", f"Unknown {key[:-4]} candidate ID", list(options)))
                         continue
+                    if key == "skill_ids" and str(choice.get("slot_eligibility") or "active_equipable").casefold() not in {
+                        "active_equipable", "basic_attack_replacement"
+                    }:
+                        errors.append(_diagnostic(
+                            "skill.not_equipable",
+                            f"{slot_path}.{key}",
+                            "Selected skill is not an equipable active skill",
+                            list(options),
+                        ))
+                    if key == "skill_ids" and (
+                        choice.get("dependencies_satisfied") is False
+                        or choice.get("manifest_available") is False
+                        or choice.get("equipment_available") is False
+                    ):
+                        errors.append(_diagnostic(
+                            "skill.dependency_unavailable",
+                            f"{slot_path}.{key}",
+                            "Selected skill has an unavailable dependency",
+                            list(options),
+                        ))
                     choice_text = f"{choice.get('name', '')} {choice.get('description', '')}".lower()
                     status_source = status_source or "pain" in choice_text or "poison" in choice_text
                     if choice.get("requires_stellar_awakened"):
@@ -716,6 +819,28 @@ def _validate_candidate_lineup(lineup: Any, bundle: dict, index: int) -> list[di
                             errors.append(_diagnostic("stellar.unavailable", f"{slot_path}.{key}", "Selected Stellar Awakening choice is unavailable", list(options)))
                         elif sa_state not in (True, "awakened") and choice.get("name", "").casefold() not in assumption_text:
                             errors.append(_diagnostic("stellar.assumption_missing", f"{slot_path}.{key}", "Unknown Stellar Awakening state requires an explicit upgrade assumption", list(options)))
+
+            if isinstance(entry.get("skill_ids"), list):
+                selected_skill_ids = entry["skill_ids"]
+                if len(selected_skill_ids) == 4 and int(character.get("skill_slot_limit", 3) or 3) < 4:
+                    errors.append(_diagnostic(
+                        "shape.skill_slot_limit",
+                        f"{slot_path}.skill_ids",
+                        "Four active skills require an explicit Light/Shadow slot allowance",
+                        list(skill_options),
+                    ))
+                family_ids = [
+                    str(skill_options[skill_id].get("skill_family_id") or skill_id)
+                    for skill_id in selected_skill_ids
+                    if skill_id in skill_options
+                ]
+                if len(family_ids) != len(set(family_ids)):
+                    errors.append(_diagnostic(
+                        "skill.duplicate_family",
+                        f"{slot_path}.skill_ids",
+                        "Selected active skills must use distinct skill families",
+                        list(skill_options),
+                    ))
 
             grasta_options = {choice["id"]: choice for choice in character.get("grastas", [])}
             selected_grastas = entry.get("grasta_ids")

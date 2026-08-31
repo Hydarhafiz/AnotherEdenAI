@@ -20,6 +20,7 @@ class QueryRequest(BaseModel):
     roster: list[str]
     owned_sidekicks: list[str] = Field(default_factory=list)
     stellar_awakened: dict = Field(default_factory=dict)
+    light_shadow_points: dict[str, int] = Field(default_factory=dict)
     boss_id: str | None = None
     item_policy: str = "late_game_assumed"
     mode: str = "exploratory"
@@ -66,6 +67,7 @@ async def post_query(body: QueryRequest, request: Request):
         "roster": body.roster,
         "owned_sidekicks": body.owned_sidekicks,
         "stellar_awakened": body.stellar_awakened,
+        "light_shadow_points": body.light_shadow_points,
         "boss_id": body.boss_id,
         "item_policy": body.item_policy,
         "mode": body.mode,
@@ -106,6 +108,7 @@ async def stream_job(job_id: str, request: Request, driver=Depends(get_driver)):
         request=request,
         owned_sidekicks=job_data.get("owned_sidekicks", []),
         stellar_awakened=job_data.get("stellar_awakened", {}),
+        light_shadow_points=job_data.get("light_shadow_points", {}),
         boss_id=job_data.get("boss_id"),
         item_policy=job_data.get("item_policy", "late_game_assumed"),
         mode=job_data.get("mode", "exploratory"),

@@ -34,6 +34,7 @@ EXPECTED_KEYS = {
     "alternatives",
     "final_output",
     "stellar_awakened",
+    "light_shadow_points",
     "boss_id",
     "item_policy",
     "workflow_mode",
