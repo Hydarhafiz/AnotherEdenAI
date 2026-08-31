@@ -17,7 +17,7 @@ from typing import Any, Iterable
 from .build_packages import resolve_lineup_allocation
 
 
-LINEUP_GENERATION_POLICY_VERSION = "feature-f-lineup-v1"
+LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v1"
 BEAM_WIDTH = 50
 MAX_CANDIDATES = 10
 MAX_BRANCHING = 12
@@ -104,49 +104,146 @@ def generate_lineup_candidates(
 
     character_entities = _character_entities(characters, role_scores)
     sidekick_entities = _sidekick_entities(sidekicks, role_scores)
+    frontier, preprocessing = _precompute_package_frontier(character_entities)
+    complete_ids = set(preprocessing["complete_character_ids"])
     eligible = {
-        entity_id: entity
-        for entity_id, entity in character_entities.items()
-        if entity.get("eligible", True) and not entity.get("rejection_reasons")
+        entity_id: character_entities[entity_id]
+        for entity_id in sorted(frontier)
+        if character_entities[entity_id].get("eligible", True)
+        and not character_entities[entity_id].get("rejection_reasons")
+    }
+    incomplete_exclusions = [
+        exclusion for exclusion in preprocessing["exclusions"]
+        if exclusion["code"] == "character_data_incomplete"
+    ]
+    stage_diagnostics = {
+        "preprocessing": {
+            "input_count": len(character_entities),
+            "complete_character_count": len(complete_ids),
+            "frontier_character_count": len(frontier),
+            "excluded_character_count": len(preprocessing["exclusions"]),
+            "incomplete_character_count": len(incomplete_exclusions),
+            "exclusions": preprocessing["exclusions"],
+            "reason_counts": preprocessing["reason_counts"],
+            "reduced_roster": bool(incomplete_exclusions),
+            "rejected_attempts": 0,
+            "rejection_reasons": {},
+        },
+        "beam_expansion": {
+            "terminal_states": 0,
+            "states_expanded": 0,
+            "states_retained": 0,
+            "trace": [],
+        },
+        "mandatory_coverage": {"rejected_attempts": 0, "rejection_reasons": {}},
+        "affinity_matchup": {"rejected_attempts": 0, "rejection_reasons": {}},
+        "allocation": {"rejected_attempts": 0, "rejection_reasons": {}},
+        "diversity_pruning": {
+            "input_candidates": 0,
+            "retained_candidates": 0,
+            "pruned_candidates": 0,
+            "rejection_reasons": {},
+        },
+        "post_beam_evaluation": {
+            "attempts": 0,
+            "retained_candidates": 0,
+            "rejected_attempts": 0,
+            "rejected_at": {},
+        },
     }
     diagnostics: dict[str, Any] = {
         "policy_version": LINEUP_GENERATION_POLICY_VERSION,
         "beam_width": beam_width,
         "max_candidates": max_candidates,
         "eligible_character_count": len(eligible),
+        "complete_character_count": len(complete_ids),
+        "incomplete_character_count": len(incomplete_exclusions),
         "requested_character_count": int((coverage or {}).get("requested_character_count", len(characters))),
         "beam_trace": [],
         "pruning_reasons": [],
         "rejection_counts": {},
         "zero_candidate_causes": [],
+        "stage_diagnostics": stage_diagnostics,
+        "readiness": {
+            "status": "ready" if not incomplete_exclusions else "reduced_roster",
+            "complete_character_count": len(complete_ids),
+            "excluded_character_count": len(incomplete_exclusions),
+            "authoritative_infeasible": not bool(incomplete_exclusions),
+        },
     }
+
+    compact_frontier = _compact_package_frontier(frontier)
+    if len(complete_ids) < LINEUP_SIZE:
+        diagnostics["zero_candidate_causes"] = ["character_data_incomplete"]
+        diagnostics["readiness"].update({
+            "status": "data_error",
+            "authoritative_infeasible": False,
+            "required_complete_character_count": LINEUP_SIZE,
+        })
+        return _result(
+            [],
+            diagnostics,
+            status="data_error",
+            missing_archetypes=list(CAPABILITY_TEMPLATES),
+            package_frontier=compact_frontier,
+            error={
+                "type": "character_data_incomplete",
+                "message": (
+                    f"Only {len(complete_ids)} complete character package(s) are available; "
+                    f"{LINEUP_SIZE} are required for a lineup."
+                ),
+                "exclusions": incomplete_exclusions,
+            },
+        )
 
     if len(eligible) < LINEUP_SIZE:
         diagnostics["zero_candidate_causes"] = ["insufficient_roster"]
-        return _result([], diagnostics, status="zero", missing_archetypes=list(CAPABILITY_TEMPLATES))
+        diagnostics["readiness"]["authoritative_infeasible"] = not bool(incomplete_exclusions)
+        return _result(
+            [],
+            diagnostics,
+            status="zero",
+            missing_archetypes=list(CAPABILITY_TEMPLATES),
+            package_frontier=compact_frontier,
+        )
 
-    if not any(_has_role(entity, "primary_damage") for entity in eligible.values()):
+    if not any(
+        _frontier_has_role(frontier[entity_id], "primary_damage")
+        or _has_role(eligible[entity_id], "primary_damage")
+        for entity_id in eligible
+    ):
         diagnostics["zero_candidate_causes"] = ["no_usable_primary_damage"]
-        return _result([], diagnostics, status="zero", missing_archetypes=list(CAPABILITY_TEMPLATES))
+        diagnostics["readiness"]["authoritative_infeasible"] = not bool(incomplete_exclusions)
+        return _result(
+            [],
+            diagnostics,
+            status="zero",
+            missing_archetypes=list(CAPABILITY_TEMPLATES),
+            package_frontier=compact_frontier,
+        )
 
-    role_pools = _normalise_role_pools(role_scores, eligible)
+    role_pools = _normalise_role_pools(role_scores, eligible, frontier=frontier)
     candidates: list[dict[str, Any]] = []
     rejection_counts: Counter[str] = Counter()
+    sidekick_options = _sidekick_options(sidekick_entities)
     for archetype, template in CAPABILITY_TEMPLATES.items():
         partials = _beam_expand(
             archetype,
             template,
             eligible,
             role_pools,
+            frontier,
             beam_width=beam_width,
             trace=diagnostics["beam_trace"],
         )
+        stage_diagnostics["beam_expansion"]["terminal_states"] += len(partials)
         for partial in partials:
-            sidekick_options = _sidekick_options(sidekick_entities)
             for sidekick_pair in sidekick_options:
+                stage_diagnostics["post_beam_evaluation"]["attempts"] += 1
                 candidate, reasons = _evaluate_candidate(
                     archetype=archetype,
-                    character_ids=partial,
+                    character_ids=[entity_id for entity_id, _ in partial],
+                    skill_packages=_selected_skill_packages(partial, frontier),
                     sidekick_pair=sidekick_pair,
                     template=template,
                     entities=eligible,
@@ -155,12 +252,26 @@ def generate_lineup_candidates(
                     boss=boss,
                 )
                 if candidate is None:
+                    stage = _rejection_stage(reasons)
+                    _record_stage_rejection(stage_diagnostics, stage, reasons)
                     for reason in reasons:
                         rejection_counts[reason] += 1
                     continue
+                stage_diagnostics["post_beam_evaluation"]["retained_candidates"] += 1
                 candidates.append(candidate)
 
     diagnostics["rejection_counts"] = dict(sorted(rejection_counts.items()))
+    stage_diagnostics["beam_expansion"]["states_expanded"] = sum(
+        row["expanded"] for row in diagnostics["beam_trace"]
+    )
+    stage_diagnostics["beam_expansion"]["states_retained"] = sum(
+        row["retained"] for row in diagnostics["beam_trace"]
+    )
+    stage_diagnostics["beam_expansion"]["trace"] = list(diagnostics["beam_trace"])
+    stage_diagnostics["post_beam_evaluation"]["rejected_attempts"] = (
+        stage_diagnostics["post_beam_evaluation"]["attempts"]
+        - stage_diagnostics["post_beam_evaluation"]["retained_candidates"]
+    )
     if not candidates:
         causes = _dominant_causes(rejection_counts)
         diagnostics["zero_candidate_causes"] = causes or ["missing_mandatory_coverage"]
@@ -168,7 +279,14 @@ def generate_lineup_candidates(
             {"reason": cause, "count": rejection_counts[cause]}
             for cause in diagnostics["zero_candidate_causes"]
         ]
-        return _result([], diagnostics, status="zero", missing_archetypes=list(CAPABILITY_TEMPLATES))
+        diagnostics["readiness"]["authoritative_infeasible"] = not bool(incomplete_exclusions)
+        return _result(
+            [],
+            diagnostics,
+            status="zero",
+            missing_archetypes=list(CAPABILITY_TEMPLATES),
+            package_frontier=compact_frontier,
+        )
 
     deduplicated = _deduplicate_candidates(candidates)
     selected = _select_diverse(deduplicated, max_candidates=max_candidates)
@@ -179,7 +297,22 @@ def generate_lineup_candidates(
         {"reason": "exact_or_near_duplicate", "count": len(candidates) - len(deduplicated)},
         {"reason": "diversity_cap", "count": max(0, len(deduplicated) - len(selected))},
     ]
-    return _result(selected, diagnostics, status=status, missing_archetypes=missing_archetypes)
+    stage_diagnostics["diversity_pruning"].update({
+        "input_candidates": len(candidates),
+        "retained_candidates": len(selected),
+        "pruned_candidates": len(candidates) - len(selected),
+        "rejection_reasons": {
+            "exact_or_near_duplicate": len(candidates) - len(deduplicated),
+            "diversity_cap": max(0, len(deduplicated) - len(selected)),
+        },
+    })
+    return _result(
+        selected,
+        diagnostics,
+        status=status,
+        missing_archetypes=missing_archetypes,
+        package_frontier=compact_frontier,
+    )
 
 
 # Verb-first aliases keep the backend contract easy to discover for offline
@@ -235,6 +368,7 @@ def score_lineup_candidate(
         sidekick_entities,
         boss,
         candidate.get("coverage", {}),
+        selected_skill_packages=candidate.get("skill_packages") or {},
         selected_packages=candidate.get("build_packages") or {},
     )
 
@@ -256,9 +390,16 @@ def evaluate_backend_lineup(
     template = CAPABILITY_TEMPLATES.get(archetype)
     if template is None:
         return None, ["archetype.invalid"]
+    frontier, _ = _precompute_package_frontier(entities)
+    if any(entity_id not in frontier for entity_id in character_ids):
+        return None, ["skill_package.missing_or_invalid"]
     return _evaluate_candidate(
         archetype=archetype,
         character_ids=list(character_ids),
+        skill_packages=_selected_skill_packages(
+            tuple((entity_id, next(iter(frontier[entity_id]))) for entity_id in character_ids),
+            frontier,
+        ),
         sidekick_pair=sidekick_pair,
         template=template,
         entities=entities,
@@ -268,8 +409,8 @@ def evaluate_backend_lineup(
     )
 
 
-def _result(candidates, diagnostics, *, status, missing_archetypes):
-    return {
+def _result(candidates, diagnostics, *, status, missing_archetypes, package_frontier=None, error=None):
+    result = {
         "policy_version": LINEUP_GENERATION_POLICY_VERSION,
         "scoring_policy": SCORING_POLICY,
         "templates": {
@@ -285,7 +426,11 @@ def _result(candidates, diagnostics, *, status, missing_archetypes):
         "candidate_count": len(candidates),
         "missing_archetypes": missing_archetypes,
         "diagnostics": diagnostics,
+        "package_frontier": package_frontier or {},
     }
+    if error is not None:
+        result["error"] = error
+    return result
 
 
 def _character_entities(characters, role_scores):
@@ -311,6 +456,212 @@ def _character_entities(characters, role_scores):
     return result
 
 
+def _precompute_package_frontier(entities):
+    """Build the legal skill-package frontier before any lineup expansion.
+
+    A character can be complete without contributing a reviewed capability: the
+    package contract owns structural legality, while capability evidence owns
+    coverage.  This distinction keeps untagged but legal fillers in the search.
+    """
+    frontier: dict[str, dict[str, dict[str, Any]]] = {}
+    complete_character_ids: list[str] = []
+    exclusions: list[dict[str, Any]] = []
+    reason_counts: Counter[str] = Counter()
+    for entity_id in sorted(entities):
+        entity = entities[entity_id]
+        options, reasons = _skill_package_options(entity)
+        if not options:
+            reason = reasons[0] if reasons else "skill_package.unavailable"
+            exclusion = {
+                "character_id": entity_id,
+                "name": str(entity.get("name") or entity_id),
+                "code": "character_data_incomplete",
+                "reason": reason,
+                "details": sorted(set(reasons or [reason])),
+            }
+            exclusions.append(exclusion)
+            reason_counts[reason] += 1
+            continue
+
+        complete_character_ids.append(entity_id)
+        frontier[entity_id] = {str(package["id"]): package for package in options}
+        if not entity.get("eligible", True) or entity.get("rejection_reasons"):
+            reasons_for_exclusion = list(entity.get("rejection_reasons") or ["character.ineligible"])
+            reason = str(reasons_for_exclusion[0])
+            exclusion = {
+                "character_id": entity_id,
+                "name": str(entity.get("name") or entity_id),
+                "code": "character_ineligible",
+                "reason": reason,
+                "details": sorted(set(str(value) for value in reasons_for_exclusion)),
+            }
+            exclusions.append(exclusion)
+            reason_counts[reason] += 1
+
+    exclusions.sort(key=lambda value: (value["code"], value["character_id"], value["reason"]))
+    return frontier, {
+        "complete_character_ids": sorted(complete_character_ids),
+        "exclusions": exclusions,
+        "reason_counts": dict(sorted(reason_counts.items())),
+    }
+
+
+def _skill_package_options(entity):
+    """Normalize and validate the D2 skill-package options for one character."""
+    frontier = entity.get("skill_package_frontier")
+    if isinstance(frontier, dict) and isinstance(frontier.get("options"), list):
+        raw_options = frontier["options"]
+        frontier_reasons = [str(value) for value in frontier.get("rejection_reasons", []) if value]
+    elif isinstance(entity.get("skill_packages"), list):
+        raw_options = entity["skill_packages"]
+        frontier_reasons = []
+    else:
+        default = entity.get("default_package")
+        raw_options = [default] if isinstance(default, dict) else []
+        frontier_reasons = []
+
+    normalized: list[dict[str, Any]] = []
+    reasons = list(frontier_reasons)
+    for raw in raw_options:
+        if not isinstance(raw, dict):
+            reasons.append("skill_package.invalid_shape")
+            continue
+        package = dict(raw)
+        skill_ids = [str(value) for value in package.get("skill_ids", []) if value]
+        family_ids = [str(value) for value in package.get("skill_family_ids", []) if value]
+        if not family_ids:
+            family_ids = list(skill_ids)
+        package_size = _coerce_int(package.get("package_size"), len(skill_ids))
+        slot_limit = _coerce_int(package.get("slot_limit"), _coerce_int(entity.get("skill_slot_limit"), 3))
+        package["skill_ids"] = skill_ids
+        package["skill_family_ids"] = family_ids
+        package["package_size"] = package_size
+        package["slot_limit"] = slot_limit
+        if not package.get("id"):
+            package["id"] = _stable_id(
+                "skill-package",
+                entity.get("id") or entity.get("name"),
+                *family_ids,
+                *skill_ids,
+                slot_limit,
+            )
+        package["id"] = str(package["id"])
+
+        package_reasons = []
+        if package.get("legal") is False:
+            package_reasons.append("skill_package.not_legal")
+        if package_size not in {3, 4}:
+            package_reasons.append("skill_package.invalid_size")
+        if package_size > slot_limit:
+            package_reasons.append("skill_package.slot_limit")
+        if len(skill_ids) != len(set(skill_ids)):
+            package_reasons.append("skill_package.duplicate_skill")
+        if len(family_ids) != len(set(family_ids)):
+            package_reasons.append("skill_package.duplicate_family")
+        if len(skill_ids) != package_size or len(family_ids) != package_size:
+            package_reasons.append("skill_package.incomplete")
+        if package_reasons:
+            reasons.extend(package_reasons)
+            continue
+        package["legal"] = True
+        normalized.append(package)
+
+    normalized.sort(key=_skill_package_sort_key)
+    unique: dict[str, dict[str, Any]] = {}
+    for package in normalized:
+        unique.setdefault(package["id"], package)
+    normalized = list(unique.values())
+    return normalized, sorted(set(reasons)) if not normalized else []
+
+
+def _skill_package_sort_key(package):
+    return (
+        -_coerce_int(package.get("contextual_score"), 0),
+        -_coerce_int((package.get("role_scores") or {}).get("boss_counter", 0), 0),
+        -_coerce_int((package.get("role_scores") or {}).get("primary_damage", 0), 0),
+        str(package.get("profile") or ""),
+        tuple(str(value) for value in package.get("skill_family_ids", [])),
+        str(package.get("id") or ""),
+    )
+
+
+def _compact_package_frontier(frontier):
+    return {
+        entity_id: [
+            {
+                "id": package.get("id"),
+                "profile": package.get("profile"),
+                "skill_ids": list(package.get("skill_ids") or []),
+                "skill_family_ids": list(package.get("skill_family_ids") or []),
+                "package_size": package.get("package_size"),
+                "slot_limit": package.get("slot_limit"),
+                "role_ids": list(package.get("role_ids") or []),
+                "role_scores": dict(package.get("role_scores") or {}),
+                "contextual_score": package.get("contextual_score", 0),
+                "proven_capabilities": list(package.get("proven_capabilities") or []),
+                "untagged_skill_ids": list(package.get("untagged_skill_ids") or []),
+                "dependency_ids": list(package.get("dependency_ids") or []),
+                "legal": bool(package.get("legal", True)),
+            }
+            for package in sorted(options.values(), key=_skill_package_sort_key)
+        ]
+        for entity_id, options in sorted(frontier.items())
+    }
+
+
+def _selected_skill_packages(state, frontier):
+    return {
+        entity_id: frontier[entity_id][package_id]
+        for entity_id, package_id in state
+        if entity_id in frontier and package_id in frontier[entity_id]
+    }
+
+
+def _frontier_has_role(options, role):
+    values = options.values() if isinstance(options, dict) else options
+    return any(_package_role_score(package, role) > 0 for package in values)
+
+
+def _package_role_score(package, role):
+    return _numeric((package.get("role_scores") or {}).get(role)) if isinstance(package, dict) else 0
+
+
+def _package_role_ids(package, entity=None):
+    if isinstance(package, dict) and isinstance(package.get("role_ids"), list):
+        return sorted(set(str(value) for value in package["role_ids"] if value))
+    if isinstance(package, dict) and isinstance(package.get("role_scores"), dict):
+        return sorted(
+            str(role) for role, score in package["role_scores"].items()
+            if _numeric(score) > 0
+        )
+    return _role_ids(entity or {})
+
+
+def _choice_sort_key(choice, role, frontier):
+    entity_id, package_id = choice
+    package = frontier[entity_id][package_id]
+    return (-_package_role_score(package, role), *_skill_package_sort_key(package), entity_id, package_id)
+
+
+def _rejection_stage(reasons):
+    if any(reason.startswith("build_") or reason.startswith("allocation") for reason in reasons):
+        return "allocation"
+    if any(reason.startswith("primary_damage") or reason.startswith("affinity") for reason in reasons):
+        return "affinity_matchup"
+    if any(reason.startswith("mandatory") for reason in reasons):
+        return "mandatory_coverage"
+    return "preprocessing"
+
+
+def _record_stage_rejection(stage_diagnostics, stage, reasons):
+    stage_info = stage_diagnostics[stage]
+    stage_info["rejected_attempts"] += 1
+    for reason in sorted(set(reasons)):
+        stage_info["rejection_reasons"][reason] = stage_info["rejection_reasons"].get(reason, 0) + 1
+    flow = stage_diagnostics["post_beam_evaluation"]
+    flow["rejected_at"][stage] = flow["rejected_at"].get(stage, 0) + 1
+
+
 def _sidekick_entities(sidekicks, role_scores):
     result = {
         str(entity.get("id")): dict(entity)
@@ -327,7 +678,7 @@ def _sidekick_entities(sidekicks, role_scores):
     return result
 
 
-def _normalise_role_pools(role_scores, eligible):
+def _normalise_role_pools(role_scores, eligible, *, frontier=None):
     pools = {}
     raw = role_scores.get("role_pools", {}) if isinstance(role_scores, dict) else {}
     for role in _all_roles():
@@ -337,27 +688,49 @@ def _normalise_role_pools(role_scores, eligible):
             if entity_id in eligible and entity_id not in values:
                 values.append(entity_id)
         if not values:
-            values = [entity_id for entity_id in sorted(eligible) if _has_role(eligible[entity_id], role)]
+            values = [
+                entity_id for entity_id in sorted(eligible)
+                if _frontier_has_role((frontier or {}).get(entity_id, {}), role)
+                or _has_role(eligible[entity_id], role)
+            ]
+        if frontier:
+            values.sort(
+                key=lambda entity_id: (
+                    -max(
+                        _package_role_score(package, role)
+                        for package in frontier.get(entity_id, {}).values()
+                    ) if frontier.get(entity_id) else 0,
+                    entity_id,
+                )
+            )
         pools[role] = values[:8]
     return pools
 
 
-def _beam_expand(archetype, template, entities, role_pools, *, beam_width, trace):
-    states: list[tuple[str, ...]] = [()]
-    all_ids = sorted(entities)
+def _beam_expand(archetype, template, entities, role_pools, frontier, *, beam_width, trace):
+    """Expand only character/package choices from the precomputed frontier."""
+    states: list[tuple[tuple[str, str], ...]] = [()]
+    all_ids = sorted(frontier)
     for step, role in enumerate(template["slot_roles"], start=1):
-        pool = list(role_pools.get(role, []))
-        pool.extend(entity_id for entity_id in all_ids if entity_id not in pool)
-        pool = pool[:MAX_BRANCHING]
-        expanded: set[tuple[str, ...]] = set()
+        entity_pool = list(role_pools.get(role, []))
+        entity_pool.extend(entity_id for entity_id in all_ids if entity_id not in entity_pool)
+        entity_pool = entity_pool[:MAX_BRANCHING]
+        choices = [
+            (entity_id, package["id"])
+            for entity_id in entity_pool
+            for package in frontier.get(entity_id, {}).values()
+        ]
+        choices = sorted(set(choices), key=lambda value: _choice_sort_key(value, role, frontier))
+        expanded: set[tuple[tuple[str, str], ...]] = set()
         for state in states:
-            for entity_id in pool:
-                if entity_id in state:
+            used = {entity_id for entity_id, _ in state}
+            for choice in choices:
+                if choice[0] in used:
                     continue
-                expanded.add((*state, entity_id))
+                expanded.add((*state, choice))
         ordered = sorted(
             expanded,
-            key=lambda value: _partial_sort_key(value, role, entities),
+            key=lambda value: _partial_sort_key(value, role, entities, frontier),
         )
         states = ordered[:beam_width]
         trace.append({
@@ -367,16 +740,28 @@ def _beam_expand(archetype, template, entities, role_pools, *, beam_width, trace
             "expanded": len(expanded),
             "retained": len(states),
             "beam_width": beam_width,
+            "choice_count": len(choices),
+            "package_first": True,
         })
         if not states:
             break
     return states
 
 
-def _partial_sort_key(state, next_role, entities):
-    role_score = sum(_role_score(entities[entity_id], next_role) for entity_id in state)
-    covered = len({role for entity_id in state for role in _role_ids(entities[entity_id])})
-    total = sum(sum(_role_score(entities[entity_id], role) for role in _all_roles()) for entity_id in state)
+def _partial_sort_key(state, next_role, entities, frontier):
+    role_score = sum(
+        _package_role_score(frontier[entity_id][package_id], next_role)
+        for entity_id, package_id in state
+    )
+    covered = len({
+        role
+        for entity_id, package_id in state
+        for role in _package_role_ids(frontier[entity_id][package_id], entities[entity_id])
+    })
+    total = sum(
+        sum(_package_role_score(frontier[entity_id][package_id], role) for role in _all_roles())
+        for entity_id, package_id in state
+    )
     return (-role_score, -covered, -total, state)
 
 
@@ -405,7 +790,7 @@ def _sidekick_options(sidekick_entities):
     return options[: max(1, MAX_BRANCHING)]
 
 
-def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, entities, sidekick_entities, role_scores, boss):
+def _evaluate_candidate(*, archetype, character_ids, skill_packages=None, sidekick_pair, template, entities, sidekick_entities, role_scores, boss):
     reasons: list[str] = []
     if len(character_ids) != LINEUP_SIZE or len(set(character_ids)) != LINEUP_SIZE:
         return None, ["lineup.shape"]
@@ -413,6 +798,15 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         return None, ["character.unavailable"]
     if any(not entities[entity_id].get("eligible", True) for entity_id in character_ids):
         return None, ["character.ineligible"]
+
+    skill_packages = skill_packages or {}
+    selected_skill_packages = {
+        entity_id: skill_packages.get(entity_id)
+        for entity_id in character_ids
+        if isinstance(skill_packages.get(entity_id), dict)
+    }
+    if len(selected_skill_packages) != LINEUP_SIZE:
+        reasons.append("skill_package.missing_or_invalid")
 
     package_options = {
         entity_id: _build_package_options(entities[entity_id])
@@ -446,12 +840,13 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         sidekick_entities,
         boss,
         role_scores,
+        selected_skill_packages=selected_skill_packages,
         selected_packages=selected_packages,
     )
     reasons.extend(coverage["missing"])
 
     for entity_id in character_ids:
-        if not _package_ready(entities[entity_id]):
+        if not _package_ready(entities[entity_id], selected_skill_packages.get(entity_id)):
             reasons.append("skill_package.missing_or_unbounded")
     if reasons:
         return None, sorted(set(reasons))
@@ -464,6 +859,7 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         sidekick_entities,
         boss,
         coverage,
+        selected_skill_packages=selected_skill_packages,
         selected_packages=selected_packages,
     )
     main_sidekick_id = _public_sidekick_id(sidekick_pair[0], sidekick_entities)
@@ -473,7 +869,11 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         for entity_id in character_ids
     }
     skills = {
-        entity_id: list(_default_package(entities[entity_id]).get("skill_ids") or [])
+        entity_id: list(selected_skill_packages[entity_id].get("skill_ids") or [])
+        for entity_id in character_ids
+    }
+    selected_entities = {
+        entity_id: _apply_skill_package(entities[entity_id], selected_skill_packages[entity_id])
         for entity_id in character_ids
     }
     candidate = {
@@ -490,7 +890,7 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         "frontline_character_ids": list(character_ids[:FRONTLINE_SIZE]),
         "reserve_character_ids": list(character_ids[FRONTLINE_SIZE:]),
         "role_assignments": {
-            entity_id: list(_role_ids(entities[entity_id]))
+            entity_id: list(_role_ids(selected_entities[entity_id]))
             for entity_id in character_ids
         },
         "main_sidekick_entity_id": sidekick_pair[0],
@@ -498,6 +898,11 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
         "main_sidekick_id": main_sidekick_id,
         "sub_sidekick_id": sub_sidekick_id,
         "skill_package_ids": skills,
+        "selected_skill_package_ids": {
+            entity_id: str(selected_skill_packages[entity_id].get("id") or "")
+            for entity_id in character_ids
+        },
+        "skill_packages": selected_skill_packages,
         "build_package_ids": package_ids,
         "build_packages": selected_packages,
         "build_allocation": allocation.get("allocation", {"scope": "lineup", "items": []}),
@@ -513,16 +918,20 @@ def _evaluate_candidate(*, archetype, character_ids, sidekick_pair, template, en
             "character_count": LINEUP_SIZE,
             "build_allocation": "validated",
             "build_package_ids": package_ids,
-            "reason": "survived bounded beam expansion and full-lineup legality gates",
+            "reason": "survived package-first beam expansion and full-lineup legality gates",
         },
-        "pruning_survival_reason": f"{archetype} template coverage-valid candidate retained by deterministic score",
+        "pruning_survival_reason": f"{archetype} template coverage-valid package choice retained by deterministic score",
     }
     return candidate, []
 
 
-def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, role_scores, *, selected_packages=None):
+def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, role_scores, *, selected_skill_packages=None, selected_packages=None):
+    selected_skill_packages = selected_skill_packages or {}
     selected_packages = selected_packages or {}
-    selected = [entities[entity_id] for entity_id in character_ids]
+    selected = [
+        _apply_skill_package(entities[entity_id], selected_skill_packages.get(entity_id))
+        for entity_id in character_ids
+    ]
     selected_sidekicks = [sidekick_entities[entity_id] for entity_id in sidekick_pair if entity_id and entity_id in sidekick_entities]
     all_entities = [*selected, *selected_sidekicks]
     covered_roles = {role for entity in all_entities for role in _role_ids(entity)}
@@ -582,9 +991,13 @@ def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entitie
     }
 
 
-def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, coverage, *, selected_packages=None):
+def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_entities, boss, coverage, *, selected_skill_packages=None, selected_packages=None):
+    selected_skill_packages = selected_skill_packages or {}
     selected_packages = selected_packages or {}
-    selected = [entities[entity_id] for entity_id in character_ids]
+    selected = [
+        _apply_skill_package(entities[entity_id], selected_skill_packages.get(entity_id))
+        for entity_id in character_ids
+    ]
     frontline = selected[:FRONTLINE_SIZE]
     reserve = selected[FRONTLINE_SIZE:]
     sidekicks = [sidekick_entities[entity_id] for entity_id in sidekick_pair if entity_id and entity_id in sidekick_entities]
@@ -810,6 +1223,13 @@ def _numeric(value):
         return 0.0
 
 
+def _coerce_int(value, default=0):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return int(default)
+
+
 def _values(value):
     if value is None:
         return []
@@ -836,10 +1256,46 @@ def _build_package_options(entity):
     return []
 
 
-def _package_ready(entity):
-    package = _default_package(entity)
+def _apply_skill_package(entity, package):
+    """Overlay one selected D2 package without mutating the source entity."""
+    if not isinstance(package, dict):
+        return dict(entity)
+    selected = dict(entity)
+    selected["default_package"] = package
+    selected["selected_skill_package"] = package
+    if isinstance(package.get("role_scores"), dict):
+        selected["role_scores"] = dict(package["role_scores"])
+    if isinstance(package.get("role_ids"), list):
+        selected["role_ids"] = list(package["role_ids"])
+    if isinstance(package.get("evidence"), dict):
+        selected["evidence"] = {
+            str(role): list(rows) if isinstance(rows, list) else []
+            for role, rows in package["evidence"].items()
+        }
+    selected["package_ready"] = bool(package.get("legal", True))
+    return selected
+
+
+def _package_ready(entity, package=None):
+    package = package if isinstance(package, dict) else _default_package(entity)
     skill_ids = package.get("skill_ids")
-    return isinstance(skill_ids, list) and 3 <= len(skill_ids) <= 4
+    family_ids = package.get("skill_family_ids") or skill_ids
+    try:
+        package_size = int(package.get("package_size") or len(skill_ids or []))
+        slot_limit = int(package.get("slot_limit") or entity.get("skill_slot_limit") or 3)
+    except (TypeError, ValueError):
+        return False
+    return (
+        bool(package.get("legal", True))
+        and isinstance(skill_ids, list)
+        and isinstance(family_ids, list)
+        and package_size in {3, 4}
+        and package_size <= slot_limit
+        and len(skill_ids) == package_size
+        and len(skill_ids) == len(set(skill_ids))
+        and len(family_ids) == package_size
+        and len(family_ids) == len(set(family_ids))
+    )
 
 
 def _sidekick_base(entity_id):

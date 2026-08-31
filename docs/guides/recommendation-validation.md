@@ -95,14 +95,21 @@ Run the durable offline checks:
 
 ```bash
 uv run pytest tests/workflow/test_lineup_generation.py
+uv run pytest tests/workflow/test_package_first_beam.py
 ```
 
 Pass conditions:
 
 - Burst, sustain, and hybrid have explicit mandatory and optional capability
   groups; one multifunction hero may satisfy multiple proven groups.
+- Package preprocessing emits a deterministic legal skill-package frontier per
+  complete character. Every beam state carries one selected package and never
+  repeats a character; incomplete or structurally invalid kits name the
+  character and exact reason before expansion.
 - Candidate expansion is deterministic and every beam step retains at most 50
-  partial combinations.
+  partial combinations. Inspect `diagnostics.stage_diagnostics` to distinguish
+  preprocessing, beam expansion, mandatory coverage, affinity/matchup,
+  allocation, and diversity/pruning outcomes.
 - Each returned candidate has six distinct heroes, four frontline heroes, two
   reserves, a selected three-to-four-skill package, a validated build
   allocation, component scores, and any assumption/uncertainty penalties.
@@ -110,8 +117,11 @@ Pass conditions:
   slots.
 - Exact and near-duplicate strategies are removed while distinct archetypes are
   retained when legal; the result contains no more than ten candidates.
-- Sparse or infeasible input returns a typed partial/zero result with dominant
-  causes. A zero-candidate result records zero analyzer calls.
+- Sparse input returns a typed readiness error when fewer than six complete
+  characters remain. If incomplete optional characters are excluded while six
+  complete characters remain, generation continues with a reduced-roster
+  warning and does not label the result authoritatively infeasible. A
+  zero-candidate result records zero analyzer calls.
 
 No analyzer response can add a hero, package, skill, sidekick, capability, or
 coverage claim to this backend result. Compact projection and bounded analyzer

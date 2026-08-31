@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, E, F, G, and G1 are complete. Feature H began offline verification but is blocked at H-03 by a cross-feature data, package, search, allocation, and oracle conflict. The human-approved Milestone 5 correction sequence C6 -> D2 -> E2 -> F2 must complete before H resumes. No paid call is authorized by this plan.
+Status: Active; Features A, B, C1-C5, D, E, F, G, G1, and correction Features C6, D2, E2, and F2 are complete. Feature H began offline verification but is blocked at H-03 by a cross-feature data, package, search, allocation, and oracle conflict. H may resume through its approved feature-planning route; no paid call is authorized by this plan.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -1002,7 +1002,7 @@ this deterministic backend feature.
 
 ### Feature F2: Package-First Beam Search And Stage Diagnostics
 
-Status: Approved and admitted as the next correction feature after E2.
+Status: Complete. Package-first expansion, readiness exclusions, stage-accountable diagnostics, and deterministic regression coverage are verified.
 
 Outcome: Beam search expands only structurally valid character-package choices while retaining complete diagnostics for excluded heroes and later constraint failures.
 
@@ -1020,6 +1020,14 @@ Acceptance criteria:
 - **F2-02:** Complete legal untagged fillers are not filtered out as capability failures; mandatory coverage still requires proven evidence.
 - **F2-03:** `character_data_incomplete` exclusions are visible, never trigger a paid analyzer call, and never produce a definitive infeasible label.
 - **F2-04:** Identical input, corpus, and policy versions produce identical frontier, beam, allocation, candidate order, and diagnostics.
+
+Evidence: `.venv/bin/pytest -q tests/workflow/test_package_first_beam.py`
+passes 5 tests; `.venv/bin/pytest -q tests/workflow --ignore=tests/workflow/test_graph.py`
+passes 259 tests; and `.venv/bin/pytest -q tests/unit` passes 155 tests. The
+focused regressions cover package identity and uniqueness, legal untagged
+fillers, named incomplete-character exclusions, readiness errors with zero
+analyzer calls, and reproducible disjoint stage diagnostics. No manual or
+external-provider test is required for this deterministic backend feature.
 
 ### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
 
@@ -1122,7 +1130,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
 - Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
 - Correction Feature D2: completed; legal skill-family package frontiers, explicit Light/Shadow slot limits, dependency gates, untagged fillers, and deterministic contextual alternatives are verified.
-- Correction planning: completed and human-approved on 2026-08-22; C6, D2, and E2 are complete, F2 is the next admitted correction feature, and H remains blocked until F2 completes.
+- Correction planning: completed and human-approved on 2026-08-22; C6, D2, E2, and F2 are complete, and H remains blocked at H-03 pending its corrected fixture/oracle work.
 - Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through correction planning and implementation.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
