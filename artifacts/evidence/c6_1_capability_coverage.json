@@ -1,0 +1,102 @@
+{
+  "artifact_version": "c6.1-h-witness-capability-coverage-v1",
+  "source_authority": "data/parsed/v1.6.0/characters",
+  "taxonomy_version": "3.1.0",
+  "review_artifact_version": "3.1.0",
+  "kit_artifact_version": "c6.1.0",
+  "roster": [
+    "Aisha",
+    "Aldo",
+    "Alma",
+    "Anabel",
+    "Ashtear",
+    "Azami"
+  ],
+  "capability_matrix": {
+    "Aisha": {
+      "direct_damage": ["skill:ca40f9733298269222b6"],
+      "offensive_enablement": ["skill:8a5a4e1f70487c377725"],
+      "zone_setup": ["skill:575912d04d8a7232ffd1"]
+    },
+    "Aldo": {
+      "direct_damage": ["skill:3bf0d55a753ab920d4c4"]
+    },
+    "Alma": {
+      "direct_damage": ["skill:7b8e55622abfae128296"]
+    },
+    "Anabel": {
+      "direct_damage": ["skill:6879a9e832e740f47c16"],
+      "survival": ["passive:c3fbe82c9a081c027401"]
+    },
+    "Ashtear": {
+      "direct_damage": ["skill:c9ea36e3d686d4fefc9a"],
+      "survival": ["skill:b2922592664ed96cc1e9"]
+    },
+    "Azami": {
+      "direct_damage": ["skill:d59d23c963f3f2888569"]
+    }
+  },
+  "deterministic_smoke": {
+    "role_pools": {
+      "primary_damage": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"],
+      "offensive_enablement": ["Aisha"],
+      "zone_setup": ["Aisha"],
+      "survival": ["Anabel", "Ashtear"]
+    },
+    "lineup_status": "success",
+    "candidate_count": 3,
+    "missing_archetypes": []
+  },
+  "h_witness_readiness": {
+    "status": "coverage-materialized-h-rebuild-required",
+    "independently_proved_feasible_witness_count": 0,
+    "remaining_authority_gap": "Feature H must independently rebuild and witness its 20 feasible H-03 requests after consuming this materialized capability set."
+  },
+  "graph_materialization_status": "authoritative-canonical-replay",
+  "canonical_replay": {
+    "command": "ETL_SOURCE_MODE=parsed ETL_CRAWL_SCOPE=full ETL_ALLOW_SUPERBOSS_RECONCILIATION=true .venv/bin/python -u -m src.etl.run_etl",
+    "replay_count": 2,
+    "exit_codes": [0, 0],
+    "prepared_counts": {
+      "characters": 367,
+      "skills": 4110,
+      "passive_skills": 926,
+      "sidekicks": 25,
+      "superbosses": 30,
+      "mechanic_references": 12,
+      "grastas": 668,
+      "ores": 61,
+      "equipment": 888
+    },
+    "capability_handoff": {
+      "taxonomy_version": "3.1.0",
+      "review_corpus_version": "3.1.0",
+      "parsed_fact_count": 5123
+    },
+    "capability_projection": {
+      "node_count": 5120,
+      "capability_value_count": 107,
+      "artifact_versions": ["3.1.0"],
+      "fingerprints": [
+        "0e5a22b56eff5a5c3f529b44a6d585638abddab5630b30cc6b292c7d6380913c",
+        "0e5a22b56eff5a5c3f529b44a6d585638abddab5630b30cc6b292c7d6380913c"
+      ]
+    },
+    "graph_gates": {
+      "character_kit_receipts": 367,
+      "missing_character_ids": 0,
+      "missing_skill_ids": 0,
+      "missing_passive_skill_ids": 0,
+      "stale_schema_nodes": 0,
+      "superbosses": 30,
+      "superbosses_without_mechanics": 0,
+      "superboss_reconciliation_stale_names": [],
+      "superboss_reconciliation_identity_conflicts": [],
+      "schema_assertion": "passed"
+    },
+    "external_calls": {
+      "live_crawl": false,
+      "paid_provider_calls": false
+    }
+  }
+}

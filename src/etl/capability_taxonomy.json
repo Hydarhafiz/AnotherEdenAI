@@ -138,6 +138,72 @@
       "direction": "enemy",
       "target": "single_enemy",
       "matched_phrase": "ignores target's defense (Def=0 in Damage Formula)"
+    },
+    {
+      "id": "c6-1-h-witness-aisha-jewel-concerto-damage",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "direct_damage",
+      "record_type": "skill",
+      "record_id": "skill:ca40f9733298269222b6",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "Fire type magic attack on a single enemy (L)"
+    },
+    {
+      "id": "c6-1-h-witness-aldo-phoenix-slash-damage",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "direct_damage",
+      "record_type": "skill",
+      "record_id": "skill:3bf0d55a753ab920d4c4",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "Fire type slash attack on a single enemy x3 (XL)"
+    },
+    {
+      "id": "c6-1-h-witness-anabel-deliverance-sword-damage",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "direct_damage",
+      "record_type": "skill",
+      "record_id": "skill:6879a9e832e740f47c16",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "Preemptive Slash attack on a single enemy (XL, 2x)"
+    },
+    {
+      "id": "c6-1-h-witness-ashtear-mystery-bullet-damage",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "direct_damage",
+      "record_type": "skill",
+      "record_id": "skill:c9ea36e3d686d4fefc9a",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "Fire Type Magic attack on a single enemy (XL)"
+    },
+    {
+      "id": "c6-1-h-witness-azami-heavenly-dance-damage",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "direct_damage",
+      "record_type": "skill",
+      "record_id": "skill:d59d23c963f3f2888569",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "Wind type slash attack on a single enemy x3 (XL)"
+    },
+    {
+      "id": "c6-1-h-witness-aisha-flame-serenade-zone",
+      "phase": "defensive_setup",
+      "kind": "capability",
+      "value": "deploy_zone",
+      "record_type": "skill",
+      "record_id": "skill:575912d04d8a7232ffd1",
+      "direction": "field",
+      "target": "zone",
+      "matched_phrase": "Deploy Raging Fire Stance"
     }
   ]
 }

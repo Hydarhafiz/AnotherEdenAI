@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, E, F, G, G1, and correction Features C6, D2, E2, and F2 are complete. Correction Feature G1.1 is admitted to make the G1 manifest and committed source corpus authoritative for canonical parsed replay before C6.1 can finish materialization. Feature H remains blocked at H-03 until G1.1 and C6.1 complete. No paid call is authorized by this plan.
+Status: Active; Features A, B, C1-C5, D, E, F, G, G1, and correction Features C6, C6.1, D2, E2, F2, and G1.1 are complete. Feature H remains blocked at H-03 while its independent witness register and evaluation authority are rebuilt from the materialized C6.1 capability set. No paid call is authorized by this plan.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -924,10 +924,10 @@ complete corpus.
 
 ### Correction Feature C6.1: H Witness Capability Coverage And Materialization
 
-Status: Local capability review, coverage, and regression evidence are green. Canonical
-materialization is now unblocked by completed G1.1 and remains a bounded correction to
-C6's selective capability-evidence boundary, not an exhaustive review of all 367
-character kits.
+Status: Complete on 2026-09-04. Local capability review, coverage, regression evidence,
+and two canonical Neo4j replays are green. This remains a bounded correction to C6's
+selective capability-evidence boundary, not an exhaustive review of all 367 character
+kits.
 
 Outcome: H receives source-backed, reviewed capability facts for the characters and
 roles used by its feasible witnesses and infeasibility certificates. Those facts are
@@ -970,6 +970,13 @@ Acceptance criteria:
 Route: `contract-auditor -> architect-planner -> feature-planner -> builder-executor -> tdd-loop`.
 The source-review and materialization plan may be prepared offline, but any Neo4j
 mutation, live crawl, or external provider call requires its own human authorization.
+
+Evidence: `artifacts/evidence/c6_1_capability_coverage.json` records the reviewed H
+witness capability matrix, two exit-zero canonical replays, 5,120 materialized
+capability nodes on taxonomy `3.1.0`, and matching projection fingerprint
+`0e5a22b56eff5a5c3f529b44a6d585638abddab5630b30cc6b292c7d6380913c`. The post-load
+schema assertion and 163-test unit suite pass; no live crawl or paid provider call
+was used.
 
 ### Feature D2: Legal Skill Families And Contextual Package Frontier
 
@@ -1302,7 +1309,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Correction Feature D2: completed; legal skill-family package frontiers, explicit Light/Shadow slot limits, dependency gates, untagged fillers, and deterministic contextual alternatives are verified.
 - Correction planning: completed and human-approved on 2026-08-22 for C6, D2, E2, F2, and H. On 2026-09-01, the bounded C6.1 correction was admitted after the H-03 authority audit. On 2026-09-04, G1.1 was admitted when canonical parsed replay proved unable to consume G1's thirty-boss corpus.
 - Correction Feature G1.1: completed on 2026-09-04; it owns manifest-driven offline artifact production, parsed replay, and safe graph reconciliation for exactly thirty bosses, with two approved local Neo4j replays and matching projection fingerprints.
-- Correction Feature C6.1: local review and regression evidence are green; canonical capability materialization is unblocked by G1.1 and remains the next correction step.
+- Correction Feature C6.1: completed on 2026-09-04; reviewed H witness capability facts are canonically materialized and reproduce the same graph projection across two Neo4j replays. Feature H remains blocked only at its corrected H-03 witness/evaluation boundary.
 - Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through G1.1, C6.1 completion, and H correction execution.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
