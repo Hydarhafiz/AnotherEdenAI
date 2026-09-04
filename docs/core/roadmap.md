@@ -196,7 +196,7 @@ Expected artifacts:
 - Golden deterministic gates and observed provider token/cost reporting.
 - Updated reusable ETL and recommendation-validation guidance.
 - Beta safety work sequenced after the core engine passes.
-- Feature G1 is complete within Milestone 5: the fixed thirty-boss corpus contains ten weak, ten medium, and ten strong canonical identities. Feature H is in progress but blocked at H-03 until C6, D2, E2, and F2 complete.
+- Feature G1 is complete within Milestone 5, and correction G1.1 completed on 2026-09-04: the committed thirty-boss corpus is authoritative for parsed replay, with ten weak, ten medium, and ten strong canonical identities. C6.1 capability materialization is now unblocked; H-03 remains gated on C6.1.
 - Feature H separates independently witnessed boss acceptance from the unchanged common-nine-character stress suite; its ten strategic infeasible cases use valid data-complete requests and deterministic impossibility certificates.
 
 Dependencies:
@@ -205,7 +205,7 @@ Dependencies:
 - Correct canonical IDs, item identity, and Grasta acquisition cardinality.
 - Curated weak-superboss and mechanics data.
 - Completion of Feature C5 after all three human-review phases achieve two consecutive clean 45-row batches before contextual RoleScores or skill shortlists.
-- Completion of correction Features C6, D2, E2, and F2 in order before H resumes Neo4j-backed acceptance.
+- Completion of correction Features C6, D2, E2, F2, G1.1, and C6.1 in order before H resumes Neo4j-backed acceptance; G1.1 is complete and C6.1 is next.
 
 Exit criteria:
 

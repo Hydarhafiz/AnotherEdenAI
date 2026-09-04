@@ -1,0 +1,68 @@
+{
+  "feature": "G1.1",
+  "corpus_version": "g1.1.0",
+  "parser_policy_version": "g1.1.0",
+  "manifest_path": "src/etl/superboss_manifest.json",
+  "capture_root": "src/etl/superboss_corpus",
+  "artifact_count": 30,
+  "cohort_counts": {
+    "medium": 10,
+    "strong": 10,
+    "weak": 10
+  },
+  "corpus_fingerprint": "21735f4c38a7088b290a98d917d28cf81e1f85ecbb9780ecca0b77e2fb0986b6",
+  "offline_prepare_counts": {
+    "characters": 367,
+    "sidekicks": 25,
+    "superbosses": 30,
+    "mechanic_references": 12
+  },
+  "automated_verification": {
+    "command": ".venv/bin/pytest -q tests/unit --confcutdir=tests/unit",
+    "result": "163 passed",
+    "schema_assertion": {
+      "command": "ETL_SOURCE_MODE=parsed ETL_CRAWL_SCOPE=full .venv/bin/python assert_schema.py",
+      "result": "passed",
+      "superboss_count": 30,
+      "complete_kit_receipt_count": 367
+    }
+  },
+  "neo4j_replay": {
+    "target": "local Docker Neo4j database neo4j",
+    "mutation_approved": true,
+    "replay_count": 2,
+    "first": {
+      "expected_count": 30,
+      "existing_count": 30,
+      "managed_count": 30,
+      "stale_names": [],
+      "identity_conflicts": [],
+      "projection_fingerprint": "16e94b0c3e763a5811c9ee26b090e24c2dab3dad0b9a71f436755c061c2ced0c"
+    },
+    "second": {
+      "expected_count": 30,
+      "existing_count": 30,
+      "managed_count": 30,
+      "stale_names": [],
+      "identity_conflicts": [],
+      "projection_fingerprint": "16e94b0c3e763a5811c9ee26b090e24c2dab3dad0b9a71f436755c061c2ced0c"
+    },
+    "projection": {
+      "superboss_count": 30,
+      "cohort_counts": {"weak": 10, "medium": 10, "strong": 10},
+      "recommendation_unready_count": 0,
+      "missing_mechanics_count": 0,
+      "citation_missing_count": 0,
+      "managed_by_g1_1_0_count": 30,
+      "cradle_system": {
+        "cohort": "weak",
+        "recommendation_ready": true,
+        "mechanics_text_chars": 183,
+        "section_anchor": "Procedure"
+      }
+    }
+  },
+  "neo4j_replay_status": "passed-two-consecutive-replays",
+  "live_fetch_used": false,
+  "paid_provider_used": false
+}

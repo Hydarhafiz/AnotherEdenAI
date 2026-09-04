@@ -186,6 +186,8 @@ Uniqueness: `sidekick_aura_id` and `(sidekick_name, name)`.
 
 ### Superboss
 - `name` (STRING, unique) — canonical curated superboss name
+- `canonical_id` (STRING) — stable manifest identity used for cohort membership, parsed artifact naming, and replay deduplication
+- `aliases` (LIST<STRING>) — accepted source/display aliases for the canonical identity
 - `source_url` (STRING) — wiki detail page URL, including a section anchor when the boss lives on a larger encounter page
 - `difficulty_tier` (STRING, nullable) — tier value discovered from the Superbosses index
 - `level` (INTEGER, nullable) — numeric level derived from the difficulty tier where available
@@ -197,9 +199,20 @@ Uniqueness: `sidekick_aura_id` and `(sidekick_name, name)`.
 - `characteristics` (STRING) — source-grounded index characteristic text
 - `mechanic_tags` (LIST<STRING>) — lightweight deterministic tags derived from source text for retrieval
 - `mechanics_text` (STRING) — source-grounded mechanics text retained for RAG context
+- `section_anchor`, `section_end_anchor`, `source_section` (STRING, nullable) — owned source-section boundary and display label
+- `section_bounded` (BOOLEAN) — true only when the parser retained an explicit bounded section
+- `citation_url` (STRING, nullable) — source URL including the owned section anchor
+- `provenance`, `mechanics_evidence`, `affinity_evidence`, `affinity_observations`, `selection_rationale` (STRING) — JSON-encoded source and parsing evidence properties
+- `support_status` (STRING) — manifest/replay support state; recommendation-ready rows use `recommendation_ready=true`
+- `recommendation_ready` (BOOLEAN) — quality-gated readiness for production recommendation retrieval
+- `managed_by`, `corpus_version` (STRING, nullable) — G1.1 ownership marker and corpus version for safe stale-node reconciliation
 - `schema_version` (STRING) — ETL schema version used for this row
 
-Superboss rows are loaded only from curated detail pages that pass quality gates. Index-only candidate facts are discovery metadata, not final graph nodes.
+Superboss rows are loaded only from manifest-approved committed captures or an explicitly
+authorized equivalent detail replay that passes quality gates. Index-only candidate facts
+are discovery metadata, not final graph nodes. The G1.1 full parsed replay requires exactly
+thirty recommendation-ready rows in ten weak, ten medium, and ten strong cohorts. Unknown
+affinity states remain distinct from confirmed empty/neutral states.
 
 ### MechanicReference
 - `id` (STRING, unique) — stable curated mechanics reference identifier

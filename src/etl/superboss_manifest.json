@@ -20,6 +20,8 @@
   "bosses": [
     {
       "canonical_id": "zennon-ogres-shadow",
+      "capture_path": "src/etl/superboss_corpus/zennon-ogres-shadow.html",
+      "capture_sha256": "1cbd0e75ef80a4286570f754c325102b112540aedf66f867bf8b6db707d28951",
       "name": "Zennon Ogre's Shadow",
       "aliases": ["Zennon Ogre's Shadow"],
       "source_url": "https://anothereden.wiki/w/Zennon_Ogre%27s_Shadow#Ogres_Spike_.5B1.5D.5B2.5D_.5B3.5D",
@@ -40,6 +42,8 @@
     },
     {
       "canonical_id": "mimi",
+      "capture_path": "src/etl/superboss_corpus/mimi.html",
+      "capture_sha256": "a8fc8db863dab81edd0678c10f710056c11e9b86570b74299409ebae8550f394",
       "name": "Mimi",
       "aliases": ["Mimi"],
       "source_url": "https://anothereden.wiki/w/Mimi#Toto_Dreamland_-_Ferris_Wheel_.28Lv.100.29.5B1.5D.5B2.5D_.5B3.5D",
@@ -60,6 +64,8 @@
     },
     {
       "canonical_id": "cradle-system",
+      "capture_path": "src/etl/superboss_corpus/cradle-system.html",
+      "capture_sha256": "92fbd65e3c6cba487f727d43888bafa4d35af24c36e803b9874cc0246546838c",
       "name": "Cradle System",
       "aliases": ["Cradle System", "Awaken: Saki AS"],
       "source_url": "https://anothereden.wiki/w/Cradle_System#Procedure",
@@ -80,6 +86,8 @@
     },
     {
       "canonical_id": "insula-ventorum",
+      "capture_path": "src/etl/superboss_corpus/insula-ventorum.html",
+      "capture_sha256": "c00835ebb41c6ae4672741961c963b501964893843c419ca678c23bbe1127c7f",
       "name": "Insula Ventorum",
       "aliases": ["Insula Ventorum"],
       "source_url": "https://anothereden.wiki/w/Insula_Ventorum#Macminal_Museum_-_Off_Limits_Floor_.28Lv.90.29.5B1.5D.5B2.5D_.5B3.5D",
@@ -100,6 +108,8 @@
     },
     {
       "canonical_id": "nameless-girl",
+      "capture_path": "src/etl/superboss_corpus/nameless-girl.html",
+      "capture_sha256": "711c42e27083a0bee75cadb571fdfaaf3273a539c3e37ae28a200697d01af667",
       "name": "Nameless Girl",
       "aliases": ["Nameless Girl", "Sophie"],
       "source_url": "https://anothereden.wiki/w/Nameless_Girl#Spacetime_Rift_.28Lv.90.29.5B1.5D.5B2.5D_.5B3.5D",
@@ -120,6 +130,8 @@
     },
     {
       "canonical_id": "imbrium-basin",
+      "capture_path": "src/etl/superboss_corpus/imbrium-basin.html",
+      "capture_sha256": "76c24782333fc4680ff9c84b3ceec902649fcc2196414be645024ef700bf6f6c",
       "name": "Imbrium Basin",
       "aliases": ["Imbrium Basin"],
       "source_url": "https://anothereden.wiki/w/Imbrium_Basin",
@@ -140,6 +152,8 @@
     },
     {
       "canonical_id": "shadow-of-chronos-menas",
+      "capture_path": "src/etl/superboss_corpus/shadow-of-chronos-menas.html",
+      "capture_sha256": "fe089c558dfbf95174e77530b590b3e59a3817d57d2bac765bf999527b9e99ab",
       "name": "Shadow of Chronos Menas",
       "aliases": ["Shadow of Chronos Menas"],
       "source_url": "https://anothereden.wiki/w/Shadow_of_Chronos_Menas",
@@ -160,6 +174,8 @@
     },
     {
       "canonical_id": "rotte-rivel",
+      "capture_path": "src/etl/superboss_corpus/rotte-rivel.html",
+      "capture_sha256": "fd171d6945fc0a8c3799e82f1f20589cfd49d4a340167c7a328051dd9a989e21",
       "name": "Rotte Rivel",
       "aliases": ["Rotte Rivel"],
       "source_url": "https://anothereden.wiki/w/Rotte_Rivel",
@@ -180,6 +196,8 @@
     },
     {
       "canonical_id": "regenwurm",
+      "capture_path": "src/etl/superboss_corpus/regenwurm.html",
+      "capture_sha256": "ae606554837eb3756c96a3c0d8419304a3e25b2859a6220f5f6afcfeb5ee19e3",
       "name": "Regenwurm",
       "aliases": ["Regenwurm"],
       "source_url": "https://anothereden.wiki/w/Regenwurm",
@@ -200,6 +218,8 @@
     },
     {
       "canonical_id": "large-white-lie-bug",
+      "capture_path": "src/etl/superboss_corpus/large-white-lie-bug.html",
+      "capture_sha256": "83ae59cc9e76a8e3ae279d3193e8a9777238f42fdde39377fad06d93568ccf3b",
       "name": "Large White Lie Bug",
       "aliases": ["Large White Lie Bug"],
       "source_url": "https://anothereden.wiki/w/Large_White_Lie_Bug",
@@ -220,6 +240,8 @@
     },
     {
       "canonical_id": "celestial-mushroom",
+      "capture_path": "src/etl/superboss_corpus/celestial-mushroom.html",
+      "capture_sha256": "086d64111c4eb019641fd3060bb0e07eaceb2134f91568b474c46eda8fb81b44",
       "name": "Celestial Mushroom",
       "aliases": ["Celestial Mushroom"],
       "source_url": "https://anothereden.wiki/w/Celestial_Mushroom",
@@ -240,6 +262,8 @@
     },
     {
       "canonical_id": "berserk-tempered-hound",
+      "capture_path": "src/etl/superboss_corpus/berserk-tempered-hound.html",
+      "capture_sha256": "742aac66616755987d2facb3afb65a8392f9810a9b776cb50657a5fdb9a7f461",
       "name": "Berserk Tempered Hound",
       "aliases": ["Berserk Tempered Hound"],
       "source_url": "https://anothereden.wiki/w/Berserk_Tempered_Hound",
@@ -260,6 +284,8 @@
     },
     {
       "canonical_id": "menreiki",
+      "capture_path": "src/etl/superboss_corpus/menreiki.html",
+      "capture_sha256": "f8b40308f6e45d116e316a3373f3249bb8a8a8a6fcdb2ae8af2331a592c88450",
       "name": "Menreiki",
       "aliases": ["Menreiki"],
       "source_url": "https://anothereden.wiki/w/Menreiki",
@@ -280,6 +306,8 @@
     },
     {
       "canonical_id": "terra-nivium",
+      "capture_path": "src/etl/superboss_corpus/terra-nivium.html",
+      "capture_sha256": "8de65c08eadc89b04658d8c9894797b9d8fac651e4f0a48478b855465f362517",
       "name": "Terra Nivium",
       "aliases": ["Terra Nivium"],
       "source_url": "https://anothereden.wiki/w/Terra_Nivium",
@@ -300,6 +328,8 @@
     },
     {
       "canonical_id": "unseen",
+      "capture_path": "src/etl/superboss_corpus/unseen.html",
+      "capture_sha256": "60ee6b1ccb206c517ce0892680db21a29266dcb492df419cea0dd2a9c0837997",
       "name": "Unseen",
       "aliases": ["Unseen"],
       "source_url": "https://anothereden.wiki/w/Unseen",
@@ -320,6 +350,8 @@
     },
     {
       "canonical_id": "shadow-of-teyul-menas",
+      "capture_path": "src/etl/superboss_corpus/shadow-of-teyul-menas.html",
+      "capture_sha256": "69928d6e6d590dc970058809caa3027bd60d129766c87ecc9f6f0a793e76d2d2",
       "name": "Shadow of Teyul Menas",
       "aliases": ["Shadow of Teyul Menas"],
       "source_url": "https://anothereden.wiki/w/Shadow_of_Teyul_Menas",
@@ -340,6 +372,8 @@
     },
     {
       "canonical_id": "kudang",
+      "capture_path": "src/etl/superboss_corpus/kudang.html",
+      "capture_sha256": "8709d47255a1f935b04192d4a059e6b460c33dc777aa77fc76c55c9946c5de60",
       "name": "Kudang",
       "aliases": ["Kudang"],
       "source_url": "https://anothereden.wiki/w/Kudang",
@@ -360,6 +394,8 @@
     },
     {
       "canonical_id": "true-fornjot",
+      "capture_path": "src/etl/superboss_corpus/true-fornjot.html",
+      "capture_sha256": "421169254b4c68d1aeadb4ea545b4e4b78d3110a393107709644c497ff518956",
       "name": "True Fornjot",
       "aliases": ["True Fornjot", "Fornjot (Superboss)"],
       "source_url": "https://anothereden.wiki/w/Fornjot#Superboss",
@@ -380,6 +416,8 @@
     },
     {
       "canonical_id": "caroline-justine",
+      "capture_path": "src/etl/superboss_corpus/caroline-justine.html",
+      "capture_sha256": "b5d51e17ad8e2c761aef621694352db184497600ec193d479926a3e94d00c9a0",
       "name": "Caroline & Justine",
       "aliases": ["Caroline & Justine"],
       "source_url": "https://anothereden.wiki/w/Caroline_%26_Justine",
@@ -400,6 +438,8 @@
     },
     {
       "canonical_id": "water-alter-force",
+      "capture_path": "src/etl/superboss_corpus/water-alter-force.html",
+      "capture_sha256": "2281775370dd2f4772ad505da43242647e98a2611b32b3c37a2049c52585468d",
       "name": "Water Alter Force",
       "aliases": ["Water Alter Force"],
       "source_url": "https://anothereden.wiki/w/Water_Alter_Force",
@@ -420,6 +460,8 @@
     },
     {
       "canonical_id": "thunder-alter-force",
+      "capture_path": "src/etl/superboss_corpus/thunder-alter-force.html",
+      "capture_sha256": "3956e743b9830cf12614eeac3b94c33e577afda130e3b59375ae41e6ec4e5a30",
       "name": "Thunder Alter Force",
       "aliases": ["Thunder Alter Force"],
       "source_url": "https://anothereden.wiki/w/Thunder_Alter_Force",
@@ -440,6 +482,8 @@
     },
     {
       "canonical_id": "eps-245-quadoxin",
+      "capture_path": "src/etl/superboss_corpus/eps-245-quadoxin.html",
+      "capture_sha256": "bb684addb67c84282206769a54c575be9e0cd88c6590e74cd37267238baaf03f",
       "name": "EPS-245 Quadoxin",
       "aliases": ["EPS-245 Quadoxin"],
       "source_url": "https://anothereden.wiki/w/EPS-245_Quadoxin",
@@ -460,6 +504,8 @@
     },
     {
       "canonical_id": "calamity-serpent",
+      "capture_path": "src/etl/superboss_corpus/calamity-serpent.html",
+      "capture_sha256": "1350f33301e1eecfb8c60bd462a20198dcb61eeb13252f62c62f7a67ab43596e",
       "name": "Calamity Serpent",
       "aliases": ["Calamity Serpent"],
       "source_url": "https://anothereden.wiki/w/Calamity_Serpent",
@@ -480,6 +526,8 @@
     },
     {
       "canonical_id": "terra-nivium-20000-bc",
+      "capture_path": "src/etl/superboss_corpus/terra-nivium-20000-bc.html",
+      "capture_sha256": "575fd456aed69942fdc32ca8453efc62cc4caf23e7d7839fe9c9446e67d8130d",
       "name": "Terra Nivium 20,000 B.C.",
       "aliases": ["Terra Nivium 20,000 B.C."],
       "source_url": "https://anothereden.wiki/w/Terra_Nivium_20,000_B.C.",
@@ -500,6 +548,8 @@
     },
     {
       "canonical_id": "demon-spider-menreiki",
+      "capture_path": "src/etl/superboss_corpus/demon-spider-menreiki.html",
+      "capture_sha256": "e3fcbd7f6b58f8b488e25665c49521d45c18e018f0db704ea3db244226d1dcbf",
       "name": "Demon Spider & Menreiki",
       "aliases": ["Demon Spider & Menreiki"],
       "source_url": "https://anothereden.wiki/w/Demon_Spider_%26_Menreiki",
@@ -520,6 +570,8 @@
     },
     {
       "canonical_id": "shadow-of-the-scales",
+      "capture_path": "src/etl/superboss_corpus/shadow-of-the-scales.html",
+      "capture_sha256": "ec3b6d0c7bb98ec8342be47617c903ce8b0e5dcbaac0a8d03516d75da886c198",
       "name": "Shadow of the Scales",
       "aliases": ["Shadow of the Scales"],
       "source_url": "https://anothereden.wiki/w/Shadow_of_the_Scales",
@@ -540,6 +592,8 @@
     },
     {
       "canonical_id": "white-tiger",
+      "capture_path": "src/etl/superboss_corpus/white-tiger.html",
+      "capture_sha256": "8e671fd4b0e0c40ee1107de8f3e51b8a276e592cb2f9deee37dd3c16f77e16f8",
       "name": "White Tiger",
       "aliases": ["White Tiger"],
       "source_url": "https://anothereden.wiki/w/White_Tiger",
@@ -560,6 +614,8 @@
     },
     {
       "canonical_id": "seiryu",
+      "capture_path": "src/etl/superboss_corpus/seiryu.html",
+      "capture_sha256": "e4c2060f2fab6b95719b45abd9c97ee30fa75e946f835b74b88f0dc64b45aef4",
       "name": "Seiryu",
       "aliases": ["Seiryu"],
       "source_url": "https://anothereden.wiki/w/Seiryu",
@@ -580,6 +636,8 @@
     },
     {
       "canonical_id": "time-anti-spiral",
+      "capture_path": "src/etl/superboss_corpus/time-anti-spiral.html",
+      "capture_sha256": "e0996ada960daeaeefad89c9cddc689b1638fa7bd32090f6f20aaae91fb5699c",
       "name": "Time Anti-Spiral",
       "aliases": ["Time Anti-Spiral"],
       "source_url": "https://anothereden.wiki/w/Time_Anti-Spiral",
@@ -600,6 +658,8 @@
     },
     {
       "canonical_id": "aloof-wing",
+      "capture_path": "src/etl/superboss_corpus/aloof-wing.html",
+      "capture_sha256": "9a7905110d3976e8de64b9a1d95f4fe2b29690e0136bb3a2194b17811275ff83",
       "name": "Aloof Wing",
       "aliases": ["Aloof Wing"],
       "source_url": "https://anothereden.wiki/w/Aloof_Wing",

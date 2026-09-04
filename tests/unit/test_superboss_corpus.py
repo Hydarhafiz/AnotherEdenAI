@@ -25,6 +25,10 @@ def _manifest():
     return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 
 
+def _capture_path(manifest_by_id, canonical_id):
+    return ROOT / manifest_by_id[canonical_id]["capture_path"]
+
+
 def test_manifest_has_exact_stratified_exit_gate_and_bounded_pending_fetch_scope():
     manifest = _manifest()
     bosses = manifest["bosses"]
@@ -60,6 +64,7 @@ def test_manifest_has_exact_stratified_exit_gate_and_bounded_pending_fetch_scope
 
 def test_cached_weak_fixture_round_trips_identity_affinity_and_owned_section():
     manifest_by_name = {item["name"]: item for item in _manifest()["bosses"]}
+    manifest_by_id = {item["canonical_id"]: item for item in manifest_by_name.values()}
     fixture = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
     assert len(fixture["cases"]) == 5
 
@@ -70,7 +75,7 @@ def test_cached_weak_fixture_round_trips_identity_affinity_and_owned_section():
             "support_status": "recommendation_ready",
         }
         soup = BeautifulSoup(
-            (FIXTURE_PATH.parent / case["html_file"]).read_text(encoding="utf-8"),
+            _capture_path(manifest_by_id, case["canonical_id"]).read_text(encoding="utf-8"),
             "html.parser",
         )
         row = parse_superboss_detail(
@@ -120,7 +125,7 @@ def test_authorized_live_fixtures_round_trip_all_25_candidates_and_provenance():
     for case in expected["cases"]:
         candidate = {**manifest_by_id[case["canonical_id"]], "support_status": "recommendation_ready"}
         soup = BeautifulSoup(
-            (LIVE_EXPECTED_PATH.parent / case["html_file"]).read_text(encoding="utf-8"),
+            _capture_path(manifest_by_id, case["canonical_id"]).read_text(encoding="utf-8"),
             "html.parser",
         )
         row = parse_superboss_detail(

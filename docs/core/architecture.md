@@ -128,6 +128,13 @@ Feature B curated superboss graph behavior:
 - Superboss detail validation requires mechanics text for RAG grounding; selected boss URLs fail visibly in the manifest instead of being silently skipped.
 - Index-only candidate facts are not loaded as final graph nodes.
 
+Correction Feature G1.1 corpus/replay behavior:
+
+- `src/etl/superboss_manifest.json` is the sole admission authority for the fixed thirty-boss corpus; the generic Superbosses index remains discovery metadata only.
+- Committed captures under `src/etl/superboss_corpus/` are keyed by canonical ID and checksum-verified before `superboss_detail` artifacts are built. The offline builder records parser/corpus versions and capture provenance in each derived artifact.
+- A parsed full-scope replay requires exactly the thirty current manifest artifacts, preserves `unknown` versus confirmed affinity states, enforces section-bounded mechanics and citations, and fails closed on missing, extra, stale, duplicate, empty, or identity-mismatched artifacts.
+- Full replay aggregates by canonical ID and requires ten weak, ten medium, and ten strong bosses before loading. Neo4j nodes loaded by this path carry `managed_by=g1.1.0`; reconciliation audits only those nodes (plus legacy recommendation-ready canonical-ID rows), never deletes unmarked nodes, and refuses connected stale-node cleanup.
+
 Feature B combat graph behavior from earlier milestone work:
 
 - Character index rows exclude sidekick-only records before character-detail crawling.

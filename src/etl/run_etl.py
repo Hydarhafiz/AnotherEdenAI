@@ -5,7 +5,13 @@ import logging
 
 from neo4j import AsyncGraphDatabase
 
-from .constants import ETL_MODE, NEO4J_AUTH, NEO4J_URI, SCHEMA_VERSION
+from .constants import (
+    ETL_ALLOW_SUPERBOSS_RECONCILIATION,
+    ETL_MODE,
+    NEO4J_AUTH,
+    NEO4J_URI,
+    SCHEMA_VERSION,
+)
 from .loader import (
     cleanup_duplicate_sidekick_characters,
     audit_character_readiness,
@@ -25,10 +31,12 @@ from .loader import (
     remove_unreleased_character_placeholders,
     remove_stale_role_materialization,
     load_superbosses,
+    reconcile_superboss_corpus,
 )
 from .pipeline import CrawlConfig, UNRELEASED_CHARACTER_NAMES, mark_loaded, prepare_parsed_data
 from .capability_taxonomy import assert_capability_materialization, validate_c5_handoff
 from .kit_readiness import build_receipt, artifact_fingerprint
+from .superboss_manifest import CORPUS_VERSION
 
 logging.basicConfig(
     level=logging.INFO,
@@ -141,7 +149,19 @@ async def main(driver=None, config: CrawlConfig | None = None) -> None:
         kit_report = await report_kit_readiness(driver, [character.name for character in characters])
         if not kit_report["ready"]:
             raise RuntimeError(f"C6 graph readiness gate failed: {kit_report}")
-        await load_superbosses(driver, superbosses)
+        superboss_is_full_parsed = config.source_mode == "parsed" and config.crawl_scope == "full"
+        if superboss_is_full_parsed:
+            reconciliation = await reconcile_superboss_corpus(
+                driver,
+                superbosses,
+                allow_stale_delete=ETL_ALLOW_SUPERBOSS_RECONCILIATION,
+            )
+            logger.info("G1.1 superboss reconciliation: %s", reconciliation)
+        await load_superbosses(
+            driver,
+            superbosses,
+            managed_by=CORPUS_VERSION if superboss_is_full_parsed else None,
+        )
         await load_mechanic_references(driver, mechanic_references)
         await remove_collapsed_legacy_grastas(driver)
         await load_grastas(driver, grastas)

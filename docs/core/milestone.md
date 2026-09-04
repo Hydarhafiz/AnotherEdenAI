@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Status: Active; Features A, B, C1-C5, D, E, F, G, G1, and correction Features C6, D2, E2, and F2 are complete. Feature H began offline verification but is blocked at H-03 by a cross-feature data, package, search, allocation, and oracle conflict. H may resume through its approved feature-planning route; no paid call is authorized by this plan.
+Status: Active; Features A, B, C1-C5, D, E, F, G, G1, and correction Features C6, D2, E2, and F2 are complete. Correction Feature G1.1 is admitted to make the G1 manifest and committed source corpus authoritative for canonical parsed replay before C6.1 can finish materialization. Feature H remains blocked at H-03 until G1.1 and C6.1 complete. No paid call is authorized by this plan.
 
 Milestone 5 replaces broad-context LLM lineup search with a distributed backend-plus-LLM recommendation pipeline. Before contextual role scoring begins, a reopened Feature C must replace broad keyword-authored role tags with reviewed atomic capabilities and dependencies. The backend is the scout, filter, role scorer, skill/build packager, candidate generator, and referee. The analyzer LLM is a bounded strategist, tie-breaker, refiner, and communicator over five to ten compact legal candidates when that many exist.
 
@@ -882,7 +882,7 @@ The correction architecture has two layers:
 1. A complete legal-kit catalog determines which skills exist, belong to an exact character form/style, share an upgrade family, are equipable, and carry SA, manifest, equipment, or other dependencies.
 2. Conservative reviewed capability evidence determines contextual RoleScores and mandatory coverage. Untagged legal skills remain selectable but receive no capability credit.
 
-The ordered execution path is C6 -> D2 -> E2 -> F2 -> H. Each correction feature uses `feature-planner -> builder-executor -> tdd-loop`, owns one detailed feature commit, and must preserve the strict Feature C proof boundary. A source-authority or destructive migration dispute adds `contract-auditor` before implementation. Neo4j mutation, live crawling, paid-provider use, deployment, and publishing retain their separate human authorization gates.
+The ordered execution path for the current H correction is C6 -> D2 -> E2 -> F2 -> G1.1 -> C6.1 -> H. Each correction feature uses `feature-planner -> builder-executor -> tdd-loop`, owns one detailed feature commit, and must preserve the strict Feature C proof boundary. A source-authority, graph-identity, or destructive reconciliation dispute adds `contract-auditor` before implementation; C6.1 and G1.1 use `architect-planner` because they reopen shared evidence and ETL boundaries. Neo4j mutation, live crawling, paid-provider use, deployment, and publishing retain their separate human authorization gates.
 
 ### Feature C6: Full Character Kit Readiness And Selective Capability Evidence
 
@@ -921,6 +921,55 @@ equipable active families, while `Bow Strike` is an ordinary basic attack and
 validation, two consecutive local Neo4j replays, targeted Browser queries, and
 post-load schema assertions passed on 2026-08-30. D2 may now consume the
 complete corpus.
+
+### Correction Feature C6.1: H Witness Capability Coverage And Materialization
+
+Status: Local capability review, coverage, and regression evidence are green. Canonical
+materialization is now unblocked by completed G1.1 and remains a bounded correction to
+C6's selective capability-evidence boundary, not an exhaustive review of all 367
+character kits.
+
+Outcome: H receives source-backed, reviewed capability facts for the characters and
+roles used by its feasible witnesses and infeasibility certificates. Those facts are
+materialized through the canonical ETL path before the H fixture is rebuilt.
+
+Scope:
+
+- Select the minimum direct-damage, mandatory-coverage, sustain, defense, counter,
+  and allocation facts needed to construct independently witnessed H-03 cases.
+- Review or correct those exact source facts with stable provenance and explicit
+  approved/rejected/ambiguous status. Candidate or unreviewed facts remain
+  non-authoritative.
+- Replay the repository-owned capability artifacts through canonical materialization,
+  then verify graph readiness, capability counts, and deterministic retrieval drift.
+- Emit a durable coverage matrix identifying which reviewed facts H can use for
+  primary damage, offensive enablement, survival, counters, and allocation. H will
+  rebuild its request register only after consuming that matrix.
+
+Non-goals: exhaustive capability proof for every skill, inferring effects from skill
+names, weakening the strict proof gate, changing the scorer to grant credit for
+unknown data, repairing H's runtime affinity normalization, rebuilding H's fixture,
+or authorizing paid OpenRouter calls.
+
+Acceptance criteria:
+
+- **C6.1-01:** Every capability used by an H witness or certificate has a reviewed
+  source fact, exact form/style ownership, and a durable decision/provenance record.
+- **C6.1-02:** Canonical replay materializes the reviewed facts reproducibly and
+  preserves unknown, rejected, ambiguous, and untagged facts without treating them
+  as proof.
+- **C6.1-03:** The selected roster exposes enough proven evidence for 20 feasible
+  H-03 witnesses, or the coverage matrix explicitly records the remaining
+  source-authority gap for H to resolve through its own feature boundary.
+- **C6.1-04:** No candidate, rejected, ambiguous, untagged, or inferred fact grants
+  capability credit after replay; existing C5 materialization and graph-drift gates
+  remain green.
+- **C6.1-05:** The selected evidence set and its coverage matrix are reproducible
+  from the same source, taxonomy, review, and parser versions.
+
+Route: `contract-auditor -> architect-planner -> feature-planner -> builder-executor -> tdd-loop`.
+The source-review and materialization plan may be prepared offline, but any Neo4j
+mutation, live crawl, or external provider call requires its own human authorization.
 
 ### Feature D2: Legal Skill Families And Contextual Package Frontier
 
@@ -1029,11 +1078,132 @@ fillers, named incomplete-character exclusions, readiness errors with zero
 analyzer calls, and reproducible disjoint stage diagnostics. No manual or
 external-provider test is required for this deterministic backend feature.
 
+### Correction Feature G1.1: Manifest-Driven Superboss Corpus Replay
+
+Status: Complete on 2026-09-04. The G1 manifest and committed corpus now drive the
+canonical parsed replay instead of the generic five-row discovery index. The offline
+build produces thirty schema-current, section-bounded artifacts with the required
+10/10/10 cohort split, and two approved local Neo4j replays are drift-free.
+
+Outcome: The fixed G1 corpus is the sole recommendation-ready superboss authority for
+offline artifact production, parsed replay, and graph materialization. Canonical replay
+reproducibly prepares and loads exactly thirty section-bounded bosses without treating
+the generic index as admission authority.
+
+Feature type and route: ETL source-boundary refactor and corpus migration through
+`contract-auditor -> feature-planner -> builder-executor -> tdd-loop`. The auditor is
+limited to Superboss identity, caller, relationship, and stale-node reconciliation risk;
+it may close as unchanged when no destructive graph migration is required.
+
+Authoritative source and corpus policy:
+
+- `src/etl/superboss_manifest.json` owns the exact thirty canonical identities,
+  aliases, cohorts, source URLs, section boundaries, support states, and membership.
+  The generic Superbosses index remains discovery metadata only.
+- The thirty already reviewed G1 HTML section captures move to one production-neutral,
+  committed ETL corpus keyed by canonical ID. Each manifest record identifies its
+  capture path and SHA-256. These captures are the offline parse inputs; the independent
+  expected JSON fixtures remain test oracles and never become loader input.
+- Ignored `data/parsed/<schema>/superbosses/` files and Neo4j nodes are derived outputs.
+  They are never source authority. A source capture, manifest, parser-policy, or schema
+  mismatch makes a detail artifact stale and fails closed.
+- A future live refresh remains a separately authorized, exact-manifest operation.
+  It cannot silently replace accepted captures or expand the corpus, and ordinary live
+  ETL must not turn this correction into an automatic thirty-page crawl.
+
+Scope:
+
+- Add an offline corpus-build path that parses each committed capture with its manifest
+  metadata and produces thirty schema-current detail artifacts with deterministic
+  provenance and no volatile fields in the content fingerprint.
+- Make parsed replay build/select superboss targets from all thirty
+  `recommendation_ready` manifest records, require every current artifact, and reject
+  missing, extra, duplicate, stale, unbounded, empty, identity-mismatched, or unready
+  records instead of silently inactivating them.
+- Aggregate by canonical ID and enforce exactly ten weak, ten medium, and ten strong
+  bosses before loading. Preserve existing character, sidekick, equipment, mechanics,
+  and capability source-selection behavior.
+- Reconcile graph materialization to the manifest-owned corpus without retaining stale
+  managed boss facts or deleting unrelated nodes blindly. Any canonical-ID constraint,
+  name-key migration, relationship rewrite, or destructive cleanup requires the audit
+  disposition and an explicit pre-replay human checkpoint.
+- Update the ETL/operator guide and the smallest necessary architecture/schema text;
+  retain only source captures, independent oracles, regression tests, manifest metadata,
+  and a sanitized replay summary as durable evidence.
+
+Non-goals: no new boss selection or fact curation; no live crawl; no all-boss support;
+no H request/oracle rebuild; no capability, scoring, allocation, or analyzer changes;
+no paid or external-provider call; no general index/source-mode redesign; and no commit
+of ignored raw, parsed, crawl-manifest, or command-output files.
+
+Acceptance criteria:
+
+- **G1.1-01:** Every manifest boss maps one-to-one to a committed capture and checksum;
+  index-only rows, test expectations, and generated parsed files cannot grant support.
+- **G1.1-02:** The same manifest, captures, parser policy, and schema produce the same
+  thirty normalized artifacts and corpus fingerprint, including non-empty Cradle System
+  mechanics, section-bounded citations, canonical IDs, readiness, and 10/10/10 cohorts.
+- **G1.1-03:** Parsed replay targets the manifest corpus even when the generic index has
+  five rows, starts no browser, never silently skips a required boss, and fails before
+  loading on every corpus completeness, provenance, freshness, or quality violation.
+- **G1.1-04:** Focused tests independently cover source/target selection, all thirty
+  parser oracles, stale/missing/extra/duplicate/empty artifacts, deterministic rebuild,
+  aggregation, loader reconciliation, and existing G1 production retrieval behavior.
+- **G1.1-05:** After separate mutation approval, two consecutive canonical Neo4j replays
+  yield the same thirty manifest-owned recommendation-ready boss projections, no stale
+  managed identities, passing schema/readiness checks, and a sanitized durable replay
+  summary sufficient to unblock C6.1 materialization.
+- **G1.1-06:** Promote-or-purge leaves one canonical copy of each source capture, keeps
+  permanent capability-named regressions and independent oracles, purges temporary build
+  output, updates this milestone accurately, and creates one detailed G1.1 feature commit.
+
+Completion evidence: `artifacts/evidence/g1_1_corpus_build.json` records the deterministic
+corpus fingerprint, two replay summaries, matching Neo4j projection fingerprints, the
+Cradle System section result, and the passing schema assertion. The focused unit suite
+passes with 163 tests, and the approved local replay loaded thirty manifest-owned
+Superboss nodes without stale identities.
+
+Manual checkpoints: no live access is needed for implementation or automated tests.
+Before any Neo4j mutation, the user must approve the audited reconciliation plan and
+the exact target database. An operator then verifies the first replay's thirty IDs,
+cohorts, readiness, citations, mechanics, and Cradle System result, repeats the replay
+for drift/idempotency, and confirms C6.1 capability materialization can proceed. Any
+missing or invalid committed capture stops the feature and requires separate live-fetch
+authorization rather than a fallback crawl.
+
 ### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
 
-Status: In progress but blocked at H-03. Existing offline fixture and evaluation work is incomplete and must be preserved. H returns to `feature-planner` after C6-D2-E2-F2 complete because its fixture authority and evidence contract changed materially. No paid call is authorized.
+Status: In progress but blocked; corrected H-03 execution resumes only after G1.1 makes
+canonical superboss replay authoritative and C6.1 completes capability materialization.
+Existing offline fixture and evaluation work is incomplete and must be preserved. No
+paid call is authorized.
 
-Route: `feature-planner -> builder-executor -> tdd-loop` for the corrected fixture/oracle and any remaining evaluation or provider transport implementation. Paid calls remain a separate human checkpoint.
+Route: `contract-auditor -> feature-planner -> builder-executor -> tdd-loop` for the corrected fixture/oracle and any remaining evaluation or provider transport implementation. Paid calls remain a separate human checkpoint.
+
+Correction execution contract:
+
+- A versioned evaluation fixture registers the boss-specific request, independent six-hero/package/coverage/allocation witness or deterministic impossibility certificate, and the unchanged common-nine-character stress cases in separate suites. Until Neo4j replay passes, that register remains evidence-pending and cannot be treated as the H-03 oracle result.
+- The deterministic runner invokes typed production retrieval only for H-03 and rejects unknown-character, incomplete-kit, or non-authoritatively-infeasible cases as fixture errors rather than strategic oracle results. Feasible cases must match an actual legal backend candidate; infeasible cases must return zero candidates with the recorded certificate and zero analyzer calls.
+- Provider qualification and usage accounting remain transport-injected and offline. The ordered OpenRouter chain is enabled only after the three individual model gates pass and a separate human checkpoint authorizes paid calls; unavailable provider metadata is classified without inference.
+- Durable evidence records the fixture and policy versions plus the historical token baseline. Handoff state, command ledgers, fake-runner output, and failed attempts remain ephemeral.
+
+Authority correction:
+
+- The H-03 witness register may use only character forms whose materialized
+  capability evidence proves the capabilities used by the witness. A complete
+  C6 kit receipt proves structural kit readiness, not direct-damage or other
+  mandatory capability coverage. The current seed register uses forms with no
+  proven capability evidence and placeholder witness fingerprints, so it is
+  evidence-pending and cannot be promoted by matching its expected labels to
+  backend output.
+- An infeasibility certificate must match the backend's deterministic
+  zero-candidate cause. Readiness metadata alone is insufficient; unknown or
+  incomplete capability data is a data-readiness failure, not strategic
+  infeasibility.
+- Persisted affinity sentinels such as `['unknown']` mean unknown data, not a
+  confirmed weak, resist, null, or absorb value. Runtime scoring and output
+  must consume the explicit per-field affinity states, preserve unknown versus
+  confirmed-empty semantics, and never use the sentinel as a known affinity.
 
 Technical requirements:
 
@@ -1091,11 +1261,11 @@ Acceptance criteria:
 
 Paid OpenRouter testing is blocked until these gates pass in order:
 
-1. C6 proves 367/367 legal-kit receipts, authoritative replay, and strict proven-capability separation.
-2. Canonical identity, ownership, SA, declared Light/Shadow, affinity, sidekick, and hard rejection.
-3. D2 contextual package frontiers with three legal skill families by default and four only at declared Light/Shadow >=80.
-4. E2 build alternatives, compatibility, finite cardinality, and deterministic lineup allocation.
-5. F2 package-first beam bounds, lineup invariants, stage diagnostics, and determinism.
+1. C6 proves 367/367 legal-kit receipts and strict proven-capability separation.
+2. D2 contextual package frontiers, E2 deterministic allocation, and F2 package-first beam bounds remain green.
+3. G1.1 reproducibly builds and replays the manifest-owned thirty-boss corpus, then passes its separately approved two-replay Neo4j checkpoint.
+4. C6.1 canonically materializes the reviewed H witness capability set against that replay path.
+5. Canonical identity, ownership, SA, declared Light/Shadow, affinity, sidekick, and hard rejection.
 6. No-weakness, unknown, resist, null, and absorb cases.
 7. Projection schema, leakage prevention, and token preflight.
 8. Swap re-scoring, rejection, fallback, frozen output, partial results, and degraded mode.
@@ -1130,8 +1300,10 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Post-Feature-G checkpoint: completed, revised, and human-approved; Disposition 2 admits Feature G1's fixed thirty-boss corpus of ten weak, ten medium, and ten strong cases plus an OpenRouter-only beta chain of DeepSeek V4 Flash, GPT-5.6 Luna, then GLM-5.2. Direct DeepSeek, Kimi, and AI judging are deferred. No live scrape, paid call, Feature G1 implementation, or Feature H work is authorized by the planning approval alone.
 - Feature G1: completed; the fixed manifest and durable section fixtures contain exactly thirty unique recommendation-ready bosses across ten weak, ten medium, and ten strong cohorts, with the five cached weak repairs and twenty-five explicitly authorized additions independently replayed.
 - Correction Feature D2: completed; legal skill-family package frontiers, explicit Light/Shadow slot limits, dependency gates, untagged fillers, and deterministic contextual alternatives are verified.
-- Correction planning: completed and human-approved on 2026-08-22; C6, D2, E2, and F2 are complete, and H remains blocked at H-03 pending its corrected fixture/oracle work.
-- Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through correction planning and implementation.
+- Correction planning: completed and human-approved on 2026-08-22 for C6, D2, E2, F2, and H. On 2026-09-01, the bounded C6.1 correction was admitted after the H-03 authority audit. On 2026-09-04, G1.1 was admitted when canonical parsed replay proved unable to consume G1's thirty-boss corpus.
+- Correction Feature G1.1: completed on 2026-09-04; it owns manifest-driven offline artifact production, parsed replay, and safe graph reconciliation for exactly thirty bosses, with two approved local Neo4j replays and matching projection fingerprints.
+- Correction Feature C6.1: local review and regression evidence are green; canonical capability materialization is unblocked by G1.1 and remains the next correction step.
+- Feature H: in progress but blocked at H-03; current fixture labels do not independently prove feasible lineups, and existing work must be preserved through G1.1, C6.1 completion, and H correction execution.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 
@@ -1139,7 +1311,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 
 Milestone 5 completes only when:
 
-- Features A-I, correction Features C6/D2/E2/F2, and any post-G boss-expansion feature admitted by the human checkpoint meet their acceptance criteria and each implementation feature owns one detailed completion commit.
+- Features A-I, correction Features C6/D2/E2/F2/G1.1/C6.1, and any later post-G boss-expansion feature admitted by a human checkpoint meet their acceptance criteria and each implementation feature owns one detailed completion commit.
 - C5 proves reproducible reviewed materialization, D-F prove deterministic legal candidate generation, G proves bounded provider-neutral refinement and fallback, and H proves the admitted corpus and paid-provider gates.
 - Production recommendation uses no PLAN, generated Cypher, retrieval-validation LLM, AI-authored RoleScores, or unbounded roster/catalog projection.
 - The exact 367-character MVP corpus passes kit completeness, every feasible acceptance case has an independent witness and yields at least one legal coverage/allocation-valid backend candidate, and every strategic infeasible case has a deterministic impossibility certificate and returns typed diagnostics without an analyzer call.

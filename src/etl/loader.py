@@ -30,6 +30,7 @@ from .models import (
     SuperbossRow,
 )
 from .kit_readiness import CharacterKitReceipt
+from .superboss_manifest import CORPUS_VERSION, READY_STATUS
 
 logger = logging.getLogger(__name__)
 
@@ -714,7 +715,158 @@ MERGE (sidekick)-[:HAS_AURA]->(aura)
     logger.info("Loaded %d Sidekick nodes", len(rows))
 
 
-async def load_superbosses(driver, rows: list[SuperbossRow]) -> None:
+async def reconcile_superboss_corpus(
+    driver,
+    rows: list[SuperbossRow],
+    *,
+    allow_stale_delete: bool = False,
+) -> dict:
+    """Audit and optionally remove stale nodes owned by the G1.1 corpus.
+
+    Nodes are managed only when they carry the G1.1 marker or the legacy
+    recommendation-ready/canonical-id pair written by the pre-marker loader.
+    Unmarked nodes are reported but never deleted.
+    """
+    expected = [
+        {
+            "name": row.name,
+            "canonical_id": row.canonical_id,
+            "support_status": row.support_status,
+            "recommendation_ready": row.recommendation_ready,
+        }
+        for row in rows
+    ]
+    if not expected:
+        raise ValueError("G1.1 reconciliation requires a non-empty superboss corpus")
+    if any(
+        item["support_status"] != READY_STATUS or not item["recommendation_ready"]
+        for item in expected
+    ):
+        raise ValueError("G1.1 reconciliation accepts recommendation-ready rows only")
+    expected_ids = [item["canonical_id"] for item in expected]
+    expected_names = [item["name"] for item in expected]
+    if not all(expected_ids) or len(set(expected_ids)) != len(expected_ids):
+        raise ValueError("G1.1 reconciliation requires unique canonical IDs")
+    if len(set(expected_names)) != len(expected_names):
+        raise ValueError("G1.1 reconciliation requires unique superboss names")
+
+    records, _, _ = await driver.execute_query(
+        """
+MATCH (s:Superboss)
+RETURN s.name AS name,
+       s.canonical_id AS canonical_id,
+       s.managed_by AS managed_by,
+       s.recommendation_ready AS recommendation_ready
+ORDER BY s.name
+""",
+        database_="neo4j",
+    )
+    existing = [dict(record) for record in records]
+    expected_by_id = {item["canonical_id"]: item for item in expected}
+    expected_by_name = {item["name"]: item for item in expected}
+    managed = []
+    unmanaged = []
+    identity_conflicts = []
+    seen_managed_ids: set[str] = set()
+    for item in existing:
+        managed_marker = item.get("managed_by") == CORPUS_VERSION
+        legacy_marker = bool(item.get("recommendation_ready")) and bool(item.get("canonical_id"))
+        if not (managed_marker or legacy_marker):
+            unmanaged.append(item)
+            continue
+        managed.append(item)
+        canonical_id = item.get("canonical_id")
+        name = item.get("name")
+        if canonical_id in seen_managed_ids:
+            identity_conflicts.append({"type": "duplicate_canonical_id", "canonical_id": canonical_id})
+        if canonical_id:
+            seen_managed_ids.add(canonical_id)
+        expected_item = expected_by_id.get(canonical_id)
+        if expected_item is not None and expected_item["name"] != name:
+            identity_conflicts.append({
+                "type": "canonical_id_name_mismatch",
+                "canonical_id": canonical_id,
+                "expected_name": expected_item["name"],
+                "found_name": name,
+            })
+        expected_item = expected_by_name.get(name)
+        if expected_item is not None and expected_item["canonical_id"] != canonical_id:
+            identity_conflicts.append({
+                "type": "name_canonical_id_mismatch",
+                "name": name,
+                "expected_canonical_id": expected_item["canonical_id"],
+                "found_canonical_id": canonical_id,
+            })
+
+    if identity_conflicts:
+        raise RuntimeError(f"G1.1 superboss identity reconciliation failed: {identity_conflicts}")
+
+    expected_id_set = set(expected_ids)
+    stale = [item for item in managed if item.get("canonical_id") not in expected_id_set]
+    stale_names = sorted({item["name"] for item in stale if item.get("name")})
+    relationship_counts: dict[str, int] = {}
+    deleted_count = 0
+    if stale_names:
+        if not allow_stale_delete:
+            raise RuntimeError(
+                "G1.1 found stale manifest-managed Superboss nodes; "
+                "set ETL_ALLOW_SUPERBOSS_RECONCILIATION=true only after the manual mutation checkpoint: "
+                + ", ".join(stale_names)
+            )
+        relationship_records, _, _ = await driver.execute_query(
+            """
+MATCH (s:Superboss)
+WHERE s.name IN $names
+OPTIONAL MATCH (s)-[r]-()
+RETURN s.name AS name, count(r) AS relationship_count
+ORDER BY s.name
+""",
+            names=stale_names,
+            database_="neo4j",
+        )
+        relationship_counts = {
+            item["name"]: int(item.get("relationship_count", 0))
+            for item in (dict(record) for record in relationship_records)
+        }
+        connected = {name: count for name, count in relationship_counts.items() if count}
+        if connected:
+            raise RuntimeError(
+                "G1.1 will not delete stale Superboss nodes with relationships: "
+                f"{connected}"
+            )
+        deleted_records, _, _ = await driver.execute_query(
+            """
+MATCH (s:Superboss)
+WHERE s.name IN $names
+DELETE s
+RETURN count(s) AS deleted_count
+""",
+            names=stale_names,
+            database_="neo4j",
+        )
+        if deleted_records:
+            deleted_count = int(dict(deleted_records[0]).get("deleted_count", 0))
+
+    return {
+        "corpus_version": CORPUS_VERSION,
+        "expected_count": len(expected),
+        "existing_count": len(existing),
+        "managed_count": len(managed),
+        "unmanaged_count": len(unmanaged),
+        "stale_names": stale_names,
+        "deleted_count": deleted_count,
+        "relationship_counts": relationship_counts,
+        "identity_conflicts": identity_conflicts,
+        "ready": not identity_conflicts and deleted_count == len(stale_names),
+    }
+
+
+async def load_superbosses(
+    driver,
+    rows: list[SuperbossRow],
+    *,
+    managed_by: str | None = None,
+) -> None:
     """Load curated Superboss nodes that passed detail-page quality gates."""
     if not rows:
         logger.warning("load_superbosses called with empty list -- nothing to load")
@@ -758,9 +910,17 @@ async def load_superbosses(driver, rows: list[SuperbossRow]) -> None:
         }
         for r in rows
     ]
-    cypher = """
+    management_set = ""
+    if managed_by is not None:
+        for row in boss_data:
+            row["managed_by"] = managed_by
+            row["corpus_version"] = CORPUS_VERSION if managed_by == CORPUS_VERSION else None
+        management_set = """,
+    s.managed_by = row.managed_by,
+    s.corpus_version = row.corpus_version"""
+    cypher = f"""
 UNWIND $rows AS row
-MERGE (s:Superboss {name: row.name})
+MERGE (s:Superboss {{name: row.name}})
 SET s.canonical_id = row.canonical_id,
     s.aliases = row.aliases,
     s.source_url = row.source_url,
@@ -792,7 +952,7 @@ SET s.canonical_id = row.canonical_id,
     s.recommendation_ready = row.recommendation_ready,
     s.variant_relationship = row.variant_relationship,
     s.selection_rationale = row.selection_rationale,
-    s.schema_version = row.schema_version
+    s.schema_version = row.schema_version{management_set}
 """
     async with driver.session() as session:
         await session.run(cypher, rows=boss_data)

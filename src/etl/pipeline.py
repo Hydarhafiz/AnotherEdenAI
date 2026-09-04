@@ -54,7 +54,8 @@ from .models import (
     SuperbossRow,
     parse_mechanic_reference,
 )
-from .superboss_manifest import manifest_records
+from .superboss_corpus import validate_parsed_superboss_corpus
+from .superboss_manifest import READY_STATUS, manifest_records
 from .kit_readiness import artifact_fingerprint
 from .scraper import (
     CHROMIUM_PATH,
@@ -335,7 +336,7 @@ def _build_superboss_targets(superboss_records: list[dict[str, Any]], config: Cr
         except Exception as exc:  # noqa: BLE001
             logger.debug("Skipping invalid superboss target record %s: %s", record.get("name"), exc)
             continue
-        slug = _slugify_title(boss.name)
+        slug = boss.canonical_id or _slugify_title(boss.name)
         targets.append(
             _make_target(
                 target_id=f"superboss::{slug}",
@@ -352,7 +353,10 @@ def _build_superboss_targets(superboss_records: list[dict[str, Any]], config: Cr
 
 def _build_manifest_superboss_targets(config: CrawlConfig, *, statuses: set[str] | None = None) -> list[dict[str, Any]]:
     """Build targets only from the explicit G1 allowlist; this is never implicit ETL discovery."""
-    return _build_superboss_targets(manifest_records(statuses=statuses), config)
+    return _build_superboss_targets(
+        manifest_records(statuses=statuses if statuses is not None else {READY_STATUS}),
+        config,
+    )
 
 
 def _ensure_target_entry(manifest: dict[str, Any], target: dict[str, Any]) -> dict[str, Any]:
@@ -722,7 +726,7 @@ def _aggregate_parsed_data(
 ) -> dict[str, list[Any]]:
     characters_by_name: dict[str, CharacterRow] = {}
     sidekicks_by_name: dict[str, SidekickRow] = {}
-    superbosses_by_name: dict[str, SuperbossRow] = {}
+    superbosses_by_id: dict[str, SuperbossRow] = {}
     grastas: list[GrastaRow] = []
     ores: list[OreRow] = []
     equipment_by_identity: dict[tuple[str, str], EquipmentRow] = {}
@@ -781,7 +785,7 @@ def _aggregate_parsed_data(
         elif kind == "superboss_detail":
             for row in rows:
                 boss = SuperbossRow.model_validate(row)
-                superbosses_by_name[boss.name] = boss
+                superbosses_by_id[boss.canonical_id or f"name:{boss.name}"] = boss
 
     characters = []
     for character in characters_by_name.values():
@@ -808,7 +812,7 @@ def _aggregate_parsed_data(
     return {
         "characters": characters,
         "sidekicks": list(sidekicks_by_name.values()),
-        "superbosses": list(superbosses_by_name.values()),
+        "superbosses": list(superbosses_by_id.values()),
         "grastas": grastas,
         "ores": ores,
         "equipment": list(equipment_by_identity.values()),
@@ -1061,7 +1065,14 @@ async def prepare_parsed_data(config: CrawlConfig | None = None) -> tuple[dict[s
 
     character_targets = _build_character_targets(character_records, config)
     sidekick_targets = _build_sidekick_targets(sidekick_records, config)
-    superboss_targets = _build_superboss_targets(superboss_records, config)
+    if config.source_mode == "parsed" and config.crawl_scope == "full":
+        validate_parsed_superboss_corpus(parsed_dir=PARSED_SUPERBOSS_DIR)
+        superboss_targets = _build_manifest_superboss_targets(
+            config,
+            statuses={READY_STATUS},
+        )
+    else:
+        superboss_targets = _build_superboss_targets(superboss_records, config)
     if config.source_mode == "parsed":
         character_targets = _filter_parsed_ready_detail_targets(manifest, character_targets)
         sidekick_targets = _filter_parsed_ready_detail_targets(manifest, sidekick_targets)

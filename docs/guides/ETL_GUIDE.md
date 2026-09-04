@@ -100,6 +100,7 @@ Pipeline controls:
 - `ETL_INCLUDE_CHARACTER_PAGES`
 - `ETL_INCLUDE_SIDEKICK_PAGES`
 - `ETL_INCLUDE_SUPERBOSS_PAGES`
+- `ETL_ALLOW_SUPERBOSS_RECONCILIATION`: `false` by default; explicitly permits deletion of stale, unconnected G1.1-managed Superboss nodes after the mutation checkpoint
 - `ETL_MAX_RETRIES`
 - `ETL_SMALL_CHARACTER_LIMIT`
 - `ETL_SMALL_SIDEKICK_LIMIT`
@@ -201,7 +202,40 @@ On bash, use:
 ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
 ```
 
-Parsed replay requires current schema-versioned index artifacts and only selects detail artifacts that already exist. Missing detail artifacts are marked `inactive` instead of fetched.
+Parsed replay requires current schema-versioned index artifacts. For ordinary small or fallback replays, detail artifacts that are absent remain inactive. For the canonical G1.1 full replay, the manifest-owned thirty-boss corpus is authoritative and missing, extra, stale, duplicate, unbounded, empty, or identity-mismatched superboss artifacts fail closed before graph loading.
+
+### 3b. G1.1 Canonical Thirty-Boss Replay
+
+Build the committed, manifest-keyed superboss corpus before the first replay. This is
+offline and does not fetch the wiki:
+
+```bash
+.venv/bin/python -m src.etl.superboss_corpus build --clean
+```
+
+The builder reads captures from `src/etl/superboss_corpus/`, verifies each manifest
+SHA-256, and writes derived artifacts under `data/parsed/v1.6.0/superbosses/`. It
+must report `artifact_count: 30` and weak/medium/strong counts of `10/10/10`.
+
+After the separate human approval of the exact Neo4j target, run the canonical replay:
+
+```bash
+ETL_SOURCE_MODE=parsed ETL_CRAWL_SCOPE=full ETL_ALLOW_SUPERBOSS_RECONCILIATION=true \
+  .venv/bin/python -u -m src.etl.run_etl
+```
+
+The log must report `Prepared ... 30 superbosses`, a G1.1 reconciliation with no
+identity conflicts or stale names, and `Loaded 30 Superboss nodes`. Verify the graph
+has thirty recommendation-ready nodes, ten in each cohort, non-empty mechanics and
+citations for every node, and a non-empty Cradle System row owned by the `Procedure`
+section. Run the exact command a second time; the canonical projection fingerprint
+and node count must remain unchanged. `assert_schema.py` may then be run as the
+general post-load check.
+
+Do not set `ETL_ALLOW_SUPERBOSS_RECONCILIATION=true` for an unreviewed database. The
+reconciliation deletes only stale G1.1-managed nodes with no relationships; connected
+stale nodes and identity conflicts stop the run. Live refresh remains a separate,
+explicit operation and is never an automatic fallback for a missing capture.
 
 ### 3. Feature E Readiness Gate
 

@@ -8,6 +8,7 @@ from typing import Any, Iterable
 
 
 MANIFEST_PATH = Path(__file__).with_name("superboss_manifest.json")
+CORPUS_VERSION = "g1.1.0"
 COHORTS = ("weak", "medium", "strong")
 PENDING_FETCH_STATUS = "proposed_pending_live_fetch"
 CACHED_REPAIR_STATUS = "cached_pending_repair"
@@ -64,6 +65,20 @@ def validate_superboss_manifest(manifest: dict[str, Any]) -> list[str]:
         errors.append("manifest must be either prefetch (25 pending + 5 cached repair) or final (30 recommendation-ready)")
     if any(not row.get("section_anchor") for row in bosses):
         errors.append("every admitted or pending record requires an explicit section anchor")
+    capture_paths = [row.get("capture_path") for row in bosses]
+    if any(not value for value in capture_paths):
+        errors.append("every admitted or pending record requires capture_path")
+    if len(set(capture_paths)) != len(capture_paths):
+        errors.append("capture_path is duplicated")
+    if any(not row.get("capture_sha256") for row in bosses):
+        errors.append("every admitted or pending record requires capture_sha256")
+    if any(
+        not isinstance(row.get("capture_sha256"), str)
+        or len(row.get("capture_sha256", "")) != 64
+        or any(char not in "0123456789abcdef" for char in row.get("capture_sha256", ""))
+        for row in bosses
+    ):
+        errors.append("capture_sha256 must be a lowercase SHA-256 digest")
     rationale_keys = {"mechanics", "affinity", "parser", "page_section", "discord_beta_review"}
     if any(set(row.get("selection_rationale", {})) != rationale_keys for row in bosses):
         errors.append("every record requires the five diversity selection-rationale fields")
