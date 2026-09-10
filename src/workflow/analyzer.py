@@ -21,6 +21,13 @@ from .lineup_generation import evaluate_backend_lineup
 ANALYZER_PROJECTION_VERSION = "feature-g-analyzer-projection-v1"
 ANALYZER_PORT_VERSION = "feature-g-analyzer-port-v1"
 ANALYZER_MAX_CALLS = 2
+ANALYZER_PER_CALL_TOKEN_BUDGET = 20_000
+ANALYZER_CUMULATIVE_TOKEN_BUDGET = 40_000
+OPENROUTER_MODEL_CHAIN = (
+    "deepseek/deepseek-v4-flash-0731",
+    "openai/gpt-5.6-luna",
+    "z-ai/glm-5.2",
+)
 ANALYZER_RESPONSE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -119,15 +126,30 @@ class AnalyzerProviderConfig:
     initial_max_output_tokens: int = 4000
     correction_max_output_tokens: int = 2000
     temperature: float = 0.0
+    fallback_models: tuple[str, ...] = ()
+    per_call_token_budget: int = ANALYZER_PER_CALL_TOKEN_BUDGET
+    cumulative_token_budget: int = ANALYZER_CUMULATIVE_TOKEN_BUDGET
 
     def __post_init__(self) -> None:
         if self.provider not in {"deepseek", "openrouter"}:
             raise ValueError("provider must be deepseek or openrouter")
+        fallback_models = tuple(str(model).strip() for model in self.fallback_models if str(model).strip())
+        if self.provider != "openrouter" and fallback_models:
+            raise ValueError("fallback_models are supported only for OpenRouter")
+        if len(set(fallback_models)) != len(fallback_models):
+            raise ValueError("fallback_models must be unique and ordered")
+        if self.per_call_token_budget < 1 or self.cumulative_token_budget < 1:
+            raise ValueError("token budgets must be positive")
+        if self.per_call_token_budget > self.cumulative_token_budget:
+            raise ValueError("per-call token budget cannot exceed cumulative budget")
+        object.__setattr__(self, "fallback_models", fallback_models)
 
     @property
     def resolved_model(self) -> str:
         if self.model:
             return self.model
+        if self.fallback_models:
+            return self.fallback_models[0]
         return "deepseek-chat" if self.provider == "deepseek" else "openrouter/auto"
 
 
@@ -140,11 +162,12 @@ class AnalyzerProviderRequest:
     projection_id: str
     max_output_tokens: int
     response_schema: dict[str, Any] = field(default_factory=lambda: ANALYZER_RESPONSE_SCHEMA)
+    fallback_models: tuple[str, ...] = ()
 
     @property
     def payload(self) -> dict[str, Any]:
         """Return the common structured-output payload used by both adapters."""
-        return {
+        payload = {
             "model": self.model,
             "messages": self.messages,
             "temperature": 0.0,
@@ -158,6 +181,9 @@ class AnalyzerProviderRequest:
                 },
             },
         }
+        if self.fallback_models:
+            payload["models"] = list(self.fallback_models)
+        return payload
 
 
 @dataclass
@@ -169,6 +195,8 @@ class AnalyzerResponseEnvelope:
     output: dict[str, Any] | None = None
     usage: dict[str, Any] = field(default_factory=dict)
     error: dict[str, Any] | None = None
+    served_model: str | None = None
+    fallback: dict[str, Any] | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -178,6 +206,8 @@ class AnalyzerResponseEnvelope:
             "output": self.output,
             "usage": self.usage,
             "error": self.error,
+            "served_model": self.served_model,
+            "fallback": self.fallback,
         }
 
 
@@ -202,6 +232,7 @@ class AnalyzerAdapter:
                     "message": "No analyzer transport was configured for this run.",
                     "retriable": False,
                 },
+                served_model=None,
             )
         try:
             raw = self.transport(request)
@@ -214,6 +245,7 @@ class AnalyzerAdapter:
                     "message": str(exc),
                     "retriable": False,
                 },
+                served_model=None,
             )
         return _normalise_provider_response(raw, self.config)
 
@@ -395,6 +427,9 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
     config = AnalyzerProviderConfig(
         provider=state.get("analyzer_provider", "openrouter"),
         model=state.get("analyzer_model"),
+        fallback_models=tuple(state.get("analyzer_fallback_models") or ()),
+        per_call_token_budget=int(state.get("analyzer_per_call_token_budget", ANALYZER_PER_CALL_TOKEN_BUDGET)),
+        cumulative_token_budget=int(state.get("analyzer_cumulative_token_budget", ANALYZER_CUMULATIVE_TOKEN_BUDGET)),
     )
     port = port or state.get("analyzer_port") or create_analyzer_port(config, state.get("analyzer_transport"))
     usage_rows: list[dict[str, Any]] = []
@@ -406,6 +441,7 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
     call_count = 0
     correction_rounds = 0
     advisories: list[str] = []
+    budget_degraded = False
 
     request = _provider_request(
         config,
@@ -416,6 +452,10 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
     response = port.generate(request)
     call_count += 1
     usage_rows.append(_usage_row(response, call_count, "initial"))
+    budget_errors = _budget_errors(response.usage, config, cumulative_tokens=0)
+    if budget_errors:
+        warnings.extend(budget_errors)
+        budget_degraded = True
     if response.error or response.output is None:
         return _degraded_result(
             bundle,
@@ -438,7 +478,17 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
     _freeze_fragments(frozen, valid)
     ranked_ids = _valid_ranked_ids(response.output, projection)
 
-    if pending_invalid and call_count < ANALYZER_MAX_CALLS:
+    if pending_invalid and not budget_degraded and (
+        _usage_tokens(response.usage)
+        + min(config.correction_max_output_tokens, config.per_call_token_budget)
+        > config.cumulative_token_budget
+    ):
+        warnings.append(
+            "Analyzer budget degradation: correction request would exceed the cumulative token ceiling."
+        )
+        budget_degraded = True
+
+    if pending_invalid and call_count < ANALYZER_MAX_CALLS and not budget_degraded:
         correction_rounds = 1
         correction = correction_payload(projection, pending_invalid, list(frozen))
         correction_request = _provider_request(
@@ -450,6 +500,14 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
         correction_response = port.generate(correction_request)
         call_count += 1
         usage_rows.append(_usage_row(correction_response, call_count, "correction"))
+        correction_budget_errors = _budget_errors(
+            correction_response.usage,
+            config,
+            cumulative_tokens=_usage_tokens(response.usage),
+        )
+        if correction_budget_errors:
+            warnings.extend(correction_budget_errors)
+            budget_degraded = True
         if correction_response.error or correction_response.output is None:
             warnings.append("Analyzer correction failed; valid initial refinements were frozen.")
         else:
@@ -479,7 +537,7 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
         structured_errors=structured_errors,
         candidate_errors=candidate_errors,
         provider=config,
-        degraded=not bool(frozen or ranked_ids),
+        degraded=budget_degraded or not bool(frozen or ranked_ids),
     )
 
 
@@ -571,7 +629,11 @@ def _provider_request(config, *, call_kind, projection_id, content):
         model=config.resolved_model,
         call_kind=call_kind,
         projection_id=projection_id,
-        max_output_tokens=(config.initial_max_output_tokens if call_kind == "initial" else config.correction_max_output_tokens),
+        max_output_tokens=min(
+            config.initial_max_output_tokens if call_kind == "initial" else config.correction_max_output_tokens,
+            config.per_call_token_budget,
+        ),
+        fallback_models=config.fallback_models,
         messages=[
             {
                 "role": "system",
@@ -587,9 +649,11 @@ def _normalise_provider_response(raw, config):
         return raw
     if not isinstance(raw, dict):
         return AnalyzerResponseEnvelope(config.provider, config.resolved_model, error={"code": "provider.invalid_envelope", "message": "Provider response must be an object", "retriable": False})
+    served_model = _served_model(raw)
+    fallback = _fallback_metadata(raw, config, served_model)
     if raw.get("error"):
         error = raw["error"] if isinstance(raw["error"], dict) else {"message": str(raw["error"])}
-        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_usage(raw.get("usage")), error={"code": error.get("code", "provider.error"), "message": error.get("message", "Provider returned an error"), "retriable": bool(error.get("retriable", False))})
+        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": error.get("code", "provider.error"), "message": error.get("message", "Provider returned an error"), "retriable": bool(error.get("retriable", False))}, served_model=served_model, fallback=fallback)
     output = raw.get("output")
     if output is None:
         choices = raw.get("choices") or []
@@ -600,28 +664,108 @@ def _normalise_provider_response(raw, config):
             try:
                 output = json.loads(content)
             except json.JSONDecodeError:
-                return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_usage(raw.get("usage")), error={"code": "structured_output.invalid_json", "message": "Provider content was not valid JSON", "retriable": False})
+                return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": "structured_output.invalid_json", "message": "Provider content was not valid JSON", "retriable": False}, served_model=served_model, fallback=fallback)
     if not isinstance(output, dict):
-        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_usage(raw.get("usage")), error={"code": "provider.empty_output", "message": "Provider returned no structured analyzer object", "retriable": False})
-    return AnalyzerResponseEnvelope(config.provider, config.resolved_model, output=output, usage=_normalise_usage(raw.get("usage")))
+        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": "provider.empty_output", "message": "Provider returned no structured analyzer object", "retriable": False}, served_model=served_model, fallback=fallback)
+    return AnalyzerResponseEnvelope(config.provider, config.resolved_model, output=output, usage=_normalise_response_usage(raw), served_model=served_model, fallback=fallback)
 
 
 def _normalise_usage(value):
     if not isinstance(value, dict):
         return {}
+    usage = dict(value)
+    prompt_details = usage.get("prompt_tokens_details")
+    if "cached_tokens" not in usage and isinstance(prompt_details, dict) and "cached_tokens" in prompt_details:
+        usage["cached_tokens"] = prompt_details["cached_tokens"]
+    reasoning_details = usage.get("completion_tokens_details")
+    if "reasoning_tokens" not in usage and isinstance(reasoning_details, dict) and "reasoning_tokens" in reasoning_details:
+        usage["reasoning_tokens"] = reasoning_details["reasoning_tokens"]
     keys = ("prompt_tokens", "completion_tokens", "reasoning_tokens", "cached_tokens", "total_tokens", "cost", "latency_ms", "generation_id", "metadata")
-    return {key: value[key] for key in keys if key in value}
+    return {key: usage[key] for key in keys if key in usage}
+
+
+def _normalise_response_usage(raw):
+    usage = _normalise_usage(raw.get("usage"))
+    if "generation_id" not in usage and raw.get("id"):
+        usage["generation_id"] = str(raw["id"])
+    return usage
 
 
 def _usage_row(response, call_number, call_kind):
+    usage = response.usage
     return {
         "call_number": call_number,
         "call_kind": call_kind,
         "provider": response.provider,
         "model": response.model,
-        **response.usage,
+        "requested_model": response.model,
+        "served_model": response.served_model,
+        "served_model_status": "reported" if response.served_model else "unavailable",
+        "fallback": response.fallback,
+        "fallback_status": "reported" if response.fallback is not None else "unavailable",
+        "metadata_availability": {
+            field: "reported" if field in usage else "unavailable"
+            for field in ("prompt_tokens", "completion_tokens", "reasoning_tokens", "cached_tokens", "total_tokens", "cost", "latency_ms", "generation_id")
+        },
+        **usage,
         "error_code": (response.error or {}).get("code"),
     }
+
+
+def _served_model(raw):
+    if not isinstance(raw, dict):
+        return None
+    value = raw.get("served_model") or raw.get("model")
+    return str(value) if value else None
+
+
+def _fallback_metadata(raw, config, served_model):
+    if not isinstance(raw, dict):
+        return None
+    value = raw.get("fallback")
+    if value is None:
+        value = raw.get("fallback_metadata")
+    if isinstance(value, dict):
+        return value
+    if value is True or raw.get("fallback_used") is True:
+        return {
+            "used": True,
+            "requested_models": [config.resolved_model, *config.fallback_models],
+            "served_model": served_model,
+        }
+    if value is False or raw.get("fallback_used") is False:
+        return {"used": False, "requested_models": [config.resolved_model, *config.fallback_models]}
+    return None
+
+
+def _usage_tokens(usage):
+    if not isinstance(usage, dict):
+        return 0
+    value = usage.get("total_tokens")
+    if value is None:
+        value = sum(_number(usage.get(key)) for key in ("prompt_tokens", "completion_tokens", "reasoning_tokens"))
+    return max(0, int(_number(value)))
+
+
+def _number(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _budget_errors(usage, config, *, cumulative_tokens):
+    observed = _usage_tokens(usage)
+    errors = []
+    if observed > config.per_call_token_budget:
+        errors.append(
+            f"Analyzer budget degradation: observed {observed} tokens exceeded the per-call ceiling of {config.per_call_token_budget}."
+        )
+    if cumulative_tokens + observed > config.cumulative_token_budget:
+        errors.append(
+            f"Analyzer budget degradation: cumulative usage would exceed the ceiling of {config.cumulative_token_budget} tokens."
+        )
+    return errors
 
 
 def _compact_candidate(candidate, characters):

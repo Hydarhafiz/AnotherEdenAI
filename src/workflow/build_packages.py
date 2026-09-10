@@ -206,7 +206,30 @@ def build_build_package_options(
             str(package.get("id") or ""),
         ),
     )
-    return ordered[:max_options]
+    selected = ordered[:max_options]
+    if item_policy == "late_game_assumed" and max_options > 1:
+        # Keep a complete generic fallback visible to lineup-wide allocation.
+        # A large named catalog can otherwise push the generic choice past the
+        # bounded frontier, leaving every candidate with the same conservative
+        # one-copy armor and making a valid finite allocation look impossible.
+        generic_fallback = build_build_package(
+            character,
+            role_entity=role_entity,
+            grastas=grasta_rows,
+            equipment=equipment_rows,
+            ores=ore_rows,
+            selected_facts=selected_facts,
+            item_policy="generic_only",
+        )
+        if not any(
+            all(item.get("generic") for item in _package_items(package))
+            for package in selected
+        ):
+            selected = [
+                *selected[:max_options - 1],
+                generic_fallback,
+            ]
+    return selected
 
 
 def generate_build_package_options(*args, **kwargs) -> list[dict[str, Any]]:

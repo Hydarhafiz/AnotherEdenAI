@@ -1,0 +1,15 @@
+{
+  "evidence_type": "historical_analyzer_token_baseline",
+  "evidence_version": "feature-h-baseline-v1",
+  "status": "recorded-baseline-not-rerun",
+  "source": "user-observed historical failed analyzer run",
+  "total_tokens": 601000,
+  "reproduction": "The historical failure is retained for reduction comparison and is not rerun.",
+  "paid_call_authorization": "not granted",
+  "policy_versions": {
+    "projection": "feature-g-analyzer-projection-v1",
+    "evaluation": "feature-h-evaluation-v1",
+    "request_fixture": "feature-h-request-fixtures-v1"
+  },
+  "secrets_included": false
+}

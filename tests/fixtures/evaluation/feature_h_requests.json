@@ -1,0 +1,295 @@
+{
+  "fixture_version": "feature-h-request-fixtures-v1",
+  "authority_status": "neo4j-replayed-witness-register-human-verified",
+  "authority": "Another Eden Wiki G1 boss manifest plus independent H request/witness register",
+  "policy_versions": {
+    "kit_corpus": "c6.1.0",
+    "kit_receipts": "c6.1.0",
+    "capability": "3.1.0",
+    "package_policy": "feature-d2-skill-package-v1",
+    "allocation_policy": "feature-e2-build-allocation-v1",
+    "search_policy": "feature-f2-package-first-v1",
+    "boss_fixture": "g1-production-1.0",
+    "request_fixture": "feature-h-request-fixtures-v1"
+  },
+  "cases": [
+    {
+      "case_id": "H-F01",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "zennon-ogres-shadow",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Zennon Ogre's Shadow", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F02",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "mimi",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Mimi", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F03",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "cradle-system",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Cradle System", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F04",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "insula-ventorum",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Insula Ventorum", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F05",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "nameless-girl",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Nameless Girl", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F06",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "imbrium-basin",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Imbrium Basin", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F07",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "shadow-of-chronos-menas",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Shadow of Chronos Menas", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F08",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "rotte-rivel",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Rotte Rivel", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:05676f10b7abedb04775", "character_ids": ["character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:7f07fbeae5c5e2c2e097", "character:02ea4044c0f45024a6a4", "character:79086a162d31f0d0b3fe"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F09",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "regenwurm",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Regenwurm", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:0dba5d4ad4748980182a", "character_ids": ["character:0521aa7b1220ae548600", "character:ad78627c89203278696e", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:c5c1a001b6bd6eb13b0f", "character:533ed838c050464bfcb9"], "package_fingerprint": "sha256:4fd82031b9f929dfd1e7e18518545f6e52cc73d0d6585cc2fbb30d7e3dc1e613", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:e6b8b530350e37bab5c500b271ba844392aeb548fd5c86b3e540d1b53d31f962"}
+    },
+    {
+      "case_id": "H-F10",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "large-white-lie-bug",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Large White Lie Bug", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F11",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "celestial-mushroom",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Celestial Mushroom", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F12",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "berserk-tempered-hound",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Berserk Tempered Hound", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06802953aa551dbd5cc7", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:7f07fbeae5c5e2c2e097", "character:c2abdeabccdbf827464e"], "package_fingerprint": "sha256:360023b089acb7c62830f35c5a0543898cfd250018bafe4fa3245853665990bb", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F13",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "menreiki",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Menreiki", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:76bb1d81848af36c52dd", "character_ids": ["character:02ea4044c0f45024a6a4", "character:660d02bd77aba6f62ade", "character:f0fc3c52900fc4c961bd", "character:533ed838c050464bfcb9", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe"], "package_fingerprint": "sha256:e5599bee975a644eed2ff4a979391567386e638890443f334ca9aa3417dede70", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F14",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "terra-nivium",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Terra Nivium", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F15",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "unseen",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Unseen", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F16",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "shadow-of-teyul-menas",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Shadow of Teyul Menas", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F17",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "kudang",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Kudang", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F18",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "true-fornjot",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "True Fornjot", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:0a7ed4a6d08e0afcf3db", "character_ids": ["character:148555b5aca73e3a93b2", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:f1b8ef435f3db4d6a531ebae3a0cc37cd9aae7254681304782e6200f5d9b52a8", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:9acb4324272f1ad729df383781ee5d909be59c3826411f38429a13dc500c6177"}
+    },
+    {
+      "case_id": "H-F19",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "caroline-justine",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Caroline & Justine", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:ad78627c89203278696e", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-F20",
+      "suite": "boss_acceptance",
+      "expected_outcome": "feasible",
+      "boss_fixture_id": "water-alter-force",
+      "source_authority": "reviewed-witness-register",
+      "request": {"boss_id": "Water Alter Force", "roster": ["Aisha", "Aldo", "Alma", "Anabel", "Ashtear", "Azami"], "item_policy": "late_game_assumed"},
+      "witness": {"candidate_id": "lineup:06ffc6f899f4cbe61cbc", "character_ids": ["character:02ea4044c0f45024a6a4", "character:f0fc3c52900fc4c961bd", "character:660d02bd77aba6f62ade", "character:79086a162d31f0d0b3fe", "character:7f07fbeae5c5e2c2e097", "character:ad78627c89203278696e"], "package_fingerprint": "sha256:cf65abdce1955009ddca8f1e5715b4b630a8ff30ed84315695aa33158b39dd13", "coverage_roles": ["primary_damage", "offensive_enablement", "survival"], "allocation_fingerprint": "sha256:58f55fe5b9c5c38ff007b98058beff88132d95056ae4a6cbe04744a54ffbe9d2"}
+    },
+    {
+      "case_id": "H-I01",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "thunder-alter-force",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Thunder Alter Force", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I01", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I02",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "eps-245-quadoxin",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "EPS-245 Quadoxin", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I02", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I03",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "calamity-serpent",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Calamity Serpent", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I03", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I04",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "terra-nivium-20000-bc",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Terra Nivium 20,000 B.C.", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I04", "stage": "preprocessing", "zero_candidate_causes": ["no_usable_primary_damage"]}
+    },
+    {
+      "case_id": "H-I05",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "demon-spider-menreiki",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Demon Spider & Menreiki", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I05", "stage": "preprocessing", "zero_candidate_causes": ["no_usable_primary_damage"]}
+    },
+    {
+      "case_id": "H-I06",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "shadow-of-the-scales",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Shadow of the Scales", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I06", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I07",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "white-tiger",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "White Tiger", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I07", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I08",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "seiryu",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Seiryu", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I08", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I09",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "time-anti-spiral",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Time Anti-Spiral", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I09", "stage": "mandatory_coverage", "zero_candidate_causes": ["missing_mandatory_coverage", "missing_mandatory_setup"]}
+    },
+    {
+      "case_id": "H-I10",
+      "suite": "boss_acceptance",
+      "expected_outcome": "infeasible",
+      "boss_fixture_id": "aloof-wing",
+      "source_authority": "reviewed-impossibility-register",
+      "request": {"boss_id": "Aloof Wing", "roster": ["Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu"], "item_policy": "late_game_assumed"},
+      "impossibility_certificate": {"proof_id": "certificate:H-I10", "stage": "preprocessing", "zero_candidate_causes": ["no_usable_primary_damage"]}
+    },
+    {
+      "case_id": "H-S01",
+      "suite": "fixed_roster_stress",
+      "expected_outcome": "stress",
+      "boss_fixture_id": "mimi",
+      "source_authority": "legacy-fixed-roster-stress-suite",
+      "request": {"boss_id": "Mimi", "roster": ["Aisha", "Akane", "Aldo", "Alma", "Anabel", "Ashtear", "Asia", "Azami", "Benedict"], "item_policy": "late_game_assumed"}
+    }
+  ]
+}

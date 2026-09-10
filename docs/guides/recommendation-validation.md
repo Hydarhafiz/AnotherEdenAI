@@ -287,3 +287,34 @@ Whole-page mechanics fallback cannot make a boss recommendation-ready.
 Do not refresh or expand this corpus from the index during ordinary validation.
 Live refreshes require a new bounded human checkpoint, and Feature H / paid
 provider calls remain outside this gate.
+
+## 11. Run the corrected Feature H deterministic gate
+
+Feature H keeps the boss-specific oracle separate from the unchanged
+nine-character stress suite. The request fixture registers twenty feasible
+cases with six-hero witnesses and ten data-complete infeasible cases with
+deterministic impossibility certificates. The register remains pending until
+those witnesses pass Neo4j-backed replay. Unknown characters and incomplete
+kits are request/data regressions, not strategic infeasibility evidence.
+
+Run the offline contract checks with:
+
+```bash
+.venv/bin/pytest -q tests/workflow/test_feature_h_evaluation.py
+```
+
+The H-03 runner calls typed production retrieval only. A feasible case must
+match a legal backend candidate with complete mandatory coverage and finite
+allocation. An infeasible case must return zero candidates with an
+authoritative certificate, and all boss acceptance cases must report zero
+analyzer calls. Synthetic runner tests validate the contract but cannot replace
+Neo4j-backed replay evidence.
+
+The historical approximately 601k-token failure is retained in
+`artifacts/evidence/feature_h_baseline.json`; it is not rerun. Provider
+qualification is transport-injected and qualifies each approved OpenRouter
+model individually before an ordered fallback array can be constructed.
+Missing provider usage fields, actual-model attribution, latency, generation,
+and cost are reported as unavailable rather than inferred. Paid qualification
+and ordered fallback calls require the separate human authorization recorded in
+the milestone.

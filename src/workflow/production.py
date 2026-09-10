@@ -120,7 +120,7 @@ RETURN coalesce(b.canonical_id, b.name) AS id,
        coalesce(b.source_section, '') AS source_section,
        coalesce(b.section_bounded, false) AS section_bounded,
        coalesce(b.weak, []) AS weak, coalesce(b.resist, []) AS resist,
-       coalesce(b.null, []) AS null, coalesce(b.absorb, []) AS absorb,
+       coalesce(b.`null`, []) AS `null`, coalesce(b.absorb, []) AS absorb,
        coalesce(b.weak_state, 'unknown') AS weak_state,
        coalesce(b.resist_state, 'unknown') AS resist_state,
        coalesce(b.null_state, 'unknown') AS null_state,
@@ -195,7 +195,8 @@ RETURN DISTINCT s.name AS name ORDER BY name
             """
 MATCH (c:Character) WHERE c.name IN $roster
 OPTIONAL MATCH (c)-[:HAS_TRAIT]->(t:Trait)
-RETURN c{.*, id: c.character_id, traits: collect(DISTINCT t.name)} AS fact ORDER BY fact.name
+WITH c, collect(DISTINCT t.name) AS traits
+RETURN c{.*, id: c.character_id, traits: traits} AS fact ORDER BY fact.name
 """,
             roster=roster,
         )
@@ -205,7 +206,7 @@ RETURN c{.*, id: c.character_id, traits: collect(DISTINCT t.name)} AS fact ORDER
         skills = await self._query(
             """
 MATCH (c:Character)-[:HAS_SKILL]->(s:Skill) WHERE c.name IN $roster
-RETURN s{.*, id: s.skill_id, character_name: c.name} AS fact ORDER BY fact.character_name, fact.name
+RETURN s{.*, id: s.skill_id, character_id: c.character_id, character_name: c.name} AS fact ORDER BY fact.character_name, fact.name
 """,
             roster=roster,
         )
@@ -213,7 +214,7 @@ RETURN s{.*, id: s.skill_id, character_name: c.name} AS fact ORDER BY fact.chara
         passives = await self._query(
             """
 MATCH (c:Character)-[:HAS_PASSIVE_SKILL]->(p:PassiveSkill) WHERE c.name IN $roster
-RETURN p{.*, id: p.passive_skill_id, character_name: c.name} AS fact ORDER BY fact.character_name, fact.name
+RETURN p{.*, id: p.passive_skill_id, character_id: c.character_id, character_name: c.name} AS fact ORDER BY fact.character_name, fact.name
 """,
             roster=roster,
         )
@@ -228,7 +229,10 @@ RETURN p{.*, id: p.passive_skill_id, character_name: c.name} AS fact ORDER BY fa
 MATCH (s:Sidekick) WHERE s.name IN $names
 OPTIONAL MATCH (s)-[:HAS_AUTO_SKILL|HAS_CHARGE_SKILL]->(skill:SidekickSkill)
 OPTIONAL MATCH (s)-[:HAS_AURA]->(aura:SidekickAura)
-RETURN s{.*, skills: collect(DISTINCT skill{.*}), auras: collect(DISTINCT aura{.*})} AS fact
+WITH s,
+     collect(DISTINCT skill{.*}) AS skills,
+     collect(DISTINCT aura{.*}) AS auras
+RETURN s{.*, skills: skills, auras: auras} AS fact
 ORDER BY fact.name
 """,
             names=names,

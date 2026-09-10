@@ -42,6 +42,10 @@ MIN_PACKAGE_SIZE = 3
 MAX_PACKAGE_SIZE = 4
 MAX_PACKAGE_OPTIONS = 3
 
+_AFFINITY_FIELDS = ("weak", "resist", "null", "absorb")
+_AFFINITY_UNKNOWN_SENTINELS = {"", "unknown"}
+_AFFINITY_UNKNOWN_STATES = {"unknown", "incomplete"}
+
 _PACKAGE_PROFILES = {
     "balanced": {
         "primary_damage": 4,
@@ -244,6 +248,7 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         "artifact_versions": _artifact_versions([*executable, *passive]),
         "policy_version": policy_version,
         "source_character_id": character.get("id"),
+        "primary_damage_usable": bool(package.get("primary_damage_usable", True)),
     }
     package_options = build_build_package_options(
         character,
@@ -465,6 +470,11 @@ def _make_skill_package(*, character, selected, passives, boss, required_counter
         "role_id": role_ids[0] if role_ids else None,
         "role_ids": role_ids,
         "role_scores": scores,
+        "primary_damage_usable": any(
+            "direct_damage" in _proven_capabilities(fact)
+            and _usable_primary(fact, boss)
+            for fact in facts
+        ),
         "contextual_score": contextual_score,
         "evidence": evidence,
         "proven_capabilities": proven_capabilities,
@@ -566,6 +576,7 @@ def _empty_skill_package(*, character: dict[str, Any], light_shadow_points: int 
         "role_id": None,
         "role_ids": [],
         "role_scores": {role: 0 for role in ROLE_DIMENSIONS},
+        "primary_damage_usable": False,
         "contextual_score": 0,
         "evidence": {role: [] for role in ROLE_DIMENSIONS},
         "proven_capabilities": [],
@@ -662,10 +673,23 @@ def _character_rejections(skills: list[dict[str, Any]], boss: dict[str, Any]) ->
     usable = [fact for fact in damaging if _usable_primary(fact, boss)]
     if usable:
         return []
+    # Resistance is a matchup penalty, not a character-legality failure.  A
+    # resisted attacker may still be a legal reserve or cover another role,
+    # while the lineup-level primary-damage gate requires at least one
+    # neutral-or-better usable damage fact.  Null and absorb remain hard
+    # rejection states for a damage-only character when every damaging option
+    # is blocked, but a hero with another proven role must remain selectable.
     blocked = [fact for fact in damaging if _affinity(fact) in _blocked_affinities(boss)]
-    if blocked:
-        return ["primary_damage.null_or_absorb"]
-    return ["primary_damage.no_neutral_or_better"]
+    if blocked and len(blocked) == len(damaging):
+        non_primary = {
+            capability
+            for fact in skills
+            for capability in _proven_capabilities(fact)
+            if capability not in {"direct_damage", "fixed_damage", "attack_again", "chain_attack", "follow_up_attack"}
+        }
+        if not non_primary:
+            return ["primary_damage.null_or_absorb"]
+    return []
 
 
 def _scores_and_evidence(facts: list[dict[str, Any]], boss: dict[str, Any], required_counters: list[str], *, placement: str) -> tuple[dict[str, int], dict[str, list[dict[str, str]]]]:
@@ -776,11 +800,11 @@ def _usable_primary(fact: dict[str, Any], boss: dict[str, Any]) -> bool:
 
 
 def _blocked_affinities(boss: dict[str, Any]) -> set[str]:
-    return {_normalize_affinity(value) for value in [*boss.get("null", []), *boss.get("absorb", [])]}
+    return boss_affinity_values(boss, "null") | boss_affinity_values(boss, "absorb")
 
 
 def _resisted_affinities(boss: dict[str, Any]) -> set[str]:
-    return {_normalize_affinity(value) for value in boss.get("resist", [])}
+    return boss_affinity_values(boss, "resist")
 
 
 def _affinity(fact: dict[str, Any]) -> str:
@@ -792,13 +816,54 @@ def _normalize_affinity(value: Any) -> str:
 
 
 def _affinity_state(boss: dict[str, Any]) -> str:
+    return boss_affinity_state(boss)
+
+
+def boss_affinity_values(boss: dict[str, Any], field: str) -> set[str]:
+    """Return only known elemental values for one explicit affinity field."""
+    if field not in _AFFINITY_FIELDS:
+        return set()
+    state = _affinity_field_state(boss, field)
+    if state in _AFFINITY_UNKNOWN_STATES:
+        return set()
+    raw = boss.get(field, [])
+    if isinstance(raw, str):
+        raw = [raw]
+    return {
+        normalized
+        for value in raw if (normalized := _normalize_affinity(value)) not in _AFFINITY_UNKNOWN_SENTINELS
+    }
+
+
+def boss_affinity_state(boss: dict[str, Any]) -> str:
+    """Classify affinity without treating the persisted unknown sentinel as data."""
     if boss.get("affinity_complete") is False:
         return "incomplete"
     if boss.get("weakness_known") is False:
         return "unknown"
-    if boss.get("weak"):
+    states = [_affinity_field_state(boss, field) for field in _AFFINITY_FIELDS]
+    if "incomplete" in states:
+        return "incomplete"
+    if "unknown" in states:
+        return "unknown"
+    if boss_affinity_values(boss, "weak"):
         return "weakness_available"
     return "confirmed_no_weakness"
+
+
+def _affinity_field_state(boss: dict[str, Any], field: str) -> str:
+    explicit = boss.get(f"{field}_state")
+    if not explicit and isinstance(boss.get("affinity_state"), dict):
+        explicit = boss["affinity_state"].get(field)
+    if explicit in {"confirmed_values", "confirmed_empty", "unknown", "incomplete"}:
+        return str(explicit)
+    raw = boss.get(field, [])
+    if isinstance(raw, str):
+        raw = [raw]
+    normalized = {_normalize_affinity(value) for value in raw}
+    if normalized & _AFFINITY_UNKNOWN_SENTINELS:
+        return "unknown"
+    return "confirmed_values" if normalized else "confirmed_empty"
 
 
 def _is_skill(fact: dict[str, Any]) -> bool:

@@ -15,6 +15,7 @@ from collections import Counter
 from typing import Any, Iterable
 
 from .build_packages import resolve_lineup_allocation
+from .role_scoring import boss_affinity_state
 
 
 LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v1"
@@ -208,8 +209,8 @@ def generate_lineup_candidates(
         )
 
     if not any(
-        _frontier_has_role(frontier[entity_id], "primary_damage")
-        or _has_role(eligible[entity_id], "primary_damage")
+        _frontier_has_usable_primary(frontier[entity_id])
+        or _entity_has_usable_primary(eligible[entity_id])
         for entity_id in eligible
     ):
         diagnostics["zero_candidate_causes"] = ["no_usable_primary_damage"]
@@ -597,6 +598,7 @@ def _compact_package_frontier(frontier):
                 "slot_limit": package.get("slot_limit"),
                 "role_ids": list(package.get("role_ids") or []),
                 "role_scores": dict(package.get("role_scores") or {}),
+                "primary_damage_usable": bool(package.get("primary_damage_usable", True)),
                 "contextual_score": package.get("contextual_score", 0),
                 "proven_capabilities": list(package.get("proven_capabilities") or []),
                 "untagged_skill_ids": list(package.get("untagged_skill_ids") or []),
@@ -620,6 +622,16 @@ def _selected_skill_packages(state, frontier):
 def _frontier_has_role(options, role):
     values = options.values() if isinstance(options, dict) else options
     return any(_package_role_score(package, role) > 0 for package in values)
+
+
+def _frontier_has_usable_primary(options):
+    values = list(options.values()) if isinstance(options, dict) else list(options or [])
+    explicit = [package for package in values if isinstance(package, dict) and "primary_damage_usable" in package]
+    if explicit:
+        return any(bool(package.get("primary_damage_usable")) for package in explicit)
+    # Preserve the compact synthetic backend contract used by older callers;
+    # production role entities carry the explicit matchup flag.
+    return any(_package_role_score(package, "primary_damage") > 0 for package in values)
 
 
 def _package_role_score(package, role):
@@ -710,7 +722,11 @@ def _normalise_role_pools(role_scores, eligible, *, frontier=None):
 def _beam_expand(archetype, template, entities, role_pools, frontier, *, beam_width, trace):
     """Expand only character/package choices from the precomputed frontier."""
     states: list[tuple[tuple[str, str], ...]] = [()]
-    all_ids = sorted(frontier)
+    # The frontier can contain structurally complete but contextually
+    # ineligible characters.  Expansion must stay inside the eligible entity
+    # map; otherwise the partial-state scorer cannot resolve those IDs and a
+    # rejected character can crash the whole request.
+    all_ids = sorted(entities)
     for step, role in enumerate(template["slot_roles"], start=1):
         entity_pool = list(role_pools.get(role, []))
         entity_pool.extend(entity_id for entity_id in all_ids if entity_id not in entity_pool)
@@ -952,7 +968,11 @@ def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entitie
     missing: list[str] = []
     groups = list(template["mandatory"])
     for group in groups:
-        if not any(role in covered_roles for role in group["roles"]):
+        if group["id"] == "primary_damage" and not any(
+            _entity_has_usable_primary(entity) for entity in selected
+        ):
+            missing.append("mandatory.primary_damage.matchup")
+        elif not any(role in covered_roles for role in group["roles"]):
             missing.append(f"mandatory.{group['id']}")
 
     required_counters = _required_counters(boss, role_scores)
@@ -1006,7 +1026,7 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
     missing_count = len(coverage.get("missing", []))
     covered_count = mandatory_count - missing_count
     primary = sum(_role_score(entity, "primary_damage") for entity in selected)
-    matchup = primary + (primary if boss.get("weak") else 0)
+    matchup = primary + (primary if boss_affinity_state(boss) == "weakness_available" else 0)
     setup = max(0, len(coverage.get("setup_dependencies", [])) - len([item for item in coverage.get("missing", []) if ".setup." in item]))
     synergy = sum(max(0, len(_role_ids(entity)) - 1) for entity in selected)
     sustain = sum(_role_score(entity, role) for entity in selected for role in SURVIVAL_ROLES + ("mp_sustain",))
@@ -1198,6 +1218,14 @@ def _has_role(entity, role):
     return role in _role_ids(entity) or _role_score(entity, role) > 0
 
 
+def _entity_has_usable_primary(entity):
+    if "primary_damage_usable" in entity:
+        return bool(entity.get("primary_damage_usable"))
+    # Compatibility for the compact synthetic role-score contract used by
+    # existing workflow tests.  Production entities are explicit.
+    return _has_role(entity, "primary_damage")
+
+
 def _role_ids(entity):
     values = set(str(value) for value in _values(entity.get("role_ids")) if value)
     values.update(role for role, score in (entity.get("role_scores") or {}).items() if _numeric(score) > 0)
@@ -1272,6 +1300,8 @@ def _apply_skill_package(entity, package):
             str(role): list(rows) if isinstance(rows, list) else []
             for role, rows in package["evidence"].items()
         }
+    if "primary_damage_usable" in package:
+        selected["primary_damage_usable"] = bool(package["primary_damage_usable"])
     selected["package_ready"] = bool(package.get("legal", True))
     return selected
 
@@ -1310,13 +1340,7 @@ def _public_sidekick_id(entity_id, entities):
 
 
 def role_scores_affinity_state(boss):
-    if boss.get("affinity_complete") is False:
-        return "incomplete"
-    if boss.get("weakness_known") is False:
-        return "unknown"
-    if boss.get("weak"):
-        return "weakness_available"
-    return "confirmed_no_weakness"
+    return boss_affinity_state(boss)
 
 
 def _stable_id(prefix, *parts):

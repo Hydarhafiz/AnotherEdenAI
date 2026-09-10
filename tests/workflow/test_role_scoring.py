@@ -71,6 +71,47 @@ def test_hard_filters_reject_null_absorb_and_missing_primary_damage_before_role_
     assert [row["entity_id"] for row in result["role_pools"]["primary_damage"]] == ["character:neutral"]
 
 
+def test_blocked_damage_does_not_remove_a_proven_support_character():
+    result = derive_contextual_role_scores(
+        boss=boss(null=["Fire"]),
+        characters=[character("Support")],
+        skills=[
+            fact("Support", "Blocked Damage", ["direct_damage"], element="Fire"),
+            fact("Support", "Zone", ["deploy_zone"]),
+        ],
+        passives=[], sidekicks=[], stellar_awakened={},
+    )
+
+    support = entity(result, "Support")
+    assert support["eligible"] is True
+    assert support["rejection_reasons"] == []
+    assert support["role_scores"]["zone_setup"] > 0
+    assert support["primary_damage_usable"] is False
+
+
+def test_unknown_affinity_sentinels_are_not_scored_as_known_matchups():
+    result = derive_contextual_role_scores(
+        boss=boss(
+            weak=["unknown"], resist=["unknown"], null=["unknown"], absorb=["unknown"],
+            affinity_state={
+                "weak": "unknown", "resist": "unknown", "null": "unknown", "absorb": "unknown",
+            },
+        ),
+        characters=[character("FireDamage")],
+        skills=[
+            fact("FireDamage", "Flame", ["direct_damage"], element="Fire"),
+            fact("FireDamage", "Filler One", []),
+            fact("FireDamage", "Filler Two", []),
+        ],
+        passives=[], sidekicks=[], stellar_awakened={},
+    )
+
+    fire_damage = entity(result, "FireDamage")
+    assert result["affinity_state"] == "unknown"
+    assert fire_damage["primary_damage_usable"] is True
+    assert fire_damage["rejection_reasons"] == []
+
+
 def test_boss_counter_exceptions_preserve_required_counters_beyond_top_eight():
     characters = [character(f"Hero{index}") for index in range(9)]
     skills = [
