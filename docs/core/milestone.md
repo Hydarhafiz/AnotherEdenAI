@@ -1181,9 +1181,9 @@ authorization rather than a fallback crawl.
 ### Feature H: Deterministic Evaluation, Token Accounting, And Paid Gates
 
 Status: Implemented and human-verified for the corrected H-03 replay. The 20/10
-deterministic gate, separate stress suite, Neo4j corpus checks, and offline provider
-contracts are green with zero analyzer calls; paid OpenRouter qualification remains a
-separate unauthorized checkpoint.
+deterministic gate, separate stress suite, Neo4j corpus checks, offline provider
+contracts, and progressive qualification harness are green with zero paid calls.
+Paid OpenRouter qualification remains a separate human checkpoint.
 
 Route: `contract-auditor -> feature-planner -> builder-executor -> tdd-loop` for the corrected fixture/oracle and any remaining evaluation or provider transport implementation. Paid calls remain a separate human checkpoint.
 
@@ -1192,6 +1192,15 @@ Correction execution contract:
 - A versioned evaluation fixture registers the boss-specific request, independent six-hero/package/coverage/allocation witness or deterministic impossibility certificate, and the unchanged common-nine-character stress cases in separate suites. Until Neo4j replay passes, that register remains evidence-pending and cannot be treated as the H-03 oracle result.
 - The deterministic runner invokes typed production retrieval only for H-03 and rejects unknown-character, incomplete-kit, or non-authoritatively-infeasible cases as fixture errors rather than strategic oracle results. Feasible cases must match an actual legal backend candidate; infeasible cases must return zero candidates with the recorded certificate and zero analyzer calls.
 - Provider qualification and usage accounting remain transport-injected and offline. The ordered OpenRouter chain is enabled only after the three individual model gates pass and a separate human checkpoint authorizes paid calls; unavailable provider metadata is classified without inference.
+- Qualification begins with a ranking-only closed-world stage and progresses through
+  refinement, constrained swap, swap abstention, full-contract, and correction
+  recovery stages. Request-specific JSON Schema enums/oneOf constraints may narrow
+  candidate and swap fields, but the existing deterministic Python validator remains
+  the final authority and the production contract is unchanged.
+- Each qualification attempt records bounded safe structured output, finish reason,
+  usage, allowed candidate IDs, relevant allowed swaps, and application-validation
+  errors without retaining raw credentials, reasoning payloads, or unbounded provider
+  bodies.
 - Durable evidence records the fixture and policy versions plus the historical token baseline. Handoff state, command ledgers, fake-runner output, and failed attempts remain ephemeral.
 
 Authority correction:
@@ -1310,7 +1319,7 @@ Later changes to the taxonomy, scoring policy, candidate contract, provider usag
 - Correction planning: completed and human-approved on 2026-08-22 for C6, D2, E2, F2, and H. On 2026-09-01, the bounded C6.1 correction was admitted after the H-03 authority audit. On 2026-09-04, G1.1 was admitted when canonical parsed replay proved unable to consume G1's thirty-boss corpus.
 - Correction Feature G1.1: completed on 2026-09-04; it owns manifest-driven offline artifact production, parsed replay, and safe graph reconciliation for exactly thirty bosses, with two approved local Neo4j replays and matching projection fingerprints.
 - Correction Feature C6.1: completed on 2026-09-04; reviewed H witness capability facts are canonically materialized and reproduce the same graph projection across two Neo4j replays. Feature H subsequently passed its corrected H-03 witness/evaluation boundary; paid provider qualification remains separately unauthorized.
-- Feature H: deterministic H-01 through H-03 and offline provider-contract work are implemented and human-verified; paid OpenRouter H-04/H-05/H-07 qualification remains pending separate authorization.
+- Feature H: deterministic H-01 through H-03, offline provider-contract work, safe provider diagnostics, and progressive closed-world qualification stages are implemented and verified; paid OpenRouter H-04/H-05/H-07 qualification remains pending separate authorization.
 - The legacy exploratory analyzer remains a superseded broad-context prototype and must not be credited as the typed production compact-projection or two-call architecture.
 - No new compact-projection or rewritten analyzer feature is credited as complete before its new acceptance gates pass.
 

@@ -318,3 +318,21 @@ Missing provider usage fields, actual-model attribution, latency, generation,
 and cost are reported as unavailable rather than inferred. Paid qualification
 and ordered fallback calls require the separate human authorization recorded in
 the milestone.
+
+The provider-neutral qualification register is
+`tests/fixtures/evaluation/feature_h_qualification.json`. Its stages are applied
+in this order: ranking-only, ranking plus refinement without swaps, a valid
+backend-authorized swap, swap abstention, the full analyzer contract, and one
+correction-path recovery. Run the offline harness with:
+
+```bash
+.venv/bin/pytest -q tests/workflow/test_analyzer.py tests/workflow/test_feature_h_evaluation.py --confcutdir=tests/workflow
+```
+
+The harness sends request-specific closed-world schema constraints for candidate
+IDs and practical swap alternatives, but the existing Python validator remains
+the final authority. Each attempt records finish reason, bounded structured
+output when safe, usage, allowed candidate IDs, relevant allowed swaps, and
+application-validation errors. These tests do not call a paid model; a live
+DeepSeek qualification must use the same register only after its separate human
+checkpoint.

@@ -20,8 +20,10 @@ from src.workflow.evaluation import (
     build_openrouter_fallback_config,
     classify_analyzer_run,
     load_evaluation_cases,
+    load_qualification_fixture,
     qualify_openrouter_models,
     run_h03_evaluation,
+    run_qualification_suite,
     summarize_analyzer_usage,
     validate_evaluation_fixture,
 )
@@ -32,6 +34,7 @@ from tests.workflow.test_analyzer import _bundle as analyzer_bundle
 
 ROOT = Path(__file__).parents[1]
 FIXTURE_PATH = ROOT / "fixtures" / "evaluation" / "feature_h_requests.json"
+QUALIFICATION_FIXTURE_PATH = ROOT / "fixtures" / "evaluation" / "feature_h_qualification.json"
 REAL_CHARACTER_IDS = [
     "character:f0fc3c52900fc4c961bd",
     "character:7f07fbeae5c5e2c2e097",
@@ -207,6 +210,77 @@ def test_openrouter_models_are_qualified_individually_before_fallback():
     assert config.fallback_models == OPENROUTER_MODEL_CHAIN[1:]
     assert calls[0].fallback_models == ()
     assert "models" not in calls[0].payload
+
+
+def test_progressive_qualification_fixture_runs_all_stages_and_one_correction():
+    fixture = load_qualification_fixture(QUALIFICATION_FIXTURE_PATH)
+    stages = {stage["stage_id"]: stage for stage in fixture["stages"]}
+    calls = []
+
+    def transport(request):
+        calls.append(request)
+        payload = json.loads(request.messages[1]["content"])
+        stage = stages[payload["qualification_stage"]]
+        output = (
+            stage["initial_response"]
+            if stage["stage"] == "correction_recovery" and request.call_kind == "initial"
+            else stage["response"]
+        )
+        return {
+            "model": request.model,
+            "finish_reason": "stop",
+            "choices": [{"message": {"content": json.dumps(output)}}],
+            "usage": {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15},
+        }
+
+    report = run_qualification_suite(QUALIFICATION_FIXTURE_PATH, transport, model="offline-model")
+
+    assert report["all_passed"] is True
+    assert report["analyzer_call_count"] == 7
+    assert report["within_cumulative_budget"] is True
+    assert [stage["stage"] for stage in report["stages"]] == [
+        "ranking_only",
+        "ranking_refinement_no_swap",
+        "authorized_swap",
+        "swap_abstention",
+        "full_contract",
+        "correction_recovery",
+    ]
+    assert report["stages"][-1]["call_count"] == 2
+    assert report["stages"][-1]["correction_used"] is True
+    assert all(stage["diagnostics"] for stage in report["stages"])
+    assert calls[0].response_schema["properties"]["refinements"]["const"] == []
+    assert calls[0].response_schema["properties"]["advisories"]["const"] == []
+    assert calls[2].response_schema["properties"]["refinements"]["minItems"] == 1
+    assert calls[2].response_schema["properties"]["refinements"]["items"]["oneOf"]
+    assert calls[-1].call_kind == "correction"
+    assert "projection" not in calls[-1].messages[1]["content"]
+
+
+def test_staged_model_qualification_applies_the_same_suite_without_fallback():
+    fixture = load_qualification_fixture(QUALIFICATION_FIXTURE_PATH)
+    stages = {stage["stage_id"]: stage for stage in fixture["stages"]}
+
+    def transport(request):
+        payload = json.loads(request.messages[1]["content"])
+        stage = stages[payload["qualification_stage"]]
+        output = (
+            stage["initial_response"]
+            if stage["stage"] == "correction_recovery" and request.call_kind == "initial"
+            else stage["response"]
+        )
+        return {"choices": [{"message": {"content": json.dumps(output)}}], "usage": {"total_tokens": 1}}
+
+    qualification = qualify_openrouter_models(
+        {"backend_candidates": [{"id": "candidate:1", "character_ids": []}], "characters": []},
+        transport,
+        models=("model:a", "model:b"),
+        qualification_fixture=fixture,
+    )
+
+    assert qualification["all_passed"] is True
+    assert all(item["qualification"]["all_passed"] for item in qualification["models"])
+    assert all(item["qualification"]["fallback_enabled"] is False for item in qualification["models"])
 
 
 def test_openrouter_fallback_request_emits_ordered_server_managed_models():

@@ -1,0 +1,178 @@
+{
+  "fixture_version": "feature-h-qualification-v1",
+  "authority_status": "offline-qualification-register",
+  "projection": {
+    "version": "feature-g-analyzer-projection-v1",
+    "projection_id": "projection:qualification-fixture",
+    "candidate_ids": [
+      "candidate:alpha",
+      "candidate:beta"
+    ],
+    "candidates": [
+      {
+        "id": "candidate:alpha",
+        "character_ids": ["character:alpha"]
+      },
+      {
+        "id": "candidate:beta",
+        "character_ids": ["character:beta"]
+      }
+    ],
+    "catalogs": {
+      "characters": {
+        "character:alpha": {
+          "skills": [
+            {"id": "skill:alpha:0"},
+            {"id": "skill:alpha:1"},
+            {"id": "skill:alpha:2"},
+            {"id": "skill:alpha:3"}
+          ]
+        },
+        "character:beta": {
+          "skills": [
+            {"id": "skill:beta:0"},
+            {"id": "skill:beta:1"},
+            {"id": "skill:beta:2"},
+            {"id": "skill:beta:3"}
+          ]
+        }
+      }
+    },
+    "allowed_swaps": [
+      {
+        "candidate_id": "candidate:alpha",
+        "slot": "frontline.0",
+        "current_character_id": "character:alpha",
+        "alternative_character_id": "character:gamma",
+        "backend_role_ids": ["role:primary_damage"]
+      }
+    ],
+    "constraints": {
+      "candidate_ids_are_closed_world": true,
+      "max_swaps_per_lineup": 1
+    }
+  },
+  "stages": [
+    {
+      "stage_id": "Q-RANK-01",
+      "stage": "ranking_only",
+      "request": {
+        "instruction": "Rank the supplied candidates only. Do not refine or advise."
+      },
+      "response": {
+        "ranked_candidate_ids": ["candidate:alpha", "candidate:beta"],
+        "refinements": [],
+        "advisories": []
+      }
+    },
+    {
+      "stage_id": "Q-REFINE-01",
+      "stage": "ranking_refinement_no_swap",
+      "request": {
+        "instruction": "Rank and refine one supplied candidate without proposing a swap."
+      },
+      "response": {
+        "ranked_candidate_ids": ["candidate:alpha"],
+        "refinements": [
+          {
+            "candidate_id": "candidate:alpha",
+            "strategy_summary": "Keep the backend plan.",
+            "explanation": "Clarify the supplied strategy.",
+            "swap": null
+          }
+        ],
+        "advisories": []
+      }
+    },
+    {
+      "stage_id": "Q-SWAP-01",
+      "stage": "authorized_swap",
+      "request": {
+        "instruction": "Use the backend-authorized alternative only when it is beneficial."
+      },
+      "response": {
+        "ranked_candidate_ids": ["candidate:alpha"],
+        "refinements": [
+          {
+            "candidate_id": "candidate:alpha",
+            "strategy_summary": "Use the authorized alternative.",
+            "swap": {
+              "slot": "frontline.0",
+              "character_id": "character:gamma",
+              "reason": "The supplied alternative improves the requested matchup."
+            }
+          }
+        ],
+        "advisories": []
+      }
+    },
+    {
+      "stage_id": "Q-ABSTAIN-01",
+      "stage": "swap_abstention",
+      "request": {
+        "instruction": "No beneficial allowed swap exists for this response; abstain."
+      },
+      "response": {
+        "ranked_candidate_ids": ["candidate:beta"],
+        "refinements": [
+          {
+            "candidate_id": "candidate:beta",
+            "strategy_summary": "Keep the backend lineup.",
+            "swap": null
+          }
+        ],
+        "advisories": []
+      }
+    },
+    {
+      "stage_id": "Q-FULL-01",
+      "stage": "full_contract",
+      "request": {
+        "instruction": "Return the complete analyzer response for the supplied candidate."
+      },
+      "response": {
+        "ranked_candidate_ids": ["candidate:alpha", "candidate:beta"],
+        "refinements": [
+          {
+            "candidate_id": "candidate:alpha",
+            "strategy_summary": "Use the supplied package.",
+            "explanation": "The backend candidate remains authoritative.",
+            "skill_selections": {
+              "character:alpha": [
+                "skill:alpha:0",
+                "skill:alpha:1",
+                "skill:alpha:2"
+              ]
+            },
+            "hero_advice": [
+              {
+                "character_id": "character:alpha",
+                "display_role": "primary damage"
+              }
+            ],
+            "swap": null,
+            "risks": ["The advice remains non-authoritative."]
+          }
+        ],
+        "advisories": ["Verify the player's setup assumptions."]
+      }
+    },
+    {
+      "stage_id": "Q-CORRECT-01",
+      "stage": "correction_recovery",
+      "request": {
+        "instruction": "Recover from an invalid initial response using one correction."
+      },
+      "initial_response": {
+        "ranked_candidate_ids": ["candidate:forged"],
+        "refinements": [],
+        "advisories": []
+      },
+      "response": {
+        "ranked_candidate_ids": ["candidate:beta"],
+        "refinements": [],
+        "advisories": []
+      }
+    }
+  ]
+}

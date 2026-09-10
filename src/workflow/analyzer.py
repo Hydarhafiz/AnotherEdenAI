@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Callable, Literal
 
@@ -23,6 +24,8 @@ ANALYZER_PORT_VERSION = "feature-g-analyzer-port-v1"
 ANALYZER_MAX_CALLS = 2
 ANALYZER_PER_CALL_TOKEN_BUDGET = 20_000
 ANALYZER_CUMULATIVE_TOKEN_BUDGET = 40_000
+ANALYZER_DIAGNOSTIC_OUTPUT_MAX_CHARS = 12_000
+QUALIFICATION_SCHEMA_PAIR_LIMIT = 64
 OPENROUTER_MODEL_CHAIN = (
     "deepseek/deepseek-v4-flash-0731",
     "openai/gpt-5.6-luna",
@@ -116,6 +119,126 @@ _FORBIDDEN_AUTHORITY_PHRASES = (
     "coverage claim",
 )
 
+QUALIFICATION_STAGES = (
+    "ranking_only",
+    "ranking_refinement_no_swap",
+    "authorized_swap",
+    "swap_abstention",
+    "full_contract",
+    "correction_recovery",
+)
+
+
+def build_request_specific_response_schema(
+    projection: dict[str, Any],
+    *,
+    stage: str = "full_contract",
+) -> dict[str, Any]:
+    """Narrow qualification output fields without changing production authority.
+
+    The returned schema is a new object.  The application validator remains the
+    final authority because provider-side JSON Schema support is not trusted to
+    enforce backend legality by itself.
+    """
+    if stage not in QUALIFICATION_STAGES:
+        raise ValueError(f"Unknown analyzer qualification stage: {stage}")
+    candidate_ids = sorted({str(value) for value in projection.get("candidate_ids", []) if str(value)})
+    if not candidate_ids:
+        raise ValueError("Qualification projection must contain at least one candidate ID")
+
+    schema = deepcopy(ANALYZER_RESPONSE_SCHEMA)
+    schema["properties"]["ranked_candidate_ids"]["items"] = {
+        "type": "string",
+        "enum": candidate_ids,
+    }
+    refinements = schema["properties"]["refinements"]
+    if stage == "ranking_only":
+        refinements["const"] = []
+        schema["properties"]["advisories"] = {"const": []}
+        return schema
+
+    refinements["minItems"] = 1 if stage in {"ranking_refinement_no_swap", "authorized_swap", "swap_abstention"} else 0
+    total_swap_pairs = sum(
+        1
+        for item in projection.get("allowed_swaps", [])
+        if isinstance(item, dict) and item.get("candidate_id") in candidate_ids and item.get("slot") and item.get("alternative_character_id")
+    )
+    if total_swap_pairs > QUALIFICATION_SCHEMA_PAIR_LIMIT:
+        variant = deepcopy(refinements["items"])
+        variant["properties"]["candidate_id"] = {"type": "string", "enum": candidate_ids}
+        swap_schemas = _qualification_swap_schemas(projection)
+        if stage == "authorized_swap" and not swap_schemas:
+            raise ValueError(f"Qualification stage {stage} has no schema-valid candidate refinement")
+        if stage in {"ranking_refinement_no_swap", "swap_abstention"}:
+            variant["properties"]["swap"] = {"const": None}
+            variant["required"] = [*variant.get("required", []), "swap"]
+        elif swap_schemas:
+            allowed_swap = {"oneOf": swap_schemas}
+            variant["properties"]["swap"] = allowed_swap if stage == "authorized_swap" else {
+                "anyOf": [{"type": "null"}, allowed_swap]
+            }
+            if stage == "authorized_swap":
+                variant["required"] = [*variant.get("required", []), "swap"]
+        else:
+            variant["properties"]["swap"] = {"const": None}
+        refinements["items"] = {"oneOf": [variant]}
+        return schema
+
+    refinement_variants = []
+    for candidate_id in candidate_ids:
+        candidate_swaps = [
+            item
+            for item in projection.get("allowed_swaps", [])
+            if isinstance(item, dict) and item.get("candidate_id") == candidate_id
+        ]
+        if stage == "authorized_swap" and not candidate_swaps:
+            continue
+        variant = deepcopy(refinements["items"])
+        variant["properties"]["candidate_id"] = {
+            "type": "string",
+            "enum": candidate_ids,
+            "const": candidate_id,
+        }
+        swap_schemas = _qualification_swap_schemas({"allowed_swaps": candidate_swaps})
+        if stage in {"ranking_refinement_no_swap", "swap_abstention"}:
+            variant["properties"]["swap"] = {"const": None}
+            variant["required"] = [*variant.get("required", []), "swap"]
+        elif swap_schemas:
+            allowed_swap = {"oneOf": swap_schemas}
+            variant["properties"]["swap"] = allowed_swap if stage == "authorized_swap" else {
+                "anyOf": [{"type": "null"}, allowed_swap]
+            }
+            if stage == "authorized_swap":
+                variant["required"] = [*variant.get("required", []), "swap"]
+        else:
+            variant["properties"]["swap"] = {"const": None}
+        refinement_variants.append(variant)
+
+    if not refinement_variants:
+        raise ValueError(f"Qualification stage {stage} has no schema-valid candidate refinement")
+    refinements["items"] = {"oneOf": refinement_variants}
+    return schema
+
+
+def _qualification_swap_schemas(projection: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "slot": {"const": item["slot"]},
+                "character_id": {"const": item["alternative_character_id"]},
+                "reason": {"type": "string"},
+            },
+            "required": ["slot", "character_id", "reason"],
+        }
+        for item in projection.get("allowed_swaps", [])
+        if isinstance(item, dict) and item.get("slot") and item.get("alternative_character_id")
+    ]
+
+
+build_qualification_response_schema = build_request_specific_response_schema
+
 
 @dataclass(frozen=True)
 class AnalyzerProviderConfig:
@@ -197,6 +320,8 @@ class AnalyzerResponseEnvelope:
     error: dict[str, Any] | None = None
     served_model: str | None = None
     fallback: dict[str, Any] | None = None
+    finish_reason: str | None = None
+    raw_structured_output: dict[str, Any] | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -208,6 +333,8 @@ class AnalyzerResponseEnvelope:
             "error": self.error,
             "served_model": self.served_model,
             "fallback": self.fallback,
+            "finish_reason": self.finish_reason,
+            "raw_structured_output": _safe_structured_output(self.raw_structured_output),
         }
 
 
@@ -442,6 +569,7 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
     correction_rounds = 0
     advisories: list[str] = []
     budget_degraded = False
+    provider_diagnostics: list[dict[str, Any]] = []
 
     request = _provider_request(
         config,
@@ -451,12 +579,14 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
     )
     response = port.generate(request)
     call_count += 1
-    usage_rows.append(_usage_row(response, call_count, "initial"))
     budget_errors = _budget_errors(response.usage, config, cumulative_tokens=0)
     if budget_errors:
         warnings.extend(budget_errors)
         budget_degraded = True
     if response.error or response.output is None:
+        diagnostic = _usage_row(response, call_count, "initial", projection=projection)
+        usage_rows.append(diagnostic)
+        provider_diagnostics.append(diagnostic)
         return _degraded_result(
             bundle,
             warnings,
@@ -466,10 +596,20 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
             usage_rows=usage_rows,
             structured_errors=structured_errors,
             candidate_errors=candidate_errors,
+            provider_diagnostics=provider_diagnostics,
             provider=config,
         )
 
     valid, pending_invalid, errors = validate_analyzer_output(response.output, projection)
+    diagnostic = _usage_row(
+        response,
+        call_count,
+        "initial",
+        projection=projection,
+        validation_errors=errors,
+    )
+    usage_rows.append(diagnostic)
+    provider_diagnostics.append(diagnostic)
     if errors and not pending_invalid and not valid:
         pending_invalid = [{"index": 0, "fragment": response.output, "errors": errors}]
     structured_errors.extend(error for error in errors if error.get("code", "").startswith("structured_output"))
@@ -499,7 +639,6 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
         )
         correction_response = port.generate(correction_request)
         call_count += 1
-        usage_rows.append(_usage_row(correction_response, call_count, "correction"))
         correction_budget_errors = _budget_errors(
             correction_response.usage,
             config,
@@ -509,9 +648,21 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
             warnings.extend(correction_budget_errors)
             budget_degraded = True
         if correction_response.error or correction_response.output is None:
+            diagnostic = _usage_row(correction_response, call_count, "correction", projection=projection)
+            usage_rows.append(diagnostic)
+            provider_diagnostics.append(diagnostic)
             warnings.append("Analyzer correction failed; valid initial refinements were frozen.")
         else:
             corrected, still_invalid, correction_errors = validate_analyzer_output(correction_response.output, projection)
+            diagnostic = _usage_row(
+                correction_response,
+                call_count,
+                "correction",
+                projection=projection,
+                validation_errors=correction_errors,
+            )
+            usage_rows.append(diagnostic)
+            provider_diagnostics.append(diagnostic)
             _freeze_fragments(frozen, corrected)
             candidate_errors.extend(correction_errors)
             pending_invalid = still_invalid
@@ -536,12 +687,13 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
         usage_rows=usage_rows,
         structured_errors=structured_errors,
         candidate_errors=candidate_errors,
+        provider_diagnostics=provider_diagnostics,
         provider=config,
         degraded=budget_degraded or not bool(frozen or ranked_ids),
     )
 
 
-def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_count, correction_rounds, usage_rows, structured_errors, candidate_errors, provider, degraded):
+def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_count, correction_rounds, usage_rows, structured_errors, candidate_errors, provider_diagnostics, provider, degraded):
     backend_by_id = {str(candidate.get("id")): candidate for candidate in bundle.get("backend_candidates", [])}
     ordered_ids = []
     for candidate_id in ranked_ids:
@@ -586,6 +738,7 @@ def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_cou
             usage_rows=usage_rows,
             structured_errors=structured_errors,
             candidate_errors=candidate_errors,
+            provider_diagnostics=provider_diagnostics,
             provider=provider,
         )
     resolved = resolve_candidate_recommendations(proposals[:3], bundle, warnings)
@@ -599,13 +752,14 @@ def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_cou
         "analyzer_correction_rounds": correction_rounds,
         "provider_transport_retries": 0,
         "analyzer_usage": usage_rows,
+        "provider_diagnostics": provider_diagnostics,
         "structured_output_errors": structured_errors,
         "candidate_validation_errors": candidate_errors,
         "analysis_failure": {"type": "analyzer_degraded", "message": "Backend candidates were returned without analyzer authority."} if degraded else {},
     }
 
 
-def _degraded_result(bundle, warnings, *, reason, call_count, correction_rounds, usage_rows, structured_errors, candidate_errors, provider):
+def _degraded_result(bundle, warnings, *, reason, call_count, correction_rounds, usage_rows, structured_errors, candidate_errors, provider_diagnostics, provider):
     warnings = [*warnings, f"Analyzer degraded mode: {reason}. Backend candidates remain authoritative."]
     return _render_result(
         bundle=bundle,
@@ -618,6 +772,7 @@ def _degraded_result(bundle, warnings, *, reason, call_count, correction_rounds,
         usage_rows=usage_rows,
         structured_errors=structured_errors,
         candidate_errors=candidate_errors,
+        provider_diagnostics=provider_diagnostics,
         provider=provider,
         degraded=True,
     )
@@ -651,9 +806,10 @@ def _normalise_provider_response(raw, config):
         return AnalyzerResponseEnvelope(config.provider, config.resolved_model, error={"code": "provider.invalid_envelope", "message": "Provider response must be an object", "retriable": False})
     served_model = _served_model(raw)
     fallback = _fallback_metadata(raw, config, served_model)
+    finish_reason = _finish_reason(raw)
     if raw.get("error"):
         error = raw["error"] if isinstance(raw["error"], dict) else {"message": str(raw["error"])}
-        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": error.get("code", "provider.error"), "message": error.get("message", "Provider returned an error"), "retriable": bool(error.get("retriable", False))}, served_model=served_model, fallback=fallback)
+        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": error.get("code", "provider.error"), "message": error.get("message", "Provider returned an error"), "retriable": bool(error.get("retriable", False))}, served_model=served_model, fallback=fallback, finish_reason=finish_reason)
     output = raw.get("output")
     if output is None:
         choices = raw.get("choices") or []
@@ -664,10 +820,10 @@ def _normalise_provider_response(raw, config):
             try:
                 output = json.loads(content)
             except json.JSONDecodeError:
-                return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": "structured_output.invalid_json", "message": "Provider content was not valid JSON", "retriable": False}, served_model=served_model, fallback=fallback)
+                return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": "structured_output.invalid_json", "message": "Provider content was not valid JSON", "retriable": False}, served_model=served_model, fallback=fallback, finish_reason=finish_reason)
     if not isinstance(output, dict):
-        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": "provider.empty_output", "message": "Provider returned no structured analyzer object", "retriable": False}, served_model=served_model, fallback=fallback)
-    return AnalyzerResponseEnvelope(config.provider, config.resolved_model, output=output, usage=_normalise_response_usage(raw), served_model=served_model, fallback=fallback)
+        return AnalyzerResponseEnvelope(config.provider, config.resolved_model, usage=_normalise_response_usage(raw), error={"code": "provider.empty_output", "message": "Provider returned no structured analyzer object", "retriable": False}, served_model=served_model, fallback=fallback, finish_reason=finish_reason)
+    return AnalyzerResponseEnvelope(config.provider, config.resolved_model, output=output, usage=_normalise_response_usage(raw), served_model=served_model, fallback=fallback, finish_reason=finish_reason, raw_structured_output=output)
 
 
 def _normalise_usage(value):
@@ -691,8 +847,58 @@ def _normalise_response_usage(raw):
     return usage
 
 
-def _usage_row(response, call_number, call_kind):
+def _finish_reason(raw):
+    if not isinstance(raw, dict):
+        return None
+    value = raw.get("finish_reason")
+    if value is None:
+        choices = raw.get("choices") or []
+        if choices and isinstance(choices[0], dict):
+            value = choices[0].get("finish_reason")
+    return str(value) if value is not None else None
+
+
+def _safe_structured_output(value):
+    """Keep diagnostics bounded and exclude arbitrary provider envelopes."""
+    if not isinstance(value, dict):
+        return None
+    try:
+        serialized = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    except (TypeError, ValueError):
+        return {"captured": False, "reason": "unserializable"}
+    if len(serialized) <= ANALYZER_DIAGNOSTIC_OUTPUT_MAX_CHARS:
+        return json.loads(serialized)
+    return {
+        "captured": False,
+        "reason": "size_limit",
+        "serialized_chars": len(serialized),
+        "sha256": hashlib.sha256(serialized.encode("utf-8")).hexdigest(),
+    }
+
+
+def build_provider_diagnostic(
+    response: AnalyzerResponseEnvelope,
+    call_number: int,
+    call_kind: str,
+    projection: dict[str, Any],
+    *,
+    validation_errors: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Build a safe attempt-level diagnostic for production and qualification."""
+    return _usage_row(
+        response,
+        call_number,
+        call_kind,
+        projection=projection,
+        validation_errors=validation_errors,
+    )
+
+
+def _usage_row(response, call_number, call_kind, *, projection=None, validation_errors=None):
     usage = response.usage
+    output = response.raw_structured_output if response.raw_structured_output is not None else response.output
+    allowed_candidate_ids = sorted({str(value) for value in (projection or {}).get("candidate_ids", [])})
+    relevant_allowed_swaps = _relevant_allowed_swaps(output, projection or {})
     return {
         "call_number": call_number,
         "call_kind": call_kind,
@@ -703,6 +909,12 @@ def _usage_row(response, call_number, call_kind):
         "served_model_status": "reported" if response.served_model else "unavailable",
         "fallback": response.fallback,
         "fallback_status": "reported" if response.fallback is not None else "unavailable",
+        "finish_reason": response.finish_reason,
+        "finish_reason_status": "reported" if response.finish_reason else "unavailable",
+        "raw_structured_output": _safe_structured_output(output),
+        "allowed_candidate_ids": allowed_candidate_ids,
+        "relevant_allowed_swaps": relevant_allowed_swaps,
+        "validation_errors": list(validation_errors or []),
         "metadata_availability": {
             field: "reported" if field in usage else "unavailable"
             for field in ("prompt_tokens", "completion_tokens", "reasoning_tokens", "cached_tokens", "total_tokens", "cost", "latency_ms", "generation_id")
@@ -710,6 +922,26 @@ def _usage_row(response, call_number, call_kind):
         **usage,
         "error_code": (response.error or {}).get("code"),
     }
+
+
+def _relevant_allowed_swaps(output, projection):
+    if not isinstance(output, dict):
+        return []
+    mentioned_ids = {
+        str(candidate_id)
+        for candidate_id in output.get("ranked_candidate_ids", [])
+        if isinstance(candidate_id, str)
+    }
+    mentioned_ids.update(
+        str(fragment.get("candidate_id"))
+        for fragment in output.get("refinements", [])
+        if isinstance(fragment, dict) and fragment.get("candidate_id")
+    )
+    return [
+        dict(item)
+        for item in projection.get("allowed_swaps", [])
+        if isinstance(item, dict) and item.get("candidate_id") in mentioned_ids
+    ]
 
 
 def _served_model(raw):

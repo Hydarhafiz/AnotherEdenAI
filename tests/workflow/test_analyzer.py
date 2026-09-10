@@ -8,6 +8,7 @@ from src.workflow.analyzer import (
     AnalyzerProviderRequest,
     DeepSeekAnalyzerAdapter,
     OpenRouterAnalyzerAdapter,
+    build_request_specific_response_schema,
     build_compact_projection,
     correction_payload,
     run_bounded_analyzer,
@@ -141,6 +142,76 @@ def test_provider_adapters_share_structured_request_and_usage_error_envelope_off
     assert "api_key" not in json.dumps(deepseek_result.as_dict()).lower()
 
 
+def test_provider_diagnostics_capture_safe_output_finish_reason_closed_world_and_validation():
+    bundle = _bundle()
+    projection = build_compact_projection(bundle)
+    candidate_id = projection["candidate_ids"][0]
+    output = {"ranked_candidate_ids": [candidate_id], "refinements": [], "advisories": []}
+
+    result = run_bounded_analyzer(
+        _state(
+            bundle,
+            transport=lambda request: {
+                "model": "deepseek/qualification",
+                "finish_reason": "stop",
+                "choices": [{"message": {"content": json.dumps(output)}}],
+                "usage": {"prompt_tokens": 13, "completion_tokens": 5, "total_tokens": 18},
+            },
+        ),
+        bundle,
+    )
+
+    diagnostic = result["provider_diagnostics"][0]
+    assert diagnostic["finish_reason"] == "stop"
+    assert diagnostic["raw_structured_output"] == output
+    assert diagnostic["allowed_candidate_ids"] == projection["candidate_ids"]
+    assert diagnostic["relevant_allowed_swaps"]
+    assert diagnostic["validation_errors"] == []
+    assert diagnostic["total_tokens"] == 18
+
+
+def test_request_specific_schema_is_copy_and_python_validator_still_rejects_forged_swap():
+    bundle = _bundle()
+    projection = build_compact_projection(bundle)
+    schema = build_request_specific_response_schema(projection, stage="authorized_swap")
+
+    assert schema is not build_request_specific_response_schema(projection, stage="authorized_swap")
+    assert schema["properties"]["ranked_candidate_ids"]["items"]["enum"] == projection["candidate_ids"]
+    assert schema["properties"]["refinements"]["items"]["oneOf"]
+
+    candidate_id = projection["candidate_ids"][0]
+    forged = {
+        "ranked_candidate_ids": [candidate_id],
+        "refinements": [{
+            "candidate_id": candidate_id,
+            "swap": {"slot": "frontline.0", "character_id": "character:forged", "reason": "forged"},
+        }],
+        "advisories": [],
+    }
+    _, _, errors = validate_analyzer_output(forged, projection)
+    assert any(error["code"] == "swap.not_allowed" for error in errors)
+
+
+def test_request_specific_schema_bounds_large_swap_catalog():
+    projection = {
+        "candidate_ids": ["candidate:one", "candidate:two"],
+        "allowed_swaps": [
+            {
+                "candidate_id": "candidate:one",
+                "slot": f"frontline.{index % 4}",
+                "alternative_character_id": f"character:{index}",
+            }
+            for index in range(65)
+        ],
+    }
+
+    schema = build_request_specific_response_schema(projection, stage="full_contract")
+    item_schema = schema["properties"]["refinements"]["items"]
+
+    assert len(item_schema["oneOf"]) == 1
+    assert item_schema["oneOf"][0]["properties"]["candidate_id"]["enum"] == projection["candidate_ids"]
+
+
 def test_analyzer_rejects_out_of_bundle_ids_role_authority_and_mandatory_coverage_claims():
     projection = build_compact_projection(_bundle())
     candidate_id = projection["candidate_ids"][0]
@@ -190,6 +261,8 @@ def test_bounded_correction_freezes_valid_candidate_and_sends_only_fragments():
     assert result["analyzer_call_count"] == 2
     assert result["analyzer_correction_rounds"] == 1
     assert len(calls) == 2
+    assert any(error["code"] == "id.candidate" for error in result["provider_diagnostics"][0]["validation_errors"])
+    assert result["provider_diagnostics"][1]["validation_errors"] == []
     correction_content = calls[1].messages[1]["content"]
     assert "projection" not in correction_content
     assert "catalogs" not in correction_content

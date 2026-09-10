@@ -16,12 +16,16 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping, Sequence
 
 from .analyzer import (
+    ANALYZER_MAX_CALLS,
     ANALYZER_CUMULATIVE_TOKEN_BUDGET,
-    ANALYZER_RESPONSE_SCHEMA,
     AnalyzerProviderConfig,
     AnalyzerProviderRequest,
     OPENROUTER_MODEL_CHAIN,
+    QUALIFICATION_STAGES,
+    build_provider_diagnostic,
     build_compact_projection,
+    build_request_specific_response_schema,
+    correction_payload,
     create_analyzer_port,
     validate_analyzer_output,
 )
@@ -30,6 +34,7 @@ from .production import ProductionRequestError, validate_production_request
 
 EVALUATION_POLICY_VERSION = "feature-h-evaluation-v1"
 REQUEST_FIXTURE_VERSION = "feature-h-request-fixtures-v1"
+QUALIFICATION_FIXTURE_VERSION = "feature-h-qualification-v1"
 HISTORICAL_BASELINE_TOKENS = 601_000
 H03_FEASIBLE_COUNT = 20
 H03_INFEASIBLE_COUNT = 10
@@ -210,11 +215,308 @@ async def evaluate_feature_h(
     return await run_h03_evaluation(source, retrieval_service)
 
 
+def load_qualification_fixture(path: str | Path) -> dict[str, Any]:
+    """Load the small, provider-neutral progressive qualification register."""
+    fixture_path = Path(path)
+    try:
+        raw = json.loads(fixture_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise EvaluationFixtureError(f"Unable to load qualification fixture {fixture_path}: {exc}") from exc
+    if not isinstance(raw, dict):
+        raise EvaluationFixtureError("Qualification fixture must be a JSON object")
+    validate_qualification_fixture(raw)
+    return raw
+
+
+def validate_qualification_fixture(fixture: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate stage order and fixture outputs with the application authority."""
+    if fixture.get("fixture_version") != QUALIFICATION_FIXTURE_VERSION:
+        raise EvaluationFixtureError("Unsupported qualification fixture version")
+    projection = fixture.get("projection")
+    if not isinstance(projection, dict):
+        raise EvaluationFixtureError("Qualification fixture projection must be an object")
+    candidate_ids = projection.get("candidate_ids")
+    if (
+        not isinstance(candidate_ids, list)
+        or not candidate_ids
+        or any(not isinstance(value, str) or not value for value in candidate_ids)
+        or len(set(candidate_ids)) != len(candidate_ids)
+    ):
+        raise EvaluationFixtureError("Qualification projection candidate_ids must be unique non-empty strings")
+    candidates = projection.get("candidates")
+    candidate_records = {
+        str(item.get("id")): item
+        for item in candidates or []
+        if isinstance(item, dict) and item.get("id")
+    }
+    if set(candidate_ids) != set(candidate_records):
+        raise EvaluationFixtureError("Qualification projection candidates must match candidate_ids")
+    allowed_swaps = projection.get("allowed_swaps", [])
+    if not isinstance(allowed_swaps, list):
+        raise EvaluationFixtureError("Qualification projection allowed_swaps must be a list")
+    for item in allowed_swaps:
+        if (
+            not isinstance(item, dict)
+            or item.get("candidate_id") not in candidate_ids
+            or not isinstance(item.get("slot"), str)
+            or not isinstance(item.get("alternative_character_id"), str)
+            or not item.get("alternative_character_id")
+        ):
+            raise EvaluationFixtureError("Every qualification swap must be backend-authorized and bounded")
+
+    stages = fixture.get("stages")
+    if not isinstance(stages, list) or [item.get("stage") for item in stages if isinstance(item, dict)] != list(QUALIFICATION_STAGES):
+        raise EvaluationFixtureError("Qualification stages must follow the progressive stage order")
+    seen_ids: set[str] = set()
+    for stage in stages:
+        if not isinstance(stage, dict):
+            raise EvaluationFixtureError("Every qualification stage must be an object")
+        stage_id = str(stage.get("stage_id") or "")
+        if not stage_id or stage_id in seen_ids:
+            raise EvaluationFixtureError("Qualification stage IDs must be present and unique")
+        seen_ids.add(stage_id)
+        if not isinstance(stage.get("request"), dict) or not isinstance(stage.get("response"), dict):
+            raise EvaluationFixtureError(f"{stage_id}: request and response must be objects")
+        _validate_qualification_response(stage["response"], stage["stage"], projection, stage_id)
+        if stage["stage"] == "correction_recovery":
+            initial = stage.get("initial_response")
+            if not isinstance(initial, dict):
+                raise EvaluationFixtureError(f"{stage_id}: correction stage requires initial_response")
+            _, _, initial_errors = validate_analyzer_output(initial, projection)
+            if not initial_errors:
+                raise EvaluationFixtureError(f"{stage_id}: initial_response must exercise application correction")
+    return dict(fixture)
+
+
+def build_qualification_request(
+    projection: Mapping[str, Any],
+    stage: Mapping[str, Any],
+    config: AnalyzerProviderConfig,
+    *,
+    call_kind: str = "initial",
+    invalid_fragments: list[dict[str, Any]] | None = None,
+) -> AnalyzerProviderRequest:
+    """Build a stage request with dynamic closed-world response constraints."""
+    stage_name = str(stage.get("stage") or "")
+    stage_id = str(stage.get("stage_id") or "qualification")
+    if call_kind == "correction":
+        content = correction_payload(dict(projection), invalid_fragments or [], [])
+        content["qualification_stage"] = stage_id
+        content["request"] = dict(stage.get("request") or {})
+    else:
+        content = {
+            "qualification_stage": stage_id,
+            "request": dict(stage.get("request") or {}),
+            "projection": dict(projection),
+        }
+    return AnalyzerProviderRequest(
+        provider=config.provider,
+        model=config.resolved_model,
+        call_kind=call_kind,
+        messages=[
+            {
+                "role": "system",
+                "content": "Return only the qualification JSON schema. Backend IDs and authorized swaps are closed-world and read-only.",
+            },
+            {"role": "user", "content": json.dumps(content, ensure_ascii=False, separators=(",", ":"))},
+        ],
+        projection_id=f"{projection.get('projection_id', 'projection:qualification')}:{stage_id}",
+        max_output_tokens=min(
+            config.initial_max_output_tokens if call_kind == "initial" else config.correction_max_output_tokens,
+            config.per_call_token_budget,
+        ),
+        response_schema=build_request_specific_response_schema(dict(projection), stage=stage_name),
+    )
+
+
+def run_qualification_suite(
+    source: str | Path | Mapping[str, Any],
+    transport: Callable[[AnalyzerProviderRequest], Any],
+    *,
+    provider: str = "openrouter",
+    model: str = "qualification-model",
+) -> dict[str, Any]:
+    """Run every progressive qualification stage through one injected port."""
+    fixture = load_qualification_fixture(source) if isinstance(source, (str, Path)) else dict(source)
+    validate_qualification_fixture(fixture)
+    projection = dict(fixture["projection"])
+    config = AnalyzerProviderConfig(provider=provider, model=model)
+    port = create_analyzer_port(config, transport)
+    stage_reports: list[dict[str, Any]] = []
+    total_tokens = 0
+    for stage in fixture["stages"]:
+        stage_id = stage["stage_id"]
+        if total_tokens >= config.cumulative_token_budget:
+            stage_reports.append({
+                "stage_id": stage_id,
+                "stage": stage["stage"],
+                "passed": False,
+                "call_count": 0,
+                "correction_used": False,
+                "application_validation_errors": [{"code": "qualification.cumulative_budget"}],
+                "provider_errors": [],
+                "diagnostics": [],
+                "schema_candidate_ids": sorted(projection["candidate_ids"]),
+                "schema_allowed_swap_count": len(projection.get("allowed_swaps", [])),
+            })
+            continue
+        diagnostics: list[dict[str, Any]] = []
+        application_errors: list[dict[str, Any]] = []
+        provider_errors: list[dict[str, Any]] = []
+        calls_before = len(port.requests)
+
+        initial_response = port.generate(build_qualification_request(projection, stage, config))
+        initial_errors, initial_provider_errors = _qualification_response_errors(
+            initial_response,
+            stage,
+            projection,
+        )
+        provider_errors.extend(initial_provider_errors)
+        initial_tokens = _usage_tokens(initial_response.usage)
+        total_tokens += initial_tokens
+        diagnostics.append(
+            build_provider_diagnostic(
+                initial_response,
+                len(port.requests),
+                "initial",
+                projection,
+                validation_errors=initial_errors,
+            )
+        )
+
+        final_response = initial_response
+        correction_used = False
+        if stage["stage"] == "correction_recovery":
+            if initial_response.output is not None and initial_errors and not initial_response.error:
+                correction_budget = min(config.correction_max_output_tokens, config.per_call_token_budget)
+                if len(port.requests) - calls_before >= ANALYZER_MAX_CALLS:
+                    application_errors.append({"code": "qualification.correction_cap"})
+                elif total_tokens + correction_budget > config.cumulative_token_budget:
+                    application_errors.append({"code": "qualification.cumulative_budget"})
+                else:
+                    correction_used = True
+                    correction_request = build_qualification_request(
+                        projection,
+                        stage,
+                        config,
+                        call_kind="correction",
+                        invalid_fragments=[{"fragment": initial_response.output, "errors": initial_errors}],
+                    )
+                    final_response = port.generate(correction_request)
+                    correction_errors, correction_provider_errors = _qualification_response_errors(
+                        final_response,
+                        stage,
+                        projection,
+                    )
+                    application_errors.extend(correction_errors)
+                    provider_errors.extend(correction_provider_errors)
+                    total_tokens += _usage_tokens(final_response.usage)
+                    diagnostics.append(
+                        build_provider_diagnostic(
+                            final_response,
+                            len(port.requests),
+                            "correction",
+                            projection,
+                            validation_errors=correction_errors,
+                        )
+                    )
+            else:
+                application_errors.append({"code": "qualification.correction_not_exercised"})
+        else:
+            application_errors.extend(initial_errors)
+
+        application_errors.extend(_qualification_budget_errors(initial_response, config, cumulative_tokens=0))
+        if final_response is not initial_response:
+            application_errors.extend(
+                _qualification_budget_errors(
+                    final_response,
+                    config,
+                    cumulative_tokens=initial_tokens,
+                )
+            )
+        stage_reports.append({
+            "stage_id": stage_id,
+            "stage": stage["stage"],
+            "passed": not application_errors and not provider_errors and correction_used is (stage["stage"] == "correction_recovery"),
+            "call_count": len(port.requests) - calls_before,
+            "correction_used": correction_used,
+            "application_validation_errors": application_errors,
+            "provider_errors": provider_errors,
+            "diagnostics": diagnostics,
+            "schema_candidate_ids": sorted(projection["candidate_ids"]),
+            "schema_allowed_swap_count": len(projection.get("allowed_swaps", [])),
+        })
+    return {
+        "evaluation_version": EVALUATION_POLICY_VERSION,
+        "qualification_fixture_version": fixture["fixture_version"],
+        "provider": provider,
+        "model": model,
+        "fallback_enabled": False,
+        "analyzer_call_count": len(port.requests),
+        "total_tokens": total_tokens,
+        "within_cumulative_budget": total_tokens <= config.cumulative_token_budget,
+        "stages": stage_reports,
+        "all_passed": bool(stage_reports) and all(item["passed"] for item in stage_reports),
+    }
+
+
+def _validate_qualification_response(output, stage, projection, stage_id):
+    _, _, errors = validate_analyzer_output(output, projection)
+    errors = [*errors, *_qualification_shape_errors(output, stage)]
+    if errors:
+        raise EvaluationFixtureError(
+            f"{stage_id}: response is not a valid {stage} qualification output: {errors[0].get('code')}"
+        )
+
+
+def _qualification_response_errors(response, stage, projection):
+    if response.error or response.output is None:
+        return [], [{"code": (response.error or {}).get("code", "provider.empty_response")}]
+    _, _, validation_errors = validate_analyzer_output(response.output, projection)
+    return [*validation_errors, *_qualification_shape_errors(response.output, stage["stage"])], []
+
+
+def _qualification_shape_errors(output, stage):
+    errors: list[dict[str, Any]] = []
+    if not isinstance(output, dict):
+        return [{"code": "qualification.shape.object"}]
+    missing = sorted({"ranked_candidate_ids", "refinements", "advisories"} - set(output))
+    errors.extend({"code": "qualification.shape.missing_field", "field": field} for field in missing)
+    if stage == "ranking_only" and (output.get("refinements") != [] or output.get("advisories") != []):
+        errors.append({"code": "qualification.ranking_only_shape"})
+    if stage == "ranking_refinement_no_swap":
+        if not output.get("refinements") or any(
+            item.get("swap") is not None for item in output["refinements"] if isinstance(item, dict)
+        ):
+            errors.append({"code": "qualification.refinement_swap_present"})
+    if stage == "authorized_swap":
+        if not output.get("refinements") or not any(
+            item.get("swap") is not None for item in output["refinements"] if isinstance(item, dict)
+        ):
+            errors.append({"code": "qualification.authorized_swap_missing"})
+    if stage == "swap_abstention" and any(
+        item.get("swap") is not None for item in output.get("refinements", []) if isinstance(item, dict)
+    ):
+        errors.append({"code": "qualification.swap_abstention_failed"})
+    return errors
+
+
+def _qualification_budget_errors(response, config, *, cumulative_tokens):
+    observed = _usage_tokens(response.usage)
+    errors = []
+    if observed > config.per_call_token_budget:
+        errors.append({"code": "qualification.per_call_budget"})
+    if cumulative_tokens + observed > config.cumulative_token_budget:
+        errors.append({"code": "qualification.cumulative_budget"})
+    return errors
+
+
 def qualify_openrouter_models(
     bundle: Mapping[str, Any],
     transport: Callable[[AnalyzerProviderRequest], Any],
     *,
     models: Iterable[str] = OPENROUTER_MODEL_CHAIN,
+    qualification_fixture: str | Path | Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Qualify each OpenRouter model independently against one strict fixture.
 
@@ -225,6 +527,37 @@ def qualify_openrouter_models(
     requested_models = tuple(str(model).strip() for model in models if str(model).strip())
     results: list[dict[str, Any]] = []
     for model in requested_models:
+        if qualification_fixture is not None:
+            qualification = run_qualification_suite(
+                qualification_fixture,
+                transport,
+                provider="openrouter",
+                model=model,
+            )
+            results.append({
+                "model": model,
+                "passed": qualification["all_passed"],
+                "strict_output": qualification["all_passed"],
+                "authority_valid": not any(
+                    stage["provider_errors"] or any(
+                        str(error.get("code", "")).startswith("authority.")
+                        for error in stage["application_validation_errors"]
+                    )
+                    for stage in qualification["stages"]
+                ),
+                "served_model": None,
+                "served_model_status": "reported_in_stage_diagnostics" if qualification["all_passed"] else "unavailable",
+                "fallback": None,
+                "usage": {"total_tokens": qualification["total_tokens"]},
+                "metadata_availability": {"qualification": "reported"},
+                "qualification": qualification,
+                "errors": [
+                    error
+                    for stage in qualification["stages"]
+                    for error in [*stage["application_validation_errors"], *stage["provider_errors"]]
+                ],
+            })
+            continue
         config = AnalyzerProviderConfig(provider="openrouter", model=model)
         port = create_analyzer_port(config, transport)
         request = AnalyzerProviderRequest(
@@ -237,12 +570,14 @@ def qualify_openrouter_models(
             ],
             projection_id=projection["projection_id"],
             max_output_tokens=config.initial_max_output_tokens,
-            response_schema=ANALYZER_RESPONSE_SCHEMA,
+            response_schema=build_request_specific_response_schema(projection, stage="full_contract"),
         )
         response = port.generate(request)
         valid, invalid, errors = validate_analyzer_output(response.output, projection) if response.output is not None else ([], [], [])
+        application_errors = list(errors)
         if response.error:
-            errors = [*errors, {"code": response.error.get("code", "provider.error"), "message": response.error.get("message", "Provider error")}]
+            errors = [*application_errors, {"code": response.error.get("code", "provider.error"), "message": response.error.get("message", "Provider error")}]
+        diagnostic = build_provider_diagnostic(response, 1, "initial", projection, validation_errors=application_errors)
         metadata = _metadata_availability(response.usage, response.served_model)
         results.append({
             "model": model,
@@ -254,6 +589,7 @@ def qualify_openrouter_models(
             "fallback": response.fallback,
             "usage": dict(response.usage),
             "metadata_availability": metadata,
+            "diagnostics": [diagnostic],
             "errors": errors,
         })
     return {
@@ -617,14 +953,19 @@ __all__ = [
     "EVALUATION_POLICY_VERSION",
     "EvaluationCase",
     "EvaluationFixtureError",
+    "QUALIFICATION_FIXTURE_VERSION",
+    "build_qualification_request",
     "build_openrouter_fallback_config",
     "classify_analyzer_run",
     "evaluate_feature_h",
     "load_evaluation_cases",
     "load_evaluation_fixture",
+    "load_qualification_fixture",
     "qualify_openrouter_models",
+    "run_qualification_suite",
     "run_h03_evaluation",
     "summarize_analyzer_usage",
     "summarize_analyzer_run",
+    "validate_qualification_fixture",
     "validate_evaluation_fixture",
 ]
