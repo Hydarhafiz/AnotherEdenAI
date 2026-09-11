@@ -26,6 +26,7 @@ ANALYZER_PER_CALL_TOKEN_BUDGET = 20_000
 ANALYZER_CUMULATIVE_TOKEN_BUDGET = 40_000
 ANALYZER_DIAGNOSTIC_OUTPUT_MAX_CHARS = 12_000
 QUALIFICATION_SCHEMA_PAIR_LIMIT = 64
+ANALYZER_REASONING_EFFORTS = ("none", "low", "minimal", "medium", "high", "xhigh", "max")
 OPENROUTER_MODEL_CHAIN = (
     "deepseek/deepseek-v4-flash-0731",
     "openai/gpt-5.6-luna",
@@ -249,6 +250,7 @@ class AnalyzerProviderConfig:
     initial_max_output_tokens: int = 4000
     correction_max_output_tokens: int = 2000
     temperature: float = 0.0
+    reasoning_effort: Literal["none", "low", "minimal", "medium", "high", "xhigh", "max"] | None = None
     fallback_models: tuple[str, ...] = ()
     per_call_token_budget: int = ANALYZER_PER_CALL_TOKEN_BUDGET
     cumulative_token_budget: int = ANALYZER_CUMULATIVE_TOKEN_BUDGET
@@ -256,6 +258,8 @@ class AnalyzerProviderConfig:
     def __post_init__(self) -> None:
         if self.provider not in {"deepseek", "openrouter"}:
             raise ValueError("provider must be deepseek or openrouter")
+        if self.reasoning_effort is not None and self.reasoning_effort not in ANALYZER_REASONING_EFFORTS:
+            raise ValueError("reasoning_effort must be a supported OpenRouter effort or None")
         fallback_models = tuple(str(model).strip() for model in self.fallback_models if str(model).strip())
         if self.provider != "openrouter" and fallback_models:
             raise ValueError("fallback_models are supported only for OpenRouter")
@@ -285,6 +289,7 @@ class AnalyzerProviderRequest:
     projection_id: str
     max_output_tokens: int
     response_schema: dict[str, Any] = field(default_factory=lambda: ANALYZER_RESPONSE_SCHEMA)
+    reasoning_effort: str | None = None
     fallback_models: tuple[str, ...] = ()
 
     @property
@@ -306,6 +311,8 @@ class AnalyzerProviderRequest:
         }
         if self.fallback_models:
             payload["models"] = list(self.fallback_models)
+        if self.reasoning_effort is not None:
+            payload["reasoning"] = {"effort": self.reasoning_effort}
         return payload
 
 
@@ -548,12 +555,21 @@ def correction_payload(
     }
 
 
-def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: AnalyzerAdapter | None = None) -> dict[str, Any]:
+def run_bounded_analyzer(
+    state: dict[str, Any],
+    bundle: dict[str, Any],
+    port: AnalyzerAdapter | None = None,
+    *,
+    projection: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Run one initial call and at most one fragment-only correction call."""
-    projection = build_compact_projection(bundle, user_query=state.get("user_query", ""))
+    projection = projection or build_compact_projection(bundle, user_query=state.get("user_query", ""))
     config = AnalyzerProviderConfig(
         provider=state.get("analyzer_provider", "openrouter"),
         model=state.get("analyzer_model"),
+        initial_max_output_tokens=int(state.get("analyzer_initial_max_output_tokens", 4000)),
+        correction_max_output_tokens=int(state.get("analyzer_correction_max_output_tokens", 2000)),
+        reasoning_effort=state.get("analyzer_reasoning_effort"),
         fallback_models=tuple(state.get("analyzer_fallback_models") or ()),
         per_call_token_budget=int(state.get("analyzer_per_call_token_budget", ANALYZER_PER_CALL_TOKEN_BUDGET)),
         cumulative_token_budget=int(state.get("analyzer_cumulative_token_budget", ANALYZER_CUMULATIVE_TOKEN_BUDGET)),
@@ -598,6 +614,7 @@ def run_bounded_analyzer(state: dict[str, Any], bundle: dict[str, Any], port: An
             candidate_errors=candidate_errors,
             provider_diagnostics=provider_diagnostics,
             provider=config,
+            projection=projection,
         )
 
     valid, pending_invalid, errors = validate_analyzer_output(response.output, projection)
@@ -740,6 +757,7 @@ def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_cou
             candidate_errors=candidate_errors,
             provider_diagnostics=provider_diagnostics,
             provider=provider,
+            projection=projection,
         )
     resolved = resolve_candidate_recommendations(proposals[:3], bundle, warnings)
     resolved["degraded"] = degraded
@@ -759,11 +777,24 @@ def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_cou
     }
 
 
-def _degraded_result(bundle, warnings, *, reason, call_count, correction_rounds, usage_rows, structured_errors, candidate_errors, provider_diagnostics, provider):
+def _degraded_result(
+    bundle,
+    warnings,
+    *,
+    reason,
+    call_count,
+    correction_rounds,
+    usage_rows,
+    structured_errors,
+    candidate_errors,
+    provider_diagnostics,
+    provider,
+    projection=None,
+):
     warnings = [*warnings, f"Analyzer degraded mode: {reason}. Backend candidates remain authoritative."]
     return _render_result(
         bundle=bundle,
-        projection=build_compact_projection(bundle),
+        projection=projection or build_compact_projection(bundle),
         frozen={},
         ranked_ids=[],
         warnings=warnings,
@@ -788,6 +819,7 @@ def _provider_request(config, *, call_kind, projection_id, content):
             config.initial_max_output_tokens if call_kind == "initial" else config.correction_max_output_tokens,
             config.per_call_token_budget,
         ),
+        reasoning_effort=config.reasoning_effort,
         fallback_models=config.fallback_models,
         messages=[
             {

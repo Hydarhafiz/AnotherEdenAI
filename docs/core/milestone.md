@@ -1237,6 +1237,85 @@ Technical requirements:
 - Preserve the ~601k failure as a recorded baseline artifact.
 - Export sanitized, deterministically valid recommendation samples for portfolio evidence and possible later Discord feedback; do not make Discord participation an H gate and do not use an AI judge.
 
+#### Evaluation sub-feature H1: Neo4j-backed analyzer reasoning comparison
+
+Status: Complete on 2026-09-11 as a small real-data quality/cost/reliability
+evaluation harness under Feature H. It is not a production analyzer
+configuration change. The first paid Neo4j/OpenRouter run remains a separate
+human checkpoint and was not executed by this feature.
+
+Route: `builder-executor -> tdd-loop` after this contained contract refinement;
+the first real-data run remains a separate human checkpoint.
+
+H1 compares the same Neo4j-backed production scenario through the existing typed
+retrieval, deterministic legality/scoring, bounded lineup generation, and compact
+analyzer projection with two explicitly constructed OpenRouter requests:
+
+- Baseline A: `deepseek/deepseek-v4-flash-0731`, reasoning `none`, maximum output
+  4,000 tokens.
+- Variant B: `deepseek/deepseek-v4-flash-0731`, reasoning `low`, maximum output
+  8,000 tokens, unless the provider boundary requires an equivalent bounded
+  value.
+
+The harness generates or accepts one deterministic candidate bundle/projection
+per scenario and reuses equivalent input for both independent runs. It must not
+send a full roster or item catalog to the analyzer, enable provider fallback,
+change production defaults, weaken closed-world IDs, swaps, legality,
+correction, schema, degraded-mode, or cumulative-budget contracts, or execute a
+paid request during normal tests. It records bounded sanitized attempt metadata,
+validation outcomes, selected candidates/skills/swaps, advisories, and objective
+comparison deltas in a machine-readable report with a side-by-side manual-review
+shape. Real-data scenario selection is limited initially to roughly five to
+eight existing Neo4j cases; unsupported matchup categories are reported rather
+than fabricated.
+
+Acceptance criteria:
+
+- **H1-01:** Baseline and variant configs are constructed with the exact model,
+  reasoning, and bounded output settings; reasoning is present in each provider
+  payload and no fallback array is emitted.
+- **H1-02:** Both runs receive equivalent compact projections from one
+  deterministic backend preparation, with no full-roster/catalog leakage.
+- **H1-03:** Each scenario permits at most one initial call plus the existing
+  bounded correction behavior per configuration, preserves all Feature H
+  authority gates, and never invokes paid transport from offline tests.
+- **H1-04:** Reports capture scenario/configuration, projection size, token and
+  cost/latency metadata when available, finish/provider status, validation and
+  correction outcomes, ranking/skills/swaps, and cumulative-budget status
+  without secrets or unbounded provider bodies.
+- **H1-05:** Objective comparison fields and side-by-side A/B report aggregation
+  cover ranking, top candidate, swap, closed-world IDs, skill validity, and
+  token/cost/latency deltas while leaving strategic quality to manual review.
+- **H1-06:** Offline tests cover configuration/payload construction, equivalent
+  projection, aggregation, provider/validation errors, budget bounds, and paid
+  transport isolation; existing workflow regressions remain green.
+- **H1-07:** Documentation gives the exact opt-in paid evaluation command,
+  estimated initial call count, report shape, and a recommended first set of
+  five to eight real Neo4j scenario categories; the comparison does not select
+  a production winner.
+
+H1 operator handoff:
+
+- Exact command (not executed by implementation or offline verification):
+  .venv/bin/python scripts/evaluate_feature_h1.py --request-fixture tests/fixtures/evaluation/feature_h_requests.json --case-id H-F01 --case-id H-F03 --case-id H-F05 --case-id H-F08 --case-id H-F12 --case-id H-F13 --case-id H-F18 --case-id H-F20 --output /tmp/anothereden-feature-h1.json
+- The initial eight-case run estimates 16 initial OpenRouter calls. Existing
+  correction behavior can add at most one application correction per arm and
+  scenario, for a maximum of 32 application calls; provider fallback is not
+  configured. The command requires the user to provide OPENROUTER_API_KEY,
+  NEO4J_URI, and NEO4J_AUTH at invocation time; values never enter the report.
+- The report contains one shared projection fingerprint and backend ranking
+  context per scenario, then side-by-side baseline_a and variant_b records
+  with request shapes, bounded provider diagnostics, validation/correction
+  status, ranking, top recommendation, skills, swaps, advisories, risks,
+  usage/cost/latency metadata, and objective deltas. Strategic quality remains
+  manual_review_required; winner is always null.
+- The first cohort deliberately reuses the reviewed H request fixture:
+  H-F01, H-F03, H-F05, H-F08, H-F12, H-F13, H-F18, and H-F20.
+  Reviewers should use these to look for weakness, resistance/nullification,
+  neutral/no-weakness, sustain/mitigation, burst, beneficial-swap, and
+  swap-abstention behavior only where the retrieved Neo4j facts support the
+  category. Unsupported categories must be recorded, not fabricated.
+
 Acceptance criteria:
 
 - **H-01:** Hard legality and out-of-bundle ID gates pass 100%.
