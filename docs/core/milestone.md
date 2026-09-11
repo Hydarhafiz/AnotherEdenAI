@@ -1240,9 +1240,12 @@ Technical requirements:
 #### Evaluation sub-feature H1: Neo4j-backed analyzer reasoning comparison
 
 Status: Complete on 2026-09-11 as a small real-data quality/cost/reliability
-evaluation harness under Feature H. It is not a production analyzer
-configuration change. The first paid Neo4j/OpenRouter run remains a separate
-human checkpoint and was not executed by this feature.
+evaluation harness under Feature H. Human review of the first eight-case run
+records DeepSeek `reasoning=none` with a 4,000-token cap as the provisional
+operational winner for this comparison because it produced more valid final
+responses at lower reported cost. This is not a production analyzer
+configuration change; strategic recommendation quality remains the H2
+checkpoint.
 
 Route: `builder-executor -> tdd-loop` after this contained contract refinement;
 the first real-data run remains a separate human checkpoint.
@@ -1308,7 +1311,7 @@ H1 operator handoff:
   with request shapes, bounded provider diagnostics, validation/correction
   status, ranking, top recommendation, skills, swaps, advisories, risks,
   usage/cost/latency metadata, and objective deltas. Strategic quality remains
-  manual_review_required; winner is always null.
+  manual_review_required; the harness does not auto-select a winner.
 - The first cohort deliberately reuses the reviewed H request fixture:
   H-F01, H-F03, H-F05, H-F08, H-F12, H-F13, H-F18, and H-F20.
   Reviewers should use these to look for weakness, resistance/nullification,
@@ -1326,6 +1329,110 @@ Acceptance criteria:
 - **H-06:** Reports distinguish backend failures, analyzer structure/refinement failures, OpenRouter transport failures, model/provider fallback selection, local validation failure, budget degradation, and readiness for later human review.
 - **H-07:** The ordered fallback chain is exercised only after all three models pass independent strict-output and authority gates; no AI judge call exists in the evaluation or public portfolio path.
 - **H-08:** H evidence records the exact kit-corpus, receipt, capability, package-policy, allocation-policy, search-policy, boss-fixture, and request-fixture versions used; fake-runner or synthetic unit success alone cannot satisfy H-03.
+
+H1 human-review result:
+
+- The eight-case run made 16 initial calls with no provider fallback or
+  correction calls. Baseline A had 6/8 valid final responses and reported cost
+  `0.01055758`; Variant B had 3/8 valid final responses and reported cost
+  `0.03000612`. Latency metadata was unavailable.
+- The reviewer therefore records `reasoning=none`, 4,000 tokens as the
+  provisional DeepSeek operational winner for H1. This decision is limited to
+  reliability/cost evidence from the sampled run and does not claim strategic
+  superiority or authorize a production setting change.
+- All eight scenarios were marked degraded because the real projections
+  exceeded the analyzer's 20,000-token per-call ceiling. H2 must surface this
+  input-budget observation and make strategic review practical without trying
+  to solve projection compression.
+
+#### Evaluation sub-feature H2: Human-readable recommendation validation
+
+Status: Complete on 2026-09-11 as the offline-first follow-up to H1. H2 does
+not make paid provider calls, change DeepSeek settings, add an LLM judge,
+redesign candidate generation, or claim that a lineup will clear a boss. Its
+strongest supported claim is modeled viability according to authoritative boss
+facts, affinity, role coverage, setup dependencies, mitigation, and validated
+game-data evidence. The first real H2 Markdown artifact remains a human
+checkpoint generated from the user's H1 JSON report.
+
+Route: `feature-planner -> builder-executor -> tdd-loop`.
+
+H2 generates a bounded Markdown review artifact from an H1 JSON report or an
+equivalent real evaluation report, by default at
+`/tmp/anothereden-feature-h2-review.md`. It resolves internal character and
+skill IDs wherever the supplied report/evidence makes names available and
+keeps compact evidence references to Neo4j fact IDs, skill/passive IDs, boss
+facts, and existing citations. It does not dump the full projection or require
+the reviewer to inspect opaque hashes and thousands of JSON lines.
+
+Every scenario contains four explicit review gates with `PASS`, `FAIL`,
+`REVIEW`, or `UNKNOWN` status:
+
+1. Damage affinity and elemental viability: explicit boss Weak/Resist/Null/
+   Absorb facts override generic relationships; primary damage must be neutral
+   or better, while missing evidence is `UNKNOWN`/`REVIEW`. Any elemental cycle
+   or attack/defense relationship must come from the project's authoritative
+   taxonomy rather than an unverified hard-coded assumption.
+2. Boss mechanic counter coverage: map supplied boss threats to concrete team
+   capabilities and evidence, distinguishing mandatory counters, useful
+   coverage, and unsupported mechanics.
+3. Team synergy and role coherence: expose the primary win condition, each
+   character's placement and purpose, reserve rationale, role duplication, and
+   materially indistinguishable archetypes.
+4. Setup executability: map every relevant dependency to a teammate, self,
+   system/player action, missing provider, or unknown evidence; important
+   unsatisfied dependencies cannot receive a clean pass.
+
+H2 also reports candidate diversity per scenario: candidate count, unique
+character/frontline sets, unique archetypes, identical total/component scores,
+set overlap when practical, ordering-only differences, and archetype
+differentiation warnings. It diagnoses candidate-generation issues without
+redesigning scoring.
+
+The end of each scenario contains a short manual checklist and bounded
+verdict choices such as strong, plausible, weak, or reject. Overall wording
+must remain modeled viability/quality and must explicitly state that no combat
+simulation, turn-by-turn calculation, or gameplay clear has been performed.
+
+Acceptance criteria:
+
+- **H2-01:** A separate offline report generator transforms H1-shaped input
+  into bounded, readable Markdown with one concise section per scenario and a
+  compact JSON companion only if useful.
+- **H2-02:** Character and skill IDs resolve to names wherever authoritative
+  names are available; unresolved IDs remain explicit and do not become
+  fabricated names.
+- **H2-03:** All four gates expose evidence-backed statuses, preserve explicit
+  Weak/Resist/Null/Absorb precedence, distinguish missing evidence from a
+  pass, and retain concise traceability references.
+- **H2-04:** Boss threats map to concrete counter capabilities and setup
+  dependencies map to providers with clear missing/unknown distinctions.
+- **H2-05:** Candidate diversity and archetype-differentiation warnings detect
+  same-character-set, same-score, same-component-vector, and ordering-only
+  candidates without changing production scoring.
+- **H2-06:** Each scenario includes a usable manual checklist, bounded modeled
+  viability wording, and observed analyzer input-budget status; no guaranteed
+  clear or fake probability is emitted.
+- **H2-07:** Offline tests cover report generation, ID resolution, all gate
+  statuses, evidence precedence, authoritative element handling, threat and
+  setup mappings, diversity warnings, bounded Markdown, and paid-transport /
+  production-setting isolation. Existing workflow regressions remain green.
+- **H2-08:** Documentation gives the exact command to generate a review from
+  the existing H1 report, expected output path, example scenario shape,
+  candidate-diversity findings, and known taxonomy/data gaps. Projection
+  compression remains a recorded follow-up rather than H2 scope.
+
+H2 verification and human checkpoint:
+
+- Offline verification passed with 8 focused H2 tests, 292 workflow tests
+  (excluding the graph integration test), and 163 unit tests. CLI help and
+  Python compilation also passed; no paid provider, Neo4j, or production
+  configuration call was made.
+- The H1 JSON is created only when the documented H1 command is run and is
+  written to `/tmp/anothereden-feature-h1.json`; it is not stored in the
+  repository. Run the documented H2 command afterward to create
+  `/tmp/anothereden-feature-h2-review.md`, then record the human verdict and
+  notes in that local Markdown artifact.
 
 ### Feature I: Reusable Guidance And Portfolio-Preview Safeguards
 

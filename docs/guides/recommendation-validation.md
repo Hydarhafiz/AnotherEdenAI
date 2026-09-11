@@ -336,3 +336,48 @@ output when safe, usage, allowed candidate IDs, relevant allowed swaps, and
 application-validation errors. These tests do not call a paid model; a live
 DeepSeek qualification must use the same register only after its separate human
 checkpoint.
+
+## 12. Generate the Feature H2 human-readable review
+
+Feature H2 is an offline report transformer for the sanitized H1 JSON result.
+It does not call Neo4j, OpenRouter, or another model, and it does not change
+production analyzer settings. Generate the Markdown review with:
+
+```bash
+.venv/bin/python scripts/evaluate_feature_h2.py \
+  --h1-report /tmp/anothereden-feature-h1.json \
+  --output /tmp/anothereden-feature-h2-review.md
+```
+
+The output is a bounded, one-to-three-minute-per-scenario review document. It
+shows the selected DeepSeek `baseline_a` recommendation by default, the H1
+comparison signals, the backend candidates, four modeled-viability gates, the
+candidate-diversity audit, analyzer input-budget status, and a short manual
+checklist. Use `--variant variant_b` only when reviewing the H1 comparison arm
+separately.
+
+H1 intentionally retains only bounded projection summaries. If a scenario
+needs names or boss facts that are absent from H1, pass an optional sanitized
+context sidecar:
+
+```bash
+.venv/bin/python scripts/evaluate_feature_h2.py \
+  --h1-report /tmp/anothereden-feature-h1.json \
+  --context /path/to/sanitized-h2-context.json \
+  --output /tmp/anothereden-feature-h2-review.md
+```
+
+The sidecar may contain `scenarios` keyed by scenario ID, each with `boss`,
+`characters`, `candidates`, `threats`, `dependency_providers`, and
+`element_relationships`. Element relationships must carry authoritative
+evidence; H2 never assumes a generic Fire/Wind cycle when the source does not
+provide one. Missing names, affinities, threats, or setup providers are shown
+as `UNKNOWN` or `REVIEW`, never as an invented pass.
+
+The four gates are damage affinity, boss-mechanic counter coverage, team
+synergy/role coherence, and setup executability. The report may conclude that
+a lineup is modeled as plausible or well-matched, but it must not claim a
+guaranteed clear, exact win probability, turn-by-turn damage result, or actual
+gameplay success. The generated Markdown and any context sidecar are local or
+generated evaluation material and should not be committed as application
+source.
