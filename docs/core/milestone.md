@@ -6,6 +6,8 @@ Status: Active as of 2026-09-14. Milestone 5 is closed through an approved scope
 
 Milestone 6 expands recommendation-ready, high-value strategic evidence across all 367 canonical character forms/styles and improves meaningful candidate diversity. It does not attempt to model every mechanic, prove a globally optimal team, predict a clear, or replace conservative evidence review with inference.
 
+Plan revision approved 2026-09-15: preserve completed A-C and insert C1 (structural evidence and bounded references) and C2 (scoped classification and review-reduction evaluation) before D. The sequence is A → B → C → C1 → C2 → D → E → F → G. C1/C2 implementation remains unstarted; this approval records the planning boundary only. D's numeric coverage floors and E-G contracts remain unchanged.
+
 The product claim is:
 
 > AnotherEdenAI generates legal, boss-aware, evidence-backed lineup candidates from the player's available roster and explains why they are strategically plausible.
@@ -52,6 +54,8 @@ Milestone 6 includes:
 - an authoritative baseline of catalog, capability, search-funnel, and candidate-diversity coverage;
 - boss-driven prioritization from the existing thirty-boss corpus;
 - deterministic high-value capability proposals attempted across all 367 canonical forms/styles;
+- source-faithful structural evidence and bounded resolution of combat-relevant child definitions before selective review;
+- scoped classification and a reproducible comparison of extraction accuracy and review effort;
 - selective human review of ambiguous, high-impact, recurring, and boss-acceptance-relevant facts;
 - conservative materialization of proven evidence with explicit unknown and ambiguous states;
 - request-time pool and candidate-set diagnostics;
@@ -308,7 +312,7 @@ Completion evidence:
 
 ### Feature C: Full-Catalog High-Value Extraction
 
-Status: Completed on 2026-09-14; stopped at the planned human-review handoff to Feature D.
+Status: Completed on 2026-09-14. Its accepted extraction baseline is preserved; the approved 2026-09-15 revision inserts C1/C2 before the Feature D review handoff.
 
 Type and route: `build` via `builder-executor -> tdd-loop`.
 
@@ -331,13 +335,61 @@ Completion evidence:
 - Existing review decisions (323 IDs), gold/negative fixtures (12 IDs), taxonomy overrides (9), the immutable Feature A baseline fingerprint and metrics, proposal IDs, direction/target/availability/qualifier fields, and replay digest are preserved. A second identical pass produces the same proposal digest.
 - Generated proposals are marked non-authoritative. No scoring, mandatory coverage, retrieval, search, packaging/allocation, persisted schema, provider/live refresh, production configuration, Neo4j state, or supported-character subset changed. Feature D must perform the bounded human review and normal approve/correct/reject/ambiguous materialization path.
 
+### Feature C1: Structural Evidence And Bounded References
+
+Status: Planned after Feature C; implementation unstarted.
+
+Type and route: `build` via `builder-executor -> tdd-loop`; refine the contained parser and traversal contract with `feature-planner` before execution.
+
+Outcome: Preserve the combat-bearing source arrangement and relevant definition links in a separately versioned structural sidecar bound to existing source-fact IDs and pinned captures.
+
+Scope: Character active/passive/SA and sidekick auto/charge/aura adapters share a small ordered block/token representation. Preserve section/tab context, list ancestry, table cells, meaningful line boundaries, inline links and icon identity. Definitions, conditions, results and exceptions are interpretations of source structure, not automatic meanings of HTML nesting. Include bounded mechanics-child resolution and small boss/equipment generalization fixtures.
+
+Non-goals: Broad semantic classification, automatic approval, graph migration, full equipment/badge ingestion, new supported bosses, exhaustive ontology, formula execution, paid providers, frontend or production mutation.
+
+Entry gate: Use the accepted C catalog and A/B/C evidence; reconcile source captures to catalog provenance and inventory relevant link topology before choosing traversal limits.
+
+Acceptance:
+
+- **C1-01:** Structural blocks and inline references retain order, parent context and traceable locations in checksum-identified sources. Unsupported/malformed structures produce explicit diagnostics; simple kits do not require artificial semantic nesting.
+- **C1-02:** Sidecar bindings preserve existing fact and family identities, legacy descriptions, legal-kit output and 367/367 completeness. Structural coverage reports denominators and unresolved mappings by source kind; failed mappings never become absence.
+- **C1-03:** Combat-bearing child references are retained and either resolved to captured definitions or explicitly unresolved. Canonical page deduplication preserves fragments and occurrence context; destination classification uses source content rather than URL spelling alone.
+- **C1-04:** Traversal starts from admitted combat fields and follows only definition/restriction dependencies needed for interpretation. A deterministic frontier, visited set and explicit page/depth budgets bound work; exclusion, access failure and budget exhaustion are distinguishable. Audit actual topology before selecting numeric limits. Lore, galleries, acquisition walkthroughs and unrelated entity lists do not expand the frontier.
+- **C1-05:** Fixtures cover Darunis/Denny, Iphi, Alma AS, Anabel ES, Shigure ES, Tetra AS and Kumos AS; named resource and Lunatic-family definitions require captured evidence. Existing manifest bosses and cached equipment/Grasta rows test shared structural handling. An-ki Dingir and Edaxian Zennon are supplemental witnesses only, pending capture, and do not enter the thirty-boss corpus.
+- **C1-06:** Preserve entity ownership versus mechanic definitions, role/index discovery and strategy authority boundaries. Keep reusable authoritative fixtures and source identities; ignore generated sidecars and crawl/comparison output. No generated definition becomes capability authority.
+
+Exit and human checkpoints: Traceable structural output, legacy-equivalence evidence and a documented traversal boundary are required before C2. Ask only for a material source conflict, a required definition that cannot be established, or a reopened architecture boundary. Unresolved lower-value links may remain explicit. One completed-feature commit contains durable implementation, fixtures and necessary documentation.
+
+### Feature C2: Scoped Classification And Review-Reduction Evaluation
+
+Status: Planned after Feature C1; implementation unstarted.
+
+Type and route: `build` via `builder-executor -> tdd-loop`; use `feature-planner` for the contained occurrence-identity and comparison contract, with a read-only compatibility audit where review meaning is disputed.
+
+Outcome: Bind capability/dependency proposals to individual effects and their conditions, recipients, timing and parameters, then demonstrate whether structural evidence reduces correction work before D.
+
+Scope: Use C1 evidence for the existing boss-prioritized high-value families. Distinguish repeated occurrences, definitions and exceptions; represent referenced concepts/resources separately from capability IDs. Preserve existing review authority and materialization compatibility through explicit occurrence mapping.
+
+Non-goals: Automatic approval, one capability ID per named resource, taxonomy expansion without boss-driven evidence, formula simulation, scoring/search changes, broad equipment/boss extraction, or a schema migration merely to store intermediate evidence.
+
+Acceptance:
+
+- **C2-01:** Source-backed positive, misleading-negative and held-out witnesses verify recipient/direction, trigger, magnitude/duration/activation scope, nested conditions and dependency/result separation. Definitions do not independently grant effects; coordinated prose still requires scoped interpretation even when no list exists.
+- **C2-02:** Existing IDs and decisions carry forward only for semantically unchanged occurrences. Splits have explicit old-to-new mappings; approvals never silently fan out. Changed recipient, condition, timing, parameter or source meaning requires review. Preserve explicit clears, overrides, gold/negative fixtures and rejection protection; unresolved compatibility cannot silently alter authoritative output.
+- **C2-03:** Compare the flattened pipeline, structural parsing without child resolution, and structural parsing with admitted child definitions on fixed source/catalog/taxonomy-scope/review snapshots. Preserve committed C as the historical extraction baseline and separately identify current reviews. Source refresh is a separate experiment, not parser improvement.
+- **C2-04:** Report proposal precision/recall against independently adjudicated effect occurrences; field and condition-attachment errors; structural and semantic-link coverage with denominators; deduplicated strategically material pending work; corrections and review time per accepted fact; effort toward D floors; prior-review regressions; and deterministic digests within each version. Use historical corrections for development and hold out character/mechanic families for evaluation.
+- **C2-05:** Distinguish automatically extracted, fully supported proposals from reviewed proven facts. Unknown counts and capped 45-row queue lengths alone cannot establish review reduction. Demonstrate improvement on identified failure classes without weakening existing safety gates; do not invent a percentage reduction target. Any operational effort target must follow measured evidence.
+- **C2-06:** Preserve 367/367 legal-kit completeness and every semantic state. Existing authoritative evidence is retained or explicitly reviewed for supersession. Separate historical baseline assertions from mutable current-review invariants in tests. Retain only reusable regressions, authoritative fixtures and accepted comparison evidence.
+
+Exit and human checkpoint: Present measured benefit, source gaps, semantic migration and remaining review burden for acceptance before D. If benefit is not demonstrated, revisit rollout instead of declaring review reduction or relaxing coverage floors. One completed-feature commit contains the verified change and durable evaluation evidence.
+
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 
-Status: Planned after Feature C.
+Status: Planned after Feature C2 and acceptance of its comparison evidence.
 
-Type and route: `build` via `builder-executor -> tdd-loop`, with required human review only for the bounded queues admitted by C.
+Type and route: `build` via `builder-executor -> tdd-loop`, with required human review for the bounded strategically material queues produced through C2.
 
-Outcome: Resolve the strategically material review set, replay authoritative artifacts, and meet the evidence-based coverage thresholds approved after Feature A.
+Outcome: Resolve the structurally grounded material review set, including changed-semantic occurrences, replay authoritative artifacts, and meet the evidence-based coverage thresholds approved after Feature A.
 
 Acceptance:
 
@@ -346,6 +398,7 @@ Acceptance:
 - **D-03:** Unknown and ambiguous evidence remains explicit and non-authoritative.
 - **D-04:** All 367 data-complete forms/styles remain legally selectable; no supported-character subset is introduced.
 - **D-05:** Rejected and negative fixtures remain effective against recurring false positives.
+- **D-06:** Materialized evidence traces to the admitted source spans, definition captures and extraction versions. Prior approvals survive only through verified unchanged meaning or explicit re-review; unresolved links or interpretations grant no authority. Persisted-shape changes, if actually necessary, require explicit schema admission rather than an incidental migration.
 
 ### Feature E: Search-Funnel And Diversity Diagnostics
 
@@ -401,6 +454,7 @@ Milestone 6 completes only when:
 
 - all 367 canonical forms/styles remain legal-kit complete and legally eligible when owned and data-complete;
 - high-value capability extraction has been attempted across the full catalog;
+- C1 structural provenance and bounded-reference gates pass, and C2's measured classification benefit, compatibility evidence and remaining review burden are accepted before D;
 - unknown, ambiguous, rejected, untagged, and proven-absence semantics remain distinct;
 - evidence-based thresholds approved after Feature A are met across the strategic coverage dimensions relevant to the thirty-boss corpus;
 - boss-eligible pools are large enough to exercise meaningful search where the effective roster and evidence permit;
@@ -412,6 +466,9 @@ Milestone 6 completes only when:
 - durable tests/evidence/documentation are promoted, generated material is purged or ignored, the milestone status is accurate, and each feature owns one focused completion commit.
 
 ## Deferred Questions
+
+- Comprehensive equipment/badge effect ingestion, broad boss admission, a globally complete mechanic ontology and exact formula execution remain outside C1/C2. Supplemental source witnesses do not expand supported entity scope.
+- Whether any future automatic approval policy is defensible remains outside M6; structure alone never authorizes a proposal.
 
 - Whether up to two backend-authorized swaps materially improves candidate quality without masking weak backend generation. Three or four swaps are not under consideration.
 - Whether paid analyzer evaluation adds enough evidence to belong in M6 after deterministic gates pass; release qualification remains M8-owned.

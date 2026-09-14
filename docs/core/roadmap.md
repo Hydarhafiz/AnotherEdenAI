@@ -39,11 +39,15 @@ Milestone 6 is ordered around:
 - measuring current catalog, strategic-evidence, search-funnel, and diversity coverage before choosing thresholds;
 - deriving capability priorities from the committed thirty-boss corpus;
 - attempting high-value extraction across all 367 canonical forms/styles;
+- preserving combat-source structure and resolving bounded relevant child definitions before selective review (C1, approved 2026-09-15);
+- evaluating scoped classification, review compatibility and measured review effort against the completed extraction baseline (C2);
 - reviewing only ambiguous, high-impact, recurring, or acceptance-relevant facts;
 - preserving proven, ambiguous, unknown, rejected, and untagged meanings;
 - exposing request-time pool and candidate-set diagnostics;
 - changing candidate generation only after diagnostics establish the responsible stage; and
 - evaluating diverse candidates with H2's four modeled-viability gates.
+
+The approved sequence is A → B → C → C1 → C2 → D → E → F → G. A-C remain completed; C1/C2 implementation is unstarted. D follows acceptance of C2's comparison evidence. Existing coverage/diversity floors remain unchanged, and generated structural evidence does not replace human capability-review authority. Complete equipment ingestion, broad boss expansion and formula simulation remain deferred.
 
 ## Research And Planning Sources
 
