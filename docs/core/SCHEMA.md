@@ -298,7 +298,7 @@ The post-load assertion gate also verifies Milestone 3 RAG-readiness coverage:
 - no exact `Character.name`/`Sidekick.name` overlap remains after the Milestone 5 sidekick cleanup gate
 - golden retrieval paths for weakness handling, main/sub sidekick behavior, Stellar Awakening gating, speed/turn order, sustain, and Grasta/Ore setup
 
-## Milestone 5 C6 Legal-Kit Contract And Current Gate
+## Milestone 5 C6 Legal-Kit Contract
 
 Schema 1.6.0 adds the C6 receipt and normalized skill-family contract. The
 repository artifact is authoritative for replay, and the current cached corpus
@@ -317,9 +317,9 @@ Each of the 367 canonical MVP character forms/styles must have one reproducible 
 
 An empty `HAS_SKILL` or `HAS_PASSIVE_SKILL` result does not prove a successful receipt. H acceptance requires 367/367 `complete` receipts and at least three distinct equipable active-skill families per character.
 
-### Planned Skill-Family Fields
+### Skill-Family Fields
 
-The correction migration must add or equivalently normalize:
+The C6 correction normalized:
 
 - `skill_family_id` (STRING) — stable identity shared by upgrade stages and SA-enhanced forms of one equipped skill
 - `slot_eligibility` (STRING) — at minimum `active_equipable`, `ordinary_basic_attack`, `basic_attack_replacement`, or `not_equipable`
@@ -329,16 +329,16 @@ The correction migration must add or equivalently normalize:
 
 Package legality uses distinct `skill_family_id` values whose slot eligibility and dependencies are satisfied. Capability fields remain unchanged in authority: only reviewed proven capabilities grant score or coverage, while a legal family with no proven capability may still fill a package slot.
 
-### Planned Production Request Extension
+### Production Request Extension
 
-Production requests add optional per-character `light_shadow_points`. Omission or an unknown value permits exactly three selected active-skill families. A declared value greater than or equal to 80 permits up to four. `is_SA`, `stellar_awakened`, and `late_game_assumed` cannot infer this value.
+Production requests accept optional per-character `light_shadow_points`. Omission or an unknown value permits exactly three selected active-skill families. A declared value greater than or equal to 80 permits up to four. `is_SA`, `stellar_awakened`, and `late_game_assumed` cannot infer this value.
 
-### Planned Replay And Migration Gate
+### Replay And Migration Gate
 
 - Authoritative replay removes stale Skill/PassiveSkill relationships and obsolete family rows for every successfully materialized character.
 - Exact form/style ownership, family uniqueness, slot eligibility, dependency integrity, and receipt completeness are asserted after replay.
 - The migration must preserve existing stable IDs when identity semantics are unchanged and provide deterministic remapping evidence when family normalization changes an ID.
-- The schema version is incremented only in the owning C6 implementation commit after parser, loader, migration, drift, and compatibility tests pass.
+- Schema-version changes belong only to an implementation commit after parser, loader, migration, drift, and compatibility tests pass. The Milestone 5 closeout and Milestone 6 planning transition do not change persisted shape or `SCHEMA_VERSION`.
 
 Current cached-corpus evidence: `src/etl/kit_catalog.json` contains 367
 deduplicated and complete receipts. The refreshed

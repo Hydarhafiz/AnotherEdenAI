@@ -7,6 +7,18 @@ boundary and final graph legality checks.
 The broad-context candidate/analyzer path is not evidence of production
 RoleScores, coverage, beam bounds, or backend candidate legality.
 
+The supported product claim is bounded: output is a legal, boss-aware,
+evidence-backed candidate that is strategically plausible according to modeled
+facts. Validation does not prove a globally optimal party, guaranteed clear,
+exact turn/damage result, or numeric win probability. Legal-kit completeness is
+independent from capability proof; missing, ambiguous, rejected, or untagged
+capability evidence must not be reported as proven character-level absence.
+
+Milestone 6 plans full-catalog high-value coverage and candidate-diversity
+diagnostics, but this planning change does not alter the commands or runtime
+behavior below. Each implementing feature must update this guide when it adds
+accepted coverage metrics, funnel diagnostics, or diversity checks.
+
 ## 1. Prepare the local services
 
 Run commands from the repository root. Use the project environment rather than

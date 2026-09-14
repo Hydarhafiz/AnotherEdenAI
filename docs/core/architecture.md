@@ -2,7 +2,7 @@
 
 ## Purpose
 
-AnotherEdenAI is a GraphRAG application for building roster-constrained team recommendations for the JRPG *Another Eden*. The system combines a scraped and normalized Neo4j graph with a multi-step LangGraph workflow and a lightweight FastAPI web UI.
+AnotherEdenAI is a GraphRAG application for building legal, roster-constrained, boss-aware lineup candidates for the JRPG *Another Eden*. The system combines a scraped and normalized Neo4j graph with deterministic production recommendation, a bounded analyzer, a separate exploratory LangGraph workflow, and a lightweight FastAPI web UI. It explains why supplied candidates are strategically plausible according to modeled evidence; it does not claim a globally optimal team, guaranteed clear, exact battle result, or numeric win probability.
 
 This document is the architectural source of truth for implementation planning. Use it alongside `SCHEMA.md` for any feature that changes data shape, graph traversal logic, prompt contracts, API behavior, or UI integration.
 
@@ -118,6 +118,16 @@ Milestone 5 correction architecture, approved 2026-08-22:
 - `late_game_assumed` means access to the released item catalog, not verified ownership. Known finite maxima apply within one six-hero lineup and reset between alternative lineups. Named equipment is single-copy unless repeatability is proven; unknown named-Grasta cardinality is conservative, with compatible labelled generic placeholders allowed by policy.
 - Build selection exposes alternatives to a deterministic bounded lineup-level matcher/backtracker. A lineup fails allocation only when no compatible complete assignment exists.
 - H acceptance uses independently witnessed boss-specific feasible cases and valid data-complete infeasible cases with deterministic impossibility certificates. The unchanged common-nine-character requests are a separate stress suite, not a feasibility oracle.
+
+Milestone 6 planning boundary, approved 2026-09-14:
+
+- All 367 canonical character forms/styles remain in the legal-kit scope; Milestone 6 does not introduce a smaller supported-character allowlist.
+- High-value capability extraction is attempted across the full catalog, prioritized from the committed thirty-boss mechanics and counters rather than an exhaustive game ontology.
+- Capability coverage distinguishes `proven_present`, explicitly evidenced `proven_absent`, `ambiguous`, and `unknown`. A missing graph relationship, untagged fact, rejected proposal, or zero score never proves character-level absence.
+- Catalog, effective-roster, data-complete, boss-eligible, role-pool, candidate, unique-character-set, unique-frontline-set, and archetype counts remain distinct observability stages.
+- Candidate diversity means different strategically coherent compositions when alternatives exist, not permutations, relabeled archetypes, or opaque IDs over identical score vectors. Constrained rosters may truthfully produce fewer candidates.
+- H2's damage-affinity, boss-counter, team-coherence, and setup-executability gates remain the quality boundary. They do not predict gameplay victory.
+- The one backend-authorized swap limit and current production analyzer configuration remain unchanged. Paid evaluation stays blocked until deterministic M6 gates pass and still requires separate authorization.
 
 Feature B curated superboss graph behavior:
 

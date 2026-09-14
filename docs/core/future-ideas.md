@@ -2,38 +2,37 @@
 
 This document captures promising ideas intentionally deferred from the active milestone. It is not an implementation contract. Promote items into `milestone.md` only after they are scoped and prioritized.
 
-## Offensive Taxonomy Extension After MVP Evaluation
+## Offensive Taxonomy Families Outside Milestone 6 Priority
 
-Deferred from Milestone 5 Feature C3 to keep the first recommender limited to source-backed, reviewable offensive/support facts.
+Deferred unless Milestone 6's boss-driven priority matrix shows that a family materially changes lineup selection.
 
 Idea:
 
-- Reintroduce `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, and residual `follow_up_attack` as a dedicated taxonomy extension.
-- Add the still-unimplemented MVP-deferred offensive/support families only after expert beta evidence identifies that they materially affect recommendation quality.
+- Reintroduce `af_gauge_gain_up`, `invert_weakness_resistance`, `grant_copy`, or residual `follow_up_attack` only when committed boss evidence and parsed character facts justify the narrow family.
+- Keep unprioritized offensive/support families deferred until evaluation shows that they materially affect recommendation quality.
 - Keep every deferred effect untagged and excluded from role scoring and mandatory coverage until it is explicitly reviewed.
 
 Readiness signals:
 
-- MVP golden and expert-beta evaluation identifies a recurring quality gap attributable to an untagged effect.
+- Milestone 6 boss mapping or controlled evaluation identifies a recurring quality gap attributable to the untagged effect.
 - Each proposed family has at least two parsed canonical character or sidekick facts, including a positive and a misleading/cross-family example.
 - The source evidence settles its narrow atomic meaning, direction, target, qualifiers, and separation from existing capabilities.
 
 ## Exhaustive Character-Skill Capability Proof
 
-Deferred from the Milestone 5 correction so the MVP can make all 367 canonical character kits legally usable without guessing the strategic meaning of every skill.
+Still deferred after Milestone 6 admission. Milestone 6 promotes full-catalog **high-value extraction attempts**, not exhaustive capability proof.
 
-Idea:
+Possible later idea:
 
-- Review every active, passive, SA, manifest, and equipment-dependent skill family against the atomic capability taxonomy.
-- Reconsider the stricter package rule under which every selected package skill must carry reviewed capability proof, but adopt it only when coverage is broad enough that it no longer excludes otherwise legal characters.
-- Expand contextual role and package scoring from the current high-value reviewed subset to the full character corpus.
-- Keep legal-kit identity, equipability, and upgrade-family facts separate from capability interpretation even after review becomes exhaustive.
+- Review every active, passive, SA, manifest, and equipment-dependent skill family only if evidence shows that exhaustive coverage adds material value beyond M6's boss-driven high-value scope.
+- Reconsider requiring capability proof for every selected package skill only if coverage becomes broad enough that the rule would not exclude otherwise legal characters.
+- Preserve legal-kit identity, equipability, and upgrade-family facts independently from capability interpretation even if review later becomes exhaustive.
 
 Readiness signals:
 
-- Milestone 5 proves complete legal kits for all 367 character forms/styles and records stable untagged-fact diagnostics.
-- More recommendation-ready bosses expose repeated quality gaps attributable to missing capability evidence rather than search, allocation, or boss-data defects.
-- Human review capacity and source evidence can support exhaustive coverage without weakening the proven-only authority standard.
+- Milestone 6 has completed full-catalog high-value extraction, controlled diversity evaluation, and explicit unknown/ambiguous accounting.
+- Repeated candidate-quality failures are attributable to low-value unreviewed facts rather than missing high-value coverage, search, allocation, or boss evidence.
+- The demonstrated benefit justifies the manual-review cost without weakening conservative proof authority.
 
 ## Battle Mechanics Knowledge Base
 
@@ -175,13 +174,13 @@ Readiness signals:
 
 ## Full Superboss Corpus Expansion And Continuous Admission
 
-The earlier intermediate/strong evaluation idea was promoted into Milestone 5 Feature G1 as a fixed thirty-boss corpus: ten weak, ten medium, and ten strong recommendation-ready bosses. Comprehensive coverage of the remaining Superbosses index is deferred to a later roadmap milestone so Discord beta evidence can guide priority and the current milestone can still finish evaluation, frontend, and deployment work.
+The earlier intermediate/strong evaluation idea was promoted into Milestone 5 Feature G1 as a fixed thirty-boss corpus: ten weak, ten medium, and ten strong recommendation-ready bosses. Milestone 6 uses that corpus to prioritize capability coverage and diversity. Comprehensive coverage of the remaining Superbosses index remains deferred until M6 evidence, later portfolio usage, or community feedback identifies a bounded need.
 
 Idea:
 
 - Expand beyond the approved thirty bosses in bounded, versioned batches; never turn index discovery or a live beta request into automatic recommendation support.
 - Track each identity through explicit states such as discovered, source-cached, parsed, fixture-proven, recommendation-ready, unsupported, and stale.
-- Prioritize later batches using Discord-requested bosses, uncovered affinity/mechanics combinations, parser/section shapes, and source freshness rather than difficulty or popularity alone.
+- Prioritize later batches using M6 coverage gaps, portfolio/community requests, uncovered affinity/mechanics combinations, parser/section shapes, and source freshness rather than difficulty or popularity alone.
 - Add richer phase, stopper, turn-script, status, summon/multi-target, AF, sustain, and execution modeling where the thirty-boss beta reveals that current facts are insufficient.
 - Detect wiki-source drift and revalidate affected bosses without invalidating unrelated supported identities.
 - Keep every expansion batch behind its own `builder-executor -> tdd-loop` boundary and promote only authoritative source manifests, fixtures, and permanent regressions.
@@ -189,7 +188,7 @@ Idea:
 Readiness signals:
 
 - All thirty Milestone 5 bosses pass identity, affinity, section, mechanics, provenance, deterministic recommendation, compact-projection, and fallback gates.
-- Discord feedback across weak, medium, and strong cohorts identifies concrete missing bosses or mechanics rather than only requesting a larger count.
+- M6 evaluation or later portfolio/community feedback identifies concrete missing bosses or mechanics rather than only requesting a larger count.
 - Feature H establishes stable evaluation, provider accounting, and regression reporting that can compare later corpus batches.
 - Source-refresh policy, crawl limits, identity/variant rules, and per-boss support status are operationally clear.
 

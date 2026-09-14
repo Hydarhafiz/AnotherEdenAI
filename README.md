@@ -1,6 +1,6 @@
 # Another Eden AI — GraphRAG Team Builder
 
-A production-grade AI system that recommends source-grounded, boss-aware lineup plans for the JRPG *Another Eden*, constrained to the player's actual roster with legality and factuality gates before rendering.
+A production-grade AI system that generates legal, boss-aware, evidence-backed lineup candidates for the JRPG *Another Eden*, constrained to the player's available roster with legality and factuality gates before rendering. It explains why candidates are strategically plausible; it does not promise a globally optimal team or guaranteed clear.
 
 > **Portfolio note:** This project demonstrates a full AI engineering pipeline -- from graph ETL through LangGraph orchestration, deterministic validation, source-grounded recommendation contracts, and a streaming web UI -- built with configurable LLM providers and Neo4j.
 
@@ -13,9 +13,9 @@ You type: *"What's the highest-damage blunt-zone synergy I can build from my ros
 The system:
 1. Scrapes live character, sidekick, curated superboss, Grasta, Ore, weapon, armor, and curated battle-mechanics data from the community wiki into a Neo4j graph
 2. Normalises your roster input to canonical graph names, augments it with free-to-play units, and accepts optional owned sidekicks
-3. Routes your question through a LangGraph pipeline (PLAN -> SUPERBOSS_CONTEXT -> GENERATE_CYPHER -> VALIDATE -> ANALYZE -> FORMAT)
+3. Routes production lineup requests through typed retrieval and deterministic candidate preparation (`PRODUCTION_RETRIEVE -> PREPARE_CANDIDATES -> ANALYZE -> FORMAT`); exploratory graph questions use the separate PLAN/Cypher workflow
 4. Streams pipeline progress to your browser via SSE -- "Validating... attempt 2/3" -- so you know it's working
-5. Returns three legal 4-frontline / 2-reserve lineup plans, usually burst, sustain, and hybrid, with sidekick slots, recommended skills, build assumptions, boss counterplay, risks, confidence labels, and citations
+5. Returns bounded legal 4-frontline / 2-reserve lineup candidates, differentiated where the roster genuinely supports alternatives, with sidekick slots, recommended skills, build assumptions, boss counterplay, risks, modeled-fit labels, and citations
 6. Blocks malformed, illegal, or boss-fact-mismatched recommendations before the web layer renders them
 
 ---
@@ -26,17 +26,17 @@ The system:
 Browser (HTMX + SSE)
         |
         v
-FastAPI Web Layer  ---- POST /api/query ------+
-        |                                      |
-        |            LangGraph Pipeline        |
-        |  +--------------------------------+  |
-        |  | PLAN -> SUPERBOSS_CONTEXT ->   |  |
-        +->| GENERATE_CYPHER -> VALIDATE -> |--+
-           | ANALYZE -> FORMAT              |
-           +-------------+------------------+
-                         |
-                         v
-              Neo4j Graph Database
+FastAPI Web Layer  ---- POST /api/query -------------------+
+        |                                                   |
+        |  Production: typed retrieval -> deterministic     |
+        |  candidates -> bounded ANALYZE -> FORMAT          |
+        |                                                   |
+        |  Exploratory: PLAN -> Cypher -> VALIDATE ->       |
+        |  ANALYZE -> FORMAT                                |
+        +------------------------+--------------------------+
+                                 |
+                                 v
+                      Neo4j Graph Database
    (Characters, Traits, Skills, Sidekicks,
     Superbosses, MechanicReferences, Grastas, Ores, Equipment)
                          ^
@@ -243,7 +243,7 @@ The Neo4j graph models roster heroes, combat facts, build context, and RAG retri
 (:Equipment)
 ```
 
-Full contract: [SCHEMA.md](docs/core/SCHEMA.md) - versioned at SCHEMA_VERSION: 1.0.0.
+Full contract: [SCHEMA.md](docs/core/SCHEMA.md) - versioned at SCHEMA_VERSION: 1.6.0.
 
 ### Verified ETL Snapshot
 
@@ -319,9 +319,10 @@ Supplementary planning notes live in `docs/core/future-ideas.md`. That file is t
 | Version | Focus |
 |---------|-------|
 | Milestone 4 (completed) | Legal 6-hero plus 2-sidekick lineup recommendation intelligence |
-| Milestone 5 (active) | Evaluation gates, recommendation optimization, graph cleanup, and cost control |
-| Milestone 6 | Portfolio frontend experience |
-| Milestone 7 | Cost-controlled demo deployment |
+| Milestone 5 (completed) | Deterministic recommendation architecture, evaluation, and cost control |
+| Milestone 6 (active) | Full-catalog high-value capability coverage and candidate diversity |
+| Milestone 7 | Portfolio frontend experience |
+| Milestone 8 | Cost-controlled demo deployment |
 
 ---
 

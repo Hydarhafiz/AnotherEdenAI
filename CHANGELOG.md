@@ -6,6 +6,25 @@ All notable changes to this project are documented here, grouped by development 
 
 ## [Unreleased] Root Pillar Docs
 
+## [Milestone 5 Closeout / Milestone 6 Plan] - 2026-09-14
+
+### Closed
+
+- Milestone 5 now closes as the completed deterministic recommendation-engine, evaluation, and cost-control architecture through Feature H2.
+- The closeout records 367/367 legal-kit readiness, conservative reviewed capability authority, package-first bounded search, finite allocation, closed-world analyzer refinement, deterministic fallback, token/cost accounting, the thirty-boss H corpus, H1 operational evidence, and H2 four-gate human-readable validation.
+- Former Feature I and paid H-04/H-05/H-07 multi-model/ordered-fallback gates are explicitly superseded and reassigned rather than marked complete.
+
+### Planned
+
+- Milestone 6 is active for full-catalog high-value capability coverage, explicit unknown/ambiguous accounting, request/search-funnel metrics, and meaningful candidate diversity.
+- All 367 canonical forms/styles remain legally in scope; exhaustive manual review of every skill/passive is not required.
+- Frontend portfolio work is renumbered to Milestone 7. Portfolio safeguards, deployment, and release-time paid-provider qualification are renumbered to Milestone 8.
+
+### Boundaries
+
+- Recommendations are legal, boss-aware, evidence-backed, and strategically plausible, not globally optimal or guaranteed to clear.
+- No schema version, production behavior, provider configuration, graph data, or paid-service state changed in this planning-only closeout.
+
 ## [Milestone 5 C4] Dependencies And Conditions Review Gate - 2026-07-28
 
 ### Added

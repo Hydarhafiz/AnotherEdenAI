@@ -788,6 +788,21 @@ This file stores source references used during planning discussions. It separate
 
 ## Source Quality Notes
 
+### Milestone 5 Closure And Milestone 6 Admission — 2026-09-14
+
+- Repository evidence: commits through Feature H2 (`ec684a9`) contain the deterministic recommendation engine, 367-character legal-kit catalog, reviewed capability pipeline, package/allocation/search boundaries, thirty-boss acceptance corpus, provider accounting/qualification harness, H1 comparison tooling, and H2 four-gate human-readable review.
+- Audit verdict: conditional pass for M5 closure. Completed implementation proves the architecture and deterministic H boundary, but it does not prove former Feature I or paid H-04/H-05/H-07 multi-model and ordered-fallback qualification.
+- Approved disposition: close M5 by explicitly superseding those uncompleted exit obligations rather than marking them passed. Move capability/untagged-evidence diagnostics to M6, frontend product-language work to M7, and portfolio safeguards plus release-time paid-provider qualification to M8.
+- Approved product claim: generate legal, boss-aware, evidence-backed lineup candidates from the player's available roster and explain why they are strategically plausible. Do not claim global optimality, guaranteed victory, exact simulation, or numeric win probability.
+- Approved M6 catalog boundary: retain all 367 canonical forms/styles as legal candidates when owned and data-complete; do not create a fixed supported subset.
+- Approved M6 evidence boundary: attempt high-value capability extraction across the full catalog while allowing low-value or unresolved facts to remain unknown or ambiguous. A rejected proposal, missing relationship, untagged fact, or zero score does not prove character-level absence.
+- Approved M6 prioritization: derive required and high-value counter families from the committed thirty-boss corpus before expanding taxonomy breadth.
+- Approved review policy: reuse deterministic proposals, constrained review, gold/negative fixtures, curated overrides, provenance, and replay; manually review only ambiguous, high-impact, recurring, sampled, or acceptance-relevant facts. Exhaustive manual review of every skill/passive is not required.
+- Approved diversity boundary: diagnose unique character/frontline sets, archetype differentiation, permutations, identical score vectors, and overlap before changing search/scoring. Do not manufacture alternatives where only one strategically valid team exists.
+- Approved cost/swap boundary: preserve one backend-authorized swap, the two-call application cap, and current production reasoning configuration. DeepSeek `reasoning=none`/4k remains a provisional evaluation baseline. No paid M6 evaluation precedes deterministic gates or occurs without separate authorization.
+- Threshold gap: concrete M6 coverage and diversity thresholds remain intentionally unset until Feature A measures current catalog and request-time distributions.
+- Schema disposition: unchanged. Planning terminology alone does not change persisted data shape or `SCHEMA_VERSION`; a later implementation feature must update schema documentation and assertions if it introduces persisted states or metrics.
+
 - Historical Milestone 5 decisions remain in this log for auditability. Where the 2026-07-01 candidate-constrained rewrite conflicts with earlier three-call correction, broad-context generation, or AI-owned hero-search policy, the 2026-07-01 locked decisions supersede the earlier policy.
 
 - The Another Eden Wiki is a community-maintained source. It is appropriate for this portfolio project's game-mechanics planning, but recommendations should cite retrieved source facts and carry uncertainty when data is incomplete.
