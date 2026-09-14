@@ -273,11 +273,18 @@ Completion evidence:
 - Proposal-state accounting records 148 proven, 5,103 unknown, 0 ambiguous, and 22 rejected atomic proposal instances alongside 2,208 separately untagged source facts and 0 explicitly proven absences. No unresolved or rejected state becomes character-level absence.
 - Generated reports remain ignored under `artifacts/generated/`; no candidate scoring/search, supported-character subset, persisted schema, paid-provider behavior, production configuration, or Neo4j state changed.
 
-Human checkpoint: after A, inspect the measured distributions and approve concrete strategic-coverage and diversity thresholds for Features D-G. This is the only planned threshold-setting checkpoint; numbers must be evidence-driven.
+Human checkpoint decision (approved 2026-09-14): the accepted Feature A artifact is the immutable before/baseline snapshot for Milestone 6, not the expected final distribution. Features C/D are expected to increase proven strategic coverage while preserving 367/367 legal-kit completeness and every evidence-state distinction. The initial D-G contract is:
+
+- **D:** preserve 367/367 legal-kit completeness and attempt extraction for 367/367; prove at least 96 primary-damage, 48 offensive-enablement, 24 zone, 48 mitigation, 24 recovery, 24 status-counterplay, 24 AF-support, 24 Pain/Poison, and 48 boss-counter identities; prove at least 8 providers in every applicable element/type stratum; permit zero semantic-state collapses.
+- **E:** 100% of measured requests emit the required funnel, diversity, denominator, and unknown-data diagnostics; identical inputs are deterministic; zero unavailable observations are silently treated as known.
+- **F:** at least 8 independently established alternative-rich cases each retain at least 6 candidates, 3 unique six-character sets, 3 unique frontlines, and 2 materially differentiated archetypes, with maximum pairwise Jaccard similarity 0.714 and zero permutation-only sets, identical component vectors, or false archetype labels. Any constrained-case exemption needs evidence.
+- **G:** 20/20 feasible cases produce at least one candidate passing all four H2 gates, 10/10 certified infeasible cases correctly produce zero, and 8/8 alternative-rich cases meet F, with zero illegal or unsupported output.
+
+Feature B may recommend a numeric adjustment only when the committed boss corpus materially proves that a floor is too high, too low, or aimed at the wrong distribution. Any adjustment must be explicitly justified and documented before D; implementation difficulty is never grounds for relaxation. Unknown and untagged counts need not reach zero.
 
 ### Feature B: Boss-To-Capability Priority Matrix
 
-Status: Planned after Feature A.
+Status: Completed on 2026-09-14.
 
 Type and route: `research` via `contract-auditor -> feature-planner`.
 
@@ -290,9 +297,18 @@ Acceptance:
 - **B-03:** Unknown boss mechanics remain unresolved rather than becoming inferred requirements.
 - **B-04:** The resulting bounded priority matrix drives Feature C; it is not an exhaustive game-mechanics ontology.
 
+Completion evidence:
+
+- `artifacts/evidence/feature_b_boss_capability_priority_matrix.json` maps exactly 30 manifest identities in three 10-boss cohorts to checksum-resolved bounded sections and separates required, high-value, contextual, and unresolved classifications.
+- Required counters are limited to explicit hard gates: affinity-safe damage affects all 30; seven bosses require multiple damage modes, seven impose prohibited-action/affinity constraints, six require multi-entity handling, four impose burst deadlines, and three impose hit/action thresholds.
+- Ranking priorities are led by status counterplay (25 bosses), mitigation (15 high-value plus 3 contextual), reset resilience (14), fixed/percent-HP response (13 high-value plus 1 contextual), resistance manipulation (10 high-value plus 8 contextual), and enemy-buff control (10). These counts are boss-impact signals, not success probabilities or target coverage counts.
+- Eight bosses retain unknown affinity profiles, and bounded source limitations or complex mechanics remain named unresolved gaps. Feature H fixtures are feasibility context only and do not create mechanic authority.
+- Feature C receives three bounded priority bands tied to existing atomic capability IDs or explicit gaps. No runtime scoring/search, taxonomy, persisted shape, legal-kit receipt, provider, production configuration, or Neo4j state changed.
+- The thirty-boss evidence materially changes extraction order but does not prove a defensible replacement for an approved identity-count floor. The initial D-G numeric contract therefore remains unchanged; AF and Pain/Poison retain deliberately low strategic-breadth floors without becoming boss-mandatory.
+
 ### Feature C: Full-Catalog High-Value Extraction
 
-Status: Planned after Feature B.
+Status: Planned next after completed Feature B.
 
 Type and route: `build` via `builder-executor -> tdd-loop`.
 
