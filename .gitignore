@@ -3,6 +3,7 @@
 .env
 data/
 .sdd/
+artifacts/generated/
 
 __pycache__/
 *.py[cod]

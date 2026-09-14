@@ -214,10 +214,19 @@ def validate_catalog_payload(
     records = payload.get("characters")
     if not isinstance(records, list):
         raise ValueError("kit catalog characters must be a list")
+    canonical_ids = [record.get("character", {}).get("character_id") for record in records]
     ids = [record.get("receipt", {}).get("character_id") for record in records]
+    duplicate_canonical_ids = sorted({value for value in canonical_ids if canonical_ids.count(value) > 1})
+    if duplicate_canonical_ids:
+        raise ValueError(f"kit catalog contains duplicate canonical character IDs: {duplicate_canonical_ids[:5]}")
     duplicate_ids = sorted({value for value in ids if ids.count(value) > 1})
     if duplicate_ids:
         raise ValueError(f"kit catalog contains duplicate character IDs: {duplicate_ids[:5]}")
+    if set(canonical_ids) != set(ids) or any(
+        canonical_id is None or receipt_id is None or canonical_id != receipt_id
+        for canonical_id, receipt_id in zip(canonical_ids, ids)
+    ):
+        raise ValueError("kit catalog canonical identity and receipt identity drifted")
     receipts: list[CharacterKitReceipt] = []
     for record in records:
         receipt = CharacterKitReceipt.model_validate(record["receipt"])
@@ -247,6 +256,7 @@ def validate_catalog_payload(
         receipts.append(receipt)
     return {
         "expected_count": expected_count,
+        "canonical_identity_count": len(set(canonical_ids)),
         "receipt_count": len(receipts),
         "count_ok": len(receipts) == expected_count,
         "complete_count": sum(receipt.overall_state == "complete" for receipt in receipts),
@@ -255,7 +265,11 @@ def validate_catalog_payload(
         "insufficient_family_characters": [
             receipt.character_name for receipt in receipts if receipt.active_skill_family_count < 3
         ],
-        "ready": len(receipts) == expected_count and all(receipt.overall_state == "complete" for receipt in receipts),
+        "ready": (
+            len(set(canonical_ids)) == expected_count
+            and len(receipts) == expected_count
+            and all(receipt.overall_state == "complete" for receipt in receipts)
+        ),
     }
 
 

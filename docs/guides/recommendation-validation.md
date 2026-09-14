@@ -14,10 +14,28 @@ exact turn/damage result, or numeric win probability. Legal-kit completeness is
 independent from capability proof; missing, ambiguous, rejected, or untagged
 capability evidence must not be reported as proven character-level absence.
 
-Milestone 6 plans full-catalog high-value coverage and candidate-diversity
-diagnostics, but this planning change does not alter the commands or runtime
-behavior below. Each implementing feature must update this guide when it adds
-accepted coverage metrics, funnel diagnostics, or diversity checks.
+Milestone 6 Feature A adds deterministic coverage accounting without changing
+candidate scoring or search. Offline catalog metrics are generated with:
+
+```bash
+.venv/bin/python scripts/report_coverage.py \
+  --catalog src/etl/kit_catalog.json \
+  --h1-report llm-output-review/anothereden-feature-h1.json \
+  --output artifacts/generated/coverage/feature_a_report.json
+```
+
+The typed `ProductionRetrieval.request_coverage` report exposes the same metric
+contract at request time. Its funnel separates user roster, permanent F2P
+augmentation, available identities, legal-package readiness, boss eligibility,
+role-pool union, candidates, and candidate uniqueness. Candidate diversity also
+reports permutation-only/same-set warnings, identical score vectors, archetype
+labels, and pairwise character-set Jaccard values. A zero-candidate result is a
+valid observation; the implementation does not pad it to a target.
+
+The accepted Feature A baseline records current distributions only. Thresholds
+for Features D-G remain unset until the planned human checkpoint. Generated
+reports under `artifacts/generated/` are local inspection material and are not
+committed.
 
 ## 1. Prepare the local services
 

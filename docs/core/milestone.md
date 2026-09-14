@@ -251,7 +251,7 @@ There is no fifth guaranteed-clear gate. Allowed conclusions include `high model
 
 ### Feature A: Coverage Baseline And Metric Contract
 
-Status: Planned; first active implementation feature.
+Status: Completed on 2026-09-14; stopped at the planned threshold-setting human checkpoint.
 
 Type and route: `build` via `builder-executor -> tdd-loop`, with a read-only authority audit if metric sources or state mappings are disputed.
 
@@ -264,6 +264,14 @@ Acceptance:
 - **A-03:** `unknown`, `ambiguous`, rejected proposals, untagged facts, and proven absence are not collapsed.
 - **A-04:** Current high-value coverage distributions are recorded without inventing a target threshold.
 - **A-05:** Temporary generated reports remain ignored; only reusable tooling, authoritative fixtures, and a concise accepted baseline are retained.
+
+Completion evidence:
+
+- Offline reporting reconciles 367 distinct canonical identities with 367 recomputed complete legal-kit receipts and fails closed on count, identity, duplicate, malformed-record, or receipt drift.
+- The versioned metric contract defines the source, denominator, and unknown-data policy for every catalog and request-time metric. Request diagnostics keep roster, newly added F2P identities, distinct availability, legal-package readiness, boss eligibility, role pools, candidate count, set diversity, archetypes, overlap, and unavailable observations separate.
+- The accepted threshold-free baseline is `artifacts/evidence/feature_a_coverage_baseline.json`: 329/367 identities currently receive a high-value proposal attempt, while reviewed proof covers 10 primary-damage, 21 offensive-enablement, 12 zone, 16 mitigation, 7 recovery, 6 status-counterplay, 6 AF-support, 4 Pain/Poison, and 18 generic boss-counter identities.
+- Proposal-state accounting records 148 proven, 5,103 unknown, 0 ambiguous, and 22 rejected atomic proposal instances alongside 2,208 separately untagged source facts and 0 explicitly proven absences. No unresolved or rejected state becomes character-level absence.
+- Generated reports remain ignored under `artifacts/generated/`; no candidate scoring/search, supported-character subset, persisted schema, paid-provider behavior, production configuration, or Neo4j state changed.
 
 Human checkpoint: after A, inspect the measured distributions and approve concrete strategic-coverage and diversity thresholds for Features D-G. This is the only planned threshold-setting checkpoint; numbers must be evidence-driven.
 

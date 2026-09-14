@@ -30,6 +30,8 @@ Important local artifacts:
 - `data/etl/crawl_manifest.json`: crawl state and diagnostics
 - `src/etl/mechanics_corpus.json`: curated Milestone 4 mechanics references replayed into parsed artifacts
 - `src/etl/kit_catalog.json`: authoritative C6 legal-kit receipts and normalized skill families
+- `artifacts/evidence/feature_a_coverage_baseline.json`: concise accepted Milestone 6 coverage baseline
+- `artifacts/generated/coverage/`: ignored full coverage reports generated for local inspection
 
 Important behavior:
 
@@ -201,6 +203,22 @@ On bash, use:
 ```bash
 ETL_SOURCE_MODE=parsed uv run python -m src.etl.run_etl
 ```
+
+Feature A offline coverage report:
+
+```bash
+.venv/bin/python scripts/report_coverage.py \
+  --catalog src/etl/kit_catalog.json \
+  --h1-report llm-output-review/anothereden-feature-h1.json \
+  --output artifacts/generated/coverage/feature_a_report.json
+```
+
+The report fails visibly unless the catalog contains exactly 367 distinct
+canonical identities and one recomputed complete legal-kit receipt for each.
+It records high-value proof only from reviewed capability evidence. Candidate,
+ambiguous, rejected, and untagged states remain separate; no unresolved state
+is interpreted as proven absence. Generated output is ignored. The accepted
+baseline is intentionally threshold-free until the Feature A human checkpoint.
 
 Parsed replay requires current schema-versioned index artifacts. For ordinary small or fallback replays, detail artifacts that are absent remain inactive. For the canonical G1.1 full replay, the manifest-owned thirty-boss corpus is authoritative and missing, extra, stale, duplicate, unbounded, empty, or identity-mismatched superboss artifacts fail closed before graph loading.
 

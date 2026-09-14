@@ -7,6 +7,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
+from .coverage import build_request_coverage_report
 from .legality import SAState, build_roster_input
 from .lineup_generation import generate_lineup_candidates
 from .mechanics import retrieve_mechanic_references
@@ -86,6 +87,7 @@ class ProductionRetrieval(BaseModel):
     grastas: list[dict[str, Any]]
     equipment: list[dict[str, Any]]
     coverage: dict[str, Any]
+    request_coverage: dict[str, Any] = Field(default_factory=dict)
     role_scores: dict[str, Any] = Field(default_factory=dict)
     build_packages: dict[str, Any] = Field(default_factory=dict)
     lineup_candidates: dict[str, Any] = Field(default_factory=dict)
@@ -381,6 +383,24 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             role_scores=role_scores,
             coverage={"requested_character_count": len(normalized)},
         )
+        retrieval_coverage = {
+            "requested_character_count": len(normalized),
+            "retrieved_character_count": len(characters),
+            "missing_character_names": missing,
+            "skill_owner_count": len({row.get("character_name") for row in skills}),
+            "passive_owner_count": len({row.get("character_name") for row in passives}),
+            "requested_sidekick_count": len(roster_input.owned_sidekicks),
+            "retrieved_sidekick_count": len(sidekicks),
+            "boss_complete": bool(boss.get("mechanics_text")),
+            "complete": not missing,
+        }
+        request_coverage = build_request_coverage_report(
+            user_roster=normalized_owned,
+            f2p_augmented_roster=normalized,
+            characters=characters,
+            role_scores=role_scores,
+            candidate_generation=lineup_candidates,
+        )
         normalized_request = request.model_copy(update={
             "boss_id": boss["id"], "roster": normalized,
             "owned_sidekicks": roster_input.owned_sidekicks,
@@ -391,17 +411,8 @@ RETURN e{.*} AS fact ORDER BY fact.equipment_slot, fact.name
             request=normalized_request, boss=boss, characters=characters,
             skills=skills, passives=passives, mechanics=mechanics,
             sidekicks=sidekicks, grastas=grastas, equipment=equipment,
-            coverage={
-                "requested_character_count": len(normalized),
-                "retrieved_character_count": len(characters),
-                "missing_character_names": missing,
-                "skill_owner_count": len({row.get("character_name") for row in skills}),
-                "passive_owner_count": len({row.get("character_name") for row in passives}),
-                "requested_sidekick_count": len(roster_input.owned_sidekicks),
-                "retrieved_sidekick_count": len(sidekicks),
-                "boss_complete": bool(boss.get("mechanics_text")),
-                "complete": not missing,
-            },
+            coverage=retrieval_coverage,
+            request_coverage=request_coverage,
             role_scores=role_scores,
             build_packages=role_scores.get("build_packages", {}),
             lineup_candidates=lineup_candidates,

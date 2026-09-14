@@ -1,0 +1,177 @@
+{
+  "artifact_type": "feature_a_accepted_coverage_baseline",
+  "artifact_version": "feature-a-baseline-v1",
+  "captured_on": "2026-09-14",
+  "historical_request_diversity": {
+    "distributions": {
+      "candidate_count": {
+        "max": 7,
+        "median": 3.0,
+        "min": 3,
+        "values": [
+          3,
+          3,
+          3,
+          3,
+          7,
+          6,
+          6,
+          3
+        ]
+      },
+      "jaccard_max": {
+        "max": 1.0,
+        "median": 1.0,
+        "min": 0.714,
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.714,
+          0.714,
+          1.0
+        ]
+      },
+      "jaccard_median": {
+        "max": 1.0,
+        "median": 1.0,
+        "min": 0.714,
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.714,
+          0.714,
+          0.714,
+          1.0
+        ]
+      },
+      "jaccard_min": {
+        "max": 1.0,
+        "median": 1.0,
+        "min": 0.714,
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.714,
+          0.714,
+          0.714,
+          1.0
+        ]
+      },
+      "unique_archetype_count": {
+        "max": 3,
+        "median": 3.0,
+        "min": 3,
+        "values": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "unique_character_set_count": {
+        "max": 6,
+        "median": 1.0,
+        "min": 1,
+        "values": [
+          1,
+          1,
+          1,
+          1,
+          6,
+          6,
+          6,
+          1
+        ]
+      },
+      "unique_frontline_set_count": {
+        "max": 5,
+        "median": 3.0,
+        "min": 2,
+        "values": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          4,
+          5,
+          2
+        ]
+      }
+    },
+    "identical_component_score_vector_scenario_count": 6,
+    "identical_total_score_scenario_count": 6,
+    "permutation_only_or_same_set_scenario_count": 5,
+    "scenario_count": 8
+  },
+  "identity_reconciliation": {
+    "canonical_identity_count": 367,
+    "complete_receipt_count": 367,
+    "duplicate_canonical_ids": [],
+    "duplicate_receipt_ids": [],
+    "expected_canonical_count": 367,
+    "extra_receipt_ids": [],
+    "malformed_record_indexes": [],
+    "mismatched_identity_rows": [],
+    "missing_receipt_ids": [],
+    "ready": true,
+    "receipt_count": 367
+  },
+  "metric_contract_version": "feature-a-metric-contract-v1",
+  "metrics": {
+    "catalog_characters": 367,
+    "characters_with_af_support": 6,
+    "characters_with_boss_counter_evidence": 18,
+    "characters_with_mitigation": 16,
+    "characters_with_offensive_enablement": 21,
+    "characters_with_pain_poison_setup": 4,
+    "characters_with_proven_primary_damage": 10,
+    "characters_with_recovery": 7,
+    "characters_with_status_counterplay": 6,
+    "characters_with_zone_setup": 12,
+    "facts_ambiguous": 0,
+    "facts_proven": 148,
+    "facts_rejected": 22,
+    "facts_unknown": 5103,
+    "high_value_capability_attempted": 329,
+    "legal_kit_complete": 367
+  },
+  "semantic_states": {
+    "ambiguous": 0,
+    "ambiguous_fact_count": 0,
+    "proven_absent": 0,
+    "proven_fact_count": 95,
+    "proven_present": 148,
+    "rejected": 22,
+    "rejected_only_fact_count": 3,
+    "total_proposal_instances": 5273,
+    "total_source_facts": 5036,
+    "unknown": 5103,
+    "unknown_fact_count": 2730,
+    "untagged_facts": 2208
+  },
+  "source": {
+    "artifact_version": "c6.1.0",
+    "capability_source": "src/etl/capability_taxonomy.json + src/etl/capability_reviews.json",
+    "catalog_fingerprint": "25987076f8ec88094e697fb53eaed216f9c753596516651652b54acdb07b334c",
+    "catalog_path": "src/etl/kit_catalog.json",
+    "parser_version": "c6-parser-1.0",
+    "schema_version": "1.6.0"
+  },
+  "thresholds": {
+    "reason": "Feature A records the current distribution; Features D-G thresholds require the planned human checkpoint.",
+    "status": "not_set",
+    "values": {}
+  }
+}
