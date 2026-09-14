@@ -1,0 +1,17 @@
+usage: evaluate_feature_h2.py [-h] --h1-report H1_REPORT [--output OUTPUT]
+                              [--context CONTEXT]
+                              [--variant {baseline_a,variant_b}]
+
+Generate a bounded human-readable Feature H2 review without paid calls
+
+options:
+  -h, --help            show this help message and exit
+  --h1-report H1_REPORT
+                        Path to an existing sanitized H1 JSON report
+  --output OUTPUT       Markdown output path (default: /tmp/anothereden-
+                        feature-h2-review.md)
+  --context CONTEXT     Optional sanitized JSON context with character, skill,
+                        boss, threat, and dependency evidence
+  --variant {baseline_a,variant_b}
+                        H1 arm to render as the primary recommendation
+                        (default: baseline_a)
