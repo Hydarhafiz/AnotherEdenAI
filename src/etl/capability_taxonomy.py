@@ -45,6 +45,7 @@ REVIEW_COLUMNS = (
 )
 
 RECORD_TYPES = {"skill", "passive", "sidekick_skill", "sidekick_aura"}
+TARGET_SELECTORS = {"enemy_attack_scope", "enemy_scope", "fixed_response_scope"}
 C3_RESERVED_CAPABILITIES = {
     "af_gauge_gain_up", "invert_weakness_resistance", "grant_copy", "follow_up_attack",
 }
@@ -156,6 +157,7 @@ def load_capability_taxonomy() -> dict[str, Any]:
             not rule.get("id") or rule["id"] in ids or rule.get("phase") not in PHASES
             or rule.get("kind") not in vocab or rule.get("value") not in vocab.get(rule.get("kind"), set())
             or rule.get("direction") not in artifact["directions"] or rule.get("target") not in artifact["targets"]
+            or rule.get("target_selector") not in {None, *TARGET_SELECTORS}
             or not set(rule.get("record_types", ())).issubset(RECORD_TYPES)
             or not rule.get("record_types") or not rule.get("pattern")
         ):
@@ -259,6 +261,29 @@ def _rule_record_type(record_type: str) -> str:
     return {"sidekick_skill": "skill", "sidekick_aura": "passive"}.get(record_type, record_type)
 
 
+def _selected_target(rule: dict[str, Any], matched_text: str) -> str:
+    """Resolve a narrow target scope when one rule covers single and group effects."""
+    selector = rule.get("target_selector")
+    if selector == "enemy_attack_scope":
+        return "all_enemies" if re.search(r"on (?:all enemies|each enemy)\b", matched_text, re.IGNORECASE) else "single_enemy"
+    if selector == "enemy_scope":
+        if re.search(r"\ball enemies\b", matched_text, re.IGNORECASE):
+            return "all_enemies"
+        if re.search(r"\b(?:a single enemy|single enemy|enemy|enemies)\b", matched_text, re.IGNORECASE):
+            return "single_enemy"
+        # An unscoped enemy debuff is still directional, but its cardinality is
+        # not source-proven.  Keep that distinction instead of inventing a
+        # single-target claim.
+        return "enemy"
+    if selector == "fixed_response_scope":
+        if re.search(r"\b(?:all party members|party members|all allies|allies)\b", matched_text, re.IGNORECASE):
+            return "party"
+        if re.search(r"\b(?:user|own|self)\b", matched_text, re.IGNORECASE):
+            return "self"
+        return str(rule["target"])
+    return str(rule["target"])
+
+
 def _qualifiers(text: str, taxonomy: dict[str, Any]) -> dict[str, str]:
     percent = re.search(r"(?<!\w)(\d+(?:\.\d+)?)\s*%", text)
     turns = re.search(r"\bfor\s+(\d+)\s+turns?\b", text, re.IGNORECASE)
@@ -327,7 +352,9 @@ def propose(record: dict[str, Any], *, phase: str | None = None) -> list[dict[st
             "fact_name": str(record.get("name") or ""), "source_text": source_text.strip(),
             "source_url": str(record.get("source_url") or ""), "rule_id": rule["id"],
             "phase": rule["phase"], "proposed_kind": rule["kind"], "proposed_value": rule["value"],
-            "proposed_direction": rule["direction"], "proposed_target": rule["target"],
+            "proposed_direction": rule["direction"], "proposed_target": _selected_target(
+                rule, source_text if rule.get("target_selector") in {"fixed_response_scope", "enemy_scope"} else match.group(0)
+            ),
             # C3 qualifiers must be attributable to this atomic match, rather than
             # borrowing percentages or durations from another clause in a compound fact.
             "proposed_availability": availability, **_qualifiers(

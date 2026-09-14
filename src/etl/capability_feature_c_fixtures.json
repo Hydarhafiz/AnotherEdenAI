@@ -1,0 +1,92 @@
+{
+  "artifact_type": "feature_c_rule_evidence",
+  "artifact_version": "m6-c-rule-fixtures-1.0.0",
+  "source": "src/etl/kit_catalog.json",
+  "rules": {
+    "cap-burst-window": {
+      "positive": {"source_fact_id": "skill:9ea6d8ed49663a656707", "source_url": "https://anothereden.wiki/w/Amy", "contains": "When used during Stellar Burst", "expected": {"present": true, "proposed_value": "burst_window", "proposed_direction": "self", "proposed_target": "self"}},
+      "misleading_negative": {"source_fact_id": "skill:6d2e8f2af5da281cb540", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "can act in Stellar Burst", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:f4d7ea55a359f6ea1370", "source_url": "https://anothereden.wiki/w/Jillfunny", "contains": "When used during Stellar Burst", "expected": {"present": true, "proposed_value": "burst_window", "proposed_direction": "self", "proposed_target": "self"}}
+    },
+    "cap-enemy-attack-type-resistance-down": {
+      "positive": {"source_fact_id": "skill:9bf696f608d4beefebb2", "source_url": "https://anothereden.wiki/w/Blooming_Blade", "contains": "Slash Resistance -50%", "expected": {"present": true, "proposed_value": "attack_type_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:aca083f24e0f6a6825ab", "source_url": "https://anothereden.wiki/w/Guildna", "contains": "Magic Resistance of user +100%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:e0342db9f1f683ab4950", "source_url": "https://anothereden.wiki/w/Cerius", "contains": "Piercing Resistance -50%", "expected": {"present": true, "proposed_value": "attack_type_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-buff-dispel": {
+      "positive": {"source_fact_id": "skill:e870fdab872969911713", "source_url": "https://anothereden.wiki/w/Aldo_(Another_Style)", "contains": "Remove all buffs/debuffs from all enemies", "expected": {"present": true, "proposed_value": "enemy_buff_dispel", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:13aca4d2fbce2299f866", "source_url": "https://anothereden.wiki/w/Noble_Specturr", "contains": "Buff Reversal", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:ac93b0a2c5acb73ed1a7", "source_url": "https://anothereden.wiki/w/Anabel_(Extra_Style)", "contains": "Remove all buffs from all enemies", "expected": {"present": true, "proposed_value": "enemy_buff_dispel", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-intelligence-down": {
+      "positive": {"source_fact_id": "skill:087f55a05545cca4a028", "source_url": "https://anothereden.wiki/w/Clarte", "contains": "Intelligence and Speed of all enemies -15%", "expected": {"present": true, "proposed_value": "intelligence_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:223a8061720d6b74a893", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "Intelligence and Speed of all party members +40%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:e0342db9f1f683ab4950", "source_url": "https://anothereden.wiki/w/Cerius", "contains": "Power and Intelligence of all enemies -25%", "expected": {"present": true, "proposed_value": "intelligence_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-magic-resistance-down": {
+      "positive": {"source_fact_id": "skill:f4d7ea55a359f6ea1370", "source_url": "https://anothereden.wiki/w/Jillfunny", "contains": "Magic resistance of a single enemy -50%", "expected": {"present": true, "proposed_value": "magic_resistance_down", "proposed_direction": "enemy", "proposed_target": "single_enemy"}},
+      "misleading_negative": {"source_fact_id": "skill:aca083f24e0f6a6825ab", "source_url": "https://anothereden.wiki/w/Guildna", "contains": "Magic Resistance of user +100%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:2a2cdf1ad72a4ffe8302", "source_url": "https://anothereden.wiki/w/Kuchinawa", "contains": "Magic Resistance of all enemies -30%", "expected": {"present": true, "proposed_value": "magic_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-physical-resistance-down": {
+      "positive": {"source_fact_id": "skill:6482e4c6b93b0f0ea591", "source_url": "https://anothereden.wiki/w/Alphen", "contains": "Physical resistance -25%", "expected": {"present": true, "proposed_value": "physical_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:25239443cd2db0ef487f", "source_url": "https://anothereden.wiki/w/Anabel", "contains": "Physical resistance of all party members +35%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:732cb3495dc790e00d91", "source_url": "https://anothereden.wiki/w/Melissa", "contains": "Physical resistance of all enemies -30%", "expected": {"present": true, "proposed_value": "physical_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-power-down": {
+      "positive": {"source_fact_id": "skill:5529e277552da43bdbe6", "source_url": "https://anothereden.wiki/w/Anabel", "contains": "Power, and Intelligence of all enemies -40%", "expected": {"present": true, "proposed_value": "power_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:223a8061720d6b74a893", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "Power, Intelligence and Speed of all party members +40%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:e0342db9f1f683ab4950", "source_url": "https://anothereden.wiki/w/Cerius", "contains": "Power and Intelligence of all enemies -25%", "expected": {"present": true, "proposed_value": "power_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-speed-down": {
+      "positive": {"source_fact_id": "skill:087f55a05545cca4a028", "source_url": "https://anothereden.wiki/w/Clarte", "contains": "Speed of all enemies -15%", "expected": {"present": true, "proposed_value": "speed_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:223a8061720d6b74a893", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "Speed of all party members +40%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:15cea8a12ca6158a5c65", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "Speed of all enemies -15%", "expected": {"present": true, "proposed_value": "speed_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-enemy-type-resistance-down": {
+      "positive": {"source_fact_id": "skill:2a2cdf1ad72a4ffe8302", "source_url": "https://anothereden.wiki/w/Kuchinawa", "contains": "Type Resistance of all enemies -30%", "expected": {"present": true, "proposed_value": "enemy_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:5f6ecc8bc37a12404137", "source_url": "https://anothereden.wiki/w/Alma_(Another_Style)", "contains": "Type Resistance of all party members +50%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:6f8c64d14984308d92c4", "source_url": "https://anothereden.wiki/w/Mayu", "contains": "Type resistance of all enemies -30%", "expected": {"present": true, "proposed_value": "enemy_resistance_down", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-fixed-damage-response": {
+      "positive": {"source_fact_id": "skill:4fcc820d45f08d355f6f", "source_url": "https://anothereden.wiki/w/Yukino_(Another_Style)", "contains": "Also works against Fixed damage", "expected": {"present": true, "proposed_value": "fixed_damage_response", "proposed_direction": "ally", "proposed_target": "party"}},
+      "misleading_negative": {"source_fact_id": "skill:3c19a3d18c01e81bd6e9", "source_url": "https://anothereden.wiki/w/Tiramisu", "contains": "Fixed damage on all enemies", "expected": {"present": false}},
+      "regression": {"source_fact_id": "passive:2a5e2976457ee8534503", "source_url": "https://anothereden.wiki/w/Anabel", "contains": "Applies against physical, magic, and fixed damage attacks", "expected": {"present": true, "proposed_value": "fixed_damage_response", "proposed_direction": "ally", "proposed_target": "self"}}
+    },
+    "cap-multi-entity-damage": {
+      "positive": {"source_fact_id": "skill:5be1c13ae8c4bce751b5", "source_url": "https://anothereden.wiki/w/Akane", "contains": "Slash attack on all enemies", "expected": {"present": true, "proposed_value": "multi_entity_damage", "proposed_direction": "enemy", "proposed_target": "all_enemies"}},
+      "misleading_negative": {"source_fact_id": "skill:087f55a05545cca4a028", "source_url": "https://anothereden.wiki/w/Clarte", "contains": "all enemies", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:41458f213cdeb36f7939", "source_url": "https://anothereden.wiki/w/Aldo", "contains": "Fire type slash attack on all enemies x2", "expected": {"present": true, "proposed_value": "multi_entity_damage", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    },
+    "cap-multi-hit-action": {
+      "positive": {"source_fact_id": "skill:3bf0d55a753ab920d4c4", "source_url": "https://anothereden.wiki/w/Aldo", "contains": "Fire type slash attack on a single enemy x3", "expected": {"present": true, "proposed_value": "multi_hit_action", "proposed_direction": "enemy", "proposed_target": "single_enemy"}},
+      "misleading_negative": {"source_fact_id": "skill:cdf2007734d06aaf49c5", "source_url": "https://anothereden.wiki/w/Colette", "contains": "once per battle", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:41458f213cdeb36f7939", "source_url": "https://anothereden.wiki/w/Aldo", "contains": "Fire type slash attack on all enemies x2", "expected": {"present": true, "proposed_value": "multi_hit_action", "proposed_direction": "enemy", "proposed_target": "single_enemy"}}
+    },
+    "cap-party-speed-up": {
+      "positive": {"source_fact_id": "skill:223a8061720d6b74a893", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "Speed of all party members +40%", "expected": {"present": true, "proposed_value": "speed_up", "proposed_direction": "ally", "proposed_target": "party"}},
+      "misleading_negative": {"source_fact_id": "skill:087f55a05545cca4a028", "source_url": "https://anothereden.wiki/w/Clarte", "contains": "Speed of all enemies -15%", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:92bbf0d2d8879b9c6e7a", "source_url": "https://anothereden.wiki/w/Amy", "contains": "Speed of all party members +25%", "expected": {"present": true, "proposed_value": "speed_up", "proposed_direction": "ally", "proposed_target": "party"}}
+    },
+    "cap-remove-active-zone": {
+      "positive": {"source_fact_id": "skill:1c2c4a24f6dd8d051b7d", "source_url": "https://anothereden.wiki/w/Anabel_(Another_Style)", "contains": "Removes Any Active Stance", "expected": {"present": true, "proposed_value": "remove_zone", "proposed_direction": "field", "proposed_target": "zone"}},
+      "misleading_negative": {"source_fact_id": "skill:e3a8fbec4bfeb37687fc", "source_url": "https://anothereden.wiki/w/Blooming_Blade", "contains": "Zone can still be removed/broken by skills that remove zones", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:f4d7ea55a359f6ea1370", "source_url": "https://anothereden.wiki/w/Jillfunny", "contains": "Remove any active zone", "expected": {"present": true, "proposed_value": "remove_zone", "proposed_direction": "field", "proposed_target": "zone"}}
+    },
+    "cap-repeatable-setup": {
+      "positive": {"source_fact_id": "skill:f4d7ea55a359f6ea1370", "source_url": "https://anothereden.wiki/w/Jillfunny", "contains": "many times per battle", "expected": {"present": true, "proposed_value": "repeatable_setup", "proposed_direction": "self", "proposed_target": "self"}},
+      "misleading_negative": {"source_fact_id": "skill:cdf2007734d06aaf49c5", "source_url": "https://anothereden.wiki/w/Colette", "contains": "once per battle", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:1ae66e098b51092fed84", "source_url": "https://anothereden.wiki/w/Blooming_Blade", "contains": "many times per battle", "expected": {"present": true, "proposed_value": "repeatable_setup", "proposed_direction": "self", "proposed_target": "self"}}
+    },
+    "cap-restore-statuses": {
+      "positive": {"source_fact_id": "skill:087f55a05545cca4a028", "source_url": "https://anothereden.wiki/w/Clarte", "contains": "Restore all statuses of all party members", "expected": {"present": true, "proposed_value": "remove_status_ailment", "proposed_direction": "ally", "proposed_target": "party"}},
+      "misleading_negative": {"source_fact_id": "skill:4508a105b9bc0870a662", "source_url": "https://anothereden.wiki/w/Aldo_(Another_Style)", "contains": "restore all statuses and remove Debuffs on user", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:5fa1048044fa85d25060", "source_url": "https://anothereden.wiki/w/Claude_(Extra_Style)", "contains": "Restore all party members' HP 30% and restore all statuses", "expected": {"present": true, "proposed_value": "remove_status_ailment", "proposed_direction": "ally", "proposed_target": "party"}}
+    },
+    "cap-typed-damage": {
+      "positive": {"source_fact_id": "skill:3bf0d55a753ab920d4c4", "source_url": "https://anothereden.wiki/w/Aldo", "contains": "Fire type slash attack on a single enemy", "expected": {"present": true, "proposed_value": "direct_damage", "proposed_direction": "enemy", "proposed_target": "single_enemy"}},
+      "misleading_negative": {"source_fact_id": "skill:8a5a4e1f70487c377725", "source_url": "https://anothereden.wiki/w/Aisha", "contains": "Inflict Pain and Inflict Poison on all enemies", "expected": {"present": false}},
+      "regression": {"source_fact_id": "skill:41458f213cdeb36f7939", "source_url": "https://anothereden.wiki/w/Aldo", "contains": "Fire type slash attack on all enemies x2", "expected": {"present": true, "proposed_value": "direct_damage", "proposed_direction": "enemy", "proposed_target": "all_enemies"}}
+    }
+  }
+}

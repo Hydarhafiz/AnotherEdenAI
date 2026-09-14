@@ -163,8 +163,15 @@ def test_c3_qualifiers_do_not_cross_compound_effect_clauses():
 def test_c3_mvp_activates_exactly_25_families_and_reserves_four():
     taxonomy = load_capability_taxonomy()
     active = active_capabilities(phase="offensive_support")
+    feature_c_active = {
+        "attack_type_resistance_down", "burst_window", "enemy_buff_dispel",
+        "enemy_resistance_down", "intelligence_down", "magic_resistance_down",
+        "multi_entity_damage", "multi_hit_action", "physical_resistance_down",
+        "power_down", "speed_down", "speed_up",
+    }
 
-    assert len(active) == 25
+    assert len(set(active) - feature_c_active) == 25
+    assert feature_c_active <= set(active)
     assert set(taxonomy["reserved_capabilities"]) == {
         "af_gauge_gain_up", "invert_weakness_resistance", "grant_copy", "follow_up_attack",
     }
@@ -266,7 +273,7 @@ def test_c3_seed_review_is_deterministic_and_artifact_only(tmp_path, monkeypatch
     assert first.read_bytes() == second.read_bytes()
     with first.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    assert len(rows) == 25
+    assert len(rows) == len(active)
     assert {row["fixture_role"] for row in rows} == {"positive_with_cross_family"}
     assert all(row["cross_family_value"] != row["fixture_capability"] for row in rows)
     assert not list(tmp_path.glob("*.json")) or (tmp_path / "seed-1.reference.json").exists()

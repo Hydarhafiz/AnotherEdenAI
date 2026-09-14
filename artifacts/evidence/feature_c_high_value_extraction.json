@@ -1,0 +1,3471 @@
+{
+  "artifact_type": "feature_c_full_catalog_high_value_extraction",
+  "artifact_version": "m6-c-1.0.0",
+  "bounded_review_queues": {
+    "ambiguous": [],
+    "boss_acceptance_relevant": [
+      {
+        "authoritative": false,
+        "character_id": "character:8f1a6ac9f94c26c335b0",
+        "character_name": "Senya (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "c852f1b7d5b6cb1f4297d20f",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:017db2e0661ab645c62f",
+        "source_text": "Resonance Blaze Fire type slash attack on all enemies (XL, increase skill damage 25 times 25x of the standard skill multiplier of 160% ) and stack 3 Resonance [Mind] Restore all party members' MP +10% Changes the basic attacks of all party members when Radical Raging Fire Stance is Deployed by Senya AS Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Senya_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f09df4055333f8b7ffc2",
+        "character_name": "Meryt",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type blunt attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "af697595647eb54fda64f395",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:170a2b2e412e1be755a9",
+        "source_text": "Crimson Fire Claw Chain Ability Activates when any ally excluding user uses a fire attack Fire type blunt attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 160% ) Restores User's HP 30% Can activate up to 3 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Meryt"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:2dd84082c1941a1c9b48",
+        "character_name": "Renri",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "501d7bb4cddb1ddbb1944be3",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:1a995df8a0f69030df26",
+        "source_text": "Unanimity Chain Ability Activates when any ally excluding user uses a piercing attack Slash attack on all enemies (XXL, increase skill damage 15 times. 15x of the standard skill multiplier of 220% ) Can activate once per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Renri"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:01bb3c58b171be72af5e",
+        "character_name": "Ilulu (Alter),Crimson Reaper",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "7d2c616c176702bc5a91ca17",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:224986dd69e96674c923",
+        "source_text": "Ilulu End of Turn Attack End of Turn Attack When in Another Zone and Harvest is stacked: Water type slash attack on all enemies (XL) Skill multiplier = [160% x (5 + slash moves)] (Max 50 Moves: Multiplier: x55 ) effect's power is based on number [up to 50] of Slash moves used during the turn. double moves from Copy status are counted twice. Attack again moves are each counted. End-of-Turn, counters, knocked back or dead allies' moves are not counted. Counting Rules - in-length explanations When not in Sleep, Confusion, Stone, Freeze, Stun    zone Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Crimson_Reaper"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:d1e255f2d5046b549817",
+        "character_name": "Klaudia",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water type magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "6df64160c0668f8714dddd58",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:26b45368965187552204",
+        "source_text": "Tuning Chain Ability Activates On : At turn start, select randomly from below An ally other than you uses a Fire type attack Skill An ally other than you uses a Water type attack Skill An ally other than you uses a Stat Debuff Skill Water type magic attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 150% ) and raise Tactics Level by 20 Can activate up to 2 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Klaudia"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:16af7b78d596b7ac4e21",
+        "character_name": "Laclair (Alter),Selfless Seeker",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth Type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "8eec014e683957b5b5affdcb",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:3614894b6cc07cc1e63d",
+        "source_text": "Hunting - EOT End of Turn Attack When 60 Hunting are stacked on any enemy : Activate Lunatic with Status Mind's eye on user (3 turn) Earth Type piercing attack on all enemies (XL, increase skill damage 40 times 40x of the standard skill multiplier of 160% ) Consumes Hunting Stack When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Selfless_Seeker"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa48a99937064f28863",
+        "character_name": "Nagi (Extra Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "do work inside AF. Changes party damage",
+        "priority_band": "P0",
+        "proposal_id": "8949155887738a722129f5d8",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:38a077e7e450a17b3ae1",
+        "source_text": "Sea of Stars Stance Enables AF button only at 100% AF gauge. Increase effects do work inside AF. Changes party damage and party healing in a battle with multipliers: +100% for all All types of attack moves. Only when AF gauge is full. Another Force (AF) gauge is charged per move when Zone is active , in place of normal per hit charge. 7.5% - AF gain from All types of attack moves. 0.5% - AF gain from fixed and self-damage moves. Zone stays in effect until the end of battle, unless overwritten with another Zone.    zone Stances/Zones",
+        "source_url": "https://anothereden.wiki/w/Nagi_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa82dee7df31bbbc437",
+        "character_name": "Yukino",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "d1c65e3d587756b3c4f8c9f5",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:3ada30ca78c87d65ca45",
+        "source_text": "Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [150%] > x2: [300%] > x3: [600%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4e506184814a77f45c64",
+        "character_name": "Premaya (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "c3b482c289c423fc545c79f0",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:3ce6d782716010839000",
+        "source_text": "Sagitta EOT Attack End of Turn Attack Earth type piercing attack on all enemies (XL) Number of attacks and multiplier increase based on number of Sagitta stacked (Max Stack 4, Add 3 extra attacks, Multiplier x2) Number stacked: 1 > 2 > 3 > 4 Multiplier: 160% > 210% x 2 (420%) > 260% x 3 (780%) > 320% x 4 (1280%) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Premaya_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a9d6e4edd82a809a49d8",
+        "character_name": "Dunarith (Alter) (Another Style),Dream Weaver (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "Does not affect speed based damage",
+        "priority_band": "P0",
+        "proposal_id": "b455062839b4d4d7715f6e87",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:4e61d9c973aef031dc14",
+        "source_text": "Resonance (Sacrifice) Stacking Sonority When user is on the frontline : Stack 1 Resonance [Sacrifice] at turn end Resonance [Sacrifice] : Endurance and Spirit all party members +20 per stack (Max Stack 10: +100 ) When in any Radical Stance : Apply effects of Lunatic - Sacrifice on all party members (can co-exist with other Lunatic types). Convert a portion of P.DEF ( END ) to PWR and a portion of M.DEF ( SPR ) to INT . Increase in INT does not affect Elemental Modifier Does not affect speed based damage Activates Lunatic conditioned effects of skills.    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Dream_Weaver_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4d406a026000eba823b8",
+        "character_name": "Zeviro (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "30% Damage",
+        "priority_band": "P0",
+        "proposal_id": "12e18fab2426286efe1305fd",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:4f9c5f711f52e2a38b67",
+        "source_text": "Dread Stacking Battle Start Stack 1 Dread to all enemies at the beginning of the battle if the unit is in front. Dread : Increases each time enemy receive a hit, Physical Resistance -0.6% per stack, max 50 stacks: -30% Damage from Allies and Pain / Poison also increases Dread    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zeviro_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:388660846bd7ab128c23",
+        "character_name": "Velvet",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "a9fbbe78c7e30afa37c82a76",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:51c9b8b11bfcea625896",
+        "source_text": "Phalanx Raid End of Turn Attack When in Therion State and at 0 Soul Gauges : Earth type slash attack on all enemies x3 (XL) and Speed -50% (3 turns) and Critical damage of user +50% (3 turns) Stop Therion State When not in Sleep, Confusion, Stone, Freeze, Stun    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Velvet"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:227f5383de684cfbe0d6",
+        "character_name": "Zilva (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "100% damage",
+        "priority_band": "P0",
+        "proposal_id": "c431f83426a4420602f0eb8b",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:535a1d3f160039608f5c",
+        "source_text": "Deep Shadow EOT End of Turn Attack When in Deep Shadow mode : Slash attack on a single enemy (XL), Guaranteed Critical and ignore target's defense (Def=0 in Damage Formula ) +100% damage if target is afflicted with Pain (Multiplier x2) +100% damage if target is afflicted with Poison (Multiplier x2) When target has Lingering Scent Stacked: Skill multiplier +200% (Multiplier x3) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zilva_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:227f5383de684cfbe0d6",
+        "character_name": "Zilva (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "8b68c10de4439a26223184ff",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:535a1d3f160039608f5c",
+        "source_text": "Deep Shadow EOT End of Turn Attack When in Deep Shadow mode : Slash attack on a single enemy (XL), Guaranteed Critical and ignore target's defense (Def=0 in Damage Formula ) +100% damage if target is afflicted with Pain (Multiplier x2) +100% damage if target is afflicted with Poison (Multiplier x2) When target has Lingering Scent Stacked: Skill multiplier +200% (Multiplier x3) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zilva_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1676fd54815c08c37882",
+        "character_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Shade type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "0bc70b310c58dcb8c0c96ccf",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:535bb1d1adfcdcbc0add",
+        "source_text": "Dark Shadow - EOT End of Turn attack Shade type slash attack on all enemies x2 (XL, increase skill damage 25 times 25x of the standard skill multiplier of 160% ) and Shade type resistance -50% (5 turns) When not in Sleep, Confusion, Stone, Freeze, Stun    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Black_Clad_Sw._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:8107443aee02b056ea9b",
+        "character_name": "Mayu",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "do work inside AF. Changes party damage",
+        "priority_band": "P0",
+        "proposal_id": "0e7fc8dbb30f8302cd5e72d1",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:54a1b78fc17b3df3dc05",
+        "source_text": "Sea of Stars Stance Enables AF button only at 100% AF gauge. Increase effects do work inside AF. Changes party damage and party healing in a battle with multipliers: +100% for all All types of attack moves. Only when AF gauge is full. Another Force (AF) gauge is charged per move when Zone is active , in place of normal per hit charge. 7.5% - AF gain from All types of attack moves. 0.5% - AF gain from fixed and self-damage moves. Zone stays in effect until the end of battle, unless overwritten with another Zone.    zone Stances/Zones",
+        "source_url": "https://anothereden.wiki/w/Mayu"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a0679b5fdedf556bb0c9",
+        "character_name": "Shanie (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water type slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "b8cf4a68b4bbc5a65593e5b4",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:5fcfca6bcfdc996b8462",
+        "source_text": "Magic Sword: Water Stack End of Turn Attack Water type slash attack on a single enemy (S) number of hit equals number of Teal stacked (max 3) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Shanie_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:d4817bd00fdf274d1ad2",
+        "character_name": "Ryza",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "bd226db0bbcc6a63be47c1e3",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:62dde3c4ab90320c5cf4",
+        "source_text": "Astral Sphere Chain Ability Activates On : At turn start, select randomly from below An ally other than you uses a Fire type attack Skill An ally other than you uses a Restore Skill An ally other than you uses a Stat Buff Skill Fire type magic attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 150% ) and raise Tactics Level by 20 Can activate up to 2 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Ryza"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:5202c7ca8e5c489d7801",
+        "character_name": "Id",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type blunt attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "47f6c5dc2dc79ec0df4b8316",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6a1d0ee57d02a8d000a5",
+        "source_text": "Scattering Kick Chain Ability Activates when any ally excluding user uses an AOE attack Earth type blunt attack on all enemies (XL, increase skill damage 2 times. 2x of the standard skill multiplier of 160% ) and inflict Stun Skill multiplier increases based on number of frontline Fists/Hammer ally excluding user (Max x3) Can activate up to 5 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Id"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:769b96358a21d6bad573",
+        "character_name": "Empel",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "0378d029021c8c81636b83d3",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6c482361cdead6b522c4",
+        "source_text": "Access Shift Chain Ability Activates On : At turn start, select randomly from below An ally other than you uses a Restore Skill An ally other than you uses a Stat Buff Skill An ally other than you uses a Stat Debuff Skill Non type magic attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 160% ) and raise Tactics Level by 20 Can activate up to 2 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Empel"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:128debdc859c78d9e14a",
+        "character_name": "Milsha (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Shade type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "aad4d1e27a74509b04fe7b10",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6eb2da1f72705035bf1b",
+        "source_text": "Delfini Turn-End Attack End of Turn Attack When user has Delfini stacks, consume 1 stack to do: Shade type piercing attack on all enemies and Guaranteed critical Move multiplier is equal to that of the last used of any of Adis-Veloni , Adis-Dory Multiplier from last used is maintained regardless of current Steidi stacks or Lunatic state When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Milsha_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1676fd54815c08c37882",
+        "character_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Preemptive Shade type slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "4d8160e934cba7b85f5bc163",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6f98887c6827f5974ac6",
+        "source_text": "Scherzando Preemptive Shade type slash attack on a single enemy x2 (XL, increase skill damage 10 times 10x of the standard skill multiplier of 200% ) Changes the basic attacks of all party members when Radical Biting Shade Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active Stack 2 Resonance [Sacrifice]    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Black_Clad_Sw._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:c014ef6dc6ba3791c20b",
+        "character_name": "Krervo (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "ff7f314ea6fbaa5167a58dd4",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:75d453a30d93c1d5f16e",
+        "source_text": "Debuff Reuse Chain Ability Activates when any ally excluding user uses a Stat Debuff Magic attack on all enemies (XL, increase skill damage 3 times 3x of the standard skill multiplier of 160% ) Restore all party members' HP (XL) and Max HP of all party members +500 (3 turns, Max Stacks x6: +3000 Max HP) Can activate up to 5 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Krervo_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:baac838017aed8d012b3",
+        "character_name": "Zeviro",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "30% Damage",
+        "priority_band": "P0",
+        "proposal_id": "627d0519ebaa57680d7e4aff",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:7d8cb7a42361e87b1fe7",
+        "source_text": "Dread Stacking Battle Start Stack 1 Dread to all enemies at the beginning of the battle if the unit is in front. Dread : Increases each time enemy receive a hit, Physical Resistance -0.6% per stack, max 50 stacks: -30% Damage from Allies and Pain / Poison also increases Dread    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zeviro"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a82b21ccb08b7a2b79da",
+        "character_name": "Yukino (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "39efcbd873825513e3dc7032",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:7dc020d6abe5e65ef472",
+        "source_text": "Cool Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Cool Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [750%] > x2: [1500%] > x3: [3000%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1676fd54815c08c37882",
+        "character_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "Does not affect speed based damage",
+        "priority_band": "P0",
+        "proposal_id": "bbcf98302facbd68866c5592",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8053bb578f2293f6bbb3",
+        "source_text": "Resonance (Sacrifice) Stacking (BCS) Sonority When user is on the frontline : Stack 2 Resonance [Sacrifice] at turn end Resonance [Sacrifice] : Endurance and Spirit all party members +20 per stack (Max Stack 10: +100 ) When in any Radical Stance : Apply effects of Lunatic - Sacrifice on all party members (can co-exist with other Lunatic types). Convert a portion of P.DEF ( END ) to PWR and a portion of M.DEF ( SPR ) to INT . Increase in INT does not affect Elemental Modifier Does not affect speed based damage Activates Lunatic conditioned effects of skills.    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Black_Clad_Sw._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a6c13262f020b32f283b",
+        "character_name": "Milsha",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Shade type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "205498534280cdb3b8a79cc1",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:83d1de27bf426c7e89d3",
+        "source_text": "Delfini Turn-End Attack End of Turn Attack When user has Delfini stacks, consume 1 stack to do: Shade type piercing attack on all enemies and Guaranteed critical Move multiplier is equal to that of the last used of any of Adis-Veloni , Adis-Dory , Adis-Triana Multiplier from last used is maintained regardless of current Steidi stacks or Lunatic state When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Milsha"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa82dee7df31bbbc437",
+        "character_name": "Yukino",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "ac853226684be5fc74dfa742",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:840d4e4f57f3fa2ea189",
+        "source_text": "Ultra Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Ultra Yuki-snowgirl : Water-type magic attack on all enemies (XL) Skill multiplier increase from Snow Flurry Stacks x1: [1500%] > x2: [3000%] > x3: [6000%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:54ad5dc6143d99269455",
+        "character_name": "Victor (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Wind type Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "b9c36829b3699013371a3feb",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8523128d695f8a29d191",
+        "source_text": "Victor AS EoT attack: Noche stack End of Turn Attack Consume Noche stack to perform Wind type Slash attack on all enemies (XL) [160% x mod] When in Lunatic, guarantee Critical If AF is used in that turn, final AF combo% is added to skill multiplier. Skill multiplier: 160% + 7.2 * AF_combo%, capped at AF combo% = 1000% (max skill multiplier= 7360% ) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Victor_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:88de83feb3a759541a2f",
+        "character_name": "Toova (Alter) (Another Style),Violet Lancer (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type piercing attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "9579b54ba69945976b764635",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:86ff948cb86ce1f467a5",
+        "source_text": "Weakness Skewer Earth type piercing attack on a single enemy (XL) and stack 2 Resonance [Mind's Eye] Weakness Multiplier of the user +1 (3 turns) Changes the basic attacks of all party members when Radical Torn Earth Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Violet_Lancer_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:88de83feb3a759541a2f",
+        "character_name": "Toova (Alter) (Another Style),Violet Lancer (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth Type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "0bf5627f6543b7053cb873ff",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8e9eb678cf73dc26502f",
+        "source_text": "Earth Piercer Chain Ability Activates when any ally excluding user uses an Earth type attack Earth Type piercing attack on all enemies (XL) Stack 2 Resonance [Mind's Eye] Can activate up to 2 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Violet_Lancer_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a82b21ccb08b7a2b79da",
+        "character_name": "Yukino (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "92a618a21665364382216697",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8f23c18d55739809bc2b",
+        "source_text": "Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [150%] > x2: [300%] > x3: [600%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:c1cf685e670a3aca4c6b",
+        "character_name": "Milla",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "3afbaf4f9de1cb8bd8b6c12b",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:903c3c961403815185a2",
+        "source_text": "Shimmer Spin - EoT End of Turn Attack When Shimmer Spin skill was used and according to the most-used element type in current turn: If Null : Magic attack on all enemies (XL) and restore all party members' HP +50% If Fire/Earth/Wind/Water : Fire/Earth/Wind/Water type magic attack on all enemies (XL) and Fire/Earth/Wind/Water type resistance of all enemies -100% (1 turn), respectively Damage is based on user's PWR Most used element : Multi-move skill like Copy counts twice. HP and MP healing and self-damage count as Null. fixed damage/counters/EoT attacks/additional attack from 1 More or other elements attacks are not counted. if a skill has multiple elements, each count. if an attack also has healing, only count the attack random from few elements if they are tied as most used. When not in Sleep, Confusion, Stone, Freeze, Stun    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Milla"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa82dee7df31bbbc437",
+        "character_name": "Yukino",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "c316a6a17184efa899342f96",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:93a3f4498e613eb44b51",
+        "source_text": "Cool Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Cool Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [750%] > x2: [1500%] > x3: [3000%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6d76d4e88b6e59d9bf44",
+        "character_name": "Premaya (Alter) (Another Style),Silver Striker (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Thunder type piercing attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "74987c0ec4439e8092789cfc",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:93b01b521fb8ab53cfbd",
+        "source_text": "Auto Recover Thunder type piercing attack on a single enemy (L) and stack 2 Resonance [Pierce] Apply Regen 15% and MP regen 15% on user (5 turns) Changes the basic attacks of all party members when Radical Thundering Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Silver_Striker_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:e9b7d3375043c48fa68c",
+        "character_name": "Kuchinawa (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth Type magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "da8236ca1ff38127b7c6a688",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:961c00951d86eae17bed",
+        "source_text": "Exorcism of Serpents Chain Ability Activates when any ally excluding user uses an Earth type attack Earth Type magic attack on all enemies (XL) Stack 2 Snake Ward Snake Ward : PWR/INT/END/SPR -10 per stack (Max Stack 20: -200 Stats) Can activate up to 3 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Kuchinawa_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4f360980f4f771e5b7ef",
+        "character_name": "Ruvi",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "4d337435ca7a8e912507f187",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9621fa8f11d16fb4637c",
+        "source_text": "Cross Cut Chain Ability Activates when any ally excluding user uses a slash attack Slash attack on all enemies (M) and Stack 1 Chronosphere Count (Max Stacks: 3) Chronosphere Count : When user has 3 stacked, Activate Chronosphere EOT Can activate 3 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Ruvi"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:c3e82dfc790c7d4ee912",
+        "character_name": "Daisy (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "80% damage",
+        "priority_band": "P0",
+        "proposal_id": "9c04cd973ea6fa019aa7d8d2",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:967201fb659f358cf948",
+        "source_text": "Turn Start Eagle Eyes Start of Turn When in Roaring Bash Stance : Give Eagle Eyes to user (3 turns) : +80% damage if enemy moves before user. Skill requires Stellar Awakening    stance Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Daisy_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:810393564dea0ed53113",
+        "character_name": "Flammelapis (Extra Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water Type Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "d221079be52e4f13e88803ea",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9734e532f25f8f1134da",
+        "source_text": "Am Luas Chain Ability Activates when any ally excluding user uses a magic attack Water Type Slash attack on all enemies (XL, increase skill damage 2 times 2x of the standard skill multiplier of 160% ) and Stack 1 Mana Luas on user Mana Luas : Power + 20 and Speed + 50 per stack (Max Stacks 10: Power +200 and Speed +500) Restore all party member's MP +5% Can activate up to 5 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Flammelapis_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:b5f21aa1ebfe6e0229ef",
+        "character_name": "Elseal (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "c4e866d77f14ad440c62f518",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9dbcd68d943b733c1996",
+        "source_text": "Hastatus Chain Ability Activates when any ally excluding user uses a single target water type skill Slash attack on a single enemy (L) and Stack 1 Antique on all frontline water party members Antique : Power, Intelligence and Speed +10 per stack (Max Stacks: 10, +100 Stats) Consumes 1 Stack at turn end If user dies consumes all stacks Can activate up to 4 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Elseal_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:43d0bb70fee41423ed30",
+        "character_name": "Tsukiha (Alter) (Another Style),Noble Blossom (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "f899297089a934b4c5f26118",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9ee570c358bc2698ccd3",
+        "source_text": "Burning Grace Fire type slash attack on all enemies (XL) and stack 3 Resonance [Pierce] Physical resistance and Magic resistance +50% (3 turns) Changes the basic attacks of all party members when Radical Raging Fire Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Noble_Blossom_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:2200e18bb33bac43ed55",
+        "character_name": "Felmina",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Wind Type Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "201616a56cb40f1e0e1ce783",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:a7db08409acb7db3f794",
+        "source_text": "Clandestine EOT End of Turn Attack Wind Type Slash attack on all enemies x3 (XL, increase skill damage 20 times 10x of the standard skill multiplier of 160% ) Skill multiplier increases based on number of turns spent in Clandestine mode (Max 3 turns: Multiplier x2) When not in Sleep, Confusion, Stone, Freeze, Stun    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Felmina"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4f360980f4f771e5b7ef",
+        "character_name": "Ruvi",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "1712f16efb3bcd51a58577a8",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:ad52ca6955a290cdc804",
+        "source_text": "Chronosphere EOT End of Turn Attack Slash attack on all enemies (XL, increase skill damage 3 times 3x of the standard skill multiplier of 210% ) Consume all Chronosphere Count When not in Sleep, Confusion, Stone, Freeze, Stun    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Ruvi"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:602d9fdba0d77cd45cff",
+        "character_name": "Minalca (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "Deal 20% current HP damage",
+        "priority_band": "P0",
+        "proposal_id": "06096c0406247c995d6b93c3",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:b1799911e4fb624ea6cf",
+        "source_text": "Tributum Stacking Start of Turn Deal 20% current HP damage to all allies at the frontline and stack Tributum based on damage dealt, (max stacks: 50 ) Number of stacks = 10 + total_ally_damage_dealt_by_Minalca / 100, rounded down Example: 4 allies with ~3400 current HP, will make 10 + (20%*13600)/100 = 37 stacks Max stacks when allies have 5000+ average current HP (or 20,000+ HP total) Damage done to Shield does not count Stacks are reset at turn end Stack effects: gradually affects power of some of user skill buffs and attacks. Effect is calculated with formula: [1 stack power] = ([max skill power]-[min skill power]) / 50 Current skill power = [min skill power] + [number of stacks] x [1 stack power] Simplified example: 37 stacks are 74% of 50 stacks: all skills will work with [Base effect] + [74% of possible additional power]    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Minalca_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a18512e9b8edd16c3659",
+        "character_name": "Nina",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Crystal type magic attack on random enemies",
+        "priority_band": "P0",
+        "proposal_id": "20d7d3b4f6741632569ef3c9",
+        "reason": "required_boss_counter",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:b46ee25e77721a691d82",
+        "source_text": "Fashionable Outfit Chain Ability Activates when any ally excluding user uses a Crystal type attack Crystal type magic attack on random enemies (XL, increase skill damage 4 times. 4x of the standard skill multiplier of 190% ) Critical Rate and Magic Critical rate of all party members +100% and Type attack +100% (3 moves) and Stack 1 Outfit on all party members Can activate up to 3 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Nina"
+      }
+    ],
+    "high_impact": [
+      {
+        "authoritative": false,
+        "character_id": "character:8f1a6ac9f94c26c335b0",
+        "character_name": "Senya (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "c852f1b7d5b6cb1f4297d20f",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:017db2e0661ab645c62f",
+        "source_text": "Resonance Blaze Fire type slash attack on all enemies (XL, increase skill damage 25 times 25x of the standard skill multiplier of 160% ) and stack 3 Resonance [Mind] Restore all party members' MP +10% Changes the basic attacks of all party members when Radical Raging Fire Stance is Deployed by Senya AS Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Senya_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f09df4055333f8b7ffc2",
+        "character_name": "Meryt",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type blunt attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "af697595647eb54fda64f395",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:170a2b2e412e1be755a9",
+        "source_text": "Crimson Fire Claw Chain Ability Activates when any ally excluding user uses a fire attack Fire type blunt attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 160% ) Restores User's HP 30% Can activate up to 3 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Meryt"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:2dd84082c1941a1c9b48",
+        "character_name": "Renri",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "501d7bb4cddb1ddbb1944be3",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:1a995df8a0f69030df26",
+        "source_text": "Unanimity Chain Ability Activates when any ally excluding user uses a piercing attack Slash attack on all enemies (XXL, increase skill damage 15 times. 15x of the standard skill multiplier of 220% ) Can activate once per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Renri"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:01bb3c58b171be72af5e",
+        "character_name": "Ilulu (Alter),Crimson Reaper",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "7d2c616c176702bc5a91ca17",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:224986dd69e96674c923",
+        "source_text": "Ilulu End of Turn Attack End of Turn Attack When in Another Zone and Harvest is stacked: Water type slash attack on all enemies (XL) Skill multiplier = [160% x (5 + slash moves)] (Max 50 Moves: Multiplier: x55 ) effect's power is based on number [up to 50] of Slash moves used during the turn. double moves from Copy status are counted twice. Attack again moves are each counted. End-of-Turn, counters, knocked back or dead allies' moves are not counted. Counting Rules - in-length explanations When not in Sleep, Confusion, Stone, Freeze, Stun    zone Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Crimson_Reaper"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:d1e255f2d5046b549817",
+        "character_name": "Klaudia",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water type magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "6df64160c0668f8714dddd58",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:26b45368965187552204",
+        "source_text": "Tuning Chain Ability Activates On : At turn start, select randomly from below An ally other than you uses a Fire type attack Skill An ally other than you uses a Water type attack Skill An ally other than you uses a Stat Debuff Skill Water type magic attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 150% ) and raise Tactics Level by 20 Can activate up to 2 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Klaudia"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:16af7b78d596b7ac4e21",
+        "character_name": "Laclair (Alter),Selfless Seeker",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth Type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "8eec014e683957b5b5affdcb",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:3614894b6cc07cc1e63d",
+        "source_text": "Hunting - EOT End of Turn Attack When 60 Hunting are stacked on any enemy : Activate Lunatic with Status Mind's eye on user (3 turn) Earth Type piercing attack on all enemies (XL, increase skill damage 40 times 40x of the standard skill multiplier of 160% ) Consumes Hunting Stack When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Selfless_Seeker"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa48a99937064f28863",
+        "character_name": "Nagi (Extra Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "do work inside AF. Changes party damage",
+        "priority_band": "P0",
+        "proposal_id": "8949155887738a722129f5d8",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:38a077e7e450a17b3ae1",
+        "source_text": "Sea of Stars Stance Enables AF button only at 100% AF gauge. Increase effects do work inside AF. Changes party damage and party healing in a battle with multipliers: +100% for all All types of attack moves. Only when AF gauge is full. Another Force (AF) gauge is charged per move when Zone is active , in place of normal per hit charge. 7.5% - AF gain from All types of attack moves. 0.5% - AF gain from fixed and self-damage moves. Zone stays in effect until the end of battle, unless overwritten with another Zone.    zone Stances/Zones",
+        "source_url": "https://anothereden.wiki/w/Nagi_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa82dee7df31bbbc437",
+        "character_name": "Yukino",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "d1c65e3d587756b3c4f8c9f5",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:3ada30ca78c87d65ca45",
+        "source_text": "Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [150%] > x2: [300%] > x3: [600%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4e506184814a77f45c64",
+        "character_name": "Premaya (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "c3b482c289c423fc545c79f0",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:3ce6d782716010839000",
+        "source_text": "Sagitta EOT Attack End of Turn Attack Earth type piercing attack on all enemies (XL) Number of attacks and multiplier increase based on number of Sagitta stacked (Max Stack 4, Add 3 extra attacks, Multiplier x2) Number stacked: 1 > 2 > 3 > 4 Multiplier: 160% > 210% x 2 (420%) > 260% x 3 (780%) > 320% x 4 (1280%) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Premaya_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a9d6e4edd82a809a49d8",
+        "character_name": "Dunarith (Alter) (Another Style),Dream Weaver (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "Does not affect speed based damage",
+        "priority_band": "P0",
+        "proposal_id": "b455062839b4d4d7715f6e87",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:4e61d9c973aef031dc14",
+        "source_text": "Resonance (Sacrifice) Stacking Sonority When user is on the frontline : Stack 1 Resonance [Sacrifice] at turn end Resonance [Sacrifice] : Endurance and Spirit all party members +20 per stack (Max Stack 10: +100 ) When in any Radical Stance : Apply effects of Lunatic - Sacrifice on all party members (can co-exist with other Lunatic types). Convert a portion of P.DEF ( END ) to PWR and a portion of M.DEF ( SPR ) to INT . Increase in INT does not affect Elemental Modifier Does not affect speed based damage Activates Lunatic conditioned effects of skills.    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Dream_Weaver_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4d406a026000eba823b8",
+        "character_name": "Zeviro (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "30% Damage",
+        "priority_band": "P0",
+        "proposal_id": "12e18fab2426286efe1305fd",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:4f9c5f711f52e2a38b67",
+        "source_text": "Dread Stacking Battle Start Stack 1 Dread to all enemies at the beginning of the battle if the unit is in front. Dread : Increases each time enemy receive a hit, Physical Resistance -0.6% per stack, max 50 stacks: -30% Damage from Allies and Pain / Poison also increases Dread    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zeviro_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:388660846bd7ab128c23",
+        "character_name": "Velvet",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "a9fbbe78c7e30afa37c82a76",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:51c9b8b11bfcea625896",
+        "source_text": "Phalanx Raid End of Turn Attack When in Therion State and at 0 Soul Gauges : Earth type slash attack on all enemies x3 (XL) and Speed -50% (3 turns) and Critical damage of user +50% (3 turns) Stop Therion State When not in Sleep, Confusion, Stone, Freeze, Stun    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Velvet"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:227f5383de684cfbe0d6",
+        "character_name": "Zilva (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "100% damage",
+        "priority_band": "P0",
+        "proposal_id": "c431f83426a4420602f0eb8b",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:535a1d3f160039608f5c",
+        "source_text": "Deep Shadow EOT End of Turn Attack When in Deep Shadow mode : Slash attack on a single enemy (XL), Guaranteed Critical and ignore target's defense (Def=0 in Damage Formula ) +100% damage if target is afflicted with Pain (Multiplier x2) +100% damage if target is afflicted with Poison (Multiplier x2) When target has Lingering Scent Stacked: Skill multiplier +200% (Multiplier x3) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zilva_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:227f5383de684cfbe0d6",
+        "character_name": "Zilva (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "8b68c10de4439a26223184ff",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:535a1d3f160039608f5c",
+        "source_text": "Deep Shadow EOT End of Turn Attack When in Deep Shadow mode : Slash attack on a single enemy (XL), Guaranteed Critical and ignore target's defense (Def=0 in Damage Formula ) +100% damage if target is afflicted with Pain (Multiplier x2) +100% damage if target is afflicted with Poison (Multiplier x2) When target has Lingering Scent Stacked: Skill multiplier +200% (Multiplier x3) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zilva_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1676fd54815c08c37882",
+        "character_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Shade type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "0bc70b310c58dcb8c0c96ccf",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:535bb1d1adfcdcbc0add",
+        "source_text": "Dark Shadow - EOT End of Turn attack Shade type slash attack on all enemies x2 (XL, increase skill damage 25 times 25x of the standard skill multiplier of 160% ) and Shade type resistance -50% (5 turns) When not in Sleep, Confusion, Stone, Freeze, Stun    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Black_Clad_Sw._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:8107443aee02b056ea9b",
+        "character_name": "Mayu",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "do work inside AF. Changes party damage",
+        "priority_band": "P0",
+        "proposal_id": "0e7fc8dbb30f8302cd5e72d1",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:54a1b78fc17b3df3dc05",
+        "source_text": "Sea of Stars Stance Enables AF button only at 100% AF gauge. Increase effects do work inside AF. Changes party damage and party healing in a battle with multipliers: +100% for all All types of attack moves. Only when AF gauge is full. Another Force (AF) gauge is charged per move when Zone is active , in place of normal per hit charge. 7.5% - AF gain from All types of attack moves. 0.5% - AF gain from fixed and self-damage moves. Zone stays in effect until the end of battle, unless overwritten with another Zone.    zone Stances/Zones",
+        "source_url": "https://anothereden.wiki/w/Mayu"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a0679b5fdedf556bb0c9",
+        "character_name": "Shanie (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water type slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "b8cf4a68b4bbc5a65593e5b4",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:5fcfca6bcfdc996b8462",
+        "source_text": "Magic Sword: Water Stack End of Turn Attack Water type slash attack on a single enemy (S) number of hit equals number of Teal stacked (max 3) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Shanie_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:d4817bd00fdf274d1ad2",
+        "character_name": "Ryza",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "bd226db0bbcc6a63be47c1e3",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:62dde3c4ab90320c5cf4",
+        "source_text": "Astral Sphere Chain Ability Activates On : At turn start, select randomly from below An ally other than you uses a Fire type attack Skill An ally other than you uses a Restore Skill An ally other than you uses a Stat Buff Skill Fire type magic attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 150% ) and raise Tactics Level by 20 Can activate up to 2 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Ryza"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:5202c7ca8e5c489d7801",
+        "character_name": "Id",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type blunt attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "47f6c5dc2dc79ec0df4b8316",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6a1d0ee57d02a8d000a5",
+        "source_text": "Scattering Kick Chain Ability Activates when any ally excluding user uses an AOE attack Earth type blunt attack on all enemies (XL, increase skill damage 2 times. 2x of the standard skill multiplier of 160% ) and inflict Stun Skill multiplier increases based on number of frontline Fists/Hammer ally excluding user (Max x3) Can activate up to 5 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Id"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:769b96358a21d6bad573",
+        "character_name": "Empel",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "0378d029021c8c81636b83d3",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6c482361cdead6b522c4",
+        "source_text": "Access Shift Chain Ability Activates On : At turn start, select randomly from below An ally other than you uses a Restore Skill An ally other than you uses a Stat Buff Skill An ally other than you uses a Stat Debuff Skill Non type magic attack on all enemies (XL, increase skill damage 3 times. 3x of the standard skill multiplier of 160% ) and raise Tactics Level by 20 Can activate up to 2 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Empel"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:128debdc859c78d9e14a",
+        "character_name": "Milsha (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Shade type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "aad4d1e27a74509b04fe7b10",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6eb2da1f72705035bf1b",
+        "source_text": "Delfini Turn-End Attack End of Turn Attack When user has Delfini stacks, consume 1 stack to do: Shade type piercing attack on all enemies and Guaranteed critical Move multiplier is equal to that of the last used of any of Adis-Veloni , Adis-Dory Multiplier from last used is maintained regardless of current Steidi stacks or Lunatic state When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Milsha_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1676fd54815c08c37882",
+        "character_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Preemptive Shade type slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "4d8160e934cba7b85f5bc163",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6f98887c6827f5974ac6",
+        "source_text": "Scherzando Preemptive Shade type slash attack on a single enemy x2 (XL, increase skill damage 10 times 10x of the standard skill multiplier of 200% ) Changes the basic attacks of all party members when Radical Biting Shade Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active Stack 2 Resonance [Sacrifice]    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Black_Clad_Sw._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:c014ef6dc6ba3791c20b",
+        "character_name": "Krervo (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "ff7f314ea6fbaa5167a58dd4",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:75d453a30d93c1d5f16e",
+        "source_text": "Debuff Reuse Chain Ability Activates when any ally excluding user uses a Stat Debuff Magic attack on all enemies (XL, increase skill damage 3 times 3x of the standard skill multiplier of 160% ) Restore all party members' HP (XL) and Max HP of all party members +500 (3 turns, Max Stacks x6: +3000 Max HP) Can activate up to 5 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Krervo_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:baac838017aed8d012b3",
+        "character_name": "Zeviro",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "30% Damage",
+        "priority_band": "P0",
+        "proposal_id": "627d0519ebaa57680d7e4aff",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:7d8cb7a42361e87b1fe7",
+        "source_text": "Dread Stacking Battle Start Stack 1 Dread to all enemies at the beginning of the battle if the unit is in front. Dread : Increases each time enemy receive a hit, Physical Resistance -0.6% per stack, max 50 stacks: -30% Damage from Allies and Pain / Poison also increases Dread    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Zeviro"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a82b21ccb08b7a2b79da",
+        "character_name": "Yukino (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "39efcbd873825513e3dc7032",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:7dc020d6abe5e65ef472",
+        "source_text": "Cool Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Cool Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [750%] > x2: [1500%] > x3: [3000%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1676fd54815c08c37882",
+        "character_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "Does not affect speed based damage",
+        "priority_band": "P0",
+        "proposal_id": "bbcf98302facbd68866c5592",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8053bb578f2293f6bbb3",
+        "source_text": "Resonance (Sacrifice) Stacking (BCS) Sonority When user is on the frontline : Stack 2 Resonance [Sacrifice] at turn end Resonance [Sacrifice] : Endurance and Spirit all party members +20 per stack (Max Stack 10: +100 ) When in any Radical Stance : Apply effects of Lunatic - Sacrifice on all party members (can co-exist with other Lunatic types). Convert a portion of P.DEF ( END ) to PWR and a portion of M.DEF ( SPR ) to INT . Increase in INT does not affect Elemental Modifier Does not affect speed based damage Activates Lunatic conditioned effects of skills.    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Black_Clad_Sw._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a6c13262f020b32f283b",
+        "character_name": "Milsha",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Shade type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "205498534280cdb3b8a79cc1",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:83d1de27bf426c7e89d3",
+        "source_text": "Delfini Turn-End Attack End of Turn Attack When user has Delfini stacks, consume 1 stack to do: Shade type piercing attack on all enemies and Guaranteed critical Move multiplier is equal to that of the last used of any of Adis-Veloni , Adis-Dory , Adis-Triana Multiplier from last used is maintained regardless of current Steidi stacks or Lunatic state When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Milsha"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa82dee7df31bbbc437",
+        "character_name": "Yukino",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "ac853226684be5fc74dfa742",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:840d4e4f57f3fa2ea189",
+        "source_text": "Ultra Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Ultra Yuki-snowgirl : Water-type magic attack on all enemies (XL) Skill multiplier increase from Snow Flurry Stacks x1: [1500%] > x2: [3000%] > x3: [6000%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:54ad5dc6143d99269455",
+        "character_name": "Victor (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Wind type Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "b9c36829b3699013371a3feb",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8523128d695f8a29d191",
+        "source_text": "Victor AS EoT attack: Noche stack End of Turn Attack Consume Noche stack to perform Wind type Slash attack on all enemies (XL) [160% x mod] When in Lunatic, guarantee Critical If AF is used in that turn, final AF combo% is added to skill multiplier. Skill multiplier: 160% + 7.2 * AF_combo%, capped at AF combo% = 1000% (max skill multiplier= 7360% ) When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Victor_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:88de83feb3a759541a2f",
+        "character_name": "Toova (Alter) (Another Style),Violet Lancer (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth type piercing attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "9579b54ba69945976b764635",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:86ff948cb86ce1f467a5",
+        "source_text": "Weakness Skewer Earth type piercing attack on a single enemy (XL) and stack 2 Resonance [Mind's Eye] Weakness Multiplier of the user +1 (3 turns) Changes the basic attacks of all party members when Radical Torn Earth Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Violet_Lancer_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:88de83feb3a759541a2f",
+        "character_name": "Toova (Alter) (Another Style),Violet Lancer (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth Type piercing attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "0bf5627f6543b7053cb873ff",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8e9eb678cf73dc26502f",
+        "source_text": "Earth Piercer Chain Ability Activates when any ally excluding user uses an Earth type attack Earth Type piercing attack on all enemies (XL) Stack 2 Resonance [Mind's Eye] Can activate up to 2 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Violet_Lancer_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a82b21ccb08b7a2b79da",
+        "character_name": "Yukino (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "92a618a21665364382216697",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:8f23c18d55739809bc2b",
+        "source_text": "Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [150%] > x2: [300%] > x3: [600%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:c1cf685e670a3aca4c6b",
+        "character_name": "Milla",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "3afbaf4f9de1cb8bd8b6c12b",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:903c3c961403815185a2",
+        "source_text": "Shimmer Spin - EoT End of Turn Attack When Shimmer Spin skill was used and according to the most-used element type in current turn: If Null : Magic attack on all enemies (XL) and restore all party members' HP +50% If Fire/Earth/Wind/Water : Fire/Earth/Wind/Water type magic attack on all enemies (XL) and Fire/Earth/Wind/Water type resistance of all enemies -100% (1 turn), respectively Damage is based on user's PWR Most used element : Multi-move skill like Copy counts twice. HP and MP healing and self-damage count as Null. fixed damage/counters/EoT attacks/additional attack from 1 More or other elements attacks are not counted. if a skill has multiple elements, each count. if an attack also has healing, only count the attack random from few elements if they are tied as most used. When not in Sleep, Confusion, Stone, Freeze, Stun    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Milla"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6fa82dee7df31bbbc437",
+        "character_name": "Yukino",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "c316a6a17184efa899342f96",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:93a3f4498e613eb44b51",
+        "source_text": "Cool Yuki-snowgirl Attack End of Turn Attack When in Yuki-snowgirl State from skill Cool Yuki-snowgirl : Water-type magic attack on all enemies (S) Skill multiplier increase from Snow Flurry Stacks x1: [750%] > x2: [1500%] > x3: [3000%] When not in Sleep, Confusion, Stone, Freeze, Stun    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Yukino"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6d76d4e88b6e59d9bf44",
+        "character_name": "Premaya (Alter) (Another Style),Silver Striker (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Thunder type piercing attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "74987c0ec4439e8092789cfc",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:93b01b521fb8ab53cfbd",
+        "source_text": "Auto Recover Thunder type piercing attack on a single enemy (L) and stack 2 Resonance [Pierce] Apply Regen 15% and MP regen 15% on user (5 turns) Changes the basic attacks of all party members when Radical Thundering Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Silver_Striker_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:e9b7d3375043c48fa68c",
+        "character_name": "Kuchinawa (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Earth Type magic attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "da8236ca1ff38127b7c6a688",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:961c00951d86eae17bed",
+        "source_text": "Exorcism of Serpents Chain Ability Activates when any ally excluding user uses an Earth type attack Earth Type magic attack on all enemies (XL) Stack 2 Snake Ward Snake Ward : PWR/INT/END/SPR -10 per stack (Max Stack 20: -200 Stats) Can activate up to 3 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Kuchinawa_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4f360980f4f771e5b7ef",
+        "character_name": "Ruvi",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "4d337435ca7a8e912507f187",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9621fa8f11d16fb4637c",
+        "source_text": "Cross Cut Chain Ability Activates when any ally excluding user uses a slash attack Slash attack on all enemies (M) and Stack 1 Chronosphere Count (Max Stacks: 3) Chronosphere Count : When user has 3 stacked, Activate Chronosphere EOT Can activate 3 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Ruvi"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:c3e82dfc790c7d4ee912",
+        "character_name": "Daisy (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "80% damage",
+        "priority_band": "P0",
+        "proposal_id": "9c04cd973ea6fa019aa7d8d2",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:967201fb659f358cf948",
+        "source_text": "Turn Start Eagle Eyes Start of Turn When in Roaring Bash Stance : Give Eagle Eyes to user (3 turns) : +80% damage if enemy moves before user. Skill requires Stellar Awakening    stance Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Daisy_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:810393564dea0ed53113",
+        "character_name": "Flammelapis (Extra Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Water Type Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "d221079be52e4f13e88803ea",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9734e532f25f8f1134da",
+        "source_text": "Am Luas Chain Ability Activates when any ally excluding user uses a magic attack Water Type Slash attack on all enemies (XL, increase skill damage 2 times 2x of the standard skill multiplier of 160% ) and Stack 1 Mana Luas on user Mana Luas : Power + 20 and Speed + 50 per stack (Max Stacks 10: Power +200 and Speed +500) Restore all party member's MP +5% Can activate up to 5 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Flammelapis_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:b5f21aa1ebfe6e0229ef",
+        "character_name": "Elseal (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on a single enemy",
+        "priority_band": "P0",
+        "proposal_id": "c4e866d77f14ad440c62f518",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9dbcd68d943b733c1996",
+        "source_text": "Hastatus Chain Ability Activates when any ally excluding user uses a single target water type skill Slash attack on a single enemy (L) and Stack 1 Antique on all frontline water party members Antique : Power, Intelligence and Speed +10 per stack (Max Stacks: 10, +100 Stats) Consumes 1 Stack at turn end If user dies consumes all stacks Can activate up to 4 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Elseal_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:43d0bb70fee41423ed30",
+        "character_name": "Tsukiha (Alter) (Another Style),Noble Blossom (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Fire type slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "f899297089a934b4c5f26118",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:9ee570c358bc2698ccd3",
+        "source_text": "Burning Grace Fire type slash attack on all enemies (XL) and stack 3 Resonance [Pierce] Physical resistance and Magic resistance +50% (3 turns) Changes the basic attacks of all party members when Radical Raging Fire Stance is Deployed Usable only once per Awakening Will not change the basic attacks when basic attack replacement is already active    stance Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Noble_Blossom_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:2200e18bb33bac43ed55",
+        "character_name": "Felmina",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Wind Type Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "201616a56cb40f1e0e1ce783",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:a7db08409acb7db3f794",
+        "source_text": "Clandestine EOT End of Turn Attack Wind Type Slash attack on all enemies x3 (XL, increase skill damage 20 times 10x of the standard skill multiplier of 160% ) Skill multiplier increases based on number of turns spent in Clandestine mode (Max 3 turns: Multiplier x2) When not in Sleep, Confusion, Stone, Freeze, Stun    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Felmina"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4f360980f4f771e5b7ef",
+        "character_name": "Ruvi",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Slash attack on all enemies",
+        "priority_band": "P0",
+        "proposal_id": "1712f16efb3bcd51a58577a8",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:ad52ca6955a290cdc804",
+        "source_text": "Chronosphere EOT End of Turn Attack Slash attack on all enemies (XL, increase skill damage 3 times 3x of the standard skill multiplier of 210% ) Consume all Chronosphere Count When not in Sleep, Confusion, Stone, Freeze, Stun    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Ruvi"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:602d9fdba0d77cd45cff",
+        "character_name": "Minalca (Another Style)",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "trigger_avoidance",
+          "burst_deadline"
+        ],
+        "matched_phrase": "Deal 20% current HP damage",
+        "priority_band": "P0",
+        "proposal_id": "06096c0406247c995d6b93c3",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:b1799911e4fb624ea6cf",
+        "source_text": "Tributum Stacking Start of Turn Deal 20% current HP damage to all allies at the frontline and stack Tributum based on damage dealt, (max stacks: 50 ) Number of stacks = 10 + total_ally_damage_dealt_by_Minalca / 100, rounded down Example: 4 allies with ~3400 current HP, will make 10 + (20%*13600)/100 = 37 stacks Max stacks when allies have 5000+ average current HP (or 20,000+ HP total) Damage done to Shield does not count Stacks are reset at turn end Stack effects: gradually affects power of some of user skill buffs and attacks. Effect is calculated with formula: [1 stack power] = ([max skill power]-[min skill power]) / 50 Current skill power = [min skill power] + [number of stacks] x [1 stack power] Simplified example: 37 stacks are 74% of 50 stacks: all skills will work with [Base effect] + [74% of possible additional power]    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Minalca_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a18512e9b8edd16c3659",
+        "character_name": "Nina",
+        "counter_ids": [
+          "affinity_safe_damage",
+          "multi_mode_damage",
+          "multi_entity_damage"
+        ],
+        "matched_phrase": "Crystal type magic attack on random enemies",
+        "priority_band": "P0",
+        "proposal_id": "20d7d3b4f6741632569ef3c9",
+        "reason": "high_impact_p0",
+        "rule_id": "cap-typed-damage",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:b46ee25e77721a691d82",
+        "source_text": "Fashionable Outfit Chain Ability Activates when any ally excluding user uses a Crystal type attack Crystal type magic attack on random enemies (XL, increase skill damage 4 times. 4x of the standard skill multiplier of 190% ) Critical Rate and Magic Critical rate of all party members +100% and Type attack +100% (3 moves) and Stack 1 Outfit on all party members Can activate up to 3 times per turn    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Nina"
+      }
+    ],
+    "recurring": [
+      {
+        "authoritative": false,
+        "character_id": "character:40b4d2ae78f498429bac",
+        "character_name": "Miyu (Extra Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "01a7b18b325e17266ff855d9",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:55fa8682e40db6ca0fd0",
+        "source_text": "Ofeilo Voltic Thunder type piercing attack on all enemies (L) +200% skill damage if any enemy is afflicted with any status (Multiplier x3 ) When in Thunder Stance : Another Force Combo gain of this skill is tripled ( x3 )   Piercing  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Miyu_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:58d10d4c37f69c1e0398",
+        "character_name": "Kyo",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "1652ab05ab6c5a210232b438",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:3d59e2df314f1086e98f",
+        "source_text": "Konokizu Fire type blunt attack on a single enemy (L) and physical resistance -20% (3 turns, Max Stack 3: -40% ) Another Force Combo gain of this skill is doubled When in MAX MODE : Skill Multiplier +200% (Multiplier x3)   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Kyo"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "1c0d2641d6d48a2906f7457f",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:2d649f86d2ada6766a5d",
+        "source_text": "Cat Deity: Windy Wind type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:244360b70c2aefc7cff8",
+        "character_name": "Terry",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "1e3f25e8dc8414daee7ac680",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:e77e85db20c214ea31e0",
+        "source_text": "Burning Knuckle Blunt attack on a single enemy (XL) and Inflicts 3 stacks of Weapon Break (Blunt) Another Force Combo gain of this skill is doubled When in MAX MODE : Skill Multiplier +500% (Multiplier x6)   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Terry"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:519429a1986522b2d52f",
+        "character_name": "Kula",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "32aea464794b9f9b689cfeb1",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:ac4d1d78265ad558246e",
+        "source_text": "Ray Spin Water Type magic attack on a single enemy (S) Damage is based on user's PWR Another Force Combo gain of this skill is doubled Restore all party members HP +10% and Restore all party members MP +20 Critical rate and Magic Critical rate of all party members +100% (1 move) When in MAX MODE : HP and MP Restore amount x2   Magic  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Kula"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4b3c6b3f851a3e616c96",
+        "character_name": "Orleya",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "38a9b2b4932fe05b4e4e0af2",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:112ab0de206a0b6a764c",
+        "source_text": "Orage Hache Thunder type slash attack on a single enemy x4 (XL) Critical rate of all party members +100% (3 moves) Another Force Combo gain of this skill is doubled When in an Elemental/Attack Type Zone : Once per battle: awaken Another Zone (2 turns) When user awakens Another Zone: activate Lunatic   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Orleya"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:1b759310d7dd49f33f78",
+        "character_name": "Curio",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "3dd2653d6f0a09d0c0133311",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:ca7b0f710606b7216314",
+        "source_text": "Ups & Downs Wind type slash attack on a single enemy x5 (S) Increase skill damage and increase number of hits when use consecutively x3, 225% / x4, 320% / x5, 420% (4th use onwards) Increase damage based on number of IDA School or Lost Laboratory characters in party Skill multiplier +105% per additional character (max 3 additional characters) Another Force Combo gain +20% (x1.2) When in Lunatic : Critical Rate for all party members +100% (1 move)   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Curio"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:2200e18bb33bac43ed55",
+        "character_name": "Felmina",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "5bba84b64c418cb5b50551c3",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:4230a3c9be3359ecf6d2",
+        "source_text": "Tri-cataclysm Wind type blunt attack on a single enemy x3 (XL, increase skill damage 3 times 3x of the standard skill multiplier of 250% ) and Physical resistance and Wind type resistance -50% (3 turns) Another Force Combo gain of this skill is doubled Critical damage of the user +50% ( 3 turns) +100% damage if target is afflicted with Pain (Multiplier x2) +100% damage if target is afflicted with Poison (Multiplier x2) Debuff effect increases based on number of Miasmic Corrosion stacked (Max 25 Stacks: -100% )   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Felmina"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:519429a1986522b2d52f",
+        "character_name": "Kula",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "66c505e890481665f067f89a",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:b90316ff14a151cb46a8",
+        "source_text": "EX Ray Spin (S) Water Type magic attack on a single enemy x4 (XL) Damage is based on user's PWR Another Force Combo gain of this skill is doubled Restore all party members HP +20% and Restore all party members MP +30 Critical rate and Magic Critical rate of all party members +100% (3 moves) When in MAX MODE : HP and MP Restore amount x2   Magic  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Kula"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f6e73181c78d8a13d204",
+        "character_name": "Cerius (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "6d308d8279ef39fc22b0ec25",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:4ef8b6356d6cb78c023b",
+        "source_text": "Lustrous Arrow: Bore Earth type piercing attack on a single enemy x3 (XL, increase skill damage 15 times 15x of the standard skill multiplier of 200% ) and Inflict 3 stacks of Weapon Break (Piercing) and Barrier Pierce ignore Barriers: Damage Reduction and Status Immunity Does not ignore resistances, Barriers on target are not consumed, inflict status from equipment also ignores immunity Another Force Combo gain of this skill is doubled   Piercing  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Cerius_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:384b9378bea4c1f6d342",
+        "character_name": "Mai",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "6fafd4ffad48264954e1ca68",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:d2947577b0f576c0d21b",
+        "source_text": "Ryuuenbu Fire type blunt attack on a single enemy x2 (XL) and Speed of the user +50% (3 turns, Max Stacks 3: +100% ) Another Force Combo gain of this skill is doubled When in MAX MODE : Inflict 3 stacks of Elemental Break (Fire)   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Mai"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:327b319aa2ebb9f04fe9",
+        "character_name": "Hismena (Extra Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "7725b2cef0cd5c089a4c926c",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:b3897af24d095b9ffd32",
+        "source_text": "Calor Abrasador Fire type slash attack on all enemies x5 (XL) and Type Resistance -100% (1 turn) Another Force Combo gain of this skill is doubled Skill Multiplier increases based number of Sword/Katana/Ax/Lance/Bow users on the frontline (Max Multiplier x20)   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Hismena_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:810393564dea0ed53113",
+        "character_name": "Flammelapis (Extra Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "785eeab6da2351da47f67481",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:ed1051688405ed0df79e",
+        "source_text": "Teascadh Nádúrtha Water type slash attack on all enemies x3 (XL) and Inflict 5 stacks of Weapon Break (Slash Magic) Another Force Combo gain of this skill is doubled Critical rate and Magic Critical rate of all allies +100% (5 moves) Skill Multiplier increases based on Another Force Combo Rate (Max 1000% Combo rate: Multiplier x50)   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Flammelapis_(Extra_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:58d10d4c37f69c1e0398",
+        "character_name": "Kyo",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "7b16fbbaff6031114cee83eb",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:5f5683f145954c838820",
+        "source_text": "Aragami Fire type blunt attack on a single enemy (S) and physical resistance -15% (3 turns, Max Stack 3: -30% ) Another Force Combo gain of this skill is doubled When in MAX MODE : Skill Multiplier +100% (Multiplier x2)   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Kyo"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:ab02fe190911a01bbf65",
+        "character_name": "Lovely",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "7ff0442883ebcee5fe8dbc61",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:8799aacbd2fc5101d726",
+        "source_text": "Lovelyn Cooking Fire type blunt attack on a single enemy x3 (XL) and Another Force Combo gain increasesed . +100% damage if enemy is afflicted with Poison. (Multiplier x2) +400% damage if user is afflicted with Poison. (Multiplier x5) When there are 4 Fire party members on the frontlines: Inflict 3 stacks of Elemental Break (Fire)   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Lovely"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:519429a1986522b2d52f",
+        "character_name": "Kula",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "80d4c72fc640b92b0a84eda3",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:60d7ae33404034d00bb0",
+        "source_text": "Ray Spin (S) Water Type magic attack on a single enemy x4 (L) Damage is based on user's PWR Another Force Combo gain of this skill is doubled Restore all party members HP +15% and Restore all party members MP +25 Critical rate and Magic Critical rate of all party members +100% (2 moves) When in MAX MODE : HP and MP Restore amount x2   Magic  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Kula"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:55212826e291d9c2a2b2",
+        "character_name": "Flammelapis (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "9642e5a7ba8fab0dc4197be7",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:457a15a355f5507de951",
+        "source_text": "Pentálfa Unn Water type magic attack on single enemy x5 (XL) and Inflicts 3 stacks of Weapon Break (Magic) When used within the first 3 turns of battle: Magical critical rate of user +100% (1 move) Another Force Combo gain of this skill is doubled   Magic  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Flammelapis_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4b3c6b3f851a3e616c96",
+        "character_name": "Orleya",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "968f1bee215e700783cabe07",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:3c861d1ba43d654fbb8b",
+        "source_text": "Foudre Hache Thunder type slash attack on a single enemy x3 (L) Critical rate of all party members +80% (3 moves) Another Force Combo gain of this skill is doubled When in an Elemental/Attack Type Zone : Once per battle: awaken Another Zone (2 turns) When user awakens Another Zone: activate Lunatic   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Orleya"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "9ba4798a66ea8ca9f2408086",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:074f511e152387de0db7",
+        "source_text": "Cat Deity: Flame Fire type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f5523aebc2f159a49ec1",
+        "character_name": "Lovinia (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "a3422090258ad11caafd64ae",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:3611196d736c36822084",
+        "source_text": "Breezy Melody - Song Song Activate Song (3 turns) with effect -50% damage received on all party members Damage and healing of all party members +80% (Multiplier 1.8x) Critical Rate and Magical Critical Rate of all party members +100% Another Force Combo gain of all party member is increased (3% per attack) Activate Breezy Melody - EOT Disrupted by Sleep, Confusion, Stone, Stun, Freeze , Knockback, Death   Buff  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Lovinia_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:9b80849a49dec2ce511d",
+        "character_name": "Mistrare",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "b5216c9338a800b767095c1c",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:12d975a2c42641e3003c",
+        "source_text": "Stifling Song - Song Song Activate Song (3 turns) with effect Damage and healing of all party members +50% (Multiplier 1.5x) Another Force Combo gain of all party member is increased (3% per attack) Activate Stifling Song - EOT Disrupted by Sleep, Confusion, Stone, Stun, Freeze , Knockback, Death   Buff  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Mistrare"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "b7d8bb07424e4b6ac2bb44c1",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:5972c8e66272c943fde8",
+        "source_text": "Cat Deity: Thunder Thunder type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "c14860d499d25a35bfe977b2",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:82f76fc1a97753d67214",
+        "source_text": "Cat Deity: Bright Crystal type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f58414b3861a5bf28524",
+        "character_name": "Sazanca",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "d1c629329d5455aec19aaa00",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:79be1a0bf8f0f0457ba6",
+        "source_text": "Junretsu Ranbu Fire type slash attack on random enemies x5 (L) When Skybloom is stacked: +700% damage (Multiplier x8) and Another Force Combo gain increased   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Sazanca"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "d31230eb8f8850ab8de73aba",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:5231f2ab2b37c7163b4a",
+        "source_text": "Cat Deity Earth type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Skill changes to match active Elemental Stance Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:fd132265ce73d9656c81",
+        "character_name": "Pizzica (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "d3f13c6c098496fc32917591",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:7cced0cb2f00130c0801",
+        "source_text": "Fortissimo Fire type piercing attack on all enemies x4 (XL) and Inflict 3 stacks of Weapon Break (Pierce) Another Force Combo gain of this skill x1.6 Increase multiplier per Harmony stacked on all party members (Max Stack 12, Multiplier x15) Add 560% × HarmonyCount/12 rounded up, to each hit   Piercing  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Pizzica_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "d512d4ef3ba622764776dc1b",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:865eca127d465db84088",
+        "source_text": "Cat Odori Earth type slash attack on a single enemy x3 (L) Additional effect in any zone : Critical rate of all party members +100% (2 moves) Attack element changes to match active elemental zone Another Force Combo gain of this skill is doubled   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "d7af05ddc11aecbcd6c146aa",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:c9016d30ca7d98a795a1",
+        "source_text": "Cat Deity: Rocky Earth type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:4b3c6b3f851a3e616c96",
+        "character_name": "Orleya",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "dea713e5a10ba86182086ce3",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:c4d6b3e9c6b97d73aac9",
+        "source_text": "Tonnerre Hache Thunder type slash attack on a single enemy x2 (S) Critical rate of all party members +60% (3 moves) Another Force Combo gain of this skill is doubled When in an Elemental/Attack Type Zone : Once per battle: awaken Another Zone (2 turns) When user awakens Another Zone: activate Lunatic   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Orleya"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:6b135cc8ba57454819c9",
+        "character_name": "Lovely (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "e739884c545d3c687cfe49d1",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:174f79496c7f30297ff6",
+        "source_text": "Lovelyn Full Course Fire type blunt attack on all enemies (XL) and Inflict Megapoison +300% damage if target is afflicted with Poison (Multiplier x4) When in Another Force : Add 2 extra attacks and Another Force Combo gain of this skill is doubled   Blunt  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Lovely_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:bd234a2b74fae865d849",
+        "character_name": "Orleya (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "e7f0fc4f29367cd387201367",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:8fc83c47e5467d12e450",
+        "source_text": "Foudre Hache Thunder type slash attack on a single enemy x3 (L) Critical rate of all party members +80% (3 moves) Another Force Combo gain of this skill is doubled When in an Elemental/Attack Type Zone : Once per battle: awaken Another Zone (2 turns) When user awakens Another Zone: activate Lunatic   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Orleya_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "ec6c2322a8d574979502198b",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:5007cf0204a7dcbc2f65",
+        "source_text": "Cat Deity: Dark Shade type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99aac9c4c4203fe30cc6",
+        "character_name": "Necoco",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "f0461d247916213d475c0cbf",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:b1c454792ad9afd87a09",
+        "source_text": "Cat Deity: Clear Water type slash attack on a single enemy x4 (XL) in any zone : Critical rate of all party members +100% (3 moves) Critical damage of all party members +50% (3 turns) Another Force Combo gain of this skill is doubled Hits calculated separately   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:860c14f068db5c6adf91",
+        "character_name": "Mistrare (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "f8ca1dd6d0cf7b6785d0a6af",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:548d7cee2a415e832a95",
+        "source_text": "Stifling Song - Song Song Activate Song (3 turns) with effect Damage and healing of all party members +50% (Multiplier 1.5x) Another Force Combo gain of all party member is increased (3% per attack) Activate Stifling Song - EOT Disrupted by Sleep, Confusion, Stone, Stun, Freeze , Knockback, Death   Buff  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Mistrare_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:18d43cddf82d753681b2",
+        "character_name": "Necoco (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Another Force Combo gain",
+        "priority_band": "P2",
+        "proposal_id": "fbf0fa18c4138e7ba8c9fcff",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-combo-gain",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:7cb768408a47155a62a6",
+        "source_text": "Cat Odori Earth type slash attack on a single enemy x3 (L) Additional effect in any zone : Critical rate of all party members +100% (2 moves) Attack element changes to match active elemental zone Another Force Combo gain of this skill is doubled   Slash  Active Skills",
+        "source_url": "https://anothereden.wiki/w/Necoco_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:7f07fbeae5c5e2c2e097",
+        "character_name": "Aldo",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "008ba73251acf17df76146f4",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:7c24b0ebc03b8bf37385",
+        "source_text": "Battle start AF Recover 100 Battle Start When user is in the front line and there is 3 Guiding Light allies in the front line: Restore AF gauge to 100% Skill requires Stellar Awakening    stellar awakening Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Aldo"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:e00d1df11ed38a9abe5d",
+        "character_name": "Pizzica",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "248eecd0a624d077cf2341b0",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:6507adbe605d88ec6685",
+        "source_text": "Song turn-end buff End of Turn When user is singing : Restore AF gauge +10% at the end of each turn When not in Sleep, Confusion, Stone, Freeze    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Pizzica"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:7f07fbeae5c5e2c2e097",
+        "character_name": "Aldo",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "3df57b152f7305cd3c028e53",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:ce6e5b87d90dd5cfa39d",
+        "source_text": "Battle start AF Recover 50 Battle Start When user is in the front line and there is 3 Guiding Light allies in the front line: Restore AF gauge to 50% Skill requires Stellar Awakening    stellar awakening Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Aldo"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:fd132265ce73d9656c81",
+        "character_name": "Pizzica (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "4a4ffc97aa94d2f1300ddc28",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:dae5e85975d75958bb64",
+        "source_text": "Song turn-end buff End of Turn When user is singing : Restore AF gauge +10% at the end of each turn When not in Sleep, Confusion, Stone, Freeze    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Pizzica_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:55212826e291d9c2a2b2",
+        "character_name": "Flammelapis (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "54958e1fb8e204c84db9c35d",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:320ede7073c48984388f",
+        "source_text": "Battle start AF Recover 50 Battle Start When user is in the front line and AF gauge is less than 50% : Restore AF gauge to 50%    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Flammelapis_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f5523aebc2f159a49ec1",
+        "character_name": "Lovinia (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "5e8531d109d527be2522a71f",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:b4acad1d69c835d6b5bb",
+        "source_text": "Fragrant Round Chain Ability Activates when any ally excluding user uses an AOE attack Restore AF gauge +5% Can activate up to 3 times per turn    passive Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Lovinia_(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:f445ef54bafbc7bb0729",
+        "character_name": "Amy",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "6d174b4c1ea6c0ce85dfa88f",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:9ea6d8ed49663a656707",
+        "source_text": "Crushing Gale When not in Stellar Burst : Wind Type Blunt attack on all enemies ( XXL , increase skill damage 3 times 3x of the standard skill multiplier of 210% ) Wind Type attack of the user +50% (3 turns) When not in Another Force : Attack again at no extra MP cost Counts as a separate move, so will increase Another Force gauge again When used during Stellar Burst : Wind Type Blunt attack on all enemies ( XXL , increase skill damage 10 times 10x of the standard skill multiplier of 160% ) and Attack again at no extra MP cost Wind Type attack of the user +50% (3 turns) Stack 10 Blast Boosters When not in Another Force : Restore AF gauge +5% Skill requires Stellar Awakening   Blunt  Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Amy"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:007c4fadd391c70f9fdf",
+        "character_name": "Dewey (Alter) (Another Style),Red Clad Flam. (Another Style)",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "91355250813b890ac8c70ec4",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "passive:2f13712ffc2af67a721e",
+        "source_text": "Core Heat Stacking End of Turn Stacking Stack 2 Core Heat on user (Max Stack: 20) When user is in the Frontline : Stack an additional Core Heat if user is not attacked by an enemy that turn and restore AF gauge by 7.5%    stack Passive Skills",
+        "source_url": "https://anothereden.wiki/w/Red_Clad_Flam._(Another_Style)"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:99d4b97f15e842c9993a",
+        "character_name": "Myrus",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "9171fefb6493d615c436742e",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:8b8a1ed1f93a5cca7c8d",
+        "source_text": "Lapine Heureuse Critical damage and Magic critical damage of all party members +30% (3 turns) and Give Debuff Reversal to all party members (1 turns) and Restore all statuses When used during Stellar Burst : Restore all main and reserve party members' 100% HP and MP and give a Barrier to all main and reserve party members with 100% damage reduction (1 time) Consume 1 Healing Wolpertinger to Revive all fallen party members and Restore AF gauge by 15% per revived party member (Max Revive 5: 75% ) Skill requires Stellar Awakening   Healing/Buff  Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Myrus"
+      },
+      {
+        "authoritative": false,
+        "character_id": "character:a4461b86d8166a56f676",
+        "character_name": "Izuna",
+        "counter_ids": [
+          "af_support"
+        ],
+        "matched_phrase": "Restore AF gauge",
+        "priority_band": "P2",
+        "proposal_id": "a1f4dfd19b87005993a1f44f",
+        "reason": "recurring_unreviewed_rule",
+        "rule_id": "cap-af-gauge-restore",
+        "semantic_state": "unknown",
+        "source_fact_id": "skill:8e3f118ee96a9266eaba",
+        "source_text": "Izuna Battle Start Buff Battle Start When user is on the frontline : Stack 3 God-Like Power on user and Restore AF gauge to 50% When 3 or more Thunder characters are on the frontline : Restore AF gauge to 100% instead Skill requires Stellar Awakening   Stack  Stellar Awakened Skills",
+        "source_url": "https://anothereden.wiki/w/Izuna"
+      }
+    ]
+  },
+  "captured_on": "2026-09-14",
+  "counter_metrics": {
+    "af_support": {
+      "attempted_identity_count": 367,
+      "band": "P2",
+      "generated_proposals_authoritative": false,
+      "priority": 20,
+      "proposal_count": 62,
+      "proposal_identity_count": 37,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 6,
+        "rejected": 0,
+        "unknown": 56,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-af-combo-gain",
+        "cap-af-gauge-restore"
+      ]
+    },
+    "affinity_safe_damage": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 1,
+      "proposal_count": 2962,
+      "proposal_identity_count": 367,
+      "required_by_boss_count": 30,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 7,
+        "rejected": 3,
+        "unknown": 2952,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "c6-1-h-witness-aisha-jewel-concerto-damage",
+        "c6-1-h-witness-aldo-phoenix-slash-damage",
+        "c6-1-h-witness-anabel-deliverance-sword-damage",
+        "c6-1-h-witness-ashtear-mystery-bullet-damage",
+        "c6-1-h-witness-azami-heavenly-dance-damage",
+        "cap-damage",
+        "cap-typed-damage"
+      ]
+    },
+    "burst_deadline": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 15,
+      "proposal_count": 470,
+      "proposal_identity_count": 214,
+      "required_by_boss_count": 4,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 11,
+        "rejected": 3,
+        "unknown": 456,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "c3-seed-element-resistance-down-hiten-ranbu",
+        "c6-1-h-witness-aisha-jewel-concerto-damage",
+        "c6-1-h-witness-aldo-phoenix-slash-damage",
+        "c6-1-h-witness-anabel-deliverance-sword-damage",
+        "c6-1-h-witness-ashtear-mystery-bullet-damage",
+        "c6-1-h-witness-azami-heavenly-dance-damage",
+        "cap-burst-window",
+        "cap-damage",
+        "cap-element-resistance-down",
+        "cap-outgoing-damage-up"
+      ]
+    },
+    "debuff_cleanse": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 17,
+      "proposal_count": 84,
+      "proposal_identity_count": 67,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 3,
+        "rejected": 0,
+        "unknown": 81,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-remove-debuff",
+        "cap-restore-statuses"
+      ]
+    },
+    "displacement_counterplay": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 18,
+      "proposal_count": 46,
+      "proposal_identity_count": 40,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 0,
+        "rejected": 0,
+        "unknown": 46,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-knockback-immunity"
+      ]
+    },
+    "enemy_buff_control": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 9,
+      "proposal_count": 12,
+      "proposal_identity_count": 12,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 4,
+        "rejected": 0,
+        "unknown": 8,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-buff-reversal",
+        "cap-enemy-buff-dispel"
+      ]
+    },
+    "fixed_damage_response": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 7,
+      "proposal_count": 510,
+      "proposal_identity_count": 221,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 3,
+        "rejected": 1,
+        "unknown": 506,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-fixed-damage-response",
+        "cap-heal",
+        "cap-hold-ground",
+        "cap-revive",
+        "cap-shield"
+      ]
+    },
+    "hit_action_threshold": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 16,
+      "proposal_count": 1230,
+      "proposal_identity_count": 307,
+      "required_by_boss_count": 3,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 4,
+        "rejected": 1,
+        "unknown": 1225,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-attack-again",
+        "cap-barrier-pierce",
+        "cap-chain",
+        "cap-multi-hit-action"
+      ]
+    },
+    "hp_sustain": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 11,
+      "proposal_count": 448,
+      "proposal_identity_count": 215,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 2,
+        "rejected": 1,
+        "unknown": 445,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-heal",
+        "cap-hold-ground",
+        "cap-regen-hp",
+        "cap-revive"
+      ]
+    },
+    "mitigation": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 5,
+      "proposal_count": 209,
+      "proposal_identity_count": 100,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 14,
+        "rejected": 0,
+        "unknown": 195,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-cover",
+        "cap-damage-reduction-barrier",
+        "cap-guard",
+        "cap-hold-ground",
+        "cap-mitigation",
+        "cap-shield"
+      ]
+    },
+    "mp_sustain": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 14,
+      "proposal_count": 94,
+      "proposal_identity_count": 75,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 3,
+        "rejected": 0,
+        "unknown": 91,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-mp"
+      ]
+    },
+    "multi_entity_damage": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 13,
+      "proposal_count": 3738,
+      "proposal_identity_count": 367,
+      "required_by_boss_count": 6,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 0,
+        "rejected": 0,
+        "unknown": 3738,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-multi-entity-damage",
+        "cap-typed-damage"
+      ]
+    },
+    "multi_mode_damage": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 3,
+      "proposal_count": 2712,
+      "proposal_identity_count": 367,
+      "required_by_boss_count": 7,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 0,
+        "rejected": 0,
+        "unknown": 2712,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-kaleido",
+        "cap-typed-damage"
+      ]
+    },
+    "offensive_stat_suppression": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 19,
+      "proposal_count": 171,
+      "proposal_identity_count": 80,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 0,
+        "rejected": 0,
+        "unknown": 171,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-enemy-intelligence-down",
+        "cap-enemy-power-down"
+      ]
+    },
+    "pain_poison_setup": {
+      "attempted_identity_count": 367,
+      "band": "P2",
+      "generated_proposals_authoritative": false,
+      "priority": 21,
+      "proposal_count": 288,
+      "proposal_identity_count": 177,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 4,
+        "rejected": 0,
+        "unknown": 284,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-pain",
+        "cap-poison"
+      ]
+    },
+    "reset_resilience": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 6,
+      "proposal_count": 159,
+      "proposal_identity_count": 103,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 6,
+        "rejected": 1,
+        "unknown": 152,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "c6-1-h-witness-aisha-flame-serenade-zone",
+        "cap-repeatable-setup",
+        "cap-zone-deploy"
+      ]
+    },
+    "resistance_break": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 8,
+      "proposal_count": 592,
+      "proposal_identity_count": 270,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 2,
+        "rejected": 0,
+        "unknown": 590,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "c3-seed-element-resistance-down-hiten-ranbu",
+        "cap-element-resistance-down",
+        "cap-enemy-attack-type-resistance-down",
+        "cap-enemy-magic-resistance-down",
+        "cap-enemy-physical-resistance-down",
+        "cap-enemy-type-resistance-down",
+        "cap-expose"
+      ]
+    },
+    "status_counterplay": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 2,
+      "proposal_count": 260,
+      "proposal_identity_count": 138,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 4,
+        "rejected": 0,
+        "unknown": 256,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-remove-status-ailment",
+        "cap-restore-statuses",
+        "cap-status-immunity"
+      ]
+    },
+    "trigger_avoidance": {
+      "attempted_identity_count": 367,
+      "band": "P0",
+      "generated_proposals_authoritative": false,
+      "priority": 4,
+      "proposal_count": 296,
+      "proposal_identity_count": 152,
+      "required_by_boss_count": 7,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 13,
+        "rejected": 4,
+        "unknown": 279,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "c6-1-h-witness-aisha-flame-serenade-zone",
+        "c6-1-h-witness-aisha-jewel-concerto-damage",
+        "c6-1-h-witness-aldo-phoenix-slash-damage",
+        "c6-1-h-witness-anabel-deliverance-sword-damage",
+        "c6-1-h-witness-ashtear-mystery-bullet-damage",
+        "c6-1-h-witness-azami-heavenly-dance-damage",
+        "cap-damage",
+        "cap-zone-deploy"
+      ]
+    },
+    "turn_order_control": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 10,
+      "proposal_count": 130,
+      "proposal_identity_count": 84,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 0,
+        "rejected": 0,
+        "unknown": 130,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "cap-enemy-speed-down",
+        "cap-party-speed-up"
+      ]
+    },
+    "zone_counterplay": {
+      "attempted_identity_count": 367,
+      "band": "P1",
+      "generated_proposals_authoritative": false,
+      "priority": 12,
+      "proposal_count": 438,
+      "proposal_identity_count": 157,
+      "required_by_boss_count": 0,
+      "semantic_states": {
+        "ambiguous": 0,
+        "proven_absent": 0,
+        "proven_present": 13,
+        "rejected": 1,
+        "unknown": 424,
+        "untagged": 0
+      },
+      "source_rule_ids": [
+        "c6-1-h-witness-aisha-flame-serenade-zone",
+        "cap-remove-active-zone",
+        "cap-zone-awaken",
+        "cap-zone-deploy"
+      ]
+    }
+  },
+  "fixture_validation": {
+    "artifact_version": "m6-c-rule-fixtures-1.0.0",
+    "case_count": 51,
+    "checks": [
+      {
+        "case": "positive",
+        "proposal_id": "78cbe8a57af52bb4043c6ca8",
+        "rule_id": "cap-burst-window",
+        "source_fact_id": "skill:9ea6d8ed49663a656707"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-burst-window",
+        "source_fact_id": "skill:6d2e8f2af5da281cb540"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "6434a903229c094ccfad67d7",
+        "rule_id": "cap-burst-window",
+        "source_fact_id": "skill:f4d7ea55a359f6ea1370"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "889268deca6ab8e7403e745f",
+        "rule_id": "cap-enemy-attack-type-resistance-down",
+        "source_fact_id": "skill:9bf696f608d4beefebb2"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-attack-type-resistance-down",
+        "source_fact_id": "skill:aca083f24e0f6a6825ab"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "d73b70844f9a87c72f979d57",
+        "rule_id": "cap-enemy-attack-type-resistance-down",
+        "source_fact_id": "skill:e0342db9f1f683ab4950"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "4129fa0719a98b08ae0dccf3",
+        "rule_id": "cap-enemy-buff-dispel",
+        "source_fact_id": "skill:e870fdab872969911713"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-buff-dispel",
+        "source_fact_id": "skill:13aca4d2fbce2299f866"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "401b9beb2d2e384bf2c6ba95",
+        "rule_id": "cap-enemy-buff-dispel",
+        "source_fact_id": "skill:ac93b0a2c5acb73ed1a7"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "d1490a8c87622f1b67ca183f",
+        "rule_id": "cap-enemy-intelligence-down",
+        "source_fact_id": "skill:087f55a05545cca4a028"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-intelligence-down",
+        "source_fact_id": "skill:223a8061720d6b74a893"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "73c4601ce1fb06fd9e0ba7bc",
+        "rule_id": "cap-enemy-intelligence-down",
+        "source_fact_id": "skill:e0342db9f1f683ab4950"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "a2a00e31f330414ac4f5cf80",
+        "rule_id": "cap-enemy-magic-resistance-down",
+        "source_fact_id": "skill:f4d7ea55a359f6ea1370"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-magic-resistance-down",
+        "source_fact_id": "skill:aca083f24e0f6a6825ab"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "646739359d46fc52c3dc7434",
+        "rule_id": "cap-enemy-magic-resistance-down",
+        "source_fact_id": "skill:2a2cdf1ad72a4ffe8302"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "d0a4b65b8325a5941fb72fa8",
+        "rule_id": "cap-enemy-physical-resistance-down",
+        "source_fact_id": "skill:6482e4c6b93b0f0ea591"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-physical-resistance-down",
+        "source_fact_id": "skill:25239443cd2db0ef487f"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "a28354097acef8d7baa1228e",
+        "rule_id": "cap-enemy-physical-resistance-down",
+        "source_fact_id": "skill:732cb3495dc790e00d91"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "29f48878a7ade57200d0a397",
+        "rule_id": "cap-enemy-power-down",
+        "source_fact_id": "skill:5529e277552da43bdbe6"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-power-down",
+        "source_fact_id": "skill:223a8061720d6b74a893"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "290e00cff99d00312a50b346",
+        "rule_id": "cap-enemy-power-down",
+        "source_fact_id": "skill:e0342db9f1f683ab4950"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "6911bf9a8b69748b56d27337",
+        "rule_id": "cap-enemy-speed-down",
+        "source_fact_id": "skill:087f55a05545cca4a028"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-speed-down",
+        "source_fact_id": "skill:223a8061720d6b74a893"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "403e25f45c162083547bf1ab",
+        "rule_id": "cap-enemy-speed-down",
+        "source_fact_id": "skill:15cea8a12ca6158a5c65"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "3c83593ef37985f1359a50a9",
+        "rule_id": "cap-enemy-type-resistance-down",
+        "source_fact_id": "skill:2a2cdf1ad72a4ffe8302"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-enemy-type-resistance-down",
+        "source_fact_id": "skill:5f6ecc8bc37a12404137"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "9652c3aed2e0b9c6b267a8eb",
+        "rule_id": "cap-enemy-type-resistance-down",
+        "source_fact_id": "skill:6f8c64d14984308d92c4"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "cb432aab638041f79fe34067",
+        "rule_id": "cap-fixed-damage-response",
+        "source_fact_id": "skill:4fcc820d45f08d355f6f"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-fixed-damage-response",
+        "source_fact_id": "skill:3c19a3d18c01e81bd6e9"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "4471a5dae3d45a983f45847f",
+        "rule_id": "cap-fixed-damage-response",
+        "source_fact_id": "passive:2a5e2976457ee8534503"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "146957530adab75a17c0494a",
+        "rule_id": "cap-multi-entity-damage",
+        "source_fact_id": "skill:5be1c13ae8c4bce751b5"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-multi-entity-damage",
+        "source_fact_id": "skill:087f55a05545cca4a028"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "e1860f368a4dff910b672ecf",
+        "rule_id": "cap-multi-entity-damage",
+        "source_fact_id": "skill:41458f213cdeb36f7939"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "30fb3a32fa918e6e4069b596",
+        "rule_id": "cap-multi-hit-action",
+        "source_fact_id": "skill:3bf0d55a753ab920d4c4"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-multi-hit-action",
+        "source_fact_id": "skill:cdf2007734d06aaf49c5"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "c4308efc1cef46ce1e2ad4d2",
+        "rule_id": "cap-multi-hit-action",
+        "source_fact_id": "skill:41458f213cdeb36f7939"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "f9b0afab7288b98c250f8830",
+        "rule_id": "cap-party-speed-up",
+        "source_fact_id": "skill:223a8061720d6b74a893"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-party-speed-up",
+        "source_fact_id": "skill:087f55a05545cca4a028"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "550f8c418d694c9792d703a9",
+        "rule_id": "cap-party-speed-up",
+        "source_fact_id": "skill:92bbf0d2d8879b9c6e7a"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "877d6f90c0672f3d00224127",
+        "rule_id": "cap-remove-active-zone",
+        "source_fact_id": "skill:1c2c4a24f6dd8d051b7d"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-remove-active-zone",
+        "source_fact_id": "skill:e3a8fbec4bfeb37687fc"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "d9d9ea4705a4f98df64a914d",
+        "rule_id": "cap-remove-active-zone",
+        "source_fact_id": "skill:f4d7ea55a359f6ea1370"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "35053aaaec49d885d36106d6",
+        "rule_id": "cap-repeatable-setup",
+        "source_fact_id": "skill:f4d7ea55a359f6ea1370"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-repeatable-setup",
+        "source_fact_id": "skill:cdf2007734d06aaf49c5"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "7bc3a40ea7ef37e316682882",
+        "rule_id": "cap-repeatable-setup",
+        "source_fact_id": "skill:1ae66e098b51092fed84"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "1e79b85408b5691a4f9d4dd8",
+        "rule_id": "cap-restore-statuses",
+        "source_fact_id": "skill:087f55a05545cca4a028"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-restore-statuses",
+        "source_fact_id": "skill:4508a105b9bc0870a662"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "1ae29d135f3459fe7bdec1ff",
+        "rule_id": "cap-restore-statuses",
+        "source_fact_id": "skill:5fa1048044fa85d25060"
+      },
+      {
+        "case": "positive",
+        "proposal_id": "8d6d7a36a978d02c0ef4ee18",
+        "rule_id": "cap-typed-damage",
+        "source_fact_id": "skill:3bf0d55a753ab920d4c4"
+      },
+      {
+        "case": "misleading_negative",
+        "proposal_id": null,
+        "rule_id": "cap-typed-damage",
+        "source_fact_id": "skill:8a5a4e1f70487c377725"
+      },
+      {
+        "case": "regression",
+        "proposal_id": "478ef17b67e08e5fade70ebe",
+        "rule_id": "cap-typed-damage",
+        "source_fact_id": "skill:41458f213cdeb36f7939"
+      }
+    ],
+    "rule_count": 17
+  },
+  "newly_covered_families": {
+    "note": "Source-backed proposals are extraction coverage only; generated or unreviewed proposals are not scoring or mandatory authority.",
+    "reviewed_new_rule_families": [],
+    "source_provable_counter_ids": [
+      "affinity_safe_damage",
+      "burst_deadline",
+      "debuff_cleanse",
+      "enemy_buff_control",
+      "fixed_damage_response",
+      "hit_action_threshold",
+      "multi_entity_damage",
+      "multi_mode_damage",
+      "offensive_stat_suppression",
+      "reset_resilience",
+      "resistance_break",
+      "status_counterplay",
+      "turn_order_control",
+      "zone_counterplay"
+    ],
+    "source_provable_rule_families": [
+      "cap-burst-window",
+      "cap-enemy-attack-type-resistance-down",
+      "cap-enemy-buff-dispel",
+      "cap-enemy-intelligence-down",
+      "cap-enemy-magic-resistance-down",
+      "cap-enemy-physical-resistance-down",
+      "cap-enemy-power-down",
+      "cap-enemy-speed-down",
+      "cap-enemy-type-resistance-down",
+      "cap-fixed-damage-response",
+      "cap-multi-entity-damage",
+      "cap-multi-hit-action",
+      "cap-party-speed-up",
+      "cap-remove-active-zone",
+      "cap-repeatable-setup",
+      "cap-restore-statuses",
+      "cap-typed-damage"
+    ]
+  },
+  "preservation": {
+    "feature_a_baseline_artifact_version": "feature-a-baseline-v1",
+    "feature_a_baseline_fingerprint": "19c0937b1e86e8b9b44b9263e8d583d53e4b89fcc43af00ff97db7f99269ca66",
+    "feature_a_baseline_metrics": {
+      "catalog_characters": 367,
+      "characters_with_af_support": 6,
+      "characters_with_boss_counter_evidence": 18,
+      "characters_with_mitigation": 16,
+      "characters_with_offensive_enablement": 21,
+      "characters_with_pain_poison_setup": 4,
+      "characters_with_proven_primary_damage": 10,
+      "characters_with_recovery": 7,
+      "characters_with_status_counterplay": 6,
+      "characters_with_zone_setup": 12,
+      "facts_ambiguous": 0,
+      "facts_proven": 148,
+      "facts_rejected": 22,
+      "facts_unknown": 5103,
+      "high_value_capability_attempted": 329,
+      "legal_kit_complete": 367
+    },
+    "gold_fixture_artifact_version": "1.0.0",
+    "gold_fixture_count": 12,
+    "gold_fixture_id_digest": "2ac6b8dcaaff5a475aaa5c01af981117427150da4cf7c05efcadd374c67b77e3",
+    "negative_fixtures_preserved": true,
+    "proposal_digest": "98cff969bc1740ccc67d32fd8b600c63cbfb4e265f556dc6a3af561d80d2ecd7",
+    "proposal_ids_stable": true,
+    "proven_absent_count": 0,
+    "replay_deterministic": true,
+    "replay_digest": "98cff969bc1740ccc67d32fd8b600c63cbfb4e265f556dc6a3af561d80d2ecd7",
+    "review_artifact_version": "3.1.0",
+    "review_decision_count": 323,
+    "review_proposal_id_digest": "825fff86300721e5cebc90ff5d0256e9140094839c07d43ba175938810fda4d8",
+    "taxonomy_override_count": 9,
+    "taxonomy_override_digest": "2ba9c0c035b754ca1587d1c03501307df7d1f5faad33d57be1d9aa4604c8c926"
+  },
+  "priority_band_metrics": {
+    "P0": {
+      "ambiguous_count": 0,
+      "proposal_count": 4630,
+      "proposal_identity_count": 367,
+      "proven_present_count": 38,
+      "rejected_count": 5,
+      "unknown_count": 4587
+    },
+    "P1": {
+      "ambiguous_count": 0,
+      "proposal_count": 6849,
+      "proposal_identity_count": 367,
+      "proven_present_count": 36,
+      "rejected_count": 6,
+      "unknown_count": 6807
+    },
+    "P2": {
+      "ambiguous_count": 0,
+      "proposal_count": 350,
+      "proposal_identity_count": 197,
+      "proven_present_count": 10,
+      "rejected_count": 0,
+      "unknown_count": 340
+    }
+  },
+  "proposal_authority": {
+    "generated_proposals_authoritative": false,
+    "reviewed_authoritative_proposal_count": 68,
+    "unreviewed_authoritative_proposal_count": 0
+  },
+  "proposal_state_distribution": {
+    "ambiguous": 0,
+    "proven_absent": 0,
+    "proven_present": 68,
+    "rejected": 6,
+    "unknown": 8267,
+    "untagged": 0
+  },
+  "review_checkpoint": "Feature D must perform bounded human review; Feature C does not self-approve proposals.",
+  "scope": {
+    "canonical_identity_count": 367,
+    "expected_canonical_identity_count": 367,
+    "extraction_attempt_count": 367,
+    "extraction_attempted_for_all_identities": true,
+    "extraction_identity_digest": "3500307af93b7728462b7b2c9304a89b2596eac149738f77b9159c106a7b7505",
+    "identities_with_high_value_proposals": 367,
+    "identities_without_high_value_proposals": 0,
+    "legal_kit_receipts": {
+      "canonical_identity_count": 367,
+      "complete_receipt_count": 367,
+      "duplicate_canonical_ids": [],
+      "duplicate_receipt_ids": [],
+      "expected_canonical_count": 367,
+      "extra_receipt_ids": [],
+      "malformed_record_indexes": [],
+      "mismatched_identity_rows": [],
+      "missing_receipt_ids": [],
+      "ready": true,
+      "receipt_count": 367
+    },
+    "new_rule_count": 17,
+    "new_rule_ids": [
+      "cap-burst-window",
+      "cap-enemy-attack-type-resistance-down",
+      "cap-enemy-buff-dispel",
+      "cap-enemy-intelligence-down",
+      "cap-enemy-magic-resistance-down",
+      "cap-enemy-physical-resistance-down",
+      "cap-enemy-power-down",
+      "cap-enemy-speed-down",
+      "cap-enemy-type-resistance-down",
+      "cap-fixed-damage-response",
+      "cap-multi-entity-damage",
+      "cap-multi-hit-action",
+      "cap-party-speed-up",
+      "cap-remove-active-zone",
+      "cap-repeatable-setup",
+      "cap-restore-statuses",
+      "cap-typed-damage"
+    ],
+    "skill_and_passive_fact_count": 5036
+  },
+  "semantic_policy": {
+    "absence_inference": false,
+    "legal_availability_separate_from_proof": true,
+    "runtime_scoring_or_retrieval_changed": false,
+    "states": [
+      "proven_present",
+      "proven_absent",
+      "unknown",
+      "ambiguous",
+      "rejected",
+      "untagged"
+    ],
+    "unreviewed_generated_authority": false
+  },
+  "source": {
+    "catalog": "src/etl/kit_catalog.json",
+    "catalog_artifact_version": "c6.1.0",
+    "catalog_fingerprint": "25987076f8ec88094e697fb53eaed216f9c753596516651652b54acdb07b334c",
+    "feature_b_artifact_version": "m6-b-1.0.0",
+    "feature_b_matrix": "artifacts/evidence/feature_b_boss_capability_priority_matrix.json",
+    "gold_fixtures": "src/etl/capability_gold.json",
+    "reviews": "src/etl/capability_reviews.json",
+    "taxonomy": "src/etl/capability_taxonomy.json",
+    "taxonomy_artifact_version": "3.2.0"
+  },
+  "source_fact_accounting": {
+    "facts_with_high_value_proposals": 4020,
+    "proven_absent_fact_count": 0,
+    "total_skill_and_passive_facts": 5036,
+    "untagged_fact_count": 1016
+  }
+}

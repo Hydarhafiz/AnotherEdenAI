@@ -29,6 +29,10 @@ KIT_ARTIFACT_TYPE = "character_kit_catalog"
 KIT_ARTIFACT_VERSION = "c6.1.0"
 KIT_PARSER_VERSION = "c6-parser-1.0"
 EXPECTED_CANONICAL_CHARACTER_COUNT = 367
+CAPABILITY_DERIVED_FIELDS = frozenset({
+    "capabilities", "dependencies", "capability_evidence_json",
+    "capability_artifact_version", "capability_diagnostics_json",
+})
 
 ReceiptState = Literal["complete", "failed", "ambiguous"]
 PassiveState = Literal["complete", "verified_absent", "failed", "ambiguous"]
@@ -120,6 +124,12 @@ def normalize_skill_rows(rows: list[SkillRow | dict[str, Any]]) -> list[SkillRow
 def normalize_passive_rows(rows: list[PassiveSkillRow | dict[str, Any]]) -> list[PassiveSkillRow]:
     validated = [row if isinstance(row, PassiveSkillRow) else PassiveSkillRow.model_validate(row) for row in rows]
     return sorted({row.passive_skill_id: row for row in validated}.values(), key=lambda row: row.passive_skill_id)
+
+
+def _legal_row_payload(row: SkillRow | PassiveSkillRow | dict[str, Any]) -> dict[str, Any]:
+    """Exclude taxonomy-derived fields from legal-kit normalization comparisons."""
+    payload = row.model_dump(mode="json") if isinstance(row, BaseModel) else dict(row)
+    return {key: value for key, value in payload.items() if key not in CAPABILITY_DERIVED_FIELDS}
 
 
 def build_receipt(
@@ -233,12 +243,12 @@ def validate_catalog_payload(
         character = CharacterRow.model_validate(record["character"])
         normalized_skills = normalize_skill_rows(record.get("skills", []))
         normalized_passives = normalize_passive_rows(record.get("passive_skills", []))
-        if _canonical([row.model_dump(mode="json") for row in normalized_skills]) != _canonical(
-            sorted(record.get("skills", []), key=lambda row: (row.get("skill_family_id", ""), row.get("skill_id", "")))
+        if _canonical([_legal_row_payload(row) for row in normalized_skills]) != _canonical(
+            sorted((_legal_row_payload(row) for row in record.get("skills", [])), key=lambda row: (row.get("skill_family_id", ""), row.get("skill_id", "")))
         ):
             raise ValueError(f"kit catalog skill normalization drifted for {receipt.character_name}")
-        if _canonical([row.model_dump(mode="json") for row in normalized_passives]) != _canonical(
-            sorted(record.get("passive_skills", []), key=lambda row: row.get("passive_skill_id", ""))
+        if _canonical([_legal_row_payload(row) for row in normalized_passives]) != _canonical(
+            sorted((_legal_row_payload(row) for row in record.get("passive_skills", [])), key=lambda row: row.get("passive_skill_id", ""))
         ):
             raise ValueError(f"kit catalog passive normalization drifted for {receipt.character_name}")
         computed, _, _ = build_receipt(

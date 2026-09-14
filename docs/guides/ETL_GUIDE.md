@@ -31,6 +31,8 @@ Important local artifacts:
 - `src/etl/mechanics_corpus.json`: curated Milestone 4 mechanics references replayed into parsed artifacts
 - `src/etl/kit_catalog.json`: authoritative C6 legal-kit receipts and normalized skill families
 - `artifacts/evidence/feature_a_coverage_baseline.json`: concise accepted Milestone 6 coverage baseline
+- `artifacts/evidence/feature_b_boss_capability_priority_matrix.json`: accepted 30-boss extraction-priority authority
+- `artifacts/evidence/feature_c_high_value_extraction.json`: deterministic full-catalog high-value extraction and bounded review queues
 - `artifacts/generated/coverage/`: ignored full coverage reports generated for local inspection
 
 Important behavior:
@@ -219,6 +221,19 @@ It records high-value proof only from reviewed capability evidence. Candidate,
 ambiguous, rejected, and untagged states remain separate; no unresolved state
 is interpreted as proven absence. Generated output is ignored. The accepted
 baseline is intentionally threshold-free until the Feature A human checkpoint.
+
+Feature C full-catalog extraction report:
+
+```bash
+.venv/bin/python scripts/report_feature_c_extraction.py \
+  --output artifacts/evidence/feature_c_high_value_extraction.json
+```
+
+This offline report reads the canonical 367-form kit catalog and the accepted
+Feature B priority matrix. It records source-backed proposals, preserves
+unknown/ambiguous/rejected/untagged distinctions, caps review queues at 45
+rows, and proves replay determinism. Generated proposals remain non-authoritative
+until the normal Feature D review and materialization path.
 
 Parsed replay requires current schema-versioned index artifacts. For ordinary small or fallback replays, detail artifacts that are absent remain inactive. For the canonical G1.1 full replay, the manifest-owned thirty-boss corpus is authoritative and missing, extra, stale, duplicate, unbounded, empty, or identity-mismatched superboss artifacts fail closed before graph loading.
 

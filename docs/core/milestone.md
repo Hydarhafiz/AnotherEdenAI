@@ -308,7 +308,7 @@ Completion evidence:
 
 ### Feature C: Full-Catalog High-Value Extraction
 
-Status: Planned next after completed Feature B.
+Status: Completed on 2026-09-14; stopped at the planned human-review handoff to Feature D.
 
 Type and route: `build` via `builder-executor -> tdd-loop`.
 
@@ -321,6 +321,15 @@ Acceptance:
 - **C-03:** Ambiguous and high-impact facts enter constrained review; low-value facts need not be manually reviewed.
 - **C-04:** Existing reviews, negative fixtures, overrides, provenance, and replay determinism remain intact.
 - **C-05:** No generated proposal becomes scoring or mandatory-coverage authority without the existing approved review path.
+
+Completion evidence:
+
+- `src/etl/capability_taxonomy.json` is versioned at 3.2.0 with 72 deterministic rules and 79 capability values. It retains the original 25 active Milestone 5 offensive families and adds 17 source-backed Feature C rules covering typed/scoped damage, multi-entity and multi-hit actions, enemy buff removal, resistance/stat directions, zone removal, fixed-damage response, burst windows, repeatable setup, and party status/speed support.
+- `artifacts/evidence/feature_c_high_value_extraction.json` attempts the approved priority set across all 367 canonical identities and records 367/367 complete legal-kit receipts. The run covers 5,036 skill/passive facts and produces 8,341 high-value proposal instances: 68 proven from previously reviewed evidence, 8,267 unknown, 6 rejected, 0 ambiguous, 0 proven absent, and 0 untagged within the proposal set; 1,016 source facts remain separately untagged.
+- All 17 new rules have durable source-backed positive, misleading-negative, and regression fixtures: 51 checks against stable catalog fact IDs and canonical source URLs. The report identifies all 17 new rule families as source-provable extraction coverage, while reviewed proof for those new rules remains empty by design until Feature D.
+- P0/P1/P2 ordering comes directly from the accepted Feature B matrix. High-impact, explicit-ambiguous, recurring, and boss-acceptance-relevant queues are deterministic and capped at 45 rows each; no low-value exhaustive manual queue is created.
+- Existing review decisions (323 IDs), gold/negative fixtures (12 IDs), taxonomy overrides (9), the immutable Feature A baseline fingerprint and metrics, proposal IDs, direction/target/availability/qualifier fields, and replay digest are preserved. A second identical pass produces the same proposal digest.
+- Generated proposals are marked non-authoritative. No scoring, mandatory coverage, retrieval, search, packaging/allocation, persisted schema, provider/live refresh, production configuration, Neo4j state, or supported-character subset changed. Feature D must perform the bounded human review and normal approve/correct/reject/ambiguous materialization path.
 
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 
