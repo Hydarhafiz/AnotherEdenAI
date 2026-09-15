@@ -1,0 +1,547 @@
+{
+  "authority": "Reproducible extraction digests from the accepted raw captures; the capture, not rewritten fixture prose, remains authoritative.",
+  "extraction_method": "BeautifulSoup div.character-skill-grid-container serialization selected by real record identity and source fact description.",
+  "fixture_version": "m6-c1.1-source-slices-1.0.0",
+  "records": [
+    {
+      "capture_sha256": "ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db",
+      "entity_name": "Iphi",
+      "grid_index": 1,
+      "record_id": "skill:d7e4e1721363f2159f38",
+      "source_kind": "character",
+      "source_location": "sha256:ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db/grid[1]/block[0]",
+      "source_slice_sha256": "716aaa7789e683ffcbd5507fe80634215d4f725d1b587378ecec68284d9d6a66",
+      "witness_id": "known-iphi-blood-ritual"
+    },
+    {
+      "capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "entity_name": "Alma (Another Style)",
+      "grid_index": 11,
+      "record_id": "skill:5f6ecc8bc37a12404137",
+      "source_kind": "character",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+      "source_slice_sha256": "074b1000da96e19c814d3956fb305b22d01b5c4b69dad2c7954022a0716d24c6",
+      "witness_id": "known-alma-refraction-counter"
+    },
+    {
+      "capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "entity_name": "Tetra (Another Style)",
+      "grid_index": 1,
+      "record_id": "sidekick_skill:f169ab3c49e3780497a8",
+      "source_kind": "sidekick",
+      "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+      "source_slice_sha256": "f94d3922f693647629c0db1d52b346e2e2d7236bdb88bcbe37b709133db80bf9",
+      "witness_id": "known-tetra-ruincarnation"
+    },
+    {
+      "capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756",
+      "entity_name": "Darunis",
+      "grid_index": 6,
+      "record_id": "skill:2f7fe641bb7a81a7b141",
+      "source_kind": "character",
+      "source_location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+      "source_slice_sha256": "c622bb172ed9887175e66dead6c9d3c5c090db2863ac246223ad91715d213e5e",
+      "witness_id": "known-darunis-hunters-fangs-conflict"
+    },
+    {
+      "capture_sha256": "6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64",
+      "entity_name": "Shigure (Extra Style)",
+      "grid_index": 9,
+      "record_id": "skill:226e7903b8ac87843785",
+      "source_kind": "character",
+      "source_location": "sha256:6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64/grid[9]/block[0]",
+      "source_slice_sha256": "b3d6435db50f757ff3f51e8c8f84351ee25400594c15e8ef8328ee8b6ebbade9",
+      "witness_id": "known-shigure-ripper-counter"
+    },
+    {
+      "capture_sha256": "0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840",
+      "entity_name": "Kumos (Another Style)",
+      "grid_index": 3,
+      "record_id": "sidekick_aura:1b7415c27c4eea0a7188",
+      "source_kind": "sidekick",
+      "source_location": "sha256:0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840/grid[3]/block[0]",
+      "source_slice_sha256": "042696938d7f7fc8126d942accf42ec76a9e15fc21c158eca4ed0c4aa3671d82",
+      "witness_id": "known-kumos-rejection-aura"
+    },
+    {
+      "capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "entity_name": "Anabel (Extra Style)",
+      "grid_index": 5,
+      "record_id": "skill:438aa7e1d0e071c14c43",
+      "source_kind": "character",
+      "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+      "source_slice_sha256": "bb15fed77349477d146b6912701202cba85c75f4d8d0856c1b57581b2a5c790e",
+      "witness_id": "known-anabel-prayer-child"
+    },
+    {
+      "capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "entity_name": "Aisha",
+      "grid_index": 14,
+      "record_id": "skill:0021c579e14edd0e5d6e",
+      "source_kind": "character",
+      "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[14]/block[0]",
+      "source_slice_sha256": "10ba8ae47f66ba9eec7be61bc74833c7cc0455fb03f2e5e211f68a5c4b008471",
+      "witness_id": "development-aisha-twilight-symphony"
+    },
+    {
+      "capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "entity_name": "Aisha",
+      "grid_index": 20,
+      "record_id": "passive:92a680ed2f5becafcce5",
+      "source_kind": "character",
+      "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[20]/block[0]",
+      "source_slice_sha256": "4690a8cd83ae142dd3ee137d0d2dc36b3f650b8b2450e9473a0b2031cc7513c0",
+      "witness_id": "development-aisha-mp-restore"
+    },
+    {
+      "capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "entity_name": "Aldo",
+      "grid_index": 19,
+      "record_id": "skill:e1e5596f2b79f033909d",
+      "source_kind": "character",
+      "source_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+      "source_slice_sha256": "edd67caa2ffc5581036f1465adc1c16d86051ea06891e9219a5e0fd127ec23ab",
+      "witness_id": "development-aldo-starwyrm-slash"
+    },
+    {
+      "capture_sha256": "675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01",
+      "entity_name": "Anabel",
+      "grid_index": 12,
+      "record_id": "skill:c6af1de12f6d89ec223a",
+      "source_kind": "character",
+      "source_location": "sha256:675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01/grid[12]/block[0]",
+      "source_slice_sha256": "6f67a9f292dcd353db6124859c71748e90efe9b014b581d8cb447cf4e2ae71bc",
+      "witness_id": "development-anabel-aegis-boon"
+    },
+    {
+      "capture_sha256": "497f6474efdd448bba5af3a125857acf872e4c4df35e3535576207fb2ae65fe9",
+      "entity_name": "Azami (Another Style)",
+      "grid_index": 9,
+      "record_id": "passive:1f435329414412b51db7",
+      "source_kind": "character",
+      "source_location": "sha256:497f6474efdd448bba5af3a125857acf872e4c4df35e3535576207fb2ae65fe9/grid[9]/block[0]",
+      "source_slice_sha256": "c09e5ef3b6ac23941011223be66a11adf406dffc9cdeda773734180f83eeae6f",
+      "witness_id": "development-azami-hold-ground"
+    },
+    {
+      "capture_sha256": "21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8",
+      "entity_name": "Bertrand",
+      "grid_index": 12,
+      "record_id": "skill:51b281ce56f4eaf27869",
+      "source_kind": "character",
+      "source_location": "sha256:21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8/grid[12]/block[0]",
+      "source_slice_sha256": "4d6618316206893495d60dd14575275239e88a693339e2a91fdede901eff5a2b",
+      "witness_id": "development-bertrand-guardian-lance"
+    },
+    {
+      "capture_sha256": "2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e",
+      "entity_name": "Cerius (Another Style)",
+      "grid_index": 19,
+      "record_id": "skill:15c065e10fecfa55b336",
+      "source_kind": "character",
+      "source_location": "sha256:2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e/grid[19]/block[0]",
+      "source_slice_sha256": "5d929b561896f2b396818a12a77a93570c24da8afd19b3a19b8fd468685a8604",
+      "witness_id": "development-cerius-empyrean-flash"
+    },
+    {
+      "capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+      "entity_name": "Ciel (Alter),Virtual Reflection",
+      "grid_index": 0,
+      "record_id": "skill:76634839e98a6a31203a",
+      "source_kind": "character",
+      "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[0]",
+      "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c",
+      "witness_id": "development-ciel-lunatic-charge"
+    },
+    {
+      "capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "entity_name": "Claude (Extra Style)",
+      "grid_index": 2,
+      "record_id": "skill:42d6ef8f388054c5fcf4",
+      "source_kind": "character",
+      "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/block[0]",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "development-claude-es-another-zone"
+    },
+    {
+      "capture_sha256": "dee041909dd7d25b732eebf479f1abfacdef50009aa23a679304ae30aaa61c74",
+      "entity_name": "Feinne (Another Style)",
+      "grid_index": 15,
+      "record_id": "skill:868b18f314d20a149196",
+      "source_kind": "character",
+      "source_location": "sha256:dee041909dd7d25b732eebf479f1abfacdef50009aa23a679304ae30aaa61c74/grid[15]/block[0]",
+      "source_slice_sha256": "f2e83780b19327c1a9ebc43ba1465968975e035d79cdb41c7e6e580a6554bda5",
+      "witness_id": "development-feinne-as-angel-song"
+    },
+    {
+      "capture_sha256": "4f7630ca3a22ec6ebb885e93925074147c5dcd04de73049adb2e45f41c919ce7",
+      "entity_name": "Minalca (Another Style)",
+      "grid_index": 0,
+      "record_id": "skill:be86d045c1d3c4846851",
+      "source_kind": "character",
+      "source_location": "sha256:4f7630ca3a22ec6ebb885e93925074147c5dcd04de73049adb2e45f41c919ce7/grid[0]/block[0]",
+      "source_slice_sha256": "71eeb92b0dd093b9235f701008f775e4b6d304e3a2d203c8113424785e5d6f64",
+      "witness_id": "development-minalca-as-outrage"
+    },
+    {
+      "capture_sha256": "46580b7fe5b42cf3c47e28f1e1836ebb7027c6b990c907df51cdad95a6697ac7",
+      "entity_name": "Pizzica",
+      "grid_index": 5,
+      "record_id": "skill:14707221110c0b9071bd",
+      "source_kind": "character",
+      "source_location": "sha256:46580b7fe5b42cf3c47e28f1e1836ebb7027c6b990c907df51cdad95a6697ac7/grid[5]/block[0]",
+      "source_slice_sha256": "86a044b611b49f59f089da3d94b8169ebb50bc9520ebe7a6140cd098bde3a271",
+      "witness_id": "development-pizzica-oratorio"
+    },
+    {
+      "capture_sha256": "ca557c5cc1614991157af10978e42570d3c99a6c7771240888a620bdd2a108be",
+      "entity_name": "Soira (Another Style)",
+      "grid_index": 0,
+      "record_id": "skill:e483f98647b3e08773fc",
+      "source_kind": "character",
+      "source_location": "sha256:ca557c5cc1614991157af10978e42570d3c99a6c7771240888a620bdd2a108be/grid[0]/block[0]",
+      "source_slice_sha256": "24b2dc82b84f53f47560197bd4238dfb9eb0c7abe87d165d6122a8ba9c29037a",
+      "witness_id": "development-soira-as-cover"
+    },
+    {
+      "capture_sha256": "0738b7cf597ae6502e9bcddbb97010013b1b2b7820c7ffa6febd7dbecc07f20f",
+      "entity_name": "Premaya (Another Style)",
+      "grid_index": 9,
+      "record_id": "skill:d60e04cd61b8873e3c7e",
+      "source_kind": "character",
+      "source_location": "sha256:0738b7cf597ae6502e9bcddbb97010013b1b2b7820c7ffa6febd7dbecc07f20f/grid[9]/block[0]",
+      "source_slice_sha256": "85c4998763d67bc8ca6239e441cf1d30a97b1f12d6de86bce25c3fe04940d66b",
+      "witness_id": "development-premaya-as-pain"
+    },
+    {
+      "capture_sha256": "d832f78c2d591a972c98abb570864483f3821994311c2345f874c23d0cae4703",
+      "entity_name": "Xianhua",
+      "grid_index": 9,
+      "record_id": "skill:12c5a4d35efb65ce310d",
+      "source_kind": "character",
+      "source_location": "sha256:d832f78c2d591a972c98abb570864483f3821994311c2345f874c23d0cae4703/grid[9]/block[0]",
+      "source_slice_sha256": "fd998c2f1cc6996d3c8bc909e6c8d4f30683493e13ecfbbf98dd62519fb69ea3",
+      "witness_id": "development-xianhua-horizon"
+    },
+    {
+      "capture_sha256": "47422fc5c58e8a2a7bcc1e960c1cbc5847d1c2d3f8bc970188f8d0bd37f2e2e0",
+      "entity_name": "Yakumo (Another Style)",
+      "grid_index": 9,
+      "record_id": "skill:a131e88e3d6d3aa0b01c",
+      "source_kind": "character",
+      "source_location": "sha256:47422fc5c58e8a2a7bcc1e960c1cbc5847d1c2d3f8bc970188f8d0bd37f2e2e0/grid[9]/block[0]",
+      "source_slice_sha256": "c0eb1567a11971f67f0dbd62df2092fe8861fc3f0079072c7dd5957d7738f4e7",
+      "witness_id": "development-yakumo-crunch-time"
+    },
+    {
+      "capture_sha256": "6fec556be7dbfeac261a829ef5f51d4ac4be6bcba35140596f1d2d87708a2440",
+      "entity_name": "Wenefica",
+      "grid_index": 0,
+      "record_id": "skill:4344ebb878d31e00040e",
+      "source_kind": "character",
+      "source_location": "sha256:6fec556be7dbfeac261a829ef5f51d4ac4be6bcba35140596f1d2d87708a2440/grid[0]/block[0]",
+      "source_slice_sha256": "1ff2b8ee85bd15edba1364b68e959f535db86689b971938292c609b303a9af25",
+      "witness_id": "development-wenefica-lunatic"
+    },
+    {
+      "capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "entity_name": "Alma (Another Style)",
+      "grid_index": 16,
+      "record_id": "skill:cf8045d9a204c458a1c7",
+      "source_kind": "character",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[16]/block[0]",
+      "source_slice_sha256": "d97a35c44f646c637d8ad18978811fd3367d9845d9c5bdb346649437edec6aa0",
+      "witness_id": "development-alma-kaleidoscope"
+    },
+    {
+      "capture_sha256": "6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64",
+      "entity_name": "Shigure (Extra Style)",
+      "grid_index": 12,
+      "record_id": "skill:665dc2d34bc4b5d2cedf",
+      "source_kind": "character",
+      "source_location": "sha256:6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64/grid[12]/block[0]",
+      "source_slice_sha256": "ca7165fe7b95a86bbfd508d741125a9e7f9f879187de4075bf8f291918e1dfd3",
+      "witness_id": "development-shigure-cease-counter"
+    },
+    {
+      "capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "entity_name": "Anabel (Extra Style)",
+      "grid_index": 10,
+      "record_id": "skill:73ae0e1154397f4356c6",
+      "source_kind": "character",
+      "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[10]/block[0]",
+      "source_slice_sha256": "434a8cfcb1827fd0b07f52806de2e7b70ef6d27e0b624bfcda1c6af9ccd27f20",
+      "witness_id": "development-anabel-es-nadir-pierce"
+    },
+    {
+      "capture_sha256": "f57f2514b644f597ff4e049a772c776d52e1384d979e1e8b145002df4977452e",
+      "entity_name": "Denny",
+      "grid_index": 1,
+      "record_id": "skill:bea75a228763765a36af",
+      "source_kind": "character",
+      "source_location": "sha256:f57f2514b644f597ff4e049a772c776d52e1384d979e1e8b145002df4977452e/grid[1]/block[0]",
+      "source_slice_sha256": "249adbd467f5e9267d276471a9e7fc43d2e259675ecfb6f3b9f691dc7fd4736c",
+      "witness_id": "development-denny-anchor-down"
+    },
+    {
+      "capture_sha256": "ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db",
+      "entity_name": "Iphi",
+      "grid_index": 9,
+      "record_id": "skill:85c97f7b79e91d8bf194",
+      "source_kind": "character",
+      "source_location": "sha256:ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db/grid[9]/block[0]",
+      "source_slice_sha256": "2260b44524bac3120852d1db668ab82c58b901717419c1738bcf9457352db948",
+      "witness_id": "development-iphi-spina-liliac"
+    },
+    {
+      "capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "entity_name": "Tetra (Another Style)",
+      "grid_index": 0,
+      "record_id": "sidekick_skill:4efa2ee5cbed7b7c032a",
+      "source_kind": "sidekick",
+      "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[0]/block[0]",
+      "source_slice_sha256": "6ec075a9d052f95d51e4a8d474516a4b5d21f158f4468d35728d97a70afbafcf",
+      "witness_id": "development-tetra-auto"
+    },
+    {
+      "capture_sha256": "0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840",
+      "entity_name": "Kumos (Another Style)",
+      "grid_index": 0,
+      "record_id": "sidekick_skill:6c84c1c5b3507af440fd",
+      "source_kind": "sidekick",
+      "source_location": "sha256:0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840/grid[0]/block[0]",
+      "source_slice_sha256": "c10fcd3021aa7d3cf03b9d219d4dd53764f813a95928a4b52dd59de0eb9ae91b",
+      "witness_id": "development-kumos-auto"
+    },
+    {
+      "capture_sha256": "e71a69b8bc1c013e7215b25d38e9f09a8d9c05695a783fb6c496ad6cb49f7b73",
+      "entity_name": "Moke",
+      "grid_index": 1,
+      "record_id": "sidekick_skill:4e19269edf092b799140",
+      "source_kind": "sidekick",
+      "source_location": "sha256:e71a69b8bc1c013e7215b25d38e9f09a8d9c05695a783fb6c496ad6cb49f7b73/grid[1]/block[0]",
+      "source_slice_sha256": "4e623fe53de2f947f1277e63adfa84923c58473f13a7ecaf7c366343580237dd",
+      "witness_id": "development-moke-charge"
+    },
+    {
+      "capture_sha256": "4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b",
+      "entity_name": "Hameow",
+      "grid_index": 1,
+      "record_id": "sidekick_aura:29ee16dada2c963d4479",
+      "source_kind": "sidekick",
+      "source_location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[0]",
+      "source_slice_sha256": "679db3d633f9705987c4e5674c24725d7994ca27b8aec706b685776536154ce5",
+      "witness_id": "development-hameow-aura"
+    },
+    {
+      "capture_sha256": "184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a",
+      "entity_name": "Akane",
+      "grid_index": 11,
+      "record_id": "skill:d88537d18523a18bf48b",
+      "source_kind": "character",
+      "source_location": "sha256:184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a/grid[11]/block[0]",
+      "source_slice_sha256": "04565c904eddc64ad4bb5f178d1d53d90234c731818df6ea9c96fbe7deea67fb",
+      "witness_id": "heldout-akane-fearless-persistence"
+    },
+    {
+      "capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "entity_name": "Alma (Another Style)",
+      "grid_index": 0,
+      "record_id": "skill:23ab8562e6c888b51544",
+      "source_kind": "character",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[0]/block[0]",
+      "source_slice_sha256": "492461941219864519842107dafe399c7d0f60cf549c50a3cb0529ff38e22c37",
+      "witness_id": "heldout-alma-lunatic-copy"
+    },
+    {
+      "capture_sha256": "6062b9c0b59509d6bdea6be670e23084c9911a3c4457b4216ea12b26a9824661",
+      "entity_name": "Anabel (Another Style)",
+      "grid_index": 9,
+      "record_id": "skill:05d2958b8c2a50fcb33b",
+      "source_kind": "character",
+      "source_location": "sha256:6062b9c0b59509d6bdea6be670e23084c9911a3c4457b4216ea12b26a9824661/grid[9]/block[0]",
+      "source_slice_sha256": "b171731581b87574ba2671098ec709cf0d92c68d6e6ac76776bab91dec145a26",
+      "witness_id": "heldout-anabel-as-aegir-saber"
+    },
+    {
+      "capture_sha256": "4b8818f5f28eb6746b82afc6e7768a54e4c6f33c0bc973cf7a273e574d4e31a6",
+      "entity_name": "Cyrus",
+      "grid_index": 18,
+      "record_id": "passive:3eebb7574eaeee6796e6",
+      "source_kind": "character",
+      "source_location": "sha256:4b8818f5f28eb6746b82afc6e7768a54e4c6f33c0bc973cf7a273e574d4e31a6/grid[18]/block[0]",
+      "source_slice_sha256": "7069fcb1d905858377ac517fcaed83b1e4eff4a66ab77baf16479ccbd13d394d",
+      "witness_id": "heldout-cyrus-battle-start"
+    },
+    {
+      "capture_sha256": "60da312fd6d7512353fef061a0823f67dff1df5f9b3ab417a82d1039d5939239",
+      "entity_name": "Dewey",
+      "grid_index": 9,
+      "record_id": "skill:0107eb71fb8a18ce5dfe",
+      "source_kind": "character",
+      "source_location": "sha256:60da312fd6d7512353fef061a0823f67dff1df5f9b3ab417a82d1039d5939239/grid[9]/block[0]",
+      "source_slice_sha256": "44bffa105bbd71dfd9e10741e90741f3d2b3afbd9d9a3d9ff0ced80d4c00e6e7",
+      "witness_id": "heldout-dewey-mist-blast"
+    },
+    {
+      "capture_sha256": "8b5e4978eb415c24584961d61c675763516775cd47355619c82bf047c8e3f4f4",
+      "entity_name": "Eleanor",
+      "grid_index": 0,
+      "record_id": "skill:1867792c8867166496df",
+      "source_kind": "character",
+      "source_location": "sha256:8b5e4978eb415c24584961d61c675763516775cd47355619c82bf047c8e3f4f4/grid[0]/block[0]",
+      "source_slice_sha256": "ffc0afbdb2869fd5a2f3a58accd6184aa47c3c6d74b90aca1392dcfa9fc2896d",
+      "witness_id": "heldout-eleanor-lunatic"
+    },
+    {
+      "capture_sha256": "722a033da6c32a56aca41f103900ab2268294b77b714d5f0d13638a97f55c84c",
+      "entity_name": "Kuchinawa",
+      "grid_index": 2,
+      "record_id": "skill:36f0f4d13efb2a5ccf9b",
+      "source_kind": "character",
+      "source_location": "sha256:722a033da6c32a56aca41f103900ab2268294b77b714d5f0d13638a97f55c84c/grid[2]/block[0]",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "heldout-kuchinawa-another-zone"
+    },
+    {
+      "capture_sha256": "40d73b3e8d93bbb6a4027f43588a38dadeb08da9521a76c757467c5c3b18b6ab",
+      "entity_name": "Mariel (Extra Style)",
+      "grid_index": 12,
+      "record_id": "skill:8dbfe58026a10dfe2f5b",
+      "source_kind": "character",
+      "source_location": "sha256:40d73b3e8d93bbb6a4027f43588a38dadeb08da9521a76c757467c5c3b18b6ab/grid[12]/block[0]",
+      "source_slice_sha256": "87cf1fa8518c4219fd8d197bf4b4bf1b190a92212b8d5326f99794a54ef41f61",
+      "witness_id": "heldout-mariel-prayer"
+    },
+    {
+      "capture_sha256": "9d84a75b0045595d62f7d5fda7d83300833b5573600617cbbc3f84f4083cbf50",
+      "entity_name": "Shion (Extra Style)",
+      "grid_index": 5,
+      "record_id": "skill:3e0f25580e903f5f7ae2",
+      "source_kind": "character",
+      "source_location": "sha256:9d84a75b0045595d62f7d5fda7d83300833b5573600617cbbc3f84f4083cbf50/grid[5]/block[0]",
+      "source_slice_sha256": "9f09642ad61573be033b0ccfb0e9ac5fde12faeca5c66b932aaff6ac01ea1c13",
+      "witness_id": "heldout-shion-warriors-counter"
+    },
+    {
+      "capture_sha256": "ad3684119741bf61d5a60a76e3bb67e8cf7cc6e28759cf22a872aa568b4e9350",
+      "entity_name": "Tiramisu (Another Style)",
+      "grid_index": 7,
+      "record_id": "skill:1fdc6a015079a2944d1f",
+      "source_kind": "character",
+      "source_location": "sha256:ad3684119741bf61d5a60a76e3bb67e8cf7cc6e28759cf22a872aa568b4e9350/grid[7]/block[0]",
+      "source_slice_sha256": "00c1dd7e4a5855734086ed8ebc381e13d1cbc395bee8a5da37e58fe3e1a9b77e",
+      "witness_id": "heldout-tiramisu-calamity-dragon"
+    },
+    {
+      "capture_sha256": "853b8b1ddcb2699f2a710abf7dfc41ae7834717a7b7c0efc068515ba5db2bf50",
+      "entity_name": "Toova (Extra Style)",
+      "grid_index": 10,
+      "record_id": "skill:6bb95f1412decf796107",
+      "source_kind": "character",
+      "source_location": "sha256:853b8b1ddcb2699f2a710abf7dfc41ae7834717a7b7c0efc068515ba5db2bf50/grid[10]/block[0]",
+      "source_slice_sha256": "b104704c28885d04625d702d786dc811dd8246acb998621b6cad4c8ced458110",
+      "witness_id": "heldout-toova-ringing-night"
+    },
+    {
+      "capture_sha256": "e2cdaffa9d97b0f1050d82b076914c1801773fef314b2f3e9101b23a6c1983cf",
+      "entity_name": "Urania",
+      "grid_index": 3,
+      "record_id": "skill:aa7d557f6a32d81fa220",
+      "source_kind": "character",
+      "source_location": "sha256:e2cdaffa9d97b0f1050d82b076914c1801773fef314b2f3e9101b23a6c1983cf/grid[3]/block[0]",
+      "source_slice_sha256": "5841428b80711bf67234a9ff87de247b97b1cc5b57b5b6dd79e1f71e33b5711f",
+      "witness_id": "heldout-urania-round-house-kick"
+    },
+    {
+      "capture_sha256": "dcc9e0fccdfaa476638aedffc59d134cacee92553f6b5ca9b9f37524405bf4cd",
+      "entity_name": "Velette",
+      "grid_index": 2,
+      "record_id": "skill:8ad731e8de59c426d3c0",
+      "source_kind": "character",
+      "source_location": "sha256:dcc9e0fccdfaa476638aedffc59d134cacee92553f6b5ca9b9f37524405bf4cd/grid[2]/block[0]",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "heldout-velette-another-zone"
+    },
+    {
+      "capture_sha256": "874e1bca6412bfcbbe3ec5e676bee23e96af032d273079da0af496d59056e32f",
+      "entity_name": "Asia",
+      "grid_index": 3,
+      "record_id": "skill:c173e0af7d2055b85c34",
+      "source_kind": "character",
+      "source_location": "sha256:874e1bca6412bfcbbe3ec5e676bee23e96af032d273079da0af496d59056e32f/grid[3]/block[0]",
+      "source_slice_sha256": "b7436fbcb21cfccd9216bf8aa2cc6dbd438caf8eda48132dfdf2f0e8a226cd15",
+      "witness_id": "heldout-asia-venom-shot"
+    },
+    {
+      "capture_sha256": "1fd31a5c2580cce3712d6e0672d183ff4dbc13016e8b121bdb11ca1eb88876ec",
+      "entity_name": "Prai",
+      "grid_index": 1,
+      "record_id": "skill:12dba8ba5300b89fef7e",
+      "source_kind": "character",
+      "source_location": "sha256:1fd31a5c2580cce3712d6e0672d183ff4dbc13016e8b121bdb11ca1eb88876ec/grid[1]/block[0]",
+      "source_slice_sha256": "470d75f2919d81e2e2a87cafd831d63d44aa6116856922e5a815ba2ed7ce63a8",
+      "witness_id": "heldout-prai-judgment-ray"
+    },
+    {
+      "capture_sha256": "f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486",
+      "entity_name": "Gunce (Another Style)",
+      "grid_index": 0,
+      "record_id": "sidekick_skill:42e66a735ecbad695a93",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486/grid[0]/block[0]",
+      "source_slice_sha256": "585b4b9bd74eb08e6cdadfc9d595b6fb1a788fc54e0e97a776a6eb092a70ba72",
+      "witness_id": "heldout-gunce-auto"
+    },
+    {
+      "capture_sha256": "f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486",
+      "entity_name": "Gunce (Another Style)",
+      "grid_index": 1,
+      "record_id": "sidekick_skill:f6d4394b5aeed3fc46f7",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486/grid[1]/block[0]",
+      "source_slice_sha256": "e851de3876d1c5d8926ab4b025ecfae2fe5c4d69dfd78ff9df49f7d16a9f1e85",
+      "witness_id": "heldout-gunce-charge"
+    },
+    {
+      "capture_sha256": "f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486",
+      "entity_name": "Gunce (Another Style)",
+      "grid_index": 2,
+      "record_id": "sidekick_aura:b270e175d915f37b4eb0",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486/grid[2]/block[0]",
+      "source_slice_sha256": "373c56468e0702c22769b7a5092da376239a169ec559d4a9adc300bdd379f9b0",
+      "witness_id": "heldout-gunce-aura"
+    },
+    {
+      "capture_sha256": "ff419d2f960be1289b75d5386579cd92efbe9c6f5f9d1b11e4e5501389eabe21",
+      "entity_name": "Sesta (Another Style)",
+      "grid_index": 10,
+      "record_id": "passive:3f32571f6c3420b5864c",
+      "source_kind": "character",
+      "source_location": "sha256:ff419d2f960be1289b75d5386579cd92efbe9c6f5f9d1b11e4e5501389eabe21/grid[10]/block[0]",
+      "source_slice_sha256": "b63b311a1dea1b892886dcd391bec865ba21291fd938271886d6dd31c336827e",
+      "witness_id": "heldout-sesta-wolfheart"
+    },
+    {
+      "capture_sha256": "2bd7e22e5cf9ed80850b845116e501b6caa5925e9ae96ec0cfdf30d6cb327686",
+      "entity_name": "Tsubame (Another Style)",
+      "grid_index": 8,
+      "record_id": "skill:f2a72fd640b0c1f45373",
+      "source_kind": "character",
+      "source_location": "sha256:2bd7e22e5cf9ed80850b845116e501b6caa5925e9ae96ec0cfdf30d6cb327686/grid[8]/block[0]",
+      "source_slice_sha256": "fd2284f00fa5c34a7d62fdc99b31c6677e5e96c26e5149acc1a0c7338456b787",
+      "witness_id": "heldout-tsubame-shuriken"
+    },
+    {
+      "capture_sha256": "946ded42aee70a5fcedb8021ec582cefd3baeca5b246b3bb870cb01ebfe8660e",
+      "entity_name": "Minalca",
+      "grid_index": 13,
+      "record_id": "passive:f7100a4dfd8cd467207d",
+      "source_kind": "character",
+      "source_location": "sha256:946ded42aee70a5fcedb8021ec582cefd3baeca5b246b3bb870cb01ebfe8660e/grid[13]/block[0]",
+      "source_slice_sha256": "f73b00e1a7d6b2d05a914e8001435b6fee8287c3594a918a0de09ec8bfd857cf",
+      "witness_id": "heldout-minalca-tributum"
+    }
+  ]
+}

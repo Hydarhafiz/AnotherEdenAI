@@ -521,6 +521,47 @@ The traversal limit is selected only after auditing the finite local link topolo
 
 The durable fixture/source identities live in `src/etl/structural_fixture_manifest.json`; the accepted aggregate and sidecar digest live in `artifacts/evidence/feature_c1_structural_evidence.json`. Refresh either only as an explicit source-snapshot experiment. Source refresh and semantic classification are not part of C1 parser replay.
 
+### Milestone 6 Source Fidelity Witnesses
+
+Feature C1.1 adds the source-semantic gate before C2. The normal implementation
+and structural replay command intentionally does not read the semantic oracle:
+
+```bash
+.venv/bin/python scripts/report_feature_c1_1_source_fidelity.py \
+  --output artifacts/generated/feature_c1_1_source_fidelity_replay.json
+```
+
+The replay covers all 367 canonical character identities, preserves the
+367/367 legal-kit receipt gate, and reports structural parsing, real fact
+binding, capture identity, unresolved mappings, relevant-link outcomes, and
+deterministic child-definition traversal. Sidekick `auto`, `charge`, and
+`aura` records are reported with separate denominators. Generated replay
+output remains ignored.
+
+The deterministic witness manifest is
+`src/etl/source_fidelity_manifest.json`. It contains seven named regressions
+plus separate archetype-stratified development and held-out cohorts; it is not
+an ML-style percentage split. The source-slice fixture at
+`tests/fixtures/source_fidelity/source_slice_manifest.json` stores reproducible
+capture locators and digests. The separately authored
+`src/etl/source_fidelity_oracle.json` is sealed during implementation and may
+only be read by an explicit evaluation command after rules are frozen:
+
+```bash
+.venv/bin/python scripts/report_feature_c1_1_source_fidelity.py \
+  --oracle src/etl/source_fidelity_oracle.json \
+  --include-held-out \
+  --output artifacts/evidence/feature_c1_1_source_fidelity.json
+```
+
+The evidence keeps witness counts separate from independently adjudicated
+effect/dependency occurrence counts. Every fidelity dimension is one of
+`passed`, `failed`, `unknown`, or `not_applicable`; only occurrences with all
+applicable dimensions passed can be fully supported for C2. Unknown or failed
+source selection, semantic attachment, and child-definition resolution never
+become absence or capability authority. Known regressions are reported apart
+from generalization evidence, and held-out labels cannot tune later rules.
+
 ## Maintenance Rule
 
 When an implementation changes ETL stages, crawl controls, manifest shape, operator workflow, artifact layout, or debugging steps, update this guide in the same feature.

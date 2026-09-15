@@ -1,0 +1,352 @@
+{
+  "oracle_version": "m6-c1.1-independent-oracle-1.0.0",
+  "sealed": true,
+  "authority": "Independently authored adjudications over checksum-pinned source records; implementation output, taxonomy proposals, and tuning artifacts are not oracle inputs.",
+  "isolation": {
+    "held_out_cohort": "sealed until explicit evaluation command",
+    "implementation_access": "normal replay does not read this file",
+    "tuning_rule": "held-out labels cannot tune rules after unsealing; any such change requires a replacement held-out cohort"
+  },
+  "default_dimensions": {
+    "effect_completeness": {
+      "status": "passed"
+    },
+    "effect_order": {
+      "status": "passed"
+    },
+    "parent_child_condition_attachment": {
+      "status": "not_applicable"
+    },
+    "actor": {
+      "status": "passed"
+    },
+    "recipient": {
+      "status": "passed"
+    },
+    "trigger": {
+      "status": "not_applicable"
+    },
+    "result": {
+      "status": "passed"
+    },
+    "magnitude_parameter": {
+      "status": "not_applicable"
+    },
+    "duration_activation": {
+      "status": "not_applicable"
+    },
+    "element": {
+      "status": "not_applicable"
+    },
+    "attack_type": {
+      "status": "not_applicable"
+    },
+    "mechanic_resource_reference": {
+      "status": "not_applicable"
+    },
+    "child_definition_resolution": {
+      "status": "not_applicable"
+    }
+  },
+  "witnesses": [
+    {
+      "witness_id": "known-iphi-blood-ritual",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1,
+      "dimension_overrides": {
+        "child_definition_resolution": {
+          "status": "unknown",
+          "reason": "Lunatic (Iphi) destination is not an admitted captured definition in the C1 topology"
+        }
+      }
+    },
+    {
+      "witness_id": "known-alma-refraction-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1,
+      "dimension_overrides": {
+        "parent_child_condition_attachment": {
+          "status": "failed",
+          "reason": "legacy structural witness did not preserve the counter activation attachment"
+        }
+      }
+    },
+    {
+      "witness_id": "known-tetra-ruincarnation",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "known-darunis-hunters-fangs-conflict",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 0,
+      "oracle_status": "source_conflict",
+      "dimension_overrides": {
+        "attack_type": {
+          "status": "failed",
+          "reason": "admitted source says piercing; Hunter's Fangs/Wind is not present"
+        },
+        "element": {
+          "status": "unknown",
+          "reason": "no admitted Wind element on Hunter Shoot"
+        }
+      }
+    },
+    {
+      "witness_id": "known-shigure-ripper-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "known-kumos-rejection-aura",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "known-anabel-prayer-child",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1,
+      "dimension_overrides": {
+        "child_definition_resolution": {
+          "status": "unknown",
+          "reason": "Knight's Pride - Prayer (Anabel ES) is linked by source but not admitted as a captured definition"
+        }
+      }
+    },
+    {
+      "witness_id": "development-aisha-twilight-symphony",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-aisha-mp-restore",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-aldo-starwyrm-slash",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-anabel-aegis-boon",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-azami-hold-ground",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-bertrand-guardian-lance",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-cerius-empyrean-flash",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-ciel-lunatic-charge",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-claude-es-another-zone",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-feinne-as-angel-song",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-minalca-as-outrage",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-pizzica-oratorio",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-soira-as-cover",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-premaya-as-pain",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "development-xianhua-horizon",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-yakumo-crunch-time",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-wenefica-lunatic",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-alma-kaleidoscope",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-shigure-cease-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-anabel-es-nadir-pierce",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-denny-anchor-down",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "development-iphi-spina-liliac",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "development-tetra-auto",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-kumos-auto",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-moke-charge",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-hameow-aura",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-akane-fearless-persistence",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-alma-lunatic-copy",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-anabel-as-aegir-saber",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-cyrus-battle-start",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-dewey-mist-blast",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "heldout-eleanor-lunatic",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-kuchinawa-another-zone",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-mariel-prayer",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-shion-warriors-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-tiramisu-calamity-dragon",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-toova-ringing-night",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "heldout-urania-round-house-kick",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "heldout-velette-another-zone",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-asia-venom-shot",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "heldout-prai-judgment-ray",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "heldout-gunce-auto",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-gunce-charge",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-gunce-aura",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-sesta-wolfheart",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-tsubame-shuriken",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-minalca-tributum",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    }
+  ]
+}

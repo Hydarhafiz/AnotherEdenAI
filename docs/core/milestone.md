@@ -372,7 +372,7 @@ Post-completion audit disposition, approved 2026-09-15: C1 remains completed for
 
 ### Feature C1.1: Source Fidelity And Authoritative Witnesses
 
-Status: Planned after the C1 post-completion audit; implementation unstarted.
+Status: Completed on 2026-09-15; stopped at the approved pre-C2 human checkpoint.
 
 Type and route: `build` via `builder-executor -> tdd-loop`; use `feature-planner` to finalize the stratified witness manifest and exact fidelity artifact contract, with a required read-only source-authority audit during verification.
 
@@ -394,6 +394,15 @@ Acceptance:
 - **C1.1-08:** Only fidelity-passed occurrences may enter C2 as fully supported inputs. Unresolved source selection, identity, semantic attachment or required definition remains unknown/non-authoritative. No automatic approval, materialized capability, graph mutation or legal-kit change occurs.
 
 Exit and human checkpoint: C2 may start only after the seven regressions pass, the development/held-out manifest demonstrably covers the material archetypes, held-out adjudications remain sealed, full-catalog automatic replay is deterministic, and unresolved source/definition gaps are reported. One completed-feature commit contains the implementation, authoritative fixtures/manifest, regressions, accepted evidence and necessary documentation.
+
+Completion evidence:
+
+- `src/etl/source_fidelity_manifest.json` is a deterministic, non-percentage witness manifest with seven named regressions, 26 additional development witnesses, and 21 held-out witnesses. All required source/mechanic archetypes present in the accepted corpus are represented in both development and held-out strata, including separate sidekick auto, charge, and aura records.
+- `tests/fixtures/source_fidelity/source_slice_manifest.json` binds all 54 witnesses to real source/fact IDs, checksum-qualified captures, source grid locations, and reproducible source-slice digests. Rewritten prose is not used as source authority. The separate sealed oracle records 40/30 independently adjudicated effect occurrences and 23/16 independently adjudicated dependency occurrences for development/held-out cohorts respectively.
+- Full automatic replay covers 367/367 canonical character identities, 4,863 bound facts and 173 explicit unresolved mappings, with 367/367 structural parses and unchanged 367/367 complete legal-kit receipts. The separate sidekick replay covers 25 parsed sidekicks with 28 auto, 18 charge, and 41 aura records. Link, child-definition, source-selection, parse, and budget failures remain explicit.
+- The seven regressions use real Iphi, Alma AS, Tetra AS, Darunis, Shigure ES, Kumos AS, and Anabel ES identities and are excluded from generalization evidence. Iphi Lunatic and Anabel Prayer remain unresolved child-definition states; Alma counter attachment remains a failed legacy regression; Darunis `Hunter's Fangs`/Wind remains an explicit source conflict; Tetra/Kumos sidekick record-kind coverage and the remaining named regressions are independently visible.
+- Fidelity dimensions are reported separately for source-record selection, source identity, effect completeness/order, parent-child condition attachment, actor, recipient, trigger, result, magnitude/parameter, duration/activation, element, attack type, mechanic/resource references, and child-definition resolution. Only fully passed applicable dimensions are admitted as fully supported C2 inputs; no capability approval, materialization, graph/schema, legal-kit, scoring/search, provider, frontend, or production behavior changed.
+- Accepted evidence is `artifacts/evidence/feature_c1_1_source_fidelity.json`; generated replay output remains ignored. The full replay is deterministic with digest `8c2a3dbd645a78d084adc282ff9b77497b1eaa79b7a05b78471d0272401de7aa`. C2 remains unstarted pending this human checkpoint.
 
 ### Feature C2: Scoped Classification And Review-Reduction Evaluation
 
