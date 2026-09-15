@@ -1,0 +1,19 @@
+{
+  "artifact_version": "m6-c1-fixtures-1.0.0",
+  "authority": "Small source-faithful structural witnesses pinned to the accepted 2026-09-15 local captures; fixtures prove parser behavior, not capability meaning.",
+  "cases": [
+    {"entity": "Darunis", "kind": "character", "source_url": "https://anothereden.wiki/w/Darunis", "source_capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756", "fixture": "tests/fixtures/structural/darunis.html", "fixture_sha256": "70f2690c4855c8fffe1ccb23c226d1ba6512659d91665b0cc86ab9ab9acb63f0"},
+    {"entity": "Denny", "kind": "character", "source_url": "https://anothereden.wiki/w/Denny", "source_capture_sha256": "f57f2514b644f597ff4e049a772c776d52e1384d979e1e8b145002df4977452e", "fixture": "tests/fixtures/structural/denny.html", "fixture_sha256": "ca957b4a1fec778dcf7b2b35342e48067e38e26a3e03383f80648d5298d06c44"},
+    {"entity": "Iphi", "kind": "character", "source_url": "https://anothereden.wiki/w/Iphi", "source_capture_sha256": "ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db", "fixture": "tests/fixtures/structural/iphi.html", "fixture_sha256": "6c6897d7b31d51d0ae47a164b1b11065236ba96c9320b5fd58e58e274442f12b", "required_definitions": ["Blood Contract", "Lunatic (Iphi)"]},
+    {"entity": "Alma (Another Style)", "kind": "character", "source_url": "https://anothereden.wiki/w/Alma_(Another_Style)", "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2", "fixture": "tests/fixtures/structural/alma_as.html", "fixture_sha256": "e65382075b60e75e615f51eb7e3ef4910bec9b4cf4b2df6d84a5754962daff5e"},
+    {"entity": "Anabel (Extra Style)", "kind": "character", "source_url": "https://anothereden.wiki/w/Anabel_(Extra_Style)", "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3", "fixture": "tests/fixtures/structural/anabel_es.html", "fixture_sha256": "3b40ce4d781704e57ee65c62398299b629fe557af34c46e6e26cc2b6481eccc5"},
+    {"entity": "Shigure (Extra Style)", "kind": "character", "source_url": "https://anothereden.wiki/w/Shigure_(Extra_Style)", "source_capture_sha256": "6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64", "fixture": "tests/fixtures/structural/shigure_es.html", "fixture_sha256": "37deb469fdcffcc2afcfc537f6010d933b4ccff239244e8eb79c1ae39137e6c7"},
+    {"entity": "Tetra (Another Style)", "kind": "sidekick", "source_url": "https://anothereden.wiki/w/Tetra_(Another_Style)", "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d", "fixture": "tests/fixtures/structural/tetra_as.html", "fixture_sha256": "f6c0926e76e96d2127fb54d01ff565cd5e10fae7361280a0c516a6226a3c0978"},
+    {"entity": "Kumos (Another Style)", "kind": "sidekick", "source_url": "https://anothereden.wiki/w/Kumos_(Another_Style)", "source_capture_sha256": "0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840", "fixture": "tests/fixtures/structural/kumos_as.html", "fixture_sha256": "41491638d1db2ae6c63302190fde5d2f1725cd9bd219ac7b3a24132f8a6f3b2d"},
+    {"entity": "Shared boss/equipment/Grasta rows", "kind": "cross_entity", "source_url": "https://anothereden.wiki/w/", "source_capture_sha256": "185ad1765eb9cf0bbe1ea804497ef123edb0a60d52d204fe05664b9e82072985", "additional_source_capture_sha256": ["792fbe435835b316ca5e9ecca3318cf411559780e2460715bcb733bc81b06714", "6f926d2855d6a2019bd1e671796a79af07369684c59cb7b9f15439efa481b656"], "fixture": "tests/fixtures/structural/shared_rows.html", "fixture_sha256": "14f9620a42f6b559bf151ed19296e5c48850e57020c49ca48a3fecf3f35e1c2d"}
+  ],
+  "supplemental_witnesses": [
+    {"name": "An-ki Dingir", "status": "pending capture", "admitted_boss": false},
+    {"name": "Edaxian Zennon", "status": "pending capture", "admitted_boss": false}
+  ]
+}

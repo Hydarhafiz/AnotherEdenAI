@@ -6,7 +6,7 @@ Status: Active as of 2026-09-14. Milestone 5 is closed through an approved scope
 
 Milestone 6 expands recommendation-ready, high-value strategic evidence across all 367 canonical character forms/styles and improves meaningful candidate diversity. It does not attempt to model every mechanic, prove a globally optimal team, predict a clear, or replace conservative evidence review with inference.
 
-Plan revision approved 2026-09-15: preserve completed A-C and insert C1 (structural evidence and bounded references) and C2 (scoped classification and review-reduction evaluation) before D. The sequence is A → B → C → C1 → C2 → D → E → F → G. C1/C2 implementation remains unstarted; this approval records the planning boundary only. D's numeric coverage floors and E-G contracts remain unchanged.
+Plan revision approved 2026-09-15: preserve completed A-C and insert C1 (structural evidence and bounded references) and C2 (scoped classification and review-reduction evaluation) before D. The sequence is A → B → C → C1 → C2 → D → E → F → G. C1 is complete and C2 remains unstarted. D's numeric coverage floors and E-G contracts remain unchanged.
 
 The product claim is:
 
@@ -337,7 +337,7 @@ Completion evidence:
 
 ### Feature C1: Structural Evidence And Bounded References
 
-Status: Planned after Feature C; implementation unstarted.
+Status: Completed on 2026-09-15.
 
 Type and route: `build` via `builder-executor -> tdd-loop`; refine the contained parser and traversal contract with `feature-planner` before execution.
 
@@ -359,6 +359,14 @@ Acceptance:
 - **C1-06:** Preserve entity ownership versus mechanic definitions, role/index discovery and strategy authority boundaries. Keep reusable authoritative fixtures and source identities; ignore generated sidecars and crawl/comparison output. No generated definition becomes capability authority.
 
 Exit and human checkpoints: Traceable structural output, legacy-equivalence evidence and a documented traversal boundary are required before C2. Ask only for a material source conflict, a required definition that cannot be established, or a reopened architecture boundary. Unresolved lower-value links may remain explicit. One completed-feature commit contains durable implementation, fixtures and necessary documentation.
+
+Completion evidence:
+
+- The versioned `m6-c1-1.0.0` offline sidecar preserves ordered root/list/table blocks, ancestry, sections, line breaks, inline references, fragments, icon identities and checksum-qualified locations without assigning semantic meaning to nesting.
+- The accepted 367-capture replay reconciles 367/367 complete legal-kit receipts and binds 4,863 of 5,036 existing facts without changing their IDs, families or legacy descriptions. The remaining 173 mappings (9 active, 164 passive) are explicit unknown diagnostics and never become absence.
+- The finite captured topology was inventoried before traversal limits were selected: 5,634 structural units, 6,554 reference occurrences, 15,384 locally resolvable edges, observed connected extremes of depth 18 and 49 canonical definition pages, and maximum out-degree 99. Per-root work is therefore capped at depth 3, eight pages and 64 frontier additions; resolution, exclusion, missing capture, visited nodes and each budget exhaustion remain distinct.
+- Permanent source-pinned fixtures cover Darunis, Denny, Iphi, Alma AS, Anabel ES, Shigure ES, Tetra AS and Kumos AS, including captured Blood Contract and Lunatic-family definitions. Shared table-cell handling is covered for an admitted boss witness plus cached equipment and Grasta rows. An-ki Dingir and Edaxian Zennon remain non-admitted pending-capture witnesses.
+- The generated sidecar and crawl/comparison output remain ignored. Only reusable parsing/reporting code, compact fixtures and their source identities, the accepted digest/summary, operator guidance and regressions are retained. No capability approval, graph/schema, legal-kit, discovery/index, boss-strategy, provider, frontend or production behavior changed.
 
 ### Feature C2: Scoped Classification And Review-Reduction Evaluation
 

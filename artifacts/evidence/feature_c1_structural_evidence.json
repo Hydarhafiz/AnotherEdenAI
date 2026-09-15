@@ -1,0 +1,69 @@
+{
+  "artifact_version": "m6-c1-evidence-1.0.0",
+  "accepted_source_snapshot": {
+    "catalog_fingerprint": "25987076f8ec88094e697fb53eaed216f9c753596516651652b54acdb07b334c",
+    "capture_count": 367,
+    "fixture_manifest_sha256": "8e0c1d89aaa18dd3ae8592447b2c58a35f1b4d9d7d93977685abc0f497b16325",
+    "structural_sidecar_digest": "0bf84f890eade901e390f679372a8e86ed75a53279f007ebd20db3a0f320f470"
+  },
+  "legal_kit": {
+    "canonical_identity_count": 367,
+    "complete_receipt_count": 367,
+    "ready": true,
+    "identity_or_receipt_drift": false
+  },
+  "coverage": {
+    "source_fact_denominator": 5036,
+    "bound_source_fact_count": 4863,
+    "unresolved_source_fact_count": 173,
+    "bound_by_source_kind": {
+      "active_skill": 4101,
+      "passive_skill": 762
+    },
+    "unresolved_by_source_kind": {
+      "active_skill": 9,
+      "passive_skill": 164
+    },
+    "malformed_grid_diagnostic_count": 0,
+    "unknown_or_failed_mapping_becomes_absence": false
+  },
+  "topology_audit": {
+    "unit_count": 5634,
+    "reference_occurrence_count": 6554,
+    "locally_resolvable_edge_count": 15384,
+    "observed_maximum_depth": 18,
+    "observed_maximum_pages_per_root": 49,
+    "observed_maximum_out_degree": 99
+  },
+  "traversal_boundary": {
+    "max_depth": 3,
+    "max_pages_per_root": 8,
+    "max_frontier_per_root": 64,
+    "rationale": "The finite captured graph was audited before selection. The observed 18-depth/49-page connected extremes are highly recursive definition networks, so C1 admits a bounded interpretation neighborhood with explicit exhaustion instead of attempting transitive ontology ingestion.",
+    "reference_occurrence_count_after_traversal": 9796,
+    "status_distribution": {
+      "access_failure": 6619,
+      "depth_budget_exhausted": 58,
+      "page_budget_exhausted": 238,
+      "resolved": 1892,
+      "unresolved_mapping": 21,
+      "visited": 968
+    }
+  },
+  "authority": {
+    "generated_capability_authority": false,
+    "definitions_grant_capabilities": false,
+    "legacy_catalog_is_mutated": false,
+    "graph_schema_is_mutated": false,
+    "role_or_index_discovery_is_mutated": false,
+    "boss_strategy_authority_is_mutated": false
+  },
+  "retention": {
+    "structural_parser": "committed reusable implementation",
+    "fixture_manifest": "committed source-identity record",
+    "named_fixture_snippets": "committed permanent regressions",
+    "accepted_summary": "committed durable evidence",
+    "generated_sidecar": "ignored",
+    "crawl_and_comparison_output": "ignored"
+  }
+}

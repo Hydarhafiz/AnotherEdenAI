@@ -507,6 +507,20 @@ If C5 fails, do not edit Neo4j capability properties manually. Repair the reposi
 
 The final C5 handoff versions in the manifest are the only capability inputs Feature D may use; it must consume only materialized proven facts.
 
+### Milestone 6 Structural Evidence Sidecar
+
+Feature C1 preserves source arrangement separately from the legal-kit catalog and graph schema. Generate the full-catalog sidecar only from the accepted local character captures:
+
+```bash
+.venv/bin/python scripts/report_feature_c1_structural_evidence.py
+```
+
+The default output, `artifacts/generated/feature_c1_structural_sidecar.json`, is reproducible and ignored. It records checksum-qualified locations, ordered root/list/table blocks, inline references and icons, existing fact/family bindings, explicit mapping diagnostics, and bounded reference outcomes. Do not load it into Neo4j or treat a resolved definition as capability approval.
+
+The traversal limit is selected only after auditing the finite local link topology, then capped at depth 3, eight canonical definition pages per root, and 64 frontier additions. `access_failure`, `excluded`, `unresolved_mapping`, `depth_budget_exhausted`, `page_budget_exhausted`, and `frontier_budget_exhausted` are distinct results. A failed mapping or unresolved link is unknown evidence, never proof of absence.
+
+The durable fixture/source identities live in `src/etl/structural_fixture_manifest.json`; the accepted aggregate and sidecar digest live in `artifacts/evidence/feature_c1_structural_evidence.json`. Refresh either only as an explicit source-snapshot experiment. Source refresh and semantic classification are not part of C1 parser replay.
+
 ## Maintenance Rule
 
 When an implementation changes ETL stages, crawl controls, manifest shape, operator workflow, artifact layout, or debugging steps, update this guide in the same feature.
