@@ -40,14 +40,15 @@ Milestone 6 is ordered around:
 - deriving capability priorities from the committed thirty-boss corpus;
 - attempting high-value extraction across all 367 canonical forms/styles;
 - preserving combat-source structure and resolving bounded relevant child definitions before selective review (C1, approved 2026-09-15);
-- evaluating scoped classification, review compatibility and measured review effort against the completed extraction baseline (C2);
+- establishing source-semantic fidelity through targeted regressions, stratified development/held-out witnesses and full-catalog automatic replay (C1.1);
+- evaluating scoped classification, review compatibility and measured review effort against independent held-out occurrences (C2);
 - reviewing only ambiguous, high-impact, recurring, or acceptance-relevant facts;
 - preserving proven, ambiguous, unknown, rejected, and untagged meanings;
 - exposing request-time pool and candidate-set diagnostics;
 - changing candidate generation only after diagnostics establish the responsible stage; and
 - evaluating diverse candidates with H2's four modeled-viability gates.
 
-The approved sequence is A → B → C → C1 → C2 → D → E → F → G. A-C remain completed; C1/C2 implementation is unstarted. D follows acceptance of C2's comparison evidence. Existing coverage/diversity floors remain unchanged, and generated structural evidence does not replace human capability-review authority. Complete equipment ingestion, broad boss expansion and formula simulation remain deferred.
+The approved sequence is A → B → C → C1 → C1.1 → C2 → D → E → F → G. A-C and C1 are completed; C1's claim is narrowed to structural preservation after the 2026-09-15 source-fidelity audit. C1.1 and C2 remain unstarted. D follows acceptance of C1.1 fidelity and C2 held-out comparison evidence. Existing coverage/diversity floors remain unchanged, and generated structural or semantic evidence does not replace human capability-review authority. Complete equipment ingestion, broad boss expansion and formula simulation remain deferred.
 
 ## Research And Planning Sources
 

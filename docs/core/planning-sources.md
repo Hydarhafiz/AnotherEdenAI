@@ -788,7 +788,7 @@ This file stores source references used during planning discussions. It separate
 
 ### Milestone 6 Structural Evidence Revision — Approved 2026-09-15
 
-Decision: insert C1 (Structural Evidence And Bounded References) and C2 (Scoped Classification And Review-Reduction Evaluation) between completed C and planned D. The owner approved these architecture and sequence boundaries while explicitly leaving implementation unstarted. Preserve A-C evidence and D-G numeric contracts. The active feature acceptance criteria live in `milestone.md`; the shared representation and authority boundary live in `architecture.md`.
+Original decision: insert C1 (Structural Evidence And Bounded References) and C2 (Scoped Classification And Review-Reduction Evaluation) between completed C and planned D. The owner approved these architecture and sequence boundaries while explicitly leaving implementation unstarted. Preserve A-C evidence and D-G numeric contracts. The active feature acceptance criteria live in `milestone.md`; the shared representation and authority boundary live in `architecture.md`.
 
 Repository grounding:
 
@@ -814,9 +814,40 @@ External source identities and limitations:
 - Equipment witnesses: https://anothereden.wiki/w/Rainbow_Axe_(Reforged), https://anothereden.wiki/w/Elpis_Bangle and https://anothereden.wiki/w/Badgelist were not retrieved as dedicated pages. Cached index rows support the first two examples; badge and detail-page contracts remain source gaps.
 - Role/index pages remain discovery/classification witnesses, never standalone proof of entity ownership. The supplied community sources https://www.reddit.com/r/AnotherEdenGlobal/comments/j4gv69/grasta_setup_guide/ and https://www.reddit.com/r/AnotherEdenGlobal/comments/eu264p/recommended_grasta/ were accessible strategy material; the former records a 2021 update. Neither becomes equal-authority deterministic mechanic proof.
 
-Evaluation decision: compare flattened, structural-only and structural-plus-child-reference arms with fixed source, catalog, taxonomy scope and review snapshots. Separate source refresh from parser improvements. Measure independent semantic correctness, attachment errors, structural/link coverage, review corrections/time and effort toward D floors, plus deterministic replay and prior-review compatibility. Hold out character/mechanic families. No numerical review-reduction threshold is justified yet; fully supported extraction is not reviewed proof, and capped queue length is not total workload.
+The following evaluation decision is superseded by the source-fidelity revision below: compare flattened, structural-only and structural-plus-child-reference arms using compact independently adjudicated witnesses. Its fixed-input and no-invented-threshold principles remain valid, but the seven known cases and separately authored fixture prose cannot establish generalization.
 
-Provenance disposition: approved planning/architecture intent revised; runtime behavior, taxonomy/review authority, catalog, source captures, persisted schema and production/provider configuration unchanged. New sidecar/extraction identities are planned, not issued. No graph mutation or implementation was authorized by this plan revision.
+Provenance disposition at the original revision: approved planning/architecture intent revised; runtime behavior, taxonomy/review authority, catalog, source captures, persisted schema and production/provider configuration unchanged. C1 subsequently issued its structural sidecar identity; the source-fidelity audit below narrows that identity's accepted meaning rather than rewriting it.
+
+### Milestone 6 Source-Fidelity And Stratified-Evaluation Revision — Approved 2026-09-15
+
+Decision: preserve C1 as completed structural work with a narrowed claim, insert C1.1 (Source Fidelity And Authoritative Witnesses), and revise C2 before D. The approved sequence is A → B → C → C1 → C1.1 → C2 → D → E → F → G. Runtime behavior, source captures, catalog, review authority, persisted schema, D-G numeric floors, paid-provider policy and frontend scope remain unchanged.
+
+Audit findings:
+
+- C1's accepted full sidecar contains 4,863 bound character units (4,101 active and 762 passive) and no production sidekick units. The 367/367 receipt result remains character legal-kit evidence, not proof of sidekick structural or semantic coverage.
+- The C1 fixture manifest pins both raw-capture and fixture checksums but does not prove their contents are equivalent. The compact Darunis fixture names a `Hunter's Fangs` record absent from the pinned capture, while the Kumos AS fixture substitutes Power/Intelligence -15% for the capture's Type Resistance -50%. The fixture manifest's source-faithful semantic implication is superseded; its parser-regression role remains recoverable in C1 history.
+- Real C1 structural units preserve the relevant Iphi, Alma AS, Shigure ES and Anabel ES source clauses. Blood Contract and Alma's counter definition resolve, while Iphi's Lunatic link and Anabel's `(Anabel_ES)` Prayer link remain explicit access failures in the real replay. Fixture-local definitions did not prove production child resolution.
+- Tetra AS's pinned capture and parsed record contain Hold Ground for all party members. Its compact fixture omitted that clause, and the current Hold Ground taxonomy rule excludes sidekick skill records. This is a fixture/taxonomy admission gap, not source-capture loss.
+- The pinned Darunis capture identifies `Hunter Shoot` with element `None` and Piercing attack type. No admitted repository source establishes `Hunter's Fangs` or Wind for this witness; retain the conflict instead of converting the requested expectation into authority.
+- Existing C2 prototype fixtures used fabricated feature-local fact IDs and incomplete, sometimes false expected effects. Their green tests and partial human timing cannot support semantic correctness, compatibility or review-reduction claims and were purged with the abandoned prototype.
+
+Source-semantic fidelity decision:
+
+- C1.1 must establish the exact capture/page/section/record and real fact identity, complete ordered effect text, condition attachment, actor, recipient, trigger, result, magnitude/parameter, duration/activation, element, attack type, mechanic/resource links and admitted child-definition status. Each dimension is pass, failed, unresolved or inapplicable; a structural binding count alone never grants semantic success.
+- Only fidelity-passed occurrences may become fully supported C2 inputs. Any unresolved source, identity, attachment or required-definition issue remains unknown and non-authoritative. This adds no automatic approval path.
+- One source damage event owns one authoritative `direct_damage` occurrence with target cardinality. `multi_entity_damage` becomes a deterministic derived/query-compatible projection where the target proves multiple entities. C2 must audit and preserve Feature B and downstream consumer behavior before adapting legacy materialization.
+
+Stratified evaluation decision:
+
+- The seven known Iphi, Alma AS, Tetra AS, Darunis, Shigure ES, Kumos AS and Anabel ES cases are permanent targeted development regressions. They may guide implementation and prove that known failure classes remain fixed, but they cannot serve as independent generalization evidence.
+- Select approximately 20-30 additional development witnesses and approximately 20-25 additional held-out witnesses through a deterministic manifest stratified by materially different source and semantic archetypes. The held-out semantic oracle remains isolated until evaluation; tuning after unsealing invalidates that cohort and requires a replacement cohort.
+- The combined planning target is roughly 50-60 character/style/sidekick witnesses including the seven regressions, subject to adjustment after actual archetype inspection. This is neither an ML train/validation/test split nor a percentage-based acceptance oracle. Acceptance depends on demonstrated material-archetype coverage, with development and held-out representation for each archetype where the corpus permits.
+- Archetype routing includes, where present: simple legacy skills; nested conditions; SA skills/passives and Stellar Burst; counter activation/triggers/results; zones/Another Zone/Radical Zone; stacks/resources; Lunatic variants; child definitions; buffs/debuffs and resistance manipulation; statuses; healing/revival; Guard/Cover/Hold Ground; Pain/Poison; recipient eligibility and position/frontline conditions; multi-hit/multi-target attacks; and sidekick auto, charge and aura records.
+- Report development and held-out witness counts separately from their independently adjudicated effect/dependency occurrence counts, plus archetype/family coverage. A complex record and a one-effect legacy skill are not equivalent semantic evidence units.
+- Human semantic sampling never reduces the automatic replay boundary. C1.1/C2 must replay structural/fidelity diagnostics across all 367 canonical character identities, preserve 367/367 legal-kit completeness, separately cover admitted sidekick record kinds, and report structural parsing, fact binding, source identity, unresolved mappings, relevant-link/child resolution, failures and deterministic replay.
+- The three C2 comparison arms start from identical checksum-pinned raw records: legacy flattened parser/classifier; C1 structure without child resolution; and fidelity-checked structure with admitted definitions plus scoped classification. Committed Feature C remains historical context, not an experimental oracle. Human review timing is blinded and uses the exact admitted source spans only after fidelity and semantic-accuracy gates pass.
+
+Provenance disposition: C1 structural implementation and historical commit remain unchanged; C1 fixture-authority and semantic-completeness claims are superseded; a source-semantic fidelity artifact identity is newly planned for C1.1; C2 experiment and `multi_entity_damage` compatibility policy are revised. No application release, source capture, taxonomy/review artifact, graph/schema, runtime, provider or deployment identity changed during this planning revision.
 
 ## Source Quality Notes
 
