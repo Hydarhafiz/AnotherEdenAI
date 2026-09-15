@@ -406,7 +406,7 @@ Completion evidence:
 
 ### Feature C2: Scoped Classification And Review-Reduction Evaluation
 
-Status: Planned after Feature C1.1; implementation unstarted.
+Status: Implementation and verification complete on 2026-09-15; stopped at the required C2 exit/human checkpoint before Feature D. Occurrence benefit is measured, but review-reduction acceptance remains pending because no authoritative blinded human-review timing study exists and the held-out precision/recall trade-off requires human acceptance.
 
 Type and route: `build` via `builder-executor -> tdd-loop`; use `feature-planner` for the contained occurrence-identity and comparison contract, with a read-only compatibility audit where review meaning is disputed.
 
@@ -428,6 +428,14 @@ Acceptance:
 - **C2-08:** Preserve 367/367 legal-kit completeness and every semantic state. Existing authoritative evidence is retained or explicitly reviewed for supersession. Separate historical baseline assertions from mutable current-review invariants in tests. Retain only reusable regressions, authoritative fixtures/manifests and accepted comparison evidence.
 
 Exit and human checkpoint: Present measured benefit, source gaps, semantic migration and remaining review burden for acceptance before D. If benefit is not demonstrated, revisit rollout instead of declaring review reduction or relaxing coverage floors. One completed-feature commit contains the verified change and durable evaluation evidence.
+
+Completion evidence:
+
+- `src/etl/c2_scoped_classification.py` and `scripts/report_feature_c2.py` provide an offline, deterministic three-arm comparison over the same C1.1 checksum-pinned source records. Occurrences retain real fact identity, capture SHA, source span, semantic fields, explicit definition support and non-authoritative states; the taxonomy, review corpus, schema, graph, scoring and legal-kit paths are unchanged.
+- `tests/fixtures/c2/occurrence_oracle.json` is separately authored and sealed. The evaluation keeps known regressions outside generalization evidence and reports 26 development witnesses / 40 effects / 23 dependencies separately from 21 held-out witnesses / 30 effects / 16 dependencies. The held-out oracle is not read by normal classification.
+- `artifacts/evidence/feature_c2_scoped_classification.json` records all three arms, explicit legacy-to-current compatibility decisions, field/condition/relationship error and correction-action fields, prior-review regression fields, per-occurrence review-time status, D-floor effort fields, full-catalog diagnostics, and deterministic digests. The source-fidelity replay remains 367/367 canonical identities with 367/367 legal-kit receipts and separate sidekick auto/charge/aura coverage.
+- On the held-out occurrence oracle, the fidelity-checked arm records recall `0.9348` versus the legacy arm's `0.7609`, while precision is `0.3707` versus `0.6604`; this is measurable source-occurrence recall benefit with a precision trade-off, not proof of review reduction. All held-out review-time rows are `not_measured`, and the artifact's `review_reduction_claim` is false.
+- C2 remains at the human checkpoint: accept the mixed held-out result and supply blinded timing evidence, or revise the occurrence extraction/rollout. Feature D must not begin from this evidence alone.
 
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 

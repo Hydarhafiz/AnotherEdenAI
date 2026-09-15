@@ -562,6 +562,47 @@ source selection, semantic attachment, and child-definition resolution never
 become absence or capability authority. Known regressions are reported apart
 from generalization evidence, and held-out labels cannot tune later rules.
 
+### Milestone 6 C2 Scoped Classification
+
+Feature C2 is an offline comparison/evaluation layer over the accepted C1.1
+inputs. It does not modify taxonomy rules, review decisions, model/loader
+fields, graph state, scoring, search, or the legal-kit catalog. Generate the
+durable comparison evidence only with explicit evaluation inputs:
+
+```bash
+.venv/bin/python scripts/report_feature_c2.py \
+  --fidelity-oracle src/etl/source_fidelity_oracle.json \
+  --occurrence-oracle tests/fixtures/c2/occurrence_oracle.json \
+  --include-held-out \
+  --output artifacts/evidence/feature_c2_scoped_classification.json
+```
+
+The report compares the committed legacy flattened baseline, structural
+parsing without child-definition admission, and fidelity-checked scoped
+occurrences from the same checksum-pinned captures. Occurrences retain the
+real source fact ID, capture SHA, source span, actor, recipient/cardinality,
+condition, trigger, result, magnitude, duration/activation, element, attack
+type, state/reference and definition-support state. Only C1.1-passed records
+are marked `fully_supported_input`; every other state remains
+`unknown_non_authoritative` or another explicit non-authoritative state.
+
+Legacy proposal IDs have an explicit compatibility mapping. A carry-forward
+requires one source- and field-identical destination; splits are
+`split_requires_review`, and no approval fans out silently. A damage event has
+one authoritative `direct_damage` occurrence. `multi_entity_damage` is a
+derived projection recorded from proven target cardinality, not a second
+reviewed fact.
+
+The C2 occurrence oracle is independently authored and sealed. Normal report
+generation never reads it; held-out evaluation is opt-in and rejects an
+unsealed oracle. Known regressions, development witnesses, and held-out
+witnesses have separate denominators and separate effect/dependency counts.
+The accepted repository currently has no authoritative blinded human-review
+timing study, so the evidence reports occurrence metrics and the timing gap
+but makes no review-reduction claim. Stop at the C2 human checkpoint before
+Feature D until that gap and the mixed held-out precision/recall result are
+accepted or the rollout is revised.
+
 ## Maintenance Rule
 
 When an implementation changes ETL stages, crawl controls, manifest shape, operator workflow, artifact layout, or debugging steps, update this guide in the same feature.
