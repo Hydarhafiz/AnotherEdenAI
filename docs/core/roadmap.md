@@ -151,7 +151,7 @@ Historical Features A-H, corrections C6/C6.1/D2/E2/F2/G1.1, and their identifier
 
 ### Milestone 6: Character Capability Coverage And Candidate Diversity
 
-Status: Active.
+Status: Active. A-C and C1 are complete; C1.1 and C2 are technically implemented with human acceptance pending. The 24-witness exploratory C2 review is complete. The bounded remediation plan was approved on 2026-10-04 and is not implemented; C2-R1 is next. C2 is non-authoritative; its checkpoint is not accepted; D is blocked/unstarted.
 
 Purpose:
 
@@ -162,10 +162,12 @@ Planned feature sequence:
 1. Coverage baseline and metric contract.
 2. Boss-to-capability priority matrix.
 3. Full-catalog high-value extraction.
-4. Selective review, materialization, and coverage closure.
-5. Search-funnel and candidate-diversity diagnostics.
-6. Evidence-driven candidate-diversity improvements.
-7. Controlled four-gate evaluation and milestone closure.
+4. Structural evidence (C1), source fidelity (C1.1), and initial scoped classification/evaluation (C2); technical work exists, semantic acceptance remains pending.
+5. Approved bounded C2 remediation: freeze protected evaluation and fresh replacement coverage; repair ETL fields/variants; add minimal controlled shared mechanics; repair atomic decomposition/classification/relationships; evaluate and perform a small human verification. Stop for explicit C1.1/C2 acceptance.
+6. Selective review, materialization, and coverage closure (D), blocked until that acceptance.
+7. Search-funnel and candidate-diversity diagnostics (E).
+8. Evidence-driven candidate-diversity improvements (F).
+9. Controlled four-gate evaluation and milestone closure (G).
 
 Dependencies:
 
@@ -177,15 +179,16 @@ Exit direction:
 
 - All 367 remain legal-kit complete and in scope.
 - High-value extraction is attempted across the full catalog.
+- Source-faithful atomic proposals improve precision without losing high-impact recall; frozen semantic/field/relationship evaluation and explicit human acceptance precede D. Historical occurrence-count metrics alone do not prove capability accuracy, role-taxonomy accuracy or reduced review time.
 - Unknown and ambiguous evidence remains explicit and non-authoritative.
-- Evidence-driven thresholds are selected only after the baseline reports current distributions.
+- The D-G thresholds approved after Feature A remain unchanged by the C2 remediation proposal.
 - Coverage spans applicable elements, physical/magic offense, offensive support, zone/setup, mitigation, recovery, status counterplay, AF support, Pain/Poison, and boss counters.
 - Controlled alternative-rich rosters yield multiple meaningfully different legal character/frontline sets and coherent archetypes.
 - Constrained rosters may return fewer candidates with stage-accountable reasons.
 - H2's four gates support plausible evidence-backed candidates with no global-optimality, win-probability, or guaranteed-clear claim.
 - No paid analyzer evaluation occurs before deterministic gates pass or without separate authorization.
 
-The detailed executable contract and eventual numeric-threshold checkpoint live in `docs/core/milestone.md`.
+The approved remediation plan, human acceptance checkpoint and approved D-G numeric contracts live in `docs/core/milestone.md`.
 
 ### Milestone 7: Frontend Portfolio Experience
 
