@@ -1,0 +1,473 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "m6-c2-shared-mechanics-1.0.0",
+  "authority": "bounded identities from approved known-regression and development sources; identities never approve capabilities",
+  "entries": [
+    {
+      "mechanic_id": "shared:another-zone",
+      "mechanic_class": "zone",
+      "definition_status": "available",
+      "definition_source_anchor_id": "zones-another-zone-definition",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Another_Zone",
+          "source_anchor_id": "claude-another-zone-skill-link"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "zones-another-zone-definition",
+          "source_kind": "captured_mechanics_page",
+          "source_url": "https://anothereden.wiki/w/Zones#Another_Zone",
+          "source_capture_sha256": "047bb35189ea6a5920643eaea991e0a00bd001d44b77a60c3ddeef6b91e21d0a",
+          "source_location": "#Another_Zone",
+          "source_span_sha256": "224054fa8a951933b1133caab527628c07be1e1bdd2a04d41b98317456027091"
+        },
+        {
+          "anchor_id": "claude-another-zone-skill-link",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Claude_(Extra_Style)",
+          "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+          "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/skill_name_link",
+          "source_fact_id": "skill:42d6ef8f388054c5fcf4",
+          "witness_id": "development-claude-es-another-zone",
+          "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:prayer",
+      "mechanic_class": "support_mechanism",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Prayer",
+          "source_anchor_id": "anabel-prayer-source",
+          "case_sensitive": true
+        },
+        {
+          "kind": "icon",
+          "value": "St prayer.png",
+          "source_anchor_id": "anabel-prayer-source"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "anabel-prayer-source",
+          "source_kind": "known_regression",
+          "source_url": "https://anothereden.wiki/w/Anabel_(Extra_Style)",
+          "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+          "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[3]",
+          "source_fact_id": "skill:438aa7e1d0e071c14c43",
+          "witness_id": "known-anabel-prayer-child",
+          "source_slice_sha256": "bb15fed77349477d146b6912701202cba85c75f4d8d0856c1b57581b2a5c790e"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:song",
+      "mechanic_class": "support_mechanism",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Song",
+          "source_anchor_id": "aisha-song-source"
+        },
+        {
+          "kind": "name",
+          "value": "Song",
+          "source_anchor_id": "aisha-song-name",
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "aisha-song-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Aisha",
+          "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+          "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[14]/block[0]/token[2]",
+          "source_fact_id": "skill:0021c579e14edd0e5d6e",
+          "witness_id": "development-aisha-twilight-symphony",
+          "source_slice_sha256": "10ba8ae47f66ba9eec7be61bc74833c7cc0455fb03f2e5e211f68a5c4b008471"
+        },
+        {
+          "anchor_id": "aisha-song-name",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Aisha",
+          "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+          "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[14]/block[2]/token[0]",
+          "source_fact_id": "skill:0021c579e14edd0e5d6e",
+          "witness_id": "development-aisha-twilight-symphony",
+          "source_slice_sha256": "10ba8ae47f66ba9eec7be61bc74833c7cc0455fb03f2e5e211f68a5c4b008471"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:barrier-piercing",
+      "mechanic_class": "combat_modifier",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Barrier_Piercing",
+          "source_anchor_id": "cerius-barrier-piercing-source"
+        },
+        {
+          "kind": "icon",
+          "value": "St ignore barrier.png",
+          "source_anchor_id": "cerius-barrier-icon-source"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "cerius-barrier-piercing-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Cerius_(Another_Style)",
+          "source_capture_sha256": "2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e",
+          "source_location": "sha256:2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e/grid[19]/block[3]/token[8]",
+          "source_fact_id": "skill:15c065e10fecfa55b336",
+          "witness_id": "development-cerius-empyrean-flash",
+          "source_slice_sha256": "5d929b561896f2b396818a12a77a93570c24da8afd19b3a19b8fd468685a8604"
+        },
+        {
+          "anchor_id": "cerius-barrier-icon-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Cerius_(Another_Style)",
+          "source_capture_sha256": "2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e",
+          "source_location": "sha256:2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e/grid[19]/block[3]/token[9]",
+          "source_fact_id": "skill:15c065e10fecfa55b336",
+          "witness_id": "development-cerius-empyrean-flash",
+          "source_slice_sha256": "5d929b561896f2b396818a12a77a93570c24da8afd19b3a19b8fd468685a8604"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:lunatic",
+      "mechanic_class": "status_family",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Lunatic",
+          "source_anchor_id": "ciel-lunatic-source"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "ciel-lunatic-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Virtual_Reflection",
+          "source_capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+          "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[0]/token[1]",
+          "source_fact_id": "skill:76634839e98a6a31203a",
+          "witness_id": "development-ciel-lunatic-charge",
+          "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:lunatic-charge",
+      "mechanic_class": "lunatic_variant",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Lunatic_-_Charge",
+          "source_anchor_id": "ciel-lunatic-charge-skill-link"
+        },
+        {
+          "kind": "name",
+          "value": "Charge",
+          "source_anchor_id": "ciel-charge-source",
+          "required_entity_kind": "character",
+          "required_reference_urls": [
+            "https://anothereden.wiki/w/Lunatic"
+          ],
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "ciel-lunatic-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Virtual_Reflection",
+          "source_capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+          "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[0]/token[3]",
+          "source_fact_id": "skill:76634839e98a6a31203a",
+          "witness_id": "development-ciel-lunatic-charge",
+          "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c"
+        },
+        {
+          "anchor_id": "ciel-charge-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Virtual_Reflection",
+          "source_capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+          "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[0]/token[3]",
+          "source_fact_id": "skill:76634839e98a6a31203a",
+          "witness_id": "development-ciel-lunatic-charge",
+          "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c"
+        },
+        {
+          "anchor_id": "ciel-lunatic-charge-skill-link",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Virtual_Reflection",
+          "source_capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+          "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/skill_name_link",
+          "source_fact_id": "skill:76634839e98a6a31203a",
+          "witness_id": "development-ciel-lunatic-charge",
+          "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:lunatic-minds-eye",
+      "mechanic_class": "lunatic_variant",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Mind's Eye",
+          "source_anchor_id": "cerius-lunatic-source",
+          "required_entity_kind": "character",
+          "required_reference_urls": [
+            "https://anothereden.wiki/w/Lunatic"
+          ],
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "cerius-lunatic-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Cerius_(Another_Style)",
+          "source_capture_sha256": "2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e",
+          "source_location": "sha256:2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e/grid[19]/block[0]/token[4]",
+          "source_fact_id": "skill:15c065e10fecfa55b336",
+          "witness_id": "development-cerius-empyrean-flash",
+          "source_slice_sha256": "5d929b561896f2b396818a12a77a93570c24da8afd19b3a19b8fd468685a8604"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:kaleido",
+      "mechanic_class": "mechanic_modifier",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Kaleido",
+          "source_anchor_id": "ciel-kaleido-source",
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "ciel-kaleido-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Virtual_Reflection",
+          "source_capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+          "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[5]/token[0]",
+          "source_fact_id": "skill:76634839e98a6a31203a",
+          "witness_id": "development-ciel-lunatic-charge",
+          "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:moonlight-stance",
+      "mechanic_class": "stance",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Moonlight_Stance",
+          "source_anchor_id": "claude-moonlight-stance-link"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "claude-moonlight-stance-link",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Claude_(Extra_Style)",
+          "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+          "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/block[1]/token[1]",
+          "source_fact_id": "skill:42d6ef8f388054c5fcf4",
+          "witness_id": "development-claude-es-another-zone",
+          "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:copy",
+      "mechanic_class": "action_state",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Copy",
+          "source_anchor_id": "aisha-copy-source",
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "aisha-copy-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Aisha",
+          "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+          "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[20]/block[3]/token[2]",
+          "source_fact_id": "passive:92a680ed2f5becafcce5",
+          "witness_id": "development-aisha-mp-restore",
+          "source_slice_sha256": "4690a8cd83ae142dd3ee137d0d2dc36b3f650b8b2450e9473a0b2031cc7513c0"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:attack-again",
+      "mechanic_class": "action_state",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Attack Again",
+          "source_anchor_id": "aisha-attack-again-source",
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "aisha-attack-again-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Aisha",
+          "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+          "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[20]/block[3]/token[4]",
+          "source_fact_id": "passive:92a680ed2f5becafcce5",
+          "witness_id": "development-aisha-mp-restore",
+          "source_slice_sha256": "4690a8cd83ae142dd3ee137d0d2dc36b3f650b8b2450e9473a0b2031cc7513c0"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:sidekick-charge",
+      "mechanic_class": "sidekick_resource",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Charge",
+          "source_anchor_id": "tetra-charge-source",
+          "required_entity_kind": "sidekick",
+          "required_record_types": [
+            "sidekick_auto",
+            "sidekick_charge"
+          ],
+          "case_sensitive": true
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "tetra-charge-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Tetra_(Another_Style)",
+          "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+          "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[0]/block[1]/token[2]",
+          "source_fact_id": "sidekick_skill:4efa2ee5cbed7b7c032a",
+          "witness_id": "development-tetra-auto",
+          "source_slice_sha256": "6ec075a9d052f95d51e4a8d474516a4b5d21f158f4468d35728d97a70afbafcf"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:hold-ground",
+      "mechanic_class": "defensive_status",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "href",
+          "value": "https://anothereden.wiki/w/Hold_Ground",
+          "source_anchor_id": "minalca-hold-ground-source"
+        },
+        {
+          "kind": "name",
+          "value": "Hold Ground",
+          "source_anchor_id": "azami-hold-ground-source",
+          "case_sensitive": true
+        },
+        {
+          "kind": "icon",
+          "value": "Status Hold Ground.png",
+          "source_anchor_id": "azami-hold-ground-source"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "minalca-hold-ground-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Minalca_(Another_Style)",
+          "source_capture_sha256": "4f7630ca3a22ec6ebb885e93925074147c5dcd04de73049adb2e45f41c919ce7",
+          "source_location": "sha256:4f7630ca3a22ec6ebb885e93925074147c5dcd04de73049adb2e45f41c919ce7/grid[0]/block[3]/token[2]",
+          "source_fact_id": "skill:be86d045c1d3c4846851",
+          "witness_id": "development-minalca-as-outrage",
+          "source_slice_sha256": "71eeb92b0dd093b9235f701008f775e4b6d304e3a2d203c8113424785e5d6f64"
+        },
+        {
+          "anchor_id": "azami-hold-ground-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Azami_(Another_Style)",
+          "source_capture_sha256": "497f6474efdd448bba5af3a125857acf872e4c4df35e3535576207fb2ae65fe9",
+          "source_location": "sha256:497f6474efdd448bba5af3a125857acf872e4c4df35e3535576207fb2ae65fe9/grid[9]/block[0]",
+          "source_fact_id": "passive:1f435329414412b51db7",
+          "witness_id": "development-azami-hold-ground",
+          "source_slice_sha256": "c09e5ef3b6ac23941011223be66a11adf406dffc9cdeda773734180f83eeae6f"
+        }
+      ]
+    },
+    {
+      "mechanic_id": "shared:rage-taunt",
+      "mechanic_class": "taunt_status",
+      "definition_status": "unavailable",
+      "definition_source_anchor_id": "",
+      "aliases": [
+        {
+          "kind": "name",
+          "value": "Rage",
+          "source_anchor_id": "bertrand-rage-source",
+          "case_sensitive": true
+        },
+        {
+          "kind": "icon",
+          "value": "Rage.png",
+          "source_anchor_id": "bertrand-rage-source"
+        }
+      ],
+      "source_anchors": [
+        {
+          "anchor_id": "bertrand-rage-source",
+          "source_kind": "development_witness",
+          "source_url": "https://anothereden.wiki/w/Bertrand",
+          "source_capture_sha256": "21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8",
+          "source_location": "sha256:21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8/grid[12]/block[0]",
+          "source_fact_id": "skill:51b281ce56f4eaf27869",
+          "witness_id": "development-bertrand-guardian-lance",
+          "source_slice_sha256": "4d6618316206893495d60dd14575275239e88a693339e2a91fdede901eff5a2b"
+        }
+      ]
+    }
+  ]
+}

@@ -39,9 +39,10 @@ from .structural_evidence import (
     resolve_bounded_references,
     select_traversal_limits,
 )
+from .shared_mechanics import REGISTRY_VERSION, resolve_shared_mechanics
 
 
-C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.1.0"
+C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.2.0"
 C2_ORACLE_VERSION = "m6-c2-independent-occurrence-oracle-1.0.0"
 MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 
@@ -836,6 +837,13 @@ def _build_comparison(
                     "admitted_count": sum(1 for row in fidelity if row.get("definition_support") == "admitted"),
                     "unresolved_count": sum(1 for row in fidelity if row.get("definition_support") == "unresolved"),
                 },
+                "shared_mechanic_resolutions": [
+                    item.as_dict()
+                    for item in resolve_shared_mechanics(
+                        unit,
+                        parent_source_fact_id=str(witness.get("record_id") or ""),
+                    )
+                ] if unit is not None else [],
                 "arms": {
                     "legacy_flattened": _arm_summary(legacy),
                     "structural_only": _arm_summary(structural),
@@ -928,6 +936,14 @@ def build_c2_report(
             "primary_occurrence_kinds": list(PRIMARY_OCCURRENCE_KINDS),
             "one_direct_damage_event_rule": "one source damage event owns one direct_damage effect occurrence; multi_entity_damage is a derived projection when target cardinality is multiple",
             "definition_rule": "definitions may support only the scoped occurrence relationship invoked by the source; unresolved or unrelated definitions remain unknown",
+        },
+        "shared_mechanic_contract": {
+            "registry_version": REGISTRY_VERSION,
+            "resolution_is_non_authoritative": True,
+            "local_payload_owner": "parent source fact",
+            "unavailable_definition_never_becomes_semantics": True,
+            "registry_deduplicates_by_mechanic_id": True,
+            "graph_labels_added": False,
         },
         "manifest": c1_report["manifest"],
         "witness_replay": c1_report["witness_replay"]["source_slice_fixture"],

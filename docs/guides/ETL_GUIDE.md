@@ -563,6 +563,25 @@ persisted fact IDs remain unchanged. Development regressions are pinned to
 source capture checksums and existing fact/family IDs; any changed meaning
 requires explicit source re-review rather than review approval fan-out.
 
+### C2-R3 controlled shared mechanics
+
+The shared-mechanic registry is a small, versioned offline index. It matches
+exact captured links, whole-token allowlisted unlinked names, and allowlisted
+icons, and records which provenance path resolved each mention. It does not
+search ordinary prose for a name. Context gates keep overloaded labels such
+as `Charge` distinct across character Lunatic and Sidekick resource records.
+Ambiguous, unknown, and insufficient-context mentions stay unresolved. A
+known identity may still have no admitted definition.
+
+Each resolution points back to its parent source fact, owner, capture, and
+source location. Local triggers, targets, values, durations, and other payload
+remain on that parent. Shared definitions are deduplicated by mechanic ID and
+cannot grant capabilities or ownership to the character that references them.
+The registry adds no graph labels, automatic approval, broad text matching, or
+whole-rulebook ingestion; only the source-backed Another Zone definition is
+available, while other admitted identities remain identity-only until their
+definitions are separately reviewed.
+
 The deterministic witness manifest is
 `src/etl/source_fidelity_manifest.json`. It contains seven named regressions
 plus separate archetype-stratified development and held-out cohorts; it is not

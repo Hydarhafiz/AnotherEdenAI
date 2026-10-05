@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "fixture": "tests/fixtures/structural/c2_r3_shared_mechanics.html",
+  "fixture_sha256": "1142f660b37061a2c3c061b110572f62d9c84c65c8d4854e5df23d8c54cb466c",
+  "source_mapping_authority": "checksum-pinned development witness source slices; fixture serialization is for regression only",
+  "records": [
+    {
+      "witness_id": "development-ciel-lunatic-charge",
+      "selector": "#ciel_lunatic_charge",
+      "source_kind": "development_witness",
+      "source_url": "https://anothereden.wiki/w/Virtual_Reflection",
+      "entity_name": "Ciel (Alter),Virtual Reflection",
+      "record_id": "skill:76634839e98a6a31203a",
+      "capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+      "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[0]",
+      "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c",
+      "skill_name_link_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/skill_name_link"
+    },
+    {
+      "witness_id": "development-claude-es-another-zone",
+      "selector": "#claude_another_zone",
+      "source_kind": "development_witness",
+      "source_url": "https://anothereden.wiki/w/Claude_(Extra_Style)",
+      "entity_name": "Claude (Extra Style)",
+      "record_id": "skill:42d6ef8f388054c5fcf4",
+      "capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/block[0]",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "skill_name_link_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/skill_name_link"
+    },
+    {
+      "witness_id": "development-alma-kaleidoscope",
+      "selector": "#alma_barrier_piercing",
+      "source_kind": "development_witness",
+      "source_url": "https://anothereden.wiki/w/Alma_(Another_Style)",
+      "entity_name": "Alma (Another Style)",
+      "record_id": "skill:cf8045d9a204c458a1c7",
+      "capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[16]/block[0]",
+      "source_slice_sha256": "d97a35c44f646c637d8ad18978811fd3367d9845d9c5bdb346649437edec6aa0",
+      "skill_name_link_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[16]/skill_name_link"
+    }
+  ]
+}

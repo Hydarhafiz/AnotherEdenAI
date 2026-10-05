@@ -79,6 +79,37 @@ def test_only_fidelity_passed_rows_are_fully_supported(report: dict):
         assert comparison["arms"]["fidelity_checked"]["fully_supported_occurrence_count"] <= comparison["arms"]["fidelity_checked"]["occurrence_count"]
 
 
+def test_shared_mechanic_references_stay_parent_scoped_and_non_authoritative(report: dict):
+    contract = report["shared_mechanic_contract"]
+    assert contract["resolution_is_non_authoritative"] is True
+    assert contract["local_payload_owner"] == "parent source fact"
+    assert contract["unavailable_definition_never_becomes_semantics"] is True
+    assert contract["registry_deduplicates_by_mechanic_id"] is True
+    assert contract["graph_labels_added"] is False
+
+    claude = next(
+        row
+        for row in report["comparisons"]["development"]["witnesses"]
+        if row["witness_id"] == "development-claude-es-another-zone"
+    )
+    zone_rows = [
+        row
+        for row in claude["shared_mechanic_resolutions"]
+        if row["mechanic_id"] == "shared:another-zone"
+    ]
+    assert zone_rows
+    assert all(row["parent_source_fact_id"] == claude["fact_id"] for row in zone_rows)
+    assert all(row["parent_owner_name"] == claude["entity_name"] for row in zone_rows)
+    assert all("capability" not in row and "authority" not in row for row in zone_rows)
+
+    for comparison in report["comparisons"].values():
+        for witness in comparison["witnesses"]:
+            for resolution in witness["shared_mechanic_resolutions"]:
+                assert resolution["parent_source_fact_id"] == witness["fact_id"]
+                assert resolution["parent_owner_name"] == witness["entity_name"]
+                assert resolution["resolution_status"] in {"resolved", "ambiguous", "unresolved"}
+
+
 def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(report: dict):
     replay = report
     assert replay["manifest"]["known_regression_count"] == 7
