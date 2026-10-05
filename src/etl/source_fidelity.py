@@ -27,13 +27,15 @@ from .structural_evidence import (
     TraversalLimits,
     audit_reference_topology,
     bind_catalog_facts,
+    extract_sidekick_aura_fields,
+    extract_sidekick_charge_operations,
     parse_grid_document,
     resolve_bounded_references,
     select_traversal_limits,
 )
 
 
-SOURCE_FIDELITY_VERSION = "m6-c1.1-1.1.0"
+SOURCE_FIDELITY_VERSION = "m6-c1.1-1.2.0"
 CATALOG_PATH = Path("src/etl/kit_catalog.json")
 MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 RAW_CHARACTER_DIR = Path("data/raw/characters")
@@ -205,6 +207,16 @@ def _fixture_record_from_character(
     if selected is None:
         result["failure"] = "no_unique_source_record"
         return result
+    bound_units, _binding_diagnostics = bind_catalog_facts(units, _catalog_facts(record))
+    selected.source_fact_id = _fact_id(fact)
+    selected.family_id = str(fact.get("skill_family_id") or "") or None
+    topology = audit_reference_topology(units, include_explicit_aliases=True)
+    reference_rows = resolve_bounded_references(
+        [selected],
+        units,
+        select_traversal_limits(topology),
+        include_explicit_aliases=True,
+    )
     soup = BeautifulSoup(raw, "html.parser")
     grids = soup.select("div.character-skill-grid-container")
     grid_index = _unit_grid_index(selected)
@@ -227,6 +239,9 @@ def _fixture_record_from_character(
             "section": selected.section,
             "title": selected.title,
             "legacy_description": selected.legacy_description,
+            "source_variant_identity": selected.variant_identity(),
+            "explicit_definition_aliases": list(selected.explicit_definition_aliases),
+            "captured_definition_resolutions": reference_rows,
             "source_slice_sha256": _sha256(source_slice.encode("utf-8")) if source_slice else None,
             "source_slice_bytes": len(source_slice.encode("utf-8")),
             "structural_block_count": len(selected.blocks),
@@ -318,6 +333,7 @@ def _fixture_record_from_sidekick(
     if actual is None or selected is None:
         result["failure"] = "sidekick_record_not uniquely_bound"
         return result
+    selected.source_fact_id = wanted[1]
     soup = BeautifulSoup(raw, "html.parser")
     grids = soup.select("div.character-skill-grid-container")
     grid_index = _unit_grid_index(selected)
@@ -329,6 +345,9 @@ def _fixture_record_from_sidekick(
             "section": selected.section,
             "title": selected.title,
             "legacy_description": selected.legacy_description,
+            "source_variant_identity": selected.variant_identity(),
+            "charge_operations": extract_sidekick_charge_operations(selected),
+            "aura_source_fields": extract_sidekick_aura_fields(selected),
             "source_slice_sha256": _sha256(source_slice.encode("utf-8")) if source_slice else None,
             "source_slice_bytes": len(source_slice.encode("utf-8")),
             "structural_block_count": len(selected.blocks),
@@ -598,6 +617,18 @@ def evaluate_oracle(
                 status = str(item.get("status", "unknown"))
                 if name in {"source_record_selection", "source_identity"}:
                     status = "passed" if source_ok else "unknown"
+                elif name == "child_definition_resolution" and status == "passed":
+                    expected_target = str(item.get("target_source_fact_id") or "")
+                    matching_resolutions = [
+                        row
+                        for row in resolved.get("captured_definition_resolutions", [])
+                        if row.get("status") == "resolved"
+                        and row.get("resolution_basis")
+                        in {"explicit_source_href_alias", "explicit_source_href_alias_and_variant_key"}
+                        and (not expected_target or row.get("target_source_fact_id") == expected_target)
+                    ]
+                    if not matching_resolutions:
+                        status = "failed"
                 elif source_ok and status == "passed" and not _expected_terms_ok(item, resolved):
                     status = "failed"
                 dimensions[name] = {**dict(item), "status": status}
@@ -660,6 +691,22 @@ def evaluate_oracle(
             )
             for name in FIDELITY_DIMENSIONS
         }
+        child_resolution = expected_dimensions.get("child_definition_resolution", {})
+        if child_resolution.get("status") == "passed":
+            expected_target = str(child_resolution.get("target_source_fact_id") or "")
+            matching_resolutions = [
+                row
+                for row in resolved.get("captured_definition_resolutions", [])
+                if row.get("status") == "resolved"
+                and row.get("resolution_basis")
+                in {"explicit_source_href_alias", "explicit_source_href_alias_and_variant_key"}
+                and (not expected_target or row.get("target_source_fact_id") == expected_target)
+            ]
+            if not matching_resolutions:
+                expected_dimensions["child_definition_resolution"] = {
+                    **dict(child_resolution),
+                    "status": "failed",
+                }
         applicable = [
             value["status"]
             for value in expected_dimensions.values()
@@ -715,10 +762,20 @@ def build_source_fidelity_report(
         raw_sidekick_dir=raw_sidekick_dir, parsed_sidekick_dir=parsed_sidekick_dir
     )
     topology_units = [*character_units, *sidekick_units]
-    topology = audit_reference_topology(topology_units)
+    topology = audit_reference_topology(topology_units, include_explicit_aliases=True)
     limits = select_traversal_limits(topology)
-    outcomes = resolve_bounded_references(bound_units, topology_units, limits)
-    sidekick_outcomes = resolve_bounded_references(sidekick_units, topology_units, limits)
+    outcomes = resolve_bounded_references(
+        bound_units,
+        topology_units,
+        limits,
+        include_explicit_aliases=True,
+    )
+    sidekick_outcomes = resolve_bounded_references(
+        sidekick_units,
+        topology_units,
+        limits,
+        include_explicit_aliases=True,
+    )
     sidekick_kind_counts = Counter(
         kind
         for row in sidekick_rows

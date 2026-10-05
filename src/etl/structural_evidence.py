@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 
 from .coverage_baseline import reconcile_catalog_receipts
 from .kit_readiness import EXPECTED_CANONICAL_CHARACTER_COUNT, artifact_fingerprint
+from .models import stable_skill_family_id
 
 
 STRUCTURAL_EVIDENCE_VERSION = "m6-c1-1.0.0"
@@ -128,6 +129,11 @@ class StructuralUnit:
     legacy_description: str
     blocks: list[StructuralBlock]
     definition_page_url: str
+    explicit_definition_aliases: list[str] = field(default_factory=list)
+    source_variant_label: str | None = None
+    variant_key: str = "unresolved"
+    progression_unlock: str | None = None
+    requires_equipment: str | None = None
 
     def text(self) -> str:
         return _clean(" ".join(token.text for block in self.blocks for token in block.tokens))
@@ -140,11 +146,42 @@ class StructuralUnit:
             if token.kind == "reference" and token.canonical_page_url
         ]
 
-    def as_dict(self) -> dict[str, Any]:
+    def variant_identity(self) -> dict[str, Any]:
+        """Return offline source identity without changing the persisted fact ID."""
+        family_id = self.family_id or (
+            stable_skill_family_id(self.entity_name, self.title)
+            if self.entity_kind == "character"
+            else _stable_id("source_variant_family", self.entity_name, self.title)
+        )
         return {
-            **{key: value for key, value in asdict(self).items() if key != "source"},
+            "family_id": family_id,
+            "variant_key": self.variant_key,
+            "identity_key": f"{family_id}:{self.variant_key}",
+            "source_label": self.source_variant_label,
+            "basis": "explicit_source_selector" if self.source_variant_label else "unresolved",
+            "progression_unlock": self.progression_unlock,
+            "requires_equipment": self.requires_equipment,
+        }
+
+    def as_dict(self, *, include_r2_source_identity: bool = False) -> dict[str, Any]:
+        """Serialize the C1 shape by default; R2 source identity is opt-in offline metadata."""
+        payload = asdict(self)
+        for key in (
+            "explicit_definition_aliases",
+            "source_variant_label",
+            "variant_key",
+            "progression_unlock",
+            "requires_equipment",
+        ):
+            payload.pop(key, None)
+        result = {
+            **{key: value for key, value in payload.items() if key != "source"},
             "source": asdict(self.source),
         }
+        if include_r2_source_identity:
+            result["explicit_definition_aliases"] = list(self.explicit_definition_aliases)
+            result["source_variant"] = self.variant_identity()
+        return result
 
 
 @dataclass(frozen=True)
@@ -160,6 +197,159 @@ def _section_title(container: Tag) -> str:
         return _clean(str(article.get("title")))
     previous = container.find_previous(["h2", "h3", "h4"])
     return _clean(previous.get_text(" ", strip=True)) if previous else "Unsectioned combat source"
+
+
+def _source_variant_label(container: Tag) -> str | None:
+    """Read an explicit wiki variant selector adjacent to a collapsible skill row."""
+    for attribute in ("data-variant-label", "data-skill-variant", "data-variant"):
+        value = _clean(str(container.get(attribute) or ""))
+        if value:
+            return value
+    wrapper = container.find_parent("div", class_="mw-collapsible")
+    if wrapper is None or not wrapper.get("id"):
+        return None
+    selector = wrapper.find_previous_sibling("table")
+    if selector is None or selector.get("id") != wrapper.get("id"):
+        return None
+    cells = selector.find_all(["th", "td"])
+    if len(cells) < 2:
+        return None
+    label = _clean(cells[-1].get_text(" ", strip=True))
+    return label or None
+
+
+def _source_variant_fields(section: str, label: str | None) -> tuple[str, str | None, str | None]:
+    if not label:
+        return "unresolved", None, None
+    normalized = _key(label)
+    if "stellar" in _key(section):
+        progression_unlock = "Stellar Awakening" if "stellar awakened" in _key(section) else None
+        if normalized == "normal":
+            return "stellar_normal", progression_unlock, None
+        if normalized == "enhanced":
+            return "stellar_enhanced", progression_unlock, None
+    if normalized in {"normal", "base", "default"}:
+        return "base", None, None
+    if normalized == "enhanced":
+        return "enhanced", None, None
+    if normalized == "true manifest unlocked":
+        return "true_manifest", "True Manifest", None
+    if normalized == "manifest unlocked":
+        return "manifest", "Manifest", None
+    equipment_match = re.fullmatch(r"equip(?:ped)?\s+(.+)", label.strip(), flags=re.IGNORECASE)
+    if equipment_match:
+        requirement = _clean(equipment_match.group(1))
+        key = "manifest_equipped" if "manifest" in _key(requirement) else f"equipped:{_slugify_title(requirement)}"
+        return key, None, requirement
+    return f"source_label:{_slugify_title(label)}", None, None
+
+
+def _explicit_state_replacement(block: StructuralBlock, reference: StructuralToken) -> str | None:
+    prefix = _clean(" ".join(token.text for token in block.tokens if token.order < reference.order))
+    match = re.search(
+        r"(?:^|[.!?]\s*)When\s+in\s+(?P<condition>[^:]+?)\s*:\s*Skill\s+changes\s+to\s*$",
+        prefix,
+        flags=re.IGNORECASE,
+    )
+    return _clean(match.group("condition")) if match else None
+
+
+def _condition_before_charge(text: str, operation_start: int) -> str | None:
+    prefix = _clean(text[:operation_start]).strip(" :")
+    match = re.search(r"(?:^|[.!?]\s*|\]\s*:?\s*)(When\b.*)$", prefix, flags=re.IGNORECASE)
+    if not match:
+        return None
+    return _clean(match.group(1).strip("[] :")) or None
+
+
+def extract_sidekick_charge_operations(unit: StructuralUnit) -> list[dict[str, Any]]:
+    """Extract explicit sidekick Charge events from their source blocks only."""
+    if unit.entity_kind != "sidekick" or unit.record_type not in {"sidekick_auto", "sidekick_charge"}:
+        return []
+    operations: list[dict[str, Any]] = []
+    patterns = (
+        ("consumption", re.compile(r"\bconsumes?\s+(?P<amount>\d+)\s+charge\b", re.IGNORECASE)),
+        ("gain", re.compile(r"\b(?:stack|gain(?:s)?)\s+(?:\+\s*)?(?P<amount>\d+|one|two)\s+charge\b", re.IGNORECASE)),
+        (
+            "availability_threshold",
+            re.compile(r"\b(?:requires?|needs?|available\s+at|minimum\s+of)\s+(?P<amount>\d+)\s+charge\b", re.IGNORECASE),
+        ),
+    )
+    for block in unit.blocks:
+        text = _clean(" ".join(token.text for token in block.tokens if token.kind != "line_break"))
+        for operation, pattern in patterns:
+            for match in pattern.finditer(text):
+                amount_text = match.group("amount").casefold()
+                amount = {"one": 1, "two": 2}.get(amount_text, int(amount_text) if amount_text.isdigit() else None)
+                operations.append(
+                    {
+                        "operation": operation,
+                        "amount": amount,
+                        "unit": "Charge",
+                        "resource_id": "sidekick_charge",
+                        "resource_owner": {"kind": unit.entity_kind, "name": unit.entity_name},
+                        "source_fact_id": unit.source_fact_id,
+                        "source_url": unit.source.source_url,
+                        "capture_sha256": unit.source.capture_sha256,
+                        "source_location": block.location,
+                        "source_text": text,
+                        "condition": _condition_before_charge(text, match.start()),
+                        "authority": "source_explicit_non_authoritative",
+                    }
+                )
+        if unit.record_type == "sidekick_charge" and block.kind == "root" and re.match(r"^Charged\b", text, re.IGNORECASE):
+            operations.append(
+                {
+                    "operation": "action_availability_threshold",
+                    "amount": None,
+                    "unit": "Charge",
+                    "threshold_state": "charged",
+                    "resource_id": "sidekick_charge",
+                    "resource_owner": {"kind": unit.entity_kind, "name": unit.entity_name},
+                    "source_fact_id": unit.source_fact_id,
+                    "source_url": unit.source.source_url,
+                    "capture_sha256": unit.source.capture_sha256,
+                    "source_location": block.location,
+                    "source_text": "Charged",
+                    "condition": None,
+                    "authority": "source_explicit_non_authoritative",
+                }
+            )
+    return operations
+
+
+def extract_sidekick_aura_fields(unit: StructuralUnit) -> dict[str, Any]:
+    """Split an aura condition from its effect blocks using captured structure."""
+    if unit.record_type != "sidekick_aura":
+        return {"status": "not_applicable", "activation_condition": None, "effect_text": ""}
+    condition_block: StructuralBlock | None = None
+    condition: str | None = None
+    for block in unit.blocks:
+        text = _clean(" ".join(token.text for token in block.tokens if token.kind != "line_break"))
+        match = re.search(r"Activation\s+condition\s*:\s*(.*)$", text, flags=re.IGNORECASE)
+        if match:
+            condition = _clean(match.group(1)) or None
+            condition_block = block
+            break
+    effect_blocks = [block for block in unit.blocks if block is not condition_block and block.order > (condition_block.order if condition_block else -1)]
+    effect_text = _clean(" ".join(
+        " ".join(token.text for token in block.tokens if token.kind != "line_break")
+        for block in effect_blocks
+    ))
+    if condition_block is None or condition is None or not effect_text:
+        return {
+            "status": "unknown",
+            "activation_condition": condition,
+            "effect_text": unit.legacy_description,
+            "condition_source_location": condition_block.location if condition_block else None,
+        }
+    return {
+        "status": "source_blocks_separated",
+        "activation_condition": condition,
+        "effect_text": effect_text,
+        "condition_source_location": condition_block.location,
+        "effect_source_locations": [block.location for block in effect_blocks],
+    }
 
 
 def _direct_content_tokens(
@@ -323,6 +513,13 @@ def parse_grid_document(
             )
             continue
         section = _section_title(container)
+        name_link = name_node.find("a", href=True) if name_node else None
+        explicit_aliases = []
+        if name_link and name_link.get("href"):
+            alias_url, _fragment = canonical_reference_url(str(name_link.get("href")), source.source_url)
+            explicit_aliases.append(alias_url)
+        variant_label = _source_variant_label(container)
+        variant_key, progression_unlock, requires_equipment = _source_variant_fields(section, variant_label)
         skill_type_node = container.select_one(".character-skill-element-type .lower-grid")
         skill_type = _clean(skill_type_node.get_text(" ", strip=True)) if skill_type_node else ""
         description_text = _clean(description.get_text(" ", strip=True))
@@ -356,6 +553,11 @@ def parse_grid_document(
                 definition_page_url=canonical_reference_url(
                     definition_page_url(title, source.source_url), source.source_url
                 )[0],
+                explicit_definition_aliases=explicit_aliases,
+                source_variant_label=variant_label,
+                variant_key=variant_key,
+                progression_unlock=progression_unlock,
+                requires_equipment=requires_equipment,
             )
         )
     return units, diagnostics
@@ -459,16 +661,28 @@ def classify_destination(unit: StructuralUnit) -> str:
     return "unresolved_content_classification"
 
 
-def destination_index(units: Iterable[StructuralUnit]) -> dict[str, list[StructuralUnit]]:
+def destination_index(
+    units: Iterable[StructuralUnit],
+    *,
+    include_explicit_aliases: bool = False,
+) -> dict[str, list[StructuralUnit]]:
     index: dict[str, list[StructuralUnit]] = defaultdict(list)
     for unit in units:
         index[unit.definition_page_url].append(unit)
+        if include_explicit_aliases:
+            for alias in unit.explicit_definition_aliases:
+                if alias != unit.definition_page_url:
+                    index[alias].append(unit)
     return dict(index)
 
 
-def audit_reference_topology(units: Sequence[StructuralUnit]) -> dict[str, int]:
+def audit_reference_topology(
+    units: Sequence[StructuralUnit],
+    *,
+    include_explicit_aliases: bool = False,
+) -> dict[str, int]:
     """Inspect the complete finite local graph before selecting traversal limits."""
-    index = destination_index(units)
+    index = destination_index(units, include_explicit_aliases=include_explicit_aliases)
     adjacency: dict[str, set[str]] = defaultdict(set)
     occurrence_count = 0
     for unit in units:
@@ -522,9 +736,11 @@ def resolve_bounded_references(
     roots: Sequence[StructuralUnit],
     all_units: Sequence[StructuralUnit],
     limits: TraversalLimits,
+    *,
+    include_explicit_aliases: bool = False,
 ) -> list[dict[str, Any]]:
     """Resolve a deterministic, locally captured, definition-only frontier."""
-    index = destination_index(all_units)
+    index = destination_index(all_units, include_explicit_aliases=include_explicit_aliases)
     outcomes: list[dict[str, Any]] = []
     for root in sorted(roots, key=lambda unit: unit.unit_id):
         frontier = deque([(root, 0)])
@@ -537,53 +753,112 @@ def resolve_bounded_references(
             if unit.unit_id in visited_units:
                 continue
             visited_units.add(unit.unit_id)
-            for reference in unit.references():
-                occurrence_id = _stable_id(
-                    "reference_occurrence", root.unit_id, unit.unit_id, reference.location, str(occurrence_number)
-                )
-                occurrence_number += 1
-                targets = index.get(str(reference.canonical_page_url), [])
-                base = {
-                    "root_source_fact_id": root.source_fact_id,
-                    "origin_unit_id": unit.unit_id,
-                    "occurrence_id": occurrence_id,
-                    "occurrence_location": reference.location,
-                    "canonical_page_url": reference.canonical_page_url,
-                    "fragment": reference.fragment,
-                    "depth": depth,
-                }
-                if not targets:
-                    outcomes.append({**base, "status": "access_failure", "reason": "no_admitted_capture"})
-                    continue
-                classified = [(target, classify_destination(target)) for target in targets]
-                combat_targets = [target for target, kind in classified if kind == "combat_definition"]
-                if not combat_targets:
-                    kinds = sorted({kind for _, kind in classified})
-                    status = "excluded" if kinds == ["excluded_noncombat"] else "unresolved_mapping"
-                    outcomes.append({**base, "status": status, "reason": ",".join(kinds)})
-                    continue
-                target = sorted(combat_targets, key=lambda item: item.unit_id)[0]
-                target_page = str(reference.canonical_page_url)
-                resolved = {**base, "target_unit_id": target.unit_id}
-                if target.unit_id in visited_units:
-                    outcomes.append({**resolved, "status": "visited", "reason": "definition_already_visited"})
-                elif depth >= limits.max_depth:
-                    outcomes.append({**resolved, "status": "depth_budget_exhausted", "reason": "max_depth"})
-                elif target_page not in visited_pages and len(visited_pages) >= limits.max_pages_per_root:
-                    outcomes.append({**resolved, "status": "page_budget_exhausted", "reason": "max_pages_per_root"})
-                elif frontier_additions >= limits.max_frontier_per_root:
-                    outcomes.append(
-                        {
-                            **resolved,
-                            "status": "frontier_budget_exhausted",
-                            "reason": "max_frontier_per_root",
-                        }
+            for block in unit.blocks:
+                for reference in block.tokens:
+                    if reference.kind != "reference" or not reference.canonical_page_url:
+                        continue
+                    occurrence_id = _stable_id(
+                        "reference_occurrence", root.unit_id, unit.unit_id, reference.location, str(occurrence_number)
                     )
-                else:
-                    visited_pages.add(target_page)
-                    frontier.append((target, depth + 1))
-                    frontier_additions += 1
-                    outcomes.append({**resolved, "status": "resolved", "reason": "captured_combat_definition"})
+                    occurrence_number += 1
+                    targets = index.get(str(reference.canonical_page_url), [])
+                    alias_targets = [
+                        target for target in targets
+                        if str(reference.canonical_page_url) in target.explicit_definition_aliases
+                    ]
+                    if include_explicit_aliases and alias_targets:
+                        targets = alias_targets
+                    resolution_basis = "explicit_source_href_alias" if alias_targets else "captured_title_slug"
+                    base = {
+                        "root_source_fact_id": root.source_fact_id,
+                        "origin_unit_id": unit.unit_id,
+                        "occurrence_id": occurrence_id,
+                        "occurrence_location": reference.location,
+                        "canonical_page_url": reference.canonical_page_url,
+                        "fragment": reference.fragment,
+                        "depth": depth,
+                    }
+                    if include_explicit_aliases:
+                        base["resolution_basis"] = resolution_basis
+                    if not targets:
+                        outcomes.append({**base, "status": "access_failure", "reason": "no_admitted_capture"})
+                        continue
+                    classified = [(target, classify_destination(target)) for target in targets]
+                    combat_targets = [target for target, kind in classified if kind == "combat_definition"]
+                    if not combat_targets:
+                        kinds = sorted({kind for _, kind in classified})
+                        status = "excluded" if kinds == ["excluded_noncombat"] else "unresolved_mapping"
+                        outcomes.append({**base, "status": status, "reason": ",".join(kinds)})
+                        continue
+                    variant_match = False
+                    if include_explicit_aliases and len(combat_targets) > 1:
+                        matching_variants = [
+                            candidate
+                            for candidate in combat_targets
+                            if unit.variant_key != "unresolved" and candidate.variant_key == unit.variant_key
+                        ]
+                        if len(matching_variants) == 1:
+                            combat_targets = matching_variants
+                            variant_match = True
+                        else:
+                            outcomes.append(
+                                {
+                                    **base,
+                                    "status": "unresolved_mapping",
+                                    "reason": "ambiguous_source_variant_alias",
+                                    "candidate_unit_ids": sorted(candidate.unit_id for candidate in combat_targets),
+                                    "candidate_variant_keys": sorted(candidate.variant_key for candidate in combat_targets),
+                                }
+                            )
+                            continue
+                    target = sorted(combat_targets, key=lambda item: item.unit_id)[0]
+                    target_page = (
+                        target.source.source_url
+                        if include_explicit_aliases and alias_targets
+                        else str(reference.canonical_page_url)
+                    )
+                    resolved = {
+                        **base,
+                        "target_unit_id": target.unit_id,
+                        "target_source_fact_id": target.source_fact_id,
+                    }
+                    if include_explicit_aliases:
+                        resolved["target_variant_key"] = target.variant_key
+                        if variant_match:
+                            resolved["resolution_basis"] = "explicit_source_href_alias_and_variant_key"
+                    replacement_condition = _explicit_state_replacement(block, reference)
+                    if replacement_condition:
+                        family_id = str(root.variant_identity()["family_id"])
+                        replacement_key = f"state_replacement:{_slugify_title(replacement_condition)}:{target.variant_key}"
+                        resolved["variant_relationship"] = {
+                            "type": "state_selected_replacement",
+                            "family_id": family_id,
+                            "variant_key": replacement_key,
+                            "identity_key": f"{family_id}:{replacement_key}",
+                            "condition": replacement_condition,
+                            "target_source_fact_id": target.source_fact_id,
+                            "target_variant_key": target.variant_key,
+                            "independently_equipable": False,
+                        }
+                    if target.unit_id in visited_units:
+                        outcomes.append({**resolved, "status": "visited", "reason": "definition_already_visited"})
+                    elif depth >= limits.max_depth:
+                        outcomes.append({**resolved, "status": "depth_budget_exhausted", "reason": "max_depth"})
+                    elif target_page not in visited_pages and len(visited_pages) >= limits.max_pages_per_root:
+                        outcomes.append({**resolved, "status": "page_budget_exhausted", "reason": "max_pages_per_root"})
+                    elif frontier_additions >= limits.max_frontier_per_root:
+                        outcomes.append(
+                            {
+                                **resolved,
+                                "status": "frontier_budget_exhausted",
+                                "reason": "max_frontier_per_root",
+                            }
+                        )
+                    else:
+                        visited_pages.add(target_page)
+                        frontier.append((target, depth + 1))
+                        frontier_additions += 1
+                        outcomes.append({**resolved, "status": "resolved", "reason": "captured_combat_definition"})
     return outcomes
 
 

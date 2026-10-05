@@ -24,6 +24,7 @@ Critical column mappings (verified against live wiki — see 01-RESEARCH.md):
     col[3] = source/location
 """
 import asyncio
+import copy
 import hashlib
 import html
 import logging
@@ -849,26 +850,66 @@ def _sidekick_skill_kind(description: str) -> str | None:
     return None
 
 
-def _sidekick_charge_cost(description: str, mp_text: str) -> int | None:
+def _sidekick_charge_cost(description: str) -> int | None:
+    """Return an explicitly consumed Charge amount; MP metadata is unrelated."""
     match = re.search(r"consumes\s+(\d+)\s+charge", description, flags=re.IGNORECASE)
-    if match:
-        return int(match.group(1))
-    return SidekickSkillRow.coerce_charge_cost(mp_text)
+    return int(match.group(1)) if match else None
 
 
-def _aura_condition(description: str) -> str | None:
-    parts = re.split(r"activation condition:\s*", description, maxsplit=1, flags=re.IGNORECASE)
-    if len(parts) != 2:
-        return None
-    condition = re.split(
-        r"\s+(?:Damage dealt|Inflicted Damage|All party|Power|Intelligence|Type resistance|Physical resistance|Magic resistance)\b",
-        parts[1],
-        maxsplit=1,
-        flags=re.IGNORECASE,
-    )[0]
-    if condition:
-        return _clean_cell_text(condition)
-    return None
+def _aura_source_fields(description_node) -> tuple[str | None, str]:
+    """Separate an aura activation clause from effects at the next DOM block."""
+    if description_node is None:
+        return None, ""
+    full_text = _clean_cell_text(description_node.get_text(" ", strip=True))
+    label = next(
+        (
+            node
+            for node in description_node.find_all(["b", "strong", "span"])
+            if _clean_cell_text(node.get_text(" ", strip=True)).rstrip(":").casefold() == "activation condition"
+        ),
+        None,
+    )
+    if label is None:
+        return None, full_text
+    condition_parts: list[str] = []
+    has_source_boundary = False
+    for sibling in label.next_siblings:
+        if getattr(sibling, "name", None) in {"br", "ul", "ol", "table", "hr", "div", "p"}:
+            has_source_boundary = True
+            break
+        condition_parts.append(
+            sibling.get_text(" ", strip=True) if hasattr(sibling, "get_text") else str(sibling)
+        )
+    condition = _clean_cell_text(" ".join(condition_parts)).strip(" :")
+    if not has_source_boundary or not condition:
+        return None, full_text
+
+    effects = copy.deepcopy(description_node)
+    effect_label = next(
+        (
+            node
+            for node in effects.find_all(["b", "strong", "span"])
+            if _clean_cell_text(node.get_text(" ", strip=True)).rstrip(":").casefold() == "activation condition"
+        ),
+        None,
+    )
+    if effect_label is None:
+        return condition, full_text
+    for sibling in list(effect_label.next_siblings):
+        if getattr(sibling, "name", None) in {"br", "ul", "ol", "table", "hr", "div", "p"}:
+            break
+        sibling.extract()
+    for sibling in list(effect_label.previous_siblings):
+        sibling_text = _clean_cell_text(sibling.get_text(" ", strip=True) if hasattr(sibling, "get_text") else str(sibling))
+        if not sibling_text:
+            continue
+        if sibling_text.casefold() == "aura":
+            sibling.extract()
+            continue
+        break
+    effect_label.decompose()
+    effect_text = _clean_cell_text(effects.get_text(" ", strip=True))
+    return condition, effect_text
 
 
 def _associated_characters_from_descriptions(soup: BeautifulSoup) -> list[str]:
@@ -912,14 +953,16 @@ def parse_sidekick_detail(
         section = _article_title(container) or _section_for_row(container)
         kind = _sidekick_skill_kind(description)
         if kind == "aura":
+            description_node = container.select_one(".skill-description")
+            activation_condition, effect_text = _aura_source_fields(description_node)
             try:
                 auras.append(
                     SidekickAuraRow.model_validate(
                         {
                             "sidekick_name": sidekick.name,
                             "name": name,
-                            "activation_condition": _aura_condition(description),
-                            "effect_text": description,
+                            "activation_condition": activation_condition,
+                            "effect_text": effect_text,
                             "source_url": source_url,
                             "section": section,
                         }
@@ -934,7 +977,7 @@ def parse_sidekick_detail(
                 "skill_kind": kind,
                 "element": _first_text(container, ".character-skill-element-type .upper-grid"),
                 "skill_type": _first_text(container, ".character-skill-element-type .lower-grid"),
-                "charge_cost": _sidekick_charge_cost(description, _first_text(container, ".character-skill-mp")),
+                "charge_cost": _sidekick_charge_cost(description) if kind == "charge" else None,
                 "description": description,
                 "source_url": source_url,
                 "section": section,

@@ -173,7 +173,7 @@ def test_known_failure_states_and_darunis_conflict_remain_visible(evaluated_repo
     assert darunis["effect_occurrence_count"] == 2
     assert darunis["dimensions"]["attack_type"]["status"] == "passed"
     assert darunis["dimensions"]["element"]["status"] == "not_applicable"
-    assert rows["known-anabel-prayer-child"]["dimensions"]["child_definition_resolution"]["status"] == "unknown"
+    assert rows["known-anabel-prayer-child"]["dimensions"]["child_definition_resolution"]["status"] == "passed"
     assert all(row["generalization_evidence"] is False for row in rows.values())
 
 

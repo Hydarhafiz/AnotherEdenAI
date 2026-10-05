@@ -1,0 +1,95 @@
+{
+  "version": "c2-r2-development-source-corrections-1",
+  "authority": "approved development and known-regression sources only",
+  "records": [
+    {
+      "fixture": "tests/fixtures/structural/c2_r2_tetra_sidekick.html",
+      "fixture_sha256": "2fc0cf8a07af7057cdba7bb87cbbe3d2bbc5e15bebde02b2dd54097932f29a31",
+      "source_entity": "Tetra (Another Style)",
+      "source_kind": "sidekick",
+      "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "source_witness_ids": [
+        "development-tetra-auto",
+        "known-tetra-ruincarnation"
+      ],
+      "source_fact_ids": [
+        "sidekick_skill:4efa2ee5cbed7b7c032a",
+        "sidekick_skill:f169ab3c49e3780497a8"
+      ],
+      "review_reference": "artifacts/evidence/feature_c2_human_review.md"
+    },
+    {
+      "fixture": "tests/fixtures/structural/c2_r2_hameow_aura.html",
+      "fixture_sha256": "7712bd89bd92fdfc42051ee34cf75df272bbfb218038fbc257cfd53629ea3114",
+      "source_entity": "Hameow",
+      "source_kind": "sidekick",
+      "source_capture_sha256": "4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b",
+      "source_witness_ids": [
+        "development-hameow-aura"
+      ],
+      "source_fact_ids": [
+        "sidekick_aura:29ee16dada2c963d4479"
+      ],
+      "review_reference": "artifacts/evidence/feature_c2_human_review.md"
+    },
+    {
+      "fixture": "tests/fixtures/structural/c2_r2_anabel_prayer_alias.html",
+      "fixture_sha256": "f2741a1d1d732ea5c0c5bf6e13ad4a94324789638bc9e40fe5e7678b4911e062",
+      "source_entity": "Anabel (Extra Style)",
+      "source_kind": "character",
+      "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "source_witness_ids": [
+        "known-anabel-prayer-child"
+      ],
+      "source_fact_ids": [
+        "skill:438aa7e1d0e071c14c43",
+        "skill:eac6950dc058daaf9941"
+      ],
+      "review_reference": "artifacts/evidence/feature_c2_human_review.md"
+    },
+    {
+      "fixture": "tests/fixtures/structural/c2_r2_anabel_stellar_variants.html",
+      "fixture_sha256": "93f9e8ea74308c70f4ae4aaf2eb048985bab57e77aaaa9f20242115f9f49a39d",
+      "source_entity": "Anabel",
+      "source_kind": "character",
+      "source_capture_sha256": "675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01",
+      "source_witness_ids": [
+        "development-anabel-aegis-boon"
+      ],
+      "source_fact_ids": [
+        "skill:c6af1de12f6d89ec223a"
+      ],
+      "review_reference": "artifacts/evidence/feature_c2_human_review.md"
+    },
+    {
+      "fixture": "tests/fixtures/structural/c2_r2_bertrand_progression_variants.html",
+      "fixture_sha256": "f95b75709396271fb627d57ded81194802507b68017c1667a9e520093f36e8a7",
+      "source_entity": "Bertrand",
+      "source_kind": "character",
+      "source_capture_sha256": "21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8",
+      "source_witness_ids": [
+        "development-bertrand-guardian-lance"
+      ],
+      "source_fact_ids": [
+        "skill:51b281ce56f4eaf27869"
+      ],
+      "review_reference": "artifacts/evidence/feature_c2_human_review.md"
+    },
+    {
+      "fixture": "tests/fixtures/structural/c2_r2_cerius_replacements.html",
+      "fixture_sha256": "8bbd7323689d187f9ef8febc818e3e90c5f382b3ff9c73bcce0ed21c656c1c22",
+      "source_entity": "Cerius (Another Style)",
+      "source_kind": "character",
+      "source_capture_sha256": "2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e",
+      "source_witness_ids": [
+        "development-cerius-empyrean-flash"
+      ],
+      "source_fact_ids": [
+        "skill:b01a7780e72ea88bda5e",
+        "skill:15c065e10fecfa55b336",
+        "skill:4d370634b4fe71e6d1ca"
+      ],
+      "review_reference": "artifacts/evidence/feature_c2_human_review.md"
+    }
+  ]
+}

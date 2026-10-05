@@ -538,6 +538,31 @@ deterministic child-definition traversal. Sidekick `auto`, `charge`, and
 `aura` records are reported with separate denominators. Generated replay
 output remains ignored.
 
+### C2-R2 source fields and variant identity
+
+The sidekick ETL writes `charge_cost` only for an explicitly stated consumed
+Charge amount. A conditional gain and a `Charged` availability state are
+separate source events, with owner, unit, source fact, capture checksum,
+source block, and local condition retained in offline structural evidence.
+They do not populate `charge_cost`. Aura activation is separated from effects
+only when the captured DOM marks a source block boundary; otherwise the
+condition stays unresolved and the original effect text is retained.
+
+Character structural evidence records an explicit same-page href alias only
+when that link is present in the capture, and resolves it only against an
+admitted captured definition. Source variant keys are read from explicit
+source selectors. Stellar Normal/Enhanced, base/Manifest/True Manifest, and
+state-selected replacement forms keep their shared family while preserving
+their own source parameters and availability. Ambiguous selectors and missing
+child captures stay unresolved. Replacement forms are not separately owned
+or equipable skills, and this evidence does not choose a runtime default.
+
+R2 aliases, variant identity, and resource-event metadata are opt-in fields in
+the offline structural sidecar. The default sidecar shape, graph schema, and
+persisted fact IDs remain unchanged. Development regressions are pinned to
+source capture checksums and existing fact/family IDs; any changed meaning
+requires explicit source re-review rather than review approval fan-out.
+
 The deterministic witness manifest is
 `src/etl/source_fidelity_manifest.json`. It contains seven named regressions
 plus separate archetype-stratified development and held-out cohorts; it is not

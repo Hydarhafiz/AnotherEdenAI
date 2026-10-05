@@ -222,8 +222,9 @@
       "dependency_occurrence_count": 1,
       "dimension_overrides": {
         "child_definition_resolution": {
-          "status": "unknown",
-          "reason": "Knight's Pride - Prayer (Anabel ES) is linked by source but not admitted as a captured definition"
+          "status": "passed",
+          "reason": "The explicit href alias resolves to the separately captured same-page Prayer child",
+          "target_source_fact_id": "skill:eac6950dc058daaf9941"
         }
       }
     },

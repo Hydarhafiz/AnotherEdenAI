@@ -162,7 +162,7 @@ Query-time ownership contract:
 - `skill_kind` (STRING) — `auto` or `charge`
 - `element` (STRING, nullable) — parsed skill element when available
 - `skill_type` (STRING, nullable) — parsed sidekick skill type when available
-- `charge_cost` (INTEGER, nullable) — charge consumed or generated when available
+- `charge_cost` (INTEGER, nullable) — explicitly consumed sidekick Charge for a charge skill; a gain such as `+1 Charge` and an availability state such as `Charged` are not costs
 - `description` (STRING) — source-grounded skill text
 - `source_url` (STRING, nullable) — source sidekick detail page
 - `section` (STRING, nullable) — source page section
@@ -175,14 +175,19 @@ Uniqueness: `sidekick_skill_id` and `(sidekick_name, name, skill_kind)`.
 - `sidekick_aura_id` (STRING, stable candidate identity) — derived from sidekick owner and aura name
 - `sidekick_name` (STRING) — owning Sidekick name
 - `name` (STRING) — aura display name
-- `activation_condition` (STRING, nullable) — best-effort parsed activation condition
-- `effect_text` (STRING) — source-grounded aura effect text
+- `activation_condition` (STRING, nullable) — parsed from a source-labeled activation block when the captured DOM separates it from effects; otherwise unresolved
+- `effect_text` (STRING) — source-grounded aura effect text from the following source block(s)
 - `source_url` (STRING, nullable) — source sidekick detail page
 - `section` (STRING, nullable) — source page section
 - `capabilities`, `dependencies`, `capability_evidence_json`, `capability_artifact_version`, `capability_diagnostics_json` — reviewed atomic materialization using the same authority and drift contract as character facts; placement availability is `main_or_sub`
 - `schema_version` (STRING) — ETL schema version used for this row
 
 Uniqueness: `sidekick_aura_id` and `(sidekick_name, name)`.
+
+### Offline C2-R2 source identity
+The structural source-fidelity report may carry explicit href aliases and a `source_variant` object containing `family_id`, `variant_key`, `identity_key`, source selector, progression unlock, and equipment requirement. These values retain captured source distinctions while leaving the existing skill fact and family IDs intact. Sidekick resource events retain operation, amount or threshold state, unit, owner, source fact, capture checksum, source location, and effect-local condition.
+
+This metadata is opt-in in the offline structural sidecar and does not add graph properties or change persisted model fields. It does not authorize capabilities or select runtime skill variants.
 
 ### Superboss
 - `name` (STRING, unique) — canonical curated superboss name
