@@ -13,17 +13,8 @@ from src.etl.source_fidelity import build_source_fidelity_report
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--oracle", type=Path)
-    parser.add_argument(
-        "--include-held-out",
-        action="store_true",
-        help="Explicitly evaluate the sealed held-out oracle; never use during implementation.",
-    )
     args = parser.parse_args()
-    oracle = None
-    if args.oracle:
-        oracle = json.loads(args.oracle.read_text(encoding="utf-8"))
-    report = build_source_fidelity_report(oracle=oracle, include_held_out=args.include_held_out)
+    report = build_source_fidelity_report()
     replay = build_source_fidelity_report()
     report["deterministic_replay"]["repeat_replay_digest"] = replay["deterministic_replay"]["replay_digest"]
     report["deterministic_replay"]["same_input_same_digest"] = (

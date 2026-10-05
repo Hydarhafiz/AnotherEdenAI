@@ -11,11 +11,13 @@ from src.etl.source_fidelity import (
     FIDELITY_DIMENSIONS,
     REQUIRED_ARCHETYPES,
     build_source_fidelity_report,
+    evaluate_oracle,
 )
 
 
 MANIFEST = Path("src/etl/source_fidelity_manifest.json")
-ORACLE = Path("src/etl/source_fidelity_oracle.json")
+FROZEN_MANIFEST = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
+DEV_ORACLE = Path("tests/fixtures/source_fidelity/c2_development_oracle.json")
 CATALOG = Path("src/etl/kit_catalog.json")
 
 
@@ -33,15 +35,22 @@ def catalog() -> dict:
 def replay_report() -> dict:
     if not Path("data/raw/characters").exists():
         pytest.skip("accepted raw captures are required for C1.1 replay")
-    return build_source_fidelity_report()
+    report = build_source_fidelity_report()
+    assert "held_out" not in report["witness_replay"]
+    assert "character_rows" not in report["full_catalog_replay"]
+    assert "rows" not in report["sidekick_replay"]
+    return report
 
 
 @pytest.fixture(scope="module")
 def evaluated_report() -> dict:
     if not Path("data/raw/characters").exists():
         pytest.skip("accepted raw captures are required for C1.1 replay")
-    oracle = json.loads(ORACLE.read_text(encoding="utf-8"))
-    return build_source_fidelity_report(oracle=oracle, include_held_out=True)
+    oracle = json.loads(DEV_ORACLE.read_text(encoding="utf-8"))
+    return build_source_fidelity_report(
+        manifest_path=FROZEN_MANIFEST,
+        oracle=oracle,
+    )
 
 
 def test_manifest_is_deterministic_stratified_and_not_a_percentage_split(manifest: dict):
@@ -78,10 +87,10 @@ def test_witnesses_use_real_catalog_fact_and_capture_identities(manifest: dict, 
 def test_source_slice_fixture_is_capture_derived_and_all_witnesses_bind(replay_report: dict):
     fixture = replay_report["witness_replay"]["source_slice_fixture"]
     assert fixture["loaded"] is True
-    assert fixture["passed_count"] == 54
+    assert fixture["passed_count"] == 64
     assert fixture["failed_count"] == 0
     assert fixture["unknown_count"] == 0
-    for cohort in ("known_regressions", "development", "held_out"):
+    for cohort in ("known_regressions", "development"):
         rows = replay_report["witness_replay"][cohort]
         assert all(row["source_identity_status"] == "passed" for row in rows)
         assert all(row["source_record_selection_status"] == "passed" for row in rows)
@@ -144,25 +153,38 @@ def test_all_fidelity_dimensions_are_explicit_and_default_replay_is_oracle_free(
 def test_independent_oracle_reports_separate_counts_and_c2_admission(evaluated_report: dict):
     assert evaluated_report["oracle_evaluation"]["known_regressions"]["generalization_evidence"] is False
     development = evaluated_report["oracle_evaluation"]["development"]
-    held_out = evaluated_report["oracle_evaluation"]["held_out"]
-    assert development["witness_count"] == 26
-    assert held_out["witness_count"] == 21
+    assert "held_out" not in evaluated_report["oracle_evaluation"]
+    assert development["witness_count"] == 57
     assert development["independently_adjudicated_effect_occurrence_count"] > 0
     assert development["independently_adjudicated_dependency_occurrence_count"] > 0
-    assert held_out["independently_adjudicated_effect_occurrence_count"] > 0
-    assert held_out["independently_adjudicated_dependency_occurrence_count"] > 0
     assert all(
         row["c2_admission"] == ("fully_supported" if row["semantic_fidelity_passed"] else "unknown_non_authoritative")
-        for row in development["witnesses"] + held_out["witnesses"]
+        for row in development["witnesses"]
     )
-    assert all(set(row["dimensions"]) == set(FIDELITY_DIMENSIONS) for row in development["witnesses"] + held_out["witnesses"])
+    assert all(set(row["dimensions"]) == set(FIDELITY_DIMENSIONS) for row in development["witnesses"])
 
 
 def test_known_failure_states_and_darunis_conflict_remain_visible(evaluated_report: dict):
     rows = {row["witness_id"]: row for row in evaluated_report["oracle_evaluation"]["known_regressions"]["witnesses"]}
     assert rows["known-iphi-blood-ritual"]["dimensions"]["child_definition_resolution"]["status"] == "unknown"
-    assert rows["known-alma-refraction-counter"]["dimensions"]["parent_child_condition_attachment"]["status"] == "failed"
-    assert rows["known-darunis-hunters-fangs-conflict"]["oracle_status"] == "source_conflict"
-    assert rows["known-darunis-hunters-fangs-conflict"]["dimensions"]["attack_type"]["status"] == "failed"
+    assert rows["known-alma-refraction-counter"]["dimensions"]["parent_child_condition_attachment"]["status"] == "passed"
+    darunis = rows["known-darunis-hunters-fangs-conflict"]
+    assert darunis["oracle_status"] == "adjudicated"
+    assert darunis["effect_occurrence_count"] == 2
+    assert darunis["dimensions"]["attack_type"]["status"] == "passed"
+    assert darunis["dimensions"]["element"]["status"] == "not_applicable"
     assert rows["known-anabel-prayer-child"]["dimensions"]["child_definition_resolution"]["status"] == "unknown"
     assert all(row["generalization_evidence"] is False for row in rows.values())
+
+
+def test_source_fidelity_evaluator_rejects_protected_oracle_identity(manifest: dict, catalog: dict):
+    with pytest.raises(ValueError, match="outside known/development"):
+        evaluate_oracle(
+            manifest,
+            catalog,
+            {"witnesses": [{"witness_id": "heldout-dewey-mist-blast"}]},
+        )
+    freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
+    protected_id = freeze["held_out_witnesses"][0]["witness_id"]
+    with pytest.raises(ValueError, match="outside known/development"):
+        evaluate_oracle(freeze, catalog, {"witnesses": [{"witness_id": protected_id}]})

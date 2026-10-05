@@ -1,0 +1,2119 @@
+{
+  "access_history": {
+    "cohort_count_reconciliation": "The 57 development witnesses comprise 26 original development, 21 prior validation identities, and 10 retired interim fresh candidates. The three reviewed Gunce identities and two source-slice-overlap findings are subsets of the 21 prior validation identities, not additional cohorts.",
+    "committed_tests_and_cli_historically_support_heldout_access": true,
+    "current_turn": "Initial packet source exposure and unbounded src/tests search caused all then-protected identities to be conservatively reclassified; fresh cohort was rebuilt from unused captures.",
+    "historical_execution_audit_available": false,
+    "historical_validation_witness_count_before_reclassification": 21,
+    "legacy_ordinal_rows_retired_to_development": 3,
+    "prior_validation_reclassification_reason": "source-search output was truncated and row exposure could not be bounded",
+    "prior_validation_witnesses_reclassified_to_development": 21,
+    "remaining_legacy_protected_validation_count": 0,
+    "reviewed_gunce_reclassified": 3,
+    "source_packet_candidates_retired_to_development": 10,
+    "source_slice_duplicate_validation_reclassified": 2,
+    "unbounded_search_exposure_detected": true
+  },
+  "artifact_type": "c2_frozen_evaluation_manifest",
+  "artifact_version": "m6-c2-r1-evaluation-boundary-1.0.0",
+  "coverage_contract": {
+    "coverage_tag_status": "Owner-directed tags frozen as evaluation-only metadata; seven accepted witnesses cover every required stratum.",
+    "coverage_tags": {
+      "fresh-erina-refresh": [
+        "simple_skill"
+      ],
+      "fresh-isuka-alter-andante": [
+        "complex_multi_effect_skill",
+        "stellar_or_state_driven_variant",
+        "shared_mechanic",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "fresh-minimander-auto": [
+        "sidekick_auto",
+        "complex_multi_effect_skill"
+      ],
+      "fresh-mordy-aura": [
+        "sidekick_aura",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "fresh-myunfa-alter-radical-zone": [
+        "shared_mechanic",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "fresh-tetra-charge": [
+        "sidekick_charge",
+        "complex_multi_effect_skill",
+        "shared_mechanic",
+        "parent_child_relation",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "fresh-yuna-turn-start-status-immunity": [
+        "passive",
+        "condition_or_state_heavy_mechanic"
+      ]
+    },
+    "current_metadata_candidates": {
+      "passive": [
+        "fresh-yuna-turn-start-status-immunity"
+      ],
+      "shared_mechanic": [
+        "fresh-tetra-charge",
+        "fresh-isuka-alter-andante",
+        "fresh-myunfa-alter-radical-zone"
+      ],
+      "sidekick_aura": [
+        "fresh-mordy-aura"
+      ],
+      "sidekick_auto": [
+        "fresh-minimander-auto"
+      ],
+      "sidekick_charge": [
+        "fresh-tetra-charge"
+      ]
+    },
+    "fresh_replacement_strata_status": "All ten required coverage strata remain represented in seven owner-adjudicated fresh witnesses. Yuna replaces the non-evaluable Thillelille Koakh case for the passive stratum; Koakh remains a separate, unscored taxonomy gap.",
+    "optional_diagnostic_tags": {
+      "fresh-isuka-alter-andante": [
+        "stack_or_resource_state"
+      ]
+    },
+    "required_strata": [
+      "simple_skill",
+      "complex_multi_effect_skill",
+      "passive",
+      "stellar_or_state_driven_variant",
+      "sidekick_auto",
+      "sidekick_charge",
+      "sidekick_aura",
+      "shared_mechanic",
+      "parent_child_relation",
+      "condition_or_state_heavy_mechanic"
+    ],
+    "required_strata_unchanged": true,
+    "stratum_labels_for_legacy_validation_are_manifest_metadata_only": "true",
+    "tag_decisions": {
+      "fresh-isuka-alter-andante.stack_or_resource_state": "Optional diagnostic tag only; it does not alter required_strata or the acceptance floor.",
+      "fresh-minimander-auto.shared_mechanic": "Removed: no reusable canonical mechanic identity is the target of this witness; its generic attack/buff references do not establish one.",
+      "fresh-mordy-aura.shared_mechanic": "Removed: the Time Breakup activation dependency has no controlled shared definition in the R1 admitted identity set.",
+      "fresh-myunfa-alter-radical-zone.passive": "Removed: Radical Zone is a reusable shared mechanic definition despite being stored in a passive row; the row does not satisfy the semantic passive stratum.",
+      "fresh-tetra-charge.parent_child_relation": "Retained: source explicitly links the conditional action to Minalca activating the named Lethal Mode child; count only when represented as a typed activates relation to that linked mode identity. The tag does not assert Lethal Mode internals.",
+      "fresh-yuna-turn-start-status-immunity.condition_or_state_heavy_mechanic": "Included: the source has a Turn Start trigger and an independent front-line condition plus a Stellar Awakening prerequisite.",
+      "fresh-yuna-turn-start-status-immunity.passive": "Included: this is a character passive with a source effect represented by the existing taxonomy."
+    }
+  },
+  "development_witness_count": 57,
+  "development_witnesses": [
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "zone_another_or_radical_zone",
+        "stack_or_character_resource",
+        "buff_debuff_or_resistance",
+        "healing_or_revival",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Aisha",
+      "fact_id": "passive:92a680ed2f5becafcce5",
+      "fact_name": "MP Restore - Fire Stance - Fire",
+      "record_type": "passive_skill",
+      "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_kind": "character",
+      "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[20]/block[0]",
+      "source_path": "data/raw/characters/aisha.html",
+      "source_slice_sha256": "4690a8cd83ae142dd3ee137d0d2dc36b3f650b8b2450e9473a0b2031cc7513c0",
+      "witness_id": "development-aisha-mp-restore"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "zone_another_or_radical_zone",
+        "buff_debuff_or_resistance",
+        "recipient_or_position_condition",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Aisha",
+      "fact_id": "skill:0021c579e14edd0e5d6e",
+      "fact_name": "Twilight Symphony",
+      "record_type": "active_skill",
+      "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_kind": "character",
+      "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[14]/block[0]",
+      "source_path": "data/raw/characters/aisha.html",
+      "source_slice_sha256": "10ba8ae47f66ba9eec7be61bc74833c7cc0455fb03f2e5e211f68a5c4b008471",
+      "witness_id": "development-aisha-twilight-symphony"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "buff_debuff_or_resistance",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Aldo",
+      "fact_id": "skill:e1e5596f2b79f033909d",
+      "fact_name": "Starwyrm Slash",
+      "record_type": "active_skill",
+      "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_kind": "character",
+      "source_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+      "source_path": "data/raw/characters/aldo.html",
+      "source_slice_sha256": "edd67caa2ffc5581036f1465adc1c16d86051ea06891e9219a5e0fd127ec23ab",
+      "witness_id": "development-aldo-starwyrm-slash"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "named_child_definition",
+        "healing_or_revival",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Alma (Another Style)",
+      "fact_id": "skill:cf8045d9a204c458a1c7",
+      "fact_name": "Kaleidoscope",
+      "record_type": "active_skill",
+      "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "source_kind": "character",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[16]/block[0]",
+      "source_path": "data/raw/characters/alma_another_style.html",
+      "source_slice_sha256": "d97a35c44f646c637d8ad18978811fd3367d9845d9c5bdb346649437edec6aa0",
+      "witness_id": "development-alma-kaleidoscope"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Anabel",
+      "fact_id": "skill:c6af1de12f6d89ec223a",
+      "fact_name": "Aegis Boon",
+      "record_type": "active_skill",
+      "source_capture_sha256": "675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01",
+      "source_kind": "character",
+      "source_location": "sha256:675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01/grid[12]/block[0]",
+      "source_path": "data/raw/characters/anabel.html",
+      "source_slice_sha256": "6f67a9f292dcd353db6124859c71748e90efe9b014b581d8cb447cf4e2ae71bc",
+      "witness_id": "development-anabel-aegis-boon"
+    },
+    {
+      "archetypes": [
+        "pain_poison",
+        "status_mechanic",
+        "zone_another_or_radical_zone",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Anabel (Extra Style)",
+      "fact_id": "skill:73ae0e1154397f4356c6",
+      "fact_name": "Nadir Pierce",
+      "record_type": "active_skill",
+      "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "source_kind": "character",
+      "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[10]/block[0]",
+      "source_path": "data/raw/characters/anabel_extra_style.html",
+      "source_slice_sha256": "434a8cfcb1827fd0b07f52806de2e7b70ef6d27e0b624bfcda1c6af9ccd27f20",
+      "witness_id": "development-anabel-es-nadir-pierce"
+    },
+    {
+      "archetypes": [
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Azami (Another Style)",
+      "fact_id": "passive:1f435329414412b51db7",
+      "fact_name": "Hold Ground",
+      "record_type": "passive_skill",
+      "source_capture_sha256": "497f6474efdd448bba5af3a125857acf872e4c4df35e3535576207fb2ae65fe9",
+      "source_kind": "character",
+      "source_location": "sha256:497f6474efdd448bba5af3a125857acf872e4c4df35e3535576207fb2ae65fe9/grid[9]/block[0]",
+      "source_path": "data/raw/characters/azami_another_style.html",
+      "source_slice_sha256": "c09e5ef3b6ac23941011223be66a11adf406dffc9cdeda773734180f83eeae6f",
+      "witness_id": "development-azami-hold-ground"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "guard_cover_or_hold_ground",
+        "status_mechanic",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Bertrand",
+      "fact_id": "skill:51b281ce56f4eaf27869",
+      "fact_name": "Guardian Lance",
+      "record_type": "active_skill",
+      "source_capture_sha256": "21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8",
+      "source_kind": "character",
+      "source_location": "sha256:21bf7f5207ec564c90d8d508d6eaa51ec021dab8b4ac3d25b2c2415dade49cc8/grid[12]/block[0]",
+      "source_path": "data/raw/characters/bertrand.html",
+      "source_slice_sha256": "4d6618316206893495d60dd14575275239e88a693339e2a91fdede901eff5a2b",
+      "witness_id": "development-bertrand-guardian-lance"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "lunatic_variant",
+        "status_mechanic",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Cerius (Another Style)",
+      "fact_id": "skill:15c065e10fecfa55b336",
+      "fact_name": "Empyrean Flash",
+      "record_type": "active_skill",
+      "source_capture_sha256": "2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e",
+      "source_kind": "character",
+      "source_location": "sha256:2bbbd9ab93362e7006cf111f489f8a12ba94166a3aeaefeec084a45c9eb9480e/grid[19]/block[0]",
+      "source_path": "data/raw/characters/cerius_another_style.html",
+      "source_slice_sha256": "5d929b561896f2b396818a12a77a93570c24da8afd19b3a19b8fd468685a8604",
+      "witness_id": "development-cerius-empyrean-flash"
+    },
+    {
+      "archetypes": [
+        "lunatic_variant",
+        "stack_or_character_resource",
+        "modern_nested_conditions",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Ciel (Alter),Virtual Reflection",
+      "fact_id": "skill:76634839e98a6a31203a",
+      "fact_name": "Lunatic - Charge",
+      "record_type": "active_skill",
+      "source_capture_sha256": "7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607",
+      "source_kind": "character",
+      "source_location": "sha256:7b540dd855901deb119a1696d7e66944392072d45ed82a01c88ff37b37365607/grid[0]/block[0]",
+      "source_path": "data/raw/characters/ciel_alter_virtual_reflection.html",
+      "source_slice_sha256": "a1186c213c3d89c70d32c68227a88defcaa937ef45ecd3739ae6635f9e7aa22c",
+      "witness_id": "development-ciel-lunatic-charge"
+    },
+    {
+      "archetypes": [
+        "zone_another_or_radical_zone",
+        "modern_nested_conditions",
+        "buff_debuff_or_resistance"
+      ],
+      "entity_name": "Claude (Extra Style)",
+      "fact_id": "skill:42d6ef8f388054c5fcf4",
+      "fact_name": "Another Zone",
+      "record_type": "active_skill",
+      "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "source_kind": "character",
+      "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/block[0]",
+      "source_path": "data/raw/characters/claude_extra_style.html",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "development-claude-es-another-zone"
+    },
+    {
+      "archetypes": [
+        "simple_legacy",
+        "buff_debuff_or_resistance"
+      ],
+      "entity_name": "Denny",
+      "fact_id": "skill:bea75a228763765a36af",
+      "fact_name": "Anchor Down",
+      "record_type": "active_skill",
+      "source_capture_sha256": "f57f2514b644f597ff4e049a772c776d52e1384d979e1e8b145002df4977452e",
+      "source_kind": "character",
+      "source_location": "sha256:f57f2514b644f597ff4e049a772c776d52e1384d979e1e8b145002df4977452e/grid[1]/block[0]",
+      "source_path": "data/raw/characters/denny.html",
+      "source_slice_sha256": "249adbd467f5e9267d276471a9e7fc43d2e259675ecfb6f3b9f691dc7fd4736c",
+      "witness_id": "development-denny-anchor-down"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "healing_or_revival",
+        "recipient_or_position_condition",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Feinne (Another Style)",
+      "fact_id": "skill:868b18f314d20a149196",
+      "fact_name": "Angel's Song: Feinne",
+      "record_type": "active_skill",
+      "source_capture_sha256": "dee041909dd7d25b732eebf479f1abfacdef50009aa23a679304ae30aaa61c74",
+      "source_kind": "character",
+      "source_location": "sha256:dee041909dd7d25b732eebf479f1abfacdef50009aa23a679304ae30aaa61c74/grid[15]/block[0]",
+      "source_path": "data/raw/characters/feinne_another_style.html",
+      "source_slice_sha256": "f2e83780b19327c1a9ebc43ba1465968975e035d79cdb41c7e6e580a6554bda5",
+      "witness_id": "development-feinne-as-angel-song"
+    },
+    {
+      "archetypes": [
+        "sidekick_aura",
+        "modern_nested_conditions",
+        "buff_debuff_or_resistance",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Hameow",
+      "fact_id": "sidekick_aura:29ee16dada2c963d4479",
+      "fact_name": "Cross Resonance",
+      "record_type": "sidekick_aura",
+      "source_capture_sha256": "4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b",
+      "source_kind": "sidekick",
+      "source_location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/hameow.html",
+      "source_slice_sha256": "679db3d633f9705987c4e5674c24725d7994ca27b8aec706b685776536154ce5",
+      "witness_id": "development-hameow-aura"
+    },
+    {
+      "archetypes": [
+        "pain_poison",
+        "status_mechanic",
+        "buff_debuff_or_resistance",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Iphi",
+      "fact_id": "skill:85c97f7b79e91d8bf194",
+      "fact_name": "Spina Liliac",
+      "record_type": "active_skill",
+      "source_capture_sha256": "ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db",
+      "source_kind": "character",
+      "source_location": "sha256:ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db/grid[9]/block[0]",
+      "source_path": "data/raw/characters/iphi.html",
+      "source_slice_sha256": "2260b44524bac3120852d1db668ab82c58b901717419c1738bcf9457352db948",
+      "witness_id": "development-iphi-spina-liliac"
+    },
+    {
+      "archetypes": [
+        "sidekick_auto",
+        "status_mechanic",
+        "buff_debuff_or_resistance",
+        "healing_or_revival",
+        "stack_or_character_resource"
+      ],
+      "entity_name": "Kumos (Another Style)",
+      "fact_id": "sidekick_skill:6c84c1c5b3507af440fd",
+      "fact_name": "Overcome",
+      "record_type": "sidekick_auto",
+      "source_capture_sha256": "0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840",
+      "source_kind": "sidekick",
+      "source_location": "sha256:0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/kumos_another_style.html",
+      "source_slice_sha256": "c10fcd3021aa7d3cf03b9d219d4dd53764f813a95928a4b52dd59de0eb9ae91b",
+      "witness_id": "development-kumos-auto"
+    },
+    {
+      "archetypes": [
+        "stack_or_character_resource",
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition",
+        "modern_nested_conditions"
+      ],
+      "entity_name": "Minalca (Another Style)",
+      "fact_id": "skill:be86d045c1d3c4846851",
+      "fact_name": "Outrage",
+      "record_type": "active_skill",
+      "source_capture_sha256": "4f7630ca3a22ec6ebb885e93925074147c5dcd04de73049adb2e45f41c919ce7",
+      "source_kind": "character",
+      "source_location": "sha256:4f7630ca3a22ec6ebb885e93925074147c5dcd04de73049adb2e45f41c919ce7/grid[0]/block[0]",
+      "source_path": "data/raw/characters/minalca_another_style.html",
+      "source_slice_sha256": "71eeb92b0dd093b9235f701008f775e4b6d304e3a2d203c8113424785e5d6f64",
+      "witness_id": "development-minalca-as-outrage"
+    },
+    {
+      "archetypes": [
+        "sidekick_charge",
+        "modern_nested_conditions",
+        "stack_or_character_resource",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Moke",
+      "fact_id": "sidekick_skill:4e19269edf092b799140",
+      "fact_name": "Moke Clan Rampage",
+      "record_type": "sidekick_charge",
+      "source_capture_sha256": "e71a69b8bc1c013e7215b25d38e9f09a8d9c05695a783fb6c496ad6cb49f7b73",
+      "source_kind": "sidekick",
+      "source_location": "sha256:e71a69b8bc1c013e7215b25d38e9f09a8d9c05695a783fb6c496ad6cb49f7b73/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/moke.html",
+      "source_slice_sha256": "4e623fe53de2f947f1277e63adfa84923c58473f13a7ecaf7c366343580237dd",
+      "witness_id": "development-moke-charge"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "healing_or_revival",
+        "buff_debuff_or_resistance",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Pizzica",
+      "fact_id": "skill:14707221110c0b9071bd",
+      "fact_name": "Oratorio",
+      "record_type": "active_skill",
+      "source_capture_sha256": "46580b7fe5b42cf3c47e28f1e1836ebb7027c6b990c907df51cdad95a6697ac7",
+      "source_kind": "character",
+      "source_location": "sha256:46580b7fe5b42cf3c47e28f1e1836ebb7027c6b990c907df51cdad95a6697ac7/grid[5]/block[0]",
+      "source_path": "data/raw/characters/pizzica.html",
+      "source_slice_sha256": "86a044b611b49f59f089da3d94b8169ebb50bc9520ebe7a6140cd098bde3a271",
+      "witness_id": "development-pizzica-oratorio"
+    },
+    {
+      "archetypes": [
+        "pain_poison",
+        "status_mechanic",
+        "buff_debuff_or_resistance",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Premaya (Another Style)",
+      "fact_id": "skill:d60e04cd61b8873e3c7e",
+      "fact_name": "Fusillade",
+      "record_type": "active_skill",
+      "source_capture_sha256": "0738b7cf597ae6502e9bcddbb97010013b1b2b7820c7ffa6febd7dbecc07f20f",
+      "source_kind": "character",
+      "source_location": "sha256:0738b7cf597ae6502e9bcddbb97010013b1b2b7820c7ffa6febd7dbecc07f20f/grid[9]/block[0]",
+      "source_path": "data/raw/characters/premaya_another_style.html",
+      "source_slice_sha256": "85c4998763d67bc8ca6239e441cf1d30a97b1f12d6de86bce25c3fe04940d66b",
+      "witness_id": "development-premaya-as-pain"
+    },
+    {
+      "archetypes": [
+        "counter",
+        "stack_or_character_resource",
+        "status_mechanic",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Shigure (Extra Style)",
+      "fact_id": "skill:665dc2d34bc4b5d2cedf",
+      "fact_name": "Fugen Itto-Ryu: Cease - Counter",
+      "record_type": "active_skill",
+      "source_capture_sha256": "6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64",
+      "source_kind": "character",
+      "source_location": "sha256:6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64/grid[12]/block[0]",
+      "source_path": "data/raw/characters/shigure_extra_style.html",
+      "source_slice_sha256": "ca7165fe7b95a86bbfd508d741125a9e7f9f879187de4075bf8f291918e1dfd3",
+      "witness_id": "development-shigure-cease-counter"
+    },
+    {
+      "archetypes": [
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition",
+        "modern_nested_conditions"
+      ],
+      "entity_name": "Soira (Another Style)",
+      "fact_id": "skill:e483f98647b3e08773fc",
+      "fact_name": "Noblesse Oblige",
+      "record_type": "active_skill",
+      "source_capture_sha256": "ca557c5cc1614991157af10978e42570d3c99a6c7771240888a620bdd2a108be",
+      "source_kind": "character",
+      "source_location": "sha256:ca557c5cc1614991157af10978e42570d3c99a6c7771240888a620bdd2a108be/grid[0]/block[0]",
+      "source_path": "data/raw/characters/soira_another_style.html",
+      "source_slice_sha256": "24b2dc82b84f53f47560197bd4238dfb9eb0c7abe87d165d6122a8ba9c29037a",
+      "witness_id": "development-soira-as-cover"
+    },
+    {
+      "archetypes": [
+        "sidekick_auto",
+        "healing_or_revival",
+        "recipient_or_position_condition",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Tetra (Another Style)",
+      "fact_id": "sidekick_skill:4efa2ee5cbed7b7c032a",
+      "fact_name": "Spark Rebellion",
+      "record_type": "sidekick_auto",
+      "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "source_kind": "sidekick",
+      "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/tetra_another_style.html",
+      "source_slice_sha256": "6ec075a9d052f95d51e4a8d474516a4b5d21f158f4468d35728d97a70afbafcf",
+      "witness_id": "development-tetra-auto"
+    },
+    {
+      "archetypes": [
+        "lunatic_variant",
+        "status_mechanic",
+        "pain_poison",
+        "modern_nested_conditions"
+      ],
+      "entity_name": "Wenefica",
+      "fact_id": "skill:4344ebb878d31e00040e",
+      "fact_name": "Lunatic - Risktaker",
+      "record_type": "active_skill",
+      "source_capture_sha256": "6fec556be7dbfeac261a829ef5f51d4ac4be6bcba35140596f1d2d87708a2440",
+      "source_kind": "character",
+      "source_location": "sha256:6fec556be7dbfeac261a829ef5f51d4ac4be6bcba35140596f1d2d87708a2440/grid[0]/block[0]",
+      "source_path": "data/raw/characters/wenefica.html",
+      "source_slice_sha256": "1ff2b8ee85bd15edba1364b68e959f535db86689b971938292c609b303a9af25",
+      "witness_id": "development-wenefica-lunatic"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "multi_hit_or_multi_target",
+        "buff_debuff_or_resistance"
+      ],
+      "entity_name": "Xianhua",
+      "fact_id": "skill:12c5a4d35efb65ce310d",
+      "fact_name": "Horizon",
+      "record_type": "active_skill",
+      "source_capture_sha256": "d832f78c2d591a972c98abb570864483f3821994311c2345f874c23d0cae4703",
+      "source_kind": "character",
+      "source_location": "sha256:d832f78c2d591a972c98abb570864483f3821994311c2345f874c23d0cae4703/grid[9]/block[0]",
+      "source_path": "data/raw/characters/xianhua.html",
+      "source_slice_sha256": "fd998c2f1cc6996d3c8bc909e6c8d4f30683493e13ecfbbf98dd62519fb69ea3",
+      "witness_id": "development-xianhua-horizon"
+    },
+    {
+      "archetypes": [
+        "stack_or_character_resource",
+        "modern_nested_conditions",
+        "multi_hit_or_multi_target",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Yakumo (Another Style)",
+      "fact_id": "skill:a131e88e3d6d3aa0b01c",
+      "fact_name": "Crunch Time",
+      "record_type": "active_skill",
+      "source_capture_sha256": "47422fc5c58e8a2a7bcc1e960c1cbc5847d1c2d3f8bc970188f8d0bd37f2e2e0",
+      "source_kind": "character",
+      "source_location": "sha256:47422fc5c58e8a2a7bcc1e960c1cbc5847d1c2d3f8bc970188f8d0bd37f2e2e0/grid[9]/block[0]",
+      "source_path": "data/raw/characters/yakumo_another_style.html",
+      "source_slice_sha256": "c0eb1567a11971f67f0dbd62df2092fe8861fc3f0079072c7dd5957d7738f4e7",
+      "witness_id": "development-yakumo-crunch-time"
+    },
+    {
+      "archetypes": [
+        "sidekick_auto"
+      ],
+      "disposition": "development_exposed_during_r1_isolation",
+      "entity_name": "Hazama",
+      "exposure_reason": "R1 isolation inspection surfaced a legacy ordinal result or source-only packet text; exclude from frozen validation.",
+      "fact_id": "sidekick_skill:1bc24162306d6e9d330a",
+      "fact_name": "Eternal Unending",
+      "record_type": "sidekick_auto",
+      "reference_fingerprint_sha256": [
+        "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+      ],
+      "source_capture_sha256": "7119b8d9fa1f2e8e3648537dd8bf15a3a82c2988fcb8e86aec040dcb87ad25fd",
+      "source_kind": "sidekick",
+      "source_location": "sha256:7119b8d9fa1f2e8e3648537dd8bf15a3a82c2988fcb8e86aec040dcb87ad25fd/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/hazama.html",
+      "source_slice_sha256": "5e2d3df3c01c5452cb16ed65d31362b87196e0cc284e7e1c9b604d228db6c07c",
+      "source_url": "https://anothereden.wiki/w/Hazama",
+      "witness_id": "fresh-hazama-auto"
+    },
+    {
+      "archetypes": [
+        "sidekick_charge"
+      ],
+      "disposition": "development_exposed_during_r1_isolation",
+      "entity_name": "Laika",
+      "exposure_reason": "R1 isolation inspection surfaced a legacy ordinal result or source-only packet text; exclude from frozen validation.",
+      "fact_id": "sidekick_skill:9abcdd47372ae015907a",
+      "fact_name": "Laika Magic E.",
+      "record_type": "sidekick_charge",
+      "reference_fingerprint_sha256": [
+        "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+      ],
+      "source_capture_sha256": "b287fc08ae3ebb04326157a9e5365088becdc71aec1982ff7a9d4d89e81b1a9c",
+      "source_kind": "sidekick",
+      "source_location": "sha256:b287fc08ae3ebb04326157a9e5365088becdc71aec1982ff7a9d4d89e81b1a9c/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/laika.html",
+      "source_slice_sha256": "ce61af04679683585d158a29854caf29ff5f4481d1d6fa43efbe4349974039d1",
+      "source_url": "https://anothereden.wiki/w/Laika",
+      "witness_id": "fresh-laika-charge"
+    },
+    {
+      "archetypes": [
+        "sidekick_aura"
+      ],
+      "disposition": "development_exposed_during_r1_isolation",
+      "entity_name": "Pyggie",
+      "exposure_reason": "R1 isolation inspection surfaced a legacy ordinal result or source-only packet text; exclude from frozen validation.",
+      "fact_id": "sidekick_aura:b4c7a68e73628bac443a",
+      "fact_name": "Point Drill",
+      "record_type": "sidekick_aura",
+      "reference_fingerprint_sha256": [
+        "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+      ],
+      "source_capture_sha256": "a402b6e574b798c45e9522fb712ecd8223b18d84002ebacf7faea12d292289a7",
+      "source_kind": "sidekick",
+      "source_location": "sha256:a402b6e574b798c45e9522fb712ecd8223b18d84002ebacf7faea12d292289a7/grid[2]/block[0]",
+      "source_path": "data/raw/sidekicks/pyggie.html",
+      "source_slice_sha256": "2f4b1bd40d16d428e64a622286bf9a1c89055a2e662ae113b049b8f9c5c4a826",
+      "source_url": "https://anothereden.wiki/w/Pyggie",
+      "witness_id": "fresh-pyggie-aura"
+    },
+    {
+      "archetypes": [
+        "sidekick_aura",
+        "modern_nested_conditions",
+        "buff_debuff_or_resistance",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Gunce (Another Style)",
+      "fact_id": "sidekick_aura:b270e175d915f37b4eb0",
+      "fact_name": "Phortizo",
+      "record_type": "sidekick_aura",
+      "source_capture_sha256": "f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486/grid[2]/block[0]",
+      "source_path": "data/raw/sidekicks/gunce_another_style.html",
+      "source_slice_sha256": "373c56468e0702c22769b7a5092da376239a169ec559d4a9adc300bdd379f9b0",
+      "witness_id": "heldout-gunce-aura"
+    },
+    {
+      "archetypes": [
+        "sidekick_auto",
+        "modern_nested_conditions",
+        "healing_or_revival"
+      ],
+      "entity_name": "Gunce (Another Style)",
+      "fact_id": "sidekick_skill:42e66a735ecbad695a93",
+      "fact_name": "Apokatástasis",
+      "record_type": "sidekick_auto",
+      "source_capture_sha256": "f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/gunce_another_style.html",
+      "source_slice_sha256": "585b4b9bd74eb08e6cdadfc9d595b6fb1a788fc54e0e97a776a6eb092a70ba72",
+      "witness_id": "heldout-gunce-auto"
+    },
+    {
+      "archetypes": [
+        "sidekick_charge",
+        "modern_nested_conditions",
+        "stack_or_character_resource"
+      ],
+      "entity_name": "Gunce (Another Style)",
+      "fact_id": "sidekick_skill:f6d4394b5aeed3fc46f7",
+      "fact_name": "Ischýs",
+      "record_type": "sidekick_charge",
+      "source_capture_sha256": "f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f71960245af7763b5beb55ca68b2c168198a327bde10d3a9d93272061cffb486/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/gunce_another_style.html",
+      "source_slice_sha256": "e851de3876d1c5d8926ab4b025ecfae2fe5c4d69dfd78ff9df49f7d16a9f1e85",
+      "witness_id": "heldout-gunce-charge"
+    },
+    {
+      "archetypes": [
+        "zone_another_or_radical_zone",
+        "modern_nested_conditions"
+      ],
+      "disposition": "development_exposed_exact_source_slice_overlap",
+      "entity_name": "Kuchinawa",
+      "exposure_reason": "Exact source-slice match to reviewed development witness; development/regression only.",
+      "fact_id": "skill:36f0f4d13efb2a5ccf9b",
+      "fact_name": "Another Zone",
+      "record_type": "active_skill",
+      "source_capture_sha256": "722a033da6c32a56aca41f103900ab2268294b77b714d5f0d13638a97f55c84c",
+      "source_kind": "character",
+      "source_location": "sha256:722a033da6c32a56aca41f103900ab2268294b77b714d5f0d13638a97f55c84c/grid[2]/block[0]",
+      "source_path": "data/raw/characters/kuchinawa.html",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "heldout-kuchinawa-another-zone"
+    },
+    {
+      "archetypes": [
+        "stack_or_character_resource",
+        "recipient_or_position_condition",
+        "pain_poison",
+        "modern_nested_conditions"
+      ],
+      "disposition": "development_exposed_during_r1_isolation",
+      "entity_name": "Minalca",
+      "exposure_reason": "R1 isolation inspection surfaced a legacy ordinal result or source-only packet text; exclude from frozen validation.",
+      "fact_id": "passive:f7100a4dfd8cd467207d",
+      "fact_name": "Tributum Stacking",
+      "record_type": "passive_skill",
+      "source_capture_sha256": "946ded42aee70a5fcedb8021ec582cefd3baeca5b246b3bb870cb01ebfe8660e",
+      "source_kind": "character",
+      "source_location": "sha256:946ded42aee70a5fcedb8021ec582cefd3baeca5b246b3bb870cb01ebfe8660e/grid[13]/block[0]",
+      "source_path": "data/raw/characters/minalca.html",
+      "source_slice_sha256": "f73b00e1a7d6b2d05a914e8001435b6fee8287c3594a918a0de09ec8bfd857cf",
+      "witness_id": "heldout-minalca-tributum"
+    },
+    {
+      "archetypes": [
+        "stack_or_character_resource",
+        "sa_skill_or_passive",
+        "stellar_burst_condition"
+      ],
+      "disposition": "development_exposed_during_r1_isolation",
+      "entity_name": "Sesta (Another Style)",
+      "exposure_reason": "R1 isolation inspection surfaced a legacy ordinal result or source-only packet text; exclude from frozen validation.",
+      "fact_id": "passive:3f32571f6c3420b5864c",
+      "fact_name": "Wolfheart Stacking",
+      "record_type": "passive_skill",
+      "source_capture_sha256": "ff419d2f960be1289b75d5386579cd92efbe9c6f5f9d1b11e4e5501389eabe21",
+      "source_kind": "character",
+      "source_location": "sha256:ff419d2f960be1289b75d5386579cd92efbe9c6f5f9d1b11e4e5501389eabe21/grid[10]/block[0]",
+      "source_path": "data/raw/characters/sesta_another_style.html",
+      "source_slice_sha256": "b63b311a1dea1b892886dcd391bec865ba21291fd938271886d6dd31c336827e",
+      "witness_id": "heldout-sesta-wolfheart"
+    },
+    {
+      "archetypes": [
+        "status_mechanic",
+        "buff_debuff_or_resistance",
+        "multi_hit_or_multi_target",
+        "recipient_or_position_condition"
+      ],
+      "disposition": "development_exposed_during_r1_isolation",
+      "entity_name": "Tsubame (Another Style)",
+      "exposure_reason": "R1 isolation inspection surfaced a legacy ordinal result or source-only packet text; exclude from frozen validation.",
+      "fact_id": "skill:f2a72fd640b0c1f45373",
+      "fact_name": "Ningi: Gansai",
+      "record_type": "active_skill",
+      "source_capture_sha256": "2bd7e22e5cf9ed80850b845116e501b6caa5925e9ae96ec0cfdf30d6cb327686",
+      "source_kind": "character",
+      "source_location": "sha256:2bd7e22e5cf9ed80850b845116e501b6caa5925e9ae96ec0cfdf30d6cb327686/grid[8]/block[0]",
+      "source_path": "data/raw/characters/tsubame_another_style.html",
+      "source_slice_sha256": "fd2284f00fa5c34a7d62fdc99b31c6677e5e96c26e5149acc1a0c7338456b787",
+      "witness_id": "heldout-tsubame-shuriken"
+    },
+    {
+      "archetypes": [
+        "zone_another_or_radical_zone",
+        "modern_nested_conditions",
+        "buff_debuff_or_resistance"
+      ],
+      "disposition": "development_exposed_exact_source_slice_overlap",
+      "entity_name": "Velette",
+      "exposure_reason": "Exact source-slice match to reviewed development witness; development/regression only.",
+      "fact_id": "skill:8ad731e8de59c426d3c0",
+      "fact_name": "Another Zone",
+      "record_type": "active_skill",
+      "source_capture_sha256": "dcc9e0fccdfaa476638aedffc59d134cacee92553f6b5ca9b9f37524405bf4cd",
+      "source_kind": "character",
+      "source_location": "sha256:dcc9e0fccdfaa476638aedffc59d134cacee92553f6b5ca9b9f37524405bf4cd/grid[2]/block[0]",
+      "source_path": "data/raw/characters/velette.html",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "heldout-velette-another-zone"
+    },
+    {
+      "archetypes": [],
+      "disposition": "development_source_exposed_during_r1_isolation",
+      "entity_name": "Akane (Alter),Blooming Blade",
+      "fact_id": "skill:07b22a0f34f2cc397093",
+      "fact_name": "Blooming Blade",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "901299cef6fd1b8803443e46aff870f0732df23aa6d6f611f70d47a5c4e3f659",
+      "source_kind": "character",
+      "source_location": "sha256:901299cef6fd1b8803443e46aff870f0732df23aa6d6f611f70d47a5c4e3f659/grid[6]/block[0]",
+      "source_path": "data/raw/characters/akane_alter_blooming_blade.html",
+      "source_slice_sha256": "5d4183fd783d986495c05f2b315d357da986544fe49bbfbdb5a7152179bf0789",
+      "witness_id": "fresh-akane-alter-blooming-blade"
+    },
+    {
+      "archetypes": [],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Aldo (Another Style)",
+      "fact_id": "passive:3655adf1f2a6b557c738",
+      "fact_name": "Stellar Burst Activation Bonus",
+      "generalization_evidence": false,
+      "record_type": "passive_skill",
+      "source_capture_sha256": "156e6adb63c55e219f0ab5eac3bdc32f4b7339be5cb5b52cd8a34b4069999239",
+      "source_kind": "character",
+      "source_location": "sha256:156e6adb63c55e219f0ab5eac3bdc32f4b7339be5cb5b52cd8a34b4069999239/grid[23]/block[0]",
+      "source_path": "data/raw/characters/aldo_another_style.html",
+      "source_slice_sha256": "a8e28776a097e5bfd5fdd0b578476e73062e1f20867f5d03e0336e455764dc0d",
+      "witness_id": "fresh-aldo-as-stellar-burst-activation-bonus"
+    },
+    {
+      "archetypes": [],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Alphen",
+      "fact_id": "skill:27478a052964af1f8f6c",
+      "fact_name": "Swallow Blade",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "1ff3b8e81b5303b0df04bc0c5e52440b804c44921cde9a7d46a227cf6b8e29e7",
+      "source_kind": "character",
+      "source_location": "sha256:1ff3b8e81b5303b0df04bc0c5e52440b804c44921cde9a7d46a227cf6b8e29e7/grid[2]/block[0]",
+      "source_path": "data/raw/characters/alphen.html",
+      "source_slice_sha256": "94af90d259a75cd2bb67a87f15e2f9987b32a293468f7108db83de815594043a",
+      "witness_id": "fresh-alphen-swallow-blade"
+    },
+    {
+      "archetypes": [
+        "sidekick_aura"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Hyuga",
+      "fact_id": "sidekick_aura:73f42998561cc461356a",
+      "fact_name": "Inherited Will",
+      "generalization_evidence": false,
+      "record_type": "sidekick_aura",
+      "source_capture_sha256": "b03087a8f22eb4b214356b7db48eb056b3b27c6d25233ca728f1e3eb9c011403",
+      "source_kind": "sidekick",
+      "source_location": "sha256:b03087a8f22eb4b214356b7db48eb056b3b27c6d25233ca728f1e3eb9c011403/grid[4]/block[0]",
+      "source_path": "data/raw/sidekicks/hyuga.html",
+      "source_slice_sha256": "5e371f1bdd9235c435b4f7d3c9a69c086ffabd3728df7e8bc0d0f52cc178a8b6",
+      "witness_id": "fresh-hyuga-aura"
+    },
+    {
+      "archetypes": [
+        "sidekick_auto"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Iridian (Attack)",
+      "fact_id": "sidekick_skill:8f9f0fc3d650e9879b03",
+      "fact_name": "Iris Flamma",
+      "generalization_evidence": false,
+      "record_type": "sidekick_auto",
+      "source_capture_sha256": "f82e0b96cd7cc32f14097ce148e70b8c9fb889d77e6c3ed03f464dac1261a197",
+      "source_kind": "sidekick",
+      "source_location": "sha256:f82e0b96cd7cc32f14097ce148e70b8c9fb889d77e6c3ed03f464dac1261a197/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/iridian_attack.html",
+      "source_slice_sha256": "3e55257302f9ead1a0d947d9228055e6a04936fd56cb5af3abec8d3ad5dbb3b7",
+      "witness_id": "fresh-iridian-attack-auto"
+    },
+    {
+      "archetypes": [
+        "sidekick_charge"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Jilya",
+      "fact_id": "sidekick_skill:c6082a2e7f31d558b297",
+      "fact_name": "Reconstruct",
+      "generalization_evidence": false,
+      "record_type": "sidekick_charge",
+      "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+      "source_kind": "sidekick",
+      "source_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/jilya.html",
+      "source_slice_sha256": "f43edce67714777fb05b6eff9e1613561419329d4ffe7bbbbe8aaafcdd0a154c",
+      "witness_id": "fresh-jilya-charge"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "stack_or_character_resource",
+        "multi_hit_or_multi_target"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Akane",
+      "fact_id": "skill:d88537d18523a18bf48b",
+      "fact_name": "Fearless Persistence",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a",
+      "source_kind": "character",
+      "source_location": "sha256:184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a/grid[11]/block[0]",
+      "source_path": "data/raw/characters/akane.html",
+      "source_slice_sha256": "04565c904eddc64ad4bb5f178d1d53d90234c731818df6ea9c96fbe7deea67fb",
+      "witness_id": "heldout-akane-fearless-persistence"
+    },
+    {
+      "archetypes": [
+        "lunatic_variant",
+        "named_child_definition",
+        "stack_or_character_resource",
+        "modern_nested_conditions",
+        "multi_hit_or_multi_target"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Alma (Another Style)",
+      "fact_id": "skill:23ab8562e6c888b51544",
+      "fact_name": "Lunatic - Copy",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "source_kind": "character",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[0]/block[0]",
+      "source_path": "data/raw/characters/alma_another_style.html",
+      "source_slice_sha256": "492461941219864519842107dafe399c7d0f60cf549c50a3cb0529ff38e22c37",
+      "witness_id": "heldout-alma-lunatic-copy"
+    },
+    {
+      "archetypes": [
+        "zone_another_or_radical_zone",
+        "modern_nested_conditions",
+        "multi_hit_or_multi_target",
+        "recipient_or_position_condition"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Anabel (Another Style)",
+      "fact_id": "skill:05d2958b8c2a50fcb33b",
+      "fact_name": "Aegir Saber",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "6062b9c0b59509d6bdea6be670e23084c9911a3c4457b4216ea12b26a9824661",
+      "source_kind": "character",
+      "source_location": "sha256:6062b9c0b59509d6bdea6be670e23084c9911a3c4457b4216ea12b26a9824661/grid[9]/block[0]",
+      "source_path": "data/raw/characters/anabel_another_style.html",
+      "source_slice_sha256": "b171731581b87574ba2671098ec709cf0d92c68d6e6ac76776bab91dec145a26",
+      "witness_id": "heldout-anabel-as-aegir-saber"
+    },
+    {
+      "archetypes": [
+        "simple_legacy",
+        "pain_poison",
+        "status_mechanic"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Asia",
+      "fact_id": "skill:c173e0af7d2055b85c34",
+      "fact_name": "Venom Shot",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "874e1bca6412bfcbbe3ec5e676bee23e96af032d273079da0af496d59056e32f",
+      "source_kind": "character",
+      "source_location": "sha256:874e1bca6412bfcbbe3ec5e676bee23e96af032d273079da0af496d59056e32f/grid[3]/block[0]",
+      "source_path": "data/raw/characters/asia.html",
+      "source_slice_sha256": "b7436fbcb21cfccd9216bf8aa2cc6dbd438caf8eda48132dfdf2f0e8a226cd15",
+      "witness_id": "heldout-asia-venom-shot"
+    },
+    {
+      "archetypes": [
+        "sa_skill_or_passive",
+        "stellar_burst_condition",
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Cyrus",
+      "fact_id": "passive:3eebb7574eaeee6796e6",
+      "fact_name": "Cyrus Battle Start Buff",
+      "generalization_evidence": false,
+      "record_type": "passive_skill",
+      "source_capture_sha256": "4b8818f5f28eb6746b82afc6e7768a54e4c6f33c0bc973cf7a273e574d4e31a6",
+      "source_kind": "character",
+      "source_location": "sha256:4b8818f5f28eb6746b82afc6e7768a54e4c6f33c0bc973cf7a273e574d4e31a6/grid[18]/block[0]",
+      "source_path": "data/raw/characters/cyrus.html",
+      "source_slice_sha256": "7069fcb1d905858377ac517fcaed83b1e4eff4a66ab77baf16479ccbd13d394d",
+      "witness_id": "heldout-cyrus-battle-start"
+    },
+    {
+      "archetypes": [
+        "simple_legacy",
+        "multi_hit_or_multi_target"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Dewey",
+      "fact_id": "skill:0107eb71fb8a18ce5dfe",
+      "fact_name": "Mist Blast",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "60da312fd6d7512353fef061a0823f67dff1df5f9b3ab417a82d1039d5939239",
+      "source_kind": "character",
+      "source_location": "sha256:60da312fd6d7512353fef061a0823f67dff1df5f9b3ab417a82d1039d5939239/grid[9]/block[0]",
+      "source_path": "data/raw/characters/dewey.html",
+      "source_slice_sha256": "44bffa105bbd71dfd9e10741e90741f3d2b3afbd9d9a3d9ff0ced80d4c00e6e7",
+      "witness_id": "heldout-dewey-mist-blast"
+    },
+    {
+      "archetypes": [
+        "lunatic_variant",
+        "modern_nested_conditions",
+        "buff_debuff_or_resistance"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Eleanor",
+      "fact_id": "skill:1867792c8867166496df",
+      "fact_name": "Lunatic - Mind's Eye",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "8b5e4978eb415c24584961d61c675763516775cd47355619c82bf047c8e3f4f4",
+      "source_kind": "character",
+      "source_location": "sha256:8b5e4978eb415c24584961d61c675763516775cd47355619c82bf047c8e3f4f4/grid[0]/block[0]",
+      "source_path": "data/raw/characters/eleanor.html",
+      "source_slice_sha256": "ffc0afbdb2869fd5a2f3a58accd6184aa47c3c6d74b90aca1392dcfa9fc2896d",
+      "witness_id": "heldout-eleanor-lunatic"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "healing_or_revival",
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Mariel (Extra Style)",
+      "fact_id": "skill:8dbfe58026a10dfe2f5b",
+      "fact_name": "Oratio Salutis - Prayer",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "40d73b3e8d93bbb6a4027f43588a38dadeb08da9521a76c757467c5c3b18b6ab",
+      "source_kind": "character",
+      "source_location": "sha256:40d73b3e8d93bbb6a4027f43588a38dadeb08da9521a76c757467c5c3b18b6ab/grid[12]/block[0]",
+      "source_path": "data/raw/characters/mariel_extra_style.html",
+      "source_slice_sha256": "87cf1fa8518c4219fd8d197bf4b4bf1b190a92212b8d5326f99794a54ef41f61",
+      "witness_id": "heldout-mariel-prayer"
+    },
+    {
+      "archetypes": [
+        "simple_legacy",
+        "buff_debuff_or_resistance"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Prai",
+      "fact_id": "skill:12dba8ba5300b89fef7e",
+      "fact_name": "Judgment Ray",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "1fd31a5c2580cce3712d6e0672d183ff4dbc13016e8b121bdb11ca1eb88876ec",
+      "source_kind": "character",
+      "source_location": "sha256:1fd31a5c2580cce3712d6e0672d183ff4dbc13016e8b121bdb11ca1eb88876ec/grid[1]/block[0]",
+      "source_path": "data/raw/characters/prai.html",
+      "source_slice_sha256": "470d75f2919d81e2e2a87cafd831d63d44aa6116856922e5a815ba2ed7ce63a8",
+      "witness_id": "heldout-prai-judgment-ray"
+    },
+    {
+      "archetypes": [
+        "counter",
+        "stack_or_character_resource",
+        "multi_hit_or_multi_target",
+        "status_mechanic"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Shion (Extra Style)",
+      "fact_id": "skill:3e0f25580e903f5f7ae2",
+      "fact_name": "Warrior's Counter",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "9d84a75b0045595d62f7d5fda7d83300833b5573600617cbbc3f84f4083cbf50",
+      "source_kind": "character",
+      "source_location": "sha256:9d84a75b0045595d62f7d5fda7d83300833b5573600617cbbc3f84f4083cbf50/grid[5]/block[0]",
+      "source_path": "data/raw/characters/shion_extra_style.html",
+      "source_slice_sha256": "9f09642ad61573be033b0ccfb0e9ac5fde12faeca5c66b932aaff6ac01ea1c13",
+      "witness_id": "heldout-shion-warriors-counter"
+    },
+    {
+      "archetypes": [
+        "stack_or_character_resource",
+        "multi_hit_or_multi_target",
+        "modern_nested_conditions"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Tiramisu (Another Style)",
+      "fact_id": "skill:1fdc6a015079a2944d1f",
+      "fact_name": "Calamity: Dragon",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "ad3684119741bf61d5a60a76e3bb67e8cf7cc6e28759cf22a872aa568b4e9350",
+      "source_kind": "character",
+      "source_location": "sha256:ad3684119741bf61d5a60a76e3bb67e8cf7cc6e28759cf22a872aa568b4e9350/grid[7]/block[0]",
+      "source_path": "data/raw/characters/tiramisu_another_style.html",
+      "source_slice_sha256": "00c1dd7e4a5855734086ed8ebc381e13d1cbc395bee8a5da37e58fe3e1a9b77e",
+      "witness_id": "heldout-tiramisu-calamity-dragon"
+    },
+    {
+      "archetypes": [
+        "status_mechanic",
+        "buff_debuff_or_resistance",
+        "multi_hit_or_multi_target"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Toova (Extra Style)",
+      "fact_id": "skill:6bb95f1412decf796107",
+      "fact_name": "Ringing Night",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "853b8b1ddcb2699f2a710abf7dfc41ae7834717a7b7c0efc068515ba5db2bf50",
+      "source_kind": "character",
+      "source_location": "sha256:853b8b1ddcb2699f2a710abf7dfc41ae7834717a7b7c0efc068515ba5db2bf50/grid[10]/block[0]",
+      "source_path": "data/raw/characters/toova_extra_style.html",
+      "source_slice_sha256": "b104704c28885d04625d702d786dc811dd8246acb998621b6cad4c8ced458110",
+      "witness_id": "heldout-toova-ringing-night"
+    },
+    {
+      "archetypes": [
+        "simple_legacy",
+        "multi_hit_or_multi_target"
+      ],
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Urania",
+      "fact_id": "skill:aa7d557f6a32d81fa220",
+      "fact_name": "Round-House Kick",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "source_capture_sha256": "e2cdaffa9d97b0f1050d82b076914c1801773fef314b2f3e9101b23a6c1983cf",
+      "source_kind": "character",
+      "source_location": "sha256:e2cdaffa9d97b0f1050d82b076914c1801773fef314b2f3e9101b23a6c1983cf/grid[3]/block[0]",
+      "source_path": "data/raw/characters/urania.html",
+      "source_slice_sha256": "5841428b80711bf67234a9ff87de247b97b1cc5b57b5b6dd79e1f71e33b5711f",
+      "witness_id": "heldout-urania-round-house-kick"
+    },
+    {
+      "disposition": "development_exposed_by_unbounded_r1_inspection",
+      "entity_name": "Spirika",
+      "fact_id": "skill:232579b8b1686bb1a7f6",
+      "fact_name": "Orbis Lacteus",
+      "generalization_evidence": false,
+      "record_type": "active_skill",
+      "selection_basis": "distinct entity capture and source slice; active-skill record selected without semantic output",
+      "source_capture_sha256": "047fe91445f7e9ce5c5a00af5d595fbd6c3a5fa4c2d0ac4eb8931e7319f35ed6",
+      "source_kind": "character",
+      "source_location": "sha256:047fe91445f7e9ce5c5a00af5d595fbd6c3a5fa4c2d0ac4eb8931e7319f35ed6/grid[6]/block[0]",
+      "source_path": "data/raw/characters/spirika.html",
+      "source_slice_sha256": "9ce10135ae1b92a99dca410512ad43fc2ec943b0cef3d01b691dd3b59b648858",
+      "witness_id": "fresh-r1-000e838f9121"
+    }
+  ],
+  "evaluator_contract": {
+    "generic_scoped_effect_is_correct_capability_label": false,
+    "legacy_ordinal_metric": "historical diagnostic only; not semantic accuracy or generalization evidence",
+    "matching": "maximum one-to-one bipartite matching; no prediction or expected atom can be reused",
+    "operation_vocabulary": [
+      "damage",
+      "restore",
+      "apply",
+      "increase",
+      "decrease",
+      "remove",
+      "activate",
+      "consume",
+      "require",
+      "conditional",
+      "unknown"
+    ],
+    "per_witness_results": "withheld from remediation for protected and fresh validation cohorts; owner evaluation returns aggregate only",
+    "scoped_source_anchor": "pinned source block location plus a short unique verbatim quote; quotes and answers remain in the owner-held oracle",
+    "semantic_match_key": [
+      "source_capture_sha256",
+      "source_fact_id",
+      "scoped_source_anchor",
+      "atomic_capability_id",
+      "operation",
+      "occurrence_kind"
+    ],
+    "separate_metrics": [
+      "capability_label_precision_recall",
+      "effect_occurrence_precision_recall",
+      "dependency_occurrence_precision_recall",
+      "field_correctness",
+      "condition_attachment",
+      "typed_relationship_correctness",
+      "C1.1_fidelity_dimensions",
+      "coverage_including_unknown_or_unresolved"
+    ],
+    "unknown_coverage": "all frozen witnesses and all C1.1 dimensions remain in denominators; unresolved and not-applicable statuses are separately counted"
+  },
+  "excluded_taxonomy_gap_cases": [
+    {
+      "coverage_category": "passive",
+      "disposition": "excluded_non_evaluable_taxonomy_gap",
+      "entity_name": "Thillelille (Another Style)",
+      "fact_id": "passive:ffe6a2a929bd155810ed",
+      "fact_name": "Battle Start Koakh Stacking",
+      "gap_category": "initial_resource_stack_state_without_canonical_capability",
+      "record_type": "passive_skill",
+      "scored_as_semantic_atom": false,
+      "source_capture_sha256": "dd55fdda8ec401de82174310597b635be772d40d7946291e59338a9394ae9d1e",
+      "source_location": "sha256:dd55fdda8ec401de82174310597b635be772d40d7946291e59338a9394ae9d1e/grid[10]/block[0]",
+      "source_path": "data/raw/characters/thillelille_another_style.html",
+      "source_slice_sha256": "a80fbd4f8305c64fc20df9c3af94397baaab9e132044e087b875447fe3a424bc",
+      "witness_id": "fresh-thillelille-as-koakh-passive"
+    }
+  ],
+  "held_out_witness_count": 7,
+  "held_out_witnesses": [
+    {
+      "coverage_tags": [
+        "sidekick_auto",
+        "complex_multi_effect_skill"
+      ],
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Minimander",
+      "fact_id": "sidekick_skill:dba67d8609f89ceac109",
+      "fact_name": "Mini-Inferno",
+      "record_type": "sidekick_auto",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19",
+      "source_kind": "sidekick",
+      "source_location": "sha256:8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/minimander.html",
+      "source_slice_sha256": "4ced2e7ee9763eafd533baecf052d6be6b5bf2adcb5220a91d9811589775631c",
+      "witness_id": "fresh-minimander-auto"
+    },
+    {
+      "coverage_tags": [
+        "sidekick_charge",
+        "complex_multi_effect_skill",
+        "shared_mechanic",
+        "parent_child_relation",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Tetra",
+      "fact_id": "sidekick_skill:62088d706220b57f1fa4",
+      "fact_name": "Reincarnation",
+      "record_type": "sidekick_charge",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87",
+      "source_kind": "sidekick",
+      "source_location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/tetra.html",
+      "source_slice_sha256": "6cf06a1a9575197f2ba4626c5741325e520d8249395f0fe77a7db3144448acdc",
+      "witness_id": "fresh-tetra-charge"
+    },
+    {
+      "coverage_tags": [
+        "sidekick_aura",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Mordy",
+      "fact_id": "sidekick_aura:f3e831db190b414c52f7",
+      "fact_name": "Time Wanderer",
+      "record_type": "sidekick_aura",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "6c1120bf72bf46fc501ff6bf3d79bee6621401a90c2c508c3162ef282af86bdd",
+      "source_kind": "sidekick",
+      "source_location": "sha256:6c1120bf72bf46fc501ff6bf3d79bee6621401a90c2c508c3162ef282af86bdd/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/mordy.html",
+      "source_slice_sha256": "16cb5fbb095e4de94337ef0dc92ad7799ebd9782dce6c79c2ebd2f0b55afb705",
+      "witness_id": "fresh-mordy-aura"
+    },
+    {
+      "coverage_tags": [
+        "simple_skill"
+      ],
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Erina",
+      "fact_id": "skill:39f11594959ae5b6d20e",
+      "fact_name": "Refresh",
+      "record_type": "active_skill",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe",
+      "source_kind": "character",
+      "source_location": "sha256:6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe/grid[2]/block[0]",
+      "source_path": "data/raw/characters/erina.html",
+      "source_slice_sha256": "c4f50af57acf15800e52b7db136745a4cfe9daac74ae3b0ea030e62841e71b80",
+      "witness_id": "fresh-erina-refresh"
+    },
+    {
+      "coverage_tags": [
+        "complex_multi_effect_skill",
+        "stellar_or_state_driven_variant",
+        "shared_mechanic",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "display_label": "Isuka (Alter) (Another Style)",
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+      "fact_id": "skill:b981957455a7dbd05aae",
+      "fact_name": "Andante",
+      "record_type": "active_skill",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "09898c19762f9e0ff5f6797b016692838183bbfa3632101bc0078dfe7fbb5aae",
+      "source_kind": "character",
+      "source_location": "sha256:09898c19762f9e0ff5f6797b016692838183bbfa3632101bc0078dfe7fbb5aae/grid[17]/block[0]",
+      "source_path": "data/raw/characters/isuka_alter_another_style_black_clad_sw_another_style.html",
+      "source_slice_sha256": "7efdc680b25db9bfd0a6a416e3fded0083815e0248bc6418564ef514e07b2111",
+      "witness_id": "fresh-isuka-alter-andante"
+    },
+    {
+      "coverage_tags": [
+        "shared_mechanic",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "display_label": "Myunfa (Alter) (Another Style)",
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Myunfa (Alter) (Another Style),Porcelain Pixie (Another Style)",
+      "fact_id": "passive:9fb47053d32547d0b8de",
+      "fact_name": "Radical Zone",
+      "record_type": "passive_skill",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f",
+      "source_kind": "character",
+      "source_location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+      "source_path": "data/raw/characters/myunfa_alter_another_style_porcelain_pixie_another_style.html",
+      "source_slice_sha256": "489f53a583bef3c30936694f922b0f9dc6ebf0db31a9c63cfe9efb1038c1f8d8",
+      "witness_id": "fresh-myunfa-alter-radical-zone"
+    },
+    {
+      "coverage_tags": [
+        "passive",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "disposition": "fresh_replacement_frozen",
+      "entity_name": "Yuna",
+      "fact_id": "passive:32a72284b507f529e807",
+      "fact_name": "Turn Start Status Immunity",
+      "record_type": "passive_skill",
+      "selection_basis": "Owner-approved passive replacement for a non-evaluable taxonomy-gap witness; distinct pinned capture and exact source slice selected from source metadata without classifier output.",
+      "source_capture_sha256": "1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89",
+      "source_kind": "character",
+      "source_location": "sha256:1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89/grid[13]/block[0]",
+      "source_path": "data/raw/characters/yuna.html",
+      "source_slice_sha256": "76042f3513492297b88cef53622de611f791e8e86c5400c19ac23bf2c359cd2c",
+      "witness_id": "fresh-yuna-turn-start-status-immunity"
+    }
+  ],
+  "known_regression_count": 7,
+  "known_regressions": [
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "stack_or_character_resource",
+        "lunatic_variant",
+        "named_child_definition",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Iphi",
+      "fact_id": "skill:d7e4e1721363f2159f38",
+      "fact_name": "Blood Ritual",
+      "record_type": "active_skill",
+      "regression_key": "iphi_lunatic_child_definition_unresolved",
+      "source_capture_sha256": "ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db",
+      "source_kind": "character",
+      "source_location": "sha256:ed227dc69565af69264684612f783feb5077e08e95dcd21c8939a022560f49db/grid[1]/block[0]",
+      "source_path": "data/raw/characters/iphi.html",
+      "source_slice_sha256": "716aaa7789e683ffcbd5507fe80634215d4f725d1b587378ecec68284d9d6a66",
+      "witness_id": "known-iphi-blood-ritual"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "counter",
+        "buff_debuff_or_resistance",
+        "multi_hit_or_multi_target",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Alma (Another Style)",
+      "fact_id": "skill:5f6ecc8bc37a12404137",
+      "fact_name": "Refraction Bullet",
+      "record_type": "active_skill",
+      "regression_key": "alma_as_counter_child_binding",
+      "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "source_kind": "character",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+      "source_path": "data/raw/characters/alma_another_style.html",
+      "source_slice_sha256": "074b1000da96e19c814d3956fb305b22d01b5c4b69dad2c7954022a0716d24c6",
+      "witness_id": "known-alma-refraction-counter"
+    },
+    {
+      "archetypes": [
+        "sidekick_charge",
+        "healing_or_revival",
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Tetra (Another Style)",
+      "fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+      "fact_name": "Ruincarnation",
+      "record_type": "sidekick_charge",
+      "regression_key": "tetra_another_style_charge_missing_from_character_replay",
+      "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "source_kind": "sidekick",
+      "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/tetra_another_style.html",
+      "source_slice_sha256": "f94d3922f693647629c0db1d52b346e2e2d7236bdb88bcbe37b709133db80bf9",
+      "witness_id": "known-tetra-ruincarnation"
+    },
+    {
+      "archetypes": [
+        "simple_legacy"
+      ],
+      "entity_name": "Darunis",
+      "fact_id": "skill:2f7fe641bb7a81a7b141",
+      "fact_name": "Hunter Shoot",
+      "record_type": "active_skill",
+      "regression_key": "darunis_hunters_fangs_wind_source_conflict",
+      "source_capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756",
+      "source_conflict": "The unsupported Hunter's Fangs/Wind expectation is not present in the admitted capture or real catalog fact and remains unresolved.",
+      "source_kind": "character",
+      "source_location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+      "source_path": "data/raw/characters/darunis.html",
+      "source_slice_sha256": "c622bb172ed9887175e66dead6c9d3c5c090db2863ac246223ad91715d213e5e",
+      "witness_id": "known-darunis-hunters-fangs-conflict"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "counter",
+        "stack_or_character_resource",
+        "pain_poison",
+        "multi_hit_or_multi_target"
+      ],
+      "entity_name": "Shigure (Extra Style)",
+      "fact_id": "skill:226e7903b8ac87843785",
+      "fact_name": "Ripper Asura",
+      "record_type": "active_skill",
+      "regression_key": "shigure_es_counter_dependency_attachment",
+      "source_capture_sha256": "6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64",
+      "source_kind": "character",
+      "source_location": "sha256:6e3619fcb9f6448705bff895cc5b445d8cecfa4f919625186ccf668426c0ae64/grid[9]/block[0]",
+      "source_path": "data/raw/characters/shigure_extra_style.html",
+      "source_slice_sha256": "b3d6435db50f757ff3f51e8c8f84351ee25400594c15e8ef8328ee8b6ebbade9",
+      "witness_id": "known-shigure-ripper-counter"
+    },
+    {
+      "archetypes": [
+        "sidekick_aura",
+        "modern_nested_conditions",
+        "buff_debuff_or_resistance",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Kumos (Another Style)",
+      "fact_id": "sidekick_aura:1b7415c27c4eea0a7188",
+      "fact_name": "Rejection",
+      "record_type": "sidekick_aura",
+      "regression_key": "kumos_another_style_aura_record_kind_collapsed",
+      "source_capture_sha256": "0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840",
+      "source_kind": "sidekick",
+      "source_location": "sha256:0b0074a8c65fc58230fca099a6ef5c7319085d83163448e5f1c8ce118bf06840/grid[3]/block[0]",
+      "source_path": "data/raw/sidekicks/kumos_another_style.html",
+      "source_slice_sha256": "042696938d7f7fc8126d942accf42ec76a9e15fc21c158eca4ed0c4aa3671d82",
+      "witness_id": "known-kumos-rejection-aura"
+    },
+    {
+      "archetypes": [
+        "modern_nested_conditions",
+        "named_child_definition",
+        "healing_or_revival",
+        "guard_cover_or_hold_ground",
+        "recipient_or_position_condition"
+      ],
+      "entity_name": "Anabel (Extra Style)",
+      "fact_id": "skill:438aa7e1d0e071c14c43",
+      "fact_name": "Knight's Pride",
+      "record_type": "active_skill",
+      "regression_key": "anabel_es_prayer_child_definition_unresolved",
+      "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "source_kind": "character",
+      "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+      "source_path": "data/raw/characters/anabel_extra_style.html",
+      "source_slice_sha256": "bb15fed77349477d146b6912701202cba85c75f4d8d0856c1b57581b2a5c790e",
+      "witness_id": "known-anabel-prayer-child"
+    }
+  ],
+  "oracle_custody": {
+    "adjudication_status": "Owner completed source-only adjudication for all seven scoreable frozen witnesses after replacing the non-evaluable Thillelille record with Yuna; the Thillelille case remains a separate unscored taxonomy gap.",
+    "procedural_separation_limitation": "The private path is mode 0700/0600 and outside the repository, but processes running as the same OS user can technically read it. R2-R4 must not access the owner path or run the owner evaluator; only the human owner runs aggregate evaluation at R5 after the remediation freeze.",
+    "release_gate": "R5 only, after remediation freeze; any earlier access invalidates this validation cohort",
+    "schema_version": "c2-atomic-oracle-1",
+    "semantic_oracle": "owner-controlled at /home/shogunix/c2-private/c2-r1-owner-oracle.json; outside the repository and never copied into shared workspace during R2-R4.",
+    "sha256": "4213138b3aa98c7196840754d5222a826ed1820622d8542983790942699a5e1b"
+  },
+  "overlap_audit": {
+    "approved_reuse_policy": "An exact prior witness/source-slice reuse is not fresh. Shared reusable/global mechanics or references do not disqualify a distinct fresh witness.",
+    "direct_capture_overlap_pairs": [
+      {
+        "reviewed_witness_id": "known-alma-refraction-counter",
+        "same_capture_sha256": true,
+        "same_source_slice_sha256": false,
+        "validation_witness_id": "heldout-alma-lunatic-copy"
+      }
+    ],
+    "exact_source_slice_overlap_pairs": [
+      {
+        "reviewed_witness_id": "development-claude-es-another-zone",
+        "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+        "validation_witness_id": "heldout-kuchinawa-another-zone"
+      },
+      {
+        "reviewed_witness_id": "development-claude-es-another-zone",
+        "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+        "validation_witness_id": "heldout-velette-another-zone"
+      }
+    ],
+    "fresh_development_reference_overlap_pairs": [
+      {
+        "development_witness_id": "development-aisha-mp-restore",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-aisha-mp-restore",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-aisha-mp-restore",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-aisha-twilight-symphony",
+        "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
+        "shared_reference_fingerprints": [
+          "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160"
+        ]
+      },
+      {
+        "development_witness_id": "development-aldo-starwyrm-slash",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-aldo-starwyrm-slash",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-alma-kaleidoscope",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-alma-kaleidoscope",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-anabel-aegis-boon",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-anabel-aegis-boon",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-azami-hold-ground",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-azami-hold-ground",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-azami-hold-ground",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-cerius-empyrean-flash",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-cerius-empyrean-flash",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-claude-es-another-zone",
+        "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
+        "shared_reference_fingerprints": [
+          "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160",
+          "8a63607cee10540f95e979b38618344b5d89e1f362981c04b43c7bb9a83b1578"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-hameow-aura",
+        "fresh_witness_id": "fresh-mordy-aura",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "development-kumos-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-kumos-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-kumos-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-moke-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-moke-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-moke-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-pizzica-oratorio",
+        "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
+        "shared_reference_fingerprints": [
+          "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160"
+        ]
+      },
+      {
+        "development_witness_id": "development-shigure-cease-counter",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
+        ]
+      },
+      {
+        "development_witness_id": "development-tetra-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-tetra-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-tetra-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-xianhua-horizon",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-aldo-as-stellar-burst-activation-bonus",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-aldo-as-stellar-burst-activation-bonus",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hazama-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hazama-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hazama-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hyuga-aura",
+        "fresh_witness_id": "fresh-mordy-aura",
+        "shared_reference_fingerprints": [
+          "251638bf9c6eab47b425540a095b6396f097a44ebd4c51f317912d50a39e32d1",
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-iridian-attack-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-iridian-attack-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-iridian-attack-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-jilya-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-jilya-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-jilya-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-laika-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-laika-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-laika-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-pyggie-aura",
+        "fresh_witness_id": "fresh-mordy-aura",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-akane-fearless-persistence",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-akane-fearless-persistence",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-dewey-mist-blast",
+        "fresh_witness_id": "fresh-isuka-alter-andante",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-aura",
+        "fresh_witness_id": "fresh-mordy-aura",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-kuchinawa-another-zone",
+        "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
+        "shared_reference_fingerprints": [
+          "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160",
+          "8a63607cee10540f95e979b38618344b5d89e1f362981c04b43c7bb9a83b1578"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-mariel-prayer",
+        "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
+        "shared_reference_fingerprints": [
+          "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-minalca-tributum",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-minalca-tributum",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-minalca-tributum",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-sesta-wolfheart",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-sesta-wolfheart",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-sesta-wolfheart",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-velette-another-zone",
+        "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
+        "shared_reference_fingerprints": [
+          "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160",
+          "8a63607cee10540f95e979b38618344b5d89e1f362981c04b43c7bb9a83b1578"
+        ]
+      }
+    ],
+    "fresh_internal_reference_overlap_pairs": [
+      {
+        "fresh_witness_ids": [
+          "fresh-isuka-alter-andante",
+          "fresh-yuna-turn-start-status-immunity"
+        ],
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "fresh_witness_ids": [
+          "fresh-minimander-auto",
+          "fresh-tetra-charge"
+        ],
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "fresh_witness_ids": [
+          "fresh-minimander-auto",
+          "fresh-yuna-turn-start-status-immunity"
+        ],
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "fresh_witness_ids": [
+          "fresh-tetra-charge",
+          "fresh-yuna-turn-start-status-immunity"
+        ],
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      }
+    ],
+    "fresh_shared_reference_pair_count_with_development": 72,
+    "fresh_shared_reference_pair_count_within_replacement_cohort": 4,
+    "new_fresh_capture_overlap_with_prior_witnesses": 0,
+    "new_fresh_exact_source_slice_overlap_with_prior_witnesses": 0,
+    "prior_validation_disposition": "all prior validation identities were moved to development after unbounded source-search output could not establish an untouched subset",
+    "recomputed_hash_checks": {
+      "capture_hashes_verified": 64,
+      "development_and_fresh_witnesses_checked": 64,
+      "disposition": "All seven selected fresh witnesses have distinct source captures and exact source slices from development; shared reference fingerprints are recorded and are permitted by the approved reuse policy.",
+      "fresh_vs_development_exact_capture_pairs": 0,
+      "fresh_vs_development_exact_source_slice_pairs": 0,
+      "fresh_vs_development_shared_reference_pairs": 72,
+      "method": "Re-resolved all development and fresh witnesses from pinned captures using the source-fidelity selector; compared capture SHA-256, source-slice SHA-256, and source location; recomputed canonical reference fingerprints without emitting source text or URLs.",
+      "recorded_shared_reference_fingerprint_pairs_match_recomputation": true,
+      "source_locations_verified": 64,
+      "source_slice_hashes_verified": 64,
+      "within_fresh_cohort_shared_reference_pairs": 4
+    },
+    "reference_fingerprints": "SHA-256(canonical source-reference URL with fragment when present); URLs and reference text are omitted from the committed manifest",
+    "reviewed_vs_original_validation_shared_reference_audit": {
+      "reference_text_disclosed": false,
+      "shared_reference_pair_count": 18,
+      "validation_witnesses_with_any_shared_reference_fingerprint": 10
+    }
+  },
+  "paired_pre_remediation_baseline": {
+    "cohort": "seven-witness fresh replacement cohort only; legacy validation cohort has historical ordinal diagnostic and no corrected independent semantic baseline",
+    "evaluator_version": "c2-atomic-eval-1.0.0",
+    "implementation": "current C2 implementation at b480642, before any R2-R4 changes",
+    "output": "artifacts/evidence/feature_c2_pre_remediation_baseline.json; aggregate arm/cohort metrics only, no per-witness rows or semantic values",
+    "status": "produced against the final frozen Yuna cohort and owner-held oracle; no protected answers or per-witness comparisons returned"
+  },
+  "r5_reserved_post_fix_human_sample": [
+    "fresh-minimander-auto",
+    "fresh-tetra-charge",
+    "fresh-mordy-aura",
+    "fresh-erina-refresh",
+    "fresh-isuka-alter-andante",
+    "fresh-myunfa-alter-radical-zone",
+    "fresh-yuna-turn-start-status-immunity"
+  ],
+  "selection_policy": {
+    "exact_source_slice_duplicates_removed_from_validation": true,
+    "fresh_passive_addition_owner_accepted": true,
+    "fresh_replacements_use_distinct_pinned_captures": true,
+    "known_regressions_are_generalization_evidence": false,
+    "protected_validation_results_are_hidden_from_routine_reports": true,
+    "random_percentage_split": false,
+    "required_sidekick_auto_charge_aura_covered": true,
+    "reviewed_gunce_are_development": true,
+    "source_exposed_fresh_records_are_reclassified_as_development": true,
+    "unbounded_search_exposure_reclassifies_entire_legacy_validation_cohort": true
+  },
+  "source_authority": {
+    "human_review_authority": "artifacts/evidence/feature_c2_human_review.md",
+    "initial_slice_manifest": "tests/fixtures/source_fidelity/source_slice_manifest.json",
+    "initial_witness_manifest": "src/etl/source_fidelity_manifest.json",
+    "source_capture_authority": "raw capture SHA-256 and pinned source URL; source slice extracted by source-fidelity structural resolver"
+  },
+  "status": "C2-R1 evaluation boundary frozen; seven-witness aggregate-only pre-remediation baseline produced before R2-R4 changes."
+}

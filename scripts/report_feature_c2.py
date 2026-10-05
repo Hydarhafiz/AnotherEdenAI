@@ -6,33 +6,17 @@ import argparse
 import json
 from pathlib import Path
 
-from src.etl.c2_scoped_classification import build_c2_report, evaluate_c2_oracle
+from src.etl.c2_scoped_classification import build_c2_report
+
+DEVELOPMENT_FIDELITY_ORACLE = Path("tests/fixtures/source_fidelity/c2_development_oracle.json")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Report C2 scoped classification and review-reduction evidence")
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--fidelity-oracle", type=Path)
-    parser.add_argument("--occurrence-oracle", type=Path)
-    parser.add_argument("--include-held-out", action="store_true")
     args = parser.parse_args()
-
-    fidelity_oracle = (
-        json.loads(args.fidelity_oracle.read_text(encoding="utf-8"))
-        if args.fidelity_oracle
-        else None
-    )
-    report = build_c2_report(
-        fidelity_oracle=fidelity_oracle,
-        include_held_out=args.include_held_out,
-    )
-    if args.occurrence_oracle:
-        occurrence_oracle = json.loads(args.occurrence_oracle.read_text(encoding="utf-8"))
-        report["oracle_evaluation"] = evaluate_c2_oracle(
-            report,
-            occurrence_oracle,
-            include_held_out=args.include_held_out,
-        )
+    fidelity_oracle = json.loads(DEVELOPMENT_FIDELITY_ORACLE.read_text(encoding="utf-8"))
+    report = build_c2_report(fidelity_oracle=fidelity_oracle)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",

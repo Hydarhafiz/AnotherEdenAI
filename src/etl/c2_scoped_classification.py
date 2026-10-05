@@ -41,10 +41,9 @@ from .structural_evidence import (
 )
 
 
-C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.0.0"
+C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.1.0"
 C2_ORACLE_VERSION = "m6-c2-independent-occurrence-oracle-1.0.0"
-MANIFEST_PATH = Path("src/etl/source_fidelity_manifest.json")
-OCCURRENCE_ORACLE_PATH = Path("tests/fixtures/c2/occurrence_oracle.json")
+MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 
 OCCURRENCE_KINDS = ("effect", "dependency", "trigger", "state", "reference")
 PRIMARY_OCCURRENCE_KINDS = ("effect", "dependency")
@@ -861,24 +860,24 @@ def build_c2_report(
     *,
     catalog_path: Path = CATALOG_PATH,
     fidelity_oracle: Mapping[str, Any] | None = None,
-    include_held_out: bool = False,
+    manifest_path: Path = MANIFEST_PATH,
     raw_character_dir: Path = RAW_CHARACTER_DIR,
     raw_sidekick_dir: Path = RAW_SIDEKICK_DIR,
     parsed_sidekick_dir: Path = PARSED_SIDEKICK_DIR,
 ) -> dict[str, Any]:
-    """Build C2 comparison evidence without reading an occurrence oracle.
+    """Build development-only C2 comparison evidence.
 
-    Passing ``fidelity_oracle`` is an explicit evaluation action.  It is never
-    loaded from a default path, and held-out rows are only included when the
-    caller explicitly requests them.
+    Protected validation rows and the owner-held semantic oracle are not read
+    by routine reports.  The explicit owner evaluation has a separate entry
+    point that returns aggregate results only.
     """
     c1_report = build_source_fidelity_report(
         catalog_path=catalog_path,
+        manifest_path=manifest_path,
         raw_character_dir=raw_character_dir,
         raw_sidekick_dir=raw_sidekick_dir,
         parsed_sidekick_dir=parsed_sidekick_dir,
         oracle=fidelity_oracle,
-        include_held_out=include_held_out,
     )
     catalog = _load_catalog(catalog_path)
     by_location, all_units, topology, limits = _load_structural_corpus(
@@ -889,9 +888,7 @@ def build_c2_report(
     )
     reviews = load_reviews()
     comparisons: dict[str, Any] = {}
-    for cohort in ("known_regressions", "development", "held_out"):
-        if cohort == "held_out" and not include_held_out:
-            continue
+    for cohort in ("known_regressions", "development"):
         comparisons[cohort] = _build_comparison(
             c1_report=c1_report,
             catalog=catalog,
@@ -1084,11 +1081,18 @@ def evaluate_c2_oracle(
     *,
     include_held_out: bool = False,
 ) -> dict[str, Any]:
-    """Evaluate occurrence identities against an explicitly supplied oracle."""
-    if include_held_out and oracle.get("sealed") is not True:
-        raise ValueError("held-out C2 occurrence oracle must be sealed before evaluation")
+    """Return the historical ordinal metric for development cohorts only."""
+    if include_held_out:
+        raise ValueError("the historical ordinal evaluator is disabled for protected validation")
     rows = _oracle_rows(oracle)
-    cohorts = ["known_regressions", "development"] + (["held_out"] if include_held_out else [])
+    allowed_ids = {
+        str(witness["witness_id"])
+        for cohort in ("known_regressions", "development")
+        for witness in report.get("comparisons", {}).get(cohort, {}).get("witnesses", [])
+    }
+    if set(rows) - allowed_ids:
+        raise ValueError("historical ordinal oracle contains identities outside known/development cohorts")
+    cohorts = ["known_regressions", "development"]
     cohort_results: dict[str, Any] = {}
     for cohort in cohorts:
         comparison = report["comparisons"].get(cohort, {})
@@ -1234,15 +1238,8 @@ def write_c2_report(destination: Path, **kwargs: Any) -> dict[str, Any]:
 def _main() -> None:
     parser = argparse.ArgumentParser(description="Build or evaluate Milestone 6 C2 scoped-classification evidence")
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--fidelity-oracle", type=Path)
-    parser.add_argument("--occurrence-oracle", type=Path)
-    parser.add_argument("--include-held-out", action="store_true")
     args = parser.parse_args()
-    fidelity_oracle = json.loads(args.fidelity_oracle.read_text(encoding="utf-8")) if args.fidelity_oracle else None
-    report = build_c2_report(fidelity_oracle=fidelity_oracle, include_held_out=args.include_held_out)
-    if args.occurrence_oracle:
-        oracle = json.loads(args.occurrence_oracle.read_text(encoding="utf-8"))
-        report["oracle_evaluation"] = evaluate_c2_oracle(report, oracle, include_held_out=args.include_held_out)
+    report = build_c2_report()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"C2 artifact: {report['artifact_version']}")

@@ -1,0 +1,273 @@
+{
+  "oracle_version": "m6-c2-r1-development-fidelity-oracle-1.0.0",
+  "sealed": false,
+  "authority": "Development-only C1.1 adjudications; includes known regressions and development witnesses only. Protected validation identities and their expected semantics are excluded.",
+  "isolation": {
+    "cohorts": "known_regressions and development only",
+    "protected_validation": "excluded from this file and rejected by the evaluator if supplied",
+    "implementation_access": "used only by ordinary development/regression C2 reports",
+    "tuning_rule": "development labels may support remediation; protected validation labels remain owner-held until R5"
+  },
+  "default_dimensions": {
+    "effect_completeness": {
+      "status": "passed"
+    },
+    "effect_order": {
+      "status": "passed"
+    },
+    "parent_child_condition_attachment": {
+      "status": "not_applicable"
+    },
+    "actor": {
+      "status": "passed"
+    },
+    "recipient": {
+      "status": "passed"
+    },
+    "trigger": {
+      "status": "not_applicable"
+    },
+    "result": {
+      "status": "passed"
+    },
+    "magnitude_parameter": {
+      "status": "not_applicable"
+    },
+    "duration_activation": {
+      "status": "not_applicable"
+    },
+    "element": {
+      "status": "not_applicable"
+    },
+    "attack_type": {
+      "status": "not_applicable"
+    },
+    "mechanic_resource_reference": {
+      "status": "not_applicable"
+    },
+    "child_definition_resolution": {
+      "status": "not_applicable"
+    }
+  },
+  "witnesses": [
+    {
+      "witness_id": "development-aisha-mp-restore",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-aisha-twilight-symphony",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-aldo-starwyrm-slash",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-alma-kaleidoscope",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-anabel-aegis-boon",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-anabel-es-nadir-pierce",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-azami-hold-ground",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-bertrand-guardian-lance",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-cerius-empyrean-flash",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-ciel-lunatic-charge",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-claude-es-another-zone",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-denny-anchor-down",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "development-feinne-as-angel-song",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-hameow-aura",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-iphi-spina-liliac",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "development-kumos-auto",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-minalca-as-outrage",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-moke-charge",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-pizzica-oratorio",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-premaya-as-pain",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0
+    },
+    {
+      "witness_id": "development-shigure-cease-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-soira-as-cover",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-tetra-auto",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-wenefica-lunatic",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-xianhua-horizon",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "development-yakumo-crunch-time",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-gunce-aura",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-gunce-auto",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-gunce-charge",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-kuchinawa-another-zone",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "heldout-velette-another-zone",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "known-alma-refraction-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1,
+      "dimension_overrides": {
+        "parent_child_condition_attachment": {
+          "status": "passed",
+          "reason": "Human source review confirms the captured parent link resolves to the separately captured counter child; the remaining occurrence-target gap belongs to C2."
+        }
+      }
+    },
+    {
+      "witness_id": "known-anabel-prayer-child",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1,
+      "dimension_overrides": {
+        "child_definition_resolution": {
+          "status": "unknown",
+          "reason": "Knight's Pride - Prayer (Anabel ES) is linked by source but not admitted as a captured definition"
+        }
+      }
+    },
+    {
+      "witness_id": "known-darunis-hunters-fangs-conflict",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 0,
+      "oracle_status": "adjudicated",
+      "dimension_overrides": {
+        "attack_type": {
+          "status": "passed",
+          "reason": "Human source review confirms the captured row specifies Piercing."
+        },
+        "element": {
+          "status": "not_applicable",
+          "reason": "The captured Hunter Shoot row states no element; Wind belongs to a conflicting, non-admitted source expectation."
+        }
+      }
+    },
+    {
+      "witness_id": "known-iphi-blood-ritual",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1,
+      "dimension_overrides": {
+        "child_definition_resolution": {
+          "status": "unknown",
+          "reason": "Lunatic (Iphi) destination is not an admitted captured definition in the C1 topology"
+        }
+      }
+    },
+    {
+      "witness_id": "known-kumos-rejection-aura",
+      "effect_occurrence_count": 1,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "known-shigure-ripper-counter",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    },
+    {
+      "witness_id": "known-tetra-ruincarnation",
+      "effect_occurrence_count": 2,
+      "dependency_occurrence_count": 1
+    }
+  ]
+}

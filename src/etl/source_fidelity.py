@@ -33,9 +33,9 @@ from .structural_evidence import (
 )
 
 
-SOURCE_FIDELITY_VERSION = "m6-c1.1-1.0.0"
+SOURCE_FIDELITY_VERSION = "m6-c1.1-1.1.0"
 CATALOG_PATH = Path("src/etl/kit_catalog.json")
-MANIFEST_PATH = Path("src/etl/source_fidelity_manifest.json")
+MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 RAW_CHARACTER_DIR = Path("data/raw/characters")
 RAW_SIDEKICK_DIR = Path("data/raw/sidekicks")
 PARSED_SIDEKICK_DIR = Path("data/parsed/v1.2.0/sidekicks")
@@ -535,27 +535,30 @@ def evaluate_oracle(
     raw_character_dir: Path = RAW_CHARACTER_DIR,
     raw_sidekick_dir: Path = RAW_SIDEKICK_DIR,
     parsed_sidekick_dir: Path = PARSED_SIDEKICK_DIR,
-    include_held_out: bool = False,
 ) -> dict[str, Any]:
-    """Compare exact source records with a separately authored adjudication.
+    """Compare known and development source records with a development oracle.
 
-    Held-out rows are intentionally opt-in.  Normal replay never reads this
-    function or the oracle file, which prevents rule tuning against its labels.
+    Protected validation is deliberately absent from this API. Its semantic
+    oracle is owner-held and evaluated through the aggregate-only C2 runner.
     """
-    if include_held_out and oracle.get("sealed") is not True:
-        raise ValueError("held-out oracle must remain explicitly sealed until evaluation")
+    allowed_ids = {
+        str(row["witness_id"])
+        for cohort in ("known_regressions", "development_witnesses")
+        for row in manifest.get(cohort, [])
+    }
+    oracle_by_id = {str(row["witness_id"]): row for row in oracle.get("witnesses", [])}
+    unexpected_ids = set(oracle_by_id) - allowed_ids
+    if unexpected_ids:
+        raise ValueError("development oracle contains identities outside known/development cohorts")
     catalog_by_id = _catalog_index(catalog)
     slice_fixture = (
         json.loads(SOURCE_SLICE_FIXTURE_PATH.read_text(encoding="utf-8"))
         if SOURCE_SLICE_FIXTURE_PATH.exists()
         else None
     )
-    oracle_by_id = {str(row["witness_id"]): row for row in oracle.get("witnesses", [])}
     cohorts: dict[str, list[Mapping[str, Any]]] = {
         "development": manifest.get("development_witnesses", []),
     }
-    if include_held_out:
-        cohorts["held_out"] = manifest.get("held_out_witnesses", [])
     evaluated: dict[str, Any] = {}
     for cohort, witnesses in cohorts.items():
         rows: list[dict[str, Any]] = []
@@ -571,7 +574,15 @@ def evaluate_oracle(
             resolved = _apply_slice_fixture([resolved], slice_fixture)[0]
             expected = oracle_by_id.get(str(witness["witness_id"]))
             if expected is None:
-                rows.append({**resolved, "oracle_status": "unknown", "dimensions": _empty_dimensions("missing_oracle_row")})
+                rows.append(
+                    {
+                        **resolved,
+                        "oracle_status": "unknown",
+                        "dimensions": _empty_dimensions("missing_oracle_row"),
+                        "semantic_fidelity_passed": False,
+                        "c2_admission": "unknown_non_authoritative",
+                    }
+                )
                 continue
             source_ok = (
                 resolved.get("source_identity_status") == "passed"
@@ -693,7 +704,6 @@ def build_source_fidelity_report(
     raw_sidekick_dir: Path = RAW_SIDEKICK_DIR,
     parsed_sidekick_dir: Path = PARSED_SIDEKICK_DIR,
     oracle: Mapping[str, Any] | None = None,
-    include_held_out: bool = False,
 ) -> dict[str, Any]:
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -725,12 +735,27 @@ def build_source_fidelity_report(
     fixture = None
     if SOURCE_SLICE_FIXTURE_PATH.exists():
         fixture = json.loads(SOURCE_SLICE_FIXTURE_PATH.read_text(encoding="utf-8"))
+    fixture_records = {
+        str(row["witness_id"]): dict(row)
+        for row in (fixture or {}).get("records", [])
+    }
+    for cohort in ("known_regressions", "development_witnesses", "held_out_witnesses"):
+        for witness in manifest.get(cohort, []):
+            if not all(witness.get(key) for key in ("source_capture_sha256", "source_location", "source_slice_sha256")):
+                continue
+            fixture_records[str(witness["witness_id"])] = {
+                "witness_id": str(witness["witness_id"]),
+                "capture_sha256": str(witness["source_capture_sha256"]),
+                "source_location": str(witness["source_location"]),
+                "source_slice_sha256": str(witness["source_slice_sha256"]),
+            }
+    fixture = {"records": list(fixture_records.values())} if fixture_records else None
     witness_replay: dict[str, list[dict[str, Any]]] = {}
-    for cohort, witnesses in (
+    replay_cohorts = [
         ("known_regressions", manifest.get("known_regressions", [])),
         ("development", manifest.get("development_witnesses", [])),
-        ("held_out", manifest.get("held_out_witnesses", [])),
-    ):
+    ]
+    for cohort, witnesses in replay_cohorts:
         resolved_rows = [
             resolve_witness(
                 witness,
@@ -772,9 +797,7 @@ def build_source_fidelity_report(
         },
         "known_regressions": known,
         "witness_replay": {
-            "known_regressions": witness_replay["known_regressions"],
-            "development": witness_replay["development"],
-            "held_out": witness_replay["held_out"],
+            **witness_replay,
             "source_slice_fixture": {
                 "path": SOURCE_SLICE_FIXTURE_PATH.as_posix(),
                 "loaded": fixture is not None,
@@ -785,13 +808,18 @@ def build_source_fidelity_report(
         },
         "full_catalog_replay": {
             "character_identity_denominator": len(character_rows),
-            "character_rows": character_rows,
             "structural_parse_coverage": {
                 "identities_with_capture": sum(row.get("source_identity_status") != "unknown" for row in character_rows),
                 "identities_with_structural_parse": sum(row.get("structural_parse_status") == "passed" for row in character_rows),
                 "facts_bound": sum(row.get("bound_source_fact_count", 0) for row in character_rows),
                 "facts_unresolved": sum(row.get("unresolved_source_fact_count", 0) for row in character_rows),
-                "mapping_diagnostics": mapping_diagnostics,
+                "mapping_diagnostic_count": len(mapping_diagnostics),
+                "mapping_diagnostics_by_reason": dict(
+                    sorted(Counter(str(row.get("reason") or "unknown") for row in mapping_diagnostics).items())
+                ),
+                "mapping_diagnostics_by_record_type": dict(
+                    sorted(Counter(str(row.get("record_type") or "unknown") for row in mapping_diagnostics).items())
+                ),
             },
             "source_identity_status_counts": dict(sorted(Counter(row.get("source_identity_status") for row in character_rows).items())),
             "failure_counts": dict(sorted(Counter(row.get("failure", "none") for row in character_rows).items())),
@@ -804,7 +832,6 @@ def build_source_fidelity_report(
         },
         "sidekick_replay": {
             "sidekick_identity_denominator": len(sidekick_rows),
-            "rows": sidekick_rows,
             "record_kind_coverage": {
                 kind: {
                     "admitted_record_count": sidekick_kind_counts.get(kind, 0),
@@ -845,7 +872,6 @@ def build_source_fidelity_report(
             raw_character_dir=raw_character_dir,
             raw_sidekick_dir=raw_sidekick_dir,
             parsed_sidekick_dir=parsed_sidekick_dir,
-            include_held_out=include_held_out,
         )
     replay_digest_payload = {
         "characters": character_rows,

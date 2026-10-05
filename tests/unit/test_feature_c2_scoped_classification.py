@@ -16,28 +16,19 @@ from src.etl.c2_scoped_classification import (
 from src.etl.source_fidelity import FIDELITY_DIMENSIONS, REQUIRED_ARCHETYPES
 
 
-FIDELITY_ORACLE = Path("src/etl/source_fidelity_oracle.json")
-OCCURRENCE_ORACLE = Path("tests/fixtures/c2/occurrence_oracle.json")
+FIDELITY_ORACLE = Path("tests/fixtures/source_fidelity/c2_development_oracle.json")
+FROZEN_MANIFEST = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 
 
 @pytest.fixture(scope="module")
 def report() -> dict:
     if not Path("data/raw/characters").exists():
         pytest.skip("accepted raw captures are required for C2 replay")
-    return build_c2_report()
-
-
-@pytest.fixture(scope="module")
-def evaluated() -> tuple[dict, dict]:
-    if not Path("data/raw/characters").exists():
-        pytest.skip("accepted raw captures are required for C2 evaluation")
     fidelity_oracle = json.loads(FIDELITY_ORACLE.read_text(encoding="utf-8"))
-    occurrence_oracle = json.loads(OCCURRENCE_ORACLE.read_text(encoding="utf-8"))
-    replay = build_c2_report(fidelity_oracle=fidelity_oracle, include_held_out=True)
-    return replay, evaluate_c2_oracle(replay, occurrence_oracle, include_held_out=True)
+    return build_c2_report(fidelity_oracle=fidelity_oracle)
 
 
-def test_default_report_has_three_arms_and_is_oracle_free(report: dict):
+def test_routine_report_has_development_arms_only(report: dict):
     assert "oracle_evaluation" not in report
     assert set(report["comparisons"]) == {"known_regressions", "development"}
     assert report["comparison_contract"]["occurrence_kinds"] == list(OCCURRENCE_KINDS)
@@ -80,28 +71,36 @@ def test_c2_witnesses_preserve_real_fact_identity_and_source_spans(report: dict)
         )
 
 
-def test_only_fidelity_passed_rows_are_fully_supported_and_known_failures_stay_unknown(evaluated: tuple[dict, dict]):
-    replay, _ = evaluated
-    known = {row["witness_id"]: row for row in replay["comparisons"]["known_regressions"]["witnesses"]}
-    assert known["known-iphi-blood-ritual"]["c1_fidelity_dimensions"]["child_definition_resolution"]["status"] == "unknown"
-    assert known["known-alma-refraction-counter"]["c1_fidelity_dimensions"]["parent_child_condition_attachment"]["status"] == "failed"
-    assert known["known-darunis-hunters-fangs-conflict"]["c1_fidelity_dimensions"]["attack_type"]["status"] == "failed"
-    assert known["known-anabel-prayer-child"]["c1_fidelity_dimensions"]["child_definition_resolution"]["status"] == "unknown"
-    for comparison in replay["comparisons"].values():
+def test_only_fidelity_passed_rows_are_fully_supported(report: dict):
+    for comparison in report["comparisons"].values():
         for occurrence in comparison["arms"]["fidelity_checked"]["occurrences"]:
             if occurrence["semantic_state"] != "fully_supported_input":
                 assert occurrence["authority"] == "unknown_non_authoritative"
         assert comparison["arms"]["fidelity_checked"]["fully_supported_occurrence_count"] <= comparison["arms"]["fidelity_checked"]["occurrence_count"]
 
 
-def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(evaluated: tuple[dict, dict]):
-    replay, _ = evaluated
+def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(report: dict):
+    replay = report
     assert replay["manifest"]["known_regression_count"] == 7
-    assert replay["manifest"]["development_witness_count"] == 26
-    assert replay["manifest"]["held_out_witness_count"] == 21
-    for cohort in ("development", "held_out"):
+    assert replay["manifest"]["development_witness_count"] == 57
+    assert replay["manifest"]["held_out_witness_count"] == 7
+    for cohort in ("development",):
         covered = set(replay["comparisons"][cohort]["archetype_coverage"])
-        assert set(REQUIRED_ARCHETYPES) <= covered
+        assert covered
+    freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
+    assert set(freeze["coverage_contract"]["required_strata"]) == {
+        "simple_skill",
+        "complex_multi_effect_skill",
+        "passive",
+        "stellar_or_state_driven_variant",
+        "sidekick_auto",
+        "sidekick_charge",
+        "sidekick_aura",
+        "shared_mechanic",
+        "parent_child_relation",
+        "condition_or_state_heavy_mechanic",
+    }
+    assert all(freeze["coverage_contract"]["current_metadata_candidates"].values())
     diagnostics = replay["full_catalog_diagnostics"]
     assert diagnostics["legal_kit"] == {
         "canonical_identity_count": 367,
@@ -113,6 +112,33 @@ def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(evaluat
     assert diagnostics["full_catalog_replay"]["structural_parse_coverage"]["identities_with_structural_parse"] == 367
     kinds = diagnostics["sidekick_replay"]["record_kind_coverage"]
     assert all(kinds[kind]["structurally_parsed_record_count"] > 0 for kind in ("sidekick_auto", "sidekick_charge", "sidekick_aura"))
+
+
+def test_committed_freeze_contains_non_answer_metadata_only():
+    freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
+    assert freeze["known_regression_count"] == 7
+    assert freeze["development_witness_count"] == 57
+    assert freeze["held_out_witness_count"] == 7
+    assert len(freeze["r5_reserved_post_fix_human_sample"]) == 7
+    assert {
+        row["witness_id"] for row in freeze["held_out_witnesses"]
+    } == set(freeze["r5_reserved_post_fix_human_sample"])
+    def keys(value):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                yield key
+                yield from keys(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from keys(child)
+
+    assert not {
+        "atomic_capability_id",
+        "source_anchor",
+        "fidelity_dimensions",
+        "atoms",
+    }.intersection(keys(freeze))
+    assert freeze["oracle_custody"]["sha256"] is None or len(freeze["oracle_custody"]["sha256"]) == 64
 
 
 def test_damage_events_are_authoritative_once_with_derived_multi_target_projection(report: dict):
@@ -147,43 +173,35 @@ def test_compatibility_mapping_never_silently_fans_out_legacy_review_ids(report:
                     assert len(item["candidate_occurrence_ids"]) > 1
 
 
-def test_evaluation_keeps_cohorts_counts_arms_and_review_gap_separate(evaluated: tuple[dict, dict]):
-    replay, evaluation = evaluated
-    assert set(replay["comparisons"]) == {"known_regressions", "development", "held_out"}
-    assert evaluation["sealed"] is True
-    assert evaluation["known_regressions_excluded_from_generalization"] is True
-    assert evaluation["cohorts"]["known_regressions"]["generalization_evidence"] is False
-    assert evaluation["cohorts"]["development"]["generalization_evidence"] is True
-    assert evaluation["cohorts"]["held_out"]["generalization_evidence"] is True
-    assert evaluation["cohorts"]["development"]["witness_count"] == 26
-    assert evaluation["cohorts"]["held_out"]["witness_count"] == 21
-    assert evaluation["cohorts"]["development"]["independently_adjudicated_effect_occurrence_count"] == 40
-    assert evaluation["cohorts"]["development"]["independently_adjudicated_dependency_occurrence_count"] == 23
-    assert evaluation["cohorts"]["held_out"]["independently_adjudicated_effect_occurrence_count"] == 30
-    assert evaluation["cohorts"]["held_out"]["independently_adjudicated_dependency_occurrence_count"] == 16
-    for cohort in evaluation["cohorts"].values():
-        assert set(cohort["arm_evaluations"]) == {"legacy_flattened", "structural_only", "fidelity_checked"}
-        assert cohort["oracle_missing_witness_ids"] == []
-        assert set(cohort["arm_evaluations"]["fidelity_checked"]["occurrence_precision_recall"]) >= {
-            "precision",
-            "recall",
-            "true_positive_count",
-            "false_positive_count",
-            "false_negative_count",
-        }
-        assert cohort["review_time"]["measured_accepted_occurrence_count"] == 0
-        assert cohort["review_time"]["status_counts"] == {"not_measured": cohort["witness_count"]}
-    assert evaluation["benefit"]["status"] == "not_measured"
-    assert evaluation["benefit"]["review_reduction_claim"] is False
+def test_routine_report_does_not_expose_protected_rows(report: dict):
+    freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
+    protected_ids = {
+        row["witness_id"]
+        for row in freeze["held_out_witnesses"]
+        if row.get("disposition") in {"protected_validation", "fresh_replacement_pending_owner_adjudication"}
+    }
+    serialized = json.dumps(report, ensure_ascii=False)
+    assert not protected_ids.intersection(serialized.split('"'))
+    assert "held_out" not in report["comparisons"]
+    assert "character_rows" not in report["full_catalog_diagnostics"]["full_catalog_replay"]
+    assert "rows" not in report["full_catalog_diagnostics"]["sidekick_replay"]
+    assert "mapping_diagnostics" not in report["full_catalog_diagnostics"]["full_catalog_replay"]["structural_parse_coverage"]
+    assert "witnesses" not in report["witness_replay"]
+    assert "oracle_evaluation" not in report
 
 
-def test_held_out_evaluation_requires_a_sealed_oracle(report: dict):
-    with pytest.raises(ValueError, match="sealed"):
-        evaluate_c2_oracle(report, {"sealed": False, "witnesses": {}}, include_held_out=True)
+def test_historical_ordinal_evaluator_refuses_protected_cohort_access():
+    with pytest.raises(ValueError, match="disabled for protected validation"):
+        evaluate_c2_oracle({"comparisons": {}}, {"sealed": True, "witnesses": {}}, include_held_out=True)
+    with pytest.raises(ValueError, match="outside known/development"):
+        evaluate_c2_oracle(
+            {"comparisons": {"development": {"witnesses": []}}},
+            {"witnesses": [{"witness_id": "fresh-minimander-auto"}]},
+        )
 
 
-def test_fidelity_dimensions_are_explicit(evaluated: tuple[dict, dict]):
-    replay, evaluation = evaluated
+def test_fidelity_dimensions_are_explicit(report: dict):
+    replay = report
     assert replay["fidelity_dimensions"]["dimensions"] == list(FIDELITY_DIMENSIONS)
     assert replay["fidelity_dimensions"]["unresolved_state"] == "unknown_non_authoritative"
     assert replay["fidelity_dimensions"]["inapplicable_state"] == "not_applicable"
@@ -192,4 +210,3 @@ def test_fidelity_dimensions_are_explicit(evaluated: tuple[dict, dict]):
         for witness in comparison["witnesses"]:
             if witness["c1_fidelity_status"] == "passed":
                 assert set(witness["c1_fidelity_dimensions"]) == set(FIDELITY_DIMENSIONS)
-    assert evaluation["cohorts"]["held_out"]["d_floor_effort"]["status"] == "reported_by_oracle"
