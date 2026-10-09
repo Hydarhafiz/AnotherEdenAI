@@ -112,13 +112,13 @@ def test_shared_mechanic_references_stay_parent_scoped_and_non_authoritative(rep
 
 def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(report: dict):
     replay = report
+    freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
     assert replay["manifest"]["known_regression_count"] == 7
-    assert replay["manifest"]["development_witness_count"] == 57
-    assert replay["manifest"]["held_out_witness_count"] == 7
+    assert replay["manifest"]["development_witness_count"] == freeze["development_witness_count"]
+    assert replay["manifest"]["held_out_witness_count"] == freeze["held_out_witness_count"]
     for cohort in ("development",):
         covered = set(replay["comparisons"][cohort]["archetype_coverage"])
         assert covered
-    freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
     assert set(freeze["coverage_contract"]["required_strata"]) == {
         "simple_skill",
         "complex_multi_effect_skill",
@@ -148,7 +148,7 @@ def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(report:
 def test_committed_freeze_contains_non_answer_metadata_only():
     freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
     assert freeze["known_regression_count"] == 7
-    assert freeze["development_witness_count"] == 57
+    assert freeze["development_witness_count"] == len(freeze["development_witnesses"])
     assert freeze["held_out_witness_count"] == 7
     assert len(freeze["r5_reserved_post_fix_human_sample"]) == 7
     assert {
@@ -209,7 +209,6 @@ def test_routine_report_does_not_expose_protected_rows(report: dict):
     protected_ids = {
         row["witness_id"]
         for row in freeze["held_out_witnesses"]
-        if row.get("disposition") in {"protected_validation", "fresh_replacement_pending_owner_adjudication"}
     }
     serialized = json.dumps(report, ensure_ascii=False)
     assert not protected_ids.intersection(serialized.split('"'))

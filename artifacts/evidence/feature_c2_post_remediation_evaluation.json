@@ -1,0 +1,4500 @@
+{
+  "after": {
+    "arms": {
+      "fidelity_checked": {
+        "c1_1_fidelity_dimensions": {
+          "actor": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "attack_type": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "child_definition_resolution": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "duration_activation": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_completeness": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_order": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "element": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "magnitude_parameter": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "mechanic_resource_reference": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "parent_child_condition_attachment": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "recipient": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "result": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_identity": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_record_selection": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "trigger": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          }
+        },
+        "capability_label_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 13,
+          "precision": 0.0,
+          "predicted_count": 13,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "condition_attachment": {
+          "accuracy": 0.0,
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
+        },
+        "dependency_occurrence_precision_recall": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 11,
+          "precision": 0.0,
+          "predicted_count": 11,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effect_occurrence_precision_recall": {
+          "expected_count": 15,
+          "false_negative_count": 13,
+          "false_positive_count": 24,
+          "precision": 0.07692307692307693,
+          "predicted_count": 26,
+          "recall": 0.13333333333333333,
+          "true_positive_count": 2
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": null,
+            "denominator_count": 23,
+            "unknown_count": 23
+          },
+          "attack_type": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 1,
+            "unknown_count": 20
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "unknown_count": 13
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 21
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "denominator_count": 23,
+            "incorrect_count": 5,
+            "not_applicable_count": 1,
+            "unknown_count": 17
+          },
+          "element": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 20
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "unknown_count": 17
+          },
+          "recipient": {
+            "accuracy": 0.125,
+            "adjudicated_count": 8,
+            "correct_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "not_applicable_count": 3,
+            "unknown_count": 12
+          },
+          "relationships": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 9,
+            "unknown_count": 13
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "unknown_count": 16
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "not_applicable_count": 1,
+            "unknown_count": 12
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "not_applicable_count": 3,
+            "unknown_count": 14
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "denominator_count": 23,
+            "incorrect_count": 4,
+            "unknown_count": 19
+          }
+        },
+        "primary_occurrence_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 21,
+          "false_positive_count": 35,
+          "precision": 0.05405405405405406,
+          "predicted_count": 37,
+          "recall": 0.08695652173913043,
+          "true_positive_count": 2
+        },
+        "typed_relationship_correctness": {
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
+        },
+        "witness_denominator": 7
+      },
+      "legacy_flattened": {
+        "c1_1_fidelity_dimensions": {
+          "actor": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "attack_type": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "child_definition_resolution": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "duration_activation": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_completeness": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_order": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "element": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "magnitude_parameter": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "mechanic_resource_reference": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "parent_child_condition_attachment": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "recipient": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "result": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_identity": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_record_selection": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "trigger": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          }
+        },
+        "capability_label_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 24,
+          "precision": 0.0,
+          "predicted_count": 24,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "condition_attachment": {
+          "accuracy": 0.0,
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
+        },
+        "dependency_occurrence_precision_recall": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 8,
+          "precision": 0.0,
+          "predicted_count": 8,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effect_occurrence_precision_recall": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 16,
+          "precision": 0.0,
+          "predicted_count": 16,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": null,
+            "denominator_count": 23,
+            "unknown_count": 23
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "not_applicable_count": 1,
+            "unknown_count": 20
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "unknown_count": 13
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 21
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "denominator_count": 23,
+            "incorrect_count": 5,
+            "not_applicable_count": 1,
+            "unknown_count": 17
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "denominator_count": 23,
+            "incorrect_count": 3,
+            "unknown_count": 20
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "unknown_count": 17
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 8,
+            "denominator_count": 23,
+            "incorrect_count": 8,
+            "not_applicable_count": 3,
+            "unknown_count": 12
+          },
+          "relationships": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 9,
+            "unknown_count": 13
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "unknown_count": 16
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "not_applicable_count": 1,
+            "unknown_count": 12
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "not_applicable_count": 3,
+            "unknown_count": 14
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "denominator_count": 23,
+            "incorrect_count": 4,
+            "unknown_count": 19
+          }
+        },
+        "primary_occurrence_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 24,
+          "precision": 0.0,
+          "predicted_count": 24,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "typed_relationship_correctness": {
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
+        },
+        "witness_denominator": 7
+      },
+      "structural_only": {
+        "c1_1_fidelity_dimensions": {
+          "actor": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "attack_type": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "child_definition_resolution": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "duration_activation": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_completeness": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_order": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "element": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "magnitude_parameter": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "mechanic_resource_reference": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "parent_child_condition_attachment": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "recipient": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "result": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_identity": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_record_selection": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "trigger": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          }
+        },
+        "capability_label_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 13,
+          "precision": 0.0,
+          "predicted_count": 13,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "condition_attachment": {
+          "accuracy": 0.0,
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
+        },
+        "dependency_occurrence_precision_recall": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 11,
+          "precision": 0.0,
+          "predicted_count": 11,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effect_occurrence_precision_recall": {
+          "expected_count": 15,
+          "false_negative_count": 13,
+          "false_positive_count": 24,
+          "precision": 0.07692307692307693,
+          "predicted_count": 26,
+          "recall": 0.13333333333333333,
+          "true_positive_count": 2
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": null,
+            "denominator_count": 23,
+            "unknown_count": 23
+          },
+          "attack_type": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 1,
+            "unknown_count": 20
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "unknown_count": 13
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 21
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "denominator_count": 23,
+            "incorrect_count": 5,
+            "not_applicable_count": 1,
+            "unknown_count": 17
+          },
+          "element": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 20
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "unknown_count": 17
+          },
+          "recipient": {
+            "accuracy": 0.125,
+            "adjudicated_count": 8,
+            "correct_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "not_applicable_count": 3,
+            "unknown_count": 12
+          },
+          "relationships": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 9,
+            "unknown_count": 13
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "unknown_count": 16
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "not_applicable_count": 1,
+            "unknown_count": 12
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "not_applicable_count": 3,
+            "unknown_count": 14
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "denominator_count": 23,
+            "incorrect_count": 4,
+            "unknown_count": 19
+          }
+        },
+        "primary_occurrence_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 21,
+          "false_positive_count": 35,
+          "precision": 0.05405405405405406,
+          "predicted_count": 37,
+          "recall": 0.08695652173913043,
+          "true_positive_count": 2
+        },
+        "typed_relationship_correctness": {
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
+        },
+        "witness_denominator": 7
+      }
+    },
+    "by_coverage_stratum": {
+      "complex_multi_effect_skill": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 8,
+              "false_negative_count": 8,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 8,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 7
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 7,
+              "false_negative_count": 6,
+              "false_positive_count": 7,
+              "precision": 0.125,
+              "predicted_count": 8,
+              "recall": 0.14285714285714285,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 8,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 2
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 8,
+              "false_negative_count": 8,
+              "false_positive_count": 8,
+              "precision": 0.0,
+              "predicted_count": 8,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 8,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 7
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 7,
+              "false_negative_count": 7,
+              "false_positive_count": 7,
+              "precision": 0.0,
+              "predicted_count": 7,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 8,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 2
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 8,
+              "false_negative_count": 8,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 8,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 7
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 7,
+              "false_negative_count": 6,
+              "false_positive_count": 7,
+              "precision": 0.125,
+              "predicted_count": 8,
+              "recall": 0.14285714285714285,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 8,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 2
+          }
+        },
+        "witness_count": 2
+      },
+      "condition_or_state_heavy_mechanic": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 12,
+              "false_negative_count": 12,
+              "false_positive_count": 8,
+              "precision": 0.0,
+              "predicted_count": 8,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 12,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 7
+            },
+            "dependencies": {
+              "expected_count": 5,
+              "false_negative_count": 5,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 7,
+              "false_negative_count": 6,
+              "false_positive_count": 16,
+              "precision": 0.058823529411764705,
+              "predicted_count": 17,
+              "recall": 0.14285714285714285,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 45
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 12,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 12
+            },
+            "witnesses_per_dimension": 3
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 12,
+              "false_negative_count": 12,
+              "false_positive_count": 12,
+              "precision": 0.0,
+              "predicted_count": 12,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 12,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 7
+            },
+            "dependencies": {
+              "expected_count": 5,
+              "false_negative_count": 5,
+              "false_positive_count": 4,
+              "precision": 0.0,
+              "predicted_count": 4,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 7,
+              "false_negative_count": 7,
+              "false_positive_count": 8,
+              "precision": 0.0,
+              "predicted_count": 8,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 45
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 12,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 12
+            },
+            "witnesses_per_dimension": 3
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 12,
+              "false_negative_count": 12,
+              "false_positive_count": 8,
+              "precision": 0.0,
+              "predicted_count": 8,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 12,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 7
+            },
+            "dependencies": {
+              "expected_count": 5,
+              "false_negative_count": 5,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 7,
+              "false_negative_count": 6,
+              "false_positive_count": 16,
+              "precision": 0.058823529411764705,
+              "predicted_count": 17,
+              "recall": 0.14285714285714285,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 45
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 12,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 12
+            },
+            "witnesses_per_dimension": 3
+          }
+        },
+        "witness_count": 3
+      },
+      "parent_child_relation": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 4,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.2,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 5,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 4,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.2,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "passive": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 2,
+              "correct_count": null,
+              "denominator_count": 3,
+              "incorrect_count": 2,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 3,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 3
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 2,
+              "correct_count": null,
+              "denominator_count": 3,
+              "incorrect_count": 2,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 3,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 3
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 2,
+              "correct_count": null,
+              "denominator_count": 3,
+              "incorrect_count": 2,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 3,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 3
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "shared_mechanic": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 9,
+              "false_negative_count": 9,
+              "false_positive_count": 8,
+              "precision": 0.0,
+              "predicted_count": 8,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 3,
+              "correct_count": null,
+              "denominator_count": 9,
+              "incorrect_count": 3,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 6,
+              "false_negative_count": 5,
+              "false_positive_count": 15,
+              "precision": 0.0625,
+              "predicted_count": 16,
+              "recall": 0.16666666666666666,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 9,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 9
+            },
+            "witnesses_per_dimension": 2
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 9,
+              "false_negative_count": 9,
+              "false_positive_count": 10,
+              "precision": 0.0,
+              "predicted_count": 10,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 3,
+              "correct_count": null,
+              "denominator_count": 9,
+              "incorrect_count": 3,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 7,
+              "precision": 0.0,
+              "predicted_count": 7,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 9,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 9
+            },
+            "witnesses_per_dimension": 2
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 9,
+              "false_negative_count": 9,
+              "false_positive_count": 8,
+              "precision": 0.0,
+              "predicted_count": 8,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 3,
+              "correct_count": null,
+              "denominator_count": 9,
+              "incorrect_count": 3,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 6,
+              "false_negative_count": 5,
+              "false_positive_count": 15,
+              "precision": 0.0625,
+              "predicted_count": 16,
+              "recall": 0.16666666666666666,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 9,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 9
+            },
+            "witnesses_per_dimension": 2
+          }
+        },
+        "witness_count": 2
+      },
+      "sidekick_aura": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "sidekick_auto": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "sidekick_charge": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 4,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.2,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 5,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 4,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.2,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "simple_skill": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 1,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 1,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 1,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 1,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 1,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 1,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "stellar_or_state_driven_variant": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 3,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.25,
+              "predicted_count": 4,
+              "recall": 0.3333333333333333,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": 5,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 7,
+              "precision": 0.0,
+              "predicted_count": 7,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 4,
+              "precision": 0.0,
+              "predicted_count": 4,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": 5,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 1
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 3,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.25,
+              "predicted_count": 4,
+              "recall": 0.3333333333333333,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": 5,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      }
+    },
+    "by_record_family": {
+      "character:active_skill": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 7,
+              "false_negative_count": 7,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 7,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 4,
+              "false_negative_count": 3,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.25,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 7,
+              "incorrect_count": 1,
+              "not_applicable_count": 5,
+              "unknown_count": 1
+            },
+            "witnesses_per_dimension": 2
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 7,
+              "false_negative_count": 7,
+              "false_positive_count": 9,
+              "precision": 0.0,
+              "predicted_count": 9,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 7,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 4,
+              "false_negative_count": 4,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 7,
+              "incorrect_count": 1,
+              "not_applicable_count": 5,
+              "unknown_count": 1
+            },
+            "witnesses_per_dimension": 2
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 7,
+              "false_negative_count": 7,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 5,
+              "correct_count": null,
+              "denominator_count": 7,
+              "incorrect_count": 5,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 3,
+              "false_negative_count": 3,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 4,
+              "false_negative_count": 3,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.25,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 7,
+              "incorrect_count": 1,
+              "not_applicable_count": 5,
+              "unknown_count": 1
+            },
+            "witnesses_per_dimension": 2
+          }
+        },
+        "witness_count": 2
+      },
+      "character:passive_skill": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 4,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 4,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 4,
+              "false_negative_count": 4,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 12,
+              "precision": 0.0,
+              "predicted_count": 12,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 2
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 4,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 4,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 4,
+              "false_negative_count": 4,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 2
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 4,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 4,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 4,
+              "false_negative_count": 4,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 12,
+              "precision": 0.0,
+              "predicted_count": 12,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 30
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 2
+          }
+        },
+        "witness_count": 2
+      },
+      "sidekick:sidekick_aura": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "sidekick:sidekick_auto": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 2,
+              "precision": 0.0,
+              "predicted_count": 2,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 2
+            },
+            "dependencies": {
+              "expected_count": 0,
+              "false_negative_count": 0,
+              "false_positive_count": 0,
+              "precision": 0.0,
+              "predicted_count": 0,
+              "recall": 1.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 2,
+              "false_negative_count": 2,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 2,
+              "incorrect_count": null,
+              "not_applicable_count": 2,
+              "unknown_count": null
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      },
+      "sidekick:sidekick_charge": {
+        "arms": {
+          "fidelity_checked": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 4,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.2,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          },
+          "legacy_flattened": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 6,
+              "precision": 0.0,
+              "predicted_count": 6,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 5,
+              "false_positive_count": 5,
+              "precision": 0.0,
+              "predicted_count": 5,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          },
+          "structural_only": {
+            "capabilities": {
+              "expected_count": 6,
+              "false_negative_count": 6,
+              "false_positive_count": 3,
+              "precision": 0.0,
+              "predicted_count": 3,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "condition": {
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": 1,
+              "not_applicable_count": null,
+              "unknown_count": 5
+            },
+            "dependencies": {
+              "expected_count": 1,
+              "false_negative_count": 1,
+              "false_positive_count": 1,
+              "precision": 0.0,
+              "predicted_count": 1,
+              "recall": 0.0,
+              "true_positive_count": 0
+            },
+            "effects": {
+              "expected_count": 5,
+              "false_negative_count": 4,
+              "false_positive_count": 4,
+              "precision": 0.2,
+              "predicted_count": 5,
+              "recall": 0.2,
+              "true_positive_count": 1
+            },
+            "fidelity_dimension_count": 15,
+            "fidelity_dimension_status_counts": {
+              "unknown": 15
+            },
+            "relationships": {
+              "accuracy": null,
+              "adjudicated_count": null,
+              "correct_count": null,
+              "denominator_count": 6,
+              "incorrect_count": null,
+              "not_applicable_count": null,
+              "unknown_count": 6
+            },
+            "witnesses_per_dimension": 1
+          }
+        },
+        "witness_count": 1
+      }
+    },
+    "family_grouping": "source_kind:record_type",
+    "stratum_grouping": "coverage_tags"
+  },
+  "after_aggregate_sha256": "a1f0ff12d5270ab4d7c547b781d57211fa8b2d3490de041116e17f309e54c7da",
+  "artifact_type": "c2_r5_post_remediation_aggregate_evaluation",
+  "before": {
+    "arms": {
+      "fidelity_checked": {
+        "c1_1_fidelity_dimensions": {
+          "actor": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "attack_type": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "child_definition_resolution": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "duration_activation": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_completeness": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_order": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "element": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "magnitude_parameter": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "mechanic_resource_reference": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "parent_child_condition_attachment": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "recipient": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "result": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_identity": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_record_selection": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "trigger": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          }
+        },
+        "capability_label_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "condition_attachment": {
+          "accuracy": 0.0,
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
+        },
+        "dependency_occurrence_precision_recall": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effect_occurrence_precision_recall": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": null,
+            "denominator_count": 23,
+            "unknown_count": 23
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "not_applicable_count": 1,
+            "unknown_count": 20
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "unknown_count": 13
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 21
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "denominator_count": 23,
+            "incorrect_count": 5,
+            "not_applicable_count": 1,
+            "unknown_count": 17
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "denominator_count": 23,
+            "incorrect_count": 3,
+            "unknown_count": 20
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "unknown_count": 17
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 8,
+            "denominator_count": 23,
+            "incorrect_count": 8,
+            "not_applicable_count": 3,
+            "unknown_count": 12
+          },
+          "relationships": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 9,
+            "unknown_count": 13
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "unknown_count": 16
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "not_applicable_count": 1,
+            "unknown_count": 12
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "not_applicable_count": 3,
+            "unknown_count": 14
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "denominator_count": 23,
+            "incorrect_count": 4,
+            "unknown_count": 19
+          }
+        },
+        "primary_occurrence_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "typed_relationship_correctness": {
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
+        },
+        "witness_denominator": 7
+      },
+      "legacy_flattened": {
+        "c1_1_fidelity_dimensions": {
+          "actor": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "attack_type": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "child_definition_resolution": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "duration_activation": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_completeness": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_order": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "element": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "magnitude_parameter": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "mechanic_resource_reference": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "parent_child_condition_attachment": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "recipient": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "result": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_identity": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_record_selection": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "trigger": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          }
+        },
+        "capability_label_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 15,
+          "precision": 0.0,
+          "predicted_count": 15,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "condition_attachment": {
+          "accuracy": 0.0,
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
+        },
+        "dependency_occurrence_precision_recall": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 6,
+          "precision": 0.0,
+          "predicted_count": 6,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effect_occurrence_precision_recall": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 9,
+          "precision": 0.0,
+          "predicted_count": 9,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": null,
+            "denominator_count": 23,
+            "unknown_count": 23
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "not_applicable_count": 1,
+            "unknown_count": 20
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "unknown_count": 13
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 21
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "denominator_count": 23,
+            "incorrect_count": 5,
+            "not_applicable_count": 1,
+            "unknown_count": 17
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "denominator_count": 23,
+            "incorrect_count": 3,
+            "unknown_count": 20
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "unknown_count": 17
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 8,
+            "denominator_count": 23,
+            "incorrect_count": 8,
+            "not_applicable_count": 3,
+            "unknown_count": 12
+          },
+          "relationships": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 9,
+            "unknown_count": 13
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "unknown_count": 16
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "not_applicable_count": 1,
+            "unknown_count": 12
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "not_applicable_count": 3,
+            "unknown_count": 14
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "denominator_count": 23,
+            "incorrect_count": 4,
+            "unknown_count": 19
+          }
+        },
+        "primary_occurrence_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 15,
+          "precision": 0.0,
+          "predicted_count": 15,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "typed_relationship_correctness": {
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
+        },
+        "witness_denominator": 7
+      },
+      "structural_only": {
+        "c1_1_fidelity_dimensions": {
+          "actor": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "attack_type": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "child_definition_resolution": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "duration_activation": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_completeness": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "effect_order": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "element": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "magnitude_parameter": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "mechanic_resource_reference": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "parent_child_condition_attachment": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "recipient": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "result": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_identity": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "source_record_selection": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          },
+          "trigger": {
+            "denominator_count": 7,
+            "known_applicable_count": 0,
+            "not_applicable_count": 0,
+            "status_counts": {
+              "unknown": 7
+            },
+            "unknown_or_unresolved_count": 7
+          }
+        },
+        "capability_label_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "condition_attachment": {
+          "accuracy": 0.0,
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
+        },
+        "dependency_occurrence_precision_recall": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effect_occurrence_precision_recall": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": null,
+            "denominator_count": 23,
+            "unknown_count": 23
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "not_applicable_count": 1,
+            "unknown_count": 20
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "unknown_count": 13
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "denominator_count": 23,
+            "incorrect_count": 2,
+            "unknown_count": 21
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "denominator_count": 23,
+            "incorrect_count": 5,
+            "not_applicable_count": 1,
+            "unknown_count": 17
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "denominator_count": 23,
+            "incorrect_count": 3,
+            "unknown_count": 20
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "unknown_count": 17
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 8,
+            "denominator_count": 23,
+            "incorrect_count": 8,
+            "not_applicable_count": 3,
+            "unknown_count": 12
+          },
+          "relationships": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "denominator_count": 23,
+            "incorrect_count": 1,
+            "not_applicable_count": 9,
+            "unknown_count": 13
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "denominator_count": 23,
+            "incorrect_count": 7,
+            "unknown_count": 16
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 10,
+            "denominator_count": 23,
+            "incorrect_count": 10,
+            "not_applicable_count": 1,
+            "unknown_count": 12
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 6,
+            "denominator_count": 23,
+            "incorrect_count": 6,
+            "not_applicable_count": 3,
+            "unknown_count": 14
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "denominator_count": 23,
+            "incorrect_count": 4,
+            "unknown_count": 19
+          }
+        },
+        "primary_occurrence_precision_recall": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "typed_relationship_correctness": {
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
+        },
+        "witness_denominator": 7
+      }
+    },
+    "artifact_sha256": "e4474ad129aff4615968c802402581cc73de82b6ebc27692728b19071e132286",
+    "implementation_reference": "b480642",
+    "witness_count": 7
+  },
+  "cohort": "fresh_replacement",
+  "evaluator_version": "c2-atomic-eval-1.0.0",
+  "findings": {
+    "bounded_blocker": "Previously documented atomic decomposition/capability classification and field/condition/relationship attachment failures remain systematic across multiple required strata; no separate novel root-cause class was established from aggregate-only evidence.",
+    "c1_1_c2_ready_for_explicit_human_acceptance": false,
+    "feature_d_starts": false,
+    "fixed_or_acceptable": [
+      "All ten human-sample source spans matched their pinned capture and source-slice checksums.",
+      "All ten required coverage strata were represented by the seven protected witnesses.",
+      "The 38-test C2 development/regression suite passed; legal-kit completeness and full-catalog parse coverage remained 367/367.",
+      "Two source-anchored effect occurrences matched exactly under the atomic occurrence matcher."
+    ],
+    "implementation_modified_during_evaluation": false,
+    "isolated_unsupported_taxonomy_or_source_gaps": [
+      "The three supplemental known-regression sample records had passing source identity/selection but remained entirely unknown_non_authoritative in the fidelity-checked arm; they were not treated as held-out semantic evidence.",
+      "All 15 protected C1.1 fidelity dimensions were unknown for all seven witnesses, so R5 could not score those dimensions from the current owner-oracle contract.",
+      "Approved unsupported semantics remain outside the admitted taxonomy, including the Stellar Burst dependency and the Fire-damage aura activation dependency; they remain explicit gaps rather than being mapped to unrelated values."
+    ],
+    "new_systematic_failure_class_found": false,
+    "systematic_semantic_failures": [
+      "Across the protected cohort, all three arms had zero dependency true positives and zero capability-label true positives; the structural/fidelity-checked arms had 24 effect false positives against 15 expected effects.",
+      "Condition accuracy was 0/10 and relationship accuracy 0/1; recipient, magnitude, result, target-cardinality, trigger, and state-reference field accuracy also remained low or zero across multiple strata."
+    ],
+    "technical_gates": "fail"
+  },
+  "frozen_manifest_sha256": "8b698074ab35a943e31ee042f727d8d68abab13872f953f32c20516079f3009a",
+  "human_sample": {
+    "all_required_coverage_strata_represented_by_protected_sample": true,
+    "capture_and_source_slice_sha256_checks_passed": 10,
+    "held_out_and_supplemental_cohorts_reported_separately": true,
+    "independently_adjudicated_protected_atom_count": 23,
+    "protected_held_out_count": 7,
+    "protected_reserved_sample_covers_required_strata": true,
+    "protected_source_span_count": 7,
+    "review_time": "not_measured",
+    "reviewed_high_impact_failure_classes_covered": [
+      "atomic effect decomposition and field bleed",
+      "incorrect mechanic classification",
+      "condition, context, and state attachment",
+      "mechanic graph and parent/child relationship loss",
+      "missing canonical/shared mechanic identities",
+      "structured ETL/schema fidelity defects"
+    ],
+    "source_review_completed": true,
+    "supplemental_known_regression_count": 3,
+    "supplemental_known_regression_ids": [
+      "known-alma-refraction-counter",
+      "known-tetra-ruincarnation",
+      "known-anabel-prayer-child"
+    ],
+    "supplemental_regression_status": [
+      {
+        "evidence_class": "known_regression",
+        "fidelity_checked_rows": 8,
+        "fully_supported_rows": 0,
+        "held_out": false,
+        "unknown_non_authoritative_rows": 8,
+        "witness_id": "known-alma-refraction-counter"
+      },
+      {
+        "evidence_class": "known_regression",
+        "fidelity_checked_rows": 14,
+        "fully_supported_rows": 0,
+        "held_out": false,
+        "unknown_non_authoritative_rows": 14,
+        "witness_id": "known-tetra-ruincarnation"
+      },
+      {
+        "evidence_class": "known_regression",
+        "fidelity_checked_rows": 10,
+        "fully_supported_rows": 0,
+        "held_out": false,
+        "unknown_non_authoritative_rows": 10,
+        "witness_id": "known-anabel-prayer-child"
+      }
+    ],
+    "supplemental_source_span_count": 3,
+    "total_witnesses": 10
+  },
+  "implementation_artifact_version": "m6-c2-scoped-classification-1.3.0",
+  "implementation_commit": "12e1075ea95f701241a3b2e9e39b446379f43f49",
+  "implementation_reference": "12e1075",
+  "independently_adjudicated_atomic_count": 23,
+  "known_development_verification": {
+    "comparison_digest": "479df2226bf6df1e7f9e2892fdb47d63892a2ae9d2869fe553c23cbbe56a386a",
+    "development": {
+      "fidelity_checked_occurrence_count": 566,
+      "fully_supported_count": 347,
+      "prior_review_mappings": {
+        "review_required": 200
+      },
+      "unknown_non_authoritative_count": 219,
+      "witness_count": 59
+    },
+    "full_catalog": {
+      "canonical_character_identity_count": 367,
+      "legal_kit_complete_receipts": 367,
+      "legal_kit_ready": true,
+      "sidekick_structural_records": {
+        "sidekick_aura": 41,
+        "sidekick_auto": 28,
+        "sidekick_charge": 18
+      },
+      "structurally_parsed_count": 367
+    },
+    "full_report_artifact_version": "m6-c2-scoped-classification-1.3.0",
+    "known_regressions": {
+      "fidelity_checked_occurrence_count": 69,
+      "fully_supported_count": 0,
+      "prior_review_mappings": {
+        "review_required": 24
+      },
+      "unknown_non_authoritative_count": 69,
+      "witness_count": 7
+    },
+    "known_regressions_excluded_from_generalization": true,
+    "prior_review_compatibility": {
+      "development": {
+        "mapping_count": 200,
+        "silent_carry_forward": false,
+        "status_counts": {
+          "review_required": 200
+        }
+      },
+      "known_regressions": {
+        "mapping_count": 24,
+        "silent_carry_forward": false,
+        "status_counts": {
+          "review_required": 24
+        }
+      }
+    },
+    "source_fidelity_digest": "28eec8303f3608bf9fd1ce2a40e8108dd044c7e0037c6ce63699f6ae2a8cdbcc",
+    "unit_test_command": ".venv/bin/pytest tests/unit/test_c2_atomic_occurrences.py tests/unit/test_c2_r2_source_fields.py tests/unit/test_feature_c2_scoped_classification.py tests/unit/test_c2_semantic_evaluation.py tests/unit/test_c2_r1_baseline.py",
+    "unit_test_result": "38 passed"
+  },
+  "oracle_answers_returned": false,
+  "paired_comparison": {
+    "after": {
+      "fidelity_checked": {
+        "capabilities": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 13,
+          "precision": 0.0,
+          "predicted_count": 13,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "dependencies": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 11,
+          "precision": 0.0,
+          "predicted_count": 11,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effects": {
+          "expected_count": 15,
+          "false_negative_count": 13,
+          "false_positive_count": 24,
+          "precision": 0.07692307692307693,
+          "predicted_count": 26,
+          "recall": 0.13333333333333333,
+          "true_positive_count": 2
+        }
+      },
+      "legacy_flattened": {
+        "capabilities": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 24,
+          "precision": 0.0,
+          "predicted_count": 24,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "dependencies": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 8,
+          "precision": 0.0,
+          "predicted_count": 8,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effects": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 16,
+          "precision": 0.0,
+          "predicted_count": 16,
+          "recall": 0.0,
+          "true_positive_count": 0
+        }
+      },
+      "structural_only": {
+        "capabilities": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 13,
+          "precision": 0.0,
+          "predicted_count": 13,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "dependencies": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 11,
+          "precision": 0.0,
+          "predicted_count": 11,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effects": {
+          "expected_count": 15,
+          "false_negative_count": 13,
+          "false_positive_count": 24,
+          "precision": 0.07692307692307693,
+          "predicted_count": 26,
+          "recall": 0.13333333333333333,
+          "true_positive_count": 2
+        }
+      }
+    },
+    "aggregate_recall_not_lower": true,
+    "before": {
+      "fidelity_checked": {
+        "capabilities": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "dependencies": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effects": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        }
+      },
+      "legacy_flattened": {
+        "capabilities": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 15,
+          "precision": 0.0,
+          "predicted_count": 15,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "dependencies": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 6,
+          "precision": 0.0,
+          "predicted_count": 6,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effects": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 9,
+          "precision": 0.0,
+          "predicted_count": 9,
+          "recall": 0.0,
+          "true_positive_count": 0
+        }
+      },
+      "structural_only": {
+        "capabilities": {
+          "expected_count": 23,
+          "false_negative_count": 23,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "dependencies": {
+          "expected_count": 8,
+          "false_negative_count": 8,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        },
+        "effects": {
+          "expected_count": 15,
+          "false_negative_count": 15,
+          "false_positive_count": 0,
+          "precision": 0.0,
+          "predicted_count": 0,
+          "recall": 0.0,
+          "true_positive_count": 0
+        }
+      }
+    },
+    "family_or_stratum_before_metrics_available": false,
+    "precision_and_correction_gate_passed": false,
+    "reason": "Post-remediation false positives increased across the structural and fidelity-checked arms while capability and dependency true positives remained zero; the small effect-occurrence recall increase does not meet the predeclared meaningful-precision requirement."
+  },
+  "per_witness_results_returned": false,
+  "r5_findings_pending_human_review": false,
+  "semantic_oracle_sha256": "b52e24aa9737970ac451b9bde622856de05ac63b590cc6d2ff9bf8bc77fd78cd",
+  "source_checks": {
+    "capture_sha256_pass_count": 10,
+    "sample_count": 10,
+    "source_slice_sha256_pass_count": 10
+  },
+  "witness_count": 7
+}
