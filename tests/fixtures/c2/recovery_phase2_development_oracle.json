@@ -1,0 +1,1024 @@
+{
+  "schema_version": "c2-atomic-oracle-1",
+  "cohort": "development_regression_review",
+  "authority": {
+    "semantic_source": "artifacts/evidence/feature_c2_human_review.md",
+    "source_identity_source": "tests/fixtures/source_fidelity/source_slice_manifest.json",
+    "review_status": "The seven selected review entries record a Correct human verdict.",
+    "answer_construction": "Expected atoms come from the human correction/proposed atomic facts, not from current classifier output.",
+    "source_anchors": "Occurrence block paths and quoted spans were checked independently against the seven pinned raw captures with the C1 structural source parser.",
+    "scope": "Four known regressions and three development witnesses only; this is not held-out or generalization evidence.",
+    "relationship_scoring": "Reviewed relationship expectations are recorded separately because the evaluator compares prediction-generated relationship IDs and ownership IDs that a source-only semantic answer cannot independently supply.",
+    "unscored_mechanics": "Reviewed mechanics outside effect/dependency taxonomy or evaluator fields are retained per witness for explicit gap reporting."
+  },
+  "witnesses": [
+    {
+      "witness_id": "known-darunis-hunters-fangs-conflict",
+      "fact_id": "skill:2f7fe641bb7a81a7b141",
+      "source_capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756",
+      "source_location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+      "source_slice_sha256": "c622bb172ed9887175e66dead6c9d3c5c090db2863ac246223ad91715d213e5e",
+      "cohort_kind": "known_regression",
+      "review_reference": "Review 4 — Darunis, Hunter Shoot",
+      "source_identity_note": "The review markdown transcribes the capture hash with c21c388; the approved source manifest, source-slice fixture, and raw capture agree on c21b388, which is used here.",
+      "atoms": [
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "direct_damage",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+            "quote": "Piercing attack on a single enemy"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Darunis"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "physical_resistance_down",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+            "quote": "Physical resistance -20%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Darunis"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "20",
+                "unit": "percent",
+                "raw": "-20%"
+              }
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        }
+      ],
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "source_quote": "Physical resistance -20% (3 turns)",
+          "interpretation": "The resistance reduction's target is the attacked enemy by grammatical inference; the reviewer records that inference explicitly.",
+          "evaluator_status": "covered by adjudicated recipient and duration fields"
+        },
+        {
+          "source_quote": "Hunter Shoot",
+          "interpretation": "The historical Wind/Hunter's Fangs expectation conflicts with the admitted capture and is not an answer for this source fact.",
+          "evaluator_status": "not an atom"
+        }
+      ]
+    },
+    {
+      "witness_id": "known-alma-refraction-counter",
+      "fact_id": "skill:5f6ecc8bc37a12404137",
+      "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+      "source_slice_sha256": "074b1000da96e19c814d3956fb305b22d01b5c4b69dad2c7954022a0716d24c6",
+      "cohort_kind": "known_regression",
+      "review_reference": "Review 2 — Alma (Another Style), Refraction Bullet",
+      "atoms": [
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "direct_damage",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+            "quote": "Crystal type magic attack on all enemies"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Alma (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Crystal"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Magic"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "taunt",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+            "quote": "inflict Rage"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Alma (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "ally_resistance_up",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[2]",
+            "quote": "Type Resistance of all party members +50%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Alma (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "50",
+                "unit": "percent",
+                "raw": "+50%"
+              }
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        }
+      ],
+      "reviewed_relationships": [
+        {
+          "source_quote": "Refraction Bullet - Counter",
+          "source_fact_id": "skill:5f6ecc8bc37a12404137",
+          "target_kind": "source_fact",
+          "target_id": "skill:b5d6c1eb019db8bcd666",
+          "operation": "activates",
+          "condition": "",
+          "timing": "",
+          "reviewed_resolution": "resolved",
+          "evaluator_status": "manual semantic comparison; evaluator-internal occurrence and relationship IDs are prediction-generated"
+        }
+      ],
+      "reviewed_unscored_mechanics": [
+        {
+          "source_quote": "Activate Counterattack: Refraction Bullet - Counter on user (3 turns)",
+          "interpretation": "This is a separate parent-to-child activation relationship, not an effect copied from the Counter child's definition.",
+          "evaluator_status": "reviewed relationship retained for manual comparison; not a taxonomy-scored effect atom"
+        },
+        {
+          "source_quote": "Damage is based on user's PWR",
+          "interpretation": "Damage formula metadata, not an effect or dependency.",
+          "evaluator_status": "outside current scored fields"
+        }
+      ]
+    },
+    {
+      "witness_id": "known-anabel-prayer-child",
+      "fact_id": "skill:438aa7e1d0e071c14c43",
+      "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+      "source_slice_sha256": "bb15fed77349477d146b6912701202cba85c75f4d8d0856c1b57581b2a5c790e",
+      "cohort_kind": "known_regression",
+      "review_reference": "Review 7 — Anabel (Extra Style), Knight's Pride",
+      "atoms": [
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "heal_hp",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+            "quote": "Restore all party members' HP +50%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Anabel (Extra Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "preemptive"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "50",
+                "unit": "percent",
+                "raw": "+50%"
+              }
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "recover_mp",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+            "quote": "Restore all party members' MP +15%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Anabel (Extra Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "preemptive"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "15",
+                "unit": "percent",
+                "raw": "+15%"
+              }
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "shield",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[1]",
+            "quote": "Give Shield to user with HP equal to 500 HP (3 turns)"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Anabel (Extra Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "preemptive"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Shield on user with HP equal to 500"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        }
+      ],
+      "reviewed_relationships": [
+        {
+          "source_quote": "Knight's Pride - Prayer (Anabel ES)",
+          "source_fact_id": "skill:438aa7e1d0e071c14c43",
+          "target_kind": "source_fact",
+          "target_id": "skill:eac6950dc058daaf9941",
+          "operation": "activates",
+          "condition": "When in Guiding Light mode or Luring Shadow mode",
+          "timing": "",
+          "reviewed_resolution": "same-page child fact is known; historical href identity was unresolved",
+          "evaluator_status": "manual semantic comparison; evaluator-internal occurrence and relationship IDs are prediction-generated"
+        }
+      ],
+      "reviewed_unscored_mechanics": [
+        {
+          "source_quote": "Prayer child's Guiding Light and Luring Shadow branches",
+          "interpretation": "Child effects belong to the separately reviewed Prayer fact and are not duplicated as parent effects.",
+          "evaluator_status": "relationship target semantics only"
+        },
+        {
+          "source_quote": "Shield HP is depleted before Anabel's HP and cannot be restored",
+          "interpretation": "Shield behavior not represented by a dedicated evaluator field.",
+          "evaluator_status": "outside current scored fields"
+        }
+      ]
+    },
+    {
+      "witness_id": "known-tetra-ruincarnation",
+      "fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+      "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+      "source_slice_sha256": "f94d3922f693647629c0db1d52b346e2e2d7236bdb88bcbe37b709133db80bf9",
+      "cohort_kind": "known_regression",
+      "review_reference": "Review 3 — Tetra (Another Style), Ruincarnation",
+      "atoms": [
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "direct_damage",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+            "quote": "Fixed damage on all enemies"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fixed damage on all enemies (ignores target's defense)"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "heal_hp",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+            "quote": "Restore all party members' HP +100%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "100",
+                "unit": "percent",
+                "raw": "+100%"
+              }
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "revive",
+          "operation": "revive",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+            "quote": "Revive all dead party members"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "hold_ground",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+            "quote": "Hold Ground to all party members"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        }
+      ],
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "source_quote": "Consumes 8 Charge",
+          "interpretation": "Explicit sidekick resource cost/availability behavior; no dedicated Charge dependency ID exists in the admitted dependency taxonomy.",
+          "evaluator_status": "taxonomy gap; compare manually"
+        },
+        {
+          "source_quote": "Stack one Stigmata on Minalca (only if Outrage is still usable)",
+          "interpretation": "The review confirms this is a distinct conditional stack effect, not a resource dependency. The current admitted capability and recipient values cannot represent Stigmata on the named Minalca AS target.",
+          "evaluator_status": "unsupported named-stack mechanic and recipient gap; retain for manual comparison"
+        },
+        {
+          "source_quote": "Damage = [Restore Stat] x 2000 (Max: RES:500; Damage: 1M)",
+          "interpretation": "Damage formula and cap metadata, not another damage occurrence or dependency.",
+          "evaluator_status": "outside current scored fields"
+        },
+        {
+          "source_quote": "Stigmata on Minalca (Another Style)",
+          "interpretation": "The source names the recipient, but the current scored recipient enum cannot retain this named recipient.",
+          "evaluator_status": "named-recipient gap"
+        }
+      ]
+    },
+    {
+      "witness_id": "development-hameow-aura",
+      "fact_id": "sidekick_aura:29ee16dada2c963d4479",
+      "source_capture_sha256": "4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b",
+      "source_location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[0]",
+      "source_slice_sha256": "679db3d633f9705987c4e5674c24725d7994ca27b8aec706b685776536154ce5",
+      "cohort_kind": "development",
+      "review_reference": "Review 11 — Hameow, Cross Resonance Aura",
+      "atoms": [
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "outgoing_damage_up",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[1]",
+            "quote": "Damage dealt by all party members +10%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Hameow"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When enemy receives slash or magic damage"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_damage"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "10",
+                "unit": "percent",
+                "raw": "+10%"
+              }
+            },
+            "relationships": {
+              "status": "unknown"
+            }
+          }
+        }
+      ],
+      "reviewed_relationships": [
+        {
+          "source_quote": "When enemy receives slash or magic damage",
+          "source_fact_id": "sidekick_aura:29ee16dada2c963d4479",
+          "target_kind": "activation_condition",
+          "target_id": "outgoing_damage_up",
+          "operation": "activates",
+          "condition": "When enemy receives slash or magic damage",
+          "timing": "event-driven",
+          "reviewed_resolution": "source-confirmed activation event",
+          "evaluator_status": "not representable by the current source_fact/shared_mechanic relationship target kinds; manual comparison"
+        }
+      ],
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "witness_id": "development-aldo-starwyrm-slash",
+      "fact_id": "skill:e1e5596f2b79f033909d",
+      "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+      "source_slice_sha256": "edd67caa2ffc5581036f1465adc1c16d86051ea06891e9219a5e0fd127ec23ab",
+      "cohort_kind": "development",
+      "source_variant_label": "Enhanced",
+      "review_reference": "Review 17 — Aldo, Starwyrm Slash (Enhanced row)",
+      "atoms": [
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "direct_damage",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "Slash attack on all enemies (XXL)"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "power_up",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "Power and Speed of user +50%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "50",
+                "unit": "percent",
+                "raw": "+50%"
+              }
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "2"
+              }
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "speed_up",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "Power and Speed of user +50%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "50",
+                "unit": "percent",
+                "raw": "+50%"
+              }
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "2"
+              }
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "direct_damage",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Slash attack on all enemies (XXL x5)"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "power_up",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Power and Speed of user +100%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "100",
+                "unit": "percent",
+                "raw": "+100%"
+              }
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "effect",
+          "atomic_capability_id": "speed_up",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Power and Speed of user +100%"
+          },
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "value": "100",
+                "unit": "percent",
+                "raw": "+100%"
+              }
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        },
+        {
+          "occurrence_kind": "dependency",
+          "atomic_capability_id": "requires_stellar_awakened",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "requires Stellar Awakening"
+          },
+          "fields": {
+            "condition": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          }
+        }
+      ],
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "source_quote": "Skill Multiplier increases based on User's Guiding Light; Add User's Light x 8 to base multiplier",
+          "interpretation": "Damage-scaling inputs and formula metadata, not effects or activation dependencies.",
+          "evaluator_status": "outside current scored fields"
+        },
+        {
+          "source_quote": "When used during Stellar Burst",
+          "interpretation": "Conditional branch trigger. No requires-Stellar-Burst dependency ID exists in the current dependency taxonomy.",
+          "evaluator_status": "condition field scored; dependency taxonomy gap reported separately"
+        },
+        {
+          "source_quote": "XXL x5; Element Type changes to target's Elemental Weakness",
+          "interpretation": "Hit count and target-relative element conversion are attack metadata, not extra attack capabilities.",
+          "evaluator_status": "hit count and target-relative element conversion are outside current scored fields"
+        },
+        {
+          "source_quote": "Normal and Enhanced Starwyrm Slash",
+          "interpretation": "Variant identity must remain distinct within one conceptual skill family.",
+          "evaluator_status": "variant identity is outside current scored fields"
+        }
+      ]
+    },
+    {
+      "witness_id": "development-claude-es-another-zone",
+      "fact_id": "skill:42d6ef8f388054c5fcf4",
+      "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/block[0]",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "cohort_kind": "development",
+      "review_reference": "Review 23 — Claude (Extra Style), Another Zone shared definition",
+      "atoms": [],
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "source_quote": "Awakens any Elemental Type Zones or Damage Type Attack Zones or the named Hybrid Zones",
+          "interpretation": "A shared mechanic definition, not a Claude-owned direct-damage occurrence.",
+          "evaluator_status": "definition-level behavior is outside current effect/dependency occurrence scoring"
+        },
+        {
+          "source_quote": "Zone multipliers, weakness/resistance effects, overwrite/removal/expiration, Support Effects coexistence, and activation-use rules",
+          "interpretation": "Keep these as properties of the shared Another Zone mechanic and separate from the skill that activates it.",
+          "evaluator_status": "definition-level fields and skill-to-definition graph are not fully represented by current evaluator fields"
+        }
+      ]
+    }
+  ]
+}
