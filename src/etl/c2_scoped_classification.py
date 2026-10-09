@@ -42,11 +42,12 @@ from .structural_evidence import (
 from .shared_mechanics import (
     REGISTRY_VERSION,
     SharedMechanicRegistry,
+    load_shared_mechanic_registry,
     resolve_shared_mechanics,
 )
 
 
-C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.4.0"
+C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.5.0"
 C2_ORACLE_VERSION = "m6-c2-independent-occurrence-oracle-1.0.0"
 MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 
@@ -72,7 +73,7 @@ _EFFECT_RE = re.compile(
 )
 _ELEMENT_RE = re.compile(r"\b(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\b", re.IGNORECASE)
 _ATTACK_TYPE_RE = re.compile(r"\b(?:slash|piercing|pierce|blunt|magic|physical)\b", re.IGNORECASE)
-_PERCENT_RE = re.compile(r"(?<!\w)(\d+(?:\.\d+)?)\s*%")
+_PERCENT_RE = re.compile(r"(?<!\w)([+-]?\s*)(\d+(?:\.\d+)?)\s*%")
 _PROBABILITY_RE = re.compile(r"(?<!\w)(\d+(?:\.\d+)?)\s*%\s*(?:chance|probability)\b", re.IGNORECASE)
 _MULTIPLIER_RE = re.compile(r"\b(?:x|multiplier\s*x)\s*(\d+(?:\.\d+)?)\b", re.IGNORECASE)
 _TURN_RE = re.compile(r"\b(?:for\s+)?(\d+)\s+turns?\b", re.IGNORECASE)
@@ -80,18 +81,33 @@ _ACTIVATION_RE = re.compile(r"\b(\d+)\s+(?:times?|activations?|uses?)\b|\bonce p
 _ACTION_HEAD_RE = re.compile(
     r"\b(?:attacks?|deals?|inflicts?|applies?|increases?|raises?|boosts?|"
     r"decreases?|reduces?|lowers?|restores?|recovers?|heals?|revives?|"
-    r"removes?|cleanses?|grants?|gains?|adds?|consumes?|spends?|deploys?|"
-    r"activates?|awakens?|replaces?|converts?|changes?|sets?|takes?|"
+    r"removes?|cleanses?|grants?|gives?|gains?|adds?|consumes?|spends?|deploys?|"
+    r"activates?|awakens?|replaces?|converts?|changes?|sets?|stacks?|takes?|"
     r"copies?|follows?\s+up|performs?)\b",
     re.IGNORECASE,
 )
+_COMPOUND_EFFECT_START_RE = re.compile(
+    r"\s+and\s+(?=(?:power|intelligence|speed|luck)\b|"
+    r"(?:physical|magic|element|attack type|type)\s+resistance\b|"
+    r"(?:damage dealt|outgoing damage)\b)",
+    re.IGNORECASE,
+)
+_RESOURCE_COST_START_RE = re.compile(
+    r"\s+to\s+(?:do|deal)\s+(?=(?:fixed damage|damage|attack|attacks)\b)",
+    re.IGNORECASE,
+)
+_BRACKET_CONDITION_RE = re.compile(
+    r"\s*\[(?P<condition>(?:only\s+)?(?:if|when|unless|after|before|during|while)\b[^\]]*)\]"
+    r"\s*[:,;]?\s*",
+    re.IGNORECASE,
+)
 _LEADING_CONDITION_RE = re.compile(
-    r"\s*(?P<condition>(?:only\s+)?(?:if|when|unless|after|before|during|while)\b[^,;.]*)"
-    r"(?:[,;.]\s*|\s+(?=(?:the\s+)?(?:user|skill|effect)\b))",
+    r"\s*(?P<condition>(?:only\s+)?(?:if|when|unless|after|before|during|while)\b[^,;.:]*)"
+    r"(?:[:,;. ]\s*|\s+(?=(?:the\s+)?(?:user|skill|effect)\b))",
     re.IGNORECASE,
 )
 _TRAILING_CONDITION_RE = re.compile(
-    r"\b(?:only\s+when|when|if|unless|provided\s+that|while|after|before|requires?|must|needs?)\b[^,;]*$",
+    r"\b(?:(?:the\s+)?skill\s+requires?|only\s+when|only\s+if|when|if|unless|provided\s+that|while|after|before|requires?|must|needs?)\b[^,;]*$",
     re.IGNORECASE,
 )
 _ACTION_TIMING_RE = re.compile(
@@ -366,6 +382,10 @@ def _direction(text: str) -> str:
     lowered = _key(text)
     if re.search(r"\b(?:enemy|enemies|boss|opponent)\b", lowered):
         return "enemy"
+    if re.search(r"\b(?:inflict|apply)\b[^.;]*\brage\b", lowered) or re.search(
+        r"\bresistance\s*-\s*\d", lowered
+    ):
+        return "enemy"
     if re.search(r"\b(?:ally|allies|party|party members|frontline)\b", lowered):
         return "ally"
     if re.search(r"\b(?:user|self|own)\b", lowered):
@@ -410,6 +430,8 @@ def _condition(text: str) -> str:
 
 def _trigger(text: str) -> str:
     lowered = _key(text)
+    if re.search(r"\breceives?\b[^.;]*\bdamage\b", lowered):
+        return "on_damage"
     for phrase, value in (
         ("preemptive", "preemptive"),
         ("auto", "auto"),
@@ -433,8 +455,10 @@ def _magnitude(text: str) -> dict[str, str]:
     probability = _PROBABILITY_RE.search(text)
     multiplier = _MULTIPLIER_RE.search(text)
     hit_count = _hit_count(text)
-    if percent and (not probability or percent.start() != probability.start()):
-        return {"value": percent.group(1), "unit": "percent", "raw": percent.group(0)}
+    if percent and (not probability or percent.start(2) != probability.start()):
+        sign = percent.group(1).strip()
+        value = percent.group(2)
+        return {"value": value, "unit": "percent", "raw": f"{sign}{value}%"}
     if multiplier and not hit_count:
         return {"value": multiplier.group(1), "unit": "multiplier", "raw": multiplier.group(0)}
     count = re.search(
@@ -495,10 +519,37 @@ def _formula_metadata(text: str) -> dict[str, str]:
     return {"raw": _clean(match.group(0))} if match else {}
 
 
+def _is_formula_explanation(text: str) -> bool:
+    lowered = _key(text)
+    if re.search(r"\b(?:damage|skill multiplier)\s*[:=]", lowered):
+        return True
+    if _formula_metadata(text) and re.search(r"\b(?:skill )?multiplier\b", lowered):
+        return True
+    return bool(
+        re.search(r"\badd\b[^.;]*\b(?:light|shadow)\b[^.;]*\bbase multiplier\b", lowered)
+    )
+
+
 def _has_effect(text: str) -> bool:
+    if _is_formula_explanation(text):
+        return False
     if _formula_metadata(text) and not _ACTION_HEAD_RE.search(text):
         return False
     return bool(_ACTION_HEAD_RE.search(text) or _EFFECT_RE.search(text))
+
+
+def _is_prerequisite(text: str) -> bool:
+    lowered = _key(text)
+    if not lowered or re.search(r"\bif explicitly stated\b", lowered):
+        return False
+    if re.search(r"\b(?:receives?\b[^.;]*\bdamage|used during)\b", lowered):
+        return False
+    if re.match(r"\s*(?:after|before|during|while|until)\b", lowered):
+        return False
+    return bool(
+        re.match(r"\s*(?:(?:the\s+)?skill\s+requires?|if|unless|only when|only if|when|requires?|needs?|must)\b", lowered)
+        or re.search(r"\b(?:once per battle|only once per character|limited uses?)\b", lowered)
+    )
 
 
 def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
@@ -528,9 +579,14 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
         if re.search(r"\b(?:hp|health points?)\b", lowered) or re.search(r"\bheal(?:s|ing)?\b", lowered):
             capability = "heal_hp" if direction in {"ally", "self"} else ""
             return [("hp_recovery", capability, "hp")]
+    if direction in {"ally", "self"} and re.search(r"\b(?:give|grant|apply)\b[^.;]*\bshield\b", lowered):
+        return [("damage_mitigation", "shield", "shield")]
+    if direction in {"ally", "self"} and re.search(r"\b(?:give|grant|apply)\b[^.;]*\bhold ground\b", lowered):
+        return [("status_or_effect_application", "hold_ground", "hold_ground")]
     if re.search(r"\b(?:inflict|inflicts|apply|applies|grant|grants)\b", lowered):
         if direction == "enemy":
             for status, capability in (
+                ("rage", "taunt"),
                 ("pain", "inflict_pain"),
                 ("poison", "inflict_poison"),
                 ("break", "inflict_break"),
@@ -544,8 +600,11 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
         return [("zone_deployment", "deploy_zone", "zone")]
     if re.search(r"\b(?:awaken|awakens|awakened|awakening)\b[^.;]*\bzone\b", lowered):
         return [("zone_awakening", "awaken_zone", "zone")]
-    if re.search(r"\b(?:decrease|decreases|reduce|reduces|lower|lowers)\b[^.;]*\bresistance\b", lowered):
-        if direction == "enemy":
+    if re.search(r"\bresistance\b", lowered) and (
+        direction == "enemy"
+        or re.search(r"(?:decrease|decreases|reduce|reduces|lower|lowers|down)|-\s*\d", lowered)
+    ):
+        if direction not in {"ally", "self"}:
             for property_name, capability in (
                 ("physical", "physical_resistance_down"),
                 ("magic", "magic_resistance_down"),
@@ -555,7 +614,7 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
                 if property_name in lowered:
                     return [("resistance_reduction", capability, property_name.replace(" ", "_"))]
             return [("resistance_reduction", "enemy_resistance_down", "resistance")]
-    if direction in {"ally", "self"} and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts)\b[^.;]*\bresistance\b", lowered):
+    if direction in {"ally", "self"} and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts)\b[^.;]*\bresistance\b|\bresistance\b[^.;]*\+\s*\d", lowered):
         return [("resistance_increase", "ally_resistance_up", "resistance")]
     if direction in {"ally", "self"} and re.search(r"\b(?:damage reduction|reduce damage (?:taken|received)|damage taken)\b", lowered):
         return [("damage_mitigation", "damage_reduction", "damage_received")]
@@ -571,13 +630,13 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
                 return [("critical_support", "magic_critical_rate_up", "magic_critical_rate")]
     if (
         re.search(r"\b(?:attacks|deals|deal)\b", lowered)
-        or re.search(r"\battack\s+(?:all|each|a|an|single|enemy|enemies|opponent|opponents)\b", lowered)
+        or re.search(r"\battack\s+(?:on\s+)?(?:all|each|a|an|single|enemy|enemies|opponent|opponents)\b", lowered)
         or re.search(r"\b(?:fixed damage|performs?\s+(?:an?\s+)?attack)\b", lowered)
     ):
         capability = "direct_damage" if direction == "enemy" else ""
         return [("damage_event", capability, "damage")]
     stat_matches = list(_STAT_WORD_RE.finditer(lowered))
-    if stat_matches and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts|up)\b", lowered):
+    if stat_matches and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts|up)\b|\+\s*\d", lowered):
         stats = list(dict.fromkeys(re.sub(r"\s+", " ", match.group(0).casefold()) for match in stat_matches))
         return [
             (
@@ -597,7 +656,10 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
             )
             for stat in stats
         ]
-    if re.search(r"\b(?:outgoing damage|damage dealt)\b", lowered) and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts|up)\b", lowered):
+    if re.search(r"\b(?:outgoing damage|damage dealt)\b", lowered) and re.search(
+        r"\b(?:increase|increases|raise|raises|boost|boosts|up)\b|\+\s*\d",
+        lowered,
+    ):
         capability = "outgoing_damage_up" if direction in {"ally", "self"} else ""
         return [("damage_modifier", capability, "outgoing_damage")]
     if re.search(r"\b(?:damage received|damage taken|damage reduction|barrier|shield)\b", lowered):
@@ -619,20 +681,20 @@ def _dependency_value(text: str) -> str:
         return "requires_stack"
     if re.search(r"\bstatus\b", lowered):
         return "requires_status"
-    if re.search(r"\bstellar awakened\b", lowered):
+    if re.search(r"\bstellar (?:awakened|awakening)\b", lowered):
         return "requires_stellar_awakened"
     if re.search(
         r"\b(?:sidekick activation|sidekick is active|sidekick active|activate sidekick)\b",
         lowered,
     ):
         return "requires_sidekick_activation"
-    if re.search(r"\b(?:frontline|party composition)\b", lowered):
+    if re.search(r"\b(?:frontline|party composition|at front)\b", lowered):
         return "party_composition"
     if re.search(r"\b(?:party members?|allies|recipients?)\b", lowered):
         return "requires_recipient_eligibility"
     if re.search(r"\b(?:eligible|eligibility)\b", lowered):
         return "requires_recipient_eligibility"
-    if re.search(r"\b(?:once per battle|limited use|limited uses?)\b", lowered):
+    if re.search(r"\b(?:once per battle|once per character|limited use|limited uses?)\b", lowered):
         return "limited_use"
     return ""
 
@@ -665,24 +727,40 @@ def _trim_range(text: str, start: int, end: int) -> tuple[int, int]:
 
 def _split_action_ranges(text: str, start: int, end: int) -> list[tuple[int, int]]:
     matches = [match for match in _ACTION_HEAD_RE.finditer(text, start, end)]
-    boundaries: list[int] = []
+    compound_matches = list(_COMPOUND_EFFECT_START_RE.finditer(text, start, end))
+    splits: set[tuple[int, int]] = {
+        (match.start(), match.end())
+        for match in compound_matches
+        if not re.search(
+            r"\b(?:power|intelligence|speed|luck)\s*$",
+            text[max(start, match.start() - 50):match.start()],
+            re.IGNORECASE,
+        )
+    }
+    splits.update((match.start(), match.end()) for match in _RESOURCE_COST_START_RE.finditer(text, start, end))
     previous_end = matches[0].end() if matches else start
     for match in matches[1:]:
         between = text[previous_end:match.start()]
-        connector = re.search(r"(?:,\s*(?:and|then)?\s*|\s+(?:and|then)\s+)$", between, re.IGNORECASE)
+        connector = re.search(
+            r"(?:,\s*(?:and|then)?\s*|\s+(?:and|then)\s+)"
+            r"(?:(?:[\w-]+\.png)\s*)*$",
+            between,
+            re.IGNORECASE,
+        )
         if connector:
-            boundaries.append(previous_end + connector.start())
+            splits.add((previous_end + connector.start(), match.start()))
         previous_end = match.end()
-    if not boundaries:
+    if not splits:
         return [_trim_range(text, start, end)]
     ranges: list[tuple[int, int]] = []
     previous = start
-    for boundary in boundaries:
-        left_start, left_end = _trim_range(text, previous, boundary)
+    for left_end, right_start in sorted(splits):
+        if left_end <= previous or right_start >= end:
+            continue
+        left_start, left_end = _trim_range(text, previous, left_end)
         if left_start < left_end:
             ranges.append((left_start, left_end))
-        action = next((match.start() for match in matches if match.start() >= boundary), boundary)
-        previous = action
+        previous = right_start
     right_start, right_end = _trim_range(text, previous, end)
     if right_start < right_end:
         ranges.append((right_start, right_end))
@@ -694,7 +772,7 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
     atoms: list[_SourceAtom] = []
     segment_start = 0
     segment_ranges: list[tuple[int, int]] = []
-    for separator in re.finditer(r";|(?<!\d)\.(?!\d)", text):
+    for separator in re.finditer(r";|(?<!\d)\.(?!\d)(?!png\b)", text, re.IGNORECASE):
         segment_ranges.append((segment_start, separator.start()))
         segment_start = separator.end()
     segment_ranges.append((segment_start, len(text)))
@@ -706,7 +784,7 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
         condition = ""
         condition_start: int | None = None
         condition_end: int | None = None
-        condition_match = _LEADING_CONDITION_RE.match(text, start, end)
+        condition_match = _BRACKET_CONDITION_RE.match(text, start, end) or _LEADING_CONDITION_RE.match(text, start, end)
         body_start = start
         if condition_match and _trigger(condition_match.group("condition")) != "on_use":
             condition = _clean(condition_match.group("condition"))
@@ -729,7 +807,12 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
 
         body_start, body_end = _trim_range(text, body_start, end)
         has_action = bool(_ACTION_HEAD_RE.search(text, body_start, body_end))
-        if not has_action and _CONDITION_RE.search(text[start:end]) and not _formula_metadata(text[start:end]):
+        if (
+            not has_action
+            and _CONDITION_RE.search(text[start:end])
+            and (not _EFFECT_RE.search(text[start:end]) or bool(_trigger(text[start:end])))
+            and not _formula_metadata(text[start:end])
+        ):
             trigger = _trigger(text[start:end])
             is_trigger = bool(trigger)
             atoms.append(
@@ -754,17 +837,21 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
             effect_end = action_end
             trailing = _TRAILING_CONDITION_RE.search(text, action_start, action_end)
             if trailing and trailing.start() > action_start:
-                trailing_text = _clean(trailing.group(0))
+                trailing_text = _clean(trailing.group(0)).strip("() ")
                 trailing_timing = _trigger(trailing_text)
                 if trailing_timing == "on_use":
                     timing = trailing_timing
                     timing_start = trailing.start()
                     timing_end = trailing.end()
                 else:
-                    local_condition = trailing_text
-                    local_condition_start = trailing.start()
+                    local_condition = (
+                        f"{local_condition}; {trailing_text}" if local_condition else trailing_text
+                    )
+                    local_condition_start = local_condition_start or trailing.start()
                     local_condition_end = trailing.end()
                 effect_end = trailing.start()
+                if effect_end > action_start and text[effect_end - 1] == "(":
+                    effect_end -= 1
             effect_start, effect_end = _trim_range(text, action_start, effect_end)
             if effect_start == effect_end:
                 continue
@@ -835,9 +922,29 @@ def _occurrence(
     timing_source_span: SourceSpan | None = None,
     probability: Mapping[str, str] | None = None,
     state_reference: str | None = None,
+    field_context: str = "",
 ) -> ClassifiedOccurrence:
     scoped_text = effect_text if effect_text is not None else text
+    result_text = _clean(scoped_text)
+    if semantic_type == "damage_mitigation" and semantic_subject == "shield":
+        result_text = re.sub(
+            r"^.*?\b(?:give|grant|apply)\s+shield\s+to\s+user\b",
+            "Shield on user",
+            result_text,
+            flags=re.IGNORECASE,
+        )
+        result_text = re.sub(r"(?<=\d)\s+HP\b", "", result_text, flags=re.IGNORECASE)
+        result_text = re.sub(r"\s*\(\s*\d+\s+turns?\s*\)\s*$", "", result_text, flags=re.IGNORECASE)
+        result_text = _clean(result_text)
     recipient, cardinality = _recipient_and_cardinality(scoped_text)
+    direction = _direction(scoped_text)
+    if field_context:
+        inherited_recipient, inherited_cardinality = _recipient_and_cardinality(field_context)
+        if recipient == "unknown":
+            recipient = inherited_recipient
+            cardinality = inherited_cardinality
+        if direction == "unknown":
+            direction = _direction(field_context)
     canonical_capability = capability_value if capability_value in _CAPABILITY_IDS else ""
     canonical_dependency = dependency_value if dependency_value in _DEPENDENCY_IDS else ""
     return ClassifiedOccurrence(
@@ -852,13 +959,13 @@ def _occurrence(
         source_span=span,
         source_text=_clean(text),
         actor=str(witness.get("entity_name") or "source_owner"),
-        direction=_direction(scoped_text),
+        direction=direction,
         recipient=recipient,
         recipient_name=_named_recipient(scoped_text, references),
         target_cardinality=cardinality,
         condition=_condition(text) if condition is None else condition,
         trigger=_trigger(text) if action_timing is None else action_timing,
-        result=_clean(scoped_text),
+        result=result_text,
         magnitude=_magnitude(scoped_text),
         duration_activation=_duration_activation(scoped_text),
         element=_element(scoped_text),
@@ -1042,7 +1149,7 @@ def _relationship_operation(text: str, target_text: str) -> str:
     if latest is None:
         return "references"
     verb_position, operation = latest
-    return operation if len(before_target) - verb_position <= 40 else "references"
+    return operation if len(before_target) - verb_position <= 80 else "references"
 
 
 def _relationship_id(
@@ -1184,14 +1291,17 @@ def _classify_relationships(
         if token is None:
             continue
         context, token_start, token_end = _reference_context(contexts_by_unit.get(origin_id, ()), token)
-        local_text = context.atom.text if context else token.text
-        operation = "replaces" if row.get("variant_relationship") else _relationship_operation(local_text, token.text)
+        block = next(
+            (block for block in origin.blocks if any(item.location == token.location for item in block.tokens)),
+            None,
+        )
+        if block is None:
+            continue
+        block_text, _block_positions = _render_fragment_tokens(block.tokens)
+        operation = "replaces" if row.get("variant_relationship") else _relationship_operation(block_text, token.text)
         variant = row.get("variant_relationship") or {}
         condition = str(variant.get("condition") or (context.atom.condition if context else ""))
         timing = context.atom.action_timing if context else ""
-        block = next((block for block in origin.blocks if any(item.location == token.location for item in block.tokens)), None)
-        if block is None:
-            continue
         source_span = SourceSpan(
             location=token.location,
             block_kind=block.kind,
@@ -1256,6 +1366,15 @@ def _classify_relationships(
             )
             if block is None:
                 continue
+            has_child_link = any(
+                row.get("target_source_fact_id")
+                and any(token.location == row.get("occurrence_location") for token in block.tokens)
+                for row in resolutions
+            )
+            operation_text, _block_positions = _render_fragment_tokens(block.tokens)
+            operation = _relationship_operation(operation_text, mention.mention)
+            if has_child_link and operation == "activates":
+                continue
             source_span = SourceSpan(
                 location=mention.source_location,
                 block_kind=block.kind,
@@ -1268,7 +1387,6 @@ def _classify_relationships(
             )
             target_id = mention.mechanic_id if mention.resolution_status == "resolved" else ""
             target_kind = "shared_mechanic" if target_id else "unresolved"
-            operation_text = context.atom.text if context else mention.mention
             add_relationship(
                 source_fact_id=mention.parent_source_fact_id or str(origin.source_fact_id or witness.get("record_id") or ""),
                 source_owner=mention.parent_owner_name or origin.entity_name,
@@ -1276,7 +1394,7 @@ def _classify_relationships(
                 target_kind=target_kind,
                 target_id=target_id,
                 candidate_target_ids=mention.candidate_mechanic_ids,
-                operation=_relationship_operation(operation_text, mention.mention),
+                operation=operation,
                 condition=context.atom.condition if context else "",
                 timing=context.atom.action_timing if context else "",
                 source_span=source_span,
@@ -1328,14 +1446,33 @@ def _classify_unit(
     seen_triggers: set[tuple[str, str, int | None, int | None]] = set()
     seen_states: set[tuple[str, str, int | None, int | None]] = set()
     unit_contexts: dict[str, list[_AtomContext]] = {}
+    pending_condition = ""
+    pending_condition_span: SourceSpan | None = None
+    pending_action_timing = ""
+    pending_global_timing = ""
+    pending_global_timing_span: SourceSpan | None = None
+    registry = mechanic_registry or load_shared_mechanic_registry()
+    source_fact_id = str(witness.get("record_id") or unit.source_fact_id or "")
+    witness_id = str(witness.get("witness_id") or "")
+    shared_definition_source = any(
+        entry.definition_status == "available"
+        and anchor.source_fact_id == source_fact_id
+        and anchor.witness_id == witness_id
+        and any(alias.source_anchor_id == anchor.anchor_id for alias in entry.aliases)
+        for entry in registry.entries
+        for anchor in entry.source_anchors
+    )
 
     for block in unit.blocks:
+        consume_global_timing = False
         for tokens, start, end in _tokens_to_fragments(block):
             text, token_positions = _render_fragment_tokens(tokens)
             if not text:
                 continue
             contexts = _fragment_atoms(block, tokens, start, end, text, token_positions)
             unit_contexts.setdefault(unit.unit_id, []).extend(contexts)
+            previous_target_context = ""
+            consume_pending_condition = False
             for context in contexts:
                 atom = context.atom
                 selected_tokens = context.selected_tokens
@@ -1346,36 +1483,97 @@ def _classify_unit(
                 support = _definition_support(references, resolution_by_location, admit_definitions=admit_definitions)
                 effect_text = atom.effect_text
                 direction = _direction(effect_text)
-                if _has_effect(effect_text):
+                has_effect = _has_effect(effect_text)
+                effect_condition = atom.condition
+                effect_condition_span = condition_span
+                effect_timing = atom.action_timing
+                effect_timing_span = timing_span
+                if re.match(r"\s*(?:the\s+)?skill\s+requires?\b", effect_condition, re.IGNORECASE):
+                    effect_condition = ""
+                    effect_condition_span = None
+                if has_effect and pending_condition:
+                    if not effect_condition:
+                        effect_condition = pending_condition
+                        effect_condition_span = pending_condition_span
+                    if not effect_timing:
+                        effect_timing = pending_action_timing
+                        effect_timing_span = pending_condition_span
+                    consume_pending_condition = True
+                if has_effect and block.kind != "root" and pending_global_timing and not effect_timing:
+                    effect_timing = pending_global_timing
+                    effect_timing_span = pending_global_timing_span
+                    consume_global_timing = True
+
+                if direction == "unknown" and previous_target_context:
+                    direction = _direction(previous_target_context)
+                block_locations = {token.location for token in block.tokens}
+                resolved_child_target = any(
+                    row.get("status") in {"resolved", "visited"}
+                    and row.get("target_source_fact_id")
+                    and row.get("occurrence_location") in block_locations
+                    for row in resolutions
+                )
+                relationship_activation = (
+                    has_effect
+                    and bool(re.search(r"\bactivate(?:s|d|ing)?\b", effect_text, re.IGNORECASE))
+                    and resolved_child_target
+                )
+                if has_effect and not shared_definition_source and not relationship_activation:
                     for semantic_type, capability, subject in _effect_semantics(effect_text, direction):
+                        resource_prerequisite = (
+                            semantic_type == "resource_consumption"
+                            and bool(_RESOURCE_COST_START_RE.search(context.fragment_text))
+                        )
+                        occurrence_kind = "dependency" if resource_prerequisite else "effect"
+                        inherited_target = (
+                            previous_target_context
+                            if semantic_type in {"resistance_reduction", "status_infliction"}
+                            and _recipient_and_cardinality(effect_text)[0] == "unknown"
+                            else ""
+                        )
+                        value = _dependency_value(effect_text) if resource_prerequisite else ""
                         occurrences.append(
                             _occurrence(
-                                kind="effect",
+                                kind=occurrence_kind,
                                 witness=witness,
                                 span=atom_span,
                                 text=atom.text,
                                 effect_text=effect_text,
-                                ordinal=ordinal_by_kind["effect"],
+                                ordinal=ordinal_by_kind[occurrence_kind],
                                 semantic_state=semantic_state,
                                 authority=authority,
                                 definition_support=support,
                                 references=references,
-                                capability_value=capability,
-                                condition=atom.condition,
-                                action_timing=atom.action_timing,
+                                capability_value="" if resource_prerequisite else capability,
+                                dependency_value=value,
+                                condition=effect_condition,
+                                action_timing=effect_timing,
                                 semantic_type=semantic_type,
                                 hit_count=_hit_count(effect_text),
                                 formula_metadata=_formula_metadata(effect_text),
                                 semantic_subject=subject,
-                                condition_source_span=condition_span,
-                                timing_source_span=timing_span,
+                                condition_source_span=effect_condition_span,
+                                timing_source_span=effect_timing_span,
                                 probability=_probability(effect_text),
                                 state_reference=_state_reference(atom.condition) or _state_reference(effect_text),
+                                field_context=inherited_target,
                             )
                         )
-                        ordinal_by_kind["effect"] += 1
+                        ordinal_by_kind[occurrence_kind] += 1
+                    if _recipient_and_cardinality(effect_text)[0] != "unknown":
+                        previous_target_context = effect_text
 
-                if atom.condition:
+                relationship_condition = (
+                    has_effect
+                    and bool(re.search(r"\bactivate(?:s|d|ing)?\b", effect_text, re.IGNORECASE))
+                    and bool(references)
+                )
+                if (
+                    atom.condition
+                    and _is_prerequisite(atom.condition)
+                    and not relationship_condition
+                    and not shared_definition_source
+                ):
                     condition_key = (atom_span.location, atom.condition, atom.condition_start, atom.condition_end)
                     if condition_key not in seen_dependencies:
                         seen_dependencies.add(condition_key)
@@ -1436,6 +1634,23 @@ def _classify_unit(
                         )
                         ordinal_by_kind["trigger"] += 1
 
+                if atom.action_timing and not has_effect:
+                    trigger_text = re.sub(
+                        r"^aura activation condition\s*:\s*",
+                        "",
+                        _clean(atom.text),
+                        flags=re.IGNORECASE,
+                    ).rstrip(":")
+                    if trigger_text:
+                        pending_condition = trigger_text
+                        pending_condition_span = atom_span
+                        pending_action_timing = (
+                            "" if atom.action_timing == "on_use" else atom.action_timing
+                        )
+                if block.kind == "root" and atom.action_timing == "preemptive":
+                    pending_global_timing = atom.action_timing
+                    pending_global_timing_span = timing_span or atom_span
+
                 state_text = atom.condition or effect_text or atom.text
                 state_reference = _state_reference(state_text)
                 if state_reference:
@@ -1489,6 +1704,14 @@ def _classify_unit(
                     )
                 )
                 ordinal_by_kind["reference"] += 1
+
+            if consume_pending_condition:
+                pending_condition = ""
+                pending_condition_span = None
+                pending_action_timing = ""
+        if consume_global_timing:
+            pending_global_timing = ""
+            pending_global_timing_span = None
 
     unit_by_id = {candidate.unit_id: candidate for candidate in all_units}
     unit_by_id[unit.unit_id] = unit

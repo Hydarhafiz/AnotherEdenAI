@@ -143,6 +143,43 @@ def test_compound_effects_keep_magnitude_duration_probability_and_hits_local():
     assert all(row.authority == "automatic_candidate" for row in effects)
 
 
+def test_compound_damage_resistance_and_rage_keep_canonical_labels_and_local_targets():
+    darunis = _unit(
+        "skill:example:compound-resistance",
+        "Compound Resistance",
+        "https://example.test/wiki/Compound_Resistance",
+        [_text_token(
+            "Deals slash attack on one enemy, then reduces Physical resistance of that enemy by 20% for 3 turns.",
+            "sha256:resistance/block[0]/text[0]",
+        )],
+    )
+    alma = _unit(
+        "skill:example:compound-rage",
+        "Compound Rage",
+        "https://example.test/wiki/Compound_Rage",
+        [_text_token(
+            "Deals slash attack on one enemy, then inflicts Rage on that enemy for 3 turns.",
+            "sha256:rage/block[0]/text[0]",
+        )],
+    )
+
+    resistance_effects = _effects(_classify(darunis))
+    damage, resistance = resistance_effects
+    assert damage.capability_value == "direct_damage"
+    assert damage.recipient == "single_enemy"
+    assert resistance.capability_value == "physical_resistance_down"
+    assert resistance.recipient == "single_enemy"
+    assert resistance.magnitude == {"value": "20", "unit": "percent", "raw": "20%"}
+    assert resistance.duration_activation["duration_turns"] == "3"
+
+    rage_effects = _effects(_classify(alma))
+    damage, rage = rage_effects
+    assert damage.capability_value == "direct_damage"
+    assert rage.capability_value == "taunt"
+    assert rage.recipient == "single_enemy"
+    assert rage.duration_activation["duration_turns"] == "3"
+
+
 def test_potency_multiplier_is_not_mistaken_for_attack_hit_count():
     unit = _unit(
         "skill:example:potency",
@@ -249,6 +286,31 @@ def test_buffs_recovery_cleansing_resources_and_hit_count_stay_separate():
     assert not any(row.occurrence_kind == "dependency" for row in result.occurrences if "based on" in row.source_text)
 
 
+def test_formula_explanations_and_stack_resource_text_do_not_become_dependencies():
+    unit = _unit(
+        "skill:example:formula-resource",
+        "Formula Resource",
+        "https://example.test/wiki/Formula_Resource",
+        [_text_token(
+            "Damage = attack x 3. Add Light attack's base multiplier. Consumes 2 Stacks and deals damage to one enemy. Requires Stellar Awakening.",
+            "sha256:formula-resource/block[0]/text[0]",
+        )],
+    )
+
+    result = _classify(unit)
+    effects = _effects(result)
+    dependencies = [row for row in result.occurrences if row.occurrence_kind == "dependency"]
+    state_references = [row for row in result.occurrences if row.occurrence_kind == "state"]
+
+    assert [row.capability_value for row in effects if row.semantic_type == "damage_event"] == ["direct_damage"]
+    assert not any("Damage =" in row.source_text or "base multiplier" in row.source_text for row in effects)
+    assert not any(row.dependency_value == "requires_stack" for row in dependencies)
+    assert any(row.dependency_value == "requires_stellar_awakened" for row in dependencies)
+    assert state_references and state_references[0].state_reference == "Stacks"
+    resource_cost = next(row for row in effects if row.semantic_type == "resource_consumption")
+    assert resource_cost.capability_gap is True
+
+
 def test_review_mapping_requires_recheck_after_atomic_semantics_change_without_fanout():
     legacy = {
         "occurrence_id": "legacy:one",
@@ -324,6 +386,38 @@ def test_resolved_child_edges_keep_local_condition_timing_and_source_ownership()
     assert edge.resolution_status == "resolved"
     assert edge.source_occurrence_id
     assert edge.authority == "automatic_candidate"
+
+
+def test_child_activation_is_a_parent_owned_relationship_not_a_scoreable_effect():
+    parent_url = "https://example.test/wiki/Activation_Parent"
+    child_url = "https://example.test/wiki/Activation_Child"
+    block_location = "sha256:activation-parent/block[0]"
+    parent = _unit(
+        "skill:example:activation-parent",
+        "Activation Parent",
+        parent_url,
+        [
+            _text_token("Activates", f"{block_location}/text[0]", 0),
+            _reference_token("Child Skill", child_url, f"{block_location}/link[1]", 1),
+        ],
+    )
+    child = _unit(
+        "skill:example:activation-child",
+        "Child Skill",
+        child_url,
+        [],
+        blocks=[],
+    )
+
+    result = _classify(parent, child)
+    edge = next(row for row in result.relationships if row.target_id == child.source_fact_id)
+
+    assert not _effects(result)
+    assert edge.source_fact_id == parent.source_fact_id
+    assert edge.source_owner == parent.entity_name
+    assert edge.target_kind == "source_fact"
+    assert edge.operation == "activates"
+    assert edge.resolution_status == "resolved"
 
 
 def test_counter_stack_edge_keeps_parent_local_condition_and_shared_identity():
