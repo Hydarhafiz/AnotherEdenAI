@@ -1,44 +1,57 @@
 {
   "access_history": {
-    "cohort_count_reconciliation": "The 57 development witnesses comprise 26 original development, 21 prior validation identities, and 10 retired interim fresh candidates. The three reviewed Gunce identities and two source-slice-overlap findings are subsets of the 21 prior validation identities, not additional cohorts.",
+    "cohort_count_reconciliation": "59 development = 26 original development + 21 prior validation + 10 interim candidates + two previously reviewed protected records retired before R4; seven known regressions remain separate; five prior fresh entries retained and two replacements added.",
     "committed_tests_and_cli_historically_support_heldout_access": true,
-    "current_turn": "Initial packet source exposure and unbounded src/tests search caused all then-protected identities to be conservatively reclassified; fresh cohort was rebuilt from unused captures.",
+    "current_turn": "Before R4 the owner replaced two already-reviewed protected identities, preserved five prior answers, and generated only an aggregate BEFORE baseline against b480642. This owner-helper session is excluded from R4 implementation/tuning.",
     "historical_execution_audit_available": false,
     "historical_validation_witness_count_before_reclassification": 21,
     "legacy_ordinal_rows_retired_to_development": 3,
+    "previously_reviewed_protected_witnesses_retired_to_development": 2,
     "prior_validation_reclassification_reason": "source-search output was truncated and row exposure could not be bounded",
     "prior_validation_witnesses_reclassified_to_development": 21,
     "remaining_legacy_protected_validation_count": 0,
+    "retired_protected_witness_ids": [
+      "fresh-isuka-alter-andante",
+      "fresh-mordy-aura"
+    ],
     "reviewed_gunce_reclassified": 3,
     "source_packet_candidates_retired_to_development": 10,
     "source_slice_duplicate_validation_reclassified": 2,
     "unbounded_search_exposure_detected": true
   },
   "artifact_type": "c2_frozen_evaluation_manifest",
-  "artifact_version": "m6-c2-r1-evaluation-boundary-1.0.0",
+  "artifact_version": "m6-c2-r1-evaluation-boundary-1.1.0",
+  "cohort_refresh": {
+    "date": "2026-10-09",
+    "other_five_protected_entries_semantically_unchanged": true,
+    "replacement_witness_ids": [
+      "fresh-replacement-cetie-holdup",
+      "fresh-replacement-korobo-flame-jammer"
+    ],
+    "retired_witness_ids": [
+      "fresh-isuka-alter-andante",
+      "fresh-mordy-aura"
+    ]
+  },
   "coverage_contract": {
     "coverage_tag_status": "Owner-directed tags frozen as evaluation-only metadata; seven accepted witnesses cover every required stratum.",
     "coverage_tags": {
       "fresh-erina-refresh": [
         "simple_skill"
       ],
-      "fresh-isuka-alter-andante": [
-        "complex_multi_effect_skill",
-        "stellar_or_state_driven_variant",
-        "shared_mechanic",
-        "condition_or_state_heavy_mechanic"
-      ],
       "fresh-minimander-auto": [
         "sidekick_auto",
         "complex_multi_effect_skill"
       ],
-      "fresh-mordy-aura": [
-        "sidekick_aura",
-        "condition_or_state_heavy_mechanic"
-      ],
       "fresh-myunfa-alter-radical-zone": [
         "shared_mechanic",
         "condition_or_state_heavy_mechanic"
+      ],
+      "fresh-replacement-cetie-holdup": [
+        "stellar_or_state_driven_variant"
+      ],
+      "fresh-replacement-korobo-flame-jammer": [
+        "sidekick_aura"
       ],
       "fresh-tetra-charge": [
         "sidekick_charge",
@@ -58,25 +71,23 @@
       ],
       "shared_mechanic": [
         "fresh-tetra-charge",
-        "fresh-isuka-alter-andante",
         "fresh-myunfa-alter-radical-zone"
       ],
       "sidekick_aura": [
-        "fresh-mordy-aura"
+        "fresh-replacement-korobo-flame-jammer"
       ],
       "sidekick_auto": [
         "fresh-minimander-auto"
       ],
       "sidekick_charge": [
         "fresh-tetra-charge"
+      ],
+      "stellar_or_state_driven_variant": [
+        "fresh-replacement-cetie-holdup"
       ]
     },
-    "fresh_replacement_strata_status": "All ten required coverage strata remain represented in seven owner-adjudicated fresh witnesses. Yuna replaces the non-evaluable Thillelille Koakh case for the passive stratum; Koakh remains a separate, unscored taxonomy gap.",
-    "optional_diagnostic_tags": {
-      "fresh-isuka-alter-andante": [
-        "stack_or_resource_state"
-      ]
-    },
+    "fresh_replacement_strata_status": "All ten required strata remain represented; five protected entries are unchanged and two replacements add the approved Stellar/state-driven and sidekick-aura strata.",
+    "optional_diagnostic_tags": {},
     "required_strata": [
       "simple_skill",
       "complex_multi_effect_skill",
@@ -90,18 +101,39 @@
       "condition_or_state_heavy_mechanic"
     ],
     "required_strata_unchanged": true,
+    "retired_witness_metadata": {
+      "coverage_tags": {
+        "fresh-isuka-alter-andante": [
+          "complex_multi_effect_skill",
+          "stellar_or_state_driven_variant",
+          "shared_mechanic",
+          "condition_or_state_heavy_mechanic"
+        ],
+        "fresh-mordy-aura": [
+          "sidekick_aura",
+          "condition_or_state_heavy_mechanic"
+        ]
+      },
+      "optional_diagnostic_tags": {
+        "fresh-isuka-alter-andante": [
+          "stack_or_resource_state"
+        ]
+      },
+      "tag_decisions": {
+        "fresh-isuka-alter-andante.stack_or_resource_state": "Optional diagnostic tag only; it does not alter required_strata or the acceptance floor.",
+        "fresh-mordy-aura.shared_mechanic": "Removed: the Time Breakup activation dependency has no controlled shared definition in the R1 admitted identity set."
+      }
+    },
     "stratum_labels_for_legacy_validation_are_manifest_metadata_only": "true",
     "tag_decisions": {
-      "fresh-isuka-alter-andante.stack_or_resource_state": "Optional diagnostic tag only; it does not alter required_strata or the acceptance floor.",
       "fresh-minimander-auto.shared_mechanic": "Removed: no reusable canonical mechanic identity is the target of this witness; its generic attack/buff references do not establish one.",
-      "fresh-mordy-aura.shared_mechanic": "Removed: the Time Breakup activation dependency has no controlled shared definition in the R1 admitted identity set.",
       "fresh-myunfa-alter-radical-zone.passive": "Removed: Radical Zone is a reusable shared mechanic definition despite being stored in a passive row; the row does not satisfy the semantic passive stratum.",
       "fresh-tetra-charge.parent_child_relation": "Retained: source explicitly links the conditional action to Minalca activating the named Lethal Mode child; count only when represented as a typed activates relation to that linked mode identity. The tag does not assert Lethal Mode internals.",
       "fresh-yuna-turn-start-status-immunity.condition_or_state_heavy_mechanic": "Included: the source has a Turn Start trigger and an independent front-line condition plus a Stellar Awakening prerequisite.",
       "fresh-yuna-turn-start-status-immunity.passive": "Included: this is a character passive with a source effect represented by the existing taxonomy."
     }
   },
-  "development_witness_count": 57,
+  "development_witness_count": 59,
   "development_witnesses": [
     {
       "archetypes": [
@@ -1143,6 +1175,49 @@
       "source_path": "data/raw/characters/spirika.html",
       "source_slice_sha256": "9ce10135ae1b92a99dca410512ad43fc2ec943b0cef3d01b691dd3b59b648858",
       "witness_id": "fresh-r1-000e838f9121"
+    },
+    {
+      "display_label": "Isuka (Alter) (Another Style)",
+      "disposition": "retired_to_development_regression_prior_reviewed",
+      "entity_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
+      "fact_id": "skill:b981957455a7dbd05aae",
+      "fact_name": "Andante",
+      "prior_protected_coverage_tags": [
+        "complex_multi_effect_skill",
+        "stellar_or_state_driven_variant",
+        "shared_mechanic",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "record_type": "active_skill",
+      "retired_from_protected_cohort": true,
+      "retirement_reason": "Previously reviewed; moved to development/regression evidence before R4.",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "09898c19762f9e0ff5f6797b016692838183bbfa3632101bc0078dfe7fbb5aae",
+      "source_kind": "character",
+      "source_location": "sha256:09898c19762f9e0ff5f6797b016692838183bbfa3632101bc0078dfe7fbb5aae/grid[17]/block[0]",
+      "source_path": "data/raw/characters/isuka_alter_another_style_black_clad_sw_another_style.html",
+      "source_slice_sha256": "7efdc680b25db9bfd0a6a416e3fded0083815e0248bc6418564ef514e07b2111",
+      "witness_id": "fresh-isuka-alter-andante"
+    },
+    {
+      "disposition": "retired_to_development_regression_prior_reviewed",
+      "entity_name": "Mordy",
+      "fact_id": "sidekick_aura:f3e831db190b414c52f7",
+      "fact_name": "Time Wanderer",
+      "prior_protected_coverage_tags": [
+        "sidekick_aura",
+        "condition_or_state_heavy_mechanic"
+      ],
+      "record_type": "sidekick_aura",
+      "retired_from_protected_cohort": true,
+      "retirement_reason": "Previously reviewed; moved to development/regression evidence before R4.",
+      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
+      "source_capture_sha256": "6c1120bf72bf46fc501ff6bf3d79bee6621401a90c2c508c3162ef282af86bdd",
+      "source_kind": "sidekick",
+      "source_location": "sha256:6c1120bf72bf46fc501ff6bf3d79bee6621401a90c2c508c3162ef282af86bdd/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/mordy.html",
+      "source_slice_sha256": "16cb5fbb095e4de94337ef0dc92ad7799ebd9782dce6c79c2ebd2f0b55afb705",
+      "witness_id": "fresh-mordy-aura"
     }
   ],
   "evaluator_contract": {
@@ -1244,21 +1319,33 @@
     },
     {
       "coverage_tags": [
-        "sidekick_aura",
-        "condition_or_state_heavy_mechanic"
+        "sidekick_aura"
       ],
       "disposition": "fresh_replacement_frozen",
-      "entity_name": "Mordy",
-      "fact_id": "sidekick_aura:f3e831db190b414c52f7",
-      "fact_name": "Time Wanderer",
+      "entity_name": "Korobo",
+      "fact_id": "sidekick_aura:36fe58e3ce12f71d0b49",
+      "fact_name": "Flame Jammer",
+      "freshness_attestation": {
+        "capability_gold": "none exact",
+        "development_or_heldout_oracles": "none exact",
+        "exact_fact_identity_reuse": "none",
+        "exact_source_slice_reuse": "none",
+        "fixtures": "none exact",
+        "prior_review": "none exact",
+        "review_batches": "none exact"
+      },
       "record_type": "sidekick_aura",
-      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
-      "source_capture_sha256": "6c1120bf72bf46fc501ff6bf3d79bee6621401a90c2c508c3162ef282af86bdd",
+      "selection_basis": "Owner-selected primary from metadata-only freshness slate.",
+      "source_capture_sha256": "3ae5125dd04526eb3bd615fed37098a0cad5aed0ba172613320c326605519f76",
       "source_kind": "sidekick",
-      "source_location": "sha256:6c1120bf72bf46fc501ff6bf3d79bee6621401a90c2c508c3162ef282af86bdd/grid[1]/block[0]",
-      "source_path": "data/raw/sidekicks/mordy.html",
-      "source_slice_sha256": "16cb5fbb095e4de94337ef0dc92ad7799ebd9782dce6c79c2ebd2f0b55afb705",
-      "witness_id": "fresh-mordy-aura"
+      "source_location": "sha256:3ae5125dd04526eb3bd615fed37098a0cad5aed0ba172613320c326605519f76/grid[2]/block[0]",
+      "source_path": "data/raw/sidekicks/korobo.html",
+      "source_slice_sha256": "0545832a683fabc4a252f69c7b55bb2b754b50fe71b0c326c0c8842e5df92669",
+      "structural_metadata": {
+        "activation_condition_field_present": true,
+        "grid_index": 2
+      },
+      "witness_id": "fresh-replacement-korobo-flame-jammer"
     },
     {
       "coverage_tags": [
@@ -1279,24 +1366,35 @@
     },
     {
       "coverage_tags": [
-        "complex_multi_effect_skill",
-        "stellar_or_state_driven_variant",
-        "shared_mechanic",
-        "condition_or_state_heavy_mechanic"
+        "stellar_or_state_driven_variant"
       ],
-      "display_label": "Isuka (Alter) (Another Style)",
       "disposition": "fresh_replacement_frozen",
-      "entity_name": "Isuka (Alter) (Another Style),Black Clad Sw. (Another Style)",
-      "fact_id": "skill:b981957455a7dbd05aae",
-      "fact_name": "Andante",
+      "entity_name": "Cetie",
+      "fact_id": "skill:9c713bcaaf0c7c77829c",
+      "fact_name": "Holdup",
+      "freshness_attestation": {
+        "capability_gold": "none exact",
+        "development_or_heldout_oracles": "none exact",
+        "exact_fact_identity_reuse": "none",
+        "exact_source_slice_reuse": "none",
+        "fixtures": "none exact",
+        "prior_review": "none exact",
+        "review_batches": "none exact"
+      },
       "record_type": "active_skill",
-      "selection_basis": "unused pinned capture and exact source slice; selected by identity and structural metadata without classifier output",
-      "source_capture_sha256": "09898c19762f9e0ff5f6797b016692838183bbfa3632101bc0078dfe7fbb5aae",
+      "selection_basis": "Owner-selected primary from metadata-only freshness slate.",
+      "source_capture_sha256": "8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce",
       "source_kind": "character",
-      "source_location": "sha256:09898c19762f9e0ff5f6797b016692838183bbfa3632101bc0078dfe7fbb5aae/grid[17]/block[0]",
-      "source_path": "data/raw/characters/isuka_alter_another_style_black_clad_sw_another_style.html",
-      "source_slice_sha256": "7efdc680b25db9bfd0a6a416e3fded0083815e0248bc6418564ef514e07b2111",
-      "witness_id": "fresh-isuka-alter-andante"
+      "source_location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+      "source_path": "data/raw/characters/cetie.html",
+      "source_slice_sha256": "648ac13f52696199c8cb7bfd3c17271bb3494ba91b1d5a097406a8f9d7ad5760",
+      "structural_metadata": {
+        "block_count": 6,
+        "grid_index": 10,
+        "reference_count": 6,
+        "token_count": 32
+      },
+      "witness_id": "fresh-replacement-cetie-holdup"
     },
     {
       "coverage_tags": [
@@ -1476,12 +1574,12 @@
     }
   ],
   "oracle_custody": {
-    "adjudication_status": "Owner completed source-only adjudication for all seven scoreable frozen witnesses after replacing the non-evaluable Thillelille record with Yuna; the Thillelille case remains a separate unscored taxonomy gap.",
-    "procedural_separation_limitation": "The private path is mode 0700/0600 and outside the repository, but processes running as the same OS user can technically read it. R2-R4 must not access the owner path or run the owner evaluator; only the human owner runs aggregate evaluation at R5 after the remediation freeze.",
-    "release_gate": "R5 only, after remediation freeze; any earlier access invalidates this validation cohort",
+    "adjudication_status": "Owner preserved five prior answers unchanged and adjudicated the two selected replacements from source-only evidence; only revised digest is committed.",
+    "procedural_separation_limitation": "Explicit owner-helper access was limited to the two approved replacements and aggregate BEFORE baseline. This session is excluded from R4 implementation/tuning; R4 will run in a new isolated chat. Same-user access remains technically possible.",
+    "release_gate": "Post-remediation protected comparison remains reserved for R5; owner-authorized aggregate BEFORE is frozen before R4. Any per-witness result access or tuning invalidates the cohort.",
     "schema_version": "c2-atomic-oracle-1",
     "semantic_oracle": "owner-controlled at /home/shogunix/c2-private/c2-r1-owner-oracle.json; outside the repository and never copied into shared workspace during R2-R4.",
-    "sha256": "4213138b3aa98c7196840754d5222a826ed1820622d8542983790942699a5e1b"
+    "sha256": "b52e24aa9737970ac451b9bde622856de05ac63b590cc6d2ff9bf8bc77fd78cd"
   },
   "overlap_audit": {
     "approved_reuse_policy": "An exact prior witness/source-slice reuse is not fresh. Shared reusable/global mechanics or references do not disqualify a distinct fresh witness.",
@@ -1514,15 +1612,99 @@
         ]
       },
       {
-        "development_witness_id": "development-aisha-mp-restore",
-        "fresh_witness_id": "fresh-tetra-charge",
+        "development_witness_id": "development-azami-hold-ground",
+        "fresh_witness_id": "fresh-minimander-auto",
         "shared_reference_fingerprints": [
           "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
         ]
       },
       {
-        "development_witness_id": "development-aisha-mp-restore",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-kumos-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-moke-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-tetra-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hazama-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-iridian-attack-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-jilya-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-laika-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-auto",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-charge",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-minalca-tributum",
+        "fresh_witness_id": "fresh-minimander-auto",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-sesta-wolfheart",
+        "fresh_witness_id": "fresh-minimander-auto",
         "shared_reference_fingerprints": [
           "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
         ]
@@ -1535,84 +1717,6 @@
         ]
       },
       {
-        "development_witness_id": "development-aldo-starwyrm-slash",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-aldo-starwyrm-slash",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-alma-kaleidoscope",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-alma-kaleidoscope",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-anabel-aegis-boon",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-anabel-aegis-boon",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-azami-hold-ground",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-azami-hold-ground",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-azami-hold-ground",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-cerius-empyrean-flash",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05",
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-cerius-empyrean-flash",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
         "development_witness_id": "development-claude-es-another-zone",
         "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
         "shared_reference_fingerprints": [
@@ -1621,335 +1725,10 @@
         ]
       },
       {
-        "development_witness_id": "development-feinne-as-angel-song",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-feinne-as-angel-song",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-feinne-as-angel-song",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-feinne-as-angel-song",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940",
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "development-hameow-aura",
-        "fresh_witness_id": "fresh-mordy-aura",
-        "shared_reference_fingerprints": [
-          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
-        ]
-      },
-      {
-        "development_witness_id": "development-kumos-auto",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-kumos-auto",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-kumos-auto",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-moke-charge",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-moke-charge",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-moke-charge",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
         "development_witness_id": "development-pizzica-oratorio",
         "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
         "shared_reference_fingerprints": [
           "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160"
-        ]
-      },
-      {
-        "development_witness_id": "development-shigure-cease-counter",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
-        ]
-      },
-      {
-        "development_witness_id": "development-tetra-auto",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-tetra-auto",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-tetra-auto",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "development-xianhua-horizon",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-aldo-as-stellar-burst-activation-bonus",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-aldo-as-stellar-burst-activation-bonus",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-hazama-auto",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-hazama-auto",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-hazama-auto",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-hyuga-aura",
-        "fresh_witness_id": "fresh-mordy-aura",
-        "shared_reference_fingerprints": [
-          "251638bf9c6eab47b425540a095b6396f097a44ebd4c51f317912d50a39e32d1",
-          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-iridian-attack-auto",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-iridian-attack-auto",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-iridian-attack-auto",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-jilya-charge",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-jilya-charge",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-jilya-charge",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-laika-charge",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-laika-charge",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-laika-charge",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "fresh-pyggie-aura",
-        "fresh_witness_id": "fresh-mordy-aura",
-        "shared_reference_fingerprints": [
-          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-akane-fearless-persistence",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-akane-fearless-persistence",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-cyrus-battle-start",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-cyrus-battle-start",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-cyrus-battle-start",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-cyrus-battle-start",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940",
-          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-dewey-mist-blast",
-        "fresh_witness_id": "fresh-isuka-alter-andante",
-        "shared_reference_fingerprints": [
-          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-aura",
-        "fresh_witness_id": "fresh-mordy-aura",
-        "shared_reference_fingerprints": [
-          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-auto",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-auto",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-auto",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-charge",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-charge",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-gunce-charge",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
         ]
       },
       {
@@ -1968,66 +1747,412 @@
         ]
       },
       {
-        "development_witness_id": "heldout-minalca-tributum",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-minalca-tributum",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-minalca-tributum",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-sesta-wolfheart",
-        "fresh_witness_id": "fresh-minimander-auto",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-sesta-wolfheart",
-        "fresh_witness_id": "fresh-tetra-charge",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
-        "development_witness_id": "heldout-sesta-wolfheart",
-        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
-        "shared_reference_fingerprints": [
-          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
-        ]
-      },
-      {
         "development_witness_id": "heldout-velette-another-zone",
         "fresh_witness_id": "fresh-myunfa-alter-radical-zone",
         "shared_reference_fingerprints": [
           "67d205d529b150994a7170f0a1be22bb8be3fb8f2d238f24d838a3d97e262160",
           "8a63607cee10540f95e979b38618344b5d89e1f362981c04b43c7bb9a83b1578"
         ]
-      }
-    ],
-    "fresh_internal_reference_overlap_pairs": [
+      },
       {
-        "fresh_witness_ids": [
-          "fresh-isuka-alter-andante",
-          "fresh-yuna-turn-start-status-immunity"
-        ],
+        "development_witness_id": "development-aldo-starwyrm-slash",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
         "shared_reference_fingerprints": [
           "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
         ]
       },
+      {
+        "development_witness_id": "development-alma-kaleidoscope",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-anabel-aegis-boon",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "60a5a4f5b42c9cb5c139fb6f910c46db52caac8183658485c5d80674112b934e",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-cerius-empyrean-flash",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-iphi-spina-liliac",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "60a5a4f5b42c9cb5c139fb6f910c46db52caac8183658485c5d80674112b934e"
+        ]
+      },
+      {
+        "development_witness_id": "development-shigure-cease-counter",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
+        ]
+      },
+      {
+        "development_witness_id": "development-soira-as-cover",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "60a5a4f5b42c9cb5c139fb6f910c46db52caac8183658485c5d80674112b934e"
+        ]
+      },
+      {
+        "development_witness_id": "development-xianhua-horizon",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-aldo-as-stellar-burst-activation-bonus",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-isuka-alter-andante",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-akane-fearless-persistence",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-dewey-mist-blast",
+        "fresh_witness_id": "fresh-replacement-cetie-holdup",
+        "shared_reference_fingerprints": [
+          "18bef3748066c86fbd087180f3f2190d6687d9b46daf028213b445cb8248df05"
+        ]
+      },
+      {
+        "development_witness_id": "development-hameow-aura",
+        "fresh_witness_id": "fresh-replacement-korobo-flame-jammer",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hyuga-aura",
+        "fresh_witness_id": "fresh-replacement-korobo-flame-jammer",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-mordy-aura",
+        "fresh_witness_id": "fresh-replacement-korobo-flame-jammer",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-pyggie-aura",
+        "fresh_witness_id": "fresh-replacement-korobo-flame-jammer",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-aura",
+        "fresh_witness_id": "fresh-replacement-korobo-flame-jammer",
+        "shared_reference_fingerprints": [
+          "5e98256cf5c8970d7224f57effc853042925a0cb1ecbed3352ad42358838cede"
+        ]
+      },
+      {
+        "development_witness_id": "development-aisha-mp-restore",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-azami-hold-ground",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-kumos-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-moke-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-tetra-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hazama-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-iridian-attack-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-jilya-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-laika-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-auto",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-charge",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-minalca-tributum",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-sesta-wolfheart",
+        "fresh_witness_id": "fresh-tetra-charge",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-aisha-mp-restore",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-aldo-starwyrm-slash",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-alma-kaleidoscope",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-anabel-aegis-boon",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-azami-hold-ground",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-cerius-empyrean-flash",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-feinne-as-angel-song",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "development-kumos-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-moke-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "development-tetra-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-aldo-as-stellar-burst-activation-bonus",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-hazama-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-iridian-attack-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-isuka-alter-andante",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-jilya-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "fresh-laika-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-akane-fearless-persistence",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-cyrus-battle-start",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940",
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-auto",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-gunce-charge",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-minalca-tributum",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      },
+      {
+        "development_witness_id": "heldout-sesta-wolfheart",
+        "fresh_witness_id": "fresh-yuna-turn-start-status-immunity",
+        "shared_reference_fingerprints": [
+          "36c94b59b5b2d76933db1b5e8700eca74b1ba83c7c3995699282dbefd180f940"
+        ]
+      }
+    ],
+    "fresh_internal_reference_overlap_pairs": [
       {
         "fresh_witness_ids": [
           "fresh-minimander-auto",
@@ -2048,6 +2173,15 @@
       },
       {
         "fresh_witness_ids": [
+          "fresh-replacement-cetie-holdup",
+          "fresh-yuna-turn-start-status-immunity"
+        ],
+        "shared_reference_fingerprints": [
+          "6561f05f7dddaa18c301d68e7e8ff1b912713086ca6d6dcce624b7c37cbfba60"
+        ]
+      },
+      {
+        "fresh_witness_ids": [
           "fresh-tetra-charge",
           "fresh-yuna-turn-start-status-immunity"
         ],
@@ -2056,22 +2190,22 @@
         ]
       }
     ],
-    "fresh_shared_reference_pair_count_with_development": 72,
+    "fresh_shared_reference_pair_count_with_development": 77,
     "fresh_shared_reference_pair_count_within_replacement_cohort": 4,
     "new_fresh_capture_overlap_with_prior_witnesses": 0,
     "new_fresh_exact_source_slice_overlap_with_prior_witnesses": 0,
     "prior_validation_disposition": "all prior validation identities were moved to development after unbounded source-search output could not establish an untouched subset",
     "recomputed_hash_checks": {
-      "capture_hashes_verified": 64,
-      "development_and_fresh_witnesses_checked": 64,
+      "capture_hashes_verified": 66,
+      "development_and_fresh_witnesses_checked": 66,
       "disposition": "All seven selected fresh witnesses have distinct source captures and exact source slices from development; shared reference fingerprints are recorded and are permitted by the approved reuse policy.",
       "fresh_vs_development_exact_capture_pairs": 0,
       "fresh_vs_development_exact_source_slice_pairs": 0,
-      "fresh_vs_development_shared_reference_pairs": 72,
+      "fresh_vs_development_shared_reference_pairs": 77,
       "method": "Re-resolved all development and fresh witnesses from pinned captures using the source-fidelity selector; compared capture SHA-256, source-slice SHA-256, and source location; recomputed canonical reference fingerprints without emitting source text or URLs.",
       "recorded_shared_reference_fingerprint_pairs_match_recomputation": true,
-      "source_locations_verified": 64,
-      "source_slice_hashes_verified": 64,
+      "source_locations_verified": 66,
+      "source_slice_hashes_verified": 66,
       "within_fresh_cohort_shared_reference_pairs": 4
     },
     "reference_fingerprints": "SHA-256(canonical source-reference URL with fragment when present); URLs and reference text are omitted from the committed manifest",
@@ -2084,16 +2218,16 @@
   "paired_pre_remediation_baseline": {
     "cohort": "seven-witness fresh replacement cohort only; legacy validation cohort has historical ordinal diagnostic and no corrected independent semantic baseline",
     "evaluator_version": "c2-atomic-eval-1.0.0",
-    "implementation": "current C2 implementation at b480642, before any R2-R4 changes",
-    "output": "artifacts/evidence/feature_c2_pre_remediation_baseline.json; aggregate arm/cohort metrics only, no per-witness rows or semantic values",
-    "status": "produced against the final frozen Yuna cohort and owner-held oracle; no protected answers or per-witness comparisons returned"
+    "implementation": "original pre-remediation C2 classifier at b480642 with corrected R1 evaluator",
+    "output": "artifacts/evidence/feature_c2_pre_remediation_baseline.json; aggregate metrics only, no per-witness rows or semantic values",
+    "status": "regenerated for revised owner freeze before R4; no answers or per-witness comparisons returned"
   },
   "r5_reserved_post_fix_human_sample": [
     "fresh-minimander-auto",
     "fresh-tetra-charge",
-    "fresh-mordy-aura",
+    "fresh-replacement-korobo-flame-jammer",
     "fresh-erina-refresh",
-    "fresh-isuka-alter-andante",
+    "fresh-replacement-cetie-holdup",
     "fresh-myunfa-alter-radical-zone",
     "fresh-yuna-turn-start-status-immunity"
   ],
@@ -2115,5 +2249,5 @@
     "initial_witness_manifest": "src/etl/source_fidelity_manifest.json",
     "source_capture_authority": "raw capture SHA-256 and pinned source URL; source slice extracted by source-fidelity structural resolver"
   },
-  "status": "C2-R1 evaluation boundary frozen; seven-witness aggregate-only pre-remediation baseline produced before R2-R4 changes."
+  "status": "owner-refrozen-before-c2-r4"
 }

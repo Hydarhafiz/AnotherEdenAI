@@ -139,146 +139,152 @@
         }
       },
       "capability_label_precision_recall": {
-        "expected_count": 26,
-        "false_negative_count": 25,
-        "false_positive_count": 42,
-        "precision": 0.023255813953488372,
-        "predicted_count": 43,
-        "recall": 0.038461538461538464,
-        "true_positive_count": 1
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "condition_attachment": {
         "accuracy": 0.0,
-        "adjudicated_count": 14,
-        "denominator_count": 26,
-        "incorrect_count": 14,
-        "unknown_count": 12
+        "adjudicated_count": 10,
+        "denominator_count": 23,
+        "incorrect_count": 10,
+        "unknown_count": 13
       },
       "dependency_occurrence_precision_recall": {
-        "expected_count": 9,
-        "false_negative_count": 7,
-        "false_positive_count": 16,
-        "precision": 0.1111111111111111,
-        "predicted_count": 18,
-        "recall": 0.2222222222222222,
-        "true_positive_count": 2
+        "expected_count": 8,
+        "false_negative_count": 8,
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "effect_occurrence_precision_recall": {
-        "expected_count": 17,
+        "expected_count": 15,
         "false_negative_count": 15,
-        "false_positive_count": 23,
-        "precision": 0.08,
-        "predicted_count": 25,
-        "recall": 0.11764705882352941,
-        "true_positive_count": 2
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "field_correctness": {
         "actor": {
           "accuracy": null,
-          "denominator_count": 26,
-          "unknown_count": 26
+          "denominator_count": 23,
+          "unknown_count": 23
         },
         "attack_type": {
-          "accuracy": 0.2,
-          "adjudicated_count": 5,
-          "correct_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 4,
+          "accuracy": 0.0,
+          "adjudicated_count": 2,
+          "denominator_count": 23,
+          "incorrect_count": 2,
           "not_applicable_count": 1,
           "unknown_count": 20
         },
         "condition": {
           "accuracy": 0.0,
-          "adjudicated_count": 14,
-          "denominator_count": 26,
-          "incorrect_count": 14,
-          "unknown_count": 12
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
         },
         "direction": {
           "accuracy": 0.0,
           "adjudicated_count": 2,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 2,
-          "unknown_count": 24
+          "unknown_count": 21
         },
         "duration_activation": {
           "accuracy": 0.0,
           "adjudicated_count": 5,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 5,
-          "unknown_count": 21
+          "not_applicable_count": 1,
+          "unknown_count": 17
         },
         "element": {
-          "accuracy": 0.14285714285714285,
-          "adjudicated_count": 7,
-          "correct_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 6,
-          "unknown_count": 19
+          "accuracy": 0.0,
+          "adjudicated_count": 3,
+          "denominator_count": 23,
+          "incorrect_count": 3,
+          "unknown_count": 20
         },
         "magnitude": {
           "accuracy": 0.0,
-          "adjudicated_count": 2,
-          "denominator_count": 26,
-          "incorrect_count": 2,
-          "unknown_count": 24
+          "adjudicated_count": 6,
+          "denominator_count": 23,
+          "incorrect_count": 6,
+          "unknown_count": 17
         },
         "recipient": {
           "accuracy": 0.0,
-          "adjudicated_count": 10,
-          "denominator_count": 26,
-          "incorrect_count": 10,
-          "unknown_count": 16
+          "adjudicated_count": 8,
+          "denominator_count": 23,
+          "incorrect_count": 8,
+          "not_applicable_count": 3,
+          "unknown_count": 12
         },
         "relationships": {
-          "accuracy": null,
-          "denominator_count": 26,
-          "not_applicable_count": 2,
-          "unknown_count": 24
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
         },
         "result": {
           "accuracy": 0.0,
           "adjudicated_count": 7,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 7,
-          "unknown_count": 19
+          "unknown_count": 16
         },
         "state_reference": {
           "accuracy": 0.0,
-          "adjudicated_count": 12,
-          "denominator_count": 26,
-          "incorrect_count": 12,
-          "unknown_count": 14
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "not_applicable_count": 1,
+          "unknown_count": 12
         },
         "target_cardinality": {
           "accuracy": 0.0,
-          "adjudicated_count": 10,
-          "denominator_count": 26,
-          "incorrect_count": 10,
-          "unknown_count": 16
+          "adjudicated_count": 6,
+          "denominator_count": 23,
+          "incorrect_count": 6,
+          "not_applicable_count": 3,
+          "unknown_count": 14
         },
         "trigger": {
           "accuracy": 0.0,
-          "adjudicated_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 1,
-          "unknown_count": 25
+          "adjudicated_count": 4,
+          "denominator_count": 23,
+          "incorrect_count": 4,
+          "unknown_count": 19
         }
       },
       "primary_occurrence_precision_recall": {
-        "expected_count": 26,
-        "false_negative_count": 22,
-        "false_positive_count": 39,
-        "precision": 0.09302325581395349,
-        "predicted_count": 43,
-        "recall": 0.15384615384615385,
-        "true_positive_count": 4
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "typed_relationship_correctness": {
-        "accuracy": null,
-        "denominator_count": 26,
-        "not_applicable_count": 2,
-        "unknown_count": 24
+        "accuracy": 0.0,
+        "adjudicated_count": 1,
+        "denominator_count": 23,
+        "incorrect_count": 1,
+        "not_applicable_count": 9,
+        "unknown_count": 13
       },
       "witness_denominator": 7
     },
@@ -421,144 +427,152 @@
         }
       },
       "capability_label_precision_recall": {
-        "expected_count": 26,
-        "false_negative_count": 26,
-        "false_positive_count": 25,
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 15,
         "precision": 0.0,
-        "predicted_count": 25,
+        "predicted_count": 15,
         "recall": 0.0,
         "true_positive_count": 0
       },
       "condition_attachment": {
         "accuracy": 0.0,
-        "adjudicated_count": 14,
-        "denominator_count": 26,
-        "incorrect_count": 14,
-        "unknown_count": 12
+        "adjudicated_count": 10,
+        "denominator_count": 23,
+        "incorrect_count": 10,
+        "unknown_count": 13
       },
       "dependency_occurrence_precision_recall": {
-        "expected_count": 9,
-        "false_negative_count": 9,
-        "false_positive_count": 7,
+        "expected_count": 8,
+        "false_negative_count": 8,
+        "false_positive_count": 6,
         "precision": 0.0,
-        "predicted_count": 7,
+        "predicted_count": 6,
         "recall": 0.0,
         "true_positive_count": 0
       },
       "effect_occurrence_precision_recall": {
-        "expected_count": 17,
-        "false_negative_count": 17,
-        "false_positive_count": 18,
+        "expected_count": 15,
+        "false_negative_count": 15,
+        "false_positive_count": 9,
         "precision": 0.0,
-        "predicted_count": 18,
+        "predicted_count": 9,
         "recall": 0.0,
         "true_positive_count": 0
       },
       "field_correctness": {
         "actor": {
           "accuracy": null,
-          "denominator_count": 26,
-          "unknown_count": 26
+          "denominator_count": 23,
+          "unknown_count": 23
         },
         "attack_type": {
           "accuracy": 0.0,
-          "adjudicated_count": 5,
-          "denominator_count": 26,
-          "incorrect_count": 5,
+          "adjudicated_count": 2,
+          "denominator_count": 23,
+          "incorrect_count": 2,
           "not_applicable_count": 1,
           "unknown_count": 20
         },
         "condition": {
           "accuracy": 0.0,
-          "adjudicated_count": 14,
-          "denominator_count": 26,
-          "incorrect_count": 14,
-          "unknown_count": 12
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
         },
         "direction": {
           "accuracy": 0.0,
           "adjudicated_count": 2,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 2,
-          "unknown_count": 24
+          "unknown_count": 21
         },
         "duration_activation": {
           "accuracy": 0.0,
           "adjudicated_count": 5,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 5,
-          "unknown_count": 21
+          "not_applicable_count": 1,
+          "unknown_count": 17
         },
         "element": {
           "accuracy": 0.0,
-          "adjudicated_count": 7,
-          "denominator_count": 26,
-          "incorrect_count": 7,
-          "unknown_count": 19
+          "adjudicated_count": 3,
+          "denominator_count": 23,
+          "incorrect_count": 3,
+          "unknown_count": 20
         },
         "magnitude": {
           "accuracy": 0.0,
-          "adjudicated_count": 2,
-          "denominator_count": 26,
-          "incorrect_count": 2,
-          "unknown_count": 24
+          "adjudicated_count": 6,
+          "denominator_count": 23,
+          "incorrect_count": 6,
+          "unknown_count": 17
         },
         "recipient": {
           "accuracy": 0.0,
-          "adjudicated_count": 10,
-          "denominator_count": 26,
-          "incorrect_count": 10,
-          "unknown_count": 16
+          "adjudicated_count": 8,
+          "denominator_count": 23,
+          "incorrect_count": 8,
+          "not_applicable_count": 3,
+          "unknown_count": 12
         },
         "relationships": {
-          "accuracy": null,
-          "denominator_count": 26,
-          "not_applicable_count": 2,
-          "unknown_count": 24
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
         },
         "result": {
           "accuracy": 0.0,
           "adjudicated_count": 7,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 7,
-          "unknown_count": 19
+          "unknown_count": 16
         },
         "state_reference": {
           "accuracy": 0.0,
-          "adjudicated_count": 12,
-          "denominator_count": 26,
-          "incorrect_count": 12,
-          "unknown_count": 14
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "not_applicable_count": 1,
+          "unknown_count": 12
         },
         "target_cardinality": {
           "accuracy": 0.0,
-          "adjudicated_count": 10,
-          "denominator_count": 26,
-          "incorrect_count": 10,
-          "unknown_count": 16
+          "adjudicated_count": 6,
+          "denominator_count": 23,
+          "incorrect_count": 6,
+          "not_applicable_count": 3,
+          "unknown_count": 14
         },
         "trigger": {
           "accuracy": 0.0,
-          "adjudicated_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 1,
-          "unknown_count": 25
+          "adjudicated_count": 4,
+          "denominator_count": 23,
+          "incorrect_count": 4,
+          "unknown_count": 19
         }
       },
       "primary_occurrence_precision_recall": {
-        "expected_count": 26,
-        "false_negative_count": 26,
-        "false_positive_count": 25,
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 15,
         "precision": 0.0,
-        "predicted_count": 25,
+        "predicted_count": 15,
         "recall": 0.0,
         "true_positive_count": 0
       },
       "typed_relationship_correctness": {
-        "accuracy": null,
-        "denominator_count": 26,
-        "not_applicable_count": 2,
-        "unknown_count": 24
+        "accuracy": 0.0,
+        "adjudicated_count": 1,
+        "denominator_count": 23,
+        "incorrect_count": 1,
+        "not_applicable_count": 9,
+        "unknown_count": 13
       },
       "witness_denominator": 7
     },
@@ -701,146 +715,152 @@
         }
       },
       "capability_label_precision_recall": {
-        "expected_count": 26,
-        "false_negative_count": 25,
-        "false_positive_count": 42,
-        "precision": 0.023255813953488372,
-        "predicted_count": 43,
-        "recall": 0.038461538461538464,
-        "true_positive_count": 1
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "condition_attachment": {
         "accuracy": 0.0,
-        "adjudicated_count": 14,
-        "denominator_count": 26,
-        "incorrect_count": 14,
-        "unknown_count": 12
+        "adjudicated_count": 10,
+        "denominator_count": 23,
+        "incorrect_count": 10,
+        "unknown_count": 13
       },
       "dependency_occurrence_precision_recall": {
-        "expected_count": 9,
-        "false_negative_count": 7,
-        "false_positive_count": 16,
-        "precision": 0.1111111111111111,
-        "predicted_count": 18,
-        "recall": 0.2222222222222222,
-        "true_positive_count": 2
+        "expected_count": 8,
+        "false_negative_count": 8,
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "effect_occurrence_precision_recall": {
-        "expected_count": 17,
+        "expected_count": 15,
         "false_negative_count": 15,
-        "false_positive_count": 23,
-        "precision": 0.08,
-        "predicted_count": 25,
-        "recall": 0.11764705882352941,
-        "true_positive_count": 2
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "field_correctness": {
         "actor": {
           "accuracy": null,
-          "denominator_count": 26,
-          "unknown_count": 26
+          "denominator_count": 23,
+          "unknown_count": 23
         },
         "attack_type": {
-          "accuracy": 0.2,
-          "adjudicated_count": 5,
-          "correct_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 4,
+          "accuracy": 0.0,
+          "adjudicated_count": 2,
+          "denominator_count": 23,
+          "incorrect_count": 2,
           "not_applicable_count": 1,
           "unknown_count": 20
         },
         "condition": {
           "accuracy": 0.0,
-          "adjudicated_count": 14,
-          "denominator_count": 26,
-          "incorrect_count": 14,
-          "unknown_count": 12
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "unknown_count": 13
         },
         "direction": {
           "accuracy": 0.0,
           "adjudicated_count": 2,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 2,
-          "unknown_count": 24
+          "unknown_count": 21
         },
         "duration_activation": {
           "accuracy": 0.0,
           "adjudicated_count": 5,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 5,
-          "unknown_count": 21
+          "not_applicable_count": 1,
+          "unknown_count": 17
         },
         "element": {
-          "accuracy": 0.14285714285714285,
-          "adjudicated_count": 7,
-          "correct_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 6,
-          "unknown_count": 19
+          "accuracy": 0.0,
+          "adjudicated_count": 3,
+          "denominator_count": 23,
+          "incorrect_count": 3,
+          "unknown_count": 20
         },
         "magnitude": {
           "accuracy": 0.0,
-          "adjudicated_count": 2,
-          "denominator_count": 26,
-          "incorrect_count": 2,
-          "unknown_count": 24
+          "adjudicated_count": 6,
+          "denominator_count": 23,
+          "incorrect_count": 6,
+          "unknown_count": 17
         },
         "recipient": {
           "accuracy": 0.0,
-          "adjudicated_count": 10,
-          "denominator_count": 26,
-          "incorrect_count": 10,
-          "unknown_count": 16
+          "adjudicated_count": 8,
+          "denominator_count": 23,
+          "incorrect_count": 8,
+          "not_applicable_count": 3,
+          "unknown_count": 12
         },
         "relationships": {
-          "accuracy": null,
-          "denominator_count": 26,
-          "not_applicable_count": 2,
-          "unknown_count": 24
+          "accuracy": 0.0,
+          "adjudicated_count": 1,
+          "denominator_count": 23,
+          "incorrect_count": 1,
+          "not_applicable_count": 9,
+          "unknown_count": 13
         },
         "result": {
           "accuracy": 0.0,
           "adjudicated_count": 7,
-          "denominator_count": 26,
+          "denominator_count": 23,
           "incorrect_count": 7,
-          "unknown_count": 19
+          "unknown_count": 16
         },
         "state_reference": {
           "accuracy": 0.0,
-          "adjudicated_count": 12,
-          "denominator_count": 26,
-          "incorrect_count": 12,
-          "unknown_count": 14
+          "adjudicated_count": 10,
+          "denominator_count": 23,
+          "incorrect_count": 10,
+          "not_applicable_count": 1,
+          "unknown_count": 12
         },
         "target_cardinality": {
           "accuracy": 0.0,
-          "adjudicated_count": 10,
-          "denominator_count": 26,
-          "incorrect_count": 10,
-          "unknown_count": 16
+          "adjudicated_count": 6,
+          "denominator_count": 23,
+          "incorrect_count": 6,
+          "not_applicable_count": 3,
+          "unknown_count": 14
         },
         "trigger": {
           "accuracy": 0.0,
-          "adjudicated_count": 1,
-          "denominator_count": 26,
-          "incorrect_count": 1,
-          "unknown_count": 25
+          "adjudicated_count": 4,
+          "denominator_count": 23,
+          "incorrect_count": 4,
+          "unknown_count": 19
         }
       },
       "primary_occurrence_precision_recall": {
-        "expected_count": 26,
-        "false_negative_count": 22,
-        "false_positive_count": 39,
-        "precision": 0.09302325581395349,
-        "predicted_count": 43,
-        "recall": 0.15384615384615385,
-        "true_positive_count": 4
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 0,
+        "precision": 0.0,
+        "predicted_count": 0,
+        "recall": 0.0,
+        "true_positive_count": 0
       },
       "typed_relationship_correctness": {
-        "accuracy": null,
-        "denominator_count": 26,
-        "not_applicable_count": 2,
-        "unknown_count": 24
+        "accuracy": 0.0,
+        "adjudicated_count": 1,
+        "denominator_count": 23,
+        "incorrect_count": 1,
+        "not_applicable_count": 9,
+        "unknown_count": 13
       },
       "witness_denominator": 7
     }
@@ -848,12 +868,12 @@
   "artifact_type": "c2_paired_pre_remediation_semantic_baseline",
   "cohort": "fresh_replacement",
   "evaluator_version": "c2-atomic-eval-1.0.0",
-  "frozen_manifest_sha256": "0fd5761613d22434b91673878317ef6d2285bb8dc43fe225d589e66cd40e366d",
-  "implementation_artifact_version": "m6-c2-scoped-classification-1.1.0",
+  "frozen_manifest_sha256": "8b698074ab35a943e31ee042f727d8d68abab13872f953f32c20516079f3009a",
+  "implementation_artifact_version": "m6-c2-scoped-classification-1.0.0",
   "implementation_reference": "b480642",
   "legacy_protected_semantic_baseline": "not produced; historical ordinal counts remain diagnostic only",
   "oracle_answers_returned": false,
   "per_witness_results_returned": false,
-  "semantic_oracle_sha256": "4213138b3aa98c7196840754d5222a826ed1820622d8542983790942699a5e1b",
+  "semantic_oracle_sha256": "b52e24aa9737970ac451b9bde622856de05ac63b590cc6d2ff9bf8bc77fd78cd",
   "witness_count": 7
 }
