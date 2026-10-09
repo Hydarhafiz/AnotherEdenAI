@@ -18,7 +18,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
-from .capability_taxonomy import load_reviews, propose
+from .capability_taxonomy import load_capability_taxonomy, load_reviews, propose
 from .kit_readiness import EXPECTED_CANONICAL_CHARACTER_COUNT, artifact_fingerprint
 from .source_fidelity import (
     FIDELITY_DIMENSIONS,
@@ -46,7 +46,7 @@ from .shared_mechanics import (
 )
 
 
-C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.3.0"
+C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.4.0"
 C2_ORACLE_VERSION = "m6-c2-independent-occurrence-oracle-1.0.0"
 MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 
@@ -117,18 +117,51 @@ _KNOWN_STAT_CAPABILITIES = {
     "speed": "speed_up",
     "luck": "luck_up",
 }
-_CAPABILITY_GAP_SEMANTIC_TYPES = frozenset(
-    {
-        "stat_increase",
-        "stat_decrease",
-        "damage_modifier",
-        "defensive_effect",
-        "unsupported_effect",
-        "status_or_effect_application",
-        "removal",
-    }
-)
+_KNOWN_STAT_DECREASE_CAPABILITIES = {
+    "power": "power_down",
+    "intelligence": "intelligence_down",
+    "speed": "speed_down",
+    "luck": "luck_down",
+}
+_TAXONOMY = load_capability_taxonomy()
+_CAPABILITY_IDS = frozenset(_TAXONOMY["capabilities"])
+_DEPENDENCY_IDS = frozenset(_TAXONOMY["dependencies"])
 _STAT_WORD_RE = re.compile(r"\b(?:power|intelligence|speed|luck|max(?:imum)?\s+hp|max(?:imum)?\s+mp)\b", re.IGNORECASE)
+_OPERATION_PATTERNS = (
+    ("damage", re.compile(r"\b(?:attack|attacks|deal(?:s)?|fixed damage)\b", re.I)),
+    ("restore", re.compile(r"\b(?:heal|restore|recover)\b", re.I)),
+    ("apply", re.compile(r"\b(?:apply|inflict|give|grant)\b", re.I)),
+    ("increase", re.compile(r"\b(?:increase|raise|up)\b|\+\s*\d", re.I)),
+    ("decrease", re.compile(r"\b(?:decrease|reduce|lower|down)\b|-\s*\d", re.I)),
+    ("remove", re.compile(r"\b(?:remove|clear|dispel)\b", re.I)),
+    ("activate", re.compile(r"\b(?:activate|deploy|awaken)\b", re.I)),
+    ("consume", re.compile(r"\bconsume(?:s|d)?\b", re.I)),
+    ("require", re.compile(r"\b(?:requires?|needs?)\b", re.I)),
+)
+_OPERATION_BY_SEMANTIC_TYPE = {
+    "action_replacement": "replace",
+    "critical_support": "increase",
+    "damage_event": "damage",
+    "damage_mitigation": "apply",
+    "damage_modifier": "increase",
+    "debuff_cleansing": "remove",
+    "hp_recovery": "restore",
+    "hit_count_modifier": "modify",
+    "mp_recovery": "restore",
+    "resistance_increase": "increase",
+    "resistance_reduction": "decrease",
+    "resource_consumption": "consume",
+    "resource_grant": "grant",
+    "revive": "revive",
+    "stat_decrease": "decrease",
+    "stat_increase": "increase",
+    "status_cleansing": "remove",
+    "status_immunity": "apply",
+    "status_infliction": "apply",
+    "status_or_effect_application": "apply",
+    "zone_deployment": "activate",
+    "zone_awakening": "activate",
+}
 
 
 def _clean(value: str) -> str:
@@ -198,6 +231,7 @@ class SourceSpan:
 class ClassifiedOccurrence:
     occurrence_id: str
     occurrence_kind: str
+    operation: str
     source_fact_id: str
     record_type: str
     entity_name: str
@@ -234,6 +268,7 @@ class ClassifiedOccurrence:
     probability: Mapping[str, str] = field(default_factory=dict)
     recipient_name: str = ""
     capability_gap: bool = False
+    dependency_gap: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -554,7 +589,14 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
         ]
     if stat_matches and re.search(r"\b(?:decrease|decreases|reduce|reduces|lower|lowers|down)\b", lowered):
         stats = list(dict.fromkeys(re.sub(r"\s+", " ", match.group(0).casefold()) for match in stat_matches))
-        return [("stat_decrease", "", stat.replace(" ", "_")) for stat in stats]
+        return [
+            (
+                "stat_decrease",
+                _KNOWN_STAT_DECREASE_CAPABILITIES.get(stat, "") if direction in {"ally", "self"} else "",
+                stat.replace(" ", "_"),
+            )
+            for stat in stats
+        ]
     if re.search(r"\b(?:outgoing damage|damage dealt)\b", lowered) and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts|up)\b", lowered):
         capability = "outgoing_damage_up" if direction in {"ally", "self"} else ""
         return [("damage_modifier", capability, "outgoing_damage")]
@@ -567,17 +609,50 @@ def _dependency_value(text: str) -> str:
     lowered = _key(text)
     if _formula_metadata(text):
         return ""
-    if re.search(r"\b(?:zone|stance)\b", lowered):
-        return "requires_zone_or_stance"
-    if "lunatic" in lowered:
-        return "requires_lunatic_or_variant"
-    if re.search(r"\b(?:stack|stacks|charge)\b", lowered):
-        return "requires_resource_state"
-    if re.search(r"\b(?:blood contract|status|frontline|party member|ally)\b", lowered):
-        return "recipient_or_state_condition"
-    if re.search(r"\b(?:once per battle|limited|consumes?)\b", lowered):
-        return "activation_constraint"
-    return "scoped_condition"
+    if re.search(r"\bend of turn\b", lowered):
+        return "end_of_turn"
+    if re.search(r"\bawakened zone\b", lowered):
+        return "requires_awakened_zone"
+    if re.search(r"\bzone\b", lowered):
+        return "requires_zone"
+    if re.search(r"\bstacks?\b", lowered):
+        return "requires_stack"
+    if re.search(r"\bstatus\b", lowered):
+        return "requires_status"
+    if re.search(r"\bstellar awakened\b", lowered):
+        return "requires_stellar_awakened"
+    if re.search(
+        r"\b(?:sidekick activation|sidekick is active|sidekick active|activate sidekick)\b",
+        lowered,
+    ):
+        return "requires_sidekick_activation"
+    if re.search(r"\b(?:frontline|party composition)\b", lowered):
+        return "party_composition"
+    if re.search(r"\b(?:party members?|allies|recipients?)\b", lowered):
+        return "requires_recipient_eligibility"
+    if re.search(r"\b(?:eligible|eligibility)\b", lowered):
+        return "requires_recipient_eligibility"
+    if re.search(r"\b(?:once per battle|limited use|limited uses?)\b", lowered):
+        return "limited_use"
+    return ""
+
+
+def _operation_for_occurrence(kind: str, text: str, semantic_type: str) -> str:
+    known_operation = _OPERATION_BY_SEMANTIC_TYPE.get(semantic_type)
+    if known_operation:
+        return known_operation
+    lowered = _key(text)
+    if kind == "dependency":
+        if re.search(r"\bconsume(?:s|d)?\b", lowered):
+            return "consume"
+        if re.search(r"\b(?:requires?|needs?)\b", lowered):
+            return "require"
+        if re.search(r"\b(?:if|when|unless|only when|after|before|during)\b", lowered):
+            return "conditional"
+    for operation, pattern in _OPERATION_PATTERNS:
+        if pattern.search(lowered):
+            return operation
+    return "unknown"
 
 
 def _trim_range(text: str, start: int, end: int) -> tuple[int, int]:
@@ -760,13 +835,15 @@ def _occurrence(
     timing_source_span: SourceSpan | None = None,
     probability: Mapping[str, str] | None = None,
     state_reference: str | None = None,
-    capability_gap: bool = False,
 ) -> ClassifiedOccurrence:
     scoped_text = effect_text if effect_text is not None else text
     recipient, cardinality = _recipient_and_cardinality(scoped_text)
+    canonical_capability = capability_value if capability_value in _CAPABILITY_IDS else ""
+    canonical_dependency = dependency_value if dependency_value in _DEPENDENCY_IDS else ""
     return ClassifiedOccurrence(
         occurrence_id=_stable_occurrence_id(str(witness["record_id"]), kind, span, ordinal),
         occurrence_kind=kind,
+        operation=_operation_for_occurrence(kind, text, semantic_type),
         source_fact_id=str(witness["record_id"]),
         record_type=str(witness.get("record_type") or ""),
         entity_name=str(witness.get("entity_name") or ""),
@@ -790,12 +867,12 @@ def _occurrence(
         definition_support=definition_support,
         semantic_state=semantic_state,
         authority=authority,
-        capability_value=capability_value,
-        dependency_value=dependency_value,
+        capability_value=canonical_capability,
+        dependency_value=canonical_dependency,
         legacy_proposal_id=legacy_proposal_id,
         derived_projection=(
             "multi_entity_damage"
-            if kind == "effect" and capability_value == "direct_damage" and cardinality == "multiple"
+            if kind == "effect" and canonical_capability == "direct_damage" and cardinality == "multiple"
             else ""
         ),
         semantic_type=semantic_type,
@@ -806,7 +883,8 @@ def _occurrence(
         condition_source_span=condition_source_span,
         timing_source_span=timing_source_span,
         probability=dict(probability or _probability(scoped_text)),
-        capability_gap=capability_gap,
+        capability_gap=kind == "effect" and not canonical_capability,
+        dependency_gap=kind == "dependency" and not canonical_dependency,
     )
 
 
@@ -1293,10 +1371,6 @@ def _classify_unit(
                                 timing_source_span=timing_span,
                                 probability=_probability(effect_text),
                                 state_reference=_state_reference(atom.condition) or _state_reference(effect_text),
-                                capability_gap=(
-                                    not capability
-                                    and semantic_type in _CAPABILITY_GAP_SEMANTIC_TYPES
-                                ),
                             )
                         )
                         ordinal_by_kind["effect"] += 1
@@ -1578,7 +1652,14 @@ def _arm_summary(
     return {
         "occurrence_count": len(rows),
         "fully_supported_occurrence_count": sum(row.get("semantic_state") == "fully_supported_input" for row in rows),
-        "capability_gap_occurrence_count": sum(row.get("occurrence_kind") == "effect" and row.get("capability_gap") is True for row in rows),
+        "capability_gap_occurrence_count": sum(
+            row.get("occurrence_kind") == "effect" and row.get("capability_gap") is True
+            for row in rows
+        ),
+        "dependency_gap_occurrence_count": sum(
+            row.get("occurrence_kind") == "dependency" and row.get("dependency_gap") is True
+            for row in rows
+        ),
         "effect_occurrence_count": counts.get("effect", 0),
         "dependency_occurrence_count": counts.get("dependency", 0),
         "occurrence_kind_counts": dict(sorted(counts.items())),
@@ -1591,6 +1672,7 @@ def _arm_summary(
 
 _COMPATIBILITY_FIELDS = (
     "occurrence_kind",
+    "operation",
     "source_fact_id",
     "source_text",
     "actor",
@@ -1612,6 +1694,7 @@ _COMPATIBILITY_FIELDS = (
     "semantic_type",
     "semantic_subject",
     "capability_gap",
+    "dependency_gap",
     "hit_count",
     "formula_metadata",
     "action_timing",
@@ -1857,12 +1940,15 @@ def build_c2_report(
                 "hit_count",
                 "duration_activation",
             ],
-            "unmapped_semantics_are_capability_gaps": True,
+            "occurrence_operation_is_explicit": True,
+            "unmapped_semantics_are_explicit_taxonomy_gaps": True,
             "relationship_contract": {
                 "target_kinds": ["source_fact", "shared_mechanic", "unresolved"],
                 "local_condition_and_timing": True,
                 "unresolved_targets_remain_unresolved": True,
                 "definition_semantics_are_not_copied": True,
+                "report_adapter_owner_key": "source_occurrence_id",
+                "unattached_rows_are_retained_as_unresolved": True,
                 "authority": "non_authoritative",
             },
             "one_direct_damage_event_rule": "one source damage event owns one direct_damage effect occurrence; multi_entity_damage is a derived projection when target cardinality is multiple",

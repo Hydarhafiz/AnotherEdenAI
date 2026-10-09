@@ -11,10 +11,13 @@ import json
 import re
 import unicodedata
 from collections import Counter, defaultdict
+from decimal import Decimal, InvalidOperation
 from typing import Any, Mapping, Sequence
 
+from .capability_taxonomy import load_capability_taxonomy
 
-EVALUATOR_VERSION = "c2-atomic-eval-1.0.0"
+
+EVALUATOR_VERSION = "c2-atomic-eval-1.1.0"
 ORACLE_SCHEMA_VERSION = "c2-atomic-oracle-1"
 FIDELITY_DIMENSIONS = (
     "source_record_selection",
@@ -51,17 +54,11 @@ FIELD_NAMES = (
 OCCURRENCE_KINDS = ("effect", "dependency")
 
 _SPACE = re.compile(r"\s+")
-_OPERATION_PATTERNS = (
-    ("damage", re.compile(r"\b(?:attack|attacks|deal(?:s)?|fixed damage)\b", re.I)),
-    ("restore", re.compile(r"\b(?:heal|restore|recover)\b", re.I)),
-    ("apply", re.compile(r"\b(?:apply|inflict|give|grant)\b", re.I)),
-    ("increase", re.compile(r"\b(?:increase|raise|up)\b|\+\s*\d", re.I)),
-    ("decrease", re.compile(r"\b(?:decrease|reduce|lower|down)\b|-\s*\d", re.I)),
-    ("remove", re.compile(r"\b(?:remove|clear|dispel)\b", re.I)),
-    ("activate", re.compile(r"\b(?:activate|deploy|awaken)\b", re.I)),
-    ("consume", re.compile(r"\bconsume(?:s|d)?\b", re.I)),
-    ("require", re.compile(r"\b(?:requires?|needs?)\b", re.I)),
-)
+_NUMERIC_TEXT = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)")
+_ENUM_FIELDS = frozenset({"direction", "recipient", "target_cardinality", "element", "attack_type"})
+_TAXONOMY = load_capability_taxonomy()
+_CAPABILITY_IDS = frozenset(_TAXONOMY["capabilities"])
+_DEPENDENCY_IDS = frozenset(_TAXONOMY["dependencies"])
 
 
 def _normal_text(value: Any) -> str:
@@ -72,38 +69,129 @@ def _canonical(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
-def _operation(row: Mapping[str, Any], *, occurrence_kind: str) -> str:
-    explicit = _normal_text(row.get("operation"))
-    if explicit:
-        return explicit
-    text = " ".join(
-        str(value or "")
-        for value in (
-            row.get("source_text"),
-            (row.get("source_span") or {}).get("text") if isinstance(row.get("source_span"), Mapping) else "",
-            row.get("result"),
-        )
+def _normal_number(value: Any) -> str | None:
+    text = str(value)
+    if not _NUMERIC_TEXT.fullmatch(text):
+        return None
+    try:
+        number = Decimal(text).normalize()
+    except InvalidOperation:
+        return None
+    return "0" if number == 0 else format(number, "f")
+
+
+def _normalise_value(value: Any, *, unknown_markers: bool, field: str = "") -> Any:
+    if value is None:
+        return "unknown" if unknown_markers else None
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float, Decimal)):
+        return _normal_number(value) or str(value)
+    if isinstance(value, str):
+        text = _normal_text(value)
+        if unknown_markers and text in {"", "unknown", "unresolved"}:
+            return "unknown"
+        if field in _ENUM_FIELDS and text:
+            text = re.sub(r"[\s-]+", "_", text)
+        return _normal_number(text) or text
+    if isinstance(value, Mapping):
+        return {
+            str(key): _normalise_value(
+                item,
+                unknown_markers=unknown_markers,
+                field=str(key),
+            )
+            for key, item in sorted(value.items(), key=lambda pair: str(pair[0]))
+        }
+    if isinstance(value, (list, tuple)):
+        return [_normalise_value(item, unknown_markers=unknown_markers) for item in value]
+    return value
+
+
+def _normalise_field(field: str, value: Any) -> Any:
+    normalized = _normalise_value(
+        value,
+        unknown_markers=field != "relationships",
+        field=field,
     )
-    if occurrence_kind == "dependency":
-        if re.search(r"\bconsume(?:s|d)?\b", text, re.I):
-            return "consume"
-        if re.search(r"\b(?:requires?|needs?)\b", text, re.I):
-            return "require"
-        if re.search(r"\b(?:if|when|unless|only when|after|before|during)\b", text, re.I):
-            return "conditional"
-    for operation, pattern in _OPERATION_PATTERNS:
-        if pattern.search(text):
-            return operation
-    if occurrence_kind == "dependency" and re.search(r"\b(?:if|when|unless|only when|after|before|during)\b", text, re.I):
-        return "conditional"
-    return "unknown"
+    if field == "relationships" and isinstance(normalized, list):
+        return sorted(normalized, key=_canonical)
+    return normalized
 
 
 def _prediction_capability(row: Mapping[str, Any]) -> str:
     value = row.get("atomic_capability_id") or row.get(
         "dependency_value" if row.get("occurrence_kind") == "dependency" else "capability_value"
     ) or ""
-    return _normal_text(value)
+    identifier = _normal_text(value)
+    allowed = _DEPENDENCY_IDS if row.get("occurrence_kind") == "dependency" else _CAPABILITY_IDS
+    return identifier if identifier in allowed else ""
+
+
+def adapt_c2_report_to_evaluator(
+    comparison: Mapping[str, Any],
+    witnesses: Sequence[Mapping[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Map a C2 comparison report to answer-key IDs and owner-scoped edges."""
+    witness_by_source = {
+        (str(row.get("fact_id") or ""), str(row.get("source_capture_sha256") or "")): str(row["witness_id"])
+        for row in witnesses
+    }
+    selected_fact_ids = {fact_id for fact_id, _capture in witness_by_source}
+    predictions_by_arm: dict[str, dict[str, list[dict[str, Any]]]] = {}
+    unresolved_relationships_by_arm: dict[str, list[dict[str, Any]]] = {}
+
+    for arm_name, arm in comparison.get("arms", {}).items():
+        per_witness = {str(row["witness_id"]): [] for row in witnesses}
+        owner_by_id: dict[str, dict[str, Any]] = {}
+        for occurrence in arm.get("occurrences", []):
+            witness_id = witness_by_source.get(
+                (
+                    str(occurrence.get("source_fact_id") or ""),
+                    str(occurrence.get("source_capture_sha256") or ""),
+                )
+            )
+            if witness_id is None:
+                continue
+            row = dict(occurrence)
+            row["atomic_capability_id"] = (
+                row.get("dependency_value") if row.get("occurrence_kind") == "dependency"
+                else row.get("capability_value")
+            ) or ""
+            row["relationships"] = []
+            per_witness[witness_id].append(row)
+            occurrence_id = str(row.get("occurrence_id") or "")
+            if occurrence_id:
+                owner_by_id[occurrence_id] = row
+
+        unresolved: list[dict[str, Any]] = []
+        for relationship in arm.get("relationships", []):
+            if str(relationship.get("source_fact_id") or "") not in selected_fact_ids:
+                continue
+            owner_id = str(relationship.get("source_occurrence_id") or "")
+            owner = owner_by_id.get(owner_id) if owner_id else None
+            if (
+                owner is not None
+                and str(owner.get("source_fact_id") or "")
+                == str(relationship.get("source_fact_id") or "")
+            ):
+                owner["relationships"].append(dict(relationship))
+            else:
+                unresolved.append(
+                    {
+                        **dict(relationship),
+                        "attachment_status": "unresolved",
+                        "attachment_reason": "source occurrence was not present in the selected report arm",
+                    }
+                )
+
+        predictions_by_arm[str(arm_name)] = per_witness
+        unresolved_relationships_by_arm[str(arm_name)] = unresolved
+
+    return {
+        "predictions_by_arm": predictions_by_arm,
+        "unresolved_relationships_by_arm": unresolved_relationships_by_arm,
+    }
 
 
 def _prediction_anchor(row: Mapping[str, Any]) -> tuple[str, str]:
@@ -154,7 +242,7 @@ def _base_matches(
         _identity_matches(prediction, witness)
         and str(prediction.get("occurrence_kind") or "") == kind
         and kind in OCCURRENCE_KINDS
-        and _operation(prediction, occurrence_kind=kind) == _normal_text(atom.get("operation"))
+        and _normal_text(prediction.get("operation")) == _normal_text(atom.get("operation"))
         and _anchor_matches(prediction, atom)
     )
 
@@ -195,7 +283,7 @@ def _metrics(predicted_count: int, expected_count: int, true_positive: int) -> d
 
 def _field_status(value: Any) -> tuple[str, Any]:
     if isinstance(value, Mapping) and "status" in value:
-        status = str(value.get("status") or "unknown")
+        status = re.sub(r"[\s-]+", "_", _normal_text(value.get("status"))) or "unknown"
         return status, value.get("value")
     if value is None or _normal_text(value) in {"", "unknown", "unresolved"}:
         return "unknown", None
@@ -229,7 +317,9 @@ def _field_metrics(
                 counts["incorrect_count"] += 1
                 continue
             actual_value = predictions[predicted_index].get(field)
-            if _canonical(actual_value) == _canonical(expected_value):
+            normalized_actual = _normalise_field(field, actual_value)
+            normalized_expected = _normalise_field(field, expected_value)
+            if _canonical(normalized_actual) == _canonical(normalized_expected):
                 counts["correct_count"] += 1
             else:
                 counts["incorrect_count"] += 1
@@ -275,6 +365,14 @@ def _validate_inputs(
             ):
                 raise ValueError("semantic oracle atom is missing its capability, operation, kind, or source anchor")
     for arm, per_witness in predictions_by_arm.items():
+        for rows in per_witness.values():
+            if any(
+                str(row.get("occurrence_kind") or "") in OCCURRENCE_KINDS
+                and not _normal_text(row.get("operation"))
+                for row in rows
+            ):
+                raise ValueError(f"prediction arm {arm!r} contains an occurrence without an explicit operation")
+    for arm, per_witness in predictions_by_arm.items():
         extra_ids = set(per_witness) - set(witness_by_id)
         if extra_ids:
             raise ValueError(f"prediction arm {arm!r} contains identities outside the frozen cohort")
@@ -285,6 +383,7 @@ def _arm_aggregate(
     per_witness: Mapping[str, Sequence[Mapping[str, Any]]],
     witness_by_id: Mapping[str, Mapping[str, Any]],
     oracle_by_id: Mapping[str, Mapping[str, Any]],
+    unresolved_relationship_count: int,
 ) -> dict[str, Any]:
     occurrence_counts = {kind: Counter() for kind in OCCURRENCE_KINDS}
     capability_counts = Counter()
@@ -357,6 +456,7 @@ def _arm_aggregate(
     dependency_counts = occurrence_counts["dependency"]
     return {
         "witness_denominator": witness_denominator,
+        "unresolved_relationship_count": unresolved_relationship_count,
         "capability_label_precision_recall": _metrics(
             capability_counts["predicted_count"],
             capability_counts["expected_count"],
@@ -409,6 +509,8 @@ def evaluate_frozen_cohort(
     predictions_by_arm: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]],
     oracle: Mapping[str, Any],
     witnesses: Sequence[Mapping[str, Any]],
+    *,
+    unresolved_relationships_by_arm: Mapping[str, Sequence[Mapping[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     """Return cohort/arm aggregates only; never include a witness-level row."""
     witness_by_id, oracle_by_id = _validate_inputs(predictions_by_arm, oracle, witnesses)
@@ -417,7 +519,12 @@ def evaluate_frozen_cohort(
         "cohort": str(oracle.get("cohort") or "fresh_replacement"),
         "witness_count": len(witness_by_id),
         "arms": {
-            str(arm): _arm_aggregate(per_witness, witness_by_id, oracle_by_id)
+            str(arm): _arm_aggregate(
+                per_witness,
+                witness_by_id,
+                oracle_by_id,
+                len((unresolved_relationships_by_arm or {}).get(str(arm), [])),
+            )
             for arm, per_witness in sorted(predictions_by_arm.items())
         },
         "oracle_answers_returned": False,

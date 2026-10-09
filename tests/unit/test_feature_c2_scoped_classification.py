@@ -7,11 +7,18 @@ from pathlib import Path
 
 import pytest
 
+from src.etl.capability_taxonomy import load_capability_taxonomy
 from src.etl.c2_scoped_classification import (
     OCCURRENCE_KINDS,
     PRIMARY_OCCURRENCE_KINDS,
     build_c2_report,
     evaluate_c2_oracle,
+)
+from src.etl.c2_semantic_evaluation import (
+    FIDELITY_DIMENSIONS as EVALUATOR_FIDELITY_DIMENSIONS,
+    ORACLE_SCHEMA_VERSION,
+    adapt_c2_report_to_evaluator,
+    evaluate_frozen_cohort,
 )
 from src.etl.source_fidelity import FIDELITY_DIMENSIONS, REQUIRED_ARCHETYPES
 
@@ -143,6 +150,133 @@ def test_manifest_and_catalog_diagnostics_remain_stratified_and_complete(report:
     assert diagnostics["full_catalog_replay"]["structural_parse_coverage"]["identities_with_structural_parse"] == 367
     kinds = diagnostics["sidekick_replay"]["record_kind_coverage"]
     assert all(kinds[kind]["structurally_parsed_record_count"] > 0 for kind in ("sidekick_auto", "sidekick_charge", "sidekick_aura"))
+
+
+def test_development_report_uses_canonical_classifier_to_evaluator_contract(report: dict):
+    comparison = report["comparisons"]["development"]
+    contract = report["comparison_contract"]
+    assert contract["occurrence_operation_is_explicit"] is True
+    assert contract["unmapped_semantics_are_explicit_taxonomy_gaps"] is True
+    assert contract["relationship_contract"]["report_adapter_owner_key"] == "source_occurrence_id"
+    assert contract["relationship_contract"]["unattached_rows_are_retained_as_unresolved"] is True
+    taxonomy = load_capability_taxonomy()
+    capability_ids = set(taxonomy["capabilities"])
+    dependency_ids = set(taxonomy["dependencies"])
+
+    for arm in comparison["arms"].values():
+        for occurrence in arm["occurrences"]:
+            assert occurrence["operation"]
+            if occurrence["occurrence_kind"] == "effect":
+                if occurrence["capability_value"]:
+                    assert occurrence["capability_value"] in capability_ids
+                else:
+                    assert occurrence["capability_gap"] is True
+            elif occurrence["occurrence_kind"] == "dependency":
+                if occurrence["dependency_value"]:
+                    assert occurrence["dependency_value"] in dependency_ids
+                else:
+                    assert occurrence["dependency_gap"] is True
+
+    source_capture_by_fact = {
+        occurrence["source_fact_id"]: occurrence["source_capture_sha256"]
+        for occurrence in comparison["arms"]["structural_only"]["occurrences"]
+    }
+    development_witnesses = [
+        {
+            "witness_id": row["witness_id"],
+            "fact_id": row["fact_id"],
+            "source_capture_sha256": source_capture_by_fact[row["fact_id"]],
+        }
+        for row in comparison["witnesses"]
+        if row["fact_id"] in source_capture_by_fact
+    ]
+    full_adapter = adapt_c2_report_to_evaluator(comparison, development_witnesses)
+    attached_relationship_count = 0
+    for arm_name, arm in comparison["arms"].items():
+        adapted_occurrences = [
+            occurrence
+            for rows in full_adapter["predictions_by_arm"][arm_name].values()
+            for occurrence in rows
+        ]
+        attached_relationship_count += sum(
+            len(occurrence["relationships"]) for occurrence in adapted_occurrences
+        )
+        selected_facts = {row["fact_id"] for row in development_witnesses}
+        reported_relationship_count = sum(
+            str(relationship.get("source_fact_id") or "") in selected_facts
+            for relationship in arm["relationships"]
+        )
+        unresolved_count = len(full_adapter["unresolved_relationships_by_arm"][arm_name])
+        assert reported_relationship_count == sum(
+            len(occurrence["relationships"]) for occurrence in adapted_occurrences
+        ) + unresolved_count
+    assert attached_relationship_count > 0
+
+    witness_row = next(
+        row for row in comparison["witnesses"]
+        if row["witness_id"] == "development-aisha-mp-restore"
+    )
+    effect = next(
+        row for row in comparison["arms"]["structural_only"]["occurrences"]
+        if row["source_fact_id"] == witness_row["fact_id"]
+        and row["occurrence_kind"] == "effect"
+        and row["source_text"].casefold().startswith("restore all party members' mp")
+    )
+    witness = {
+        "witness_id": witness_row["witness_id"],
+        "fact_id": witness_row["fact_id"],
+        "source_capture_sha256": effect["source_capture_sha256"],
+    }
+    adapted = adapt_c2_report_to_evaluator(comparison, [witness])
+    evaluator_row = next(
+        row for row in adapted["predictions_by_arm"]["structural_only"][witness["witness_id"]]
+        if row["occurrence_id"] == effect["occurrence_id"]
+    )
+    assert evaluator_row["atomic_capability_id"] == "recover_mp"
+    assert evaluator_row["operation"] == "restore"
+    assert evaluator_row["source_capture_sha256"] == effect["source_capture_sha256"]
+    assert evaluator_row["source_span"] == effect["source_span"]
+
+    oracle = {
+        "schema_version": ORACLE_SCHEMA_VERSION,
+        "cohort": "development_contract_smoke",
+        "witnesses": [
+            {
+                **witness,
+                "atoms": [
+                    {
+                        "occurrence_kind": "effect",
+                        "atomic_capability_id": "recover_mp",
+                        "operation": "restore",
+                        "source_anchor": {
+                            "location": effect["source_span"]["location"],
+                            "quote": "Restore all party members",
+                        },
+                        "fields": {
+                            "recipient": {"status": "adjudicated", "value": "party"},
+                            "relationships": {"status": "not_applicable"},
+                        },
+                    }
+                ],
+                "fidelity_dimensions": {
+                    name: {"status": "unknown"} for name in EVALUATOR_FIDELITY_DIMENSIONS
+                },
+            }
+        ],
+    }
+    evaluated = evaluate_frozen_cohort(
+        adapted["predictions_by_arm"],
+        oracle,
+        [witness],
+        unresolved_relationships_by_arm=adapted["unresolved_relationships_by_arm"],
+    )
+
+    structural = evaluated["arms"]["structural_only"]
+    assert structural["effect_occurrence_precision_recall"]["true_positive_count"] == 1
+    assert structural["capability_label_precision_recall"]["true_positive_count"] == 1
+    assert structural["field_correctness"]["recipient"]["correct_count"] == 1
+    assert evaluated["oracle_answers_returned"] is False
+    assert evaluated["per_witness_results_returned"] is False
 
 
 def test_committed_freeze_contains_non_answer_metadata_only():

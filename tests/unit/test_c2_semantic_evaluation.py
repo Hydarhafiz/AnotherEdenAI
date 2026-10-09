@@ -4,11 +4,15 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from src.etl.c2_semantic_evaluation import (
     EVALUATOR_VERSION,
     FIDELITY_DIMENSIONS,
     ORACLE_SCHEMA_VERSION,
+    adapt_c2_report_to_evaluator,
     evaluate_frozen_cohort,
+    _normalise_field,
 )
 
 
@@ -92,7 +96,7 @@ def test_exact_semantics_match_once_and_return_aggregates_only():
     assert "Deal damage" not in serialized
 
 
-def test_generic_scoped_effect_counts_as_occurrence_but_not_capability():
+def test_non_taxonomy_label_counts_as_occurrence_but_not_as_a_capability():
     report = evaluate_frozen_cohort(
         {"structural_only": {"fresh-test-only": [_prediction("scoped_effect")]}},
         _oracle(),
@@ -102,7 +106,8 @@ def test_generic_scoped_effect_counts_as_occurrence_but_not_capability():
     assert arm["effect_occurrence_precision_recall"]["true_positive_count"] == 1
     capability = arm["capability_label_precision_recall"]
     assert capability["true_positive_count"] == 0
-    assert capability["false_positive_count"] == 1
+    assert capability["predicted_count"] == 0
+    assert capability["false_positive_count"] == 0
     assert capability["false_negative_count"] == 1
 
 
@@ -129,3 +134,120 @@ def test_capture_fact_or_anchor_mismatch_cannot_match():
     )
     assert report["arms"]["structural_only"]["effect_occurrence_precision_recall"]["true_positive_count"] == 0
     assert report["arms"]["structural_only"]["capability_label_precision_recall"]["false_negative_count"] == 1
+
+
+def test_evaluator_requires_classifier_operation_instead_of_guessing_from_prose():
+    prediction = _prediction()
+    prediction.pop("operation")
+
+    with pytest.raises(ValueError, match="without an explicit operation"):
+        evaluate_frozen_cohort(
+            {"structural_only": {"fresh-test-only": [prediction]}},
+            _oracle(),
+            [_witness()],
+        )
+
+
+def test_equivalent_enum_and_structured_fields_match_after_normalization():
+    prediction = _prediction()
+    prediction.update(
+        {
+            "recipient": "Single Enemy",
+            "element": "FIRE",
+            "magnitude": {"unit": "Percent", "value": "25.0"},
+            "duration_activation": {"turns": 1},
+        }
+    )
+    atom = _atom()
+    atom["fields"].update(
+        {
+            "recipient": {"status": "adjudicated", "value": "single_enemy"},
+            "element": {"status": "adjudicated", "value": "fire"},
+            "magnitude": {"status": "adjudicated", "value": {"value": 25, "unit": "percent"}},
+            "duration_activation": {"status": "adjudicated", "value": {"turns": "1.0"}},
+        }
+    )
+
+    report = evaluate_frozen_cohort(
+        {"structural_only": {"fresh-test-only": [prediction]}},
+        _oracle(atom),
+        [_witness()],
+    )
+
+    fields = report["arms"]["structural_only"]["field_correctness"]
+    for field in ("recipient", "element", "magnitude", "duration_activation"):
+        assert fields[field]["correct_count"] == 1
+
+
+def test_unknown_field_spellings_have_one_evaluator_value():
+    assert _normalise_field("condition", None) == "unknown"
+    assert _normalise_field("condition", "") == "unknown"
+    assert _normalise_field("condition", "UNRESOLVED") == "unknown"
+
+
+def test_report_adapter_attaches_typed_edges_and_reports_orphans():
+    occurrence = {
+        **_prediction(),
+        "occurrence_id": "occ:owner",
+        "source_span": {"location": LOCATION, "text": "Deal damage to a single enemy."},
+    }
+    relationship = {
+        "relationship_id": "rel:attached",
+        "source_fact_id": FACT_ID,
+        "source_occurrence_id": "occ:owner",
+        "target_kind": "source_fact",
+        "target_id": "skill:child",
+        "operation": "activates",
+        "condition": "when used",
+        "timing": "turn_end",
+        "resolution_status": "resolved",
+    }
+    orphan = {**relationship, "relationship_id": "rel:orphan", "source_occurrence_id": "occ:missing"}
+    comparison = {
+        "arms": {
+            "structural_only": {
+                "occurrences": [occurrence],
+                "relationships": [relationship, orphan],
+            }
+        }
+    }
+
+    adapted = adapt_c2_report_to_evaluator(comparison, [_witness()])
+    predictions = adapted["predictions_by_arm"]["structural_only"]["fresh-test-only"]
+    assert predictions[0]["source_capture_sha256"] == CAPTURE
+    assert predictions[0]["source_span"] == occurrence["source_span"]
+    assert predictions[0]["atomic_capability_id"] == "direct_damage"
+    assert predictions[0]["relationships"] == [relationship]
+    assert adapted["unresolved_relationships_by_arm"]["structural_only"] == [
+        {
+            **orphan,
+            "attachment_status": "unresolved",
+            "attachment_reason": "source occurrence was not present in the selected report arm",
+        }
+    ]
+
+    atom = _atom()
+    atom["fields"]["relationships"] = {"status": "adjudicated", "value": [relationship]}
+    report = evaluate_frozen_cohort(
+        adapted["predictions_by_arm"],
+        _oracle(atom),
+        [_witness()],
+        unresolved_relationships_by_arm=adapted["unresolved_relationships_by_arm"],
+    )
+    arm = report["arms"]["structural_only"]
+    assert arm["field_correctness"]["relationships"]["correct_count"] == 1
+    assert arm["unresolved_relationship_count"] == 1
+    serialized = json.dumps(report, ensure_ascii=False)
+    assert "rel:orphan" not in serialized
+    assert "fresh-test-only" not in serialized
+
+
+def test_source_span_is_required_even_when_capture_and_fact_match():
+    prediction = _prediction()
+    prediction["source_span"] = None
+    report = evaluate_frozen_cohort(
+        {"structural_only": {"fresh-test-only": [prediction]}},
+        _oracle(),
+        [_witness()],
+    )
+    assert report["arms"]["structural_only"]["effect_occurrence_precision_recall"]["true_positive_count"] == 0

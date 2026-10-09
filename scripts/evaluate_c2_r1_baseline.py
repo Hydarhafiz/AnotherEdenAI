@@ -14,7 +14,10 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from src.etl.c2_scoped_classification import C2_ARTIFACT_VERSION, build_c2_report
-from src.etl.c2_semantic_evaluation import evaluate_frozen_cohort
+from src.etl.c2_semantic_evaluation import (
+    adapt_c2_report_to_evaluator,
+    evaluate_frozen_cohort,
+)
 
 
 FREEZE_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
@@ -34,27 +37,6 @@ def _fresh_witnesses(manifest: Mapping[str, Any]) -> list[dict[str, Any]]:
             "fresh_replacement_frozen",
         }
     ]
-
-
-def _predictions_by_arm(report: Mapping[str, Any], witnesses: list[Mapping[str, Any]]) -> dict[str, dict[str, list[dict[str, Any]]]]:
-    witness_by_source = {
-        (str(row.get("fact_id") or ""), str(row.get("source_capture_sha256") or "")): str(row["witness_id"])
-        for row in witnesses
-    }
-    comparison = report["comparisons"]["development"]
-    result: dict[str, dict[str, list[dict[str, Any]]]] = {}
-    for arm_name, arm in comparison["arms"].items():
-        per_witness = {str(row["witness_id"]): [] for row in witnesses}
-        for occurrence in arm.get("occurrences", []):
-            key = (
-                str(occurrence.get("source_fact_id") or ""),
-                str(occurrence.get("source_capture_sha256") or ""),
-            )
-            witness_id = witness_by_source.get(key)
-            if witness_id is not None:
-                per_witness[witness_id].append(dict(occurrence))
-        result[str(arm_name)] = per_witness
-    return result
 
 
 def evaluate_baseline(owner_oracle_path: Path, *, freeze_path: Path = FREEZE_PATH) -> dict[str, Any]:
@@ -91,7 +73,10 @@ def evaluate_baseline(owner_oracle_path: Path, *, freeze_path: Path = FREEZE_PAT
         c2_report = build_c2_report(
             manifest_path=temporary_manifest_path,
         )
-        predictions = _predictions_by_arm(c2_report, witnesses)
+        evaluator_input = adapt_c2_report_to_evaluator(
+            c2_report["comparisons"]["development"],
+            witnesses,
+        )
 
     # Parse owner answers only after current C2 predictions are complete.
     # They enter the aggregate evaluator and never the classifier/report path.
@@ -105,7 +90,12 @@ def evaluate_baseline(owner_oracle_path: Path, *, freeze_path: Path = FREEZE_PAT
     )
     if expected_atom_count == 0:
         raise ValueError("owner oracle contains no atomic expectations; semantic baseline cannot be produced")
-    aggregates = evaluate_frozen_cohort(predictions, oracle, witnesses)
+    aggregates = evaluate_frozen_cohort(
+        evaluator_input["predictions_by_arm"],
+        oracle,
+        witnesses,
+        unresolved_relationships_by_arm=evaluator_input["unresolved_relationships_by_arm"],
+    )
 
     return {
         "artifact_type": "c2_paired_pre_remediation_semantic_baseline",

@@ -1,5 +1,6 @@
 """Synthetic development regressions for atomic C2 occurrence handling."""
 
+from src.etl.capability_taxonomy import load_capability_taxonomy
 from src.etl.c2_scoped_classification import _classify_unit, _compatibility_mapping
 from src.etl.shared_mechanics import (
     MechanicAlias,
@@ -480,3 +481,47 @@ def test_allowlisted_shared_mechanics_remain_identity_edges_without_definition_s
     assert edge.condition == "when Another Zone is active"
     assert edge.timing == "turn_end"
     assert edge.authority == "automatic_candidate"
+
+
+def test_classifier_uses_taxonomy_ids_and_marks_unsupported_semantics_as_gaps():
+    capabilities = set(load_capability_taxonomy()["capabilities"])
+    dependencies = set(load_capability_taxonomy()["dependencies"])
+    supported_result = _classify(
+        _unit(
+            "skill:example:canonical-id",
+            "MP Restore",
+            "https://example.test/wiki/MP_Restore",
+            [_text_token("Restores MP to all allies.", "sha256:mp-restore/block[0]/text[0]")],
+        )
+    )
+    unsupported_result = _classify(
+        _unit(
+            "skill:example:unsupported-gap",
+            "Lunatic HP Increase",
+            "https://example.test/wiki/Lunatic_HP_Increase",
+            [_text_token("When Lunatic is active, increases maximum HP.", "sha256:gap/block[0]/text[0]")],
+        )
+    )
+
+    recovery = next(row for row in supported_result.occurrences if row.occurrence_kind == "effect")
+    unsupported_effect = next(row for row in unsupported_result.occurrences if row.occurrence_kind == "effect")
+    unsupported_dependency = next(row for row in unsupported_result.occurrences if row.occurrence_kind == "dependency")
+
+    assert recovery.capability_value == "recover_mp"
+    assert recovery.capability_value in capabilities
+    assert recovery.operation == "restore"
+    assert recovery.source_span is not None
+    assert unsupported_effect.capability_value == ""
+    assert unsupported_effect.capability_gap is True
+    assert unsupported_effect.operation == "increase"
+    assert unsupported_dependency.dependency_value == ""
+    assert unsupported_dependency.dependency_gap is True
+    assert unsupported_dependency.operation == "conditional"
+    assert unsupported_dependency.dependency_value not in dependencies
+    assert unsupported_dependency.dependency_value not in {
+        "scoped_condition",
+        "requires_zone_or_stance",
+        "requires_resource_state",
+        "requires_lunatic_or_variant",
+        "recipient_or_state_condition",
+    }

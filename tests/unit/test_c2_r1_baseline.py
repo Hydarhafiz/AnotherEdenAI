@@ -57,16 +57,61 @@ def test_owner_answers_reach_only_aggregate_evaluator_after_predictions(tmp_path
     )
     events = []
 
+    occurrence = {
+        "occurrence_id": "occ:test",
+        "occurrence_kind": "effect",
+        "operation": "apply",
+        "source_fact_id": witness["fact_id"],
+        "source_capture_sha256": witness["source_capture_sha256"],
+        "source_span": {"location": "sha256:test/grid[0]/block[0]", "text": "Test-only source"},
+        "capability_value": "test_only_capability",
+    }
+    relationship = {
+        "relationship_id": "rel:test",
+        "source_fact_id": witness["fact_id"],
+        "source_occurrence_id": "occ:test",
+        "target_kind": "source_fact",
+        "target_id": "skill:child",
+        "operation": "activates",
+    }
+    orphan_relationship = {**relationship, "relationship_id": "rel:orphan", "source_occurrence_id": "occ:missing"}
+
     def fake_build_c2_report(**kwargs):
         events.append("predictions")
         assert kwargs.get("fidelity_oracle") is None
-        return {"comparisons": {"development": {"arms": {"test_arm": {"occurrences": []}}}}}
+        return {
+            "comparisons": {
+                "development": {
+                    "arms": {
+                        "test_arm": {
+                            "occurrences": [occurrence],
+                            "relationships": [relationship, orphan_relationship],
+                        }
+                    }
+                }
+            }
+        }
 
-    def fake_evaluate_frozen_cohort(predictions, actual_oracle, witnesses):
+    def fake_evaluate_frozen_cohort(
+        predictions,
+        actual_oracle,
+        witnesses,
+        *,
+        unresolved_relationships_by_arm,
+    ):
         events.append("aggregate_evaluation")
         assert actual_oracle == oracle
         assert list(predictions) == ["test_arm"]
         assert [row["witness_id"] for row in witnesses] == [witness["witness_id"]]
+        predicted = predictions["test_arm"][witness["witness_id"]]
+        assert predicted[0]["relationships"] == [relationship]
+        assert unresolved_relationships_by_arm["test_arm"] == [
+            {
+                **orphan_relationship,
+                "attachment_status": "unresolved",
+                "attachment_reason": "source occurrence was not present in the selected report arm",
+            }
+        ]
         return {"evaluator_version": "test-only", "witness_count": 1, "arms": {"test_arm": {"aggregate": True}}}
 
     monkeypatch.setattr(baseline, "build_c2_report", fake_build_c2_report)
