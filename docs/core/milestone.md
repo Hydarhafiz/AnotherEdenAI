@@ -6,13 +6,41 @@ Status: Active as of 2026-09-14. Milestone 5 is closed through an approved scope
 
 Milestone 6 expands recommendation-ready, high-value strategic evidence across all 367 canonical character forms/styles and improves meaningful candidate diversity. It does not attempt to model every mechanic, prove a globally optimal team, predict a clear, or replace conservative evidence review with inference.
 
-Current checkpoint: Features A-C1.1/C2 implementation are complete. Recovery Phases 1-3 and the Tetra development-oracle reconciliation are complete. The seven-witness development result scores supported capability/dependency labels 21/21; the intentional Charge gap is recorded under Feature C2. Joint C1.1/C2 acceptance awaits the final fresh held-out evaluation. Feature D remains blocked.
-
 The product claim is:
 
 > AnotherEdenAI generates legal, boss-aware, evidence-backed lineup candidates from the player's available roster and explains why they are strategically plausible.
 
 Candidates remain bounded, auditable recommendations. They are not guaranteed clears, exact simulations, globally optimal parties, or numeric win probabilities.
+
+## Current Milestone 6 State
+
+- C1 is complete.
+- C1.1 and C2 technical implementation and verification are complete; joint human acceptance remains pending.
+- The completed development evaluation scores supported capability and dependency labels 21/21. Effect occurrences score 19 TP / 2 FP / 0 FN, and dependency occurrences score 2 TP / 1 FP / 0 FN. Adjudicated fields match exactly.
+- Tetra's unmatched Charge-cost occurrence is an intentional unsupported taxonomy gap, not a classifier defect.
+- No fresh final held-out cohort has been selected or evaluated.
+- Every earlier protected, held-out, or R5 cohort and every development witness used for review or tuning is consumed and ineligible for final validation.
+- Feature D remains blocked until explicit joint C1.1/C2 human acceptance.
+
+## Completed Recovery
+
+This is historical evidence and does not define additional execution phases:
+
+- The classifier, shared adapter, and evaluator contracts were aligned (`70fea2b`).
+- Seven reviewed development witnesses were evaluated through the real semantic path (`84e2a40`).
+- Recurring classifier errors were repaired using development evidence only (`ad2d46b`).
+- The Tetra development oracle was reconciled with reviewed evidence (`3af367f`).
+- Supported development labels now score 21/21.
+
+Completed recovery is reopened only if fresh validation identifies evidence that a specific completed layer is defective. No additional R-numbered phase is planned.
+
+## Remaining Work
+
+1. Select seven genuinely unseen witnesses using metadata and freshness checks only. Exclude every exact fact identity or source slice previously reviewed, tuned, protected, or evaluated.
+2. Give the evaluation owner source-only evidence and independently adjudicate expected effects, dependencies, supported taxonomy labels, fields, and relationship semantics. Preserve unsupported mechanics as explicit gaps and freeze the oracle before evaluation.
+3. Run one held-out evaluation through the existing `classifier → shared adapter → semantic evaluator` path. Do not tune against the cohort or add held-out-only behavior.
+4. Record explicit joint C1.1/C2 human acceptance when supported labels are generally correct, no recurring decomposition or false-positive pattern appears, fields and relationships show no systematic failure, unsupported mechanics fail closed, and no new systematic failure class appears. If the cohort fails, mark it consumed, promote its failures to development/regression evidence, make only the bounded repair those failures justify, and require a new fresh cohort.
+5. Begin Feature D only after explicit acceptance.
 
 ## Milestone 5 Transition
 
@@ -253,6 +281,8 @@ There is no fifth guaranteed-clear gate. Allowed conclusions include `high model
 
 ## Feature Plan
 
+Features A through C2 below retain completed contracts and evidence for historical traceability. They do not override `Current Milestone 6 State` or `Remaining Work`. Feature D is the next executable feature only after joint C1.1/C2 acceptance.
+
 ### Feature A: Coverage Baseline And Metric Contract
 
 Status: Completed on 2026-09-14; stopped at the planned threshold-setting human checkpoint.
@@ -372,9 +402,9 @@ Post-completion audit disposition, approved 2026-09-15: C1 remains completed for
 
 ### Feature C1.1: Source Fidelity And Authoritative Witnesses
 
-Status: Technical implementation and verification are complete. Joint C1.1/C2 human acceptance remains pending until the final fresh held-out validation below. Development recovery is complete; no new held-out cohort has been selected or evaluated.
+Status: Technical implementation and verification are complete. Joint C1.1/C2 human acceptance remains pending under `Remaining Work`.
 
-Type and route: Completed via `builder-executor -> tdd-loop`; remaining work is the joint human acceptance checkpoint described under Feature C2.
+Type and route: Completed via `builder-executor -> tdd-loop`; the remaining human checkpoint is defined under `Remaining Work`.
 
 Outcome: Establish a reproducible source-semantic record for every occurrence admitted to C2, with complete source identity, structure, effect text, scoped relationships and explicit child-definition status. Structural binding alone is not semantic success.
 
@@ -382,23 +412,26 @@ Scope: Reconcile checksum-pinned captures, selected page/section/record, parsed 
 
 Non-goals: Capability classification, proposal approval or materialization, broad ontology expansion, scoring/search changes, exact simulation, full equipment/BiS ingestion, new bosses, provider/frontend work, or incidental persisted-schema migration.
 
-Acceptance:
+Implemented technical contract:
 
 - **C1.1-01:** Every admitted semantic record identifies the correct capture checksum, source page, section, source row/unit and real fact ID. Exact or reproducibly extracted source content is compared to the capture; a checksum attached to separately rewritten fixture prose is insufficient.
 - **C1.1-02:** Fidelity is reported independently for source-record selection, effect completeness and order, parent/child condition attachment, actor, recipient, trigger, result, magnitude/parameter, duration/activation, element, attack type, mechanic/resource references and admitted child-definition resolution. Failed or inapplicable dimensions remain explicit and never count as semantic success.
 - **C1.1-03:** Full automatic replay covers all 367 canonical character identities and separately reports every admitted sidekick record kind. It preserves 367/367 legal-kit completeness and reports structural parse coverage, fact binding, source identity, unresolved mappings, relevant-link and child-definition resolution, failures and deterministic replay. Human sampling never substitutes for this replay.
 - **C1.1-04:** The seven known Iphi, Alma AS, Tetra AS, Darunis, Shigure ES, Kumos AS and Anabel ES failures become permanent development regressions with real source/fact identities. They prove their distinct defects but provide no independent generalization claim. The unsupported Darunis `Hunter's Fangs`/Wind expectation remains an explicit source conflict until an admitted source establishes it.
-- **C1.1-05:** The original C1.1 development sampling is historical. The seven reviewed Phase 2 witnesses under Feature C2 are the current tuning surface.
-- **C1.1-06:** The former held-out cohort is consumed and excluded; it cannot support final acceptance or be reused for tuning.
-- **C1.1-07:** The prior sample-size and archetype-coverage plan is historical. Final held-out selection and isolation follow the short sequence under Feature C2.
 - **C1.1-08:** Only fidelity-passed occurrences may enter C2 as fully supported inputs. Unresolved source selection, identity, semantic attachment or required definition remains unknown/non-authoritative. No automatic approval, materialized capability, graph mutation or legal-kit change occurs.
 
-Exit and human checkpoint: Technical completion supplies replay and witness evidence, not acceptance. The former held-out cohort is consumed and excluded. Remaining joint C1.1/C2 acceptance follows the final fresh held-out sequence under Feature C2; source conflicts, unresolved definitions and failed attachments remain explicit until then.
+Historical cohort disposition (non-executable):
 
-Completion evidence:
+- **C1.1-05:** The original C1.1 development sampling and the seven reviewed development witnesses are historical, consumed tuning evidence.
+- **C1.1-06:** All former protected and held-out cohorts are consumed and excluded; they cannot support final acceptance or be reused for tuning.
+- **C1.1-07:** The prior sample-size and archetype-coverage plan is historical. Final held-out selection and isolation follow `Remaining Work`.
 
-- `src/etl/source_fidelity_manifest.json` is a deterministic, non-percentage witness manifest with seven named regressions, 26 additional development witnesses, and 21 held-out witnesses. All required source/mechanic archetypes present in the accepted corpus are represented in both development and held-out strata, including separate sidekick auto, charge, and aura records.
-- `tests/fixtures/source_fidelity/source_slice_manifest.json` binds all 54 witnesses to real source/fact IDs, checksum-qualified captures, source grid locations, and reproducible source-slice digests. Rewritten prose is not used as source authority. The separate sealed oracle records 40/30 independently adjudicated effect occurrences and 23/16 independently adjudicated dependency occurrences for development/held-out cohorts respectively.
+Exit and human checkpoint: Technical completion supplies replay and witness evidence, not acceptance. Every former protected or held-out cohort is consumed and excluded. Remaining joint C1.1/C2 acceptance follows `Remaining Work`; source conflicts, unresolved definitions and failed attachments remain explicit until then.
+
+Historical technical evidence (non-executable):
+
+- `src/etl/source_fidelity_manifest.json` is a deterministic, non-percentage witness manifest with seven named regressions, 26 additional development witnesses, and 21 now-consumed held-out witnesses. All required source/mechanic archetypes present in the accepted corpus are represented in both historical development and held-out strata, including separate sidekick auto, charge, and aura records.
+- `tests/fixtures/source_fidelity/source_slice_manifest.json` binds all 54 historical witnesses to real source/fact IDs, checksum-qualified captures, source grid locations, and reproducible source-slice digests. Rewritten prose is not used as source authority. The separate historical sealed oracle records 40/30 independently adjudicated effect occurrences and 23/16 independently adjudicated dependency occurrences for development/held-out cohorts respectively; it cannot support final acceptance.
 - Full automatic replay covers 367/367 canonical character identities, 4,863 bound facts and 173 explicit unresolved mappings, with 367/367 structural parses and unchanged 367/367 complete legal-kit receipts. The separate sidekick replay covers 25 parsed sidekicks with 28 auto, 18 charge, and 41 aura records. Link, child-definition, source-selection, parse, and budget failures remain explicit.
 - The seven regressions use real Iphi, Alma AS, Tetra AS, Darunis, Shigure ES, Kumos AS, and Anabel ES identities and are excluded from generalization evidence. Iphi Lunatic and Anabel Prayer remain unresolved child-definition states; Alma counter attachment remains a failed legacy regression; Darunis `Hunter's Fangs`/Wind remains an explicit source conflict; Tetra/Kumos sidekick record-kind coverage and the remaining named regressions are independently visible.
 - Fidelity dimensions are reported separately for source-record selection, source identity, effect completeness/order, parent-child condition attachment, actor, recipient, trigger, result, magnitude/parameter, duration/activation, element, attack type, mechanic/resource references, and child-definition resolution. Only fully passed applicable dimensions are admitted as fully supported C2 inputs; no capability approval, materialization, graph/schema, legal-kit, scoring/search, provider, frontend, or production behavior changed.
@@ -406,66 +439,13 @@ Completion evidence:
 
 ### Feature C2: Scoped Classification And Review-Reduction Evaluation
 
-Status: Development recovery is complete. C1.1/C2 remains non-authoritative until a fresh held-out evaluation and explicit human acceptance. Feature D remains blocked.
+Status: Technical recovery is complete; joint C1.1/C2 human acceptance remains pending. C1.1/C2 remains non-authoritative, and Feature D remains blocked.
 
-Recovery commits:
-- `70fea2b` — aligned classifier and evaluator contracts.
-- `84e2a40` — evaluated the seven reviewed development witnesses.
-- `ad2d46bf` — corrected recurring classifier errors using that development evidence.
-- `3af367f` — reconciled the Tetra development oracle with reviewed evidence.
-
-Current development result (seven reviewed witnesses): supported capability and dependency labels score 21/21 correct. Effect occurrences score 19 TP / 2 FP / 0 FN; dependency occurrences score 2 TP / 1 FP / 0 FN. Adjudicated fields match exactly. The remaining dependency-occurrence extra is Tetra's unlabeled Charge-cost record: no current dependency value fits, so it remains an intentional unsupported gap rather than a classifier error. No fresh held-out cohort has been selected or evaluated.
-
-#### Final C1.1/C2 Validation
-
-##### Fresh cohort
-
-Select seven genuinely unseen witnesses using metadata and freshness checks only. Together they should cover the important C2 behaviors represented in development:
-
-- simple effect;
-- compound or multi-effect skill;
-- conditional or state-heavy mechanic;
-- passive;
-- sidekick behavior where an eligible source is available;
-- shared mechanic or parent/child relationship; and
-- Stellar or other state-driven behavior.
-
-A candidate is ineligible if its exact fact identity or exact source slice already has semantic review or tuning evidence in development/regression records or historical review artifacts. Generic shared-mechanic overlap alone does not disqualify a distinct source record. The consumed R5 cohort and all current Phase 2/3 development witnesses are ineligible.
-
-##### Isolation and adjudication
-
-Selection uses metadata/freshness information only. After selection, the evaluation owner receives source-only evidence and independently adjudicates expected effects and dependencies, canonical taxonomy labels, relevant conditions and triggers, recipient and target, magnitude and duration where supported, and relationship semantics where applicable. Unsupported mechanics remain explicit gaps; do not force them into an existing taxonomy value. Freeze the external semantic oracle before evaluation. Implementation and remediation sessions must not see owner answers before evaluation.
-
-##### Evaluation
-
-Use the recovery-proven path:
-
-`source/report → classifier → shared adapter → semantic evaluator`
-
-Run the current classifier on the fresh cohort once, without tuning against it. Do not add a new evaluator or held-out-only classifier behavior. If the evaluator lacks an independent expected-ID denominator for relationships, compare relationship semantics manually and report those findings separately from automated semantic metrics.
-
-##### Acceptance
-
-Do not apply a single arbitrary percentage threshold to this small cohort. C1.1/C2 is ready for explicit human acceptance only when:
-
-- taxonomy-supported expected mechanics generally appear correctly and supported capability/dependency labels are overwhelmingly correct;
-- no recurring decomposition or false-positive pattern appears;
-- conditions, recipients, timing, magnitude, and duration show no systematic attachment failure;
-- parent/child and shared-mechanic ownership remains correct;
-- unsupported mechanics fail closed as explicit gaps; and
-- no new systematic failure class appears across the cohort.
-
-An isolated unsupported mechanic or isolated miss does not automatically fail acceptance. Repeated errors of the same structural or classification type fail the checkpoint.
-
-##### Failure handling
-
-If the cohort fails, do not tune against it and rerun it as if it were still held out. Mark it consumed, convert relevant failures into development/regression evidence, and perform only the bounded repair justified by those failures. Use a new fresh cohort for any later generalization check. Do not restart C1, C1.1, R2, R3, or completed recovery unless evidence specifically shows that one of those layers is broken.
-
-Feature D remains blocked until explicit human C1.1/C2 acceptance.
+The completed recovery commits and development results are summarized under `Completed Recovery`. They are historical evidence and do not define additional remediation phases. The only remaining C1.1/C2 execution contract is `Remaining Work`.
 
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 
-Status: Blocked/unstarted until the final held-out checkpoint results in explicit human C1.1/C2 acceptance.
+Status: Blocked/unstarted. Feature D may begin only after the explicit joint acceptance defined under `Remaining Work`.
 
 Type and route: `build` via `builder-executor -> tdd-loop`, with required human review for the bounded strategically material queues produced through C2.
 
@@ -534,7 +514,7 @@ Milestone 6 completes only when:
 
 - all 367 canonical forms/styles remain legal-kit complete and legally eligible when owned and data-complete;
 - high-value capability extraction has been attempted across the full catalog;
-- C1's structural guarantees remain valid, C1.1 establishes source-semantic fidelity with stratified witnesses plus deterministic full-catalog replay, and C2's held-out classification benefit, compatibility evidence and remaining review burden are accepted before D;
+- C1's structural guarantees and C1.1's deterministic source-fidelity replay remain valid, and the fresh seven-witness evaluation receives explicit joint C1.1/C2 human acceptance before Feature D begins;
 - unknown, ambiguous, rejected, untagged, and proven-absence semantics remain distinct;
 - evidence-based thresholds approved after Feature A are met across the strategic coverage dimensions relevant to the thirty-boss corpus;
 - boss-eligible pools are large enough to exercise meaningful search where the effective roster and evidence permit;
