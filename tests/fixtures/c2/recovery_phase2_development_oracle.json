@@ -582,6 +582,24 @@
               "status": "not_applicable"
             }
           }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "condition": {
+              "status": "adjudicated",
+              "value": "When Minalca (Another Style) is at front; only if Outrage is still usable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+            "quote": "When Minalca (Another Style) is at front"
+          }
         }
       ],
       "reviewed_relationships": [],
@@ -593,7 +611,7 @@
         },
         {
           "source_quote": "Stack one Stigmata on Minalca (only if Outrage is still usable)",
-          "interpretation": "The review confirms this is a distinct conditional stack effect, not a resource dependency. The current admitted capability and recipient values cannot represent Stigmata on the named Minalca AS target.",
+          "interpretation": "The Stigmata stack application remains an unsupported effect. Its Minalca-at-front prerequisite is scored separately as party_composition; the Outrage-usable condition and named recipient remain unscored because no corresponding dependency or recipient value fits.",
           "evaluator_status": "unsupported named-stack mechanic and recipient gap; retain for manual comparison"
         },
         {

@@ -140,30 +140,30 @@
           }
         },
         "capability_label_precision_recall": {
-          "expected_count": 20,
+          "expected_count": 21,
           "false_negative_count": 0,
-          "false_positive_count": 1,
-          "precision": 0.9523809523809523,
+          "false_positive_count": 0,
+          "precision": 1.0,
           "predicted_count": 21,
           "recall": 1.0,
-          "true_positive_count": 20
+          "true_positive_count": 21
         },
         "condition_attachment": {
           "accuracy": 1.0,
-          "adjudicated_count": 5,
-          "correct_count": 5,
-          "denominator_count": 20,
+          "adjudicated_count": 6,
+          "correct_count": 6,
+          "denominator_count": 21,
           "not_applicable_count": 3,
           "unknown_count": 12
         },
         "dependency_occurrence_precision_recall": {
-          "expected_count": 1,
+          "expected_count": 2,
           "false_negative_count": 0,
-          "false_positive_count": 2,
-          "precision": 0.3333333333333333,
+          "false_positive_count": 1,
+          "precision": 0.6666666666666666,
           "predicted_count": 3,
           "recall": 1.0,
-          "true_positive_count": 1
+          "true_positive_count": 2
         },
         "effect_occurrence_precision_recall": {
           "expected_count": 19,
@@ -179,22 +179,22 @@
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "attack_type": {
             "accuracy": 1.0,
             "adjudicated_count": 4,
             "correct_count": 4,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "not_applicable_count": 1,
-            "unknown_count": 15
+            "unknown_count": 16
           },
           "condition": {
             "accuracy": 1.0,
-            "adjudicated_count": 5,
-            "correct_count": 5,
-            "denominator_count": 20,
+            "adjudicated_count": 6,
+            "correct_count": 6,
+            "denominator_count": 21,
             "not_applicable_count": 3,
             "unknown_count": 12
           },
@@ -202,84 +202,84 @@
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "duration_activation": {
             "accuracy": 1.0,
             "adjudicated_count": 8,
             "correct_count": 8,
-            "denominator_count": 20,
-            "unknown_count": 12
+            "denominator_count": 21,
+            "unknown_count": 13
           },
           "element": {
             "accuracy": 1.0,
             "adjudicated_count": 1,
             "correct_count": 1,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "not_applicable_count": 2,
-            "unknown_count": 17
+            "unknown_count": 18
           },
           "magnitude": {
             "accuracy": 1.0,
             "adjudicated_count": 10,
             "correct_count": 10,
-            "denominator_count": 20,
-            "unknown_count": 10
+            "denominator_count": 21,
+            "unknown_count": 11
           },
           "recipient": {
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "relationships": {
             "accuracy": null,
-            "denominator_count": 20,
-            "not_applicable_count": 19,
+            "denominator_count": 21,
+            "not_applicable_count": 20,
             "unknown_count": 1
           },
           "result": {
             "accuracy": 1.0,
             "adjudicated_count": 2,
             "correct_count": 2,
-            "denominator_count": 20,
-            "unknown_count": 18
+            "denominator_count": 21,
+            "unknown_count": 19
           },
           "state_reference": {
             "accuracy": null,
-            "denominator_count": 20,
-            "unknown_count": 20
+            "denominator_count": 21,
+            "unknown_count": 21
           },
           "target_cardinality": {
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "trigger": {
             "accuracy": 1.0,
             "adjudicated_count": 4,
             "correct_count": 4,
-            "denominator_count": 20,
-            "unknown_count": 16
+            "denominator_count": 21,
+            "unknown_count": 17
           }
         },
         "primary_occurrence_precision_recall": {
-          "expected_count": 20,
+          "expected_count": 21,
           "false_negative_count": 0,
-          "false_positive_count": 4,
-          "precision": 0.8333333333333334,
+          "false_positive_count": 3,
+          "precision": 0.875,
           "predicted_count": 24,
           "recall": 1.0,
-          "true_positive_count": 20
+          "true_positive_count": 21
         },
         "typed_relationship_correctness": {
           "accuracy": null,
-          "denominator_count": 20,
-          "not_applicable_count": 19,
+          "denominator_count": 21,
+          "not_applicable_count": 20,
           "unknown_count": 1
         },
         "unresolved_relationship_count": 4,
@@ -424,8 +424,8 @@
           }
         },
         "capability_label_precision_recall": {
-          "expected_count": 20,
-          "false_negative_count": 20,
+          "expected_count": 21,
+          "false_negative_count": 21,
           "false_positive_count": 24,
           "precision": 0.0,
           "predicted_count": 24,
@@ -434,15 +434,15 @@
         },
         "condition_attachment": {
           "accuracy": 0.0,
-          "adjudicated_count": 5,
-          "denominator_count": 20,
-          "incorrect_count": 5,
+          "adjudicated_count": 6,
+          "denominator_count": 21,
+          "incorrect_count": 6,
           "not_applicable_count": 3,
           "unknown_count": 12
         },
         "dependency_occurrence_precision_recall": {
-          "expected_count": 1,
-          "false_negative_count": 1,
+          "expected_count": 2,
+          "false_negative_count": 2,
           "false_positive_count": 5,
           "precision": 0.0,
           "predicted_count": 5,
@@ -462,98 +462,98 @@
           "actor": {
             "accuracy": 0.0,
             "adjudicated_count": 19,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 19,
-            "unknown_count": 1
+            "unknown_count": 2
           },
           "attack_type": {
             "accuracy": 0.0,
             "adjudicated_count": 4,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 4,
             "not_applicable_count": 1,
-            "unknown_count": 15
+            "unknown_count": 16
           },
           "condition": {
             "accuracy": 0.0,
-            "adjudicated_count": 5,
-            "denominator_count": 20,
-            "incorrect_count": 5,
+            "adjudicated_count": 6,
+            "denominator_count": 21,
+            "incorrect_count": 6,
             "not_applicable_count": 3,
             "unknown_count": 12
           },
           "direction": {
             "accuracy": 0.0,
             "adjudicated_count": 19,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 19,
-            "unknown_count": 1
+            "unknown_count": 2
           },
           "duration_activation": {
             "accuracy": 0.0,
             "adjudicated_count": 8,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 8,
-            "unknown_count": 12
+            "unknown_count": 13
           },
           "element": {
             "accuracy": 0.0,
             "adjudicated_count": 1,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 1,
             "not_applicable_count": 2,
-            "unknown_count": 17
+            "unknown_count": 18
           },
           "magnitude": {
             "accuracy": 0.0,
             "adjudicated_count": 10,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 10,
-            "unknown_count": 10
+            "unknown_count": 11
           },
           "recipient": {
             "accuracy": 0.0,
             "adjudicated_count": 19,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 19,
-            "unknown_count": 1
+            "unknown_count": 2
           },
           "relationships": {
             "accuracy": null,
-            "denominator_count": 20,
-            "not_applicable_count": 19,
+            "denominator_count": 21,
+            "not_applicable_count": 20,
             "unknown_count": 1
           },
           "result": {
             "accuracy": 0.0,
             "adjudicated_count": 2,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 2,
-            "unknown_count": 18
+            "unknown_count": 19
           },
           "state_reference": {
             "accuracy": null,
-            "denominator_count": 20,
-            "unknown_count": 20
+            "denominator_count": 21,
+            "unknown_count": 21
           },
           "target_cardinality": {
             "accuracy": 0.0,
             "adjudicated_count": 19,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 19,
-            "unknown_count": 1
+            "unknown_count": 2
           },
           "trigger": {
             "accuracy": 0.0,
             "adjudicated_count": 4,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "incorrect_count": 4,
-            "unknown_count": 16
+            "unknown_count": 17
           }
         },
         "primary_occurrence_precision_recall": {
-          "expected_count": 20,
-          "false_negative_count": 20,
+          "expected_count": 21,
+          "false_negative_count": 21,
           "false_positive_count": 24,
           "precision": 0.0,
           "predicted_count": 24,
@@ -562,8 +562,8 @@
         },
         "typed_relationship_correctness": {
           "accuracy": null,
-          "denominator_count": 20,
-          "not_applicable_count": 19,
+          "denominator_count": 21,
+          "not_applicable_count": 20,
           "unknown_count": 1
         },
         "unresolved_relationship_count": 0,
@@ -708,30 +708,30 @@
           }
         },
         "capability_label_precision_recall": {
-          "expected_count": 20,
+          "expected_count": 21,
           "false_negative_count": 0,
-          "false_positive_count": 1,
-          "precision": 0.9523809523809523,
+          "false_positive_count": 0,
+          "precision": 1.0,
           "predicted_count": 21,
           "recall": 1.0,
-          "true_positive_count": 20
+          "true_positive_count": 21
         },
         "condition_attachment": {
           "accuracy": 1.0,
-          "adjudicated_count": 5,
-          "correct_count": 5,
-          "denominator_count": 20,
+          "adjudicated_count": 6,
+          "correct_count": 6,
+          "denominator_count": 21,
           "not_applicable_count": 3,
           "unknown_count": 12
         },
         "dependency_occurrence_precision_recall": {
-          "expected_count": 1,
+          "expected_count": 2,
           "false_negative_count": 0,
-          "false_positive_count": 2,
-          "precision": 0.3333333333333333,
+          "false_positive_count": 1,
+          "precision": 0.6666666666666666,
           "predicted_count": 3,
           "recall": 1.0,
-          "true_positive_count": 1
+          "true_positive_count": 2
         },
         "effect_occurrence_precision_recall": {
           "expected_count": 19,
@@ -747,22 +747,22 @@
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "attack_type": {
             "accuracy": 1.0,
             "adjudicated_count": 4,
             "correct_count": 4,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "not_applicable_count": 1,
-            "unknown_count": 15
+            "unknown_count": 16
           },
           "condition": {
             "accuracy": 1.0,
-            "adjudicated_count": 5,
-            "correct_count": 5,
-            "denominator_count": 20,
+            "adjudicated_count": 6,
+            "correct_count": 6,
+            "denominator_count": 21,
             "not_applicable_count": 3,
             "unknown_count": 12
           },
@@ -770,84 +770,84 @@
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "duration_activation": {
             "accuracy": 1.0,
             "adjudicated_count": 8,
             "correct_count": 8,
-            "denominator_count": 20,
-            "unknown_count": 12
+            "denominator_count": 21,
+            "unknown_count": 13
           },
           "element": {
             "accuracy": 1.0,
             "adjudicated_count": 1,
             "correct_count": 1,
-            "denominator_count": 20,
+            "denominator_count": 21,
             "not_applicable_count": 2,
-            "unknown_count": 17
+            "unknown_count": 18
           },
           "magnitude": {
             "accuracy": 1.0,
             "adjudicated_count": 10,
             "correct_count": 10,
-            "denominator_count": 20,
-            "unknown_count": 10
+            "denominator_count": 21,
+            "unknown_count": 11
           },
           "recipient": {
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "relationships": {
             "accuracy": null,
-            "denominator_count": 20,
-            "not_applicable_count": 19,
+            "denominator_count": 21,
+            "not_applicable_count": 20,
             "unknown_count": 1
           },
           "result": {
             "accuracy": 1.0,
             "adjudicated_count": 2,
             "correct_count": 2,
-            "denominator_count": 20,
-            "unknown_count": 18
+            "denominator_count": 21,
+            "unknown_count": 19
           },
           "state_reference": {
             "accuracy": null,
-            "denominator_count": 20,
-            "unknown_count": 20
+            "denominator_count": 21,
+            "unknown_count": 21
           },
           "target_cardinality": {
             "accuracy": 1.0,
             "adjudicated_count": 19,
             "correct_count": 19,
-            "denominator_count": 20,
-            "unknown_count": 1
+            "denominator_count": 21,
+            "unknown_count": 2
           },
           "trigger": {
             "accuracy": 1.0,
             "adjudicated_count": 4,
             "correct_count": 4,
-            "denominator_count": 20,
-            "unknown_count": 16
+            "denominator_count": 21,
+            "unknown_count": 17
           }
         },
         "primary_occurrence_precision_recall": {
-          "expected_count": 20,
+          "expected_count": 21,
           "false_negative_count": 0,
-          "false_positive_count": 4,
-          "precision": 0.8333333333333334,
+          "false_positive_count": 3,
+          "precision": 0.875,
           "predicted_count": 24,
           "recall": 1.0,
-          "true_positive_count": 20
+          "true_positive_count": 21
         },
         "typed_relationship_correctness": {
           "accuracy": null,
-          "denominator_count": 20,
-          "not_applicable_count": 19,
+          "denominator_count": 21,
+          "not_applicable_count": 20,
           "unknown_count": 1
         },
         "unresolved_relationship_count": 4,
@@ -6704,27 +6704,29 @@
               }
             },
             "capability_label_precision_recall": {
-              "expected_count": 4,
+              "expected_count": 5,
               "false_negative_count": 0,
-              "false_positive_count": 1,
-              "precision": 0.8,
+              "false_positive_count": 0,
+              "precision": 1.0,
               "predicted_count": 5,
               "recall": 1.0,
-              "true_positive_count": 4
+              "true_positive_count": 5
             },
             "condition_attachment": {
-              "accuracy": null,
-              "denominator_count": 4,
+              "accuracy": 1.0,
+              "adjudicated_count": 1,
+              "correct_count": 1,
+              "denominator_count": 5,
               "unknown_count": 4
             },
             "dependency_occurrence_precision_recall": {
-              "expected_count": 0,
+              "expected_count": 1,
               "false_negative_count": 0,
-              "false_positive_count": 2,
-              "precision": 0.0,
+              "false_positive_count": 1,
+              "precision": 0.5,
               "predicted_count": 2,
-              "recall": 0.0,
-              "true_positive_count": 0
+              "recall": 1.0,
+              "true_positive_count": 1
             },
             "effect_occurrence_precision_recall": {
               "expected_count": 4,
@@ -6740,89 +6742,95 @@
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "attack_type": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "condition": {
-                "accuracy": null,
-                "denominator_count": 4,
+                "accuracy": 1.0,
+                "adjudicated_count": 1,
+                "correct_count": 1,
+                "denominator_count": 5,
                 "unknown_count": 4
               },
               "direction": {
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "duration_activation": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "element": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "magnitude": {
                 "accuracy": 1.0,
                 "adjudicated_count": 1,
                 "correct_count": 1,
-                "denominator_count": 4,
-                "unknown_count": 3
+                "denominator_count": 5,
+                "unknown_count": 4
               },
               "recipient": {
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "relationships": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "not_applicable_count": 4
+                "denominator_count": 5,
+                "not_applicable_count": 5
               },
               "result": {
                 "accuracy": 1.0,
                 "adjudicated_count": 1,
                 "correct_count": 1,
-                "denominator_count": 4,
-                "unknown_count": 3
+                "denominator_count": 5,
+                "unknown_count": 4
               },
               "state_reference": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "target_cardinality": {
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "trigger": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               }
             },
             "primary_occurrence_precision_recall": {
-              "expected_count": 4,
+              "expected_count": 5,
               "false_negative_count": 0,
-              "false_positive_count": 3,
-              "precision": 0.5714285714285714,
+              "false_positive_count": 2,
+              "precision": 0.7142857142857143,
               "predicted_count": 7,
               "recall": 1.0,
-              "true_positive_count": 4
+              "true_positive_count": 5
             },
             "typed_relationship_correctness": {
               "accuracy": null,
-              "denominator_count": 4,
-              "not_applicable_count": 4
+              "denominator_count": 5,
+              "not_applicable_count": 5
             },
             "unresolved_relationship_count": 0,
             "witness_denominator": 1
@@ -7915,8 +7923,8 @@
               }
             },
             "capability_label_precision_recall": {
-              "expected_count": 4,
-              "false_negative_count": 4,
+              "expected_count": 5,
+              "false_negative_count": 5,
               "false_positive_count": 6,
               "precision": 0.0,
               "predicted_count": 6,
@@ -7924,13 +7932,15 @@
               "true_positive_count": 0
             },
             "condition_attachment": {
-              "accuracy": null,
-              "denominator_count": 4,
+              "accuracy": 0.0,
+              "adjudicated_count": 1,
+              "denominator_count": 5,
+              "incorrect_count": 1,
               "unknown_count": 4
             },
             "dependency_occurrence_precision_recall": {
-              "expected_count": 0,
-              "false_negative_count": 0,
+              "expected_count": 1,
+              "false_negative_count": 1,
               "false_positive_count": 1,
               "precision": 0.0,
               "predicted_count": 1,
@@ -7950,80 +7960,86 @@
               "actor": {
                 "accuracy": 0.0,
                 "adjudicated_count": 4,
-                "denominator_count": 4,
-                "incorrect_count": 4
+                "denominator_count": 5,
+                "incorrect_count": 4,
+                "unknown_count": 1
               },
               "attack_type": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "condition": {
-                "accuracy": null,
-                "denominator_count": 4,
+                "accuracy": 0.0,
+                "adjudicated_count": 1,
+                "denominator_count": 5,
+                "incorrect_count": 1,
                 "unknown_count": 4
               },
               "direction": {
                 "accuracy": 0.0,
                 "adjudicated_count": 4,
-                "denominator_count": 4,
-                "incorrect_count": 4
+                "denominator_count": 5,
+                "incorrect_count": 4,
+                "unknown_count": 1
               },
               "duration_activation": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "element": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "magnitude": {
                 "accuracy": 0.0,
                 "adjudicated_count": 1,
-                "denominator_count": 4,
+                "denominator_count": 5,
                 "incorrect_count": 1,
-                "unknown_count": 3
+                "unknown_count": 4
               },
               "recipient": {
                 "accuracy": 0.0,
                 "adjudicated_count": 4,
-                "denominator_count": 4,
-                "incorrect_count": 4
+                "denominator_count": 5,
+                "incorrect_count": 4,
+                "unknown_count": 1
               },
               "relationships": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "not_applicable_count": 4
+                "denominator_count": 5,
+                "not_applicable_count": 5
               },
               "result": {
                 "accuracy": 0.0,
                 "adjudicated_count": 1,
-                "denominator_count": 4,
+                "denominator_count": 5,
                 "incorrect_count": 1,
-                "unknown_count": 3
+                "unknown_count": 4
               },
               "state_reference": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "target_cardinality": {
                 "accuracy": 0.0,
                 "adjudicated_count": 4,
-                "denominator_count": 4,
-                "incorrect_count": 4
+                "denominator_count": 5,
+                "incorrect_count": 4,
+                "unknown_count": 1
               },
               "trigger": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               }
             },
             "primary_occurrence_precision_recall": {
-              "expected_count": 4,
-              "false_negative_count": 4,
+              "expected_count": 5,
+              "false_negative_count": 5,
               "false_positive_count": 6,
               "precision": 0.0,
               "predicted_count": 6,
@@ -8032,8 +8048,8 @@
             },
             "typed_relationship_correctness": {
               "accuracy": null,
-              "denominator_count": 4,
-              "not_applicable_count": 4
+              "denominator_count": 5,
+              "not_applicable_count": 5
             },
             "unresolved_relationship_count": 0,
             "witness_denominator": 1
@@ -8630,27 +8646,29 @@
               }
             },
             "capability_label_precision_recall": {
-              "expected_count": 4,
+              "expected_count": 5,
               "false_negative_count": 0,
-              "false_positive_count": 1,
-              "precision": 0.8,
+              "false_positive_count": 0,
+              "precision": 1.0,
               "predicted_count": 5,
               "recall": 1.0,
-              "true_positive_count": 4
+              "true_positive_count": 5
             },
             "condition_attachment": {
-              "accuracy": null,
-              "denominator_count": 4,
+              "accuracy": 1.0,
+              "adjudicated_count": 1,
+              "correct_count": 1,
+              "denominator_count": 5,
               "unknown_count": 4
             },
             "dependency_occurrence_precision_recall": {
-              "expected_count": 0,
+              "expected_count": 1,
               "false_negative_count": 0,
-              "false_positive_count": 2,
-              "precision": 0.0,
+              "false_positive_count": 1,
+              "precision": 0.5,
               "predicted_count": 2,
-              "recall": 0.0,
-              "true_positive_count": 0
+              "recall": 1.0,
+              "true_positive_count": 1
             },
             "effect_occurrence_precision_recall": {
               "expected_count": 4,
@@ -8666,89 +8684,95 @@
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "attack_type": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "condition": {
-                "accuracy": null,
-                "denominator_count": 4,
+                "accuracy": 1.0,
+                "adjudicated_count": 1,
+                "correct_count": 1,
+                "denominator_count": 5,
                 "unknown_count": 4
               },
               "direction": {
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "duration_activation": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "element": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "magnitude": {
                 "accuracy": 1.0,
                 "adjudicated_count": 1,
                 "correct_count": 1,
-                "denominator_count": 4,
-                "unknown_count": 3
+                "denominator_count": 5,
+                "unknown_count": 4
               },
               "recipient": {
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "relationships": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "not_applicable_count": 4
+                "denominator_count": 5,
+                "not_applicable_count": 5
               },
               "result": {
                 "accuracy": 1.0,
                 "adjudicated_count": 1,
                 "correct_count": 1,
-                "denominator_count": 4,
-                "unknown_count": 3
+                "denominator_count": 5,
+                "unknown_count": 4
               },
               "state_reference": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               },
               "target_cardinality": {
                 "accuracy": 1.0,
                 "adjudicated_count": 4,
                 "correct_count": 4,
-                "denominator_count": 4
+                "denominator_count": 5,
+                "unknown_count": 1
               },
               "trigger": {
                 "accuracy": null,
-                "denominator_count": 4,
-                "unknown_count": 4
+                "denominator_count": 5,
+                "unknown_count": 5
               }
             },
             "primary_occurrence_precision_recall": {
-              "expected_count": 4,
+              "expected_count": 5,
               "false_negative_count": 0,
-              "false_positive_count": 3,
-              "precision": 0.5714285714285714,
+              "false_positive_count": 2,
+              "precision": 0.7142857142857143,
               "predicted_count": 7,
               "recall": 1.0,
-              "true_positive_count": 4
+              "true_positive_count": 5
             },
             "typed_relationship_correctness": {
               "accuracy": null,
-              "denominator_count": 4,
-              "not_applicable_count": 4
+              "denominator_count": 5,
+              "not_applicable_count": 5
             },
             "unresolved_relationship_count": 0,
             "witness_denominator": 1
@@ -9833,6 +9857,24 @@
             "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
             "quote": "Hold Ground to all party members"
           }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "condition": {
+              "status": "adjudicated",
+              "value": "When Minalca (Another Style) is at front; only if Outrage is still usable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+            "quote": "When Minalca (Another Style) is at front"
+          }
         }
       ],
       "fact_id": "sidekick_skill:f169ab3c49e3780497a8",
@@ -9846,7 +9888,7 @@
         },
         {
           "evaluator_status": "unsupported named-stack mechanic and recipient gap; retain for manual comparison",
-          "interpretation": "The review confirms this is a distinct conditional stack effect, not a resource dependency. The current admitted capability and recipient values cannot represent Stigmata on the named Minalca AS target.",
+          "interpretation": "The Stigmata stack application remains an unsupported effect. Its Minalca-at-front prerequisite is scored separately as party_composition; the Outrage-usable condition and named recipient remain unscored because no corresponding dependency or recipient value fits.",
           "source_quote": "Stack one Stigmata on Minalca (only if Outrage is still usable)"
         },
         {
@@ -16545,8 +16587,8 @@
         },
         "condition": {
           "accuracy": 1.0,
-          "adjudicated": 5,
-          "correct": 5
+          "adjudicated": 6,
+          "correct": 6
         },
         "direction": {
           "accuracy": 1.0,
@@ -16590,24 +16632,24 @@
         }
       },
       "canonical_labels": {
-        "expected_count": 20,
-        "precision": 0.9523809523809523,
+        "expected_count": 21,
+        "precision": 1.0,
         "predicted_count": 21,
         "recall": 1.0,
         "tp_fp_fn": [
-          20,
-          1,
+          21,
+          0,
           0
         ]
       },
       "dependencies": {
-        "expected_count": 1,
-        "precision": 0.3333333333333333,
+        "expected_count": 2,
+        "precision": 0.6666666666666666,
         "predicted_count": 3,
         "recall": 1.0,
         "tp_fp_fn": [
-          1,
           2,
+          1,
           0
         ]
       },
@@ -16716,6 +16758,98 @@
         ]
       }
     },
+    "before_oracle_reconciliation_metrics": {
+      "adjudicated_fields": {
+        "actor": {
+          "accuracy": 1.0,
+          "adjudicated": 19,
+          "correct": 19
+        },
+        "attack_type": {
+          "accuracy": 1.0,
+          "adjudicated": 4,
+          "correct": 4
+        },
+        "condition": {
+          "accuracy": 1.0,
+          "adjudicated": 5,
+          "correct": 5
+        },
+        "direction": {
+          "accuracy": 1.0,
+          "adjudicated": 19,
+          "correct": 19
+        },
+        "duration_activation": {
+          "accuracy": 1.0,
+          "adjudicated": 8,
+          "correct": 8
+        },
+        "element": {
+          "accuracy": 1.0,
+          "adjudicated": 1,
+          "correct": 1
+        },
+        "magnitude": {
+          "accuracy": 1.0,
+          "adjudicated": 10,
+          "correct": 10
+        },
+        "recipient": {
+          "accuracy": 1.0,
+          "adjudicated": 19,
+          "correct": 19
+        },
+        "result": {
+          "accuracy": 1.0,
+          "adjudicated": 2,
+          "correct": 2
+        },
+        "target_cardinality": {
+          "accuracy": 1.0,
+          "adjudicated": 19,
+          "correct": 19
+        },
+        "trigger": {
+          "accuracy": 1.0,
+          "adjudicated": 4,
+          "correct": 4
+        }
+      },
+      "canonical_labels": {
+        "expected_count": 20,
+        "precision": 0.9523809523809523,
+        "predicted_count": 21,
+        "recall": 1.0,
+        "tp_fp_fn": [
+          20,
+          1,
+          0
+        ]
+      },
+      "dependencies": {
+        "expected_count": 1,
+        "precision": 0.3333333333333333,
+        "predicted_count": 3,
+        "recall": 1.0,
+        "tp_fp_fn": [
+          1,
+          2,
+          0
+        ]
+      },
+      "effects": {
+        "expected_count": 19,
+        "precision": 0.9047619047619048,
+        "predicted_count": 21,
+        "recall": 1.0,
+        "tp_fp_fn": [
+          19,
+          2,
+          0
+        ]
+      }
+    },
     "bounded_evaluation_runs": [
       {
         "bounded_change": "Compound atomization and canonical capability labels",
@@ -16800,8 +16934,30 @@
           ]
         },
         "run_id": "final"
+      },
+      {
+        "bounded_change": "Add the independently reviewed party_composition atom; classifier and taxonomy unchanged.",
+        "fidelity_checked": {
+          "canonical_labels": [
+            21,
+            0,
+            0
+          ],
+          "dependencies": [
+            2,
+            1,
+            0
+          ],
+          "effects": [
+            19,
+            2,
+            0
+          ]
+        },
+        "run_id": "oracle-reconciliation"
       }
     ],
+    "classifier_code_changed_in_reconciliation": false,
     "classifier_version_after": "m6-c2-scoped-classification-1.5.0",
     "cohort": {
       "consumed_r5_data_used": false,
@@ -16817,12 +16973,46 @@
         "development-claude-es-another-zone"
       ]
     },
+    "development_oracle_changed_in_reconciliation": true,
     "evaluator_version": "c2-atomic-eval-1.1.0",
     "fresh_held_out_cohort_readiness": {
       "created_or_evaluated_in_phase3": false,
       "limitation": "Seven reviewed development witnesses establish readiness for a fresh held-out check, not generalization or C2 acceptance.",
-      "rationale": "All 19 scored supported effects and all 20 scored capability/dependency labels are recovered, and every adjudicated semantic field is exact. The remaining effect predictions are explicit taxonomy gaps; the two extra dependency records and one extra label are reviewed Tetra mechanics outside the scored-atom denominator. Relationship scoring remains diagnostic rather than independently metric-scored.",
+      "rationale": "The seven reviewed development witnesses recover all 19 scored effects and all 21 scored canonical labels, with every adjudicated field exact. The remaining two effect predictions are explicit taxonomy gaps; the remaining dependency-occurrence FP is the intentionally unlabeled Tetra Charge-cost gap. Relationship scoring remains diagnostic rather than independently metric-scored.",
       "recommendation": "justified_to_create_in_a_later_phase"
+    },
+    "oracle_reconciliation": {
+      "added_scored_dependency": {
+        "operation": "conditional",
+        "review_basis": "Review 3 states Minalca (Another Style) must be at the front; the current dependency taxonomy includes party_composition.",
+        "source_anchor": {
+          "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+          "quote": "When Minalca (Another Style) is at front"
+        },
+        "taxonomy_value": "party_composition",
+        "witness_id": "known-tetra-ruincarnation"
+      },
+      "charge_cost_disposition": {
+        "classifier_output": "dependency occurrence with dependency_gap=true and no dependency_value",
+        "oracle_atom_added": false,
+        "scoring_note": "The evaluator counts all dependency-kind predictions, so the explicit unsupported gap remains one unmatched occurrence FP. It is not a false canonical dependency label or an erroneous source classification.",
+        "source_quote": "Consumes 8 Charge",
+        "taxonomy_value_available": false
+      },
+      "dependency_occurrence_tp_fp_fn_after": [
+        2,
+        1,
+        0
+      ],
+      "dependency_occurrence_tp_fp_fn_before": [
+        1,
+        2,
+        0
+      ],
+      "finding": "The Phase 2 oracle omitted a reviewed, taxonomy-supported Tetra party-composition prerequisite.",
+      "pinned_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "same_seven_witnesses_replayed": true,
+      "source_review": "artifacts/evidence/feature_c2_human_review.md \u2014 Review 3, Tetra (Another Style), Ruincarnation"
     },
     "phase": "Recovery Phase 3: Development Classifier Tuning",
     "relationship_scoring_limit": "The evaluator has no independent expected relationship-ID denominator; resolved targets, operations, ownership, and unresolved references are preserved in per-witness diagnostics for review.",
@@ -16847,19 +17037,19 @@
       "reviewed_but_unscored_dependency_records": [
         {
           "mechanic": "Consumes 8 Charge",
-          "reason": "Retained as an unlabeled dependency gap because the taxonomy has no Charge requirement value.",
-          "witness_id": "known-tetra-ruincarnation"
-        },
-        {
-          "mechanic": "Minalca at front / Outrage usable condition",
-          "reason": "The current taxonomy supports party_composition; the Phase 2 scored-atom list did not include this reviewed mechanic, so it appears as an extra dependency and label in those metrics.",
+          "reason": "It is a real resource-cost prerequisite, retained as dependency_gap with no canonical value. No scored oracle atom is added; the occurrence-level evaluator reports it as the one remaining dependency FP.",
           "witness_id": "known-tetra-ruincarnation"
         }
       ]
     },
+    "taxonomy_changed_in_reconciliation": false,
     "verification": {
       "focused_command": ".venv/bin/pytest tests/unit/test_c2_atomic_occurrences.py -q",
       "focused_result": "14 passed",
+      "oracle_reconciliation": {
+        "command": ".venv/bin/python scripts/evaluate_c2_development_reviews.py --output <phase3-reconciliation-output.json>",
+        "result": "Seven-witness source/report, classifier, shared-adapter, semantic-evaluator replay passed; dependencies TP/FP/FN 2/1/0."
+      },
       "real_pipeline_command": ".venv/bin/python scripts/evaluate_c2_development_reviews.py --output <phase3-output.json>",
       "real_pipeline_witness_count": 7
     }
@@ -16870,7 +17060,7 @@
     "input_filter": "Temporary manifest, C1.1 oracle, and source-slice fixture each contain only the seven named identities.",
     "report_comparison_digest": "cb8bb630bb0ad51f33ad955b817703daba135d98703d644bf45928c295bf18a9",
     "semantic_answer_set": "tests/fixtures/c2/recovery_phase2_development_oracle.json",
-    "semantic_answer_set_sha256": "79242203ae20a2746e89d95a25b73801c30e5dc11fb3252816695ab54822f255",
+    "semantic_answer_set_sha256": "83a188f95e653c892e24c77db7a3314a31fceac9ebdfa9a34ae119df0dc37d94",
     "semantic_evaluator_version": "c2-atomic-eval-1.1.0",
     "source_fidelity_artifact_version": "m6-c1.1-1.2.0",
     "source_fidelity_digest": "28eec8303f3608bf9fd1ce2a40e8108dd044c7e0037c6ce63699f6ae2a8cdbcc",
