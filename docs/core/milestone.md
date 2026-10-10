@@ -418,11 +418,50 @@ Current development result (seven reviewed witnesses): supported capability and 
 
 #### Final C1.1/C2 Validation
 
-1. **Fresh held-out selection:** Select a small genuinely unseen cohort using metadata and freshness checks only. Do not tune against these witnesses.
-2. **Independent owner adjudication:** The evaluation owner reviews source-only evidence, creates and freezes the external semantic oracle, and keeps its answers out of implementation and remediation sessions.
-3. **One final held-out evaluation:** Run the current classifier through the recovery-proven classifier → adapter → semantic evaluator path once. Do not tune against the cohort.
-4. **Acceptance checkpoint:** If supported capabilities, dependencies, and fields generalize well with no new systematic failure class, request explicit human C1.1/C2 acceptance. Otherwise stop and document the bounded failure before any further remediation.
-5. **Feature D remains blocked** until explicit C1.1/C2 acceptance.
+##### Fresh cohort
+
+Select seven genuinely unseen witnesses using metadata and freshness checks only. Together they should cover the important C2 behaviors represented in development:
+
+- simple effect;
+- compound or multi-effect skill;
+- conditional or state-heavy mechanic;
+- passive;
+- sidekick behavior where an eligible source is available;
+- shared mechanic or parent/child relationship; and
+- Stellar or other state-driven behavior.
+
+A candidate is ineligible if its exact fact identity or exact source slice already has semantic review or tuning evidence in development/regression records or historical review artifacts. Generic shared-mechanic overlap alone does not disqualify a distinct source record. The consumed R5 cohort and all current Phase 2/3 development witnesses are ineligible.
+
+##### Isolation and adjudication
+
+Selection uses metadata/freshness information only. After selection, the evaluation owner receives source-only evidence and independently adjudicates expected effects and dependencies, canonical taxonomy labels, relevant conditions and triggers, recipient and target, magnitude and duration where supported, and relationship semantics where applicable. Unsupported mechanics remain explicit gaps; do not force them into an existing taxonomy value. Freeze the external semantic oracle before evaluation. Implementation and remediation sessions must not see owner answers before evaluation.
+
+##### Evaluation
+
+Use the recovery-proven path:
+
+`source/report → classifier → shared adapter → semantic evaluator`
+
+Run the current classifier on the fresh cohort once, without tuning against it. Do not add a new evaluator or held-out-only classifier behavior. If the evaluator lacks an independent expected-ID denominator for relationships, compare relationship semantics manually and report those findings separately from automated semantic metrics.
+
+##### Acceptance
+
+Do not apply a single arbitrary percentage threshold to this small cohort. C1.1/C2 is ready for explicit human acceptance only when:
+
+- taxonomy-supported expected mechanics generally appear correctly and supported capability/dependency labels are overwhelmingly correct;
+- no recurring decomposition or false-positive pattern appears;
+- conditions, recipients, timing, magnitude, and duration show no systematic attachment failure;
+- parent/child and shared-mechanic ownership remains correct;
+- unsupported mechanics fail closed as explicit gaps; and
+- no new systematic failure class appears across the cohort.
+
+An isolated unsupported mechanic or isolated miss does not automatically fail acceptance. Repeated errors of the same structural or classification type fail the checkpoint.
+
+##### Failure handling
+
+If the cohort fails, do not tune against it and rerun it as if it were still held out. Mark it consumed, convert relevant failures into development/regression evidence, and perform only the bounded repair justified by those failures. Use a new fresh cohort for any later generalization check. Do not restart C1, C1.1, R2, R3, or completed recovery unless evidence specifically shows that one of those layers is broken.
+
+Feature D remains blocked until explicit human C1.1/C2 acceptance.
 
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 
