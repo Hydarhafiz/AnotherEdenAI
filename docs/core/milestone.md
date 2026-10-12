@@ -18,7 +18,9 @@ Candidates remain bounded, auditable recommendations. They are not guaranteed cl
 - C1.1 and C2 technical implementation and verification are complete; joint human acceptance remains pending.
 - The completed development evaluation scores supported capability and dependency labels 21/21. Effect occurrences score 19 TP / 2 FP / 0 FN, and dependency occurrences score 2 TP / 1 FP / 0 FN. Adjudicated fields match exactly.
 - Tetra's unmatched Charge-cost occurrence is an intentional unsupported taxonomy gap, not a classifier defect.
-- No fresh final held-out cohort has been selected or evaluated.
+- The 2026-10-12 seven-witness final validation failed and is now consumed development/regression evidence. Its source-pinned oracle is promoted at `tests/fixtures/c2/m6_consumed_development_regression_oracle.json`; no fresh cohort has been selected since.
+- Bounded repairs recover the recurring element-damage, multi-hit, party-composition, recipient/direction, decomposition, and Melissa replacement failures. The consumed-cohort result is effects 17 TP / 7 FP / 1 FN, dependencies 6 TP / 1 FP / 1 FN, and canonical labels 22 TP / 1 FP / 3 FN. Remaining field errors and supported-label misses mean C1.1/C2 is not ready for another fresh validation.
+- The established seven-witness development/recovery evaluation remains at its pre-repair baseline: effects 19 TP / 2 FP / 0 FN, dependencies 2 TP / 1 FP / 0 FN, and canonical labels 21 TP / 0 FP / 0 FN.
 - Every earlier protected, held-out, or R5 cohort and every development witness used for review or tuning is consumed and ineligible for final validation.
 - Feature D remains blocked until explicit joint C1.1/C2 human acceptance.
 
@@ -36,11 +38,12 @@ Completed recovery is reopened only if fresh validation identifies evidence that
 
 ## Remaining Work
 
-1. Select seven genuinely unseen witnesses using metadata and freshness checks only. Exclude every exact fact identity or source slice previously reviewed, tuned, protected, or evaluated.
-2. Give the evaluation owner source-only evidence and independently adjudicate expected effects, dependencies, supported taxonomy labels, fields, and relationship semantics. Preserve unsupported mechanics as explicit gaps and freeze the oracle before evaluation.
-3. Run one held-out evaluation through the existing `classifier → shared adapter → semantic evaluator` path. Do not tune against the cohort or add held-out-only behavior.
-4. Record explicit joint C1.1/C2 human acceptance when supported labels are generally correct, no recurring decomposition or false-positive pattern appears, fields and relationships show no systematic failure, unsupported mechanics fail closed, and no new systematic failure class appears. If the cohort fails, mark it consumed, promote its failures to development/regression evidence, make only the bounded repair those failures justify, and require a new fresh cohort.
-5. Begin Feature D only after explicit acceptance.
+1. Close the remaining consumed-cohort supported-label misses and recurring field errors in development/regression evidence. Do not select a new cohort until this evidence supports another fresh validation.
+2. After the bounded repair is reviewed, select seven genuinely unseen witnesses using metadata and freshness checks only. Exclude every exact fact identity or source slice previously reviewed, tuned, protected, or evaluated.
+3. Give the evaluation owner source-only evidence and independently adjudicate expected effects, dependencies, supported taxonomy labels, fields, and relationship semantics. Preserve unsupported mechanics as explicit gaps and freeze the oracle before evaluation.
+4. Run one held-out evaluation through the existing `classifier → shared adapter → semantic evaluator` path. Do not tune against the cohort or add held-out-only behavior.
+5. Record explicit joint C1.1/C2 human acceptance when supported labels are generally correct, no recurring decomposition or false-positive pattern appears, fields and relationships show no systematic failure, unsupported mechanics fail closed, and no new systematic failure class appears. If the cohort fails, mark it consumed, promote its failures to development/regression evidence, make only the bounded repair those failures justify, and require a new fresh cohort.
+6. Begin Feature D only after explicit acceptance.
 
 ## Milestone 5 Transition
 
@@ -439,9 +442,13 @@ Historical technical evidence (non-executable):
 
 ### Feature C2: Scoped Classification And Review-Reduction Evaluation
 
-Status: Technical recovery is complete; joint C1.1/C2 human acceptance remains pending. C1.1/C2 remains non-authoritative, and Feature D remains blocked.
+Status: Technical recovery and the bounded repair from the consumed 2026-10-12 cohort are complete; joint C1.1/C2 human acceptance remains pending. C1.1/C2 remains non-authoritative, and Feature D remains blocked.
 
 The completed recovery commits and development results are summarized under `Completed Recovery`. They are historical evidence and do not define additional remediation phases. The only remaining C1.1/C2 execution contract is `Remaining Work`.
+
+Consumed-cohort repair record (2026-10-12): the seven source-pinned witnesses became development evidence after the failed validation. Durable regressions cover Aisha's and Nona's `element_damage_up`, Otoha's and Nona's `multi_hit_action`, Nona's and Jilya's branch-scoped dependencies, recipient/direction attachment, Nona's decomposition, and Melissa's Stellar Burst replacement relationship. E4 element conversion for Nona remains metadata/gap evidence; no taxonomy value or unsupported mechanic was added. Melissa's replacement now resolves to the matching child fact without inheriting its effects onto the parent.
+
+The final consumed-cohort evaluation reports effects 17 TP / 7 FP / 1 FN, dependencies 6 TP / 1 FP / 1 FN, and canonical labels 22 TP / 1 FP / 3 FN. The remaining canonical misses are Otoha `power_up`, Claude `requires_zone`, and Jilya `physical_resistance_down`. Condition accuracy is 7/14, state-reference accuracy 0/11, trigger accuracy 2/12, and recipient/direction accuracy 19/25 each; recurring field attachment errors remain. The established seven-witness development/recovery evaluation is unchanged at effects 19/2/0, dependencies 2/1/0, and canonical labels 21/0/0. A new fresh cohort is not yet warranted.
 
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 

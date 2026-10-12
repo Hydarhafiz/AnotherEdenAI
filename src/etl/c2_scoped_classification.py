@@ -89,7 +89,9 @@ _ACTION_HEAD_RE = re.compile(
 _COMPOUND_EFFECT_START_RE = re.compile(
     r"\s+and\s+(?=(?:power|intelligence|speed|luck)\b|"
     r"(?:physical|magic|element|attack type|type)\s+resistance\b|"
-    r"(?:damage dealt|outgoing damage)\b)",
+    r"(?:damage dealt|outgoing damage)\b|"
+    r"(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\s+type attack\b|"
+    r"critical rate\b)",
     re.IGNORECASE,
 )
 _RESOURCE_COST_START_RE = re.compile(
@@ -116,8 +118,7 @@ _ACTION_TIMING_RE = re.compile(
     re.IGNORECASE,
 )
 _HIT_COUNT_RE = re.compile(
-    r"\b(?:xxl|xl|l|m|s)\s*[x×]\s*(\d+)(?![\d.])\b|"
-    r"\b(?:attacks?|hits?)\b[^.;]*?\b[x×]\s*(\d+)(?![\d.])\b",
+    r"\b(?:attacks?|hits?)\b[^.;()]*?\b[x×]\s*(\d+)(?![\d.])\b",
     re.IGNORECASE,
 )
 _FORMULA_RE = re.compile(r"\b(?:based on|depending on|according to|scales? with)\b[^.;,]*", re.IGNORECASE)
@@ -160,9 +161,12 @@ _OPERATION_BY_SEMANTIC_TYPE = {
     "damage_event": "damage",
     "damage_mitigation": "apply",
     "damage_modifier": "increase",
+    "element_damage_increase": "increase",
+    "burst_window": "replace",
     "debuff_cleansing": "remove",
     "hp_recovery": "restore",
     "hit_count_modifier": "modify",
+    "multi_hit_action": "damage",
     "mp_recovery": "restore",
     "resistance_increase": "increase",
     "resistance_reduction": "decrease",
@@ -380,6 +384,8 @@ def _tokens_to_fragments(block: StructuralBlock) -> list[tuple[list[StructuralTo
 
 def _direction(text: str) -> str:
     lowered = _key(text)
+    if re.search(r"\b(?:to|for)\s+(?:the\s+)?user\b|\buser's\b", lowered):
+        return "self"
     if re.search(r"\b(?:enemy|enemies|boss|opponent)\b", lowered):
         return "enemy"
     if re.search(r"\b(?:inflict|apply)\b[^.;]*\brage\b", lowered) or re.search(
@@ -397,6 +403,14 @@ def _direction(text: str) -> str:
 
 def _recipient_and_cardinality(text: str) -> tuple[str, str]:
     lowered = _key(text)
+    if re.search(r"\b(?:to|for)\s+(?:the\s+)?user\b|\buser's\b", lowered):
+        return "self", "single"
+    if re.search(r"\brandom(?:ly selected)? enemies\b", lowered):
+        return "random_enemies", "multiple"
+    if re.search(r"\b(?:deploy(?:s|ed|ing)?\b[^.;]*\b(?:zone|stance)|zone|stance)\b", lowered):
+        return "zone", "single"
+    if re.search(r"\b(?:an ally\b[^.;]*\bon the front ?line|[\w'-]+\s+is on the frontline)\b", lowered):
+        return "frontline", "single"
     if re.search(r"\b(?:all enemies|each enemy|all opponents)\b", lowered):
         return "all_enemies", "multiple"
     if re.search(r"\b(?:a single enemy|single enemy|one enemy)\b", lowered):
@@ -432,6 +446,8 @@ def _trigger(text: str) -> str:
     lowered = _key(text)
     if re.search(r"\breceives?\b[^.;]*\bdamage\b", lowered):
         return "on_damage"
+    if re.search(r"\b(?:when used|during) in?\s*stellar burst\b", lowered):
+        return "on_stellar_burst"
     for phrase, value in (
         ("preemptive", "preemptive"),
         ("auto", "auto"),
@@ -508,6 +524,9 @@ def _attack_type(text: str) -> str:
 
 
 def _hit_count(text: str) -> str:
+    modifier = re.search(r"\bnumber of attacks\s+by\s+\+?(\d+)\b", text, re.IGNORECASE)
+    if modifier:
+        return modifier.group(1)
     match = _HIT_COUNT_RE.search(text)
     if not match or not re.search(r"\b(?:attack|attacks|hit|hits)\b", text, re.IGNORECASE):
         return ""
@@ -533,6 +552,13 @@ def _is_formula_explanation(text: str) -> bool:
 def _has_effect(text: str) -> bool:
     if _is_formula_explanation(text):
         return False
+    lowered = _key(text)
+    if re.match(r"\s*unaffected by further zone changes\b", lowered):
+        return False
+    if re.match(r"\s*type attack buff doubled for ally with devotion\b", lowered):
+        return False
+    if re.search(r"\bkaleido\s*;\s*change element of type attack buff according\b", lowered):
+        return False
     if _formula_metadata(text) and not _ACTION_HEAD_RE.search(text):
         return False
     return bool(_ACTION_HEAD_RE.search(text) or _EFFECT_RE.search(text))
@@ -542,7 +568,7 @@ def _is_prerequisite(text: str) -> bool:
     lowered = _key(text)
     if not lowered or re.search(r"\bif explicitly stated\b", lowered):
         return False
-    if re.search(r"\b(?:receives?\b[^.;]*\bdamage|used during)\b", lowered):
+    if re.search(r"\b(?:receives?\b[^.;]*\bdamage|used (?:during|in))\b", lowered):
         return False
     if re.match(r"\s*(?:after|before|during|while|until)\b", lowered):
         return False
@@ -554,10 +580,14 @@ def _is_prerequisite(text: str) -> bool:
 
 def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
     lowered = _key(text)
+    if re.search(r"\bwhen used in stellar burst\b[^.;]*\bperform\b[^.;]*\binstead\b", lowered):
+        return [("burst_window", "burst_window", "stellar_burst")]
+    if re.search(r"\b(?:grant|grants|apply|applies)\s+kaleido\b", lowered):
+        return [("status_or_effect_application", "apply_kaleido", "kaleido")]
     if _REPLACEMENT_RE.search(lowered) and re.search(r"\b(?:skill|action|slot|move)\b", lowered):
         return [("action_replacement", "", "skill_action")]
-    if re.search(r"\b(?:hit count|number of hits|skill hits?)\b", lowered):
-        return [("hit_count_modifier", "", "hit_count")]
+    if re.search(r"\b(?:hit count|number of hits|number of attacks|skill hits?)\b", lowered):
+        return [("hit_count_modifier", "multi_hit_action", "hit_count")]
     if _RESOURCE_OPERATION_RE.search(lowered):
         operation = "resource_consumption" if re.search(r"\b(?:consume|spend|use)", lowered) else "resource_grant"
         resource = next((value for value in ("charge", "stack", "mp") if re.search(rf"\b{value}s?\b", lowered)), "unknown_resource")
@@ -596,7 +626,7 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
         if direction in {"ally", "self"} and re.search(r"\bstatus immunity\b", lowered):
             return [("status_immunity", "grant_status_immunity", "status_ailment")]
         return [("status_or_effect_application", "", "unknown_status_or_target")]
-    if re.search(r"\b(?:deploy|deploys|deployed|deploying)\b[^.;]*\bzone\b", lowered):
+    if re.search(r"\bdeploy(?:s|ed|ing)?\b[^.;]*\b(?:zone|stance)\b", lowered):
         return [("zone_deployment", "deploy_zone", "zone")]
     if re.search(r"\b(?:awaken|awakens|awakened|awakening)\b[^.;]*\bzone\b", lowered):
         return [("zone_awakening", "awaken_zone", "zone")]
@@ -628,13 +658,26 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
                 return [("critical_support", "physical_critical_rate_up", "physical_critical_rate")]
             if "magic" in lowered:
                 return [("critical_support", "magic_critical_rate_up", "magic_critical_rate")]
+    if direction in {"ally", "self"} and re.search(
+        r"\b(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\s+type attack\s+of\s+(?:all\s+)?(?:party members|allies)\b",
+        lowered,
+    ) and (re.search(r"[+-]\s*\d", lowered) or _PERCENT_RE.search(text)):
+        return [("element_damage_increase", "element_damage_up", "element_damage")]
     if (
         re.search(r"\b(?:attacks|deals|deal)\b", lowered)
-        or re.search(r"\battack\s+(?:on\s+)?(?:all|each|a|an|single|enemy|enemies|opponent|opponents)\b", lowered)
+        or re.search(r"\battack\s+(?:on\s+)?(?:all|each|a|an|single|random|enemy|enemies|opponent|opponents)\b", lowered)
         or re.search(r"\b(?:fixed damage|performs?\s+(?:an?\s+)?attack)\b", lowered)
     ):
         capability = "direct_damage" if direction == "enemy" else ""
-        return [("damage_event", capability, "damage")]
+        result = [("damage_event", capability, "damage")]
+        hit_count = _hit_count(text)
+        if (
+            hit_count
+            and int(hit_count) > 1
+            and not re.search(r"\brandom(?:ly selected)? enemies\b", lowered)
+        ):
+            result.append(("multi_hit_action", "multi_hit_action", "hit_count"))
+        return result
     stat_matches = list(_STAT_WORD_RE.finditer(lowered))
     if stat_matches and re.search(r"\b(?:increase|increases|raise|raises|boost|boosts|up)\b|\+\s*\d", lowered):
         stats = list(dict.fromkeys(re.sub(r"\s+", " ", match.group(0).casefold()) for match in stat_matches))
@@ -667,35 +710,61 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
     return [("unsupported_effect", "", "unknown")]
 
 
-def _dependency_value(text: str) -> str:
+def _dependency_values(text: str) -> list[tuple[str, str]]:
     lowered = _key(text)
     if _formula_metadata(text):
-        return ""
+        return []
+    values: list[tuple[str, str]] = []
     if re.search(r"\bend of turn\b", lowered):
-        return "end_of_turn"
-    if re.search(r"\bawakened zone\b", lowered):
-        return "requires_awakened_zone"
-    if re.search(r"\bzone\b", lowered):
-        return "requires_zone"
-    if re.search(r"\bstacks?\b", lowered):
-        return "requires_stack"
-    if re.search(r"\bstatus\b", lowered):
-        return "requires_status"
-    if re.search(r"\bstellar (?:awakened|awakening)\b", lowered):
-        return "requires_stellar_awakened"
+        return []
+    awakened = re.search(r"\bawakened zone\b", lowered)
+    stance = re.search(r"\b[a-z][\w'-]*(?:\s+[a-z][\w'-]*){0,2}\s+stance\b", lowered)
+    zone = re.search(r"\b(?:another\s+)?zone\b", lowered)
+    if awakened:
+        values.append(("requires_awakened_zone", awakened.group(0)))
+    elif stance or zone:
+        match = stance or zone
+        values.append(("requires_zone", match.group(0)))
+
+    charge_threshold = re.search(r"\bcharge\s+(?:is\s+)?(?:at least\s+)?\d+\+?\b", lowered)
+    stack_matches = list(re.finditer(r"\b([a-z][\w'-]*)\s+stacks?\b", lowered))
+    devotion_stack = next((match for match in reversed(stack_matches) if match.group(1) == "devotion"), None)
+    stack_reference = charge_threshold or devotion_stack or (stack_matches[-1] if stack_matches else None)
+    if stack_reference or re.search(r"\bstacks?\b", lowered):
+        values.append(("requires_stack", stack_reference.group(0) if stack_reference else "stack"))
+
+    status = re.search(r"\bstatus(?: ailment)?\b", lowered)
+    if status:
+        values.append(("requires_status", status.group(0)))
+    stellar = re.search(r"\bstellar (?:awakened|awakening)\b", lowered)
+    if stellar:
+        values.append(("requires_stellar_awakened", stellar.group(0)))
     if re.search(
         r"\b(?:sidekick activation|sidekick is active|sidekick active|activate sidekick)\b",
         lowered,
     ):
-        return "requires_sidekick_activation"
-    if re.search(r"\b(?:frontline|party composition|at front)\b", lowered):
-        return "party_composition"
-    if re.search(r"\b(?:party members?|allies|recipients?)\b", lowered):
-        return "requires_recipient_eligibility"
-    if re.search(r"\b(?:eligible|eligibility)\b", lowered):
-        return "requires_recipient_eligibility"
+        values.append(("requires_sidekick_activation", "sidekick activation"))
+
+    party = re.search(r"\ban ally\b[^;:]*\bon the front ?line\b", lowered) or re.search(
+        r"\b[\w'-]+\s+is on the frontline\b", lowered
+    ) or re.search(r"\b(?:frontline|front line|party composition|at front)\b", lowered)
+    if party:
+        values.append(("party_composition", party.group(0)))
+    elif re.search(r"\b(?:party members?|allies|recipients?)\b", lowered) or re.search(
+        r"\b(?:eligible|eligibility)\b", lowered
+    ):
+        values.append(("requires_recipient_eligibility", "recipient eligibility"))
     if re.search(r"\b(?:once per battle|once per character|limited use|limited uses?)\b", lowered):
-        return "limited_use"
+        values.append(("limited_use", "limited use"))
+    return list(dict.fromkeys(values))
+
+
+def _dependency_value(text: str) -> str:
+    values = _dependency_values(text)
+    if values:
+        return values[0][0]
+    if re.search(r"\bend of turn\b", _key(text)):
+        return "end_of_turn"
     return ""
 
 
@@ -773,6 +842,21 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
     segment_start = 0
     segment_ranges: list[tuple[int, int]] = []
     for separator in re.finditer(r";|(?<!\d)\.(?!\d)(?!png\b)", text, re.IGNORECASE):
+        if separator.group(0) == ";":
+            prefix = text[segment_start:separator.start()]
+            suffix = text[separator.end():]
+            kaleido_application = re.search(r"\bgrant\s+kaleido\b", prefix, re.IGNORECASE) and re.match(
+                r"\s*change user's element based on element of the ally with devotion\b",
+                suffix,
+                re.IGNORECASE,
+            )
+            kaleido_buff_metadata = re.search(r"\bkaleido\s*$", prefix, re.IGNORECASE) and re.match(
+                r"\s*change element of type attack buff according to\b",
+                suffix,
+                re.IGNORECASE,
+            )
+            if kaleido_application or kaleido_buff_metadata:
+                continue
         segment_ranges.append((segment_start, separator.start()))
         segment_start = separator.end()
     segment_ranges.append((segment_start, len(text)))
@@ -792,9 +876,9 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
             condition_end = condition_match.end("condition")
             body_start = condition_match.end()
 
-        timing = ""
-        timing_start: int | None = None
-        timing_end: int | None = None
+        timing = "on_stellar_burst" if _trigger(condition) == "on_stellar_burst" else ""
+        timing_start: int | None = condition_start if timing else None
+        timing_end: int | None = condition_end if timing else None
         timing_match = _ACTION_TIMING_RE.search(text, body_start, end)
         first_action = _ACTION_HEAD_RE.search(text, body_start, end)
         if timing_match and (first_action is None or timing_match.start() < first_action.start()):
@@ -810,7 +894,7 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
         if (
             not has_action
             and _CONDITION_RE.search(text[start:end])
-            and (not _EFFECT_RE.search(text[start:end]) or bool(_trigger(text[start:end])))
+            and (body_start >= body_end or not _EFFECT_RE.search(text[start:end]) or bool(_trigger(text[start:end])))
             and not _formula_metadata(text[start:end])
         ):
             trigger = _trigger(text[start:end])
@@ -938,6 +1022,8 @@ def _occurrence(
         result_text = _clean(result_text)
     recipient, cardinality = _recipient_and_cardinality(scoped_text)
     direction = _direction(scoped_text)
+    if semantic_type == "burst_window":
+        recipient, cardinality, direction = "self", "single", "self"
     if field_context:
         inherited_recipient, inherited_cardinality = _recipient_and_cardinality(field_context)
         if recipient == "unknown":
@@ -968,9 +1054,13 @@ def _occurrence(
         result=result_text,
         magnitude=_magnitude(scoped_text),
         duration_activation=_duration_activation(scoped_text),
-        element=_element(scoped_text),
-        attack_type=_attack_type(scoped_text),
-        state_reference=_state_reference(scoped_text) if state_reference is None else state_reference,
+        element=_element(scoped_text) or _element(field_context),
+        attack_type=_attack_type(scoped_text) or _attack_type(field_context),
+        state_reference=(
+            _state_reference(condition or scoped_text)
+            if state_reference is None
+            else state_reference
+        ),
         definition_support=definition_support,
         semantic_state=semantic_state,
         authority=authority,
@@ -1002,6 +1092,8 @@ def _render_fragment_tokens(
     positions: list[tuple[StructuralToken, int, int]] = []
     length = 0
     for token in tokens:
+        if token.kind == "icon":
+            continue
         value = _clean(token.text)
         if not value:
             continue
@@ -1130,6 +1222,8 @@ def _reference_context(
 def _relationship_operation(text: str, target_text: str) -> str:
     lowered = _key(text)
     target = _key(target_text)
+    if re.search(r"\bperform\b[^.;]*\binstead\b", lowered):
+        return "replaces"
     target_start = lowered.find(target) if target else -1
     before_target = lowered[:target_start] if target_start >= 0 else lowered
     verbs = (
@@ -1312,14 +1406,45 @@ def _classify_relationships(
             character_start=token_start,
             character_end=token_end,
         )
-        target_id = str(row.get("target_source_fact_id") or "")
-        target_kind = "source_fact" if target_id else "unresolved"
         candidate_unit_ids = [str(value) for value in row.get("candidate_unit_ids", [])]
         candidates = [
             str(unit_by_id[candidate].source_fact_id)
             for candidate in candidate_unit_ids
             if candidate in unit_by_id and unit_by_id[candidate].source_fact_id
         ]
+        target_id = str(row.get("target_source_fact_id") or "")
+        resolution_status = str(row.get("status") or "unresolved")
+        resolution_detail = str(row.get("reason") or "")
+        resolution_basis = str(row.get("resolution_basis") or "captured_reference")
+        if (
+            not target_id
+            and origin.unit_id == root.unit_id
+            and resolution_status == "unresolved_mapping"
+            and resolution_detail == "ambiguous_source_variant_alias"
+            and root.source_variant_label
+            and re.search(r"\bstellar burst\b", block_text, re.IGNORECASE)
+            and re.search(r"\bperform\b[^.;]*\binstead\b", block_text, re.IGNORECASE)
+        ):
+            child_candidates = [
+                unit_by_id[candidate]
+                for candidate in candidate_unit_ids
+                if candidate in unit_by_id
+                and _key(unit_by_id[candidate].title) == _key(token.text)
+                and unit_by_id[candidate].source_variant_label
+                and re.search(
+                    rf"\b{re.escape(_key(root.source_variant_label))}\b",
+                    _key(unit_by_id[candidate].source_variant_label),
+                )
+                and re.search(r"\bstellar burst\b", _key(unit_by_id[candidate].source_variant_label))
+                and unit_by_id[candidate].source_fact_id
+            ]
+            if len(child_candidates) == 1:
+                target_id = str(child_candidates[0].source_fact_id)
+                candidates = [target_id]
+                resolution_status = "resolved"
+                resolution_detail = ""
+                resolution_basis = "parent_variant_and_stellar_burst_context"
+        target_kind = "source_fact" if target_id else "unresolved"
         add_relationship(
             source_fact_id=str(origin.source_fact_id or witness.get("record_id") or ""),
             source_owner=origin.entity_name or str(witness.get("entity_name") or ""),
@@ -1331,9 +1456,9 @@ def _classify_relationships(
             condition=condition,
             timing=timing,
             source_span=source_span,
-            resolution_status=str(row.get("status") or "unresolved"),
-            resolution_detail=str(row.get("reason") or ""),
-            resolution_basis=str(row.get("resolution_basis") or "captured_reference"),
+            resolution_status=resolution_status,
+            resolution_detail=resolution_detail,
+            resolution_basis=resolution_basis,
             definition_status="not_applicable",
         )
 
@@ -1442,7 +1567,7 @@ def _classify_unit(
 
     occurrences: list[ClassifiedOccurrence] = []
     ordinal_by_kind: Counter[str] = Counter()
-    seen_dependencies: set[tuple[str, str, int | None, int | None]] = set()
+    seen_dependencies: set[tuple[str, str, int | None, int | None, str]] = set()
     seen_triggers: set[tuple[str, str, int | None, int | None]] = set()
     seen_states: set[tuple[str, str, int | None, int | None]] = set()
     unit_contexts: dict[str, list[_AtomContext]] = {}
@@ -1451,6 +1576,8 @@ def _classify_unit(
     pending_action_timing = ""
     pending_global_timing = ""
     pending_global_timing_span: SourceSpan | None = None
+    branch_conditions: list[tuple[tuple[str, ...], str, SourceSpan]] = []
+    unit_target_context = ""
     registry = mechanic_registry or load_shared_mechanic_registry()
     source_fact_id = str(witness.get("record_id") or unit.source_fact_id or "")
     witness_id = str(witness.get("witness_id") or "")
@@ -1465,6 +1592,15 @@ def _classify_unit(
 
     for block in unit.blocks:
         consume_global_timing = False
+        inherited_branch = max(
+            (
+                row for row in branch_conditions
+                if len(block.ancestry) > len(row[0])
+                and tuple(block.ancestry[:len(row[0])]) == row[0]
+            ),
+            key=lambda row: len(row[0]),
+            default=None,
+        )
         for tokens, start, end in _tokens_to_fragments(block):
             text, token_positions = _render_fragment_tokens(tokens)
             if not text:
@@ -1486,6 +1622,9 @@ def _classify_unit(
                 has_effect = _has_effect(effect_text)
                 effect_condition = atom.condition
                 effect_condition_span = condition_span
+                if not effect_condition and inherited_branch:
+                    effect_condition = inherited_branch[1]
+                    effect_condition_span = inherited_branch[2]
                 effect_timing = atom.action_timing
                 effect_timing_span = timing_span
                 if re.match(r"\s*(?:the\s+)?skill\s+requires?\b", effect_condition, re.IGNORECASE):
@@ -1519,7 +1658,10 @@ def _classify_unit(
                     and resolved_child_target
                 )
                 if has_effect and not shared_definition_source and not relationship_activation:
-                    for semantic_type, capability, subject in _effect_semantics(effect_text, direction):
+                    semantic_source = effect_text
+                    if effect_condition and re.search(r"\bstellar burst\b", effect_condition, re.IGNORECASE):
+                        semantic_source = f"{effect_condition}: {effect_text}"
+                    for semantic_type, capability, subject in _effect_semantics(semantic_source, direction):
                         resource_prerequisite = (
                             semantic_type == "resource_consumption"
                             and bool(_RESOURCE_COST_START_RE.search(context.fragment_text))
@@ -1531,12 +1673,28 @@ def _classify_unit(
                             and _recipient_and_cardinality(effect_text)[0] == "unknown"
                             else ""
                         )
+                        if semantic_type == "hit_count_modifier":
+                            inherited_target = previous_target_context or unit_target_context
                         value = _dependency_value(effect_text) if resource_prerequisite else ""
+                        occurrence_span = atom_span
+                        if (
+                            semantic_type == "burst_window"
+                            and atom.condition_start is not None
+                            and atom.character_start is not None
+                        ):
+                            span_start = min(atom.condition_start, atom.character_start)
+                            occurrence_span = _range_span(
+                                context.block,
+                                context.token_positions,
+                                span_start,
+                                atom.character_end,
+                                context.fragment_text[span_start:atom.character_end],
+                            )
                         occurrences.append(
                             _occurrence(
                                 kind=occurrence_kind,
                                 witness=witness,
-                                span=atom_span,
+                                span=occurrence_span,
                                 text=atom.text,
                                 effect_text=effect_text,
                                 ordinal=ordinal_by_kind[occurrence_kind],
@@ -1555,11 +1713,13 @@ def _classify_unit(
                                 condition_source_span=effect_condition_span,
                                 timing_source_span=effect_timing_span,
                                 probability=_probability(effect_text),
-                                state_reference=_state_reference(atom.condition) or _state_reference(effect_text),
+                                state_reference=_state_reference(effect_condition) or _state_reference(effect_text),
                                 field_context=inherited_target,
                             )
                         )
                         ordinal_by_kind[occurrence_kind] += 1
+                        if semantic_type == "damage_event" and capability == "direct_damage":
+                            unit_target_context = effect_text
                     if _recipient_and_cardinality(effect_text)[0] != "unknown":
                         previous_target_context = effect_text
 
@@ -1574,16 +1734,31 @@ def _classify_unit(
                     and not relationship_condition
                     and not shared_definition_source
                 ):
-                    condition_key = (atom_span.location, atom.condition, atom.condition_start, atom.condition_end)
-                    if condition_key not in seen_dependencies:
+                    dependency_condition = _clean(atom.condition).rstrip(":;,. ")
+                    condition_references = [
+                        token for token, token_start, token_end in token_positions
+                        if atom.condition_start is not None
+                        and token_start < (atom.condition_end or token_end)
+                        and token_end > atom.condition_start
+                        and token.kind == "reference"
+                    ]
+                    for dependency_value, dependency_scope in _dependency_values(dependency_condition):
+                        local_condition = dependency_condition
+                        if re.search(r"\band\b", dependency_condition, re.IGNORECASE):
+                            local_condition = f"When {dependency_scope.strip(' :;,.')}"
+                        condition_key = (
+                            atom_span.location,
+                            local_condition,
+                            atom.condition_start,
+                            atom.condition_end,
+                            dependency_value,
+                        )
+                        if condition_key in seen_dependencies:
+                            continue
                         seen_dependencies.add(condition_key)
-                        condition_references = [
-                            token for token, token_start, token_end in token_positions
-                            if atom.condition_start is not None
-                            and token_start < (atom.condition_end or token_end)
-                            and token_end > atom.condition_start
-                            and token.kind == "reference"
-                        ]
+                        field_context = dependency_condition
+                        if dependency_value == "requires_stack" and re.match(r"\s*charge\b", dependency_scope, re.IGNORECASE):
+                            field_context = "self"
                         occurrences.append(
                             _occurrence(
                                 kind="dependency",
@@ -1599,12 +1774,13 @@ def _classify_unit(
                                     admit_definitions=admit_definitions,
                                 ),
                                 references=condition_references,
-                                effect_text=atom.condition,
-                                condition=atom.condition,
+                                effect_text=dependency_scope,
+                                condition=local_condition,
                                 action_timing="",
-                                dependency_value=_dependency_value(atom.condition),
+                                dependency_value=dependency_value,
                                 semantic_type="condition",
                                 condition_source_span=condition_span,
+                                field_context=field_context,
                             )
                         )
                         ordinal_by_kind["dependency"] += 1
@@ -1647,6 +1823,17 @@ def _classify_unit(
                         pending_action_timing = (
                             "" if atom.action_timing == "on_use" else atom.action_timing
                         )
+                if (
+                    atom.condition
+                    and not has_effect
+                    and _is_prerequisite(atom.condition)
+                    and not shared_definition_source
+                ):
+                    branch_condition = _clean(atom.condition).rstrip(":;,. ")
+                    branch_span = condition_span or atom_span
+                    branch = (tuple(block.ancestry), branch_condition, branch_span)
+                    if branch not in branch_conditions:
+                        branch_conditions.append(branch)
                 if block.kind == "root" and atom.action_timing == "preemptive":
                     pending_global_timing = atom.action_timing
                     pending_global_timing_span = timing_span or atom_span
