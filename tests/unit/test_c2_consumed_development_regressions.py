@@ -85,6 +85,94 @@ def test_reproduced_supported_mechanic_misses_are_now_regressions(evaluation_bun
     )
 
 
+def test_otoha_pwr_stack_grants_a_self_power_up(evaluation_bundle):
+    _report, details = evaluation_bundle
+    power = _prediction(details, "m6-heldout-otoha-as-surging-scratch", "E3")
+    assert (power["direction"], power["recipient"]) == ("self", "self")
+
+
+def test_passive_zone_timing_and_condition_apply_to_each_child_effect(evaluation_bundle):
+    _report, details = evaluation_bundle
+    witness_id = "m6-heldout-claude-es-another-zone-heal"
+    for atom_id in ("E1", "E2"):
+        effect = _prediction(details, witness_id, atom_id)
+        assert effect["condition"] == "When in Another Zone"
+        assert effect["trigger"] == "turn_end"
+    dependency = _prediction(details, witness_id, "D1")
+    assert dependency["dependency_value"] == "requires_zone"
+    assert dependency["condition"] == "When in Another Zone"
+
+
+def test_paired_resistance_properties_share_the_explicit_magnitude(evaluation_bundle):
+    _report, details = evaluation_bundle
+    physical = _prediction(details, "m6-heldout-jilya-invasion-glow", "E2")
+    assert (physical["direction"], physical["recipient"]) == ("enemy", "all_enemies")
+    assert "-10%" in physical["result"]
+
+
+def test_dependency_conditions_keep_source_case_and_threshold_sign(evaluation_bundle):
+    _report, details = evaluation_bundle
+    witness_id = "m6-heldout-jilya-invasion-glow"
+    charge = _prediction(details, witness_id, "D2")
+    frontline = _prediction(details, witness_id, "D3")
+    assert charge["condition"] == "When Charge is 5+"
+    assert frontline["condition"] == "When Nilya is on the frontline"
+
+
+def test_compound_dependency_atoms_keep_distinct_source_spans(evaluation_bundle):
+    _report, details = evaluation_bundle
+    witness_id = "m6-heldout-jilya-invasion-glow"
+    charge = _prediction(details, witness_id, "D2")
+    frontline = _prediction(details, witness_id, "D3")
+    assert charge["source_span"]["text"] == "Charge is 5+"
+    assert frontline["source_span"]["text"] == "Nilya is on the frontline"
+
+
+def test_named_state_and_resource_references_keep_the_source_name(evaluation_bundle):
+    _report, details = evaluation_bundle
+    expected = (
+        ("m6-heldout-otoha-as-surging-scratch", "E3", "Catwisp"),
+        ("m6-heldout-nona-as-castigo", "E2", "Devotion"),
+        ("m6-heldout-nona-as-castigo", "D1", "Devotion"),
+        ("m6-heldout-nona-as-castigo", "D2", "Devotion"),
+        ("m6-heldout-nona-as-castigo", "E5", "Kaleido"),
+        ("m6-heldout-claude-es-another-zone-heal", "D1", "Another Zone"),
+        ("m6-heldout-jilya-invasion-glow", "D1", "Crystalline Stance"),
+        ("m6-heldout-jilya-invasion-glow", "D2", "Charge"),
+        ("m6-heldout-harle-lunairetic", "E1", "Power Levels"),
+        ("m6-heldout-melissa-hornet-hail-enhanced", "E2", "Elemental Break"),
+        ("m6-heldout-melissa-hornet-hail-enhanced", "D1", "Stellar Awakening"),
+    )
+    for witness_id, atom_id, state_name in expected:
+        assert _prediction(details, witness_id, atom_id)["state_reference"] == state_name
+
+
+def test_skill_use_and_prerequisite_fields_are_attached_without_auto_gap_leakage(evaluation_bundle):
+    _report, details = evaluation_bundle
+    for witness_id, atom_ids in (
+        ("m6-heldout-aisha-waters-nocturne", ("E1", "E2")),
+        ("m6-heldout-nona-as-castigo", ("E1", "E2", "E3", "E5")),
+        ("m6-heldout-harle-lunairetic", ("E1",)),
+        ("m6-heldout-melissa-hornet-hail-enhanced", ("E1", "E2")),
+    ):
+        for atom_id in atom_ids:
+            assert _prediction(details, witness_id, atom_id)["trigger"] == "on_skill_use"
+
+    for witness_id, atom_ids in (
+        ("m6-heldout-otoha-as-surging-scratch", ("E1", "E2")),
+        ("m6-heldout-jilya-invasion-glow", ("E1", "E2", "E3")),
+    ):
+        for atom_id in atom_ids:
+            assert _prediction(details, witness_id, atom_id)["trigger"] == ""
+
+    melissa_id = "m6-heldout-melissa-hornet-hail-enhanced"
+    for atom_id in ("E1", "E2"):
+        effect = _prediction(details, melissa_id, atom_id)
+        assert effect["condition"] == "Skill requires Stellar Awakening"
+    prerequisite = _prediction(details, melissa_id, "D1")
+    assert (prerequisite["recipient"], prerequisite["direction"]) == ("self", "self")
+
+
 def test_multihit_label_requires_an_explicit_hit_count_modifier():
     assert ("hit_count_modifier", "multi_hit_action", "hit_count") in _effect_semantics(
         "Increase number of attacks by +3", "enemy"
