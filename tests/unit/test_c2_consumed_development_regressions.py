@@ -206,6 +206,18 @@ def test_named_state_and_resource_references_keep_the_source_name(evaluation_bun
         assert _prediction(details, witness_id, atom_id)["state_reference"] == state_name
 
 
+def test_untyped_critical_rate_remains_an_unlabeled_unsupported_gap(evaluation_bundle):
+    _report, details = evaluation_bundle
+    rows = details["classifier_rows"]["m6-heldout-nona-as-castigo"]
+    critical_rate = [
+        row for row in rows
+        if "critical rate of all party members +100%" in str(row.get("source_text") or "").casefold()
+    ]
+    assert len(critical_rate) == 1
+    assert critical_rate[0]["semantic_type"] == "critical_support"
+    assert critical_rate[0]["capability_value"] == ""
+
+
 def test_skill_use_and_prerequisite_fields_are_attached_without_auto_gap_leakage(evaluation_bundle):
     _report, details = evaluation_bundle
     for witness_id, atom_ids in (

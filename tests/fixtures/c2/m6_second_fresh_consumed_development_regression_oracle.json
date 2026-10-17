@@ -1,0 +1,1799 @@
+{
+  "artifact_type": "m6_second_fresh_semantic_owner_oracle",
+  "authority": "Source-only human adjudication over the seven approved raw source pins; no classifier or evaluator output informed expected atoms.",
+  "cohort": "m6_consumed_development_regression",
+  "owner_approval": "Approved by the evaluation owner after the final Riica Link resource-charge correction.",
+  "schema_version": "c2-atomic-oracle-1",
+  "taxonomy_artifact_version": "3.2.0",
+  "witnesses": [
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": "Benedict",
+            "attack_type": "Slash",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": {
+              "reason": "untyped Slash attack",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "tier": "L"
+            },
+            "recipient": "single_enemy",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Slash attack on a single enemy",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": "on_use"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+            "quote": "Slash attack on a single enemy (L)"
+          }
+        },
+        {
+          "atomic_capability_id": "attack_type_resistance_down",
+          "fields": {
+            "actor": "Benedict",
+            "attack_type": "Slash",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "duration_turns": "3"
+            },
+            "element": {
+              "reason": "resistance reduction is not elemental",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "raw": "-25%",
+              "unit": "percent",
+              "value": "25"
+            },
+            "recipient": "single_enemy",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Slash resistance decreased",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": "on_use"
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+            "quote": "Slash resistance"
+          }
+        }
+      ],
+      "entity_name": "Benedict",
+      "fact_id": "skill:07dccfa630d27ee7493c",
+      "fact_name": "Large Slash",
+      "grid_index": 7,
+      "record_type": "active_skill",
+      "semantic_relationships": [],
+      "source_capture_sha256": "a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e",
+      "source_kind": "character",
+      "source_location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+      "source_metadata": {
+        "mp_cost": 40
+      },
+      "source_path": "data/raw/characters/benedict.html",
+      "source_slice_sha256": "fa251fa2125d8db7a5a6ce251b8c58ed175488e7c4ea548582def51b37b0a0bc",
+      "unsupported_gaps": [],
+      "witness_id": "fresh2-benedict-large-slash"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": "Ewan (Another Style)",
+            "attack_type": "stance_dependent:Slash|Pierce|Blunt|Magic; default Blunt",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Fire",
+            "magnitude": {
+              "tier": "XL"
+            },
+            "recipient": "all_enemies",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Fire type attack on all enemies",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": "on_use"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "Fire type slash/pierce/blunt/magic attack on all enemies (XL)"
+          }
+        },
+        {
+          "atomic_capability_id": "physical_critical_rate_up",
+          "fields": {
+            "actor": "Ewan (Another Style)",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "self",
+            "duration_activation": {
+              "reason": "Mantra duration is not stated",
+              "status": "unknown"
+            },
+            "element": {
+              "reason": "critical-rate modifier",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "max_stacks": "10",
+              "unit": "percent_per_stack",
+              "value": "10"
+            },
+            "recipient": "self",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Critical rate increased",
+            "state_reference": "Mantra",
+            "target_cardinality": "single",
+            "trigger": "while_state_active"
+          },
+          "formula_metadata": {
+            "max_stacks": 10,
+            "per_state": "Mantra"
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "Increase critical rate"
+          }
+        },
+        {
+          "atomic_capability_id": "magic_critical_rate_up",
+          "fields": {
+            "actor": "Ewan (Another Style)",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "self",
+            "duration_activation": {
+              "reason": "Mantra duration is not stated",
+              "status": "unknown"
+            },
+            "element": {
+              "reason": "critical-rate modifier",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "max_stacks": "10",
+              "unit": "percent_per_stack",
+              "value": "10"
+            },
+            "recipient": "self",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Magic critical rate increased",
+            "state_reference": "Mantra",
+            "target_cardinality": "single",
+            "trigger": "while_state_active"
+          },
+          "formula_metadata": {
+            "max_stacks": 10,
+            "per_state": "Mantra"
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "magic critical rate +10%"
+          }
+        },
+        {
+          "atomic_capability_id": "element_damage_up",
+          "fields": {
+            "actor": "Ewan (Another Style)",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "self",
+            "duration_activation": {
+              "reason": "Mantra duration is not stated",
+              "status": "unknown"
+            },
+            "element": "Fire",
+            "magnitude": {
+              "max_stacks": "10",
+              "unit": "percent_per_stack",
+              "value": "5"
+            },
+            "recipient": "self",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Fire-type attack damage increased",
+            "state_reference": "Mantra",
+            "target_cardinality": "single",
+            "trigger": "while_state_active"
+          },
+          "formula_metadata": {
+            "max_stacks": 10,
+            "per_state": "Mantra"
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "fire type attack of user +5%"
+          }
+        }
+      ],
+      "entity_name": "Ewan (Another Style)",
+      "fact_id": "skill:cc8d8b2407e2328f8c97",
+      "fact_name": "Sign: Roaring Bash",
+      "formula_metadata": {
+        "critical_damage_on_critical_hit": {
+          "multiplier": "x2",
+          "raw": "+100%",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]",
+            "quote": "Critical damage +100%"
+          }
+        },
+        "damage_by_distinct_target_debuff_count": {
+          "counts": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "is_prerequisite": false,
+          "maximum_count": 4,
+          "skill_multiplier_percent": [
+            320,
+            480,
+            640,
+            800
+          ],
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]",
+            "quote": "Damage increases from number of distinct debuffs on target"
+          }
+        }
+      },
+      "grid_index": 7,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "condition": "on skill use",
+          "note": "Mantra state effects are represented as canonical effect atoms with state_reference=Mantra; no requires_status dependency is implied.",
+          "operation": "stacks",
+          "recipient": "self",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "stack Mantra on self"
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Mantra"
+        }
+      ],
+      "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+      "source_kind": "character",
+      "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+      "source_metadata": {
+        "attack_type_selector": {
+          "active_stance": "Slash/Pierce/Blunt/Magic",
+          "no_active_stance": "Blunt"
+        },
+        "magic_damage_scaling": {
+          "source_quote": "Magic version of skill damage is based on user's PWR",
+          "stat": "user PWR"
+        },
+        "mp_cost": 65
+      },
+      "source_path": "data/raw/characters/ewan_another_style.html",
+      "source_slice_sha256": "20355c8e092cbfdef6c0769d06a8fb4c38cdfa5d27115166816cad89be8ce0fd",
+      "unsupported_gaps": [
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Mantra stack creation (+1 on Ewan)",
+          "reason": "The taxonomy has no state/stack-creation capability; retain as explicit creation semantics, not a prerequisite.",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "stack Mantra on self"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Mantra maximum HP increase",
+          "reason": "No canonical maximum-HP-up capability exists.",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "Max HP +300 per stack"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Stance-dependent attack-type selection",
+          "reason": "Attack-type selection/default behavior has no dedicated capability; it is also attached as attack-type metadata to direct_damage.",
+          "source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]",
+            "quote": "Damage type is according to active Stance"
+          }
+        }
+      ],
+      "witness_id": "fresh2-ewan-as-roaring-bash"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": "Ewella",
+            "attack_type": "Piercing",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Water",
+            "magnitude": {
+              "hit_count": 3,
+              "tier": "XL"
+            },
+            "recipient": "single_enemy",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Water piercing attack on a single enemy",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": "on_use"
+          },
+          "formula_metadata": {
+            "critical_damage_modifier": {
+              "multiplier": "x1.5",
+              "raw": "+50%",
+              "source_anchor": {
+                "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]",
+                "quote": "Damage +50% when critical"
+              }
+            },
+            "skill_multiplier_by_target_insanire_stacks": {
+              "source_anchor": {
+                "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[5]",
+                "quote": "210% > 216% > 228% > 246% > 282% > 327% > 381% > 465% > 561% > 696% > 846%"
+              },
+              "stacks_0_to_10": [
+                210,
+                216,
+                228,
+                246,
+                282,
+                327,
+                381,
+                465,
+                561,
+                696,
+                846
+              ]
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+            "quote": "Water type piercing attack on a single enemy x3 (XL)"
+          }
+        },
+        {
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": "Ewella",
+            "attack_type": "Piercing",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Water",
+            "magnitude": {
+              "hit_count": 3
+            },
+            "recipient": "single_enemy",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Three-hit action",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": "on_use"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+            "quote": "attack on a single enemy x3"
+          }
+        },
+        {
+          "atomic_capability_id": "physical_resistance_down",
+          "fields": {
+            "actor": "Ewella",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "Insanire duration is not stated",
+              "status": "unknown"
+            },
+            "element": {
+              "reason": "physical resistance reduction",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "max_stacks": "10",
+              "maximum_total": "30%",
+              "unit": "percent_per_stack",
+              "value": "3"
+            },
+            "recipient": "single_enemy",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Physical resistance decreased",
+            "state_reference": "Insanire",
+            "target_cardinality": "single",
+            "trigger": "while_state_active"
+          },
+          "formula_metadata": {
+            "max_stacks": 10,
+            "maximum_total": "-30%",
+            "per_state": "Insanire"
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[6]",
+            "quote": "Physical resistance -3%"
+          }
+        }
+      ],
+      "entity_name": "Ewella",
+      "fact_id": "skill:16e0908e04df3e54e305",
+      "fact_name": "Saevus Furorem",
+      "grid_index": 9,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "condition": "on skill use",
+          "note": "Insanire resistance definition remains a canonical physical_resistance_down effect; no requires_status dependency.",
+          "operation": "applies_state",
+          "recipient": "enemy",
+          "source_anchor": {
+            "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "quote": "Stack 1 Insanire on enemy."
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Insanire"
+        }
+      ],
+      "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+      "source_kind": "character",
+      "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+      "source_metadata": {
+        "mp_cost": 57,
+        "owner_variant_selection": "max-level Manifest Weapon variant; selector metadata is not a Lunatic prerequisite"
+      },
+      "source_path": "data/raw/characters/ewella.html",
+      "source_slice_sha256": "9c7bb3be6bed2cc832ae52c8377daba1fbe9defd2bf7f7ec5ad234efb9b7f17c",
+      "unsupported_gaps": [
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Insanire stack creation (+1 on the enemy)",
+          "reason": "No canonical state/stack-creation capability exists; the damage formula reads the state but does not make it a prerequisite.",
+          "source_anchor": {
+            "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "quote": "Stack 1 Insanire on enemy."
+          }
+        }
+      ],
+      "witness_id": "fresh2-ewella-saevus-furorem"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": "Iridian (Heal)",
+            "attack_type": "Magic",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Water",
+            "magnitude": {
+              "hit_count": 3,
+              "multiplier": "2x",
+              "tier": "XL"
+            },
+            "recipient": "all_enemies",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Water magic attack on all enemies",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": "charged"
+          },
+          "formula_metadata": {
+            "element_override": {
+              "condition": "Fire/Water/Wind/Earth Stance",
+              "result": "element type changes to deployed zone type",
+              "source_anchor": {
+                "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+                "quote": "Element type changes to type of deployed zone"
+              }
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+            "quote": "Water type magic attack on all enemies x3 (XL, 2x)"
+          }
+        },
+        {
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": "Iridian (Heal)",
+            "attack_type": "Magic",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Water",
+            "magnitude": {
+              "hit_count": 3
+            },
+            "recipient": "all_enemies",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Three-hit action",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": "charged"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+            "quote": "attack on all enemies x3"
+          }
+        },
+        {
+          "atomic_capability_id": "remove_debuff",
+          "fields": {
+            "actor": "Iridian (Heal)",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": "Wryz is at front",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "immediate removal",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "not elemental",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "debuff removal has no numeric magnitude",
+              "status": "not_applicable"
+            },
+            "recipient": "Wryz",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Debuffs removed from Wryz",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": "charged"
+          },
+          "occurrence_kind": "effect",
+          "operation": "remove",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "quote": "remove debuffs"
+          }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "actor": "Iridian (Heal)",
+            "attack_type": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "condition": "Wryz is at front",
+            "direction": "self",
+            "duration_activation": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "recipient": "party_composition",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Wryz is in the frontline",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": {
+              "reason": "branch condition, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "quote": "When Wryz is at front"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_zone",
+          "fields": {
+            "actor": "Iridian (Heal)",
+            "attack_type": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "condition": "Fire, Water, Wind, or Earth Stance active",
+            "direction": "field",
+            "duration_activation": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "recipient": "zone",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Element override uses deployed zone type",
+            "state_reference": "Fire/Water/Wind/Earth Stance",
+            "target_cardinality": "single",
+            "trigger": {
+              "reason": "branch condition, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+            "quote": "In Fire/Water/Wind/Earth Stance"
+          }
+        }
+      ],
+      "entity_name": "Iridian (Heal)",
+      "fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+      "fact_name": "Arcus Irus",
+      "grid_index": 1,
+      "record_type": "sidekick_charge",
+      "semantic_relationships": [
+        {
+          "condition": "Wryz is at front",
+          "note": "",
+          "operation": "applies_state",
+          "recipient": "Wryz",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "quote": "Stack 1 Dragonshade on Wryz"
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Dragonshade"
+        }
+      ],
+      "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+      "source_kind": "sidekick",
+      "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+      "source_metadata": {
+        "charge_cost": 5,
+        "mp_cost": 5,
+        "resource_cost": {
+          "Charge": 5
+        }
+      },
+      "source_path": "data/raw/sidekicks/iridian_heal.html",
+      "source_slice_sha256": "9009d6c4631087428210335fdf08279d2709dea6c7407471c37a500c71133cca",
+      "unsupported_gaps": [
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Dragonshade stack creation (+1 on Wryz)",
+          "reason": "No canonical state/stack-creation capability exists.",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "quote": "Stack 1 Dragonshade on Wryz"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Stance-based element override",
+          "reason": "The branch is represented by requires_zone plus damage metadata; no separate element-conversion capability exists.",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+            "quote": "Element type changes to type of deployed zone."
+          }
+        }
+      ],
+      "witness_id": "fresh2-iridian-heal-arcus-irus"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "power_up",
+          "fields": {
+            "actor": "Philo (Another Style)",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "self",
+            "duration_activation": {
+              "reason": "World Tree Power duration is not stated",
+              "status": "unknown"
+            },
+            "element": {
+              "reason": "stat increase",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "max_stacks": "3",
+              "unit": "PWR_per_stack",
+              "value": "25"
+            },
+            "recipient": "self",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "PWR increased",
+            "state_reference": "World Tree Power",
+            "target_cardinality": "single",
+            "trigger": "while_state_active"
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[2]",
+            "quote": "World Tree Power: +25 PWR per stack"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": "Philo (Another Style)",
+            "attack_type": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "condition": "World Tree Power stack count is less than 3",
+            "direction": "self",
+            "duration_activation": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "comparison": "<",
+              "resource": "World Tree Power",
+              "value": 3
+            },
+            "recipient": "self",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Basic-attack replacement applies below three World Tree Power stacks",
+            "state_reference": "World Tree Power",
+            "target_cardinality": "single",
+            "trigger": {
+              "reason": "branch/availability condition, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "quote": "less than 3 World Tree Power stacks"
+          }
+        }
+      ],
+      "entity_name": "Philo (Another Style)",
+      "fact_id": "skill:532c9a8e2a50a9558586",
+      "fact_name": "Store Power",
+      "grid_index": 0,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "condition": "on skill use",
+          "note": "Parent activation only; do not inherit child mechanics.",
+          "operation": "activates",
+          "recipient": "user",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]",
+            "quote": "Activate Storing Power State on user"
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Storing Power State"
+        },
+        {
+          "condition": "Counterattack",
+          "note": "Parent activation only; do not inherit child counter damage/scaling.",
+          "operation": "activates",
+          "recipient": "user",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]",
+            "quote": "Activate Store Power - Counter on user"
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Store Power - Counter"
+        },
+        {
+          "condition": "after pain/poison damage; not after enemy end-of-turn attacks",
+          "note": "Lifecycle metadata for child definitions, not a parent effect/dependency.",
+          "operation": "child_lifecycle",
+          "recipient": "user",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+            "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Storing Power State; Store Power - Counter"
+        }
+      ],
+      "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+      "source_kind": "character",
+      "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+      "source_metadata": {
+        "child_effects_copied_to_parent": false,
+        "mp_cost": 0,
+        "slot": "basic_attack_replacement"
+      },
+      "source_path": "data/raw/characters/philo_another_style.html",
+      "source_slice_sha256": "c66382bca5d814a57829da87b8177c96b5949078f81b55680034b1482405902a",
+      "unsupported_gaps": [
+        {
+          "expected_capability_atom": false,
+          "mechanic": "World Tree Power stack creation (+1)",
+          "reason": "No canonical state/stack-creation capability exists.",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "quote": "Stack 1 World Tree Power"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Basic-attack replacement behavior",
+          "reason": "The taxonomy has no action-replacement capability; preserve as parent action/slot metadata and its branch condition.",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "quote": "Replaces the basic attack"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Equipment replacement precedence",
+          "reason": "No canonical capability/dependency models this replacement-priority rule.",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]",
+            "quote": "overwritten if user is wearing an equipment that replaces basic attack skill slot"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Child-status lifecycle after pain/poison",
+          "reason": "This lifecycle rule belongs to the child definitions and has no canonical capability/dependency label.",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+            "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+          }
+        }
+      ],
+      "witness_id": "fresh2-philo-as-store-power"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "equipped_weapon_damage_up",
+          "fields": {
+            "actor": "Radias",
+            "attack_type": {
+              "reason": "applies to eligible weapon users, not a single attack type",
+              "status": "not_applicable"
+            },
+            "condition": "Dazzling Slash Stance is active; Radias is not in Sleep, Confusion, Stone, or Freeze",
+            "direction": "ally",
+            "duration_activation": {
+              "duration_turns": "1"
+            },
+            "element": {
+              "reason": "damage modifier is not elemental",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "by_slash_moves_used": {
+                "1": "15%",
+                "2": "30%",
+                "3": "45%",
+                "4": "60%"
+              }
+            },
+            "recipient": "characters equipped with Sword, Axe, or Katana",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Eligible characters deal increased damage",
+            "state_reference": "Dazzling Slash Stance",
+            "target_cardinality": "multiple",
+            "trigger": "turn_end"
+          },
+          "formula_metadata": {
+            "attack_again_moves_count_each": true,
+            "copy_moves_count_twice": true,
+            "excluded_moves": [
+              "end-of-turn moves",
+              "counters",
+              "knocked-back allies",
+              "dead allies"
+            ],
+            "slash_move_count_tiers": {
+              "1": "15%",
+              "2": "30%",
+              "3": "45%",
+              "4": "60%"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+            "quote": "equipped characters' damage +15%"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_zone",
+          "fields": {
+            "actor": "Radias",
+            "attack_type": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "condition": "Dazzling Slash Stance is active",
+            "direction": "field",
+            "duration_activation": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "recipient": "Dazzling Slash Stance",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Stance active",
+            "state_reference": "Dazzling Slash Stance",
+            "target_cardinality": "single",
+            "trigger": {
+              "reason": "prerequisite condition, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+            "quote": "Dazzling Slash Stance"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_recipient_eligibility",
+          "fields": {
+            "actor": "Radias",
+            "attack_type": {
+              "reason": "eligibility filter",
+              "status": "not_applicable"
+            },
+            "condition": "recipient has Sword, Axe, or Katana equipped",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "eligibility filter",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "eligibility filter",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "eligibility filter",
+              "status": "not_applicable"
+            },
+            "recipient": "characters equipped with Sword, Axe, or Katana",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Recipient is equipped with Sword, Axe, or Katana",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": {
+              "reason": "recipient filter, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+            "quote": "equipped characters' damage"
+          }
+        }
+      ],
+      "entity_name": "Radias",
+      "fact_id": "passive:d2644ada1792457176a1",
+      "fact_name": "Radias turn end buff",
+      "grid_index": 10,
+      "record_type": "passive_skill",
+      "semantic_relationships": [],
+      "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+      "source_kind": "character",
+      "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+      "source_metadata": {
+        "slash_move_count_formula": {
+          "1": 15,
+          "2": 30,
+          "3": 45,
+          "4": 60,
+          "unit": "percent"
+        },
+        "trigger": "turn_end",
+        "trigger_is_prerequisite": false
+      },
+      "source_path": "data/raw/characters/radias.html",
+      "source_slice_sha256": "a7e2d7207a8adb17b4f2e672797c5eae9ceb968e15e32fce43ad5c7bb14a4b65",
+      "unsupported_gaps": [
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Negative-status absence guard",
+          "reason": "The dependency taxonomy has no absence-of-status guard; do not convert this into a positive requires_status dependency.",
+          "source_anchor": {
+            "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+            "quote": "When not in Sleep, Confusion, Stone, Freeze"
+          }
+        }
+      ],
+      "witness_id": "fresh2-radias-turn-end-buff"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": "Blunt",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Earth",
+            "magnitude": {
+              "hit_count": 3,
+              "tier": "XXL"
+            },
+            "recipient": "all_enemies",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Earth Blunt attack on all enemies",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": "on_use"
+          },
+          "formula_metadata": {
+            "attack_type_and_element_modifiers": {
+              "element_change": "by Kaleido",
+              "source_anchor": {
+                "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+                "quote": "Can change element by Kaleido or weapon type by Flexible"
+              },
+              "weapon_type_change": "by Flexible"
+            },
+            "stellar_burst_multiplier": {
+              "condition": "during Stellar Burst",
+              "multiplier": "x15",
+              "raw": "+1400%",
+              "source_anchor": {
+                "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[8]",
+                "quote": "Skill Multiplier +1400% (Multiplier x15)"
+              }
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+            "quote": "Earth Blunt attack on all enemies x3 (XXL)"
+          }
+        },
+        {
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": "Blunt",
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "enemy",
+            "duration_activation": {
+              "reason": "damage event has no duration",
+              "status": "unknown"
+            },
+            "element": "Earth",
+            "magnitude": {
+              "hit_count": 3
+            },
+            "recipient": "all_enemies",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Three-hit action",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": "on_use"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+            "quote": "attack on all enemies x3"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stellar_awakened",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "prerequisite",
+              "status": "not_applicable"
+            },
+            "condition": "Riica is Stellar Awakened",
+            "direction": "self",
+            "duration_activation": {
+              "reason": "prerequisite",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "prerequisite",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "prerequisite",
+              "status": "not_applicable"
+            },
+            "recipient": "self",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Stellar Awakening is required",
+            "state_reference": "Stellar Awakening",
+            "target_cardinality": "single",
+            "trigger": {
+              "reason": "action prerequisite, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+            "quote": "Skill requires Stellar Awakening"
+          }
+        },
+        {
+          "atomic_capability_id": "speed_up",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "ally",
+            "duration_activation": {
+              "duration_turns": "3"
+            },
+            "element": {
+              "reason": "stat increase",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "raw": "+50%",
+              "unit": "percent",
+              "value": "50"
+            },
+            "recipient": "party",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Party Speed increased",
+            "state_reference": {
+              "reason": "no named state",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "multiple",
+            "trigger": "on_use"
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]",
+            "quote": "Speed of all party members +50% (3 turns)"
+          }
+        },
+        {
+          "atomic_capability_id": "grant_link",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "no branch condition on this atom",
+              "status": "not_applicable"
+            },
+            "direction": "ally",
+            "duration_activation": {
+              "duration_turns": "3"
+            },
+            "element": {
+              "reason": "Link grant",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "raw": "190%",
+              "unit": "percent",
+              "value": "190"
+            },
+            "recipient": "party",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Link granted to all party members",
+            "state_reference": "Link",
+            "target_cardinality": "multiple",
+            "trigger": "on_use"
+          },
+          "formula_metadata": {
+            "add_on_inherits_character_buffs": {
+              "source_anchor": {
+                "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[7]",
+                "quote": "All buffs on character apply to blunt add-on"
+              },
+              "value": true
+            },
+            "fixed_link_resource_charge": {
+              "af_gauge_charge_percent": 0.5,
+              "combo_charge_percent": 2,
+              "expected_capabilities": [],
+              "not_expected_capability_ids": [
+                "af_gauge_gain_up",
+                "af_combo_gain_up"
+              ],
+              "source_anchor": {
+                "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+                "quote": "AF gauge charge +0.5%, combo charge +2%"
+              }
+            },
+            "nested_link_definition": {
+              "effect": "Blunt add-on attack after each allied attacking move, including Attack Again moves",
+              "source_anchor": {
+                "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+                "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+              }
+            },
+            "stellar_burst_party_extension": {
+              "condition": "during Stellar Burst",
+              "recipient_scope": "main and reserve party members",
+              "source_anchor": {
+                "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[9]",
+                "quote": "Buff and Link apply main and reserve party members."
+              }
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "grant",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+            "quote": "Give Link [190%] to all party members (3 turns)"
+          }
+        },
+        {
+          "atomic_capability_id": "heal_hp",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": "Riica is in the frontline",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "immediate healing",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "healing",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "tier": "L"
+            },
+            "recipient": "party",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "HP restored by Link branch",
+            "state_reference": "Link",
+            "target_cardinality": "multiple",
+            "trigger": "after_each_attacking_move"
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+            "quote": "Restore HP (L)"
+          }
+        },
+        {
+          "atomic_capability_id": "remove_status_ailment",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": "Riica is in the frontline",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "immediate removal",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "status removal",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "status removal",
+              "status": "not_applicable"
+            },
+            "recipient": "party",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Party status ailments removed",
+            "state_reference": "Link",
+            "target_cardinality": "multiple",
+            "trigger": "after_each_attacking_move"
+          },
+          "occurrence_kind": "effect",
+          "operation": "remove",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+            "quote": "restore all statuses"
+          }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "condition": "Riica is in the frontline",
+            "direction": "self",
+            "duration_activation": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "condition",
+              "status": "not_applicable"
+            },
+            "recipient": "party_composition",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "Riica is in the frontline",
+            "state_reference": {
+              "reason": "no named state/resource reference",
+              "status": "not_applicable"
+            },
+            "target_cardinality": "single",
+            "trigger": {
+              "reason": "branch condition, not a timing trigger",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+            "quote": "If Riica is in the frontline"
+          }
+        },
+        {
+          "atomic_capability_id": "revive",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": "during Stellar Burst",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "immediate revival",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "revival",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "revival count is all fallen party members",
+              "status": "not_applicable"
+            },
+            "recipient": "party_and_reserve",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "All fallen party members revived",
+            "state_reference": "Stellar Burst",
+            "target_cardinality": "multiple",
+            "trigger": "on_stellar_burst"
+          },
+          "occurrence_kind": "effect",
+          "operation": "revive",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+            "quote": "Revive all fallen party members"
+          }
+        },
+        {
+          "atomic_capability_id": "heal_hp",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": "during Stellar Burst",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "immediate healing",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "healing",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "raw": "100%",
+              "unit": "percent",
+              "value": "100"
+            },
+            "recipient": "party_and_reserve",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "HP restored",
+            "state_reference": "Stellar Burst",
+            "target_cardinality": "multiple",
+            "trigger": "on_stellar_burst"
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+            "quote": "Restore 100% HP"
+          }
+        },
+        {
+          "atomic_capability_id": "recover_mp",
+          "fields": {
+            "actor": "Riica",
+            "attack_type": {
+              "reason": "not an attack mechanic",
+              "status": "not_applicable"
+            },
+            "condition": "during Stellar Burst",
+            "direction": "ally",
+            "duration_activation": {
+              "reason": "immediate restoration",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "MP restoration",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "raw": "20%",
+              "unit": "percent",
+              "value": "20"
+            },
+            "recipient": "party_and_reserve",
+            "relationships": {
+              "reason": "source-only relationship semantics are recorded in semantic_relationships; exact generated relationship IDs are evaluator-owned",
+              "status": "unknown"
+            },
+            "result": "MP restored",
+            "state_reference": "Stellar Burst",
+            "target_cardinality": "multiple",
+            "trigger": "on_stellar_burst"
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+            "quote": "20% MP to party and reserve members"
+          }
+        }
+      ],
+      "entity_name": "Riica",
+      "fact_id": "skill:88b9e632fcab5897d21e",
+      "fact_name": "Elimination Ray",
+      "grid_index": 10,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "condition": "on skill use",
+          "note": "Nested Link text belongs to this pinned Elimination Ray row; fixed AF/combo charges remain Link metadata.",
+          "operation": "defines_embedded_mechanic",
+          "recipient": "all party members",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+            "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+          },
+          "target_kind": "named_source_mechanic",
+          "target_name": "Link"
+        }
+      ],
+      "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+      "source_kind": "character",
+      "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+      "source_metadata": {
+        "damage_tier": "XXL",
+        "mp_cost": 72,
+        "owner_selected_variant": "Enhanced",
+        "party_scope_expands_to_reserve_during_stellar_burst": true,
+        "stellar_awakening_prerequisite": true,
+        "stellar_burst_effects": [
+          "skill multiplier x15",
+          "revive all fallen",
+          "restore 100% HP and 20% MP to party and reserve"
+        ]
+      },
+      "source_path": "data/raw/characters/riica.html",
+      "source_slice_sha256": "1ebdb880ed8942468a2b3ad62d3e70d7a3204c962b259dcf4c4fc6937e7af9a5",
+      "unsupported_gaps": [
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Fixed Link AF gauge/combo charge semantics",
+          "reason": "The nested Link adds fixed resource charge, not an increase to AF/combo gain rate. Retain as grant_link metadata; create no af_gauge_gain_up or af_combo_gain_up expected atoms.",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+            "quote": "AF gauge charge +0.5%, combo charge +2%"
+          }
+        },
+        {
+          "expected_capability_atom": false,
+          "mechanic": "Flexible weapon-type override",
+          "reason": "This row supports a weapon-type override, but the taxonomy has no matching weapon-type-conversion capability; retain as direct-damage metadata.",
+          "source_anchor": {
+            "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+            "quote": "Can change element by Kaleido or weapon type by Flexible"
+          }
+        }
+      ],
+      "witness_id": "fresh2-riica-elimination-ray"
+    }
+  ],
+  "promotion": {
+    "embedded_html": false,
+    "promotion_authority": "User explicitly marked Fresh Test #2 consumed and approved its seven witnesses for development/regression evidence.",
+    "raw_source_captures_remain_authoritative": true,
+    "source_oracle_path": "/home/shogunix/c2-private/m6-second-fresh-owner-oracle.json",
+    "source_oracle_sha256": "89d932f00c972762668b305ba2f0d61c1851230894d6b377d1d76b5b3c3d2267",
+    "source_evaluation_report_path": "/home/shogunix/c2-private/m6-second-fresh-evaluation-report.json",
+    "source_evaluation_report_sha256": "5a292625654835252f127253b8b2401840c013ae65a1a5a23e1c7771cf98e8b6",
+    "status": "consumed_development_regression"
+  }
+}

@@ -185,6 +185,61 @@ def test_unknown_field_spellings_have_one_evaluator_value():
     assert _normalise_field("condition", "UNRESOLVED") == "unknown"
 
 
+def test_equivalent_skill_use_trigger_spellings_share_one_value():
+    assert _normalise_field("trigger", "on_skill_use") == _normalise_field("trigger", "on_use")
+
+
+def test_condition_clause_introducers_are_not_part_of_the_condition_value():
+    assert _normalise_field("condition", "When Wryz is at front") == _normalise_field(
+        "condition", "Wryz is at front"
+    )
+    assert _normalise_field("condition", "If Riica is in the frontline") == _normalise_field(
+        "condition", "Riica is in the frontline"
+    )
+
+
+def test_redundant_magnitude_surface_text_does_not_change_the_numeric_value():
+    assert _normalise_field(
+        "magnitude",
+        {"value": "10", "unit": "percent_per_stack", "max_stacks": "10", "raw": "+10%"},
+    ) == _normalise_field(
+        "magnitude",
+        {"value": 10, "unit": "percent_per_stack", "max_stacks": 10},
+    )
+
+
+def test_field_matching_uses_the_canonical_label_when_atoms_share_one_anchor():
+    direct = _atom("direct_damage")
+    direct["fields"]["magnitude"] = {
+        "status": "adjudicated",
+        "value": {"tier": "L"},
+    }
+    multi_hit = _atom("multi_hit_action")
+    multi_hit["fields"]["magnitude"] = {
+        "status": "adjudicated",
+        "value": {"hit_count": 3},
+    }
+    direct_prediction = _prediction("direct_damage")
+    direct_prediction["magnitude"] = {"tier": "L"}
+    multi_hit_prediction = _prediction("multi_hit_action")
+    multi_hit_prediction["magnitude"] = {"hit_count": "3"}
+
+    report = evaluate_frozen_cohort(
+        {
+            "structural_only": {
+                "fresh-test-only": [multi_hit_prediction, direct_prediction],
+            }
+        },
+        {
+            **_oracle(direct),
+            "witnesses": [{**_witness(), "atoms": [direct, multi_hit]}],
+        },
+        [_witness()],
+    )
+
+    assert report["arms"]["structural_only"]["field_correctness"]["magnitude"]["correct_count"] == 2
+
+
 def test_report_adapter_attaches_typed_edges_and_reports_orphans():
     occurrence = {
         **_prediction(),
@@ -251,3 +306,15 @@ def test_source_span_is_required_even_when_capture_and_fact_match():
         [_witness()],
     )
     assert report["arms"]["structural_only"]["effect_occurrence_precision_recall"]["true_positive_count"] == 0
+
+
+def test_stellar_burst_condition_wording_is_equivalent():
+    expected = _normalise_field("condition", "When used during Stellar Burst")
+    actual = _normalise_field("condition", "during Stellar Burst")
+    assert actual == expected
+
+
+def test_numeric_multiplier_suffix_is_equivalent():
+    expected = _normalise_field("magnitude", {"multiplier": "2x"})
+    actual = _normalise_field("magnitude", {"multiplier": "2"})
+    assert actual == expected

@@ -17,7 +17,7 @@ from typing import Any, Mapping, Sequence
 from .capability_taxonomy import load_capability_taxonomy
 
 
-EVALUATOR_VERSION = "c2-atomic-eval-1.1.0"
+EVALUATOR_VERSION = "c2-atomic-eval-1.2.0"
 ORACLE_SCHEMA_VERSION = "c2-atomic-oracle-1"
 FIDELITY_DIMENSIONS = (
     "source_record_selection",
@@ -91,6 +91,11 @@ def _normalise_value(value: Any, *, unknown_markers: bool, field: str = "") -> A
         text = _normal_text(value)
         if unknown_markers and text in {"", "unknown", "unresolved"}:
             return "unknown"
+        if field == "trigger" and text in {"on_use", "on_skill_use"}:
+            return "on_use"
+        if field == "condition":
+            text = re.sub(r"^when used (?:in|during)\s+", "during ", text)
+            text = re.sub(r"^(?:when|if)\s+", "", text)
         if field in _ENUM_FIELDS and text:
             text = re.sub(r"[\s-]+", "_", text)
         return _normal_number(text) or text
@@ -114,6 +119,11 @@ def _normalise_field(field: str, value: Any) -> Any:
         unknown_markers=field != "relationships",
         field=field,
     )
+    if field == "magnitude" and isinstance(normalized, Mapping):
+        normalized = {key: item for key, item in normalized.items() if key != "raw"}
+        multiplier = normalized.get("multiplier")
+        if isinstance(multiplier, str) and re.fullmatch(r"\d+(?:\.\d+)?x", multiplier):
+            normalized["multiplier"] = multiplier[:-1]
     if field == "relationships" and isinstance(normalized, list):
         return sorted(normalized, key=_canonical)
     return normalized
@@ -431,7 +441,10 @@ def _arm_aggregate(
         capability_counts["predicted_count"] += sum(bool(_prediction_capability(row)) for row in predictions)
         capability_counts["expected_count"] += len(expected_atoms)
         capability_counts["true_positive_count"] += len(capability_matching)
-        fields = _field_metrics(predictions, expected_atoms, base_matching)
+        # Field values belong to a specific canonical occurrence. When two
+        # atoms share one source anchor (for example damage plus multi-hit),
+        # keep their fields with the taxonomy label that identifies them.
+        fields = _field_metrics(predictions, expected_atoms, capability_matching)
         for field, metrics in fields.items():
             field_correctness[field].update(
                 {key: value for key, value in metrics.items() if key != "accuracy" and isinstance(value, int)}

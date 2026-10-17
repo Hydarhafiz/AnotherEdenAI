@@ -279,6 +279,23 @@ def test_development_report_uses_canonical_classifier_to_evaluator_contract(repo
     assert evaluated["per_witness_results_returned"] is False
 
 
+def test_aura_activation_event_condition_attaches_to_the_child_effect(report: dict):
+    comparison = report["comparisons"]["development"]
+    witness = next(
+        row for row in comparison["witnesses"]
+        if row["witness_id"] == "development-hameow-aura"
+    )
+    effects = [
+        row for row in comparison["arms"]["fidelity_checked"]["occurrences"]
+        if row["source_fact_id"] == witness["fact_id"]
+        and row["occurrence_kind"] == "effect"
+        and row["capability_value"] == "outgoing_damage_up"
+    ]
+    assert len(effects) == 1
+    assert effects[0]["condition"] == "When enemy receives slash or magic damage"
+    assert effects[0]["action_timing"] == "on_damage"
+
+
 def test_committed_freeze_contains_non_answer_metadata_only():
     freeze = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
     assert freeze["known_regression_count"] == 7
