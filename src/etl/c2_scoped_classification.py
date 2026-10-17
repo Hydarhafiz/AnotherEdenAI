@@ -126,6 +126,34 @@ _HIT_COUNT_RE = re.compile(
     re.IGNORECASE,
 )
 _FORMULA_RE = re.compile(r"\b(?:based on|depending on|according to|scales? with)\b[^.;,]*", re.IGNORECASE)
+_SKILL_DAMAGE_MULTIPLIER_RE = re.compile(
+    r"\bincrease\s+skill\s+damage\s+\d+(?:\.\d+)?\s+times?\b|"
+    r"\b\d+(?:\.\d+)?x\s+of\s+the\s+standard\s+skill\s+multiplier\b",
+    re.IGNORECASE,
+)
+_STACK_MULTIPLIER_RE = re.compile(
+    r"\b(?:skill\s+)?multiplier\s+increases?\s+based\s+on\b",
+    re.IGNORECASE,
+)
+_RESOURCE_COST_METADATA_RE = re.compile(
+    r"\b(?:does\s+not|doesn't|do\s+not|don't|without)\s+"
+    r"(?:consume|use|cost)\s+(?:any\s+)?(?:additional\s+)?(?:mp|magic\s+points?)\b|"
+    r"\bno\s+(?:additional\s+)?(?:mp|magic\s+points?)\s+cost\b",
+    re.IGNORECASE,
+)
+_SEQUENCE_INTERRUPTION_RE = re.compile(
+    r"\b(?:unless|until)\b[^.;]*\b(?:interrupted|stopped|cancelled|canceled)\b"
+    r"[^.;]*\bstatus(?:\s+(?:effect|ailment))?\b",
+    re.IGNORECASE,
+)
+_AUTOMATIC_SEQUENCE_RE = re.compile(
+    r"\bautomatically\s+(?:used|performed|continued)\s+for\s+(\d+)\s+"
+    r"(?:actions?|uses?)\b",
+    re.IGNORECASE,
+)
+_REPEATED_ACTION_BRANCH_RE = re.compile(
+    r"\b(?:each|every)\s+(?:repeated\s+)?action\b", re.IGNORECASE
+)
 _REPLACEMENT_RE = re.compile(r"\b(?:replace|replaces|replacing|replacement|change(?:s|d)? into)\b", re.IGNORECASE)
 _RESOURCE_OPERATION_RE = re.compile(
     r"\b(?:consume(?:s|d)?|spend(?:s|ing)?|use(?:s|d)?)\b[^.;]*\b(?:charge|stack|mp|resource)s?\b|"
@@ -285,6 +313,7 @@ class ClassifiedOccurrence:
     semantic_type: str = ""
     hit_count: str = ""
     formula_metadata: Mapping[str, str] = field(default_factory=dict)
+    sequence_metadata: Mapping[str, str] = field(default_factory=dict)
     action_timing: str = ""
     semantic_subject: str = ""
     condition_source_span: SourceSpan | None = None
@@ -541,15 +570,61 @@ def _hit_count(text: str) -> str:
 
 
 def _formula_metadata(text: str) -> dict[str, str]:
+    metadata: dict[str, str] = {}
     match = _FORMULA_RE.search(text)
-    return {"raw": _clean(match.group(0))} if match else {}
+    if match:
+        metadata["raw"] = _clean(match.group(0))
+    if _SKILL_DAMAGE_MULTIPLIER_RE.search(text):
+        metadata["skill_damage_multiplier"] = _clean(text)
+    if _STACK_MULTIPLIER_RE.search(text):
+        metadata["stack_scaling"] = _clean(text)
+    return metadata
+
+
+def _sequence_metadata(unit: StructuralUnit) -> tuple[dict[str, str], tuple[str, ...]]:
+    """Retain automatic sequence resource and interruption scope on its repeated-action branch."""
+    sequence_header = next(
+        (
+            " ".join(token.text for token in block.tokens)
+            for block in unit.blocks
+            if _AUTOMATIC_SEQUENCE_RE.search(" ".join(token.text for token in block.tokens))
+        ),
+        "",
+    )
+    action_branch = next(
+        (
+            tuple(block.ancestry)
+            for block in unit.blocks
+            if _REPEATED_ACTION_BRANCH_RE.search(" ".join(token.text for token in block.tokens))
+        ),
+        (),
+    )
+    if not sequence_header:
+        return {}, ()
+
+    match = _AUTOMATIC_SEQUENCE_RE.search(sequence_header)
+    metadata = {"mode": "automatic_continuation"}
+    if match:
+        metadata["action_count"] = match.group(1)
+    if _RESOURCE_COST_METADATA_RE.search(sequence_header):
+        metadata["manual_activation_mp_cost"] = "normal_skill_cost_applies"
+        metadata["automatic_continuation_mp_cost"] = "no_additional_mp"
+    interruption = _SEQUENCE_INTERRUPTION_RE.search(sequence_header)
+    if interruption:
+        metadata["interruption"] = _clean(interruption.group(0))
+    return metadata, action_branch
 
 
 def _is_formula_explanation(text: str) -> bool:
     lowered = _key(text)
+    multiplier_note = _SKILL_DAMAGE_MULTIPLIER_RE.search(text)
+    if multiplier_note and not _ACTION_HEAD_RE.search(text[:multiplier_note.start()]):
+        return True
     if re.search(r"\b(?:damage|skill multiplier)\s*[:=]", lowered):
         return True
     if _formula_metadata(text) and re.search(r"\b(?:skill )?multiplier\b", lowered):
+        return True
+    if _STACK_MULTIPLIER_RE.search(text):
         return True
     return bool(
         re.search(r"\badd\b[^.;]*\b(?:light|shadow)\b[^.;]*\bbase multiplier\b", lowered)
@@ -575,6 +650,8 @@ def _is_prerequisite(text: str) -> bool:
     lowered = _key(text)
     if not lowered or re.search(r"\bif explicitly stated\b", lowered):
         return False
+    if _SEQUENCE_INTERRUPTION_RE.search(text):
+        return False
     if re.search(r"\b(?:receives?\b[^.;]*\bdamage|used (?:during|in))\b", lowered):
         return False
     if re.match(r"\s*(?:after|before|during|while|until)\b", lowered):
@@ -587,6 +664,11 @@ def _is_prerequisite(text: str) -> bool:
 
 def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
     lowered = _key(text)
+    if _RESOURCE_COST_METADATA_RE.search(text):
+        without_cost_note = _RESOURCE_COST_METADATA_RE.sub(" ", text)
+        if not _ACTION_HEAD_RE.search(without_cost_note) and not _EFFECT_RE.search(without_cost_note):
+            return []
+        lowered = _key(without_cost_note)
     if re.search(r"\bwhen used in stellar burst\b[^.;]*\bperform\b[^.;]*\binstead\b", lowered):
         return [("burst_window", "burst_window", "stellar_burst")]
     if re.search(r"\b(?:grant|grants|apply|applies)\s+kaleido\b", lowered):
@@ -725,6 +807,8 @@ def _effect_semantics(text: str, direction: str) -> list[tuple[str, str, str]]:
 
 def _dependency_values(text: str) -> list[tuple[str, str]]:
     lowered = _key(text)
+    if _SEQUENCE_INTERRUPTION_RE.search(text):
+        return []
     if _formula_metadata(text):
         return []
     values: list[tuple[str, str]] = []
@@ -1096,6 +1180,7 @@ def _occurrence(
     semantic_type: str = "",
     hit_count: str = "",
     formula_metadata: Mapping[str, str] | None = None,
+    sequence_metadata: Mapping[str, str] | None = None,
     semantic_subject: str = "",
     condition_source_span: SourceSpan | None = None,
     timing_source_span: SourceSpan | None = None,
@@ -1170,6 +1255,7 @@ def _occurrence(
         semantic_type=semantic_type,
         hit_count=hit_count,
         formula_metadata=dict(formula_metadata or {}),
+        sequence_metadata=dict(sequence_metadata or {}),
         action_timing=action_timing or "",
         semantic_subject=semantic_subject,
         condition_source_span=condition_source_span,
@@ -1681,6 +1767,7 @@ def _classify_unit(
         )
         for block in unit.blocks
     )
+    sequence_metadata, repeated_action_branch = _sequence_metadata(unit)
     registry = mechanic_registry or load_shared_mechanic_registry()
     source_fact_id = str(witness.get("record_id") or unit.source_fact_id or "")
     witness_id = str(witness.get("witness_id") or "")
@@ -1720,6 +1807,12 @@ def _classify_unit(
                 references = [token for token in selected_tokens if token.kind == "reference"]
                 support = _definition_support(references, resolution_by_location, admit_definitions=admit_definitions)
                 effect_text = atom.effect_text
+                effect_sequence_metadata = (
+                    sequence_metadata
+                    if repeated_action_branch
+                    and tuple(block.ancestry[:len(repeated_action_branch)]) == repeated_action_branch
+                    else {}
+                )
                 direction = _direction(effect_text)
                 has_effect = _has_effect(effect_text)
                 effect_condition = atom.condition
@@ -1814,6 +1907,7 @@ def _classify_unit(
                                 semantic_type=semantic_type,
                                 hit_count=_hit_count(effect_text),
                                 formula_metadata=_formula_metadata(effect_text),
+                                sequence_metadata=effect_sequence_metadata,
                                 semantic_subject=subject,
                                 condition_source_span=effect_condition_span,
                                 timing_source_span=effect_timing_span,
@@ -1966,7 +2060,34 @@ def _classify_unit(
                     pending_global_timing_span = timing_span or atom_span
 
                 state_text = atom.condition or effect_text or atom.text
-                state_reference = _state_reference(state_text)
+                formula_note = _formula_metadata(effect_text)
+                if (
+                    not has_effect
+                    and formula_note
+                    and (
+                        _SKILL_DAMAGE_MULTIPLIER_RE.search(effect_text)
+                        or _STACK_MULTIPLIER_RE.search(effect_text)
+                    )
+                ):
+                    for occurrence_index in range(len(occurrences) - 1, -1, -1):
+                        previous_occurrence = occurrences[occurrence_index]
+                        if (
+                            previous_occurrence.occurrence_kind == "effect"
+                            and previous_occurrence.capability_value == "direct_damage"
+                            and previous_occurrence.source_fact_id == source_fact_id
+                        ):
+                            merged_formula = dict(previous_occurrence.formula_metadata)
+                            merged_formula.update(formula_note)
+                            occurrences[occurrence_index] = replace(
+                                previous_occurrence,
+                                formula_metadata=merged_formula,
+                            )
+                            break
+                state_reference = (
+                    ""
+                    if _SEQUENCE_INTERRUPTION_RE.search(state_text)
+                    else _state_reference(state_text)
+                )
                 if state_reference:
                     if re.search(
                         r"\b(?:skill\s+)?(?:multiplier|damage)\s+increases?\s+based on\b",
@@ -2248,6 +2369,7 @@ _COMPATIBILITY_FIELDS = (
     "dependency_gap",
     "hit_count",
     "formula_metadata",
+    "sequence_metadata",
     "action_timing",
 )
 

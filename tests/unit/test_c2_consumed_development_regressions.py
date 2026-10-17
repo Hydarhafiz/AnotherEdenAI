@@ -6,7 +6,7 @@ from collections.abc import Mapping
 
 import pytest
 
-from src.etl.c2_scoped_classification import _effect_semantics
+from src.etl.c2_scoped_classification import _dependency_values, _effect_semantics, _is_prerequisite
 from scripts.evaluate_c2_consumed_development_regressions import evaluate, load_pinned_inputs
 
 
@@ -89,6 +89,65 @@ def test_otoha_pwr_stack_grants_a_self_power_up(evaluation_bundle):
     _report, details = evaluation_bundle
     power = _prediction(details, "m6-heldout-otoha-as-surging-scratch", "E3")
     assert (power["direction"], power["recipient"]) == ("self", "self")
+
+
+def test_otoha_continuation_cost_and_interruption_stay_sequence_metadata(evaluation_bundle):
+    _report, details = evaluation_bundle
+    witness_id = "m6-heldout-otoha-as-surging-scratch"
+    rows = details["predictions_by_arm"]["fidelity_checked"][witness_id]
+
+    assert not any(
+        row["occurrence_kind"] == "effect"
+        and "does not consume mp" in str(row.get("source_span", {}).get("text") or "").casefold()
+        for row in rows
+    )
+    assert not any(
+        row["occurrence_kind"] == "dependency"
+        and row["dependency_value"] == "requires_status"
+        and "interrupted by status effect" in str(row.get("source_span", {}).get("text") or "").casefold()
+        for row in rows
+    )
+    assert not any(
+        row["occurrence_kind"] == "state"
+        and row["state_reference"].casefold() == "status"
+        and "interrupted by status effect" in str(row.get("source_span", {}).get("text") or "").casefold()
+        for row in rows
+    )
+
+    action = _prediction(details, witness_id, "E1")
+    assert action["sequence_metadata"] == {
+        "mode": "automatic_continuation",
+        "action_count": "3",
+        "manual_activation_mp_cost": "normal_skill_cost_applies",
+        "automatic_continuation_mp_cost": "no_additional_mp",
+        "interruption": "unless interrupted by status effect",
+    }
+    assert not any(
+        row["occurrence_kind"] == "effect"
+        and row["capability_value"] == "multi_hit_action"
+        and "increase skill multiplier and number of hits based" in str(row.get("source_span", {}).get("text") or "").casefold()
+        for row in rows
+    )
+
+
+def test_harle_skill_multiplier_explanations_attach_to_direct_damage(evaluation_bundle):
+    _report, details = evaluation_bundle
+    witness_id = "m6-heldout-harle-lunairetic"
+    damage = _prediction(details, witness_id, "E1")
+    assert damage["state_reference"] == "Power Levels"
+    assert "1.5x of the standard skill multiplier" in damage["formula_metadata"]["skill_damage_multiplier"]
+    assert "Power Levels" in damage["formula_metadata"]["stack_scaling"]
+
+    rows = details["predictions_by_arm"]["fidelity_checked"][witness_id]
+    assert not any(
+        row["occurrence_kind"] == "effect"
+        and row["operation"] == "increase"
+        and (
+            "increase skill damage" in str(row.get("source_span", {}).get("text") or "").casefold()
+            or "multiplier increases based on number" in str(row.get("source_span", {}).get("text") or "").casefold()
+        )
+        for row in rows
+    )
 
 
 def test_passive_zone_timing_and_condition_apply_to_each_child_effect(evaluation_bundle):
@@ -183,6 +242,17 @@ def test_multihit_label_requires_an_explicit_hit_count_modifier():
     assert _effect_semantics("Water type piercing attack on random enemies x3 (XL)", "enemy") == [
         ("damage_event", "direct_damage", "damage")
     ]
+
+
+def test_resource_cost_and_interruption_language_stay_out_of_capability_labels():
+    assert _effect_semantics(
+        "Skill automatically used for 3 actions (does not consume MP)", "unknown"
+    ) == []
+    assert _effect_semantics(
+        "Earth type Slash attack on all enemies (does not consume MP)", "enemy"
+    ) == [("damage_event", "direct_damage", "damage")]
+    assert not _is_prerequisite("unless interrupted by status effect")
+    assert _dependency_values("unless interrupted by status effect") == []
 
 
 def test_party_and_stack_dependencies_remain_independent_and_branch_scoped(evaluation_bundle):
