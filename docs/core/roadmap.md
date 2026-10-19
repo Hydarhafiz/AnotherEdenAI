@@ -48,7 +48,7 @@ Milestone 6 is ordered around:
 - changing candidate generation only after diagnostics establish the responsible stage; and
 - evaluating diverse candidates with H2's four modeled-viability gates.
 
-The approved sequence is A → B → C → C1 → C1.1 → C2 → D → E → F → G. A-C and C1 are completed; C1's claim is narrowed to structural preservation after the 2026-09-15 source-fidelity audit. C1.1 and C2 remain unstarted. D follows acceptance of C1.1 fidelity and C2 held-out comparison evidence. Existing coverage/diversity floors remain unchanged, and generated structural or semantic evidence does not replace human capability-review authority. Complete equipment ingestion, broad boss expansion and formula simulation remain deferred.
+The approved sequence is A → B → C → C1 → C1.1 → C2 → C2.1 → D → E → F → G. A-C and C1 are complete; C1's claim remains structural preservation. C1.1 is technically complete; C2 is implemented but generalization is not accepted. C2.1 is active, followed by one final fresh validation after readiness, then explicit joint C1.1/C2 owner acceptance before D. Existing coverage/diversity floors remain unchanged, and generated structural or semantic evidence does not replace human capability-review authority. Complete equipment ingestion, broad boss expansion and formula simulation remain deferred.
 
 ## Research And Planning Sources
 
@@ -151,7 +151,7 @@ Historical Features A-H, corrections C6/C6.1/D2/E2/F2/G1.1, and their identifier
 
 ### Milestone 6: Character Capability Coverage And Candidate Diversity
 
-Status: Active. A-C and C1 are complete; C1.1 and C2 are technically implemented with human acceptance pending. The 24-witness exploratory C2 review is complete. The bounded remediation plan was approved on 2026-10-04 and is not implemented; C2-R1 is next. C2 is non-authoritative; its checkpoint is not accepted; D is blocked/unstarted.
+Status: Active. A-C/C1 complete → C1.1 technically complete → C2 implemented but generalization not accepted → C2.1 active → one final fresh validation after readiness → explicit joint C1.1/C2 owner acceptance → D. Fresh Tests #1/#2/#3 are consumed and ineligible for final validation. C2 remains non-authoritative and D blocked/unstarted; detailed historical evidence and the executable contract live in `docs/core/milestone.md`.
 
 Purpose:
 
@@ -163,7 +163,7 @@ Planned feature sequence:
 2. Boss-to-capability priority matrix.
 3. Full-catalog high-value extraction.
 4. Structural evidence (C1), source fidelity (C1.1), and initial scoped classification/evaluation (C2); technical work exists, semantic acceptance remains pending.
-5. Approved bounded C2 remediation: freeze protected evaluation and fresh replacement coverage; repair ETL fields/variants; add minimal controlled shared mechanics; repair atomic decomposition/classification/relationships; evaluate and perform a small human verification. Stop for explicit C1.1/C2 acceptance.
+5. Role-first occurrence and ownership stabilization (C2.1): pass consumed-evidence replay and semantic invariants, then run one genuinely unseen final validation and request explicit joint C1.1/C2 acceptance. A further broad/systematic architecture failure requires an owner decision rather than an automatic retry loop.
 6. Selective review, materialization, and coverage closure (D), blocked until that acceptance.
 7. Search-funnel and candidate-diversity diagnostics (E).
 8. Evidence-driven candidate-diversity improvements (F).
@@ -181,14 +181,14 @@ Exit direction:
 - High-value extraction is attempted across the full catalog.
 - Source-faithful atomic proposals improve precision without losing high-impact recall; frozen semantic/field/relationship evaluation and explicit human acceptance precede D. Historical occurrence-count metrics alone do not prove capability accuracy, role-taxonomy accuracy or reduced review time.
 - Unknown and ambiguous evidence remains explicit and non-authoritative.
-- The D-G thresholds approved after Feature A remain unchanged by the C2 remediation proposal.
+- The D-G thresholds approved after Feature A remain unchanged by C2.1.
 - Coverage spans applicable elements, physical/magic offense, offensive support, zone/setup, mitigation, recovery, status counterplay, AF support, Pain/Poison, and boss counters.
 - Controlled alternative-rich rosters yield multiple meaningfully different legal character/frontline sets and coherent archetypes.
 - Constrained rosters may return fewer candidates with stage-accountable reasons.
 - H2's four gates support plausible evidence-backed candidates with no global-optimality, win-probability, or guaranteed-clear claim.
 - No paid analyzer evaluation occurs before deterministic gates pass or without separate authorization.
 
-The approved remediation plan, human acceptance checkpoint and approved D-G numeric contracts live in `docs/core/milestone.md`.
+The approved C2.1 plan, historical Test #3 evidence, human acceptance checkpoint and approved D-G numeric contracts live in `docs/core/milestone.md`.
 
 ### Milestone 7: Frontend Portfolio Experience
 

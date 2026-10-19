@@ -14,15 +14,13 @@ Candidates remain bounded, auditable recommendations. They are not guaranteed cl
 
 ## Current Milestone 6 State
 
-- C1 is complete.
-- C1.1 and C2 technical implementation and verification are complete; joint human acceptance remains pending.
-- The completed development evaluation scores supported capability and dependency labels 21/21. Effect occurrences score 19 TP / 2 FP / 0 FN, and dependency occurrences score 2 TP / 0 FP / 0 FN. Adjudicated fields match exactly.
-- Tetra's unmatched Charge-cost occurrence is an intentional unsupported taxonomy gap, not a classifier defect.
-- The 2026-10-12 seven-witness final validation failed and is now consumed development/regression evidence. Its source-pinned oracle is promoted at `tests/fixtures/c2/m6_consumed_development_regression_oracle.json`.
-- Fresh Test #2 failed and is consumed development/regression evidence. Its source-pinned oracle is promoted at `tests/fixtures/c2/m6_second_fresh_consumed_development_regression_oracle.json`; its frozen external oracle/report hashes remain recorded in the C2 repair record below. The classifier now recovers every taxonomy-supported label across the original development set and both consumed cohorts. All remaining effect-occurrence false positives are explicit unsupported-gap outputs. C2 is ready for another fresh validation; Test #3 has not been selected.
-- Original development: effects 19 TP / 2 FP / 0 FN, dependencies 2 TP / 0 FP / 0 FN, and canonical labels 21 TP / 0 FP / 0 FN. Consumed Test #1: effects 18 TP / 5 FP / 0 FN, dependencies 7 TP / 0 FP / 0 FN, and canonical labels 25 TP / 0 FP / 0 FN. Consumed Test #2: effects 23 TP / 6 FP / 0 FN, dependencies 7 TP / 0 FP / 0 FN, and canonical labels 30 TP / 0 FP / 0 FN.
+- Features A-C and C1 are complete; their accepted contracts and evidence remain historical foundations.
+- C1.1 technical source-fidelity implementation and automatic replay are complete. Joint C1.1/C2 human acceptance remains pending because C2 semantic generalization has not passed.
+- C2's classifier, shared adapter and semantic evaluator are implemented. Historical contract alignment and development recovery remain useful evidence, but Fresh Test #3 exposed a shared occurrence-generation/source-context architecture defect.
+- Fresh Tests #1, #2 and #3 are consumed development/regression evidence and permanently ineligible for final validation. Test #1 and Test #2 have source-pinned repository regression oracles; Test #3's official failed result, cohort and frozen artifact identities are recorded under Feature C2. Its separately traceable regression derivative is required during C2.1.
 - Every earlier protected, held-out, or R5 cohort and every development witness used for review or tuning is consumed and ineligible for final validation.
-- Feature D remains blocked until explicit joint C1.1/C2 human acceptance.
+- Feature C2.1 is active/planned for execution: the owner-approved bounded role-first occurrence and ownership refactor. Its four-set replay and invariant gate must pass before one genuinely unseen final validation.
+- Feature D remains blocked until final validation supports explicit joint C1.1/C2 owner acceptance and that acceptance is recorded.
 
 ## Completed Recovery
 
@@ -32,18 +30,19 @@ This is historical evidence and does not define additional execution phases:
 - Seven reviewed development witnesses were evaluated through the real semantic path (`84e2a40`).
 - Recurring classifier errors were repaired using development evidence only (`ad2d46b`).
 - The Tetra development oracle was reconciled with reviewed evidence (`3af367f`).
-- Supported development labels now score 21/21.
+- Supported development labels scored 21/21 at that historical snapshot.
 
-Completed recovery is reopened only if fresh validation identifies evidence that a specific completed layer is defective. No additional R-numbered phase is planned.
+Fresh Test #3 supersedes the previous readiness conclusion, while preserving these completed results. C2.1 addresses the demonstrated occurrence/ownership weakness within Milestone 6; no additional R-numbered phase is planned.
 
 ## Remaining Work
 
-1. Completed: close the consumed-cohort supported-label misses, recurring field errors, and three demonstrated false positives in development/regression evidence.
-2. After the bounded repair is reviewed, select seven genuinely unseen witnesses using metadata and freshness checks only. Exclude every exact fact identity or source slice previously reviewed, tuned, protected, or evaluated.
-3. Give the evaluation owner source-only evidence and independently adjudicate expected effects, dependencies, supported taxonomy labels, fields, and relationship semantics. Preserve unsupported mechanics as explicit gaps and freeze the oracle before evaluation.
-4. Run one held-out evaluation through the existing `classifier → shared adapter → semantic evaluator` path. Do not tune against the cohort or add held-out-only behavior.
-5. Record explicit joint C1.1/C2 human acceptance when supported labels are generally correct, no recurring decomposition or false-positive pattern appears, fields and relationships show no systematic failure, unsupported mechanics fail closed, and no new systematic failure class appears. If the cohort fails, mark it consumed, promote its failures to development/regression evidence, make only the bounded repair those failures justify, and require a new fresh cohort.
-6. Begin Feature D only after explicit acceptance.
+1. Execute Feature C2.1 through `builder-executor -> tdd-loop`: establish semantic roles and action/branch ownership before taxonomy mapping, add reusable invariants, and promote Test #3 to a source-pinned consumed regression derivative. Preserve its frozen oracle/report unchanged; record the subsequent Felmina multi-hit correction only in the derivative.
+2. Replay original development evidence and consumed Fresh Tests #1, #2 and #3 through the same `classifier → shared adapter → semantic evaluator` path. Pass every C2.1 readiness criterion below before selecting new fresh evidence. Complete C2.1 in one feature commit containing implementation, durable regressions/evidence, necessary documentation and the milestone update.
+3. After readiness passes, select one genuinely unseen final validation cohort of seven witnesses using metadata and freshness checks only. Exclude every exact fact identity or source slice previously reviewed, tuned, protected or evaluated, including all three consumed fresh cohorts.
+4. Give the evaluation owner source-only evidence. Independently adjudicate effects, dependencies, canonical labels, fields and relationship semantics; preserve unsupported gaps and freeze the oracle before classification.
+5. Run the `classifier → shared adapter → semantic evaluator` path once. Do not tune against this final cohort or introduce held-out-only behavior.
+6. If milestone acceptance criteria pass, request explicit joint C1.1/C2 owner acceptance: supported labels are generally correct, unsupported mechanics fail closed, and no recurring decomposition/false-positive family, systematic field/relationship failure or new systematic failure class remains. Isolated edge cases may be judged proportionately against the Milestone 6 MVP goal. Do not claim measured review-time reduction without independent timing evidence.
+7. If final validation exposes another broad/systematic architecture failure, stop and return to an explicit owner architecture decision. Do not automatically begin another consume/patch/fresh-test loop. Begin Feature D only after explicit joint acceptance is recorded.
 
 ## Milestone 5 Transition
 
@@ -284,7 +283,7 @@ There is no fifth guaranteed-clear gate. Allowed conclusions include `high model
 
 ## Feature Plan
 
-Features A through C2 below retain completed contracts and evidence for historical traceability. They do not override `Current Milestone 6 State` or `Remaining Work`. Feature D is the next executable feature only after joint C1.1/C2 acceptance.
+Features A through C2 below retain accepted contracts and historical evidence; C1.1/C2 joint acceptance remains pending. C2.1 is the current executable feature. Feature D follows C2.1 readiness, one final fresh validation and explicit joint C1.1/C2 acceptance.
 
 ### Feature A: Coverage Baseline And Metric Contract
 
@@ -426,7 +425,7 @@ Implemented technical contract:
 Historical cohort disposition (non-executable):
 
 - **C1.1-05:** The original C1.1 development sampling and the seven reviewed development witnesses are historical, consumed tuning evidence.
-- **C1.1-06:** All former protected and held-out cohorts are consumed and excluded; they cannot support final acceptance or be reused for tuning.
+- **C1.1-06:** All former protected and held-out cohorts are consumed and excluded from final validation; any admitted reuse is development/regression evidence only.
 - **C1.1-07:** The prior sample-size and archetype-coverage plan is historical. Final held-out selection and isolation follow `Remaining Work`.
 
 Exit and human checkpoint: Technical completion supplies replay and witness evidence, not acceptance. Every former protected or held-out cohort is consumed and excluded. Remaining joint C1.1/C2 acceptance follows `Remaining Work`; source conflicts, unresolved definitions and failed attachments remain explicit until then.
@@ -442,25 +441,77 @@ Historical technical evidence (non-executable):
 
 ### Feature C2: Scoped Classification And Review-Reduction Evaluation
 
-Status: Technical recovery and bounded repairs from consumed Test #1 and Fresh Test #2 are complete. C2 is ready for another fresh validation; joint C1.1/C2 human acceptance remains pending. C1.1/C2 remains non-authoritative, and Feature D remains blocked.
+Status: Classifier, shared adapter and semantic evaluator implemented; semantic generalization and joint C1.1/C2 human acceptance remain pending. Fresh Test #3 exposed a recurring occurrence/ownership architecture defect. C2 proposals remain non-authoritative; C2.1 is active and Feature D remains blocked.
 
-The completed recovery commits and development results are summarized under `Completed Recovery`. They are historical evidence and do not define additional remediation phases. The only remaining C1.1/C2 execution contract is `Remaining Work`.
+Historical contract alignment and development recovery are preserved. The pre-Test-#3 shared-path results below are regression baselines, not evidence of current fresh-validation readiness. Counts are TP / FP / FN:
 
-Consumed-cohort repair record (2026-10-12): the seven source-pinned witnesses became development evidence after the failed validation. Durable regressions cover Aisha's and Nona's `element_damage_up`, Otoha's and Nona's `multi_hit_action`, Nona's and Jilya's branch-scoped dependencies, recipient/direction attachment, Nona's decomposition, and Melissa's Stellar Burst replacement relationship. E4 element conversion for Nona remains metadata/gap evidence; no taxonomy value or unsupported mechanic was added. Melissa's replacement now resolves to the matching child fact without inheriting its effects onto the parent.
+| Evidence | Effects | Dependencies | Canonical labels |
+| --- | --- | --- | --- |
+| Original development | 19 / 2 / 0 | 2 / 0 / 0 | 21 / 0 / 0 |
+| Consumed Test #1 | 18 / 5 / 0 | 7 / 0 / 0 | 25 / 0 / 0 |
+| Consumed Test #2 | 23 / 6 / 0 | 7 / 0 / 0 | 30 / 0 / 0 |
 
-The first post-recovery consumed-cohort evaluation reported effects 17 TP / 7 FP / 1 FN, dependencies 6 TP / 1 FP / 1 FN, and canonical labels 22 TP / 1 FP / 3 FN. At that stage the misses were Otoha `power_up`, Claude `requires_zone`, and Jilya `physical_resistance_down`; condition accuracy was 7/14, state-reference accuracy 0/11, trigger accuracy 2/12, and recipient/direction accuracy 19/25 each. The established seven-witness development/recovery evaluation remained at effects 19/2/0, dependencies 2/1/0, and canonical labels 21/0/0. The final bounded repair result follows below.
+At that snapshot, all 13 unmatched effect outputs aligned with explicit unsupported gaps, including Tetra's Charge cost. Repairs covered supported labels, local fields/dependencies, formula/sequence metadata and parent/child relationships without taxonomy expansion or character-name rules. Test #2 verification also recorded three pre-existing atomic-occurrence failures; historical baseline status does not waive C2.1's invariant gate. Missing adjudications in older oracles remain unknown and are not silently counted as fidelity or typed-relationship success.
 
-Final bounded repair (2026-10-16): generic source parsing recovers Otoha power_up, Claude requires_zone, and Jilya physical_resistance_down; named states/resources, active-skill trigger defaults, compound skill prerequisites, and distinct source spans for compound dependencies are attached without adding taxonomy values. At that snapshot, the consumed-cohort result was effects 18 TP / 7 FP / 0 FN, dependencies 7 TP / 1 FP / 0 FN, and canonical labels 25 TP / 1 FP / 0 FN; field accuracy was condition 14/14, state reference 11/11, trigger 12/12, recipient 25/25, and direction 25/25. The five unlabeled occurrence false positives aligned with explicit gaps (Otoha's Catwisp consumption, Nona's generic critical-rate and Flexible grants, and Jilya's Charge increment and stat-derived debuff scaling). The three classifier errors at that snapshot are closed by the follow-up repair below.
+Durable consumed regressions are `tests/fixtures/c2/m6_consumed_development_regression_oracle.json` and `tests/fixtures/c2/m6_second_fresh_consumed_development_regression_oracle.json`. Test #2's frozen external oracle is `/home/shogunix/c2-private/m6-second-fresh-owner-oracle.json` (SHA-256 `89d932f00c972762668b305ba2f0d61c1851230894d6b377d1d76b5b3c3d2267`); its report is `/home/shogunix/c2-private/m6-second-fresh-evaluation-report.json` (SHA-256 `5a292625654835252f127253b8b2401840c013ae65a1a5a23e1c7771cf98e8b6`). Both remain unchanged.
 
-Follow-up bounded false-positive repair (2026-10-17): automatic continuation MP cost and interruption wording are retained as sequence metadata on the repeated-action branch; they no longer produce a consume effect or requires_status prerequisite. Harle's skill multiplier and stack-scaling explanations are retained as formula metadata on direct damage, without a separate effect. All five residual Test #1 effect false positives align with explicit unsupported gaps. A fresh validation remains the next step, and Feature D remains blocked pending explicit joint human acceptance.
+#### Fresh Test #3 — consumed failed held-out evidence
 
-Consumed Fresh Test #2 diagnosis and bounded repair (2026-10-18): the seven witnesses are Benedict / Large Slash, Ewan (Another Style) / Sign: Roaring Bash, Ewella / Saevus Furorem, Iridian (Heal) / Arcus Irus, Philo (Another Style) / Store Power, Radias / Radias turn end buff, and Riica / Elimination Ray. The frozen external oracle remains `/home/shogunix/c2-private/m6-second-fresh-owner-oracle.json` (SHA-256 `89d932f00c972762668b305ba2f0d61c1851230894d6b377d1d76b5b3c3d2267`); the frozen evaluation report remains `/home/shogunix/c2-private/m6-second-fresh-evaluation-report.json` (SHA-256 `5a292625654835252f127253b8b2401840c013ae65a1a5a23e1c7771cf98e8b6`). The promoted regression oracle pins the source captures and slices, contains no embedded HTML, and does not alter those external artifacts.
+Owner-reported historical cohort: Aldo — `Blaze Sword`; Sesta — `Twinblade Wolf`; Dewey (Another Style) — `Vapeur Hypnotique`; Shigure (Another Style) — `Type Atk Buff - Num. of Moves`; Gunce — `Arkoúda`; Lloyd — `Raining Tiger Blade`; Felmina — Enhanced `Silent Killer`. The independently adjudicated source oracle was frozen before classification and all seven source/capture/slice pins verified.
 
-The confirmed supported-label misses were classifier generalization failures (A): Benedict direct_damage; Ewan AS magic_critical_rate_up and element_damage_up; Iridian direct_damage, multi_hit_action and requires_zone; Radias equipped_weapon_damage_up and requires_recipient_eligibility; Riica grant_link, remove_status_ailment and recover_mp. Each is now a generic regression with no character/skill-name rule or taxonomy addition. The previously demonstrated Iridian deploy_zone output and Philo child/lifecycle direct_damage output were decomposition/ownership errors (D) and are removed; formula/resource/child/metadata prose stays attached as metadata or explicit unsupported-gap evidence. The Store Power / Storing Power State activation references now attach to the owning parent occurrences. Riica's frontline eligibility condition is not reused as the child heal/cleanse recipient; where the child source does not identify a recipient, the field stays unknown.
+Official one-shot held-out result:
 
-Two evaluator/adapter representation mismatches (B) were fixed consistently across all three evidence sets: on_use and on_skill_use are equivalent trigger spellings, and semantic fields are matched only against the occurrence anchor that owns them. Trigger output existed before normalization; the trigger field is now 23/23. One genuine condition-attachment classifier error (A) let a later negative gate overwrite an earlier mode condition; generic block-scoped attachment now preserves the correct condition. The remaining Test #2 condition differences are source phrasing versus reviewer summaries (9/14 exact), with values present rather than omitted. Result text is present in the classifier output, but the frozen owner oracle uses abbreviated/canonical reviewer summaries (1/30 exact), so this is an oracle/adjudication representation mismatch (E), not 29 omitted results; result semantics were not loosened to raise the score. The Test #2 oracle has no `fidelity_dimensions` adjudication field: all C1.1 dimensions therefore remain unknown for all seven witnesses due to missing adjudication/report wiring (E), not a new source-fidelity failure. The evaluator-owned typed-relationship metric is likewise unknown for Test #2; the regression audit reports zero unresolved relationship attachments.
+| Metric | TP | FP | FN | Precision | Recall |
+| --- | --- | --- | --- | --- | --- |
+| Effects | 10 | 31 | 8 | 24.4% | 55.6% |
+| Canonical labels | 13 | 5 | 9 | 72.2% | 59.1% |
+| Dependencies | 3 | 0 | 1 | 100% | 75% |
 
-Final shared-path results: original development effects 19/2/0 (P .905, R 1.000), dependencies 2/0/0 (P/R 1.000), canonical labels 21/0/0 (P/R 1.000); Test #1 effects 18/5/0 (P .783, R 1.000), dependencies 7/0/0 (P/R 1.000), labels 25/0/0 (P/R 1.000); Test #2 effects 23/6/0 (P .793, R 1.000), dependencies 7/0/0 (P/R 1.000), labels 30/0/0 (P/R 1.000). All 13 false-positive effect outputs are intentional unsupported-gap occurrences (2 development, 5 Test #1, 6 Test #2); Test #2 has no unlabeled output without a pinned gap anchor. Test #2 important field results are actor 30/30, attack type 9/9, element 8/8, magnitude 21/21, state reference 16/16, trigger 23/23, condition 9/14, direction 26/30, recipient 25/30, target cardinality 26/30, and result 1/30. Test #1 has condition 14/14, state reference 11/11, trigger 12/12, direction 23/25, recipient 21/25, magnitude 6/6, and result 10/18. The original development set has exact adjudicated C2 fields; its C1.1 fidelity dimensions remain unknown because the oracle does not provide those adjudications. The original development report also has two non-authoritative, unanchored icon-reference candidates on Alma and Tetra; they are not expected typed effect relationships. Test #1 has zero unresolved relationship attachments. Test #2 has zero unresolved relationship attachments, including the repaired Philo activation edges; its evaluator-owned typed-relationship accuracy remains unknown. Source-level condition/result wording and a small number of child-recipient/cardinality summaries remain representation/scope differences, not a recurring supported-mechanic label failure. The relevant C2 run reports 64 passed and three failures in the pre-existing atomic-occurrence suite; the identical three failures were reproduced against clean starting commit `1fd7608`. C2 is ready for a new fresh validation; the separate joint C1.1/C2 acceptance checkpoint remains pending, and Feature D remains blocked.
+C1.1 fidelity wiring was complete for all 15 dimensions across all seven witnesses, with no unexpectedly missing/unknown dimensions; wiring completeness does not itself prove semantic correctness. The run exposed a recurring semantic occurrence/ownership problem rather than another isolated missing-rule set: formula/sequence/explanatory prose became effects, compound results were not reliably segmented, branch/field ownership failed, and supported taxonomy concepts were missed or confused. A separate confirmed anchor-representation issue arose where parser icon tokens and rendered classifier spans differed; it affected some official matching but does not explain the broader failure. All three owner-adjudicated relationship groups were unresolved in persisted attribution; typed relationship accuracy was unavailable and no clearly incorrect attachment was proven.
+
+Frozen historical artifacts (owner-supplied identities; preserve unchanged):
+
+- Owner oracle: `/home/shogunix/c2-private/m6-third-fresh-owner-oracle.json`; SHA-256 `93a2a4d48c8d4a6a85bf30a253bf31afb62a654f37a25eadcef31d24a27b1ae5`.
+- Evaluation report: `/home/shogunix/c2-private/m6-third-fresh-evaluation-report.json`; SHA-256 `49055ca03c1db91f9384b159106c5c35e78fd04adadb3ef0f0d4a68cbf0545e2`.
+
+Test #3 did not support joint C1.1/C2 acceptance; Feature D remained blocked. It is now consumed development/regression evidence and permanently ineligible for final validation. During C2.1, create a separately traceable source-pinned regression derivative recording the subsequent owner adjudication correction: Felmina's `Silent Killer` contains an owned `x5` attack and therefore also expects one `multi_hit_action` under the approved owned-attack invariant below. Do not retroactively alter the frozen oracle or official held-out result.
+
+### Feature C2.1: Role-First Occurrence And Ownership Stabilization
+
+Status: Active/planned for execution. Owner approved the bounded occurrence-generation/source-context refactor within Milestone 6.
+
+Type and route: `refactor` via `builder-executor -> tdd-loop`.
+
+Outcome: Determine what each source segment is and which action/branch owns it before mapping it to the canonical taxonomy.
+
+```text
+source structure → source segment → semantic role → owner / branch context
+    → local fields and conditions → canonical taxonomy mapping
+    → occurrence / dependency / gap / relationship → shared adapter → semantic evaluator
+```
+
+Scope: A small internal source-segment semantic role model; stable owner and branch identity before occurrence generation; role-first generation; local field scoping; nested branch-condition inheritance; explicit unsupported gaps; parent/child invocation ownership; consistent multi-hit behavior; and canonical source-anchor representation across parser, classifier, oracle handling, adapter and evaluator. Preserve source/token identity and exact evaluator-matchable icon/link anchors without weakening matching or rewriting frozen evidence to improve scores.
+
+Internal roles may include effect result, condition, trigger/timing, formula, resource gain, resource consumption, state creation, sequence, child invocation, relationship metadata, cost/activation metadata and unknown. These roles do not become capability-taxonomy values merely because the intermediate classifier understands them.
+
+Non-goals: Wholesale rewrite, LLM classifier, taxonomy expansion, formula execution, new milestone, persisted-schema migration, automatic approval/materialization, scoring/search changes, provider/frontend/deployment work or Feature D+ implementation. Preserve existing C1.1 source-fidelity/replay guarantees, external report/evaluation contracts, conservative review authority and 367/367 legal-kit completeness. Use existing pytest coverage and repository quality controls; new tooling/dependencies/configuration are outside this feature.
+
+Entry gate: Use the approved C2 contracts, original development evidence, source-pinned consumed Tests #1/#2, and owner-adjudicated consumed Test #3. Pin Test #3's regression derivative to its frozen source/oracle/report identities and record its subsequent correction separately. No new fresh cohort is selected before the exit gate.
+
+Durable semantic contracts:
+
+- **Owned attacks:** Every genuine owned attack explicitly written as `xN` or `N times`, with `N > 1`, produces one `direct_damage` and one `multi_hit_action`. Each separate attack gets its own pair. Conditional hit-count changes modify that multi-hit occurrence rather than creating another. Apply this only after establishing a genuine owned attack; formulas, sequences and child-reference prose do not qualify by containing attack words or numbers.
+- **Dependencies/resources:** Possession of a required stack produces `requires_stack`; a target stack threshold produces branch-local `requires_stack`. Consuming a stack/resource is resource consumption; creating/gaining stacks/resources is state/resource gain. Neither becomes `requires_stack` merely from mentioning stacks. A stance requirement produces `requires_zone` only on the branch it gates. End of Turn remains timing/trigger unless the canonical contract explicitly requires a dependency in that context.
+
+Acceptance:
+
+- **C2.1-01 — Roles and ownership:** Establish semantic role and stable action/branch ownership before taxonomy mapping. Metadata and child definitions cannot independently become parent effects. Unsupported mechanics follow an explicit gap path rather than receiving neighboring supported labels.
+- **C2.1-02 — Scoped fields:** Fields and conditions belong to their action/branch; nested conditions inherit without gating unconditional siblings, and conditional potency/hit-count changes update the owning effect. Genuine source uncertainty remains explicit.
+- **C2.1-03 — Invariant coverage:** Retain or add reusable synthetic semantic tests plus source-pinned regressions proving: two attacks in one root sentence stay separate; owned xN attacks produce one damage/multi-hit pair each; conditional hit-count changes update one pair; formula text cannot independently become an effect; sequence text cannot become parent damage; resource consumption/creation cannot become `requires_stack`; nested conditions inherit correctly; branch-local conditions do not gate unconditional siblings; conditional potency modifies its owning effect; child invocation does not import child effects; unsupported mechanics do not receive neighboring labels; icon/link anchors remain exactly evaluator-matchable; sibling magnitude/duration values cannot bleed; and End-of-Turn timing remains timing where appropriate.
+- **C2.1-04 — Shared replay:** Replay original development evidence and consumed Fresh Tests #1/#2/#3 through the same `classifier → shared adapter → semantic evaluator`. Recover all adjudicated supported canonical labels and canonical dependencies. No recurring non-gap false-positive family, formula/sequence/resource/child ownership leakage or systematic field-scoping failure may remain. Unsupported gaps remain unsupported; parent/child relationships resolve or remain explicitly unresolved for genuine source reasons; source-anchor representation mismatch is eliminated; the invariant suite passes. A perfect aggregate historical score is not the sole criterion, and missing adjudication remains unknown.
+- **C2.1-05 — Convergence and retention:** Make role-first generation canonical within C2 and remove displaced generation logic in this feature. Keep supported comparison arms for their distinct purposes. Any necessary temporary compatibility needs a proven caller, explicit exit condition and removal owner; do not leave unexplained parallel generators. Retain/consolidate unique capability regressions and authoritative source pins; purge temporary helpers and generated scratch reports. Preserve the frozen Test #3 oracle/report and official scores, with the Felmina correction traceable only in the consumed derivative.
+
+Exit and commit boundary: Pass C2.1-01 through C2.1-05 before fresh validation. One eventual completed-feature commit contains the refactor, durable regression derivative/tests, useful evidence, affected canonical documentation and milestone update. Reopen owner decisions only for important unresolved source/compatibility authority or a material architecture/scope change. C2.1 completion establishes readiness, not joint acceptance; final validation, the architecture-failure stop rule and explicit owner acceptance follow `Remaining Work` before D.
 
 ### Feature D: Selective Review, Materialization, And Coverage Closure
 
@@ -533,7 +584,7 @@ Milestone 6 completes only when:
 
 - all 367 canonical forms/styles remain legal-kit complete and legally eligible when owned and data-complete;
 - high-value capability extraction has been attempted across the full catalog;
-- C1's structural guarantees and C1.1's deterministic source-fidelity replay remain valid, and the fresh seven-witness evaluation receives explicit joint C1.1/C2 human acceptance before Feature D begins;
+- C1's structural guarantees and C1.1's deterministic source-fidelity replay remain valid, C2.1 passes its four-set replay and invariant readiness gate, and one genuinely unseen final seven-witness evaluation supports explicit joint C1.1/C2 owner acceptance before Feature D begins;
 - unknown, ambiguous, rejected, untagged, and proven-absence semantics remain distinct;
 - evidence-based thresholds approved after Feature A are met across the strategic coverage dimensions relevant to the thirty-boss corpus;
 - boss-eligible pools are large enough to exercise meaningful search where the effective roster and evidence permit;
