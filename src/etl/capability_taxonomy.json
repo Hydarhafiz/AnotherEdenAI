@@ -1,5 +1,5 @@
 {
-  "artifact_version": "3.2.0",
+  "artifact_version": "3.3.0",
   "review_schema_version": "3.2.0",
   "reserved_capabilities": [
     "af_gauge_gain_up",
@@ -242,6 +242,28 @@
       "direction": "field",
       "target": "zone",
       "matched_phrase": "Deploy Raging Fire Stance"
+    },
+    {
+      "id": "m6-p3-toova-double-crush-deploy-zone",
+      "phase": "defensive_setup",
+      "kind": "capability",
+      "value": "deploy_zone",
+      "record_type": "skill",
+      "record_id": "skill:2969aa07d12b8d18a8a4",
+      "direction": "field",
+      "target": "zone",
+      "matched_phrase": "Deploy Torn Earth Stance"
+    },
+    {
+      "id": "m6-p3-toova-double-crush-multi-hit",
+      "phase": "offensive_support",
+      "kind": "capability",
+      "value": "multi_hit_action",
+      "record_type": "skill",
+      "record_id": "skill:2969aa07d12b8d18a8a4",
+      "direction": "enemy",
+      "target": "single_enemy",
+      "matched_phrase": "attack on a single enemy x2"
     }
   ]
 }

@@ -154,7 +154,7 @@
       "source_url": "https://anothereden.wiki/w/Eleanor"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Toova",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -1043,7 +1043,7 @@
       "source_url": "https://anothereden.wiki/w/Noble_Specturr"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Rosetta",
       "corrected_activation_count": "__clear__",
       "corrected_availability": "not_applicable",
@@ -3617,6 +3617,47 @@
       "source_url": "https://anothereden.wiki/w/Kamlanage"
     },
     {
+      "artifact_version": "3.3.0",
+      "character_name": "Toova",
+      "corrected_activation_count": "",
+      "corrected_availability": "",
+      "corrected_direction": "enemy",
+      "corrected_duration_turns": "",
+      "corrected_kind": "capability",
+      "corrected_magnitude_unit": "",
+      "corrected_magnitude_value": "",
+      "corrected_max_stacks": "",
+      "corrected_qualifiers_json": "{\"attack_type\":[\"Magic\"],\"element\":[\"Earth\"]}",
+      "corrected_stacking_behavior": "",
+      "corrected_target": "single_enemy",
+      "corrected_trigger": "",
+      "corrected_value": "direct_damage",
+      "decision": "correct",
+      "fact_name": "Double Crush",
+      "matched_phrase": "Earth type magic attack on a single enemy",
+      "proposal_id": "47063917b580d259e96fc1b4",
+      "proposed_activation_count": "",
+      "proposed_availability": "not_applicable",
+      "proposed_direction": "enemy",
+      "proposed_duration_turns": "",
+      "proposed_kind": "capability",
+      "proposed_magnitude_unit": "",
+      "proposed_magnitude_value": "",
+      "proposed_max_stacks": "",
+      "proposed_qualifiers_json": "{\"attack_type\":[\"Magic\"],\"element\":[\"Earth\"],\"recipient_eligibility_kind\":[\"element\"]}",
+      "proposed_stacking_behavior": "not_applicable",
+      "proposed_target": "single_enemy",
+      "proposed_trigger": "none",
+      "proposed_value": "direct_damage",
+      "record_type": "skill",
+      "reviewer": "codex-milestone-6-p3",
+      "reviewer_notes": "Checked against Toova normal-form source capture SHA-256 a57956b5c7a51de89d58c7f63c59d2346e29d70b8b3809664a094975dd73f109. Approve Earth Magic direct damage to one enemy. The source also says x2 (L), but generic direct_damage carries no damage magnitude. Correct the inferred recipient-eligibility qualifier; Earth and Magic describe this attack, not a target filter.",
+      "rule_id": "cap-typed-damage",
+      "source_fact_id": "skill:2969aa07d12b8d18a8a4",
+      "source_text": "Double Crush Earth type magic attack on a single enemy x2 (L) and Deploy Torn Earth Stance   Magic  Active Skills",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    },
+    {
       "artifact_version": "3.1.0",
       "character_name": "Myunfa (Alter),Porcelain Pixie",
       "corrected_activation_count": "",
@@ -5248,7 +5289,7 @@
       "source_url": "https://anothereden.wiki/w/Gunce"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Rosetta",
       "corrected_activation_count": "3",
       "corrected_availability": "not_applicable",
@@ -5782,6 +5823,47 @@
       "source_fact_id": "skill:a48cad648cb0750577a4",
       "source_text": "Flexabilty Shift When user uses a learned skill: Before attack ( Flexible ) change attack type of user's attacks to target's attack type (Permanent) When using a skill that attacks each enemy: Attack type changes for each attack for each enemy At the end of turn, if user is not disabled by statuses: Restore user's status Skill requires Stellar Awakening   Passive  Stellar Awakened Skills",
       "source_url": "https://anothereden.wiki/w/Nilya"
+    },
+    {
+      "artifact_version": "3.3.0",
+      "character_name": "Toova",
+      "corrected_activation_count": "",
+      "corrected_availability": "",
+      "corrected_direction": "",
+      "corrected_duration_turns": "",
+      "corrected_kind": "",
+      "corrected_magnitude_unit": "",
+      "corrected_magnitude_value": "",
+      "corrected_max_stacks": "",
+      "corrected_qualifiers_json": "",
+      "corrected_stacking_behavior": "",
+      "corrected_target": "",
+      "corrected_trigger": "",
+      "corrected_value": "",
+      "decision": "approve",
+      "fact_name": "Double Crush",
+      "matched_phrase": "attack on a single enemy x2",
+      "proposal_id": "729328f10b7cac6638b13ca8",
+      "proposed_activation_count": "",
+      "proposed_availability": "not_applicable",
+      "proposed_direction": "enemy",
+      "proposed_duration_turns": "",
+      "proposed_kind": "capability",
+      "proposed_magnitude_unit": "",
+      "proposed_magnitude_value": "",
+      "proposed_max_stacks": "",
+      "proposed_qualifiers_json": "{}",
+      "proposed_stacking_behavior": "not_applicable",
+      "proposed_target": "single_enemy",
+      "proposed_trigger": "none",
+      "proposed_value": "multi_hit_action",
+      "record_type": "skill",
+      "reviewer": "codex-milestone-6-p3",
+      "reviewer_notes": "The pinned source says x2. Approve only this exact fact\u2019s qualitative multi-hit action; the generic multi-hit rule proposal remains unreviewed, and the exact hit count is not represented or scored by the current package model.",
+      "rule_id": "m6-p3-toova-double-crush-multi-hit",
+      "source_fact_id": "skill:2969aa07d12b8d18a8a4",
+      "source_text": "Double Crush Earth type magic attack on a single enemy x2 (L) and Deploy Torn Earth Stance   Magic  Active Skills",
+      "source_url": "https://anothereden.wiki/w/Toova"
     },
     {
       "artifact_version": "3.0.0",
@@ -6363,7 +6445,7 @@
       "source_url": "https://anothereden.wiki/w/Melody_(Another_Style)"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Yuna",
       "corrected_activation_count": "__clear__",
       "corrected_availability": "not_applicable",
@@ -6660,7 +6742,7 @@
       "source_url": "https://anothereden.wiki/w/Anabel"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Suzette",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -7183,6 +7265,47 @@
       "source_fact_id": "skill:cf8045d9a204c458a1c7",
       "source_text": "Kaleidoscope Target a single party member. Give them Link [200% x Mod] ( 5 turns) and Barrier Pierce ( 3 times ) and Restores Target's statuses and remove debuffs If used in AF, Target the ally to the right of user Link : Crystal type add-on attack after each attacking move (including attack again moves) Element and attack type changes depending on target's personality AF gauge charge +0.5%, combo charge +2% All buffs on character apply to crystal add-on. When used during Stellar Burst: Give Link to all party members [200% x Mod] ( 5 turns) and Barrier Pierce ( 3 times ) and Restore all statuses and remove debuffs Restore all main and reserve party members' 100% HP and MP and Revive all dead party members Skill requires Stellar Awakening   Buff/Healing  Stellar Awakened Skills",
       "source_url": "https://anothereden.wiki/w/Alma_(Another_Style)"
+    },
+    {
+      "artifact_version": "3.3.0",
+      "character_name": "Toova",
+      "corrected_activation_count": "",
+      "corrected_availability": "",
+      "corrected_direction": "",
+      "corrected_duration_turns": "",
+      "corrected_kind": "",
+      "corrected_magnitude_unit": "",
+      "corrected_magnitude_value": "",
+      "corrected_max_stacks": "",
+      "corrected_qualifiers_json": "",
+      "corrected_stacking_behavior": "",
+      "corrected_target": "",
+      "corrected_trigger": "",
+      "corrected_value": "",
+      "decision": "approve",
+      "fact_name": "Double Crush",
+      "matched_phrase": "Deploy Torn Earth Stance",
+      "proposal_id": "8d06e8c27906cb8241be1cc2",
+      "proposed_activation_count": "",
+      "proposed_availability": "not_applicable",
+      "proposed_direction": "field",
+      "proposed_duration_turns": "",
+      "proposed_kind": "capability",
+      "proposed_magnitude_unit": "",
+      "proposed_magnitude_value": "",
+      "proposed_max_stacks": "",
+      "proposed_qualifiers_json": "{\"element\":[\"Earth\"],\"recipient_eligibility_kind\":[\"element\"]}",
+      "proposed_stacking_behavior": "not_applicable",
+      "proposed_target": "zone",
+      "proposed_trigger": "none",
+      "proposed_value": "deploy_zone",
+      "record_type": "skill",
+      "reviewer": "codex-milestone-6-p3",
+      "reviewer_notes": "The pinned skill source explicitly says Deploy Torn Earth Stance. Approve only generic Zone deployment. Zone identity, element-specific effects, and competition with another active Zone remain outside this capability fact. Deployment is not a prerequisite.",
+      "rule_id": "m6-p3-toova-double-crush-deploy-zone",
+      "source_fact_id": "skill:2969aa07d12b8d18a8a4",
+      "source_text": "Double Crush Earth type magic attack on a single enemy x2 (L) and Deploy Torn Earth Stance   Magic  Active Skills",
+      "source_url": "https://anothereden.wiki/w/Toova"
     },
     {
       "artifact_version": "3.1.0",
@@ -7955,7 +8078,7 @@
       "source_url": "https://anothereden.wiki/w/Minalca_(Another_Style)"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Toova",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -8160,7 +8283,7 @@
       "source_url": "https://anothereden.wiki/w/Utpalaka"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Toova",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -8843,7 +8966,7 @@
       "source_url": "https://anothereden.wiki/w/Cerius_(Another_Style)"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Rosetta",
       "corrected_activation_count": "3",
       "corrected_availability": "not_applicable",
@@ -10076,7 +10199,7 @@
       "source_url": "https://anothereden.wiki/w/Mordy"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Suzette",
       "corrected_activation_count": "",
       "corrected_availability": "not_applicable",
@@ -10623,7 +10746,7 @@
       "source_url": "https://anothereden.wiki/w/Velette_(Another_Style)"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Toova",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -11528,7 +11651,7 @@
       "source_url": "https://anothereden.wiki/w/Forlorn_Thespian"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Toova",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -11610,7 +11733,7 @@
       "source_url": "https://anothereden.wiki/w/Verdanta"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Suzette",
       "corrected_activation_count": "",
       "corrected_availability": "",
@@ -12100,7 +12223,7 @@
       "source_url": "https://anothereden.wiki/w/Iridian_(Defense)"
     },
     {
-      "artifact_version": "3.2.0",
+      "artifact_version": "3.3.0",
       "character_name": "Toova",
       "corrected_activation_count": "",
       "corrected_availability": "",

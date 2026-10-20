@@ -487,6 +487,16 @@
       "source_url": "https://anothereden.wiki/w/Toova"
     },
     {
+      "character": "Toova",
+      "fact_name": "Double Crush",
+      "review_basis": "P3 targeted source review",
+      "scope": "Earth Magic direct damage and qualitative multi-hit; generic Zone deployment only. Exact x2/L magnitude and Torn Earth effects are not represented in capability scoring",
+      "source_fact_id": "skill:2969aa07d12b8d18a8a4",
+      "source_quote": "Earth type magic attack on a single enemy x2 (L) and Deploy Torn Earth Stance",
+      "source_revision_sha256": "a57956b5c7a51de89d58c7f63c59d2346e29d70b8b3809664a094975dd73f109",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    },
+    {
       "character": "Suzette",
       "fact_name": "Dragon Assault",
       "review_basis": "P2 curated review batch",
@@ -873,6 +883,6 @@
     "graph_mutation": false,
     "live_scraping": false,
     "paid_calls": 0,
-    "production_status": "P3 performed a deterministic in-memory 20-form diagnostic under a temporary flexible role policy; H2 remains unmet. Rotte positive-scenario acceptance remains open pending a source-justified boss decision."
+    "production_status": "P3 performed a deterministic in-memory 20-form diagnostic under a temporary flexible role policy; H2 remains unmet. A later source-reviewed Double Crush package replay produced candidates but is not an H2 pass. Rotte positive-scenario acceptance remains open pending a source-justified boss decision."
   }
 }

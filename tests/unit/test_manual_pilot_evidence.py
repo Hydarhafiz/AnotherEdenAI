@@ -10,12 +10,14 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 from src.etl.capability_taxonomy import import_review_batch, materialize_atomic
+from src.workflow.role_scoring import derive_contextual_role_scores
 
 
 SCENARIO_PATH = Path("tests/fixtures/m6_p2/pilot_scenarios.json")
 CATALOG_PATH = Path("src/etl/kit_catalog.json")
 REVIEW_PATH = Path("src/etl/review_batches/m6_p2_pilot_curated.csv")
 GHOSTLY_REVIEW_PATH = Path("src/etl/review_batches/m6_p3_toova_ghostly_curated.csv")
+DOUBLE_CRUSH_REVIEW_PATH = Path("src/etl/review_batches/m6_p3_toova_double_crush_curated.csv")
 POOL_NAMES = [
     "Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu", "Cerrine", "Levia",
     "Shion", "Toova", "Suzette", "Anabel", "Radias", "Prai", "Aisha", "Rosetta",
@@ -218,6 +220,7 @@ def test_curated_fact_receipts_match_the_source_catalog_and_reviewed_decisions()
         "skill:3bf0d55a753ab920d4c4",
         "skill:575912d04d8a7232ffd1",
         "skill:5b877ddd3737743f9006",
+        "skill:2969aa07d12b8d18a8a4",
         *CURATED_FACT_IDS,
     }
     for fact_id, pin in listed.items():
@@ -284,3 +287,96 @@ def test_ghostly_whisper_review_preserves_attack_and_withholds_unrepresentable_s
     assert evidence[0]["qualifiers"]["attack_type"] == ["Magic"]
     assert evidence[0]["review_decision"] == "approve"
     assert evidence[0]["source_fact_id"] == "skill:5b877ddd3737743f9006"
+
+
+def test_double_crush_review_materializes_source_facts_and_adds_zone_score(tmp_path: Path):
+    catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    records_by_id = _objects_by_fact_id(catalog)
+    record = records_by_id["skill:2969aa07d12b8d18a8a4"]
+    reviews_path = tmp_path / "capability_reviews.json"
+    reviews_path.write_bytes(Path("src/etl/capability_reviews.json").read_bytes())
+
+    imported = import_review_batch(
+        DOUBLE_CRUSH_REVIEW_PATH,
+        [record],
+        reviews_path=reviews_path,
+    )
+    with DOUBLE_CRUSH_REVIEW_PATH.open(encoding="utf-8", newline="") as stream:
+        decisions = list(csv.DictReader(stream))
+
+    assert len(decisions) == 3
+    assert {row["proposed_value"]: row["decision"] for row in decisions} == {
+        "deploy_zone": "approve",
+        "direct_damage": "correct",
+        "multi_hit_action": "approve",
+    }
+    assert {row["proposal_id"] for row in decisions} <= {
+        row["proposal_id"] for row in imported["decisions"]
+    }
+
+    capabilities, dependencies, evidence, version, diagnostics = materialize_atomic(record, reviews_path)
+    facts = {row["value"]: row for row in evidence}
+    assert set(capabilities) == {"direct_damage", "deploy_zone", "multi_hit_action"}
+    assert dependencies == []
+    assert version == "3.3.0"
+    assert diagnostics["proven"] == 3
+    assert diagnostics["candidate"] == 1
+    assert facts["direct_damage"]["qualifiers"] == {
+        "attack_type": ["Magic"], "element": ["Earth"],
+    }
+    assert facts["direct_damage"]["magnitude_value"] == ""
+    assert facts["multi_hit_action"]["magnitude_value"] == ""
+    assert "x2" in facts["multi_hit_action"]["matched_phrase"]
+    assert facts["multi_hit_action"]["source_id"] == "m6-p3-toova-double-crush-multi-hit"
+    assert facts["deploy_zone"]["source_id"] == "m6-p3-toova-double-crush-deploy-zone"
+    assert facts["deploy_zone"]["direction"] == "field"
+    assert facts["deploy_zone"]["target"] == "zone"
+
+    toova = next(
+        row for row in catalog["characters"]
+        if row["character"]["display_name"] == "Toova" and not row["character"]["is_SA"]
+    )
+    character = dict(toova["character"])
+    character["id"] = character["character_id"]
+    skills = []
+    passives = []
+    for source, target in ((toova["skills"], skills), (toova["passive_skills"], passives)):
+        for source_fact in source:
+            caps, deps, rows, version, counts = materialize_atomic(source_fact, reviews_path)
+            target.append({
+                **source_fact,
+                "capabilities": caps,
+                "dependencies": deps,
+                "capability_evidence_json": rows,
+                "capability_artifact_version": version,
+                "capability_diagnostics_json": counts,
+            })
+    scenario = json.loads(SCENARIO_PATH.read_text(encoding="utf-8"))
+    boss_row = scenario["bosses"]["celestial-mushroom"]
+    result = derive_contextual_role_scores(
+        boss={
+            "id": "celestial-mushroom",
+            "name": "Celestial Mushroom",
+            **boss_row["affinity"],
+            "required_counters": [],
+            "mechanic_tags": [],
+        },
+        characters=[character],
+        skills=skills,
+        passives=passives,
+        sidekicks=[],
+        stellar_awakened={"Toova": "not_awakened"},
+        light_shadow_points={"Toova": 0},
+    )
+    entity = next(row for row in result["entities"] if row["name"] == "Toova")
+    package = entity["default_package"]
+    names_by_id = {fact["skill_id"]: fact["name"] for fact in skills}
+
+    assert entity["skill_slot_limit"] == 3
+    assert [names_by_id[skill_id] for skill_id in package["skill_ids"]] == [
+        "Double Crush", "Venom", "Great Wall",
+    ]
+    assert package["role_scores"]["primary_damage"] == 9
+    assert package["role_scores"]["offensive_enablement"] == 0
+    assert package["role_scores"]["zone_setup"] == 1
+    assert package["contextual_score"] == 48

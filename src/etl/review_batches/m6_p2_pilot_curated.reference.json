@@ -1,6 +1,6 @@
 {
   "artifact_type": "curated_pilot_review",
-  "artifact_version": "3.2.0",
+  "artifact_version": "3.3.0",
   "decision_counts": {
     "ambiguous": 0,
     "approve": 4,
@@ -44,5 +44,6 @@
       "source_url": "https://anothereden.wiki/w/Rosetta"
     }
   ],
+  "taxonomy_rebase": "Additive Toova Double Crush exact-fact override; this batch was replayed under the new taxonomy artifact version without changing source decisions or proposal semantics.",
   "timing_note": "Elapsed UTC from first P2 source review at 2026-10-20 07:09:13 to importer completion at 2026-10-20 07:10:00, rounded to one minute; agent-assisted curation, with no human operator hours attributed."
 }

@@ -1,0 +1,22 @@
+{
+  "artifact_type": "curated_pilot_review",
+  "artifact_version": "3.3.0",
+  "decision_counts": {
+    "approve": 2,
+    "correct": 1,
+    "reject": 0
+  },
+  "phase": "defensive_setup, offensive_support",
+  "review_schema_version": "3.2.0",
+  "review_scope": "Review the source-proven Earth Magic attack, a source-specific qualitative multi-hit override, and generic Torn Earth Stance deployment. Leave the generic multi-hit proposal unreviewed; do not encode the x2/L magnitude, detailed Zone effects, or a Zone dependency.",
+  "reviewer": "codex-milestone-6-p3",
+  "row_count": 3,
+  "source_facts": [
+    {
+      "character_name": "Toova",
+      "fact_name": "Double Crush",
+      "source_fact_id": "skill:2969aa07d12b8d18a8a4",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    }
+  ]
+}
