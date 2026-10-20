@@ -119,6 +119,11 @@ _ROLE_CAPABILITIES = {
     "reserve_utility": {"recover_mp", "af_gauge_restore", "af_gauge_gain_up", "grant_status_immunity", "heal_hp", "regen_hp"},
 }
 
+# Celestial Mushroom gains resistance and heals when these ailments are applied.
+_BOSS_NON_BENEFICIAL_OFFENSIVE_CAPABILITIES = {
+    "celestial-mushroom": {"inflict_pain", "inflict_poison"},
+}
+
 
 def derive_contextual_role_scores(
     *,
@@ -628,7 +633,8 @@ def _shortlists(skills: list[dict[str, Any]], boss: dict[str, Any], required_cou
         choices = []
         for fact in skills:
             capabilities = _proven_capabilities(fact)
-            score = len(capabilities & _ROLE_CAPABILITIES[role])
+            role_capabilities = _role_scoring_capabilities(capabilities, role, boss)
+            score = len(role_capabilities & _ROLE_CAPABILITIES[role])
             if role == "primary_damage" and _usable_primary(fact, boss):
                 score += 2
             if role == "boss_counter":
@@ -639,7 +645,7 @@ def _shortlists(skills: list[dict[str, Any]], boss: dict[str, Any], required_cou
                     "skill_family_id": _skill_family_id(fact),
                     "slot_eligibility": _skill_slot_eligibility(fact),
                     "score": score,
-                    "evidence_ids": _evidence_ids(fact, capabilities & _ROLE_CAPABILITIES[role]),
+                    "evidence_ids": _evidence_ids(fact, role_capabilities & _ROLE_CAPABILITIES[role]),
                 })
         choices.sort(key=lambda value: (-value["score"], value["skill_id"]))
         if choices:
@@ -699,7 +705,7 @@ def _scores_and_evidence(facts: list[dict[str, Any]], boss: dict[str, Any], requ
     for fact in facts:
         capabilities = _proven_capabilities(fact)
         for role, accepted in _ROLE_CAPABILITIES.items():
-            matched = capabilities & accepted
+            matched = _role_scoring_capabilities(capabilities, role, boss) & accepted
             if matched:
                 scores[role] += len(matched)
                 evidence[role].extend(_evidence(fact, matched, placement))
@@ -712,6 +718,17 @@ def _scores_and_evidence(facts: list[dict[str, Any]], boss: dict[str, Any], requ
     for role in ROLE_DIMENSIONS:
         evidence[role].sort(key=lambda value: (value["fact_id"], value["capability"], value["evidence_id"]))
     return scores, evidence
+
+
+def _role_scoring_capabilities(
+    capabilities: set[str], role: str, boss: dict[str, Any]
+) -> set[str]:
+    if role != "offensive_enablement":
+        return capabilities
+    harmful = _BOSS_NON_BENEFICIAL_OFFENSIVE_CAPABILITIES.get(
+        str(boss.get("id") or ""), set()
+    )
+    return capabilities - harmful
 
 
 def _role_pools(entities: list[dict[str, Any]], required_counters: list[str]) -> dict[str, list[dict[str, Any]]]:

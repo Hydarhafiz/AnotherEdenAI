@@ -207,3 +207,54 @@ def test_shortlists_and_default_packages_are_available_bounded_and_reproducible(
     assert "skill:aldo:6" not in {row["skill_id"] for row in aldo["skill_shortlists"]["primary_damage"]}
     assert 3 <= aldo["default_package"]["package_size"] <= 4
     assert len(aldo["default_package"]["skill_ids"]) == aldo["default_package"]["package_size"]
+
+
+def test_celestial_mushroom_does_not_reward_pain_or_poison_but_keeps_venom_damage():
+    skills = [
+        fact("Toova", "Venom", ["direct_damage", "inflict_pain", "inflict_poison"]),
+        fact("Toova", "Damage Up", ["outgoing_damage_up"]),
+        fact("Toova", "Filler", []),
+    ]
+
+    result = derive_contextual_role_scores(
+        boss=boss(id="celestial-mushroom", name="Celestial Mushroom", resist=["Pierce", "Blunt"]),
+        characters=[character("Toova")],
+        skills=skills,
+        passives=[], sidekicks=[], stellar_awakened={},
+    )
+
+    toova = entity(result, "Toova")
+    package = toova["default_package"]
+    venom_id = "skill:Toova:Venom"
+
+    assert venom_id in package["skill_ids"]
+    assert {"direct_damage", "inflict_pain", "inflict_poison"}.issubset(package["proven_capabilities"])
+    assert toova["role_scores"]["primary_damage"] == 3
+    assert [row["capability"] for row in toova["evidence"]["primary_damage"]] == ["direct_damage"]
+    assert toova["role_scores"]["offensive_enablement"] == 1
+    assert {row["capability"] for row in toova["evidence"]["offensive_enablement"]} == {"outgoing_damage_up"}
+    assert venom_id not in {
+        row["skill_id"] for row in toova["skill_shortlists"]["offensive_enablement"]
+    }
+
+
+def test_pain_and_poison_remain_offensive_enablement_against_other_bosses():
+    skills = [
+        fact("Toova", "Venom", ["direct_damage", "inflict_pain", "inflict_poison"]),
+        fact("Toova", "Damage Up", ["outgoing_damage_up"]),
+        fact("Toova", "Filler", []),
+    ]
+
+    result = derive_contextual_role_scores(
+        boss=boss(),
+        characters=[character("Toova")],
+        skills=skills,
+        passives=[], sidekicks=[], stellar_awakened={},
+    )
+
+    toova = entity(result, "Toova")
+
+    assert toova["role_scores"]["offensive_enablement"] == 3
+    assert {row["capability"] for row in toova["evidence"]["offensive_enablement"]} == {
+        "inflict_pain", "inflict_poison", "outgoing_damage_up",
+    }

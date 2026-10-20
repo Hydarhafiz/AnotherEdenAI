@@ -136,6 +136,28 @@ def test_valid_candidate_ids_resolve_only_after_validation_and_preserve_alias_na
     assert resolved["boss_affinity"]["weak"] == ["Fire"]
 
 
+def test_candidate_validation_requires_an_explicit_four_skill_slot_allowance():
+    bundle = candidate_bundle()
+    character = bundle["characters"][0]
+    character["skills"][3]["requires_stellar_awakened"] = False
+    proposal = candidate_lineup(bundle)
+    proposal["frontline"][0]["skill_ids"] = [skill["id"] for skill in character["skills"]]
+
+    valid, invalid = validate_candidate_response({"recommendations": [proposal]}, bundle)
+
+    assert valid == []
+    assert any(
+        error["code"] == "shape.skill_slot_limit"
+        for error in invalid[0]["errors"]
+    )
+
+    character["skill_slot_limit"] = 4
+    valid, invalid = validate_candidate_response({"recommendations": [proposal]}, bundle)
+
+    assert len(valid) == 1
+    assert invalid == []
+
+
 def test_unknown_character_id_returns_structured_path_and_allowed_replacements():
     bundle = candidate_bundle()
     proposal = candidate_lineup(bundle)
