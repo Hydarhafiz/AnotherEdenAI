@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+import json
 
 import pytest
 
@@ -23,8 +24,9 @@ def _oracle_atom(oracle: Mapping, witness_id: str, atom_id: str) -> Mapping:
 def _prediction(details: Mapping, witness_id: str, atom_id: str) -> Mapping:
     oracle = details["oracle"]
     atom = _oracle_atom(oracle, witness_id, atom_id)
-    quote = atom["source_anchor"]["quote"].casefold()
-    location = atom["source_anchor"]["location"]
+    expected_identity = json.dumps(
+        atom["source_anchor"]["identity"], sort_keys=True, separators=(",", ":")
+    )
     identity = next(row for row in oracle["witnesses"] if row["witness_id"] == witness_id)
     rows = details["predictions_by_arm"]["fidelity_checked"][witness_id]
     matches = [
@@ -34,8 +36,11 @@ def _prediction(details: Mapping, witness_id: str, atom_id: str) -> Mapping:
         and row.get("operation") == atom["operation"]
         and row.get("source_fact_id") == identity["fact_id"]
         and row.get("source_capture_sha256") == identity["source_capture_sha256"]
-        and row.get("source_span", {}).get("location") == location
-        and quote in str(row.get("source_span", {}).get("text") or "").casefold()
+        and json.dumps(
+            (row.get("source_span") or {}).get("source_anchor"),
+            sort_keys=True,
+            separators=(",", ":"),
+        ) == expected_identity
     ]
     capability_key = "dependency_value" if atom["occurrence_kind"] == "dependency" else "capability_value"
     matches = [row for row in matches if row.get(capability_key) == atom["atomic_capability_id"]]
@@ -76,7 +81,10 @@ def test_reproduced_supported_mechanic_misses_are_now_regressions(evaluation_bun
     nona_kaleido = _prediction(details, "m6-heldout-nona-as-castigo", "E5")
     assert (nona_kaleido["direction"], nona_kaleido["recipient"]) == ("self", "self")
     nona = next(row for row in details["oracle"]["witnesses"] if row["witness_id"] == "m6-heldout-nona-as-castigo")
-    assert any(gap.get("former_atom_id") == "E4" for gap in nona["unsupported_mechanics"])
+    assert any(
+        note.get("former_atom_id") == "E4"
+        for note in nona["reviewed_unscored_mechanics"]
+    )
     nona_rows = details["predictions_by_arm"]["fidelity_checked"][nona["witness_id"]]
     assert not any(
         row.get("capability_value") == "apply_kaleido"
@@ -89,6 +97,46 @@ def test_otoha_pwr_stack_grants_a_self_power_up(evaluation_bundle):
     _report, details = evaluation_bundle
     power = _prediction(details, "m6-heldout-otoha-as-surging-scratch", "E3")
     assert (power["direction"], power["recipient"]) == ("self", "self")
+
+
+def test_otoha_catwisp_application_is_expected_and_creation_gap_remains(evaluation_bundle):
+    report, details = evaluation_bundle
+    witness_id = "m6-heldout-otoha-as-surging-scratch"
+    witness = next(row for row in details["oracle"]["witnesses"] if row["witness_id"] == witness_id)
+    assert witness["entity_name"] == "Otoha (Another Style)"
+    assert witness["fact_id"] == "skill:0f340a5404f853049fd9"
+
+    relationships = witness["semantic_relationships"]
+    assert len(relationships) == 1
+    relation = relationships[0]
+    assert relation["operation"] == "applies_state"
+    assert relation["recipient"] == "user"
+    assert relation["target_kind"] == "named_state"
+    assert relation["target_name"] == "Catwisp"
+    assert relation["trigger"] == "own_action"
+    assert "condition" not in relation
+    assert "target_id" not in relation
+    assert "targets" not in relation
+    assert relation["source_anchor"]["quote"] == "Stack 1 Catwisp on user"
+    assert relation["source_anchor"]["location"].endswith("/grid[8]/block[2]")
+    assert relation["source_anchor"]["identity"]["source_fact_id"] == witness["fact_id"]
+    assert (
+        relation["source_anchor"]["identity"]["source_capture_sha256"]
+        == witness["source_capture_sha256"]
+    )
+    assert (
+        relation["source_anchor"]["identity"]["anchor_id"]
+        == "src:fed9f28c11918ea3f4dfdf5963404ac7"
+    )
+
+    gaps = witness["unsupported_gaps"]
+    catwisp_gap = next(gap for gap in gaps if gap["gap_id"] == "gap-otoha-catwisp-state-creation")
+    assert catwisp_gap["gap_type"] == "unsupported_state_creation"
+    assert catwisp_gap["mechanic"] == "catwisp_stack_creation"
+    assert catwisp_gap["source_anchor"]["identity"] == relation["source_anchor"]["identity"]
+
+    assert report["relationships"]["expected_count"] == 2
+    assert report["relationships"]["groups"]["expected_groups"] == 2
 
 
 def test_otoha_continuation_cost_and_interruption_stay_sequence_metadata(evaluation_bundle):
@@ -249,10 +297,12 @@ def test_multihit_label_requires_an_explicit_hit_count_modifier():
         "Increase number of attacks by +3", "enemy"
     )
     assert _effect_semantics("Slash attack on all enemies (XXL x5)", "enemy") == [
-        ("damage_event", "direct_damage", "damage")
+        ("damage_event", "direct_damage", "damage"),
+        ("multi_hit_action", "multi_hit_action", "hit_count"),
     ]
     assert _effect_semantics("Water type piercing attack on random enemies x3 (XL)", "enemy") == [
-        ("damage_event", "direct_damage", "damage")
+        ("damage_event", "direct_damage", "damage"),
+        ("multi_hit_action", "multi_hit_action", "hit_count"),
     ]
 
 

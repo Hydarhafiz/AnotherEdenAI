@@ -15,6 +15,7 @@ import json
 import re
 from collections import Counter
 from dataclasses import asdict, dataclass, field, replace
+from enum import Enum
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -29,6 +30,7 @@ from .source_fidelity import (
     build_source_fidelity_report,
 )
 from .structural_evidence import (
+    SourceAnchor,
     SourceIdentity,
     StructuralBlock,
     StructuralToken,
@@ -37,7 +39,10 @@ from .structural_evidence import (
     bind_catalog_facts,
     parse_grid_document,
     resolve_bounded_references,
+    render_structural_tokens,
     select_traversal_limits,
+    source_anchor_from_range,
+    source_anchor_for_quote,
 )
 from .shared_mechanics import (
     REGISTRY_VERSION,
@@ -51,7 +56,7 @@ C2_ARTIFACT_VERSION = "m6-c2-scoped-classification-1.6.0"
 C2_ORACLE_VERSION = "m6-c2-independent-occurrence-oracle-1.0.0"
 MANIFEST_PATH = Path("artifacts/evidence/feature_c2_evaluation_freeze.json")
 
-OCCURRENCE_KINDS = ("effect", "dependency", "trigger", "state", "reference")
+OCCURRENCE_KINDS = ("effect", "dependency", "gap", "trigger", "state", "reference")
 PRIMARY_OCCURRENCE_KINDS = ("effect", "dependency")
 
 _SPACE_RE = re.compile(r"\s+")
@@ -73,6 +78,10 @@ _EFFECT_RE = re.compile(
 )
 _ELEMENT_RE = re.compile(r"\b(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\b", re.IGNORECASE)
 _ATTACK_TYPE_RE = re.compile(r"\b(?:slash|piercing|pierce|blunt|magic|physical)\b", re.IGNORECASE)
+_RESISTANCE_PROPERTY_RE = re.compile(
+    r"\b(?:physical|magic|element|attack type|type|slash|piercing|pierce|blunt)\s+resistance\b",
+    re.IGNORECASE,
+)
 _PERCENT_RE = re.compile(r"(?<!\w)([+-]?\s*)(\d+(?:\.\d+)?)\s*%")
 _PROBABILITY_RE = re.compile(r"(?<!\w)(\d+(?:\.\d+)?)\s*%\s*(?:chance|probability)\b", re.IGNORECASE)
 _MULTIPLIER_RE = re.compile(
@@ -83,16 +92,34 @@ _MULTIPLIER_RE = re.compile(
 _TURN_RE = re.compile(r"\b(?:for\s+)?(\d+)\s+turns?\b", re.IGNORECASE)
 _ACTIVATION_RE = re.compile(r"\b(\d+)\s+(?:times?|activations?|uses?)\b|\bonce per battle\b", re.IGNORECASE)
 _ACTION_HEAD_RE = re.compile(
-    r"\b(?:attacks?|deals?|inflicts?|applies?|increases?|raises?|boosts?|"
-    r"decreases?|reduces?|lowers?|restores?|recovers?|heals?|revives?|"
-    r"removes?|cleanses?|grants?|gives?|gains?|adds?|consumes?|spends?|deploys?|"
-    r"activates?|awakens?|replaces?|converts?|changes?|sets?|stacks?|takes?|"
-    r"copies?|follows?\s+up|performs?)\b",
+    r"\b(?:attacks?|deals?|inflict(?:s|ed|ing)?|appl(?:y|ies|ied|ying)|"
+    r"increas(?:e|es|ed|ing)|rais(?:e|es|ed|ing)|boost(?:s|ed|ing)?|"
+    r"decreas(?:e|es|ed|ing)|reduc(?:e|es|ed|ing)|lowers?|"
+    r"restor(?:e|es|ed|ing)|recover(?:s|ed|ing)?|heal(?:s|ed|ing)?|"
+    r"reviv(?:e|es|ed|ing)|remov(?:e|es|ed|ing)|cleans(?:e|es|ed|ing)|"
+    r"grant(?:s|ed|ing)?|giv(?:e|es|en|ing)|gain(?:s|ed|ing)?|"
+    r"add(?:s|ed|ing)?|consum(?:e|es|ed|ing)|spend(?:s|ing)?|"
+    r"deploy(?:s|ed|ing)?|activat(?:e|es|ed|ing)|awaken(?:s|ed|ing)?|"
+    r"replac(?:e|es|ed|ing)|convert(?:s|ed|ing)?|chang(?:e|es|ed|ing)|"
+    r"set(?:s|ting)?|stack(?:s|ed|ing)?|tak(?:e|es|en|ing)|"
+    r"cop(?:y|ies|ied|ying)|follows?\s+up|perform(?:s|ed|ing)?)\b",
+    re.IGNORECASE,
+)
+_ATTACK_RESULT_RE = re.compile(
+    r"\battack(?:s)?\s+(?:on|against|to)\s+"
+    r"(?:all|each|single|a|an|one|random(?:ly selected)?|enemy|enemies|opponent|opponents)\b"
+    r"(?:\s+(?:enemy|enemies|opponent|opponents))?",
+    re.IGNORECASE,
+)
+_ATTACK_TIER_ONLY_SUFFIX_RE = re.compile(
+    r"\s*\(\s*(?:XXL|XL|L|M|S|ignores\s+(?:the\s+)?target[’']s\s+defense)\s*\)\s*[.,;:]?\s*$",
     re.IGNORECASE,
 )
 _COMPOUND_EFFECT_START_RE = re.compile(
     r"(?:\s+and\s+|,\s*(?:and\s+)?)"
     r"(?=(?:power|intelligence|speed|luck|max(?:imum)?\s+hp)\b|"
+    r"(?:(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\s+type\s+)?"
+    r"(?:slash|piercing|pierce|blunt|magic|physical)\s+attack\b|"
     r"(?:physical|magic|element|attack type|slash|piercing|pierce|blunt|type)\s+resistance\b|"
     r"(?:damage dealt|outgoing damage)\b|"
     r"(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\s+type attack\b|"
@@ -121,7 +148,8 @@ _BRACKET_CONDITION_RE = re.compile(
     re.IGNORECASE,
 )
 _LEADING_CONDITION_RE = re.compile(
-    r"\s*(?P<condition>(?:only\s+)?(?:if|when|unless|after|before|during|while)\b[^,;.:]*|"
+    r"\s*(?P<condition>(?:only\s+)?(?:if|when|unless|after|before|during|while)\b"
+    r"[^,.:]*(?:;\s*(?:only\s+)?(?:if|when|unless|after|before|during|while)\b[^,.:]*)*|"
     r"in\s+(?:[A-Z][\w'-]*(?:\s*[/,]\s*(?:or\s+)?[A-Z][\w'-]*){0,4})\s+stance)"
     r"(?:[:,;. ]\s*|\s+(?=(?:the\s+)?(?:user|skill|effect)\b))",
     re.IGNORECASE,
@@ -136,8 +164,12 @@ _ACTION_TIMING_RE = re.compile(
     r"after each (?:attacking )?move)\b",
     re.IGNORECASE,
 )
+_RELATIONSHIP_GROUP_HEADER_RE = re.compile(
+    r"\b(?:skills?|moves?|actions?)\s*:\s*$",
+    re.IGNORECASE,
+)
 _HIT_COUNT_RE = re.compile(
-    r"\b(?:attacks?|hits?)\b[^.;()]*?\b[x×]\s*(\d+)(?![\d.])\b",
+    r"\b(?:attacks?|hits?)\b[^.;]*?\b[x×]\s*(\d+)(?!\d|\.\d)",
     re.IGNORECASE,
 )
 _FORMULA_RE = re.compile(
@@ -191,8 +223,13 @@ _NON_EFFECT_METADATA_RE = re.compile(
     re.IGNORECASE,
 )
 _NEGATED_ACTION_RE = re.compile(
-    r"\b(?:cannot|can\s+not|can't|does\s+not|doesn't|do\s+not|don't|unable\s+to)\s+"
-    r"(?:deal(?:\s+with)?|perform|make|execute)\b",
+    r"\b(?:cannot|can\s+not|can't|does\s+not|doesn't|do\s+not|don't|will\s+not|won't|"
+    r"would\s+not|unable\s+to)\s+"
+    r"(?:deal(?:\s+with)?|perform|make|execute|increase|raise|boost|attack|inflict|apply|remove|restore|recover)\b",
+    re.IGNORECASE,
+)
+_NEGATED_COPULAR_PREDICATE_RE = re.compile(
+    r"\b(?:is|are|was|were|be|being|been)\s+(?:not|never)\b",
     re.IGNORECASE,
 )
 _SEQUENCE_INTERRUPTION_RE = re.compile(
@@ -212,6 +249,104 @@ _REPLACEMENT_RE = re.compile(r"\b(?:replace|replaces|replacing|replacement|chang
 _RESOURCE_OPERATION_RE = re.compile(
     r"\b(?:consume(?:s|d)?|spend(?:s|ing)?|use(?:s|d)?)\b[^.;]*\b(?:charge|stack|mp|resource)s?\b|"
     r"\b(?:grant(?:s|ed)?|gain(?:s|ed)?|add(?:s|ed)?|give(?:s|n)?)\b[^.;]*\b(?:charge|stack)s?\b",
+    re.IGNORECASE,
+)
+_RESOURCE_CONSUMPTION_RE = re.compile(r"\b(?:consume(?:s|d)?|spend(?:s|ing)?)\s+(?:one|a|an|\d+)?\s*[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,3}\b", re.IGNORECASE)
+_RESOURCE_GAIN_RE = re.compile(r"\b(?:gain(?:s|ed)?|grant(?:s|ed)?|add(?:s|ed)?|create(?:s|d)?|generate(?:s|d)?)\s+(?:one|a|an|\+?\d+)?\s*(?:charge|stacks?|pendulum|divine wolf)\b|\bstacks?\s+\+?\d+\s+[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2}", re.IGNORECASE)
+_NAMED_STATE_REQUIREMENT_RE = re.compile(
+    r"\b(?:user|target|enemy|ally)\s+(?:has|have|possesses?|holds?)\s+"
+    r"(?P<count>\d+\s+)?(?P<state>(?-i:[A-Z])[\w'-]*(?:\s+(?-i:[A-Z])[\w'-]*){0,2})",
+    re.IGNORECASE,
+)
+_STACK_THRESHOLD_RE = re.compile(
+    r"\b(?P<count>\d+)\s+(?P<state>[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2})\s+"
+    r"(?:are|is)\s+stacks?\b|"
+    r"\b(?:the\s+)?(?:user|target|enemy|ally)\s+(?:has|have|possesses?|holds?)\s+"
+    r"(?P<owned_count>\d+)\s+(?P<owned_state>[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2})\b",
+    re.IGNORECASE,
+)
+_NEGATIVE_STATUS_CONDITION_RE = re.compile(
+    r"\b(?:without|lacks?|does not have|doesn't have|has no|not affected by)\b[^.;]*"
+    r"\b(?:status|ailment|pain|poison|debuff|effect)\b",
+    re.IGNORECASE,
+)
+_NEGATIVE_STATE_ABSENCE_RE = re.compile(
+    r"^\s*(?:when|if|unless)\s+(?:the\s+)?(?:user|target|enemy|ally)?\s*not\s+in\b",
+    re.IGNORECASE,
+)
+_NEGATIVE_STATE_ABSENCE_ANY_RE = re.compile(
+    r"\b(?:when|if|unless)\s+(?:the\s+)?(?:user|target|enemy|ally)?\s*not\s+in\b",
+    re.IGNORECASE,
+)
+_STACK_CREATION_RE = re.compile(
+    r"\b(?i:stacks?)\s+(?:\+?\d+\s+)?[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,3}"
+    r"(?:\s+(?i:on|to)\s+(?i:self|user|target|enemy|ally|[A-Z][\w'-]*))?\b"
+)
+_ANAPHORIC_TARGET_RE = re.compile(r"\b(?:that|same|those)\s+(?:enemy|enemies|target|targets|ally|allies|recipient|character)\b", re.IGNORECASE)
+_STATE_CREATION_RE = re.compile(r"\b(?:create|creates|created|summon|summons|summoned)\b[^.;]*\b(?:state|stack|stacks|status|zone|stance|barrier|shield)\b", re.IGNORECASE)
+_SEQUENCE_TEXT_RE = re.compile(
+    r"\b(?:sequence|automatically\s+(?:used|performed|continued)|each\s+repeated\s+action|"
+    r"on\s+each\s+action|next\s+use|second\s+use|third\s+or\s+later\s+use|"
+    r"perform\s+the\s+following\s+moves?\s+in\s+succession|"
+    r"counted\s+as\s*\+\s*\d+\s+moves?)\b",
+    re.IGNORECASE,
+)
+_HIT_COUNT_MODIFIER_RE = re.compile(
+    r"\b(?:hit count|number of attacks|number of (?:piercing|pierce|slash|blunt|magic|physical)\s+hits?|number of hits|\d+\s+hits?)\b",
+    re.IGNORECASE,
+)
+_MAX_STACK_METADATA_RE = re.compile(
+    r"\bmax(?:imum)?\s+stacks?\s*:?\s*(?:x\s*)?(?P<value>\d+)\b",
+    re.IGNORECASE,
+)
+_STACK_COUNT_LIST_RE = re.compile(
+    r"\b(?:number\s+stacked|number\s+of\s+stacks?)\s*:\s*"
+    r"\d+(?:\s*>\s*\d+)+",
+    re.IGNORECASE,
+)
+_TYPE_ATTACK_BUFF_DOUBLING_RE = re.compile(
+    r"\btype\s+attack\s+buff\s+(?:is\s+)?doubled\b[^.;]*\b(?:for|if|when|on)\b",
+    re.IGNORECASE,
+)
+_RESULT_EFFECT_POTENCY_RE = re.compile(
+    r"\b(?P<subjects>power(?:\s+and\s+speed)?|speed(?:\s+and\s+power)?)\s+"
+    r"effect\s+(?:increases?|is\s+increased|raised|boosted)\b",
+    re.IGNORECASE,
+)
+_EACH_PART_FORMULA_RE = re.compile(
+    r"\badd\b[^.;]*\bto\s+(?:the\s+)?total\s+multiplier\s+of\s+each\s+part\b",
+    re.IGNORECASE,
+)
+_RESULT_MODIFIER_RE = re.compile(
+    r"\b(?:damage|potency|power)\s+(?:is\s+)?(?:increased|reduced|raised|lowered|boosted)\b[^.;]*\b(?:if|when|on|during|based on)\b|"
+    + _TYPE_ATTACK_BUFF_DOUBLING_RE.pattern,
+    re.IGNORECASE,
+)
+_EXPLICIT_RESULT_PROPERTY_RE = re.compile(
+    r"\b(?:critical rate|(?:physical|magic|element|type|attack type) resistance|"
+    r"equipped characters?['’]?\s+damage|damage dealt|outgoing damage|damage taken|"
+    r"(?:mp|resource) consumption|power|intelligence|speed|luck)"
+    r"\b[^.;]*?[+-]\s*\d+(?:\.\d+)?\s*%",
+    re.IGNORECASE,
+)
+_ZONE_DESCRIPTION_RE = re.compile(
+    r"\b(?:it\s+)?(?:changes?|varies?)\s+(?:damage|damage values?|damage dealt)\b"
+    r"[^.;]*\b(?:based on|according to|depending on)\b[^.;]*\b(?:zone|stance|field)\b",
+    re.IGNORECASE,
+)
+_ZONE_PROPERTY_METADATA_RE = re.compile(
+    r"\b(?:unaffected by further zone changes|zone cannot be overwritten|"
+    r"zone can still be removed|after duration ends,? zone is removed|"
+    r"duration cannot be extended by attempting to reactivate)",
+    re.IGNORECASE,
+)
+_ELEMENT_CONVERSION_METADATA_RE = re.compile(
+    r"(?:\b(?:element(?:\s+type)?\s+(?:changes?|converts?)\s+to|"
+    r"(?:zone|stance|field)\s+(?:changes?|converts?)\s+element(?:\s+type)?\s+to)\b[^.;]*"
+    r"\b(?:target|enemy|elemental weakness|weakness)\b|"
+    r"\bchange\s+(?:the\s+)?element\s+of\s+(?:the\s+)?type\s+attack\s+buff\b[^.;]*\baccording to\b|"
+    r"\bchange\s+(?:the\s+)?element\s+of\s+(?:the\s+)?user'?s?\s+attacks?\s+to\s+(?:the\s+)?target'?s?\s+element\b|"
+    r"\bskills?\s+from\s+equipment\s+also\s+change\b)",
     re.IGNORECASE,
 )
 _KNOWN_STAT_CAPABILITIES = {
@@ -247,6 +382,7 @@ _OPERATION_BY_SEMANTIC_TYPE = {
     "damage_event": "damage",
     "damage_mitigation": "apply",
     "damage_modifier": "increase",
+    "attack_type_damage_up": "increase",
     "element_damage_increase": "increase",
     "burst_window": "replace",
     "debuff_cleansing": "remove",
@@ -254,6 +390,7 @@ _OPERATION_BY_SEMANTIC_TYPE = {
     "hit_count_modifier": "modify",
     "link_grant": "grant",
     "multi_hit_action": "damage",
+    "lunatic_activation": "activate",
     "mp_recovery": "restore",
     "resistance_increase": "increase",
     "resistance_reduction": "decrease",
@@ -269,6 +406,38 @@ _OPERATION_BY_SEMANTIC_TYPE = {
     "zone_deployment": "activate",
     "zone_awakening": "activate",
 }
+_DURATIONLESS_RESULT_TYPES = frozenset(
+    {
+        "damage_event",
+        "multi_hit_action",
+        "hp_recovery",
+        "revive",
+        "resource_consumption",
+        "resource_grant",
+        "state_creation",
+        "lunatic_activation",
+    }
+)
+
+
+class SemanticRole(str, Enum):
+    EFFECT_RESULT = "effect_result"
+    CONDITION = "condition"
+    TRIGGER_TIMING = "trigger_timing"
+    FORMULA = "formula"
+    RESOURCE_GAIN = "resource_gain"
+    RESOURCE_CONSUMPTION = "resource_consumption"
+    STATE_CREATION = "state_creation"
+    SEQUENCE = "sequence"
+    CHILD_INVOCATION = "child_invocation"
+    RELATIONSHIP_METADATA = "relationship_metadata"
+    COST_ACTIVATION_METADATA = "cost_activation_metadata"
+    RESULT_MODIFIER = "result_modifier"
+    UNKNOWN = "unknown"
+
+
+def _is_relationship_role(role: SemanticRole) -> bool:
+    return role in {SemanticRole.CHILD_INVOCATION, SemanticRole.RELATIONSHIP_METADATA}
 
 
 def _clean(value: str) -> str:
@@ -301,17 +470,6 @@ def _fact_id(fact: Mapping[str, Any]) -> str:
     )
 
 
-def _record_type_from_witness(witness: Mapping[str, Any]) -> str:
-    value = str(witness.get("record_type") or "")
-    return {
-        "active_skill": "skill",
-        "passive_skill": "passive",
-        "sidekick_auto": "sidekick_skill",
-        "sidekick_charge": "sidekick_skill",
-        "sidekick_aura": "sidekick_aura",
-    }.get(value, value)
-
-
 def _fact_key(record_type: str) -> str:
     return {
         "active_skill": "skill_id",
@@ -327,11 +485,22 @@ class SourceSpan:
     location: str
     block_kind: str
     ancestry: tuple[str, ...]
-    token_start: int
-    token_end: int
     text: str
     character_start: int | None = None
     character_end: int | None = None
+    source_anchor: SourceAnchor | None = None
+
+    @property
+    def token_start(self) -> int:
+        if self.source_anchor and self.source_anchor.token_start >= 0:
+            return self.source_anchor.token_start
+        return min((token.order for token in self.source_anchor.token_identities), default=-1) if self.source_anchor else -1
+
+    @property
+    def token_end(self) -> int:
+        if self.source_anchor and self.source_anchor.token_end >= 0:
+            return self.source_anchor.token_end
+        return max((token.order for token in self.source_anchor.token_identities), default=-1) if self.source_anchor else -1
 
 
 @dataclass(frozen=True)
@@ -370,14 +539,20 @@ class ClassifiedOccurrence:
     formula_metadata: Mapping[str, str] = field(default_factory=dict)
     sequence_metadata: Mapping[str, str] = field(default_factory=dict)
     resource_metadata: Mapping[str, str] = field(default_factory=dict)
+    result_modifiers: Mapping[str, Any] = field(default_factory=dict)
     action_timing: str = ""
     semantic_subject: str = ""
     condition_source_span: SourceSpan | None = None
     timing_source_span: SourceSpan | None = None
     probability: Mapping[str, str] = field(default_factory=dict)
     recipient_name: str = ""
-    capability_gap: bool = False
-    dependency_gap: bool = False
+    semantic_role: str = SemanticRole.UNKNOWN.value
+    source_owner_id: str = ""
+    branch_context: tuple[str, ...] = ()
+    action_owner_id: str = ""
+    coordinated_result_group_id: str = ""
+    modifier_source_spans: tuple[SourceSpan, ...] = ()
+    gap_reason: str = ""
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -388,6 +563,7 @@ class ClassifiedRelationship:
     relationship_id: str
     source_fact_id: str
     source_owner: str
+    source_owner_id: str
     source_occurrence_id: str
     target_kind: str
     target_id: str
@@ -402,6 +578,7 @@ class ClassifiedRelationship:
     candidate_target_ids: tuple[str, ...]
     semantic_state: str
     authority: str
+    semantic_role: str = ""
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -425,6 +602,13 @@ class _SourceAtom:
     action_timing: str = ""
     timing_start: int | None = None
     timing_end: int | None = None
+    action_start: int | None = None
+    action_end: int | None = None
+    conjunction_before: str = ""
+    coordinated_result_group_id: str = ""
+    shared_modifier_text: str = ""
+    shared_modifier_start: int | None = None
+    shared_modifier_end: int | None = None
 
 
 @dataclass(frozen=True)
@@ -437,6 +621,11 @@ class _AtomContext:
     source_span: SourceSpan
     condition_span: SourceSpan | None
     timing_span: SourceSpan | None
+    modifier_span: SourceSpan | None = None
+    semantic_role: SemanticRole = SemanticRole.UNKNOWN
+    owner_id: str = ""
+    action_owner_id: str = ""
+    branch_context: tuple[str, ...] = ()
 
 
 def _stable_occurrence_id(source_fact_id: str, kind: str, span: SourceSpan | None, ordinal: int) -> str:
@@ -485,11 +674,27 @@ def _direction(text: str) -> str:
         r"\bresistance\s*-\s*\d", lowered
     ):
         return "enemy"
+    if re.search(r"\b(?:remove|removes|removing|cleanse|cleanses|cleansing)\b[^.;]*\bdebuffs?\b", lowered):
+        return "self"
     if re.search(r"\b(?:ally|allies|party|party members|frontline)\b", lowered):
         return "ally"
     if re.search(r"\bis at front\b|\bis on the frontline\b", lowered):
         return "ally"
     if re.search(r"\b(?:user|self|own)\b", lowered):
+        return "self"
+    if re.search(r"\b(?:restore|restores|recover|recovers|heal|heals)\b[^.;]*\b(?:mp|hp|health|magic points?)\b", lowered):
+        return "self"
+    if _STAT_WORD_RE.search(text) and re.search(
+        r"\b(?:increase|increases|raise|raises|boost|boosts)\b|\+\s*\d",
+        text,
+        re.IGNORECASE,
+    ):
+        return "self"
+    if re.search(r"\bcritical rate\b", text, re.IGNORECASE) and re.search(
+        r"\b(?:increase|increases|raise|raises|boost|boosts)\b|\+\s*\d",
+        text,
+        re.IGNORECASE,
+    ):
         return "self"
     if re.search(r"\b(?:zone|stance|field)\b", lowered):
         return "field"
@@ -528,8 +733,6 @@ def _recipient_and_cardinality(text: str) -> tuple[str, str]:
         return "all_enemies", "multiple"
     if re.search(r"\b(?:a single enemy|single enemy|one enemy)\b", lowered):
         return "single_enemy", "single"
-    if re.search(r"\bparty and reserve members\b", lowered):
-        return "party_and_reserve", "multiple"
     if re.search(
         r"\b(?:all party members|party members|the party|all allies|all ally|party and reserve members)\b",
         lowered,
@@ -544,6 +747,40 @@ def _recipient_and_cardinality(text: str) -> tuple[str, str]:
     if re.search(r"\b(?:user|self|own)\b", lowered):
         return "self", "single"
     return "unknown", "unknown"
+
+
+def _recipient_context(text: str) -> str:
+    """Remove prerequisite clauses before inheriting a shared result target."""
+    return re.sub(
+        r"\b(?:only\s+when|if|when|unless)\b[^,;:.]*[:,;:.]?\s*",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+
+def _shared_attack_target(text: str) -> str:
+    """Return a unique attack target shared by coordinated result clauses."""
+    if not re.search(r"\battack\b[^.;]*\b(?:and|then)\b", text, re.IGNORECASE):
+        return ""
+    target_patterns = (
+        r"\ball enemies\b",
+        r"\beach enemy\b",
+        r"\ball opponents\b",
+        r"\brandom enemies\b",
+        r"\ba single enemy\b",
+        r"\bsingle enemy\b",
+        r"\bone enemy\b",
+    )
+    matches = [
+        (match.group(0), _recipient_and_cardinality(match.group(0))[0])
+        for pattern in target_patterns
+        for match in re.finditer(pattern, text, re.IGNORECASE)
+    ]
+    recipients = {recipient for _text, recipient in matches}
+    if len(recipients) != 1:
+        return ""
+    return max((value for value, _recipient in matches), key=len)
 
 
 def _named_recipient(text: str, references: Sequence[StructuralToken]) -> str:
@@ -566,7 +803,7 @@ def _trigger(text: str) -> str:
         return ""
     if re.search(r"\breceives?\b[^.;]*\bdamage\b", lowered):
         return "on_damage"
-    if re.search(r"\b(?:when used in|when in|during)\s+stellar burst\b", lowered):
+    if re.search(r"\b(?:when used\s+(?:in|during|durring)|when in|durr?ing)\s+stellar burst\b", lowered):
         return "on_stellar_burst"
     if re.search(r"\bafter\s+each\s+(?:attacking\s+)?move\b", lowered):
         return "after_each_attacking_move"
@@ -588,22 +825,53 @@ def _trigger(text: str) -> str:
 
 
 def _magnitude(text: str) -> dict[str, str]:
-    percent = _PERCENT_RE.search(text)
-    probability = _PROBABILITY_RE.search(text)
+    max_stacks = _MAX_STACK_METADATA_RE.search(text)
+    result_text = _MAX_STACK_METADATA_RE.sub(" ", text)
+    state_stat = re.search(
+        r"^\s*[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2}\s*:\s*"
+        r"(?P<value>[+-]?\s*\d+(?:\.\d+)?)\s*(?P<stat>PWR|Power|Intelligence|Speed|Luck)\b",
+        result_text,
+        re.IGNORECASE,
+    )
+    if state_stat:
+        value = re.sub(r"\s+", "", state_stat.group("value")).lstrip("+")
+        result = {
+            "value": value,
+            "unit": "flat",
+            "raw": _clean(state_stat.group(0)),
+        }
+        if max_stacks:
+            result["max_stacks"] = max_stacks.group("value")
+        return result
+
+    move_values = list(_PERCENT_RE.finditer(text))
+    if (
+        len(move_values) > 1
+        and re.search(r"\btype\s+attack\b", text, re.IGNORECASE)
+        and re.search(r"\\|/", text)
+        and re.search(r"\bmoves?\b", text, re.IGNORECASE)
+    ):
+        return {
+            "move_count_to_percent": {
+                str(index): f"{match.group(2)}%"
+                for index, match in enumerate(move_values, start=1)
+            }
+        }
+    percent = _PERCENT_RE.search(result_text)
+    probability = _PROBABILITY_RE.search(result_text)
     hit_count_match = _HIT_COUNT_RE.search(text)
     hit_count = hit_count_match.group(1) if hit_count_match else ""
     multiplier = next(
         (
             match
-            for match in _MULTIPLIER_RE.finditer(text)
+            for match in _MULTIPLIER_RE.finditer(result_text)
             if not hit_count_match
             or match.end() <= hit_count_match.start()
             or match.start() >= hit_count_match.end()
         ),
         None,
     )
-    tier = re.search(r"\b(XXL|XL|L|M|S)\b", text, re.IGNORECASE)
-    max_stacks = re.search(r"\bmax(?:imum)?\s+stack\s*:?\s*(?:x\s*)?(\d+)\b", text, re.IGNORECASE)
+    tier = re.search(r"\b(XXL|XL|L|M|S)\b", result_text, re.IGNORECASE)
     maximum_total = re.search(
         r"\bmax(?:imum)?\s+total\s*:?\s*([+-]?\d+(?:\.\d+)?\s*%)|"
         r"\bmax(?:imum)?\s+stack\b[^.;]*?(-\s*\d+(?:\.\d+)?\s*%)",
@@ -614,7 +882,7 @@ def _magnitude(text: str) -> dict[str, str]:
     if pwr_per_stack:
         result = {"value": pwr_per_stack.group(1), "unit": "PWR_per_stack"}
         if max_stacks:
-            result["max_stacks"] = max_stacks.group(1)
+            result["max_stacks"] = max_stacks.group("value")
         if maximum_total:
             total = next(value for value in maximum_total.groups() if value)
             result["maximum_total"] = _clean(total).lstrip("- ")
@@ -625,7 +893,7 @@ def _magnitude(text: str) -> dict[str, str]:
         if re.search(r"\bper\s+stack\b", text, re.IGNORECASE) or max_stacks:
             result = {"value": value, "unit": "percent_per_stack"}
             if max_stacks:
-                result["max_stacks"] = max_stacks.group(1)
+                result["max_stacks"] = max_stacks.group("value")
             if maximum_total:
                 total = next(value for value in maximum_total.groups() if value)
                 result["maximum_total"] = _clean(total).lstrip("- ")
@@ -649,11 +917,28 @@ def _magnitude(text: str) -> dict[str, str]:
         if multiplier:
             result["multiplier"] = next(value for value in multiplier.groups() if value)
         return result
-    if max_stacks:
-        return {"max_stacks": max_stacks.group(1)}
-    fixed = re.search(r"\b(?:deal|damage|restore|recover|heal)\s+(\d{3,})\b", text, re.IGNORECASE)
+    fixed_mp_hp_restore = re.search(
+        r"\b(?:restore|recover|heal)\b[^.;]*?\b(?:mp|hp|health|magic points?)\b\s*"
+        r"([+-]?\s*\d+(?:\.\d+)?)\b",
+        result_text,
+        re.IGNORECASE,
+    )
+    if fixed_mp_hp_restore:
+        value = re.sub(r"\s+", "", fixed_mp_hp_restore.group(1)).lstrip("+")
+        unit = "flat_mp" if re.search(r"\b(?:mp|magic points?)\b", fixed_mp_hp_restore.group(0), re.IGNORECASE) else "flat"
+        result = {"value": value, "unit": unit, "raw": fixed_mp_hp_restore.group(1)}
+        if max_stacks:
+            result["max_stacks"] = max_stacks.group("value")
+        return result
+    fixed = re.search(r"\b(?:deal|damage|restore|recover|heal)\s+(\d{3,})\b", result_text, re.IGNORECASE)
     if fixed:
-        return {"value": fixed.group(1), "unit": "flat", "raw": fixed.group(0)}
+        unit = "flat_mp" if re.search(r"\b(?:mp|magic points?)\b", result_text, re.IGNORECASE) else "flat"
+        result = {"value": fixed.group(1), "unit": unit, "raw": fixed.group(0)}
+        if max_stacks:
+            result["max_stacks"] = max_stacks.group("value")
+        return result
+    if max_stacks:
+        return {"max_stacks": max_stacks.group("value")}
     return {}
 
 
@@ -666,10 +951,13 @@ def _probability(text: str) -> dict[str, str]:
 
 def _duration_activation(text: str) -> dict[str, str]:
     duration = _TURN_RE.search(text)
+    move_duration = re.search(r"\b(?:for\s+)?(\d+)\s+moves?\b", text, re.IGNORECASE)
     activation = _ACTIVATION_RE.search(text)
     result: dict[str, str] = {}
     if duration:
         result["duration_turns"] = duration.group(1)
+    if move_duration:
+        result["duration_moves"] = move_duration.group(1)
     if activation:
         result["activation"] = activation.group(1) if activation.group(1) else "once_per_battle"
     if re.search(r"\bcurrent turn only\b", text, re.IGNORECASE):
@@ -726,13 +1014,15 @@ def _stance_dependent_attack_type(
 
 
 def _hit_count(text: str) -> str:
-    modifier = re.search(r"\bnumber of attacks\s+by\s+\+?(\d+)\b", text, re.IGNORECASE)
-    if modifier:
-        return modifier.group(1)
-    match = _HIT_COUNT_RE.search(text)
-    if not match or not re.search(r"\b(?:attack|attacks|hit|hits)\b", text, re.IGNORECASE):
-        return ""
-    return next((value for value in match.groups() if value), "")
+    for pattern in (
+        r"\b(?:attacks?|hits?)\b[^.;]*?\b[x×]\s*(\d+)(?!\d|\.\d)",
+        r"\b(?:attacks?|hits?)\b[^.;()]*?\b(\d+)\s+times?\b",
+        r"\b(\d+)\s+hits?\b",
+    ):
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            return match.group(1)
+    return ""
 
 
 def _formula_metadata(text: str) -> dict[str, str]:
@@ -752,8 +1042,27 @@ def _formula_metadata(text: str) -> dict[str, str]:
         metadata["element_override"] = _clean(text)
     if re.search(r"\bcan\s+change\s+(?:element|weapon\s+type)\b", text, re.IGNORECASE):
         metadata["attack_type_element_override"] = _clean(text)
+    if re.search(
+        r"\b(?:non-type|fire|water|wind|earth|thunder|shade|crystal)\s+attacks?\s+become\s+"
+        r"(?:elemental|[a-z]+(?:-type)?)\b",
+        text,
+        re.IGNORECASE,
+    ):
+        metadata["attack_type_element_override"] = _clean(text)
     if re.search(r"\baf\s+gauge\s+charge\b[^.;]*\bcombo\s+charge\b", text, re.IGNORECASE):
         metadata["fixed_link_resource_charge"] = _clean(text)
+    if not re.search(
+        r"\bequipped characters?['’]?\s+damage\b[^.;]*[+-]\s*\d",
+        text,
+        re.IGNORECASE,
+    ) and re.search(
+        r"\b(?:increased\s+damage\s+based\s+on|debuff\s+amount\s+increases?\s+from|"
+        r"buff\s+amount\s+increases?\s+from|"
+        r"damage\s+[+-]\s*\d+(?:\.\d+)?\s*%|counted\s+twice)(?=\W|$)",
+        text,
+        re.IGNORECASE,
+    ) or _STACK_COUNT_LIST_RE.search(text) or _EACH_PART_FORMULA_RE.search(text):
+        metadata["result_scaling_note"] = _clean(text)
     return metadata
 
 
@@ -824,6 +1133,12 @@ def _sequence_metadata(unit: StructuralUnit) -> tuple[dict[str, str], tuple[str,
 
 def _is_formula_explanation(text: str) -> bool:
     lowered = _key(text)
+    if re.search(
+        r"\bequipped characters?['’]?\s+damage\b[^.;]*[+-]\s*\d",
+        text,
+        re.IGNORECASE,
+    ):
+        return False
     multiplier_note = _SKILL_DAMAGE_MULTIPLIER_RE.search(text)
     if multiplier_note and not _ACTION_HEAD_RE.search(text[:multiplier_note.start()]):
         return True
@@ -837,26 +1152,180 @@ def _is_formula_explanation(text: str) -> bool:
         return True
     if _DAMAGE_SCALING_RE.search(text):
         return True
+    if re.search(
+        r"\b(?:increased\s+damage\s+based\s+on|debuff\s+amount\s+increases?\s+from|"
+        r"buff\s+amount\s+increases?\s+from|"
+        r"damage\s+[+-]\s*\d+(?:\.\d+)?\s*%|counted\s+twice)(?=\W|$)",
+        text,
+        re.IGNORECASE,
+    ) or _STACK_COUNT_LIST_RE.search(text) or _EACH_PART_FORMULA_RE.search(text):
+        return True
     return bool(
         re.search(r"\badd\b[^.;]*\b(?:light|shadow)\b[^.;]*\bbase multiplier\b", lowered)
     )
 
 
-def _has_effect(text: str) -> bool:
-    if _is_formula_explanation(text):
-        return False
-    lowered = _key(text)
-    if _NON_EFFECT_METADATA_RE.search(text) or _NEGATED_ACTION_RE.search(text):
-        return False
-    if re.match(r"\s*unaffected by further zone changes\b", lowered):
-        return False
-    if re.match(r"\s*type attack buff doubled for ally with devotion\b", lowered):
-        return False
-    if re.search(r"\bkaleido\s*;\s*change element of type attack buff according\b", lowered):
-        return False
-    if _formula_metadata(text) and not _ACTION_HEAD_RE.search(text):
-        return False
-    return bool(_ACTION_HEAD_RE.search(text) or _EFFECT_RE.search(text))
+def _semantic_role(
+    atom: _SourceAtom,
+    references: Sequence[StructuralToken],
+    *,
+    shared_definition_source: bool,
+) -> SemanticRole:
+    text = atom.effect_text or atom.text
+    if (
+        _ZONE_DESCRIPTION_RE.search(text)
+        or _ZONE_PROPERTY_METADATA_RE.search(text)
+        or _ELEMENT_CONVERSION_METADATA_RE.search(text)
+    ):
+        return SemanticRole.RELATIONSHIP_METADATA
+    attack_result = _ATTACK_RESULT_RE.search(text)
+    formula_start = min(
+        (
+            match.start()
+            for pattern in (_SKILL_DAMAGE_MULTIPLIER_RE, _STACK_MULTIPLIER_RE, _FORMULA_RE)
+            if (match := pattern.search(text)) is not None
+        ),
+        default=len(text),
+    )
+    attack_precedes_formula = bool(attack_result and attack_result.end() <= formula_start)
+    if (
+        _is_formula_explanation(text) and not attack_precedes_formula
+    ) or (
+        _formula_metadata(text)
+        and not _ACTION_HEAD_RE.search(text)
+        and not attack_result
+    ):
+        return SemanticRole.FORMULA
+    modifier_text = f"{text} {atom.condition}".strip()
+    if (
+        _HIT_COUNT_MODIFIER_RE.search(modifier_text)
+        or _RESULT_MODIFIER_RE.search(modifier_text)
+        or _RESULT_EFFECT_POTENCY_RE.search(modifier_text)
+        or re.search(
+            r"\b(?:intelligence|critical rate)\s+(?:and\s+\w+\s+)?effect\s+"
+            r"(?:increases?|is increased|raised|boosted)\b",
+            modifier_text,
+            re.IGNORECASE,
+        )
+    ):
+        return SemanticRole.RESULT_MODIFIER
+    max_stack_metadata = _MAX_STACK_METADATA_RE.search(text)
+    stack_free_text = _MAX_STACK_METADATA_RE.sub(" ", text)
+    if (
+        max_stack_metadata
+        and not _ACTION_HEAD_RE.search(stack_free_text)
+        and not _ATTACK_RESULT_RE.search(stack_free_text)
+        and not _SELF_POTENCY_STAT_LINE_RE.search(stack_free_text)
+        and not _EXPLICIT_RESULT_PROPERTY_RE.search(stack_free_text)
+    ):
+        return SemanticRole.RESULT_MODIFIER
+    explicit_child_relation = bool(
+        references
+        and not re.search(r"\bin\s+link\b", text, re.IGNORECASE)
+        and any(
+            _relationship_operation(text, token.text) in {"activates", "replaces", "branches_to"}
+            for token in references
+        )
+    )
+    relationship_group_header = bool(
+        references
+        and re.search(r"\b(?:skills?|moves?|actions?)\s*:\s*$", text, re.IGNORECASE)
+        and any(_relationship_operation(text, token.text) in {"activates", "replaces", "branches_to"} for token in references)
+    )
+    if references and (
+        explicit_child_relation
+        or relationship_group_header
+        or _SEQUENCE_TEXT_RE.search(text)
+    ):
+        return SemanticRole.CHILD_INVOCATION
+    if _SEQUENCE_TEXT_RE.search(text) or _SEQUENCE_INTERRUPTION_RE.search(text):
+        return SemanticRole.SEQUENCE
+    if _RESOURCE_CONSUMPTION_RE.search(text) or re.search(r"\b(?:consume|spend)\b[^.;]*\b(?:charge|stacks?|mp|resource)\b", text, re.IGNORECASE):
+        return SemanticRole.RESOURCE_CONSUMPTION
+    if _STACK_CREATION_RE.search(text) or _STATE_CREATION_RE.search(text):
+        return SemanticRole.STATE_CREATION
+    if _RESOURCE_GAIN_RE.search(text) or (
+        _RESOURCE_OPERATION_RE.search(text)
+        and re.search(r"\b(?:grant|gain|add|create|generate|stack)\b", text, re.IGNORECASE)
+    ):
+        return SemanticRole.RESOURCE_GAIN
+    if _CRITICAL_DAMAGE_RE.search(text) or re.search(
+        r"\b(?:reduce|reduces|reduced|decrease|decreases|decreased)\s+(?:mp|resource) consumption\b|"
+        r"\b(?:mp|resource) consumption\b[^.;]*[+-]\s*\d+(?:\.\d+)?\s*%?",
+        text,
+        re.IGNORECASE,
+    ):
+        return SemanticRole.COST_ACTIVATION_METADATA
+
+    has_effect_result = bool(
+        re.search(
+            r"\bequipped characters?['’]?\s+damage\b[^.;]*[+-]\s*\d",
+            text,
+            re.IGNORECASE,
+        )
+        or re.search(r"\b(?:can\s+)?use\b[^.;]*\bagain\b", text, re.IGNORECASE)
+        or _SELF_POTENCY_STAT_LINE_RE.search(text)
+        or re.match(r"\s*\d+(?:\.\d+)?\s*%\s*mp\b", text, re.IGNORECASE)
+        or _ACTION_HEAD_RE.search(text)
+        or attack_result
+        or _EXPLICIT_RESULT_PROPERTY_RE.search(text)
+        or (
+            _COORDINATED_RESULT_SUBJECT_RE.search(text)
+            and (
+                _COORDINATED_RESULT_VALUE_RE.search(text)
+                or re.search(r"\b(?:increase|increases|raise|raises|boost|boosts)\b", text, re.IGNORECASE)
+            )
+        )
+    )
+    if _NON_EFFECT_METADATA_RE.match(text) or _NEGATED_ACTION_RE.search(text) or _NEGATED_COPULAR_PREDICATE_RE.search(text):
+        has_effect_result = False
+    if re.match(r"\s*(?:requires?|needs?|must)\b", text, re.IGNORECASE):
+        return SemanticRole.CONDITION
+    if atom.action_timing and not has_effect_result:
+        return SemanticRole.TRIGGER_TIMING
+    if atom.condition and not atom.effect_text:
+        return SemanticRole.CONDITION
+    if atom.condition and not has_effect_result:
+        return SemanticRole.CONDITION
+    if has_effect_result:
+        return SemanticRole.EFFECT_RESULT
+    if references and shared_definition_source:
+        return SemanticRole.RELATIONSHIP_METADATA
+    if atom.action_timing:
+        return SemanticRole.TRIGGER_TIMING
+    if atom.condition:
+        return SemanticRole.CONDITION
+    return SemanticRole.UNKNOWN
+
+
+def _semantic_outputs(
+    role: SemanticRole,
+    text: str,
+    direction: str,
+    context_text: str = "",
+    coordinated_context_text: str = "",
+) -> list[tuple[str, str, str]]:
+    stellar_replacement = bool(
+        role == SemanticRole.CHILD_INVOCATION
+        and re.search(r"\bwhen used in stellar burst\b", text, re.IGNORECASE)
+        and re.search(r"\bperform\b[^.;]*\binstead\b", text, re.IGNORECASE)
+    )
+    if role == SemanticRole.EFFECT_RESULT or stellar_replacement:
+        return _effect_semantics(
+            text,
+            direction,
+            context_text or text,
+            coordinated_context_text,
+        )
+    if role == SemanticRole.RESOURCE_CONSUMPTION:
+        return [("resource_consumption", "", _resource_subject(text))]
+    if role == SemanticRole.RESOURCE_GAIN:
+        return [("resource_grant", "", _resource_subject(text))]
+    if role == SemanticRole.STATE_CREATION:
+        return [("state_creation", "", _resource_subject(text))]
+    if role == SemanticRole.COST_ACTIVATION_METADATA:
+        return [("unsupported_cost_modifier", "", "mp_consumption")]
+    return []
 
 
 def _is_prerequisite(text: str) -> bool:
@@ -871,6 +1340,8 @@ def _is_prerequisite(text: str) -> bool:
         return False
     if re.match(r"\s*in\s+(?:[\w'-]+\s*[/,]\s*)*[\w'-]+\s+stance\b", lowered):
         return True
+    if _NAMED_STATE_REQUIREMENT_RE.search(text):
+        return True
     return bool(
         re.match(r"\s*(?:(?:the\s+)?skill\s+requires?|if|unless|only when|only if|when|requires?|needs?|must)\b", lowered)
         or re.search(r"\b(?:once per battle|only once per character|limited uses?)\b", lowered)
@@ -881,6 +1352,7 @@ def _effect_semantics(
     text: str,
     direction: str,
     context_text: str = "",
+    coordinated_context_text: str = "",
 ) -> list[tuple[str, str, str]]:
     lowered = _key(text)
     if _RESOURCE_COST_METADATA_RE.search(text):
@@ -892,6 +1364,20 @@ def _effect_semantics(
         return [("burst_window", "burst_window", "stellar_burst")]
     if re.search(r"\b(?:grant|grants|apply|applies)\s+kaleido\b", lowered):
         return [("status_or_effect_application", "apply_kaleido", "kaleido")]
+    if re.search(r"\b(?:activate|activates|activated|activating)\s+lunatic\b", lowered):
+        return [("lunatic_activation", "activate_lunatic", "lunatic")]
+    if re.search(r"\bbarrier\s+pierc(?:e|ing)\b|\bpierc(?:e|es)\s+barriers?\b", lowered):
+        return [("status_or_effect_application", "barrier_pierce", "barrier_pierce")]
+    if re.search(r"\b(?:activate|activates|activated|activating)\b[^.;]*\bin\s+link\b", lowered):
+        return [("link_grant", "grant_link", "link")]
+    enemy_context = direction == "enemy" or bool(
+        re.search(r"\b(?:enemy|enemies|opponent|opponents)\b", context_text, re.IGNORECASE)
+    )
+    if enemy_context and (
+        re.search(r"\bdispel(?:s|led|ling)?\b[^.;]*\bbuffs?\b", lowered)
+        or re.search(r"\bremove(?:s|d|ing)?\b[^.;]*\bbuffs?\b[^.;]*\b(?:enemies|target)\b", lowered)
+    ):
+        return [("debuff_cleansing", "enemy_buff_dispel", "buffs")]
     if _REPLACEMENT_RE.search(lowered) and re.search(
         r"\b(?:skill|action|slot|move|basic attack)\b", lowered
     ):
@@ -929,9 +1415,14 @@ def _effect_semantics(
         return [("link_grant", "grant_link", "link")]
     if direction in {"ally", "self"} and re.search(r"\b(?:give|grant|apply)\b[^.;]*\bshield\b", lowered):
         return [("damage_mitigation", "shield", "shield")]
-    if direction in {"ally", "self"} and re.search(r"\b(?:give|grant|apply)\b[^.;]*\bhold ground\b", lowered):
+    if direction in {"ally", "self"} and re.search(
+        r"\b(?:give|gives|grant|grants|granted|apply|applies|applied)\b[^.;]*\bhold ground\b",
+        lowered,
+    ):
         return [("status_or_effect_application", "hold_ground", "hold_ground")]
     if re.search(r"\b(?:inflict|inflicts|apply|applies|grant|grants)\b", lowered):
+        if re.search(r"\belemental\s+break\b", lowered):
+            return [("status_infliction", "inflict_break", "break")]
         if direction == "enemy":
             for status, capability in (
                 ("rage", "taunt"),
@@ -989,6 +1480,8 @@ def _effect_semantics(
                 return [("critical_support", "physical_critical_rate_up", "physical_critical_rate")]
             if re.search(r"\bmagic\s+critical rate\b", context_text, re.IGNORECASE):
                 return [("critical_support", "physical_critical_rate_up", "physical_critical_rate")]
+            if re.search(r"\bmagic\s+critical rate\b", coordinated_context_text, re.IGNORECASE):
+                return [("critical_support", "physical_critical_rate_up", "physical_critical_rate")]
             return [("critical_support", "", "untyped_critical_rate")]
     if direction in {"ally", "self"} and re.search(
         r"\b(?:fire|water|wind|earth|thunder|shade|crystal|non-type)\s+type attack\s+of\s+"
@@ -996,23 +1489,25 @@ def _effect_semantics(
         lowered,
     ) and (re.search(r"[+-]\s*\d", lowered) or _PERCENT_RE.search(text)):
         return [("element_damage_increase", "element_damage_up", "element_damage")]
+    if direction in {"ally", "self"} and re.search(
+        r"\btype\s+attack\b[^.;]*?(?:[+-]\s*\d|increas|boost|rais)",
+        lowered,
+    ):
+        return [("attack_type_damage_up", "attack_type_damage_up", "attack_type_damage")]
     if direction == "ally" and re.search(r"\bequipped characters?['’]?\s+damage\b", lowered) and (
         re.search(r"[+-]\s*\d", lowered) or re.search(r"\bincreases?\b", lowered)
     ):
         return [("damage_modifier", "equipped_weapon_damage_up", "equipped_weapon_damage")]
     if (
         re.search(r"\b(?:attacks|deals|deal)\b", lowered)
+        or re.search(r"\battack\b", lowered)
         or re.search(r"\battack\s+(?:on\s+)?(?:all|each|a|an|single|random|enemy|enemies|opponent|opponents)\b", lowered)
         or re.search(r"\b(?:fixed damage|performs?\s+(?:an?\s+)?attack)\b", lowered)
     ):
-        capability = "direct_damage" if direction == "enemy" else ""
+        capability = "direct_damage" if direction == "enemy" or direction == "unknown" else ""
         result = [("damage_event", capability, "damage")]
         hit_count = _hit_count(text)
-        if (
-            hit_count
-            and int(hit_count) > 1
-            and not re.search(r"\brandom(?:ly selected)? enemies\b", lowered)
-        ):
+        if hit_count and int(hit_count) > 1:
             result.append(("multi_hit_action", "multi_hit_action", "hit_count"))
         return result
     stat_matches = list(_STAT_WORD_RE.finditer(lowered))
@@ -1055,6 +1550,20 @@ def _effect_semantics(
 
 def _dependency_values(text: str) -> list[tuple[str, str]]:
     lowered = _key(text)
+    if (
+        _RESOURCE_CONSUMPTION_RE.search(text)
+        or _RESOURCE_GAIN_RE.search(text)
+        or _STACK_CREATION_RE.search(text)
+        or _STATE_CREATION_RE.search(text)
+        or re.search(
+            r"\b(?:mp|resource) consumption\s+(?:reduction|reduced|decreased|down)\b",
+            text,
+            re.IGNORECASE,
+        )
+    ):
+        return []
+    if _NEGATIVE_STATUS_CONDITION_RE.search(text) or _NEGATIVE_STATE_ABSENCE_RE.search(text):
+        return [("unsupported_condition", _clean(text))]
     if _SEQUENCE_INTERRUPTION_RE.search(text):
         return []
     if _formula_metadata(text):
@@ -1086,7 +1595,16 @@ def _dependency_values(text: str) -> list[tuple[str, str]]:
         None,
     )
     stack_reference = charge_threshold or devotion_stack or (stack_matches[-1] if stack_matches else None)
-    if stack_reference or re.search(r"\bstacks?\b", lowered):
+    stack_threshold = _STACK_THRESHOLD_RE.search(text)
+    named_state = _NAMED_STATE_REQUIREMENT_RE.search(text)
+    if stack_threshold:
+        state_name = stack_threshold.group("state") or stack_threshold.group("owned_state") or "stack"
+        values.append(("requires_stack", _clean(state_name)))
+    elif named_state and not stack_reference:
+        values.append(("requires_stack", _clean(named_state.group("state"))))
+    if (stack_reference or re.search(r"\bstacks?\b", lowered)) and not any(
+        value == "requires_stack" for value, _scope in values
+    ):
         values.append(("requires_stack", stack_reference.group(0) if stack_reference else "stack"))
 
     status = re.search(r"\bstatus(?: ailment)?\b", text, re.IGNORECASE)
@@ -1139,6 +1657,16 @@ def _dependency_magnitude(text: str, dependency_value: str) -> dict[str, Any]:
             "resource": _clean(comparison.group(2)),
             "value": int(comparison.group(1)),
         }
+    threshold = _STACK_THRESHOLD_RE.search(text)
+    if threshold:
+        count = threshold.group("count") or threshold.group("owned_count")
+        state = threshold.group("state") or threshold.group("owned_state")
+        if count:
+            return {
+                "comparison": ">=",
+                "resource": _clean(state or "stack"),
+                "value": int(count),
+            }
     return {}
 
 
@@ -1147,7 +1675,7 @@ def _operation_for_occurrence(kind: str, text: str, semantic_type: str) -> str:
     if known_operation:
         return known_operation
     lowered = _key(text)
-    if kind == "dependency":
+    if kind in {"dependency", "gap"} and semantic_type == "condition":
         if re.search(r"\bconsume(?:s|d)?\b", lowered):
             return "consume"
         if re.search(r"\b(?:requires?|needs?)\b", lowered):
@@ -1171,7 +1699,19 @@ def _trim_range(text: str, start: int, end: int) -> tuple[int, int]:
 
 
 def _split_action_ranges(text: str, start: int, end: int) -> list[tuple[int, int]]:
-    matches = [match for match in _ACTION_HEAD_RE.finditer(text, start, end)]
+    if _SEQUENCE_TEXT_RE.search(text, start, end) or _SEQUENCE_INTERRUPTION_RE.search(text, start, end):
+        return [_trim_range(text, start, end)]
+    formula_matches = [
+        match
+        for pattern in (_SKILL_DAMAGE_MULTIPLIER_RE, _STACK_MULTIPLIER_RE, _FORMULA_RE)
+        if (match := pattern.search(text, start, end)) is not None
+    ]
+    formula_start = min((match.start() for match in formula_matches), default=end)
+    matches = [
+        match
+        for match in _ACTION_HEAD_RE.finditer(text, start, end)
+        if match.start() < formula_start
+    ]
     compound_matches = list(_COMPOUND_EFFECT_START_RE.finditer(text, start, end))
     splits: set[tuple[int, int]] = {
         (match.start(), match.end())
@@ -1188,17 +1728,22 @@ def _split_action_ranges(text: str, start: int, end: int) -> list[tuple[int, int
         if _ACTION_HEAD_RE.search(text[start:match.start()])
     )
     splits.update((match.start(), match.end()) for match in _RESOURCE_COST_START_RE.finditer(text, start, end))
+    attack_result = _ATTACK_RESULT_RE.search(text, start, formula_start)
+    if formula_matches and attack_result and attack_result.end() < end:
+        # Keep the primary attack anchor at its asserted target phrase. The
+        # following formula/tier annotation remains a sibling segment and can
+        # contribute structured metadata through the local fragment.
+        splits.add((attack_result.end(), attack_result.end()))
     previous_end = matches[0].end() if matches else start
     for match in matches[1:]:
         between = text[previous_end:match.start()]
         connector = re.search(
-            r"(?:,\s*(?:and|then)?\s*|\s+(?:and|then)\s+)"
-            r"(?:(?:[\w-]+\.png)\s*)*$",
+            r",\s*(?:and|then)?\s*|\s+(?:and|then)\s+",
             between,
             re.IGNORECASE,
         )
         if connector:
-            splits.add((previous_end + connector.start(), match.start()))
+            splits.add((previous_end + connector.start(), previous_end + connector.end()))
         previous_end = match.end()
     if not splits:
         return [_trim_range(text, start, end)]
@@ -1217,15 +1762,245 @@ def _split_action_ranges(text: str, start: int, end: int) -> list[tuple[int, int
     return ranges
 
 
+_COORDINATED_RESULT_VALUE_RE = re.compile(
+    r"(?:[+-]\s*\d+(?:\.\d+)?\s*%?|\b[x×]\s*\d+(?:\.\d+)?\b|"
+    r"\b\d+\s+times?\b|\b(?:XXL|XL|L|M|S)\b)",
+    re.IGNORECASE,
+)
+_COORDINATED_RESULT_SUBJECT_RE = re.compile(
+    r"\b(?:power|intelligence|speed|luck|max(?:imum)?\s+hp|mp|hp|mp\s+consumption|"
+    r"damage|attack|resistance|critical rate|barrier|shield|buffs?|debuffs?|link|element)\b",
+    re.IGNORECASE,
+)
+_SHARED_DURATION_SUFFIX_RE = re.compile(
+    r"(?:\(\s*(?:for\s+)?\d+\s+turns?\s*\)?|(?:for\s+)?\d+\s+turns?)\s*$",
+    re.IGNORECASE,
+)
+_SHARED_DURATION_RE = re.compile(
+    r"(?:\(\s*(?:for\s+)?\d+\s+turns?\s*\)?|(?:for\s+)?\d+\s+turns?)",
+    re.IGNORECASE,
+)
+_SHARED_DURATION_STACK_TAIL_RE = re.compile(
+    r"\(\s*(?:for\s+)?\d+\s+turns?\s*\)?\s+"
+    r"max(?:imum)?\s+stacks?\s*:?\s*\d+.*$",
+    re.IGNORECASE,
+)
+_SHARED_STACK_SUFFIX_RE = re.compile(r"\(\s*max(?:imum)?\s+stack\s*:?\s*x?\s*\d+\s*\)\s*$", re.IGNORECASE)
+_ROLE_BOUNDARY_RE = re.compile(
+    r",\s*(?:and\s+|then\s+|but\s+)?|\s+(?:and|then|but)\s+",
+    re.IGNORECASE,
+)
+
+
+_SOURCE_RESOURCE_PREDICATE_RE = re.compile(
+    r"\s*(?:consume|consumes|consumed|spend|spends|spent|gain|gains|gained|"
+    r"grant|grants|granted|add|adds|added|create|creates|created|generate|generates|"
+    r"generated|stack|stacks|stacked)\b",
+    re.IGNORECASE,
+)
+
+
+def _source_clause_is_complete(text: str) -> bool:
+    """Recognize a syntactically complete clause for source-boundary splitting."""
+    clause = text.strip(" .,:;()")
+    if not clause or _NEGATED_ACTION_RE.search(clause) or _NEGATED_COPULAR_PREDICATE_RE.search(clause):
+        return False
+    if _SEQUENCE_TEXT_RE.search(clause) or _SEQUENCE_INTERRUPTION_RE.search(clause):
+        return False
+    if _RESOURCE_CONSUMPTION_RE.search(clause) or _RESOURCE_GAIN_RE.search(clause):
+        return True
+    if _EXPLICIT_RESULT_PROPERTY_RE.search(clause):
+        return True
+    if _STACK_CREATION_RE.search(clause) or _STATE_CREATION_RE.search(clause):
+        label = re.search(r"\b[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2}\s*:\s*", clause)
+        if label and _ACTION_HEAD_RE.search(clause[label.end():]) and not _COORDINATED_RESULT_VALUE_RE.search(clause[label.end():]):
+            return False
+        return True
+    attack_result = _ATTACK_RESULT_RE.search(clause)
+    formula_start = min(
+        (
+            match.start()
+            for pattern in (_SKILL_DAMAGE_MULTIPLIER_RE, _STACK_MULTIPLIER_RE, _FORMULA_RE)
+            if (match := pattern.search(clause)) is not None
+        ),
+        default=len(clause),
+    )
+    if _is_formula_explanation(clause) and not (attack_result and attack_result.end() <= formula_start):
+        return False
+    has_predicate = bool(_ACTION_HEAD_RE.search(clause) or attack_result or _SOURCE_RESOURCE_PREDICATE_RE.search(clause))
+    has_value = bool(_COORDINATED_RESULT_VALUE_RE.search(clause))
+    has_subject = bool(_COORDINATED_RESULT_SUBJECT_RE.search(clause))
+    has_applied_object = bool(
+        re.search(r"\b(?:on|to|against|with|from)\b|\b(?:poison|pain|rage|break|status|debuff|buff|shield|link)\b", clause, re.IGNORECASE)
+    )
+    return has_predicate and (has_value or has_subject or has_applied_object)
+
+
+def _shared_result_suffix(text: str, start: int, end: int) -> re.Match[str] | None:
+    duration = _SHARED_DURATION_SUFFIX_RE.search(text, start, end)
+    stack = _SHARED_STACK_SUFFIX_RE.search(text, start, end)
+    duration_stack_tail = _SHARED_DURATION_STACK_TAIL_RE.search(text, start, end)
+    matches = [
+        match
+        for match in (duration_stack_tail, duration, stack)
+        if match is not None
+    ]
+    return min(matches, key=lambda match: match.start()) if matches else None
+
+
+def _coordinated_result_ranges(
+    text: str,
+    start: int,
+    end: int,
+) -> list[tuple[int, int, str, str, str, int | None, int | None]]:
+    """Build neutral owner ranges around independent local clauses.
+
+    Clause boundaries follow predicates and owned result fields rather than
+    effect-looking text. Coordinated modifiers remain attached to the result
+    group, and a resource cost followed by an action gets distinct owners.
+    """
+    sequence_match = re.search(
+        r"\s+to\s+(?=perform\s+the\s+following\s+moves?\s+in\s+succession\b)",
+        text[start:end],
+        re.IGNORECASE,
+    )
+    action_match = re.search(r"\s+to\s+(?:do|deal|make)\s+", text[start:end], re.IGNORECASE)
+    boundary_match = sequence_match or action_match
+    if boundary_match:
+        boundary_start = start + boundary_match.start()
+        boundary_end = start + boundary_match.end()
+        left_text = text[start:boundary_start]
+        right_text = text[boundary_end:end]
+        if _RESOURCE_CONSUMPTION_RE.search(left_text):
+            suffix = _shared_result_suffix(text, boundary_end, end)
+            content_end = suffix.start() if suffix else end
+            right_ranges = _coordinated_result_ranges(text, boundary_end, content_end) if content_end > boundary_end else []
+            result = [(start, boundary_start, "", "", "", None, None)]
+            for a, b, conjunction, group_id, _shared, _ss, _se in (
+                right_ranges or [(boundary_end, content_end, "to", "", "", None, None)]
+            ):
+                result.append(
+                    (
+                        a,
+                        b,
+                        conjunction or "to",
+                        group_id or (f"group:{start}:{end}" if suffix else ""),
+                        text[suffix.start():suffix.end()] if suffix else "",
+                        suffix.start() if suffix else None,
+                        suffix.end() if suffix else None,
+                    )
+                )
+            return result
+
+    semantic_end = end
+    skill_requirement = re.search(
+        r"\b(?:the\s+)?skill\s+requires?\b[^;]*$",
+        text[start:end],
+        re.IGNORECASE,
+    )
+    if skill_requirement and start + skill_requirement.start() > start:
+        semantic_end = start + skill_requirement.start()
+    suffix = _shared_result_suffix(text, start, semantic_end)
+    content_end = suffix.start() if suffix else semantic_end
+    connectors = list(_ROLE_BOUNDARY_RE.finditer(text, start, content_end))
+    boundaries: list[tuple[int, int, str]] = []
+    part_start = start
+    for index, connector in enumerate(connectors):
+        next_start = connectors[index + 1].start() if index + 1 < len(connectors) else content_end
+        left_text = text[part_start:connector.start()]
+        right_text = text[connector.end():next_start]
+        left_complete = _source_clause_is_complete(left_text)
+        right_complete = _source_clause_is_complete(right_text)
+        right_starts_resource_operation = bool(_SOURCE_RESOURCE_PREDICATE_RE.match(right_text))
+        if left_complete and (
+            right_complete
+            or right_starts_resource_operation
+        ):
+            conjunction_match = re.search(r"\b(and|then|but)\b", connector.group(0), re.IGNORECASE)
+            conjunction = conjunction_match.group(1).casefold() if conjunction_match else "then"
+            boundaries.append((connector.start(), connector.end(), conjunction))
+            part_start = connector.end()
+
+    # A named state label followed by a result description is a structural
+    # boundary even when the source author omits punctuation between them.
+    label_start = start
+    for label in re.finditer(r"\b[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2}\s*:\s*(?=[A-Z])", text, re.IGNORECASE):
+        if label.start() <= start or label.start() >= content_end:
+            continue
+        if _STACK_CREATION_RE.search(text[label_start:label.end()]) or _STATE_CREATION_RE.search(text[label_start:label.end()]):
+            boundaries.append((label.end(), label.end(), "label"))
+            label_start = label.end()
+
+    boundaries.sort(key=lambda row: row[0])
+    deduped: list[tuple[int, int, str]] = []
+    seen_positions: set[tuple[int, int]] = set()
+    for left, right, connector in boundaries:
+        if (left, right) in seen_positions:
+            continue
+        seen_positions.add((left, right))
+        deduped.append((left, right, connector))
+    if not deduped:
+        return [(start, end, "", "", "", None, None)]
+
+    group_id = f"group:{start}:{end}"
+    cuts: list[tuple[int, int, str]] = []
+    previous_end = start
+    for left, right, conjunction in deduped:
+        cuts.append((previous_end, left, "" if previous_end == start else conjunction))
+        previous_end = right
+    cuts.append((previous_end, content_end, "" if previous_end == start else deduped[-1][2]))
+    result: list[tuple[int, int, str, str, str, int | None, int | None]] = []
+    for index, (part_start, part_end, conjunction_before) in enumerate(cuts):
+        part_start, part_end = _trim_range(text, part_start, part_end)
+        if part_start >= part_end:
+            continue
+        cost_property = re.search(r"\b(?:mp|resource) consumption\b", text[part_start:part_end], re.IGNORECASE)
+        if cost_property and re.match(
+            r"\s*(?:reduce|reduces|reduced|decrease|decreases|decreased)\b",
+            text[part_start:part_end],
+            re.IGNORECASE,
+        ):
+            part_start += cost_property.start()
+        shared_text = text[suffix.start():suffix.end()] if suffix else ""
+        shared_start = suffix.start() if suffix else None
+        shared_end = suffix.end() if suffix else None
+        result.append(
+            (
+                part_start,
+                part_end,
+                conjunction_before,
+                group_id,
+                shared_text,
+                shared_start,
+                shared_end,
+            )
+        )
+    return result
+
+
 def _source_atoms(text: str) -> list[_SourceAtom]:
     """Split a source fragment at clear action boundaries and retain local context."""
     atoms: list[_SourceAtom] = []
     segment_start = 0
     segment_ranges: list[tuple[int, int]] = []
-    for separator in re.finditer(r";|(?<!\d)\.(?!\d)(?!png\b)", text, re.IGNORECASE):
+    for separator in re.finditer(
+        r";|(?<!\d)\.(?!\d)(?!png\b)|(?<=\d)\.(?!\d)(?!png\b)(?=\s+[A-Z])",
+        text,
+        re.IGNORECASE,
+    ):
         if separator.group(0) == ";":
             prefix = text[segment_start:separator.start()]
             suffix = text[separator.end():]
+            prior_condition = _LEADING_CONDITION_RE.match(prefix.rstrip() + ".")
+            prior_condition_is_complete = bool(
+                prior_condition
+                and prior_condition.end() == len(prefix.rstrip()) + 1
+                and not _ACTION_HEAD_RE.search(prefix)
+                and not _ATTACK_RESULT_RE.search(prefix)
+                and not _SOURCE_RESOURCE_PREDICATE_RE.search(prefix)
+            )
+            if prior_condition_is_complete and _LEADING_CONDITION_RE.match(suffix):
+                continue
             kaleido_application = re.search(r"\bgrant\s+kaleido\b", prefix, re.IGNORECASE) and re.match(
                 r"\s*change user's element based on element of the ally with devotion\b",
                 suffix,
@@ -1244,6 +2019,31 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
     for segment_start, segment_end in segment_ranges:
         start, end = _trim_range(text, segment_start, segment_end)
         if start == end:
+            continue
+
+        aura_condition = re.match(
+            r"\s*aura activation condition\s*:\s*(?P<condition>.+)$",
+            text[start:end],
+            re.IGNORECASE,
+        )
+        if aura_condition:
+            condition_start = start + aura_condition.start("condition")
+            condition_end = start + aura_condition.end("condition")
+            event_condition = _clean(text[condition_start:condition_end])
+            atoms.append(
+                _SourceAtom(
+                    text=_clean(text[start:end]),
+                    effect_text="",
+                    character_start=start,
+                    character_end=end,
+                    condition=event_condition,
+                    condition_start=condition_start,
+                    condition_end=condition_end,
+                    action_timing=_trigger(event_condition),
+                    timing_start=start,
+                    timing_end=start + aura_condition.start("condition") - 1,
+                )
+            )
             continue
 
         condition = ""
@@ -1287,12 +2087,53 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
                     body_start = post_timing_condition.end()
 
         body_start, body_end = _trim_range(text, body_start, end)
-        has_action = bool(_ACTION_HEAD_RE.search(text, body_start, body_end))
+        automatic_prefix = re.match(
+            r"(?:auto(?:matically)?|automatically)\s+(?=(?:inflict|apply|activate|restore|recover|grant|perform)\b)",
+            text[body_start:body_end],
+            re.IGNORECASE,
+        )
+        if automatic_prefix:
+            body_start += automatic_prefix.end()
+        leading_conjunction = re.match(r"(?:and|then)\s+", text[body_start:body_end], re.IGNORECASE)
+        if leading_conjunction:
+            body_start += leading_conjunction.end()
+        body_start, body_end = _trim_range(text, body_start, body_end)
+        body_text = text[body_start:body_end]
+        if re.match(r"\s*(?:(?:the\s+)?skill\s+)?(?:requires?|needs?|must)\b", body_text, re.IGNORECASE):
+            condition_text = _clean(body_text)
+            atoms.append(
+                _SourceAtom(
+                    text=_clean(text[start:end]),
+                    effect_text="",
+                    character_start=start,
+                    character_end=end,
+                    condition=condition_text,
+                    condition_start=body_start,
+                    condition_end=body_end,
+                    action_timing=timing,
+                    timing_start=timing_start,
+                    timing_end=timing_end,
+                )
+            )
+            continue
+        has_action_syntax = bool(
+            _ACTION_HEAD_RE.search(body_text)
+            or _ATTACK_RESULT_RE.search(body_text)
+            or _SOURCE_RESOURCE_PREDICATE_RE.search(body_text)
+        )
+        has_non_condition_syntax = bool(
+            has_action_syntax
+            or _EXPLICIT_RESULT_PROPERTY_RE.search(body_text)
+            or _formula_metadata(text[start:end])
+            or _SEQUENCE_TEXT_RE.search(text[start:end])
+            or _SEQUENCE_INTERRUPTION_RE.search(text[start:end])
+            or _HIT_COUNT_MODIFIER_RE.search(text[start:end])
+            or _RESULT_MODIFIER_RE.search(text[start:end])
+            or _RESULT_EFFECT_POTENCY_RE.search(text[start:end])
+        )
         if (
-            not has_action
+            not has_non_condition_syntax
             and _CONDITION_RE.search(text[start:end])
-            and (body_start >= body_end or not _EFFECT_RE.search(text[body_start:body_end]))
-            and not _formula_metadata(text[start:end])
         ):
             trigger = _trigger(text[start:end])
             is_trigger = bool(trigger)
@@ -1320,7 +2161,48 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
                 )
             )
             continue
-        action_ranges = _split_action_ranges(text, body_start, body_end)
+        action_segments: list[tuple[int, int, str, str, str, int | None, int | None]] = []
+        for (
+            result_start,
+            result_end,
+            conjunction_before,
+            group_id,
+            shared_modifier_text,
+            shared_modifier_start,
+            shared_modifier_end,
+        ) in _coordinated_result_ranges(text, body_start, body_end):
+            result_ranges = _split_action_ranges(text, result_start, result_end)
+            action_segments.extend(
+                (
+                    action_start,
+                    action_end,
+                    conjunction_before if index == 0 else "and",
+                    group_id,
+                    shared_modifier_text,
+                    shared_modifier_start,
+                    shared_modifier_end,
+                )
+                for index, (action_start, action_end) in enumerate(result_ranges)
+            )
+        action_ranges = [(action_start, action_end) for action_start, action_end, *_ in action_segments]
+        shared_suffix_start = max(
+            (
+                index
+                for index, segment in enumerate(action_segments)
+                if index > 0 and segment[2] == "then"
+            ),
+            default=0,
+        )
+        segment_metadata = {
+            (action_start, action_end): (
+                conjunction_before,
+                group_id,
+                shared_modifier_text,
+                shared_modifier_start,
+                shared_modifier_end,
+            )
+            for action_start, action_end, conjunction_before, group_id, shared_modifier_text, shared_modifier_start, shared_modifier_end in action_segments
+        }
         shared_skill_requirement = _TRAILING_CONDITION_RE.search(text, start, end)
         if (
             shared_skill_requirement
@@ -1332,6 +2214,17 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
         ):
             shared_skill_requirement = None
         for range_index, (action_start, action_end) in enumerate(action_ranges):
+            (
+                conjunction_before,
+                coordinated_group_id,
+                shared_modifier_text,
+                shared_modifier_start,
+                shared_modifier_end,
+            ) = segment_metadata[(action_start, action_end)]
+            if shared_modifier_text and range_index < shared_suffix_start:
+                shared_modifier_text = ""
+                shared_modifier_start = None
+                shared_modifier_end = None
             local_condition = condition
             local_condition_start = condition_start
             local_condition_end = condition_end
@@ -1368,7 +2261,7 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
                 effect_text,
                 re.IGNORECASE,
             )
-            if not _has_effect(effect_text) and resistance_property and range_index + 1 < len(action_ranges):
+            if resistance_property and range_index + 1 < len(action_ranges):
                 next_start, next_end = action_ranges[range_index + 1]
                 next_effect_text = _clean(text[next_start:next_end])
                 next_property = re.match(
@@ -1393,6 +2286,13 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
                     action_timing=timing or _trigger(effect_text),
                     timing_start=timing_start,
                     timing_end=timing_end,
+                    action_start=segment_start,
+                    action_end=segment_end,
+                    conjunction_before=conjunction_before,
+                    coordinated_result_group_id=coordinated_group_id,
+                    shared_modifier_text=shared_modifier_text,
+                    shared_modifier_start=shared_modifier_start,
+                    shared_modifier_end=shared_modifier_end,
                 )
             )
 
@@ -1400,6 +2300,12 @@ def _source_atoms(text: str) -> list[_SourceAtom]:
 
 
 def _state_reference(text: str) -> str:
+    text = re.sub(
+        r"^\s*(?:only\s+)?(?:when|if|unless|while|during|after|before)\s+(?:in\s+)?",
+        "",
+        text,
+        flags=re.IGNORECASE,
+    )
     stance_list = re.search(
         r"\b((?:[A-Z][\w'-]*(?:\s*[/,]\s*(?:or\s+)?[A-Z][\w'-]*){1,4})\s+Stance)\b",
         text,
@@ -1494,6 +2400,7 @@ def _occurrence(
     formula_metadata: Mapping[str, str] | None = None,
     sequence_metadata: Mapping[str, str] | None = None,
     resource_metadata: Mapping[str, str] | None = None,
+    result_modifiers: Mapping[str, Any] | None = None,
     semantic_subject: str = "",
     attack_type_override: str = "",
     condition_source_span: SourceSpan | None = None,
@@ -1501,6 +2408,14 @@ def _occurrence(
     probability: Mapping[str, str] | None = None,
     state_reference: str | None = None,
     field_context: str = "",
+    semantic_role: SemanticRole | str = SemanticRole.UNKNOWN,
+    source_owner_id: str = "",
+    branch_context: Sequence[str] = (),
+    action_owner_id: str = "",
+    coordinated_result_group_id: str = "",
+    modifier_source_spans: Sequence[SourceSpan] = (),
+    duration_activation_override: Mapping[str, str] | None = None,
+    gap_reason: str = "",
 ) -> ClassifiedOccurrence:
     scoped_text = effect_text if effect_text is not None else text
     result_text = _clean(scoped_text)
@@ -1518,15 +2433,35 @@ def _occurrence(
     direction = _direction(scoped_text)
     if semantic_type == "burst_window":
         recipient, cardinality, direction = "self", "single", "self"
+    if semantic_type == "enemy_buff_dispel" and recipient == "unknown":
+        recipient, cardinality = "single_enemy", "single"
     if field_context:
-        inherited_recipient, inherited_cardinality = _recipient_and_cardinality(field_context)
+        recipient_context = _recipient_context(field_context)
+        inherited_recipient, inherited_cardinality = _recipient_and_cardinality(recipient_context)
         if recipient == "unknown":
             recipient = inherited_recipient
             cardinality = inherited_cardinality
         if direction == "unknown":
-            direction = _direction(field_context)
+            direction = _direction(recipient_context)
     canonical_capability = capability_value if capability_value in _CAPABILITY_IDS else ""
     canonical_dependency = dependency_value if dependency_value in _DEPENDENCY_IDS else ""
+    capability_gap = (kind == "effect" and not canonical_capability) or (
+        kind == "gap" and not dependency_value
+    )
+    dependency_gap = (kind == "dependency" and not canonical_dependency) or (
+        kind == "gap" and bool(dependency_value) and not canonical_dependency
+    )
+    occurrence_kind = "gap" if capability_gap or dependency_gap else kind
+    if occurrence_kind == "gap" and not gap_reason:
+        gap_reason = (
+            "unsupported capability semantics"
+            if capability_gap
+            else "unsupported dependency semantics"
+        )
+    if canonical_capability == "inflict_break" and direction == "unknown":
+        direction = "enemy"
+        if recipient == "unknown":
+            recipient, cardinality = "single_enemy", "single"
     state_reference_value = (
         _state_reference(condition or scoped_text)
         if state_reference is None
@@ -1545,9 +2480,9 @@ def _occurrence(
         recipient = state_reference_value
         cardinality = "single"
     return ClassifiedOccurrence(
-        occurrence_id=_stable_occurrence_id(str(witness["record_id"]), kind, span, ordinal),
-        occurrence_kind=kind,
-        operation=_operation_for_occurrence(kind, text, semantic_type),
+        occurrence_id=_stable_occurrence_id(str(witness["record_id"]), occurrence_kind, span, ordinal),
+        occurrence_kind=occurrence_kind,
+        operation=_operation_for_occurrence(occurrence_kind, text, semantic_type),
         source_fact_id=str(witness["record_id"]),
         record_type=str(witness.get("record_type") or ""),
         entity_name=str(witness.get("entity_name") or ""),
@@ -1564,7 +2499,7 @@ def _occurrence(
         trigger=_trigger(text) if action_timing is None else action_timing,
         result=result_text,
         magnitude=dict(magnitude or _magnitude(scoped_text)),
-        duration_activation=_duration_activation(scoped_text),
+        duration_activation=dict(duration_activation_override or _duration_activation(scoped_text)),
         element=_element(scoped_text) or _element(field_context),
         attack_type=attack_type_override or _attack_type(scoped_text) or _attack_type(field_context),
         state_reference=state_reference_value,
@@ -1576,7 +2511,7 @@ def _occurrence(
         legacy_proposal_id=legacy_proposal_id,
         derived_projection=(
             "multi_entity_damage"
-            if kind == "effect" and canonical_capability == "direct_damage" and cardinality == "multiple"
+            if occurrence_kind == "effect" and canonical_capability == "direct_damage" and cardinality == "multiple"
             else ""
         ),
         semantic_type=semantic_type,
@@ -1584,36 +2519,502 @@ def _occurrence(
         formula_metadata=dict(formula_metadata or {}),
         sequence_metadata=dict(sequence_metadata or {}),
         resource_metadata=dict(resource_metadata or {}),
+        result_modifiers=dict(result_modifiers or {}),
         action_timing=action_timing or "",
         semantic_subject=semantic_subject,
         condition_source_span=condition_source_span,
         timing_source_span=timing_source_span,
         probability=dict(probability or _probability(scoped_text)),
-        capability_gap=kind == "effect" and not canonical_capability,
-        dependency_gap=kind == "dependency" and not canonical_dependency,
+        semantic_role=(semantic_role.value if isinstance(semantic_role, SemanticRole) else str(semantic_role)),
+        source_owner_id=source_owner_id,
+        branch_context=tuple(branch_context),
+        action_owner_id=action_owner_id,
+        coordinated_result_group_id=coordinated_result_group_id,
+        modifier_source_spans=tuple(modifier_source_spans),
+        gap_reason=gap_reason,
     )
+
+
+def _resource_subject(text: str) -> str:
+    match = re.search(
+        r"\b(?:consume|spend|use|gain|grant|add|stack)(?:s|d|ing)?\s+"
+        r"(?:one|a|an|\+?\d+)?\s*(?P<resource>[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,3})",
+        text,
+        re.IGNORECASE,
+    )
+    if not match:
+        return "unknown_resource"
+    value = _clean(match.group("resource"))
+    return re.split(r"\b(?:to|for|on|and|then|when|if)\b", value, maxsplit=1, flags=re.IGNORECASE)[0].strip()
+
+
+def _conditional_hit_counts(text: str) -> dict[str, str]:
+    counts = list(re.finditer(r"\b(?P<count>\d+)\s+hits?\b", text, re.IGNORECASE))
+    if not counts:
+        return {}
+    lowered = _key(text)
+    result: dict[str, str] = {}
+    for count in counts:
+        prefix = lowered[:count.start()]
+        use_matches = list(re.finditer(
+            r"\b(?P<ordinal>first|second|third(?:\s+or\s+later)?|"
+            r"\d+(?:st|nd|rd|th)(?:\s*\+)?)\s+use\b",
+            prefix,
+        ))
+        if not use_matches:
+            key = "conditional"
+        else:
+            ordinal = use_matches[-1].group("ordinal").casefold().replace(" ", "")
+            if ordinal.startswith("third+") or ordinal in {"3rd+", "thirdorlater"}:
+                key = "third_or_later_use"
+            elif ordinal in {"first", "1st"}:
+                key = "first_use"
+            elif ordinal in {"second", "2nd"}:
+                key = "second_use"
+            elif ordinal in {"third", "3rd"}:
+                key = "third_use"
+            else:
+                ordinal_number = re.sub(r"\D", "", ordinal)
+                key = f"use_{ordinal_number}"
+        result[key] = count.group("count")
+    return result
+
+
+def _apply_result_modifier(
+    occurrences: list[ClassifiedOccurrence],
+    owner_id: str,
+    text: str,
+    source_span: SourceSpan,
+    condition: str = "",
+    condition_source_span: SourceSpan | None = None,
+) -> bool:
+    if not owner_id:
+        return False
+
+    def support_spans(row: ClassifiedOccurrence) -> tuple[SourceSpan, ...]:
+        existing = list(row.modifier_source_spans)
+        anchor = source_span.source_anchor.anchor_id if source_span.source_anchor else ""
+        if not any(
+            (item.source_anchor.anchor_id if item.source_anchor else "") == anchor
+            and item.text == source_span.text
+            for item in existing
+        ):
+            existing.append(source_span)
+        return tuple(existing)
+
+    def append_modifier(row: ClassifiedOccurrence, key: str) -> dict[str, Any]:
+        current = dict(row.result_modifiers)
+        values = list(current.get(key) or [])
+        values.append(
+            {
+                "source_text": _clean(text),
+                "condition": condition,
+                "source_anchor_id": (
+                    source_span.source_anchor.anchor_id if source_span.source_anchor else ""
+                ),
+            }
+        )
+        current[key] = values
+        return current
+
+    def updated_condition(row: ClassifiedOccurrence) -> tuple[str, str]:
+        parts = [part for part in (row.condition, condition) if part]
+        merged = "; ".join(dict.fromkeys(parts))
+        state = row.state_reference or _state_reference(condition)
+        return merged, state
+
+    effect_potency = _RESULT_EFFECT_POTENCY_RE.search(text)
+    if effect_potency:
+        subjects = {
+            word.casefold()
+            for word in re.findall(r"\b(?:power|speed)\b", effect_potency.group("subjects"), re.IGNORECASE)
+        }
+        matches = [
+            index
+            for index, row in enumerate(occurrences)
+            if (row.source_owner_id == owner_id or row.action_owner_id == owner_id)
+            and row.occurrence_kind == "effect"
+            and row.semantic_type == "stat_increase"
+            and row.semantic_subject.casefold() in subjects
+        ]
+        if not matches:
+            return False
+        for index in matches:
+            row = occurrences[index]
+            current = append_modifier(row, "effect_potency")
+            current["effect_potency"][-1]["magnitude"] = _magnitude(text)
+            occurrences[index] = replace(
+                row,
+                result_modifiers=current,
+                modifier_source_spans=support_spans(row),
+            )
+        return True
+
+    hit_counts = _conditional_hit_counts(text)
+    if hit_counts:
+        matches = [
+            index
+            for index, row in enumerate(occurrences)
+            if row.source_owner_id == owner_id
+            and row.occurrence_kind == "effect"
+            and row.semantic_type == "multi_hit_action"
+        ]
+        if len(matches) != 1:
+            return False
+        index = matches[0]
+        row = occurrences[index]
+        current = dict(row.result_modifiers)
+        current_counts = dict(current.get("conditional_hit_counts") or {})
+        current_counts.update(hit_counts)
+        current["conditional_hit_counts"] = current_counts
+        current = append_modifier(row, "conditional_hit_modifiers")
+        current["conditional_hit_counts"] = current_counts
+        merged_condition, state_reference = updated_condition(row)
+        occurrences[index] = replace(
+            row,
+            result_modifiers=current,
+            condition=merged_condition,
+            condition_source_span=condition_source_span or row.condition_source_span,
+            state_reference=state_reference,
+            modifier_source_spans=support_spans(row),
+        )
+        return True
+
+    hit_delta = re.search(
+        r"\bnumber of (?:attacks|hits|(?:piercing|pierce|slash|blunt|magic|physical)\s+hits)\s+by\s+\+?(?P<increment>\d+)\b",
+        text,
+        re.IGNORECASE,
+    )
+    if hit_delta:
+        attack_type_hint = re.search(r"\b(piercing|pierce|slash|blunt|magic|physical)\s+hits?\b", text, re.IGNORECASE)
+        canonical_attack_type = ""
+        if attack_type_hint:
+            canonical_attack_type = {
+                "pierce": "piercing",
+                "piercing": "piercing",
+            }.get(attack_type_hint.group(1).casefold(), attack_type_hint.group(1).casefold())
+        matches = [
+            index for index, row in enumerate(occurrences)
+            if row.source_owner_id == owner_id
+            and row.occurrence_kind == "effect"
+            and row.semantic_type == "multi_hit_action"
+            and (not canonical_attack_type or row.attack_type.casefold() == canonical_attack_type)
+        ]
+        if len(matches) != 1:
+            return False
+        index = matches[0]
+        row = occurrences[index]
+        increment = int(hit_delta.group("increment"))
+        base_count = int(row.hit_count) if row.hit_count.isdigit() else 0
+        merged_condition, state_reference = updated_condition(row)
+        current = dict(row.result_modifiers)
+        current.update(
+            {
+                "conditional_increment": str(increment),
+                "conditional_total": str(base_count + increment),
+            }
+        )
+        current = append_modifier(row, "conditional_hit_modifiers")
+        current.update(
+            {
+                "conditional_increment": str(increment),
+                "conditional_total": str(base_count + increment),
+            }
+        )
+        occurrences[index] = replace(
+            row,
+            result_modifiers=current,
+            condition=merged_condition,
+            condition_source_span=condition_source_span or row.condition_source_span,
+            state_reference=state_reference,
+            modifier_source_spans=support_spans(row),
+        )
+        return True
+
+    max_stack = _MAX_STACK_METADATA_RE.search(text)
+    if max_stack:
+        matches = [
+            index
+            for index, row in enumerate(occurrences)
+            if (row.source_owner_id == owner_id or row.action_owner_id == owner_id)
+            and row.occurrence_kind == "effect"
+            and row.semantic_type in {
+                "stat_increase",
+                "element_damage_increase",
+                "critical_support",
+                "resistance_reduction",
+                "resistance_increase",
+            }
+        ]
+        if matches:
+            for index in matches:
+                row = occurrences[index]
+                current = append_modifier(row, "stack_limit_modifiers")
+                occurrences[index] = replace(
+                    row,
+                    magnitude={**dict(row.magnitude), "max_stacks": max_stack.group("value")},
+                    result_modifiers=current,
+                    modifier_source_spans=support_spans(row),
+                )
+            return True
+        return False
+
+    if _TYPE_ATTACK_BUFF_DOUBLING_RE.search(text):
+        matches = [
+            index
+            for index, row in enumerate(occurrences)
+            if (row.source_owner_id == owner_id or row.action_owner_id == owner_id)
+            and row.occurrence_kind == "effect"
+            and row.semantic_type == "element_damage_increase"
+        ]
+        if not matches:
+            return False
+        condition_match = re.search(r"\bfor\s+(.+)$", text, re.IGNORECASE)
+        for index in matches:
+            row = occurrences[index]
+            current = append_modifier(row, "conditional_potency")
+            modifier = current["conditional_potency"][-1]
+            modifier["magnitude"] = {"value": "2", "unit": "multiplier", "raw": "doubled"}
+            if condition_match:
+                modifier["condition"] = f"for {condition_match.group(1).strip(' .;')}"
+            occurrences[index] = replace(
+                row,
+                result_modifiers=current,
+                modifier_source_spans=support_spans(row),
+            )
+        return True
+
+    if not _RESULT_MODIFIER_RE.search(text):
+        return False
+    matches = [
+        index
+        for index, row in enumerate(occurrences)
+        if row.source_owner_id == owner_id
+        and row.occurrence_kind == "effect"
+        and row.semantic_type == "damage_event"
+    ]
+    if len(matches) != 1:
+        return False
+    index = matches[0]
+    row = occurrences[index]
+    current = append_modifier(row, "conditional_potency")
+    current["conditional_potency"][-1]["magnitude"] = _magnitude(text)
+    merged_condition, state_reference = updated_condition(row)
+    occurrences[index] = replace(
+        row,
+        result_modifiers=current,
+        condition=merged_condition,
+        condition_source_span=condition_source_span or row.condition_source_span,
+        state_reference=state_reference,
+        modifier_source_spans=support_spans(row),
+    )
+    return True
+
+
+def _result_owner_for_modifier(
+    occurrences: Sequence[ClassifiedOccurrence],
+    context: _AtomContext,
+    branch_context: Sequence[str],
+    text: str,
+) -> str:
+    if _RESULT_EFFECT_POTENCY_RE.search(text):
+        allowed_types = {"stat_increase"}
+    elif _HIT_COUNT_MODIFIER_RE.search(text):
+        allowed_types = {"multi_hit_action"}
+    elif _MAX_STACK_METADATA_RE.search(text):
+        allowed_types = {
+            "stat_increase",
+            "element_damage_increase",
+            "critical_support",
+            "resistance_reduction",
+            "resistance_increase",
+        }
+    elif _TYPE_ATTACK_BUFF_DOUBLING_RE.search(text):
+        allowed_types = {"element_damage_increase"}
+    elif _RESULT_MODIFIER_RE.search(text):
+        allowed_types = {"damage_event"}
+    else:
+        allowed_types = {
+            "damage_event",
+            "multi_hit_action",
+            "stat_increase",
+            "element_damage_increase",
+            "resistance_reduction",
+            "resistance_increase",
+        }
+
+    if (
+        _MAX_STACK_METADATA_RE.search(text)
+        or _TYPE_ATTACK_BUFF_DOUBLING_RE.search(text)
+        or _RESULT_EFFECT_POTENCY_RE.search(text)
+        or _HIT_COUNT_MODIFIER_RE.search(text)
+        or _EACH_PART_FORMULA_RE.search(text)
+    ):
+        modifier_types = allowed_types
+        related = [
+            row
+            for row in occurrences
+            if row.occurrence_kind == "effect"
+            and row.semantic_type in modifier_types
+            and row.source_owner_id
+            and (
+                row.source_span.location != context.block.location
+                or row.source_span.character_end is None
+                or row.source_span.character_end <= context.atom.character_start
+            )
+        ]
+        attack_type_hint = re.search(r"\b(piercing|pierce|slash|blunt|magic|physical)\b", text, re.IGNORECASE)
+        if attack_type_hint and _HIT_COUNT_MODIFIER_RE.search(text):
+            canonical_attack_type = {
+                "pierce": "piercing",
+                "piercing": "piercing",
+            }.get(attack_type_hint.group(1).casefold(), attack_type_hint.group(1).casefold())
+            related = [
+                row for row in related if row.attack_type.casefold() == canonical_attack_type
+            ]
+        if _EACH_PART_FORMULA_RE.search(text):
+            attack_types = {
+                {"pierce": "piercing", "piercing": "piercing"}.get(
+                    match.group(1).casefold(), match.group(1).casefold()
+                )
+                for match in re.finditer(r"\b(piercing|pierce|slash|blunt|magic|physical)\b", text, re.IGNORECASE)
+            }
+            related = [row for row in related if row.attack_type.casefold() in attack_types]
+        if context.action_owner_id:
+            same_action = [
+                row for row in related if row.action_owner_id == context.action_owner_id
+            ]
+            if same_action:
+                related = same_action
+        if len(related) > 1:
+            action_owners = {row.action_owner_id for row in related if row.action_owner_id}
+            if len(action_owners) == 1:
+                return next(iter(action_owners))
+        if len(related) == 1:
+            return related[0].source_owner_id
+        if related:
+            selected_related = max(
+                related,
+                key=lambda row: (
+                    len(row.source_span.ancestry),
+                    row.source_span.character_end or -1,
+                ),
+            )
+            return selected_related.source_owner_id
+
+    candidates: list[ClassifiedOccurrence] = []
+    for row in occurrences:
+        span = row.source_span
+        if (
+            row.occurrence_kind != "effect"
+            or row.semantic_type not in allowed_types
+            or not row.source_owner_id
+            or tuple(span.ancestry) != tuple(context.block.ancestry[:len(span.ancestry)])
+            or tuple(row.branch_context) != tuple(branch_context[:len(row.branch_context)])
+        ):
+            continue
+        if span.location == context.block.location and (
+            span.character_end is None
+            or span.character_end > context.atom.character_start
+        ):
+            continue
+        candidates.append(row)
+    if not candidates and _MAX_STACK_METADATA_RE.search(text) and context.action_owner_id:
+        action_candidates = [
+            row
+            for row in occurrences
+            if row.occurrence_kind == "effect"
+            and row.semantic_type in allowed_types
+            and row.action_owner_id == context.action_owner_id
+        ]
+        if len(action_candidates) > 1:
+            return context.action_owner_id
+        if len(action_candidates) == 1:
+            return action_candidates[0].source_owner_id
+    if not candidates and _TYPE_ATTACK_BUFF_DOUBLING_RE.search(text):
+        result_candidates = [
+            row
+            for row in occurrences
+            if row.occurrence_kind == "effect"
+            and row.semantic_type == "element_damage_increase"
+            and row.source_owner_id
+        ]
+        if len(result_candidates) == 1:
+            return result_candidates[0].source_owner_id
+    if not candidates:
+        return ""
+    selected = max(
+        candidates,
+        key=lambda row: (
+            len(row.source_span.ancestry),
+            row.source_span.character_end or -1,
+        ),
+    )
+    return selected.source_owner_id
+
+
+def _inherit_coordinated_result_fields(occurrences: list[ClassifiedOccurrence]) -> None:
+    """Share a trailing value only across adjacent same-role results in one group."""
+    by_group: dict[str, list[int]] = {}
+    for index, row in enumerate(occurrences):
+        if row.coordinated_result_group_id:
+            by_group.setdefault(row.coordinated_result_group_id, []).append(index)
+
+    for indices in by_group.values():
+        indices.sort(
+            key=lambda index: (
+                occurrences[index].source_span.character_start
+                if occurrences[index].source_span and occurrences[index].source_span.character_start is not None
+                else -1
+            )
+        )
+        for position, index in enumerate(indices):
+            row = occurrences[index]
+            if row.occurrence_kind != "effect" or row.semantic_type != "critical_support":
+                continue
+            if row.magnitude.get("value"):
+                continue
+            neighboring = [
+                candidate_index
+                for candidate_index in indices[max(0, position - 1):position + 2]
+                if candidate_index != index
+                and occurrences[candidate_index].occurrence_kind == "effect"
+                and occurrences[candidate_index].semantic_type == row.semantic_type
+                and occurrences[candidate_index].magnitude.get("value")
+                and tuple(occurrences[candidate_index].branch_context) == tuple(row.branch_context)
+            ]
+            if len(neighboring) != 1:
+                continue
+            source = occurrences[neighboring[0]]
+            inherited = {
+                key: source.magnitude[key]
+                for key in ("value", "unit", "raw")
+                if key in source.magnitude
+            }
+            modifiers = dict(row.result_modifiers)
+            modifiers["shared_group_magnitude"] = {
+                "source_owner_id": source.source_owner_id,
+                "source_anchor_id": (
+                    source.source_span.source_anchor.anchor_id
+                    if source.source_span and source.source_span.source_anchor
+                    else ""
+                ),
+            }
+            support_spans = list(row.modifier_source_spans)
+            if source.source_span is not None and source.source_span not in support_spans:
+                support_spans.append(source.source_span)
+            occurrences[index] = replace(
+                row,
+                magnitude={**dict(row.magnitude), **inherited},
+                result_modifiers=modifiers,
+                modifier_source_spans=tuple(support_spans),
+            )
 
 
 def _render_fragment_tokens(
     tokens: Sequence[StructuralToken],
 ) -> tuple[str, list[tuple[StructuralToken, int, int]]]:
-    pieces: list[str] = []
-    positions: list[tuple[StructuralToken, int, int]] = []
-    length = 0
-    for token in tokens:
-        if token.kind == "icon":
-            continue
-        value = _clean(token.text)
-        if not value:
-            continue
-        if pieces:
-            pieces.append(" ")
-            length += 1
-        start = length
-        pieces.append(value)
-        length += len(value)
-        positions.append((token, start, length))
-    return "".join(pieces), positions
+    return render_structural_tokens(tokens)
 
 
 def _range_span(
@@ -1622,19 +3023,113 @@ def _range_span(
     start: int,
     end: int,
     text: str,
+    *,
+    source_fact_id: str,
+    source_capture_sha256: str,
 ) -> SourceSpan:
+    cleaned_text = _clean(text)
     selected = [token for token, token_start, token_end in positions if token_start < end and token_end > start]
-    if not selected:
-        selected = [token for token, _token_start, _token_end in positions]
+    try:
+        # Resolve semantic spans against the complete structural block so the
+        # token offsets do not depend on which fragment produced the span.
+        anchor = source_anchor_for_quote(
+            source_fact_id=source_fact_id,
+            source_capture_sha256=source_capture_sha256,
+            block=block,
+            quote=cleaned_text,
+        )
+    except ValueError:
+        anchor = source_anchor_from_range(
+            source_fact_id=source_fact_id,
+            source_capture_sha256=source_capture_sha256,
+            block=block,
+            positions=positions,
+            start=start,
+            end=end,
+        )
     return SourceSpan(
         location=block.location,
         block_kind=block.kind,
         ancestry=tuple(block.ancestry),
-        token_start=min((token.order for token in selected), default=-1),
-        token_end=max((token.order for token in selected), default=-1),
-        text=_clean(text),
+        text=cleaned_text,
         character_start=start,
         character_end=end,
+        source_anchor=anchor,
+    )
+
+
+def _coordinated_stat_completion(
+    context: _AtomContext,
+    contexts: Sequence[_AtomContext],
+    *,
+    source_fact_id: str,
+    source_capture_sha256: str,
+) -> tuple[str, SourceSpan] | None:
+    """Share an explicitly written stat value with a preceding coordinated stat label."""
+    atom = context.atom
+    if not atom.coordinated_result_group_id:
+        return None
+    source_text = atom.effect_text or atom.text
+    current_stat = re.fullmatch(
+        r"\s*(?P<stat>power|pwr|intelligence|speed|luck|max(?:imum)?\s+hp|max(?:imum)?\s+mp)\s*",
+        source_text,
+        re.IGNORECASE,
+    )
+    if not current_stat:
+        return None
+    siblings = sorted(
+        (
+            candidate
+            for candidate in contexts
+            if candidate is not context
+            and candidate.atom.coordinated_result_group_id == atom.coordinated_result_group_id
+            and candidate.atom.character_start > atom.character_start
+        ),
+        key=lambda candidate: candidate.atom.character_start,
+    )
+    for sibling in siblings:
+        sibling_text = sibling.atom.effect_text or sibling.atom.text
+        sibling_stat = _STAT_WORD_RE.search(sibling_text)
+        if not sibling_stat:
+            continue
+        value = _COORDINATED_RESULT_VALUE_RE.search(sibling_text, sibling_stat.end())
+        if not value:
+            continue
+        suffix = sibling_text[sibling_stat.end():]
+        suffix = re.sub(
+            r"\s*(?:\(\s*(?:for\s+)?\d+\s+turns?\s*\)?|(?:for\s+)?\d+\s+turns?)\s*$",
+            "",
+            suffix,
+            flags=re.IGNORECASE,
+        )
+        if not suffix.strip():
+            continue
+        completed_text = f"{current_stat.group('stat')}{suffix}"
+        value_start = sibling.atom.character_start + value.start()
+        value_end = sibling.atom.character_start + value.end()
+        value_span = _range_span(
+            context.block,
+            context.token_positions,
+            value_start,
+            value_end,
+            context.fragment_text[value_start:value_end],
+            source_fact_id=source_fact_id,
+            source_capture_sha256=source_capture_sha256,
+        )
+        return completed_text, value_span
+    return None
+
+
+def _is_zone_definition_unit(unit: StructuralUnit) -> bool:
+    """Recognize a zone-definition heading whose child rows describe the mechanic."""
+    return any(
+        block.kind == "root"
+        and re.match(
+            r"\s*awakens?\s+any\b[^:]*\bzones?\s*:\s*$",
+            render_structural_tokens(block.tokens)[0],
+            re.IGNORECASE,
+        )
+        for block in unit.blocks
     )
 
 
@@ -1645,14 +3140,28 @@ def _fragment_atoms(
     end: int,
     text: str | None = None,
     token_positions: Sequence[tuple[StructuralToken, int, int]] | None = None,
+    source_fact_id: str = "",
+    source_capture_sha256: str = "",
 ) -> list[_AtomContext]:
     fragment_text, rendered_positions = (
         (text, list(token_positions))
         if text is not None and token_positions is not None
         else _render_fragment_tokens(tokens)
     )
+    semantic_characters = list(fragment_text)
+    for token, token_start, token_end in rendered_positions:
+        if token.kind == "icon":
+            semantic_characters[token_start:token_end] = " " * (token_end - token_start)
+    semantic_text = "".join(semantic_characters)
     contexts: list[_AtomContext] = []
-    for atom in _source_atoms(fragment_text):
+    for atom in _source_atoms(semantic_text):
+        if atom.coordinated_result_group_id:
+            atom = replace(
+                atom,
+                coordinated_result_group_id=(
+                    f"{block.location}:{start}:{end}:{atom.coordinated_result_group_id}"
+                ),
+            )
         selected = tuple(
             token
             for token, token_start, token_end in rendered_positions
@@ -1664,6 +3173,8 @@ def _fragment_atoms(
             atom.character_start,
             atom.character_end,
             atom.text,
+            source_fact_id=source_fact_id,
+            source_capture_sha256=source_capture_sha256,
         )
         condition_span = None
         if atom.condition_start is not None and atom.condition_end is not None:
@@ -1673,6 +3184,8 @@ def _fragment_atoms(
                 atom.condition_start,
                 atom.condition_end,
                 atom.condition,
+                source_fact_id=source_fact_id,
+                source_capture_sha256=source_capture_sha256,
             )
         timing_span = None
         if atom.timing_start is not None and atom.timing_end is not None:
@@ -1682,7 +3195,31 @@ def _fragment_atoms(
                 atom.timing_start,
                 atom.timing_end,
                 _clean(fragment_text[atom.timing_start:atom.timing_end]),
+                source_fact_id=source_fact_id,
+                source_capture_sha256=source_capture_sha256,
             )
+        modifier_span = None
+        if atom.shared_modifier_start is not None and atom.shared_modifier_end is not None:
+            modifier_span = _range_span(
+                block,
+                rendered_positions,
+                atom.shared_modifier_start,
+                atom.shared_modifier_end,
+                atom.shared_modifier_text,
+                source_fact_id=source_fact_id,
+                source_capture_sha256=source_capture_sha256,
+            )
+        action_start = atom.action_start if atom.action_start is not None else atom.character_start
+        action_end = atom.action_end if atom.action_end is not None else atom.character_end
+        action_span = _range_span(
+            block,
+            rendered_positions,
+            action_start,
+            action_end,
+            fragment_text[action_start:action_end],
+            source_fact_id=source_fact_id,
+            source_capture_sha256=source_capture_sha256,
+        )
         contexts.append(
             _AtomContext(
                 block=block,
@@ -1693,16 +3230,32 @@ def _fragment_atoms(
                 source_span=source_span,
                 condition_span=condition_span,
                 timing_span=timing_span,
+                modifier_span=modifier_span,
+                action_owner_id=(
+                    action_span.source_anchor.anchor_id
+                    if action_span.source_anchor is not None
+                    else source_span.source_anchor.anchor_id if source_span.source_anchor is not None else ""
+                ),
             )
         )
     return contexts
 
 
-def _unit_atom_contexts(unit: StructuralUnit) -> list[_AtomContext]:
+def _unit_atom_contexts(unit: StructuralUnit, source_fact_id: str = "") -> list[_AtomContext]:
     contexts: list[_AtomContext] = []
+    fact_id = source_fact_id or str(unit.source_fact_id or "")
     for block in unit.blocks:
         for tokens, start, end in _tokens_to_fragments(block):
-            contexts.extend(_fragment_atoms(block, tokens, start, end))
+            contexts.extend(
+                _fragment_atoms(
+                    block,
+                    tokens,
+                    start,
+                    end,
+                    source_fact_id=fact_id,
+                    source_capture_sha256=unit.source.capture_sha256,
+                )
+            )
     return contexts
 
 
@@ -1757,6 +3310,7 @@ def _relationship_operation(text: str, target_text: str) -> str:
 
 def _relationship_id(
     source_fact_id: str,
+    source_owner_id: str,
     target_kind: str,
     target_id: str,
     candidates: Sequence[str],
@@ -1768,6 +3322,7 @@ def _relationship_id(
     identity = _canonical(
         [
         source_fact_id,
+            source_owner_id,
             target_kind,
             target_id,
             sorted(candidates),
@@ -1809,6 +3364,95 @@ def _source_occurrence_for_reference(
     return ""
 
 
+def _relationship_source_span(context: _AtomContext, target_text: str = "") -> SourceSpan:
+    if (
+        context.atom.condition_start is not None
+        and context.atom.character_start is not None
+        and context.atom.character_end is not None
+        and _trigger(context.atom.condition) == "on_stellar_burst"
+        and re.search(r"\bperform\b[^.;]*\binstead\b", context.atom.text, re.IGNORECASE)
+    ):
+        start = min(context.atom.condition_start, context.atom.character_start)
+        end = context.atom.character_end
+        anchor = context.source_span.source_anchor
+        return _range_span(
+            context.block,
+            context.token_positions,
+            start,
+            end,
+            context.fragment_text[start:end],
+            source_fact_id=anchor.source_fact_id if anchor else "",
+            source_capture_sha256=anchor.source_capture_sha256 if anchor else "",
+        )
+    sequence = _SEQUENCE_TEXT_RE.search(context.atom.text)
+    if sequence:
+        start = context.atom.character_start + sequence.start()
+        end = context.atom.character_start + sequence.end()
+        return _range_span(
+            context.block,
+            context.token_positions,
+            start,
+            end,
+            context.atom.text[sequence.start():sequence.end()],
+            source_fact_id=context.source_span.source_anchor.source_fact_id
+            if context.source_span.source_anchor
+            else "",
+            source_capture_sha256=context.source_span.source_anchor.source_capture_sha256
+            if context.source_span.source_anchor
+            else "",
+        )
+    target_start = context.atom.text.casefold().find(target_text.casefold()) if target_text else -1
+    if target_start >= 0:
+        operation_matches = list(
+            re.finditer(
+                r"\b(?:activate(?:s|d|ing)?|replace(?:s|d|ing)?|choose|chooses|select|selects|branch|branches)\b",
+                context.atom.text[:target_start],
+                re.IGNORECASE,
+            )
+        )
+        if operation_matches:
+            start = context.atom.character_start + operation_matches[-1].start()
+            end = context.atom.character_start + target_start + len(target_text)
+            if (
+                operation_matches[-1].group(0).casefold().startswith("activate")
+                and re.search(r"\bon\s+(?:the\s+)?user\b", context.atom.text[target_start + len(target_text):], re.IGNORECASE)
+            ):
+                end = context.atom.character_end
+            return _range_span(
+                context.block,
+                context.token_positions,
+                start,
+                end,
+                context.fragment_text[start:end],
+                source_fact_id=context.source_span.source_anchor.source_fact_id
+                if context.source_span.source_anchor
+                else "",
+                source_capture_sha256=context.source_span.source_anchor.source_capture_sha256
+                if context.source_span.source_anchor
+                else "",
+            )
+    return context.source_span
+
+
+def _relationship_branch_condition(text: str, target_text: str) -> str:
+    target_start = text.casefold().find(target_text.casefold()) if target_text else -1
+    if target_start < 0:
+        return ""
+    prefix = text[:target_start]
+    operations = list(
+        re.finditer(
+            r"\b(?:activate(?:s|d|ing)?|replace(?:s|d|ing)?|choose|chooses|select|selects|branch|branches)\b",
+            prefix,
+            re.IGNORECASE,
+        )
+    )
+    if not operations:
+        return ""
+    condition_prefix = prefix[:operations[-1].start()]
+    branch = re.search(r"([^:;,.]{1,60}):\s*$", condition_prefix)
+    return _clean(branch.group(1)) if branch else ""
+
+
 def _classify_relationships(
     *,
     witness: Mapping[str, Any],
@@ -1824,17 +3468,71 @@ def _classify_relationships(
     contexts_by_unit = {key: list(value) for key, value in contexts.items()}
     origin_ids = {str(row.get("origin_unit_id") or root.unit_id) for row in resolutions}
     origin_ids.add(root.unit_id)
-    for origin_id in origin_ids:
-        origin = unit_by_id.get(origin_id)
-        if origin is not None and origin_id not in contexts_by_unit:
-            contexts_by_unit[origin_id] = _unit_atom_contexts(origin)
 
     relationships: dict[str, ClassifiedRelationship] = {}
+    shared_resolutions_by_origin = {
+        origin_id: resolve_shared_mechanics(
+            unit_by_id[origin_id],
+            parent_source_fact_id=str(
+                unit_by_id[origin_id].source_fact_id or witness.get("record_id") or ""
+            ),
+            registry=mechanic_registry,
+        )
+        for origin_id in sorted(origin_ids)
+        if origin_id in unit_by_id
+    }
+    resolved_shared_locations = {
+        origin_id: {
+            row.source_location
+            for row in rows
+            if row.resolution_status == "resolved"
+        }
+        for origin_id, rows in shared_resolutions_by_origin.items()
+    }
+    for origin_id in origin_ids - contexts_by_unit.keys():
+        origin = unit_by_id.get(origin_id)
+        if origin is None:
+            continue
+        source_fact_id = str(origin.source_fact_id or witness.get("record_id") or "")
+        shared_locations = resolved_shared_locations.get(origin_id, set())
+        contexts_by_unit[origin_id] = []
+        for context in _unit_atom_contexts(origin, source_fact_id):
+            references = [
+                token
+                for token in context.selected_tokens
+                if token.kind == "reference" and token.location not in shared_locations
+            ]
+            anchor = context.source_span.source_anchor
+            condition_anchor = (
+                context.condition_span.source_anchor
+                if context.condition_span is not None
+                else None
+            )
+            branch_context = (
+                (condition_anchor.anchor_id,)
+                if context.atom.condition
+                and _is_prerequisite(context.atom.condition)
+                and condition_anchor is not None
+                else ()
+            )
+            contexts_by_unit[origin_id].append(
+                replace(
+                    context,
+                    semantic_role=_semantic_role(
+                        context.atom,
+                        references,
+                        shared_definition_source=False,
+                    ),
+                    owner_id=anchor.anchor_id if anchor is not None else "",
+                    branch_context=branch_context,
+                )
+            )
 
     def add_relationship(
         *,
         source_fact_id: str,
         source_owner: str,
+        source_owner_id: str,
         source_occurrence_id: str,
         target_kind: str,
         target_id: str,
@@ -1847,9 +3545,34 @@ def _classify_relationships(
         resolution_detail: str,
         resolution_basis: str,
         definition_status: str,
+        semantic_role: str,
     ) -> None:
+        if not source_occurrence_id and source_owner_id:
+            candidates = [
+                row
+                for row in occurrences
+                if row.source_fact_id == source_fact_id
+                and row.source_owner_id == source_owner_id
+            ]
+            representative = next(
+                (
+                    row for row in candidates
+                    if row.semantic_role in {
+                        SemanticRole.CHILD_INVOCATION.value,
+                        SemanticRole.RELATIONSHIP_METADATA.value,
+                    }
+                ),
+                None,
+            )
+            representative = representative or next(
+                (row for row in candidates if row.occurrence_kind in OCCURRENCE_KINDS),
+                None,
+            )
+            representative = representative or next(iter(candidates), None)
+            source_occurrence_id = representative.occurrence_id if representative else ""
         relation_id = _relationship_id(
             source_fact_id,
+            source_owner_id,
             target_kind,
             target_id,
             candidate_target_ids,
@@ -1864,6 +3587,7 @@ def _classify_relationships(
                 relationship_id=relation_id,
                 source_fact_id=source_fact_id,
                 source_owner=source_owner,
+                source_owner_id=source_owner_id,
                 source_occurrence_id=source_occurrence_id,
                 target_kind=target_kind,
                 target_id=target_id,
@@ -1878,6 +3602,7 @@ def _classify_relationships(
                 candidate_target_ids=tuple(sorted(set(candidate_target_ids))),
                 semantic_state=semantic_state,
                 authority=authority,
+                semantic_role=semantic_role,
             ),
         )
 
@@ -1886,6 +3611,12 @@ def _classify_relationships(
             # General documentation links remain ordinary references.
             continue
         origin_id = str(row.get("origin_unit_id") or root.unit_id)
+        if (
+            not row.get("target_source_fact_id")
+            and str(row.get("occurrence_location") or "")
+            in resolved_shared_locations.get(origin_id, set())
+        ):
+            continue
         origin = unit_by_id.get(origin_id, root)
         token = next(
             (
@@ -1898,7 +3629,39 @@ def _classify_relationships(
         )
         if token is None:
             continue
-        context, token_start, token_end = _reference_context(contexts_by_unit.get(origin_id, ()), token)
+        reference_context, token_start, token_end = _reference_context(
+            contexts_by_unit.get(origin_id, ()), token
+        )
+        relationship_context = reference_context
+        if relationship_context is None or not _is_relationship_role(relationship_context.semantic_role):
+            ancestry = tuple(reference_context.block.ancestry) if reference_context else ()
+            relationship_context = max(
+                (
+                    candidate
+                    for candidate in contexts_by_unit.get(origin_id, ())
+                    if candidate.semantic_role == SemanticRole.CHILD_INVOCATION
+                    and len(candidate.block.ancestry) < len(ancestry)
+                    and ancestry[:len(candidate.block.ancestry)] == tuple(candidate.block.ancestry)
+                    and (
+                        _RELATIONSHIP_GROUP_HEADER_RE.search(candidate.atom.text)
+                        or _SEQUENCE_TEXT_RE.search(candidate.atom.text)
+                    )
+                    and (
+                        not _SEQUENCE_TEXT_RE.search(candidate.atom.text)
+                        or candidate.block.location == reference_context.block.location
+                    )
+                ),
+                key=lambda candidate: len(candidate.block.ancestry),
+                default=None,
+            )
+        if relationship_context is None or not _is_relationship_role(relationship_context.semantic_role):
+            continue
+        if reference_context is relationship_context and re.search(
+            rf"\b{re.escape(token.text)}\s+(?:skills?|moves?|actions?)\s*:\s*$",
+            relationship_context.atom.text,
+            re.IGNORECASE,
+        ):
+            continue
         block = next(
             (block for block in origin.blocks if any(item.location == token.location for item in block.tokens)),
             None,
@@ -1906,20 +3669,63 @@ def _classify_relationships(
         if block is None:
             continue
         block_text, _block_positions = _render_fragment_tokens(block.tokens)
-        operation = "replaces" if row.get("variant_relationship") else _relationship_operation(block_text, token.text)
+        operation = "replaces" if row.get("variant_relationship") else _relationship_operation(
+            relationship_context.atom.text,
+            token.text,
+        )
+        if _SEQUENCE_TEXT_RE.search(relationship_context.atom.text):
+            operation = "executes_sequence"
         variant = row.get("variant_relationship") or {}
-        condition = str(variant.get("condition") or (context.atom.condition if context else ""))
-        timing = context.atom.action_timing if context else ""
-        source_span = SourceSpan(
+        condition = str(
+            variant.get("condition")
+            or _relationship_branch_condition(relationship_context.atom.text, token.text)
+            or relationship_context.atom.condition
+        )
+        timing = relationship_context.atom.action_timing
+        if (
+            not timing
+            and _SEQUENCE_TEXT_RE.search(relationship_context.atom.text)
+            and str(witness.get("record_type") or "") in {"active_skill", "skill"}
+        ):
+            timing = "on_skill_use"
+        if (
+            not timing
+            and _RELATIONSHIP_GROUP_HEADER_RE.search(relationship_context.atom.text)
+            and str(witness.get("record_type") or "") in {"active_skill", "skill"}
+        ):
+            timing = "on_skill_use"
+        anchor_positions = (
+            reference_context.token_positions
+            if reference_context
+            else render_structural_tokens(block.tokens)[1]
+        )
+        anchor_range = next(
+            (
+                (token_start, token_end)
+                for selected, token_start, token_end in anchor_positions
+                if selected.location == token.location and selected.order == token.order
+            ),
+            (0, len(_clean(token.text))),
+        )
+        origin_fact_id = str(origin.source_fact_id or witness.get("record_id") or "")
+        source_anchor = source_anchor_from_range(
+            source_fact_id=origin_fact_id,
+            source_capture_sha256=origin.source.capture_sha256,
+            block=block,
+            positions=anchor_positions,
+            start=anchor_range[0],
+            end=anchor_range[1],
+        )
+        token_source_span = SourceSpan(
             location=token.location,
             block_kind=block.kind,
             ancestry=tuple(block.ancestry),
-            token_start=token.order,
-            token_end=token.order,
             text=token.text,
-            character_start=token_start,
-            character_end=token_end,
+            character_start=anchor_range[0],
+            character_end=anchor_range[1],
+            source_anchor=source_anchor,
         )
+        source_span = _relationship_source_span(relationship_context, token.text)
         candidate_unit_ids = [str(value) for value in row.get("candidate_unit_ids", [])]
         candidates = [
             str(unit_by_id[candidate].source_fact_id)
@@ -1960,9 +3766,14 @@ def _classify_relationships(
                 resolution_basis = "parent_variant_and_stellar_burst_context"
         target_kind = "source_fact" if target_id else "unresolved"
         add_relationship(
-            source_fact_id=str(origin.source_fact_id or witness.get("record_id") or ""),
+            source_fact_id=origin_fact_id,
             source_owner=origin.entity_name or str(witness.get("entity_name") or ""),
-            source_occurrence_id=_source_occurrence_for_reference(occurrences, context, token_start, token_end),
+            source_owner_id=relationship_context.owner_id or source_anchor.anchor_id,
+            source_occurrence_id=(
+                _source_occurrence_for_reference(occurrences, reference_context, token_start, token_end)
+                if reference_context is relationship_context
+                else ""
+            ),
             target_kind=target_kind,
             target_id=target_id,
             candidate_target_ids=candidates,
@@ -1974,17 +3785,14 @@ def _classify_relationships(
             resolution_detail=resolution_detail,
             resolution_basis=resolution_basis,
             definition_status="not_applicable",
+            semantic_role=relationship_context.semantic_role.value,
         )
 
     for origin_id in sorted(origin_ids):
         origin = unit_by_id.get(origin_id)
         if origin is None:
             continue
-        for mention in resolve_shared_mechanics(
-            origin,
-            parent_source_fact_id=str(origin.source_fact_id or witness.get("record_id") or ""),
-            registry=mechanic_registry,
-        ):
+        for mention in shared_resolutions_by_origin.get(origin_id, ()):
             context_token = next(
                 (
                     token
@@ -1999,36 +3807,98 @@ def _classify_relationships(
                 if context_token is not None
                 else (None, None, None)
             )
+            if context is None:
+                continue
+            semantic_role = context.semantic_role
+            if semantic_role == SemanticRole.EFFECT_RESULT:
+                source_text = context.atom.effect_text or context.atom.text
+                semantic_outputs = _semantic_outputs(
+                    semantic_role,
+                    source_text,
+                    _direction(source_text),
+                    context.fragment_text,
+                )
+                if any(capability in _CAPABILITY_IDS for _kind, capability, _subject in semantic_outputs):
+                    continue
+                semantic_role = SemanticRole.RELATIONSHIP_METADATA
+                context = replace(context, semantic_role=semantic_role)
+            if context.semantic_role == SemanticRole.UNKNOWN:
+                local_text = context.atom.effect_text or context.atom.text
+                if _relationship_operation(local_text, mention.mention) != "references":
+                    context = replace(
+                        context,
+                        semantic_role=SemanticRole.RELATIONSHIP_METADATA,
+                    )
             block = next(
                 (block for block in origin.blocks if any(token.location == mention.source_location for token in block.tokens)),
                 None,
             )
             if block is None:
                 continue
-            has_child_link = any(
+            child_link_at_mention = any(
                 row.get("target_source_fact_id")
-                and any(token.location == row.get("occurrence_location") for token in block.tokens)
+                and row.get("occurrence_location") == mention.source_location
                 for row in resolutions
             )
-            operation_text, _block_positions = _render_fragment_tokens(block.tokens)
-            operation = _relationship_operation(operation_text, mention.mention)
-            if has_child_link and operation == "activates":
+            if child_link_at_mention:
                 continue
+            operation_text, _block_positions = _render_fragment_tokens(block.tokens)
+            local_operation_text = context.atom.effect_text or context.atom.text
+            operation = _relationship_operation(local_operation_text, mention.mention)
+            if operation == "references":
+                operation = _relationship_operation(operation_text, mention.mention)
+            if (
+                context.semantic_role == SemanticRole.RESOURCE_CONSUMPTION
+                and mention.mechanic_class == "sidekick_resource"
+                and operation in {"consumes", "spends"}
+            ):
+                continue
+            if operation == "references" or (
+                not _is_relationship_role(context.semantic_role)
+                and semantic_role not in {
+                    SemanticRole.UNKNOWN,
+                    SemanticRole.RESOURCE_GAIN,
+                    SemanticRole.RESOURCE_CONSUMPTION,
+                    SemanticRole.STATE_CREATION,
+                }
+                and not re.search(
+                    r"\b(?:select|selects|choose|chooses|branch|branches|activate|activates|"
+                    r"replace|replaces|grant|grants|gain|gains|add|adds|consume|consumes|spend|spends)\b",
+                    local_operation_text,
+                    re.IGNORECASE,
+                )
+            ):
+                continue
+            anchor_positions = context.token_positions if context else render_structural_tokens(block.tokens)[1]
+            anchor_range = (
+                (token_start + mention.source_offset_start, token_start + mention.source_offset_end)
+                if token_start is not None and token_end is not None and mention.source_offset_start >= 0
+                else (token_start or 0, token_end or len(_clean(mention.mention)))
+            )
+            origin_fact_id = str(origin.source_fact_id or witness.get("record_id") or "")
+            source_anchor = source_anchor_from_range(
+                source_fact_id=origin_fact_id,
+                source_capture_sha256=origin.source.capture_sha256,
+                block=block,
+                positions=anchor_positions,
+                start=anchor_range[0],
+                end=anchor_range[1],
+            )
             source_span = SourceSpan(
                 location=mention.source_location,
                 block_kind=block.kind,
                 ancestry=tuple(block.ancestry),
-                token_start=context_token.order if context_token else -1,
-                token_end=context_token.order if context_token else -1,
                 text=mention.mention,
-                character_start=(token_start + mention.source_offset_start) if token_start is not None and mention.source_offset_start >= 0 else token_start,
-                character_end=(token_start + mention.source_offset_end) if token_start is not None and mention.source_offset_end >= 0 else token_end,
+                character_start=anchor_range[0],
+                character_end=anchor_range[1],
+                source_anchor=source_anchor,
             )
             target_id = mention.mechanic_id if mention.resolution_status == "resolved" else ""
             target_kind = "shared_mechanic" if target_id else "unresolved"
             add_relationship(
-                source_fact_id=mention.parent_source_fact_id or str(origin.source_fact_id or witness.get("record_id") or ""),
+                source_fact_id=mention.parent_source_fact_id or origin_fact_id,
                 source_owner=mention.parent_owner_name or origin.entity_name,
+                source_owner_id=(context.owner_id if context and context.owner_id else source_anchor.anchor_id),
                 source_occurrence_id=_source_occurrence_for_reference(occurrences, context, token_start, token_end),
                 target_kind=target_kind,
                 target_id=target_id,
@@ -2041,6 +3911,128 @@ def _classify_relationships(
                 resolution_detail=mention.reason,
                 resolution_basis=mention.resolution_basis,
                 definition_status=mention.definition_status,
+                semantic_role=(
+                    context.semantic_role.value
+                    if _is_relationship_role(context.semantic_role)
+                    else SemanticRole.RELATIONSHIP_METADATA.value
+                ),
+            )
+
+    # Some relationships are stated as local operations rather than links to
+    # another source fact. Keep those relations tied to the exact operation
+    # span and only emit the roles expressed by the source wording.
+    root_fact_id = str(root.source_fact_id or witness.get("record_id") or "")
+    for context in contexts_by_unit.get(root.unit_id, ()):
+        atom_text = context.atom.effect_text or context.atom.text
+        stack_state = re.search(
+            r"\bstack\s+(?:(?P<count>\d+)\s+)?(?P<state>[A-Z][\w'-]*)\s+"
+            r"on\s+(?P<recipient>self|user|enemy|ally|[A-Z][\w'-]*)\b",
+            atom_text,
+            re.IGNORECASE,
+        )
+        relation_specs: list[tuple[str, str, str, int, int, str]] = []
+        if stack_state:
+            phrase_start = stack_state.start()
+            phrase_end = stack_state.end()
+            source_end = context.atom.character_start + phrase_end
+            if source_end < len(context.fragment_text) and context.fragment_text[source_end] == ".":
+                phrase_end += 1
+            operation = "applies_state" if stack_state.group("count") else "stacks"
+            condition = _clean(context.atom.condition).strip(" :;,. ")
+            condition = re.sub(r"^(?:when|if)\s+", "", condition, flags=re.IGNORECASE)
+            if not condition and str(witness.get("record_type") or "") in {"active_skill", "skill"}:
+                condition = "on skill use"
+            relation_specs.append(
+                (
+                    operation,
+                    condition,
+                    "named_state",
+                    phrase_start,
+                    phrase_end,
+                    SemanticRole.RELATIONSHIP_METADATA.value,
+                )
+            )
+
+        if re.search(r"\bboth statuses\b[^.;]*\bend after\b", atom_text, re.IGNORECASE):
+            lifecycle_condition = "after pain/poison damage"
+            if re.search(
+                r"\bcannot\s+(?:deal with|handle)\s+(?:the\s+)?(?:enemies'?|enemy'?s?)\s+"
+                r"end-of-turn attacks?\b",
+                context.fragment_text,
+                re.IGNORECASE,
+            ):
+                lifecycle_condition += "; not after enemy end-of-turn attacks"
+            relation_specs.append(
+                (
+                    "child_lifecycle",
+                    lifecycle_condition,
+                    "named_state",
+                    0,
+                    len(atom_text),
+                    SemanticRole.RELATIONSHIP_METADATA.value,
+                )
+            )
+
+        embedded_mechanic = re.match(
+            r"\s*Link\s*:\s*(?P<definition>.+?)\s*$",
+            context.fragment_text,
+            re.IGNORECASE,
+        )
+        if embedded_mechanic:
+            relation_specs.append(
+                (
+                    "defines_embedded_mechanic",
+                    "on skill use" if str(witness.get("record_type") or "") in {"active_skill", "skill"} else "",
+                    "embedded_mechanic",
+                    embedded_mechanic.start("definition"),
+                    embedded_mechanic.end("definition"),
+                    SemanticRole.RELATIONSHIP_METADATA.value,
+                )
+            )
+
+        for operation, condition, target_kind, local_start, local_end, semantic_role in relation_specs:
+            start = context.atom.character_start + local_start
+            end = context.atom.character_start + local_end
+            source_text = context.fragment_text[start:end]
+            source_span = _range_span(
+                context.block,
+                context.token_positions,
+                start,
+                end,
+                source_text,
+                source_fact_id=root_fact_id,
+                source_capture_sha256=root.source.capture_sha256,
+            )
+            source_owner_id = context.owner_id or (
+                context.source_span.source_anchor.anchor_id
+                if context.source_span.source_anchor
+                else ""
+            )
+            source_occurrence_id = next(
+                (
+                    occurrence.occurrence_id
+                    for occurrence in occurrences
+                    if occurrence.source_owner_id == source_owner_id
+                ),
+                "",
+            )
+            add_relationship(
+                source_fact_id=root_fact_id,
+                source_owner=root.entity_name or str(witness.get("entity_name") or ""),
+                source_owner_id=source_owner_id,
+                source_occurrence_id=source_occurrence_id,
+                target_kind=target_kind,
+                target_id="",
+                candidate_target_ids=(),
+                operation=operation,
+                condition=condition,
+                timing="",
+                source_span=source_span,
+                resolution_status="resolved",
+                resolution_detail="",
+                resolution_basis="explicit_source_operation",
+                definition_status="embedded" if target_kind == "embedded_mechanic" else "not_applicable",
+                semantic_role=semantic_role,
             )
 
     return sorted(relationships.values(), key=lambda row: row.relationship_id)
@@ -2066,16 +4058,14 @@ def _classify_unit(
     )
     resolution_by_location = {str(row["occurrence_location"]): row for row in resolutions}
     source_passed = _source_ok(witness)
+    if arm not in {"fidelity_checked", "structural_only"}:
+        raise ValueError(f"unsupported classification arm: {arm}")
     if arm == "fidelity_checked":
         semantic_state = "fully_supported_input" if source_passed and fidelity_passed else "unknown_non_authoritative"
         authority = "fully_supported_input_non_authoritative" if semantic_state == "fully_supported_input" else "unknown_non_authoritative"
         admit_definitions = True
-    elif arm == "structural_only":
-        semantic_state = "structural_only_non_authoritative"
-        authority = "automatic_candidate"
-        admit_definitions = False
     else:
-        semantic_state = "legacy_non_authoritative"
+        semantic_state = "structural_only_non_authoritative"
         authority = "automatic_candidate"
         admit_definitions = False
 
@@ -2083,6 +4073,7 @@ def _classify_unit(
     ordinal_by_kind: Counter[str] = Counter()
     seen_dependencies: set[tuple[str, str, int | None, int | None, str]] = set()
     seen_triggers: set[tuple[str, str, int | None, int | None]] = set()
+    seen_unsupported_condition_gaps: set[str] = set()
     seen_states: set[tuple[str, str, int | None, int | None]] = set()
     unit_contexts: dict[str, list[_AtomContext]] = {}
     pending_condition = ""
@@ -2092,6 +4083,7 @@ def _classify_unit(
     pending_global_timing = ""
     pending_global_timing_span: SourceSpan | None = None
     active_state_reference = ""
+    active_state_direction = ""
     branch_conditions: list[tuple[tuple[str, ...], str, SourceSpan]] = []
     unit_target_context = ""
     has_automatic_sequence = any(
@@ -2104,9 +4096,10 @@ def _classify_unit(
     )
     sequence_metadata, repeated_action_branch = _sequence_metadata(unit)
     registry = mechanic_registry or load_shared_mechanic_registry()
+    zone_definition_source = _is_zone_definition_unit(unit)
     source_fact_id = str(witness.get("record_id") or unit.source_fact_id or "")
     witness_id = str(witness.get("witness_id") or "")
-    shared_definition_source = any(
+    shared_definition_source = zone_definition_source or any(
         entry.definition_status == "available"
         and anchor.source_fact_id == source_fact_id
         and anchor.witness_id == witness_id
@@ -2114,25 +4107,48 @@ def _classify_unit(
         for entry in registry.entries
         for anchor in entry.source_anchors
     )
+    shared_mechanic_locations = {
+        mention.source_location
+        for mention in resolve_shared_mechanics(
+            unit,
+            parent_source_fact_id=source_fact_id,
+            registry=registry,
+        )
+        if mention.resolution_status == "resolved"
+    }
 
     for block in unit.blocks:
         previous_target_context = ""
         active_block_state_reference = ""
-        inherited_branch = max(
+        inherited_branches = sorted(
             (
                 row for row in branch_conditions
                 if len(block.ancestry) > len(row[0])
                 and tuple(block.ancestry[:len(row[0])]) == row[0]
             ),
             key=lambda row: len(row[0]),
-            default=None,
+        )
+        inherited_condition = "; ".join(dict.fromkeys(row[1] for row in inherited_branches))
+        inherited_branch_context = tuple(
+            row[2].source_anchor.anchor_id
+            for row in inherited_branches
+            if row[2].source_anchor is not None
         )
         for tokens, start, end in _tokens_to_fragments(block):
             text, token_positions = _render_fragment_tokens(tokens)
             if not text:
                 continue
-            contexts = _fragment_atoms(block, tokens, start, end, text, token_positions)
-            unit_contexts.setdefault(unit.unit_id, []).extend(contexts)
+            contexts = _fragment_atoms(
+                block,
+                tokens,
+                start,
+                end,
+                text,
+                token_positions,
+                source_fact_id=source_fact_id,
+                source_capture_sha256=unit.source.capture_sha256,
+            )
+            unit_contexts.setdefault(unit.unit_id, [])
             pending_resource_metadata: dict[str, str] = {}
             consume_pending_condition = False
             for context in contexts:
@@ -2142,8 +4158,196 @@ def _classify_unit(
                 condition_span = context.condition_span
                 timing_span = context.timing_span
                 references = [token for token in selected_tokens if token.kind == "reference"]
+                equipment_replacement_text = f"{atom.text} {atom.condition}".strip()
+                if re.search(
+                    r"\b(?:overwritten|replaced|replaces?)\b[^.;]*\bequipment\b[^.;]*"
+                    r"\bbasic attack\b|\bequipment\b[^.;]*\b(?:overwritten|replaced|replaces?)\b"
+                    r"[^.;]*\bbasic attack\b",
+                    equipment_replacement_text,
+                    re.IGNORECASE,
+                ):
+                    effect_text = _clean(equipment_replacement_text)
+                    atom = replace(atom, effect_text=effect_text)
+                    span_start = atom.character_start
+                    span_end = atom.condition_end or atom.character_end
+                    atom_span = _range_span(
+                        context.block,
+                        context.token_positions,
+                        span_start,
+                        span_end,
+                        context.fragment_text[span_start:span_end],
+                        source_fact_id=source_fact_id,
+                        source_capture_sha256=unit.source.capture_sha256,
+                    )
+                    context = replace(context, atom=atom, source_span=atom_span)
+                relationship_references = [
+                    token
+                    for token in references
+                    if token.location not in shared_mechanic_locations
+                ]
                 support = _definition_support(references, resolution_by_location, admit_definitions=admit_definitions)
                 effect_text = atom.effect_text
+                role = _semantic_role(
+                    atom,
+                    relationship_references,
+                    shared_definition_source=shared_definition_source,
+                )
+                if role == SemanticRole.CHILD_INVOCATION:
+                    for resource_pattern, resource_semantic_type in (
+                        (_RESOURCE_CONSUMPTION_RE, "resource_consumption"),
+                        (_RESOURCE_GAIN_RE, "resource_grant"),
+                    ):
+                        for resource_match in resource_pattern.finditer(atom.text):
+                            resource_start = atom.character_start + resource_match.start()
+                            resource_end = atom.character_start + resource_match.end()
+                            resource_text = context.fragment_text[resource_start:resource_end]
+                            resource_span = _range_span(
+                                context.block,
+                                context.token_positions,
+                                resource_start,
+                                resource_end,
+                                resource_text,
+                                source_fact_id=source_fact_id,
+                                source_capture_sha256=unit.source.capture_sha256,
+                            )
+                            occurrences.append(
+                                _occurrence(
+                                    kind="gap",
+                                    witness=witness,
+                                    span=resource_span,
+                                    text=resource_text,
+                                    effect_text=resource_text,
+                                    ordinal=ordinal_by_kind["gap"],
+                                    semantic_state=semantic_state,
+                                    authority=authority,
+                                    definition_support=support,
+                                    references=references,
+                                    condition=atom.condition,
+                                    action_timing=atom.action_timing,
+                                    semantic_type=resource_semantic_type,
+                                    semantic_subject=_resource_subject(resource_text),
+                                    semantic_role=SemanticRole.RESOURCE_CONSUMPTION
+                                    if resource_semantic_type == "resource_consumption"
+                                    else SemanticRole.RESOURCE_GAIN,
+                                    source_owner_id=context.owner_id,
+                                    branch_context=context.branch_context,
+                                    action_owner_id=context.action_owner_id,
+                                    gap_reason="resource operation has no canonical capability value",
+                                )
+                            )
+                            ordinal_by_kind["gap"] += 1
+                if not shared_definition_source:
+                    for negative_match in re.finditer(
+                        r"\b(?:when|if|unless)\s+(?:the\s+)?(?:user|target|enemy|ally)?\s*"
+                        r"not\s+in\b[^.;]*",
+                        context.fragment_text,
+                        re.IGNORECASE,
+                    ):
+                        negative_text = _clean(negative_match.group(0)).rstrip(":;,. ")
+                        if _NEGATIVE_STATE_ABSENCE_ANY_RE.search(atom.condition):
+                            continue
+                        negative_span = _range_span(
+                            context.block,
+                            context.token_positions,
+                            negative_match.start(),
+                            negative_match.end(),
+                            context.fragment_text[negative_match.start():negative_match.end()],
+                            source_fact_id=source_fact_id,
+                            source_capture_sha256=unit.source.capture_sha256,
+                        )
+                        negative_anchor_id = (
+                            negative_span.source_anchor.anchor_id
+                            if negative_span.source_anchor is not None
+                            else ""
+                        )
+                        if not negative_anchor_id or negative_anchor_id in seen_unsupported_condition_gaps:
+                            continue
+                        seen_unsupported_condition_gaps.add(negative_anchor_id)
+                        owner_anchor = context.source_span.source_anchor
+                        occurrences.append(
+                            _occurrence(
+                                kind="gap",
+                                witness=witness,
+                                span=negative_span,
+                                text=negative_text,
+                                effect_text=negative_text,
+                                ordinal=ordinal_by_kind["gap"],
+                                semantic_state=semantic_state,
+                                authority=authority,
+                                definition_support=support,
+                                references=references,
+                                dependency_value="unsupported_condition",
+                                semantic_type="condition",
+                                condition=negative_text,
+                                condition_source_span=negative_span,
+                                semantic_role=SemanticRole.CONDITION,
+                                source_owner_id=(
+                                    context.action_owner_id
+                                    or (owner_anchor.anchor_id if owner_anchor is not None else negative_anchor_id)
+                                ),
+                                branch_context=inherited_branch_context,
+                                action_owner_id=context.action_owner_id,
+                                gap_reason="negative-status absence condition has no canonical dependency value",
+                            )
+                        )
+                        ordinal_by_kind["gap"] += 1
+                if zone_definition_source:
+                    role = SemanticRole.RELATIONSHIP_METADATA
+                coordinated_value_span = None
+                coordinated_stat = _coordinated_stat_completion(
+                    context,
+                    contexts,
+                    source_fact_id=source_fact_id,
+                    source_capture_sha256=unit.source.capture_sha256,
+                )
+                if coordinated_stat:
+                    if role in {SemanticRole.UNKNOWN, SemanticRole.CONDITION}:
+                        role = SemanticRole.EFFECT_RESULT
+                    if role == SemanticRole.EFFECT_RESULT:
+                        effect_text, coordinated_value_span = coordinated_stat
+                if (
+                    role == SemanticRole.EFFECT_RESULT
+                    and any(token.location in shared_mechanic_locations for token in references)
+                ):
+                    shared_activation = _semantic_outputs(
+                        role,
+                        effect_text or atom.text,
+                        _direction(effect_text or atom.text),
+                        context.fragment_text,
+                    )
+                    if not any(
+                        capability in _CAPABILITY_IDS
+                        for _kind, capability, _subject in shared_activation
+                    ):
+                        role = SemanticRole.RELATIONSHIP_METADATA
+                anchor = atom_span.source_anchor
+                owner_id = anchor.anchor_id if anchor is not None else ""
+                branch_context = inherited_branch_context
+                if atom.condition and _is_prerequisite(atom.condition) and condition_span and condition_span.source_anchor:
+                    branch_context = (*branch_context, condition_span.source_anchor.anchor_id)
+                attachable_roles = {
+                    SemanticRole.FORMULA,
+                    SemanticRole.SEQUENCE,
+                    SemanticRole.RESULT_MODIFIER,
+                }
+                if role in attachable_roles:
+                    modifier_owner = _result_owner_for_modifier(
+                        occurrences,
+                        context,
+                        branch_context,
+                        f"{effect_text or atom.text} {atom.condition}".strip(),
+                    )
+                    if modifier_owner:
+                        owner_id = modifier_owner
+                context = replace(
+                    context,
+                    semantic_role=role,
+                    owner_id=owner_id,
+                    branch_context=branch_context,
+                )
+                unit_contexts[unit.unit_id].append(context)
+                if role == SemanticRole.RESOURCE_CONSUMPTION:
+                    pending_resource_metadata.update(_resource_metadata(effect_text or atom.text))
                 effect_sequence_metadata = (
                     sequence_metadata
                     if repeated_action_branch
@@ -2151,22 +4355,64 @@ def _classify_unit(
                     else {}
                 )
                 direction = _direction(effect_text)
+                inherited_state_direction = False
                 labelled_state_reference = (
                     _state_reference(effect_text)
                     if re.match(r"\s*[A-Z][\w'-]*(?:\s+[A-Z][\w'-]*){0,2}\s*:", effect_text)
                     else ""
                 )
-                critical_damage_formula = _CRITICAL_DAMAGE_RE.search(
-                    f"{effect_text} {atom.condition}"
+                if (
+                    direction == "unknown"
+                    and labelled_state_reference
+                    and labelled_state_reference == active_state_reference
+                    and active_state_direction in {"ally", "self"}
+                ):
+                    direction = active_state_direction
+                    inherited_state_direction = True
+                if (
+                    direction == "unknown"
+                    and active_state_reference
+                    and active_state_direction in {"ally", "self"}
+                    and active_state_reference.casefold() in context.fragment_text.casefold()
+                    and re.search(
+                        r"\b(?:critical rate|power|pwr|intelligence|speed|luck|max(?:imum)?\s+hp|"
+                        r"damage dealt|outgoing damage)\b",
+                        effect_text,
+                        re.IGNORECASE,
+                    )
+                ):
+                    direction = active_state_direction
+                    inherited_state_direction = True
+                has_effect = role in {
+                    SemanticRole.EFFECT_RESULT,
+                    SemanticRole.RESOURCE_GAIN,
+                    SemanticRole.RESOURCE_CONSUMPTION,
+                    SemanticRole.STATE_CREATION,
+                    SemanticRole.COST_ACTIVATION_METADATA,
+                } or (
+                    role == SemanticRole.CHILD_INVOCATION
+                    and re.search(r"\bstellar burst\b", atom.condition, re.IGNORECASE)
+                    and re.search(r"\bperform\b[^.;]*\binstead\b", effect_text, re.IGNORECASE)
                 )
-                has_effect = _has_effect(effect_text) and not critical_damage_formula
-                effect_condition = atom.condition
-                effect_condition_span = condition_span
-                if not effect_condition and inherited_branch:
-                    effect_condition = inherited_branch[1]
-                    effect_condition_span = inherited_branch[2]
+                condition_parts = [*([inherited_condition] if inherited_condition else [])]
+                if atom.condition and atom.condition not in condition_parts:
+                    condition_parts.append(atom.condition)
+                effect_condition = "; ".join(condition_parts)
+                effect_condition_span = condition_span or (
+                    inherited_branches[-1][2] if inherited_branches else None
+                )
                 if direction == "unknown" and effect_condition:
                     direction = _direction(effect_condition)
+                if (
+                    _direction(effect_text) == "unknown"
+                    and previous_target_context
+                    and re.search(
+                        r"\b(?:inflict(?:s|ed|ing)?|appl(?:y|ies|ied|ying)|grant(?:s|ed|ing)?)\b",
+                        effect_text,
+                        re.IGNORECASE,
+                    )
+                ):
+                    direction = _direction(previous_target_context)
                 effect_timing = atom.action_timing
                 effect_timing_span = timing_span
                 if has_effect and pending_condition:
@@ -2198,76 +4444,179 @@ def _classify_unit(
                 ):
                     effect_timing = "on_skill_use"
 
-                if direction == "unknown" and previous_target_context:
+                if direction == "unknown" and previous_target_context and _ANAPHORIC_TARGET_RE.search(effect_text):
                     direction = _direction(previous_target_context)
-                block_locations = {token.location for token in block.tokens}
-                resolved_child_target = any(
-                    row.get("status") in {"resolved", "visited"}
-                    and row.get("target_source_fact_id")
-                    and row.get("occurrence_location") in block_locations
-                    for row in resolutions
-                )
-                relationship_activation = (
-                    has_effect
-                    and bool(re.search(r"\bactivate(?:s|d|ing)?\b", effect_text, re.IGNORECASE))
-                    and resolved_child_target
-                )
-                if has_effect and not shared_definition_source and not relationship_activation:
+                if role == SemanticRole.RESULT_MODIFIER:
+                    modifier_text = f"{atom.text} {atom.condition}".strip()
+                    modifier_span = atom_span
+                    modifier_condition = effect_condition
+                    modifier_condition_span = effect_condition_span
+                    if _HIT_COUNT_MODIFIER_RE.search(modifier_text) and _conditional_hit_counts(context.fragment_text):
+                        modifier_text = context.fragment_text
+                        modifier_span = _range_span(
+                            context.block,
+                            context.token_positions,
+                            atom.character_start,
+                            len(context.fragment_text),
+                            context.fragment_text[atom.character_start:],
+                            source_fact_id=source_fact_id,
+                            source_capture_sha256=unit.source.capture_sha256,
+                        )
+                        consecutive = re.search(
+                            r"\bwhen\s+used\s+consecutively\b",
+                            context.fragment_text,
+                            re.IGNORECASE,
+                        )
+                        if consecutive:
+                            modifier_condition = _clean(consecutive.group(0))
+                            modifier_condition_span = _range_span(
+                                context.block,
+                                context.token_positions,
+                                consecutive.start(),
+                                consecutive.end(),
+                                consecutive.group(0),
+                                source_fact_id=source_fact_id,
+                                source_capture_sha256=unit.source.capture_sha256,
+                            )
+                    modifier_attached = _apply_result_modifier(
+                        occurrences,
+                        context.owner_id,
+                        modifier_text,
+                        modifier_span,
+                        condition=modifier_condition,
+                        condition_source_span=modifier_condition_span,
+                    )
+                    hit_delta = re.search(
+                        r"\bnumber of (?:attacks|hits|(?:piercing|pierce|slash|blunt|magic|physical)\s+hits)\s+by\s+\+?(?P<increment>\d+)\b",
+                        modifier_text,
+                        re.IGNORECASE,
+                    )
+                    if not modifier_attached and hit_delta:
+                        occurrences.append(
+                            _occurrence(
+                                kind="effect",
+                                witness=witness,
+                                span=atom_span,
+                                text=modifier_text,
+                                effect_text=modifier_text,
+                                ordinal=ordinal_by_kind["effect"],
+                                semantic_state=semantic_state,
+                                authority=authority,
+                                definition_support=support,
+                                references=references,
+                                capability_value="multi_hit_action",
+                                semantic_type="hit_count_modifier",
+                                magnitude={
+                                    "value": hit_delta.group("increment"),
+                                    "unit": "additional_hits",
+                                },
+                                result_modifiers={
+                                    "conditional_increment": hit_delta.group("increment"),
+                                    "modifier_without_base_hit_owner": True,
+                                },
+                                condition=effect_condition or atom.condition,
+                                condition_source_span=effect_condition_span,
+                                semantic_role=role,
+                                source_owner_id=context.owner_id,
+                                branch_context=context.branch_context,
+                                action_owner_id=context.action_owner_id,
+                                coordinated_result_group_id=atom.coordinated_result_group_id,
+                                modifier_source_spans=(atom_span,),
+                            )
+                        )
+                        ordinal_by_kind["effect"] += 1
+                    elif not modifier_attached:
+                        occurrences.append(
+                            _occurrence(
+                                kind="gap",
+                                witness=witness,
+                                span=atom_span,
+                                text=modifier_text,
+                                effect_text=modifier_text,
+                                ordinal=ordinal_by_kind["effect"],
+                                semantic_state=semantic_state,
+                                authority=authority,
+                                definition_support=support,
+                                references=references,
+                                condition=atom.condition,
+                                action_timing=atom.action_timing,
+                                semantic_type="unsupported_result_modifier",
+                                magnitude=_magnitude(modifier_text),
+                                result_modifiers={"unresolved_owner": True},
+                                semantic_role=role,
+                                source_owner_id=context.owner_id,
+                                branch_context=context.branch_context,
+                                action_owner_id=context.action_owner_id,
+                                coordinated_result_group_id=atom.coordinated_result_group_id,
+                                modifier_source_spans=(atom_span,),
+                                gap_reason="conditional result modifier has no unique supported result owner",
+                            )
+                        )
+                        ordinal_by_kind["gap"] += 1
+
+                if has_effect:
                     semantic_source = effect_text
-                    if (
+                    if role in {SemanticRole.EFFECT_RESULT, SemanticRole.CHILD_INVOCATION} and (
                         effect_condition
                         and re.search(r"\bstellar burst\b", effect_condition, re.IGNORECASE)
                         and re.search(r"\bperform\b[^.;]*\binstead\b", effect_text, re.IGNORECASE)
                     ):
                         semantic_source = f"{effect_condition}: {effect_text}"
-                    for semantic_type, capability, subject in _effect_semantics(
+                    coordinated_context = " ".join(
+                        _clean(candidate.atom.effect_text or candidate.atom.text)
+                        for candidate in contexts
+                        if atom.coordinated_result_group_id
+                        and candidate.atom.coordinated_result_group_id
+                        == atom.coordinated_result_group_id
+                    )
+                    for semantic_type, capability, subject in _semantic_outputs(
+                        role,
                         semantic_source,
                         direction,
-                        context.fragment_text,
+                        effect_text if atom.coordinated_result_group_id else context.fragment_text,
+                        coordinated_context,
                     ):
-                        resource_prerequisite = (
-                            semantic_type == "resource_consumption"
-                            and bool(_RESOURCE_COST_START_RE.search(context.fragment_text))
-                        )
-                        if resource_prerequisite:
-                            pending_resource_metadata.update(_resource_metadata(context.fragment_text))
-                            continue
-                        occurrence_kind = "dependency" if resource_prerequisite else "effect"
+                        occurrence_kind = "effect" if capability else "gap"
                         inherited_target = (
                             previous_target_context or unit_target_context
                             if semantic_type in {"resistance_reduction", "status_infliction"}
                             and _recipient_and_cardinality(effect_text)[0] == "unknown"
+                            and _ANAPHORIC_TARGET_RE.search(effect_text)
                             else ""
                         )
-                        if semantic_type == "hit_count_modifier":
-                            inherited_target = previous_target_context or unit_target_context
                         if (
                             occurrence_kind == "effect"
                             and not inherited_target
                             and semantic_type in {"critical_support", "element_damage_increase", "stat_increase", "damage_modifier"}
                             and _recipient_and_cardinality(effect_text)[0] == "unknown"
+                            and _ANAPHORIC_TARGET_RE.search(effect_text)
                         ):
                             inherited_target = previous_target_context
-                        value = _dependency_value(effect_text) if resource_prerequisite else ""
+                        value = ""
                         occurrence_magnitude = _magnitude(effect_text)
-                        if semantic_type == "critical_support" and not occurrence_magnitude:
-                            shared_critical_magnitude = re.search(
-                                r"\b(?:magic\s+)?critical\s+rate\s*([+-]?\s*\d+(?:\.\d+)?\s*%)",
+                        if (
+                            not occurrence_magnitude
+                            and _ATTACK_RESULT_RE.search(effect_text)
+                            and _formula_metadata(context.fragment_text)
+                        ):
+                            occurrence_magnitude = _formula_tier_magnitude(
                                 context.fragment_text,
-                                re.IGNORECASE,
+                                effect_text,
                             )
-                            if shared_critical_magnitude:
-                                occurrence_magnitude = _magnitude(shared_critical_magnitude.group(0))
                         if semantic_type == "multi_hit_action":
                             occurrence_magnitude = {"hit_count": _hit_count(effect_text)}
                         state_context = (
                             _state_reference(effect_text)
                             or _state_reference(effect_condition)
-                            or _state_reference(previous_target_context)
+                            or (
+                                _state_reference(previous_target_context)
+                                if _ANAPHORIC_TARGET_RE.search(effect_text)
+                                else ""
+                            )
                         )
                         max_stack = re.search(
                             r"\bmax(?:imum)?\s+stack\s*:?\s*(?:x\s*)?(\d+)\b",
-                            context.fragment_text,
+                            f"{effect_text} {effect_condition}",
                             re.IGNORECASE,
                         )
                         if (
@@ -2281,10 +4630,16 @@ def _classify_unit(
                                 "unit": "percent_per_stack",
                                 "max_stacks": max_stack.group(1),
                             }
-                        occurrence_resource_metadata = dict(pending_resource_metadata)
-                        if occurrence_kind == "effect":
+                        if role in {
+                            SemanticRole.RESOURCE_CONSUMPTION,
+                            SemanticRole.RESOURCE_GAIN,
+                            SemanticRole.STATE_CREATION,
+                        }:
+                            occurrence_resource_metadata = {}
+                        else:
+                            occurrence_resource_metadata = dict(pending_resource_metadata)
                             pending_resource_metadata.clear()
-                        occurrence_formula_metadata = _formula_metadata(effect_text)
+                        occurrence_formula_metadata = _formula_metadata(context.fragment_text)
                         attack_type_override = ""
                         if semantic_type == "damage_event" and capability == "direct_damage":
                             attack_type_override, attack_type_formula = _stance_dependent_attack_type(
@@ -2294,6 +4649,47 @@ def _classify_unit(
                             if attack_type_formula:
                                 occurrence_formula_metadata["attack_type_selection"] = attack_type_formula
                         occurrence_span = atom_span
+                        if semantic_type == "damage_event" and capability == "direct_damage":
+                            tier_only_suffix = _ATTACK_TIER_ONLY_SUFFIX_RE.search(effect_text)
+                            if tier_only_suffix:
+                                span_start = atom.character_start
+                                span_end = span_start + tier_only_suffix.start()
+                                occurrence_span = _range_span(
+                                    context.block,
+                                    context.token_positions,
+                                    span_start,
+                                    span_end,
+                                    context.fragment_text[span_start:span_end],
+                                    source_fact_id=source_fact_id,
+                                    source_capture_sha256=unit.source.capture_sha256,
+                                )
+                        if semantic_type == "multi_hit_action":
+                            owning_damage = next(
+                                (
+                                    row
+                                    for row in reversed(occurrences)
+                                    if row.occurrence_kind == "effect"
+                                    and row.semantic_type == "damage_event"
+                                    and row.capability_value == "direct_damage"
+                                    and row.source_owner_id == context.owner_id
+                                ),
+                                None,
+                            )
+                            if owning_damage is not None:
+                                occurrence_span = owning_damage.source_span
+                        shared_recipient_context = ""
+                        if (
+                            semantic_type in {"hp_recovery", "mp_recovery", "revive"}
+                            and not atom.coordinated_result_group_id
+                            and _recipient_and_cardinality(effect_text)[0] == "unknown"
+                            and _recipient_and_cardinality(_recipient_context(context.fragment_text))[0] != "unknown"
+                        ):
+                            shared_recipient_context = _recipient_context(context.fragment_text)
+                        if (
+                            semantic_type in {"resistance_reduction", "status_infliction"}
+                            and _recipient_and_cardinality(effect_text)[0] == "unknown"
+                        ):
+                            shared_recipient_context = _shared_attack_target(context.fragment_text)
                         if (
                             semantic_type == "burst_window"
                             and atom.condition_start is not None
@@ -2306,7 +4702,43 @@ def _classify_unit(
                                 span_start,
                                 atom.character_end,
                                 context.fragment_text[span_start:atom.character_end],
+                                source_fact_id=source_fact_id,
+                                source_capture_sha256=unit.source.capture_sha256,
                             )
+                        if semantic_type in {"resistance_reduction", "resistance_increase"}:
+                            resistance_property = _RESISTANCE_PROPERTY_RE.search(effect_text)
+                            if resistance_property:
+                                anchor_start = atom.character_start + resistance_property.start()
+                                anchor_end = atom.character_start + resistance_property.end()
+                                occurrence_span = _range_span(
+                                    context.block,
+                                    context.token_positions,
+                                    anchor_start,
+                                    anchor_end,
+                                    context.fragment_text[anchor_start:anchor_end],
+                                    source_fact_id=source_fact_id,
+                                    source_capture_sha256=unit.source.capture_sha256,
+                                )
+                        shared_duration_applies = bool(
+                            atom.shared_modifier_text
+                            and _SHARED_DURATION_RE.search(atom.shared_modifier_text)
+                            and semantic_type not in _DURATIONLESS_RESULT_TYPES
+                        )
+                        shared_stack_match = _MAX_STACK_METADATA_RE.search(atom.shared_modifier_text)
+                        shared_stack_applies = bool(
+                            shared_stack_match
+                            and semantic_type in {
+                                "stat_increase",
+                                "element_damage_increase",
+                                "critical_support",
+                                "resistance_reduction",
+                            }
+                        )
+                        if shared_stack_applies and shared_stack_match:
+                            occurrence_magnitude = {
+                                **occurrence_magnitude,
+                                "max_stacks": shared_stack_match.group("value"),
+                            }
                         occurrences.append(
                             _occurrence(
                                 kind=occurrence_kind,
@@ -2319,7 +4751,7 @@ def _classify_unit(
                                 authority=authority,
                                 definition_support=support,
                                 references=references,
-                                capability_value="" if resource_prerequisite else capability,
+                                capability_value=capability,
                                 dependency_value=value,
                                 condition=effect_condition,
                                 action_timing=effect_timing,
@@ -2336,12 +4768,80 @@ def _classify_unit(
                                 state_reference=(
                                     _state_reference(effect_text)
                                     or _state_reference(effect_condition)
-                                    or _state_reference(previous_target_context)
+                                    or (
+                                        _state_reference(previous_target_context)
+                                        if _ANAPHORIC_TARGET_RE.search(effect_text)
+                                        else ""
+                                    )
                                     or pending_state_reference
                                     or active_state_reference
                                 ),
                                 magnitude=occurrence_magnitude,
-                                field_context=inherited_target,
+                                field_context=(
+                                    shared_recipient_context
+                                    or inherited_target
+                                    or (active_state_direction if inherited_state_direction else "")
+                                ),
+                                semantic_role=role,
+                                source_owner_id=context.owner_id,
+                                branch_context=context.branch_context,
+                                result_modifiers=(
+                                    {
+                                        "shared_modifiers": [
+                                            *(
+                                                [{
+                                                    "kind": "duration",
+                                                    "source_text": _SHARED_DURATION_RE.search(
+                                                        atom.shared_modifier_text
+                                                    ).group(0),
+                                                    "group_id": atom.coordinated_result_group_id,
+                                                }]
+                                                if shared_duration_applies
+                                                else []
+                                            ),
+                                            *(
+                                                [{
+                                                    "kind": "max_stacks",
+                                                    "source_text": _MAX_STACK_METADATA_RE.search(
+                                                        atom.shared_modifier_text
+                                                    ).group(0),
+                                                    "group_id": atom.coordinated_result_group_id,
+                                                    "result_text": atom.shared_modifier_text,
+                                                }]
+                                                if shared_stack_applies and shared_stack_match
+                                                else []
+                                            ),
+                                        ]
+                                    }
+                                    if (shared_duration_applies or shared_stack_applies)
+                                    and atom.coordinated_result_group_id
+                                    else {}
+                                ),
+                                action_owner_id=context.action_owner_id,
+                                coordinated_result_group_id=atom.coordinated_result_group_id,
+                                modifier_source_spans=tuple(
+                                    span
+                                    for span in (
+                                        coordinated_value_span,
+                                        context.modifier_span
+                                        if (shared_duration_applies or shared_stack_applies)
+                                        else None,
+                                    )
+                                    if span is not None
+                                ),
+                                duration_activation_override={
+                                    **_duration_activation(effect_text),
+                                    **(
+                                        _duration_activation(atom.shared_modifier_text)
+                                        if shared_duration_applies
+                                        else {}
+                                    ),
+                                },
+                                gap_reason=(
+                                    "recognized semantic result has no canonical taxonomy value"
+                                    if occurrence_kind == "gap"
+                                    else ""
+                                ),
                             )
                         )
                         ordinal_by_kind[occurrence_kind] += 1
@@ -2384,6 +4884,10 @@ def _classify_unit(
                                         field_context=effect_text,
                                         state_reference="",
                                         condition_source_span=atom_span,
+                                        semantic_role=role,
+                                        source_owner_id=context.owner_id,
+                                        branch_context=context.branch_context,
+                                        action_owner_id=context.action_owner_id,
                                     )
                                 )
                                 ordinal_by_kind["dependency"] += 1
@@ -2398,12 +4902,7 @@ def _classify_unit(
                     and bool(re.search(r"\bactivate(?:s|d|ing)?\b", effect_text, re.IGNORECASE))
                     and bool(references)
                 )
-                if (
-                    atom.condition
-                    and _is_prerequisite(atom.condition)
-                    and not relationship_condition
-                    and not shared_definition_source
-                ):
+                if atom.condition and _is_prerequisite(atom.condition) and not shared_definition_source:
                     dependency_condition = _clean(atom.condition).rstrip(":;,. ")
                     condition_references = [
                         token for token, token_start, token_end in token_positions
@@ -2412,6 +4911,116 @@ def _classify_unit(
                         and token_end > atom.condition_start
                         and token.kind == "reference"
                     ]
+                    existing_condition_values = {
+                        value for value, _scope in _dependency_values(dependency_condition)
+                    }
+                    has_unknown_active_state_condition = bool(
+                        re.match(
+                            r"\s*(?:when|if|unless)\s+(?:the\s+)?"
+                            r"[\w'-]+(?:\s+[\w'-]+){0,2}\s+is\s+active\b",
+                            dependency_condition,
+                            re.IGNORECASE,
+                        )
+                    )
+                    if (
+                        not existing_condition_values
+                        and has_unknown_active_state_condition
+                        and atom.condition_start is not None
+                    ):
+                        unsupported_condition_key = (
+                            atom_span.location,
+                            dependency_condition,
+                            atom.condition_start,
+                            atom.condition_end,
+                        )
+                        if unsupported_condition_key not in seen_dependencies:
+                            seen_dependencies.add(unsupported_condition_key)
+                            unsupported_condition_span = condition_span or _range_span(
+                                context.block,
+                                context.token_positions,
+                                atom.condition_start,
+                                atom.condition_end or atom.condition_start,
+                                atom.condition,
+                                source_fact_id=source_fact_id,
+                                source_capture_sha256=unit.source.capture_sha256,
+                            )
+                            occurrences.append(
+                                _occurrence(
+                                    kind="gap",
+                                    witness=witness,
+                                    span=unsupported_condition_span,
+                                    text=dependency_condition,
+                                    effect_text=dependency_condition,
+                                    ordinal=ordinal_by_kind["gap"],
+                                    semantic_state=semantic_state,
+                                    authority=authority,
+                                    definition_support=support,
+                                    references=condition_references,
+                                    condition=dependency_condition,
+                                    action_timing="",
+                                    semantic_type="condition",
+                                    condition_source_span=unsupported_condition_span,
+                                    semantic_role=SemanticRole.CONDITION,
+                                    source_owner_id=context.action_owner_id or context.owner_id,
+                                    branch_context=context.branch_context,
+                                    action_owner_id=context.action_owner_id,
+                                    gap_reason="prerequisite condition has no canonical dependency value",
+                                )
+                            )
+                            ordinal_by_kind["gap"] += 1
+                    if "unsupported_condition" not in existing_condition_values and atom.condition_start is not None:
+                        for negative_match in re.finditer(
+                            r"(?:^|;)\s*(?P<condition>(?:when|if|unless)\s+(?:the\s+)?(?:user|target|enemy|ally)?\s*not\s+in\b[^;]*)",
+                            atom.condition,
+                            re.IGNORECASE,
+                        ):
+                            negative_text = _clean(negative_match.group("condition")).rstrip(":;,. ")
+                            relative_start = negative_match.start("condition")
+                            relative_end = negative_match.end("condition")
+                            negative_span = _range_span(
+                                context.block,
+                                context.token_positions,
+                                atom.condition_start + relative_start,
+                                atom.condition_start + relative_end,
+                                atom.condition[relative_start:relative_end],
+                                source_fact_id=source_fact_id,
+                                source_capture_sha256=unit.source.capture_sha256,
+                            )
+                            negative_key = (
+                                atom_span.location,
+                                negative_text,
+                                negative_span.character_start,
+                                negative_span.character_end,
+                                "unsupported_condition",
+                            )
+                            if negative_key in seen_dependencies:
+                                continue
+                            seen_dependencies.add(negative_key)
+                            occurrences.append(
+                                _occurrence(
+                                    kind="gap",
+                                    witness=witness,
+                                    span=negative_span,
+                                    text=negative_text,
+                                    ordinal=ordinal_by_kind["gap"],
+                                    semantic_state=semantic_state,
+                                    authority=authority,
+                                    definition_support=support,
+                                    references=condition_references,
+                                    effect_text=negative_text,
+                                    condition=negative_text,
+                                    action_timing="",
+                                    dependency_value="unsupported_condition",
+                                    semantic_type="condition",
+                                    condition_source_span=negative_span,
+                                    semantic_role=SemanticRole.CONDITION,
+                                    source_owner_id=context.owner_id,
+                                    branch_context=context.branch_context,
+                                    action_owner_id=context.action_owner_id,
+                                    gap_reason="negative-status absence condition has no canonical dependency value",
+                                )
+                            )
+                            ordinal_by_kind["gap"] += 1
                     for dependency_value, dependency_scope in _dependency_values(dependency_condition):
                         local_condition = dependency_condition
                         compound_dependency = bool(
@@ -2420,6 +5029,80 @@ def _classify_unit(
                         if compound_dependency:
                             local_condition = f"When {dependency_scope.strip(' :;,.')}"
                         dependency_span = condition_span or atom_span
+                        if dependency_value == "party_composition" and atom.condition_start is not None:
+                            party_scope = re.search(
+                                r"(?:^|;)\s*(?P<condition>(?:when\s+)?[^;]*?\b(?:frontline|front\s+line|at\s+front|party\s+composition)\b)",
+                                atom.condition,
+                                re.IGNORECASE,
+                            )
+                            if party_scope:
+                                scoped_condition = party_scope.group("condition")
+                                party_clause = re.search(
+                                    r"\band\s+(?P<condition>(?:(?:when|if)\s+)?"
+                                    r"[^;]*?\b(?:frontline|front\s+line|at\s+front|party\s+composition)\b)",
+                                    atom.condition,
+                                    re.IGNORECASE,
+                                ) if compound_dependency else None
+                                if party_clause:
+                                    scoped_condition = party_clause.group("condition")
+                                    scope_start = atom.condition_start + party_clause.start("condition")
+                                    scope_end = atom.condition_start + party_clause.end("condition")
+                                else:
+                                    scoped_condition = (
+                                        dependency_condition
+                                        if ";" in dependency_condition
+                                        else party_scope.group("condition")
+                                    )
+                                    scope_start = atom.condition_start + party_scope.start("condition")
+                                    scope_end = atom.condition_start + party_scope.end("condition")
+                                local_condition = _clean(scoped_condition).rstrip(":;,. ")
+                                if compound_dependency and not re.match(r"(?:when|if)\b", local_condition, re.IGNORECASE):
+                                    local_condition = f"When {local_condition}"
+                                dependency_span = _range_span(
+                                    context.block,
+                                    context.token_positions,
+                                    scope_start,
+                                    scope_end,
+                                    atom.condition[scope_start - atom.condition_start:scope_end - atom.condition_start],
+                                    source_fact_id=source_fact_id,
+                                    source_capture_sha256=unit.source.capture_sha256,
+                                )
+                        if dependency_value == "requires_zone" and ";" in atom.condition and atom.condition_start is not None:
+                            for clause_match in re.finditer(r"[^;]+", atom.condition):
+                                clause_text = _clean(clause_match.group(0)).rstrip(":;,. ")
+                                if not any(value == "requires_zone" for value, _scope in _dependency_values(clause_text)):
+                                    continue
+                                scope_start = atom.condition_start + clause_match.start()
+                                scope_end = atom.condition_start + clause_match.end()
+                                local_condition = clause_text
+                                dependency_span = _range_span(
+                                    context.block,
+                                    context.token_positions,
+                                    scope_start,
+                                    scope_end,
+                                    atom.condition[clause_match.start():clause_match.end()],
+                                    source_fact_id=source_fact_id,
+                                    source_capture_sha256=unit.source.capture_sha256,
+                                )
+                                break
+                        if dependency_value == "requires_stellar_awakened" and atom.condition_start is not None:
+                            stellar_requirement = re.search(
+                                r"\brequires?\s+stellar\s+(?:awakening|awakened)\b",
+                                atom.condition,
+                                re.IGNORECASE,
+                            )
+                            if stellar_requirement:
+                                scope_start = atom.condition_start + stellar_requirement.start()
+                                scope_end = atom.condition_start + stellar_requirement.end()
+                                dependency_span = _range_span(
+                                    context.block,
+                                    context.token_positions,
+                                    scope_start,
+                                    scope_end,
+                                    atom.condition[stellar_requirement.start():stellar_requirement.end()],
+                                    source_fact_id=source_fact_id,
+                                    source_capture_sha256=unit.source.capture_sha256,
+                                )
                         if compound_dependency:
                             scope_match = re.search(
                                 re.escape(dependency_scope.strip(" :;,.")),
@@ -2435,6 +5118,8 @@ def _classify_unit(
                                     scope_start,
                                     scope_end,
                                     atom.condition[scope_match.start():scope_match.end()],
+                                    source_fact_id=source_fact_id,
+                                    source_capture_sha256=unit.source.capture_sha256,
                                 )
                         condition_key = (
                             atom_span.location,
@@ -2446,18 +5131,46 @@ def _classify_unit(
                         if condition_key in seen_dependencies:
                             continue
                         seen_dependencies.add(condition_key)
+                        if dependency_value == "unsupported_condition" and context.action_owner_id:
+                            gap_owners = [
+                                index
+                                for index, row in enumerate(occurrences)
+                                if row.occurrence_kind == "gap"
+                                and row.action_owner_id == context.action_owner_id
+                            ]
+                            if gap_owners:
+                                for index in gap_owners:
+                                    row = occurrences[index]
+                                    conditions = [
+                                        part
+                                        for part in (row.condition, local_condition)
+                                        if part
+                                    ]
+                                    modifier_spans = list(row.modifier_source_spans)
+                                    if dependency_span not in modifier_spans:
+                                        modifier_spans.append(dependency_span)
+                                    occurrences[index] = replace(
+                                        row,
+                                        condition="; ".join(dict.fromkeys(conditions)),
+                                        condition_source_span=dependency_span,
+                                        modifier_source_spans=tuple(modifier_spans),
+                                    )
+                                continue
                         field_context = dependency_condition
                         if dependency_value == "requires_stack" and re.match(r"\s*charge\b", dependency_scope, re.IGNORECASE):
                             field_context = "self"
                         elif dependency_value == "requires_stellar_awakened":
                             field_context = "self"
+                        dependency_kind = (
+                            "dependency" if dependency_value in _DEPENDENCY_IDS else "gap"
+                        )
                         occurrences.append(
                             _occurrence(
-                                kind="dependency",
+                                kind=dependency_kind,
                                 witness=witness,
                                 span=dependency_span,
                                 text=atom.condition,
-                                ordinal=ordinal_by_kind["dependency"],
+                                ordinal=ordinal_by_kind[dependency_kind],
                                 semantic_state=semantic_state,
                                 authority=authority,
                                 definition_support=_definition_support(
@@ -2474,9 +5187,18 @@ def _classify_unit(
                                 magnitude=_dependency_magnitude(dependency_condition, dependency_value),
                                 condition_source_span=dependency_span,
                                 field_context=field_context,
+                                semantic_role=SemanticRole.CONDITION,
+                                source_owner_id=context.owner_id,
+                                branch_context=context.branch_context,
+                                action_owner_id=context.action_owner_id,
+                                gap_reason=(
+                                    "recognized condition has no canonical dependency value"
+                                    if dependency_kind == "gap"
+                                    else ""
+                                ),
                             )
                         )
-                        ordinal_by_kind["dependency"] += 1
+                        ordinal_by_kind[dependency_kind] += 1
 
                 if atom.action_timing:
                     trigger_key = (atom_span.location, atom.action_timing, atom.timing_start, atom.timing_end)
@@ -2499,6 +5221,10 @@ def _classify_unit(
                                 action_timing=atom.action_timing,
                                 semantic_type="action_timing",
                                 timing_source_span=timing_span,
+                                semantic_role=SemanticRole.TRIGGER_TIMING,
+                                source_owner_id=context.owner_id,
+                                branch_context=context.branch_context,
+                                action_owner_id=context.action_owner_id,
                             )
                         )
                         ordinal_by_kind["trigger"] += 1
@@ -2536,7 +5262,17 @@ def _classify_unit(
                     if branch not in branch_conditions:
                         branch_conditions.append(branch)
                 if block.kind == "root" and atom.action_timing:
-                    if atom.action_timing == "aura_activation" and atom.condition:
+                    if re.match(
+                        r"\s*aura activation condition\s*:",
+                        atom.text,
+                        re.IGNORECASE,
+                    ):
+                        pending_condition = atom.condition
+                        pending_condition_span = condition_span or atom_span
+                        pending_action_timing = atom.action_timing
+                        pending_state_reference = _state_reference(atom.condition)
+                        active_state_reference = pending_state_reference or active_state_reference
+                    elif atom.action_timing == "aura_activation" and atom.condition:
                         pending_condition = atom.condition
                         pending_condition_span = condition_span or atom_span
                         pending_action_timing = _trigger(atom.condition)
@@ -2544,42 +5280,70 @@ def _classify_unit(
                         pending_global_timing = atom.action_timing
                         pending_global_timing_span = timing_span or atom_span
 
-                state_text = atom.condition or effect_text or atom.text
-                formula_note = _formula_metadata(
-                    f"{effect_text} {atom.condition}" if critical_damage_formula else effect_text
+                state_text = (
+                    atom.condition
+                    or (effect_text or atom.text)
+                    if role != SemanticRole.RELATIONSHIP_METADATA
+                    else ""
                 )
-                if not has_effect and formula_note:
+                formula_text = atom.text if role == SemanticRole.FORMULA else effect_text
+                formula_note = _formula_metadata(formula_text)
+                if role == SemanticRole.FORMULA and formula_note and context.owner_id:
+                    tier = re.search(r"\b(XXL|XL|L|M|S)\b", formula_text, re.IGNORECASE)
                     for occurrence_index in range(len(occurrences) - 1, -1, -1):
                         previous_occurrence = occurrences[occurrence_index]
                         tiered_magnitude = _formula_tier_magnitude(
-                            effect_text,
+                            formula_text,
                             previous_occurrence.source_text,
-                        )
-                        expected_metadata_owner = (
-                            "grant_link" if "fixed_link_resource_charge" in formula_note else "direct_damage"
                         )
                         if (
                             previous_occurrence.occurrence_kind == "effect"
-                            and previous_occurrence.source_fact_id == source_fact_id
                             and (
-                                previous_occurrence.capability_value == expected_metadata_owner
+                                previous_occurrence.source_owner_id == context.owner_id
+                                or previous_occurrence.action_owner_id == context.owner_id
+                                or (
+                                    context.action_owner_id
+                                    and previous_occurrence.action_owner_id == context.action_owner_id
+                                )
+                            )
+                            and (
+                                previous_occurrence.capability_value in {"direct_damage", "grant_link"}
                                 or tiered_magnitude
+                                or (
+                                    formula_note.get("result_scaling_note")
+                                    and previous_occurrence.semantic_type in {
+                                        "resistance_reduction",
+                                        "resistance_increase",
+                                    }
+                                )
                             )
                         ):
                             merged_formula = dict(previous_occurrence.formula_metadata)
                             merged_formula.update(formula_note)
+                            magnitude = dict(tiered_magnitude or previous_occurrence.magnitude)
+                            if tier and previous_occurrence.capability_value == "direct_damage":
+                                magnitude["tier"] = tier.group(1).upper()
+                            modifier_spans = list(previous_occurrence.modifier_source_spans)
+                            if atom_span not in modifier_spans:
+                                modifier_spans.append(atom_span)
                             occurrences[occurrence_index] = replace(
                                 previous_occurrence,
                                 formula_metadata=merged_formula,
-                                magnitude=tiered_magnitude or previous_occurrence.magnitude,
+                                magnitude=magnitude,
+                                modifier_source_spans=tuple(modifier_spans),
                             )
-                            break
+                            if not _EACH_PART_FORMULA_RE.search(formula_text):
+                                break
                 state_reference = (
                     ""
                     if _SEQUENCE_INTERRUPTION_RE.search(state_text)
                     else _state_reference(state_text)
                 )
                 if state_reference:
+                    if direction in {"ally", "self"}:
+                        active_state_direction = direction
+                        if role == SemanticRole.STATE_CREATION:
+                            active_state_reference = state_reference
                     if re.search(
                         r"\b(?:skill\s+)?(?:multiplier|damage)\s+increases?\s+based on\b",
                         state_text,
@@ -2598,14 +5362,20 @@ def _classify_unit(
                                     state_reference=state_reference,
                                 )
                                 break
-                    state_key = (atom_span.location, state_reference, atom.character_start, atom.character_end)
+                    state_span = condition_span or atom_span
+                    state_key = (
+                        state_span.location,
+                        state_reference,
+                        state_span.character_start,
+                        state_span.character_end,
+                    )
                     if state_key not in seen_states:
                         seen_states.add(state_key)
                         occurrences.append(
                             _occurrence(
                                 kind="state",
                                 witness=witness,
-                                span=condition_span or atom_span,
+                                span=state_span,
                                 text=state_reference,
                                 effect_text=state_reference,
                                 ordinal=ordinal_by_kind["state"],
@@ -2616,6 +5386,10 @@ def _classify_unit(
                                 condition=atom.condition,
                                 action_timing="",
                                 semantic_type="state_reference",
+                                semantic_role=role,
+                                source_owner_id=context.owner_id,
+                                branch_context=context.branch_context,
+                                action_owner_id=context.action_owner_id,
                             )
                         )
                         ordinal_by_kind["state"] += 1
@@ -2627,11 +5401,17 @@ def _classify_unit(
                     location=token.location,
                     block_kind=block.kind,
                     ancestry=tuple(block.ancestry),
-                    token_start=token.order,
-                    token_end=token.order,
                     text=token.text,
                     character_start=token_start,
                     character_end=token_end,
+                    source_anchor=source_anchor_from_range(
+                        source_fact_id=source_fact_id,
+                        source_capture_sha256=unit.source.capture_sha256,
+                        block=block,
+                        positions=token_positions,
+                        start=token_start,
+                        end=token_end,
+                    ),
                 )
                 occurrences.append(
                     _occurrence(
@@ -2645,6 +5425,10 @@ def _classify_unit(
                         definition_support=_definition_support([token], resolution_by_location, admit_definitions=admit_definitions),
                         references=[token],
                         semantic_type="source_reference",
+                        semantic_role=role,
+                        source_owner_id=context.owner_id,
+                        branch_context=context.branch_context,
+                        action_owner_id=context.action_owner_id,
                     )
                 )
                 ordinal_by_kind["reference"] += 1
@@ -2654,6 +5438,22 @@ def _classify_unit(
                 pending_condition_span = None
                 pending_action_timing = ""
                 pending_state_reference = ""
+    deduplicated_occurrences: list[ClassifiedOccurrence] = []
+    gap_index_by_anchor: dict[str, int] = {}
+    for row in occurrences:
+        anchor = row.source_span.source_anchor
+        anchor_id = anchor.anchor_id if anchor is not None else ""
+        if row.occurrence_kind == "gap" and row.semantic_type == "condition" and anchor_id in gap_index_by_anchor:
+            index = gap_index_by_anchor[anchor_id]
+            previous = deduplicated_occurrences[index]
+            if previous.source_owner_id == previous.action_owner_id and row.source_owner_id != row.action_owner_id:
+                deduplicated_occurrences[index] = row
+            continue
+        if row.occurrence_kind == "gap" and row.semantic_type == "condition" and anchor_id:
+            gap_index_by_anchor[anchor_id] = len(deduplicated_occurrences)
+        deduplicated_occurrences.append(row)
+    occurrences = deduplicated_occurrences
+    _inherit_coordinated_result_fields(occurrences)
     unit_by_id = {candidate.unit_id: candidate for candidate in all_units}
     unit_by_id[unit.unit_id] = unit
     relationships = _classify_relationships(
@@ -2816,16 +5616,9 @@ def _arm_summary(
     return {
         "occurrence_count": len(rows),
         "fully_supported_occurrence_count": sum(row.get("semantic_state") == "fully_supported_input" for row in rows),
-        "capability_gap_occurrence_count": sum(
-            row.get("occurrence_kind") == "effect" and row.get("capability_gap") is True
-            for row in rows
-        ),
-        "dependency_gap_occurrence_count": sum(
-            row.get("occurrence_kind") == "dependency" and row.get("dependency_gap") is True
-            for row in rows
-        ),
         "effect_occurrence_count": counts.get("effect", 0),
         "dependency_occurrence_count": counts.get("dependency", 0),
+        "explicit_gap_occurrence_count": counts.get("gap", 0),
         "occurrence_kind_counts": dict(sorted(counts.items())),
         "authority_counts": dict(sorted(authority.items())),
         "relationship_count": len(relation_rows),
@@ -2857,8 +5650,6 @@ _COMPATIBILITY_FIELDS = (
     "dependency_value",
     "semantic_type",
     "semantic_subject",
-    "capability_gap",
-    "dependency_gap",
     "hit_count",
     "formula_metadata",
     "sequence_metadata",
@@ -3004,8 +5795,8 @@ def _build_comparison(
                 ] if unit is not None else [],
                 "arms": {
                     "legacy_flattened": _arm_summary(legacy),
-                    "structural_only": _arm_summary(structural, structural_relationships),
-                    "fidelity_checked": _arm_summary(fidelity, fidelity_relationships),
+                "structural_only": _arm_summary(structural, structural_relationships),
+                "fidelity_checked": _arm_summary(fidelity, fidelity_relationships),
                 },
             }
         )

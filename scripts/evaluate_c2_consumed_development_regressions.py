@@ -30,6 +30,7 @@ from src.etl.structural_evidence import (
     TraversalLimits,
     bind_catalog_facts,
     parse_grid_document,
+    validate_source_anchor_identity,
 )
 
 
@@ -83,24 +84,35 @@ def _verify_source_anchors(witness: Mapping[str, Any], unit: Any) -> None:
     for relationship in witness.get("semantic_relationships", []):
         if relationship.get("source_anchor"):
             anchors.append(relationship["source_anchor"])
-    for gap in witness.get("unsupported_mechanics", []):
+    for gap in witness.get("unsupported_gaps", []):
         if gap.get("source_anchor"):
             anchors.append(gap["source_anchor"])
         anchors.extend(gap.get("additional_source_anchors", []))
+        owner_anchor = gap.get("owner_source_anchor")
+        owner_identity = owner_anchor.get("identity") if isinstance(owner_anchor, Mapping) else None
+        if not isinstance(owner_identity, Mapping) or str(gap.get("source_owner_id") or "") != str(
+            owner_identity.get("anchor_id") or ""
+        ):
+            raise ValueError(f"unsupported gap is missing its canonical owner anchor: {gap}")
+        anchors.append(owner_anchor)
 
     for anchor in anchors:
         expected_location = str(anchor.get("location") or "")
-        quote = _normal_text(str(anchor.get("quote") or ""))
-        matching_blocks = [
-            block
-            for block in unit.blocks
-            if block.location == expected_location
-            and quote
-            and quote in _normal_text(" ".join(token.text for token in block.tokens))
-        ]
+        matching_blocks = [block for block in unit.blocks if block.location == expected_location]
         if len(matching_blocks) != 1:
             raise ValueError(
                 f"source anchor no longer matches the pinned packet for {witness['witness_id']}: {anchor}"
+            )
+        identity = anchor.get("identity")
+        if not isinstance(identity, Mapping) or not validate_source_anchor_identity(
+            identity,
+            source_fact_id=str(witness["fact_id"]),
+            source_capture_sha256=str(witness["source_capture_sha256"]),
+            block=matching_blocks[0],
+            diagnostic_quote=str(anchor.get("quote") or ""),
+        ):
+            raise ValueError(
+                f"canonical source anchor identity changed for {witness['witness_id']}: {anchor}"
             )
 
 
@@ -303,17 +315,21 @@ def evaluate() -> tuple[dict[str, Any], dict[str, Any]]:
             "dependencies": arm["dependency_occurrence_precision_recall"],
             "canonical_labels": arm["capability_label_precision_recall"],
             "field_accuracies": arm["field_correctness"],
+            "explicit_unsupported_gaps": arm["explicit_unsupported_gaps"],
+            "anchor_diagnostics": arm["diagnostic_only"],
+            "relationship_groups": arm["relationship_groups"],
         },
         "relationships": {
             "expected_count": expected_relationship_count,
             "attached_count": len(attached_relationships),
             "unresolved_count": len(unresolved_relationships),
+            "groups": arm["relationship_groups"],
             "melissa": melissa_relations,
         },
         "unsupported_gaps": [
             {
                 "witness_id": row["witness_id"],
-                "gap_ids": [str(gap["gap_id"]) for gap in row.get("unsupported_mechanics", [])],
+                "gap_ids": [str(gap["gap_id"]) for gap in row.get("unsupported_gaps", [])],
             }
             for row in oracle["witnesses"]
         ],

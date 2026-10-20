@@ -16,7 +16,6 @@ from src.etl.c2_scoped_classification import (
     _classify_unit,
     _catalog_facts,
     _load_catalog,
-    _render_fragment_tokens,
 )
 from src.etl.c2_semantic_evaluation import adapt_c2_report_to_evaluator, evaluate_frozen_cohort
 from src.etl.source_fidelity import PARSED_SIDEKICK_DIR, _source_url_for_character
@@ -25,6 +24,7 @@ from src.etl.structural_evidence import (
     TraversalLimits,
     bind_catalog_facts,
     parse_grid_document,
+    validate_source_anchor_identity,
 )
 
 
@@ -83,19 +83,27 @@ def _verify_source_anchors(witness: Mapping[str, Any], unit: Any) -> None:
         if gap.get("source_anchor"):
             anchors.append(gap["source_anchor"])
         anchors.extend(gap.get("additional_source_anchors", []))
+        owner_anchor = gap.get("owner_source_anchor")
+        owner_identity = owner_anchor.get("identity") if isinstance(owner_anchor, Mapping) else None
+        if isinstance(owner_identity, Mapping):
+            if str(gap.get("source_owner_id") or "") != str(owner_identity.get("anchor_id") or ""):
+                raise ValueError(f"unsupported gap owner id does not match its canonical anchor: {gap}")
+            anchors.append(owner_anchor)
 
     for anchor in anchors:
         expected_location = str(anchor.get("location") or "")
-        quote = _normal_text(str(anchor.get("quote") or ""))
-        matches = [
-            block
-            for block in unit.blocks
-            if block.location == expected_location
-            and quote
-            and quote in _normal_text(_render_fragment_tokens(block.tokens)[0])
-        ]
+        matches = [block for block in unit.blocks if block.location == expected_location]
         if len(matches) != 1:
             raise ValueError(f"source anchor no longer matches the pinned packet: {anchor}")
+        identity = anchor.get("identity")
+        if not isinstance(identity, Mapping) or not validate_source_anchor_identity(
+            identity,
+            source_fact_id=str(witness["fact_id"]),
+            source_capture_sha256=str(witness["source_capture_sha256"]),
+            block=matches[0],
+            diagnostic_quote=str(anchor.get("quote") or ""),
+        ):
+            raise ValueError(f"canonical source anchor identity changed in the pinned packet: {anchor}")
 
 
 def load_pinned_inputs() -> tuple[dict[str, Any], list[dict[str, Any]], list[Any], dict[str, Any]]:
@@ -198,18 +206,32 @@ def load_pinned_inputs() -> tuple[dict[str, Any], list[dict[str, Any]], list[Any
 def _explicit_unsupported_gap(row: Mapping[str, Any], witness: Mapping[str, Any]) -> bool:
     span = row.get("source_span") or {}
     location = str(span.get("location") or "")
-    source_text = _normal_text(str(span.get("text") or row.get("source_text") or ""))
+    prediction_identity = span.get("source_anchor") if isinstance(span, Mapping) else None
+    role = str(row.get("semantic_role") or "")
+    capability = row.get("capability_value") or row.get("dependency_value")
+    if (
+        not capability
+        and role in {"resource_consumption", "resource_gain", "state_creation", "cost_activation_metadata"}
+        and str(row.get("source_fact_id") or "") == str(witness.get("fact_id") or "")
+        and str(row.get("source_capture_sha256") or "")
+        == str(witness.get("source_capture_sha256") or "")
+        and isinstance(prediction_identity, Mapping)
+        and str(prediction_identity.get("source_fact_id") or "") == str(witness.get("fact_id") or "")
+        and str(prediction_identity.get("source_capture_sha256") or "")
+        == str(witness.get("source_capture_sha256") or "")
+    ):
+        return True
     for gap in witness.get("unsupported_gaps", []):
         anchors = [gap.get("source_anchor"), *gap.get("additional_source_anchors", [])]
         for anchor in anchors:
             if not isinstance(anchor, Mapping):
                 continue
-            quote = _normal_text(str(anchor.get("quote") or ""))
-            comparable_quote = quote.rstrip(" .;,:\\")
             if (
                 location == str(anchor.get("location") or "")
-                and comparable_quote
-                and comparable_quote in source_text
+                and isinstance(prediction_identity, Mapping)
+                and json.dumps(
+                    prediction_identity, sort_keys=True, separators=(",", ":")
+                ) == json.dumps(anchor.get("identity"), sort_keys=True, separators=(",", ":"))
             ):
                 return True
     return False
@@ -260,9 +282,11 @@ def evaluate() -> tuple[dict[str, Any], dict[str, Any]]:
     for witness in oracle["witnesses"]:
         witness_id = str(witness["witness_id"])
         for row in classifier_rows[witness_id]:
-            if row.get("occurrence_kind") not in {"effect", "dependency"}:
+            if row.get("occurrence_kind") not in {"effect", "dependency", "gap"}:
                 continue
-            label = str(row.get("capability_value") or row.get("dependency_value") or "")
+            label = "" if row.get("occurrence_kind") == "gap" else str(
+                row.get("capability_value") or row.get("dependency_value") or ""
+            )
             if label:
                 continue
             if _explicit_unsupported_gap(row, witness):
@@ -291,6 +315,9 @@ def evaluate() -> tuple[dict[str, Any], dict[str, Any]]:
             "dependencies": arm["dependency_occurrence_precision_recall"],
             "canonical_labels": arm["capability_label_precision_recall"],
             "field_accuracies": arm["field_correctness"],
+            "explicit_unsupported_gaps": arm["explicit_unsupported_gaps"],
+            "anchor_diagnostics": arm["diagnostic_only"],
+            "relationship_groups": arm["relationship_groups"],
         },
         "classification": {
             "explicit_unsupported_gap_outputs": unsupported_outputs,

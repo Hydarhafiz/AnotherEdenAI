@@ -320,7 +320,7 @@ Supplementary planning notes live in `docs/core/future-ideas.md`. That file is t
 |---------|-------|
 | Milestone 4 (completed) | Legal 6-hero plus 2-sidekick lineup recommendation intelligence |
 | Milestone 5 (completed) | Deterministic recommendation architecture, evaluation, and cost control |
-| Milestone 6 (active) | Full-catalog high-value capability coverage and candidate diversity |
+| Milestone 6 (active) | Reviewed-knowledge recommendation pilot; C2.1 stopped after failed final validation |
 | Milestone 7 | Portfolio frontend experience |
 | Milestone 8 | Cost-controlled demo deployment |
 

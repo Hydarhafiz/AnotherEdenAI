@@ -1,0 +1,2042 @@
+{
+  "authority": {
+    "answer_construction": "Expected atoms come from the human correction/proposed atomic facts, not from current classifier output.",
+    "relationship_scoring": "Reviewed relationship expectations are recorded separately because the evaluator compares prediction-generated relationship IDs and ownership IDs that a source-only semantic answer cannot independently supply.",
+    "review_status": "The seven selected review entries record a Correct human verdict.",
+    "scope": "Four known regressions and three development witnesses only; this is not held-out or generalization evidence.",
+    "semantic_source": "artifacts/evidence/feature_c2_human_review.md",
+    "source_anchors": "Occurrence block paths and quoted spans were checked independently against the seven pinned raw captures with the C1 structural source parser.",
+    "source_identity_source": "tests/fixtures/source_fidelity/source_slice_manifest.json",
+    "unscored_mechanics": "Contextual reviewer notes remain in reviewed_unscored_mechanics; only the per-witness unsupported_gaps list is scored as semantic gap evidence."
+  },
+  "cohort": "development_regression_review",
+  "schema_version": "c2-atomic-oracle-1",
+  "witnesses": [
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Darunis"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:e85ae84fa25f702c5fa74124bb0a8d38",
+              "block_kind": "root",
+              "block_location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+              "end_token_offset": 33,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756",
+              "source_fact_id": "skill:2f7fe641bb7a81a7b141",
+              "start_token_offset": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "content_sha256": "ce845f11ff57461d57ab28061b8c4845ca031d0c2999a908f892c5950b978366",
+                  "kind": "text",
+                  "location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]/token[0]",
+                  "order": 0
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+            "quote": "Piercing attack on a single enemy"
+          }
+        },
+        {
+          "atomic_capability_id": "physical_resistance_down",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Darunis"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "-20%",
+                "unit": "percent",
+                "value": "20"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+            "quote": "Physical resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:d6a18f64979bea01c51bf691ef8b73b0",
+              "source_fact_id": "skill:2f7fe641bb7a81a7b141",
+              "source_capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756",
+              "block_location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]/token[0]",
+                  "content_sha256": "ce845f11ff57461d57ab28061b8c4845ca031d0c2999a908f892c5950b978366"
+                }
+              ],
+              "start_token_offset": 42,
+              "end_token_offset": 61
+            }
+          }
+        }
+      ],
+      "cohort_kind": "known_regression",
+      "fact_id": "skill:2f7fe641bb7a81a7b141",
+      "review_reference": "Review 4 — Darunis, Hunter Shoot",
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "evaluator_status": "covered by adjudicated recipient and duration fields",
+          "interpretation": "The resistance reduction's target is the attacked enemy by grammatical inference; the reviewer records that inference explicitly.",
+          "source_quote": "Physical resistance -20% (3 turns)"
+        },
+        {
+          "evaluator_status": "not an atom",
+          "interpretation": "The historical Wind/Hunter's Fangs expectation conflicts with the admitted capture and is not an answer for this source fact.",
+          "source_quote": "Hunter Shoot"
+        }
+      ],
+      "source_capture_sha256": "d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756",
+      "source_identity_note": "The review markdown transcribes the capture hash with c21c388; the approved source manifest, source-slice fixture, and raw capture agree on c21b388, which is used here.",
+      "source_location": "sha256:d4f2fdfea7b527ad1ae924e767473b87a2b08f8c4cdc5a8c21b388380e413756/grid[6]/block[0]",
+      "source_slice_sha256": "c622bb172ed9887175e66dead6c9d3c5c090db2863ac246223ad91715d213e5e",
+      "witness_id": "known-darunis-hunters-fangs-conflict"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Alma (Another Style)"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Magic"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Crystal"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:9bbfd33ed21d4c5d0dad1d470838825e",
+              "block_kind": "root",
+              "block_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+              "end_token_offset": 40,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+              "source_fact_id": "skill:5f6ecc8bc37a12404137",
+              "start_token_offset": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "content_sha256": "633fa38f4d58084d5cbe80384bde56715e26e0bc31e8809e6c647ffdd58c6f12",
+                  "kind": "text",
+                  "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]/token[0]",
+                  "order": 0
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+            "quote": "Crystal type magic attack on all enemies"
+          }
+        },
+        {
+          "atomic_capability_id": "taunt",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Alma (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:7d594e24e3a9c1adf5e2d28e06753e17",
+              "block_kind": "root",
+              "block_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+              "end_token_offset": 12,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+              "source_fact_id": "skill:5f6ecc8bc37a12404137",
+              "start_token_offset": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "content_sha256": "14ec9a9aabfee77b08e896cf9a663307cd7ca1d731cc6f3b7b56442575a681f3",
+                  "kind": "text",
+                  "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]/token[2]",
+                  "order": 2
+                }
+              ],
+              "token_start": 2
+            },
+            "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+            "quote": "inflict Rage"
+          }
+        },
+        {
+          "atomic_capability_id": "ally_resistance_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Alma (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+50%",
+                "unit": "percent",
+                "value": "50"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[2]",
+            "quote": "Type Resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:184ccdca77240b9b9770d1c593cd32e1",
+              "source_fact_id": "skill:5f6ecc8bc37a12404137",
+              "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+              "block_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[2]/token[0]",
+                  "content_sha256": "98917e335f7317a46b02b1aceed5023c03c2d06614c901fb51286588c0ac3d45"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 15
+            }
+          }
+        }
+      ],
+      "cohort_kind": "known_regression",
+      "fact_id": "skill:5f6ecc8bc37a12404137",
+      "review_reference": "Review 2 — Alma (Another Style), Refraction Bullet",
+      "reviewed_relationships": [
+        {
+          "condition": "",
+          "evaluator_status": "manual semantic comparison; evaluator-internal occurrence and relationship IDs are prediction-generated",
+          "operation": "activates",
+          "reviewed_resolution": "resolved",
+          "source_fact_id": "skill:5f6ecc8bc37a12404137",
+          "source_quote": "Refraction Bullet - Counter",
+          "target_id": "skill:b5d6c1eb019db8bcd666",
+          "target_kind": "source_fact",
+          "timing": ""
+        }
+      ],
+      "reviewed_unscored_mechanics": [
+        {
+          "evaluator_status": "reviewed relationship retained for manual comparison; not a taxonomy-scored effect atom",
+          "interpretation": "This is a separate parent-to-child activation relationship, not an effect copied from the Counter child's definition.",
+          "source_quote": "Activate Counterattack: Refraction Bullet - Counter on user (3 turns)"
+        },
+        {
+          "evaluator_status": "outside current scored fields",
+          "interpretation": "Damage formula metadata, not an effect or dependency.",
+          "source_quote": "Damage is based on user's PWR"
+        }
+      ],
+      "source_capture_sha256": "6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2",
+      "source_location": "sha256:6bf2c168bce5cc1d9b7d6442eda3fb7ae25369cdc880eae14afc08afaa4793b2/grid[11]/block[0]",
+      "source_slice_sha256": "074b1000da96e19c814d3956fb305b22d01b5c4b69dad2c7954022a0716d24c6",
+      "witness_id": "known-alma-refraction-counter"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "heal_hp",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Anabel (Extra Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+50%",
+                "unit": "percent",
+                "value": "50"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "preemptive"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:18a31ff71dbcc80efa0f5cf849fa3f27",
+              "block_kind": "root",
+              "block_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+              "end_token_offset": 4,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+              "source_fact_id": "skill:438aa7e1d0e071c14c43",
+              "start_token_offset": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "content_sha256": "f9592c5a6cec939386c3d8e8b6ff80e63f2af4359a2b7bb94656ac69faa7f33e",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]/token[1]",
+                  "order": 1
+                },
+                {
+                  "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]/token[2]",
+                  "order": 2
+                }
+              ],
+              "token_start": 1
+            },
+            "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+            "quote": "Restore all party members' HP +50%"
+          }
+        },
+        {
+          "atomic_capability_id": "recover_mp",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Anabel (Extra Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+15%",
+                "unit": "percent",
+                "value": "15"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "preemptive"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:7f48208a31db87cc7a6a457b94ac8cf4",
+              "block_kind": "root",
+              "block_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+              "end_token_offset": 4,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+              "source_fact_id": "skill:438aa7e1d0e071c14c43",
+              "start_token_offset": 4,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "content_sha256": "b555844e9acc8defb3d966a30d1c371e66ca59d59ef49775c416afa5cd21abf7",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]/token[3]",
+                  "order": 3
+                },
+                {
+                  "content_sha256": "36b43536a260ec0dadf0ffa8e187983890c5ee30074ac0a40544afa701ac28fe",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]/token[4]",
+                  "order": 4
+                }
+              ],
+              "token_start": 3
+            },
+            "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+            "quote": "Restore all party members' MP +15%"
+          }
+        },
+        {
+          "atomic_capability_id": "shield",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Anabel (Extra Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Shield on user with HP equal to 500"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "preemptive"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "anchor_id": "src:b4f53d3c65201fc8613731f62a847ce0",
+              "block_kind": "list_item",
+              "block_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[1]",
+              "end_token_offset": 41,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+              "source_fact_id": "skill:438aa7e1d0e071c14c43",
+              "start_token_offset": 0,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "content_sha256": "d171d2d1e1ef283e8c0cdd19e84bc44a5234857a273c01cef6123cbb1e52ab63",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[1]/token[1]",
+                  "order": 1
+                },
+                {
+                  "content_sha256": "cb9840b9b8d3cbe8fce15be3a47368250c5e51b2f9c89d1113a007b9bbaa6f21",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[1]/token[2]",
+                  "order": 2
+                },
+                {
+                  "content_sha256": "fd399221c37d6a6c888a878b623530bee66516f1cbc84b2fa951b09b403af3fd",
+                  "kind": "text",
+                  "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[1]/token[3]",
+                  "order": 3
+                }
+              ],
+              "token_start": 1
+            },
+            "location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[1]",
+            "quote": "Give Shield to user with HP equal to 500 HP (3 turns)"
+          }
+        }
+      ],
+      "cohort_kind": "known_regression",
+      "fact_id": "skill:438aa7e1d0e071c14c43",
+      "review_reference": "Review 7 — Anabel (Extra Style), Knight's Pride",
+      "reviewed_relationships": [
+        {
+          "condition": "When in Guiding Light mode or Luring Shadow mode",
+          "evaluator_status": "manual semantic comparison; evaluator-internal occurrence and relationship IDs are prediction-generated",
+          "operation": "activates",
+          "reviewed_resolution": "same-page child fact is known; historical href identity was unresolved",
+          "source_fact_id": "skill:438aa7e1d0e071c14c43",
+          "source_quote": "Knight's Pride - Prayer (Anabel ES)",
+          "target_id": "skill:eac6950dc058daaf9941",
+          "target_kind": "source_fact",
+          "timing": ""
+        }
+      ],
+      "reviewed_unscored_mechanics": [
+        {
+          "evaluator_status": "relationship target semantics only",
+          "interpretation": "Child effects belong to the separately reviewed Prayer fact and are not duplicated as parent effects.",
+          "source_quote": "Prayer child's Guiding Light and Luring Shadow branches"
+        },
+        {
+          "evaluator_status": "outside current scored fields",
+          "interpretation": "Shield behavior not represented by a dedicated evaluator field.",
+          "source_quote": "Shield HP is depleted before Anabel's HP and cannot be restored"
+        }
+      ],
+      "source_capture_sha256": "fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3",
+      "source_location": "sha256:fa8807e1f620047eae6e38278ef9ca65f82b0aec96d700c2f78c1a1f830bd8c3/grid[5]/block[0]",
+      "source_slice_sha256": "bb15fed77349477d146b6912701202cba85c75f4d8d0856c1b57581b2a5c790e",
+      "witness_id": "known-anabel-prayer-child"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fixed damage on all enemies (ignores target's defense)"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:faf20278f095797513abbbd17dce20b2",
+              "block_kind": "root",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+              "end_token_offset": 33,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "start_token_offset": 6,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "content_sha256": "7a30a226a6950411d09dde4783aa48c3df6045377e6018fd265f2e9a58792620",
+                  "kind": "text",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]/token[3]",
+                  "order": 3
+                }
+              ],
+              "token_start": 3
+            },
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+            "quote": "Fixed damage on all enemies"
+          }
+        },
+        {
+          "atomic_capability_id": "heal_hp",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+100%",
+                "unit": "percent",
+                "value": "100"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "anchor_id": "src:039330f48094ef5e7fd69b89caf21fd2",
+              "block_kind": "list_item",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+              "end_token_offset": 5,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "start_token_offset": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "content_sha256": "f9592c5a6cec939386c3d8e8b6ff80e63f2af4359a2b7bb94656ac69faa7f33e",
+                  "kind": "text",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[0]",
+                  "order": 0
+                },
+                {
+                  "content_sha256": "bbea8d0a876c5593134f4b1af28a7ddf3e8c98c563d3a6fa835603e193ec8e86",
+                  "kind": "text",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[1]",
+                  "order": 1
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+            "quote": "Restore all party members' HP +100%"
+          }
+        },
+        {
+          "atomic_capability_id": "revive",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "revive",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "anchor_id": "src:ac6f7f4f4ce917a63e20cfa63462ba38",
+              "block_kind": "list_item",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+              "end_token_offset": 33,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "start_token_offset": 4,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "content_sha256": "e270748db8bd579350a92aa2a9dc2ccd3b54f670a834ae58c427b8b9596c1327",
+                  "kind": "text",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[2]",
+                  "order": 2
+                }
+              ],
+              "token_start": 2
+            },
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+            "quote": "Revive all dead party members"
+          }
+        },
+        {
+          "atomic_capability_id": "hold_ground",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Tetra (Another Style)"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+            "quote": "give Hold Ground to all party members",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:9e25b957d47cde00d436bb74c8236bc2",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 2,
+              "token_end": 5,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[2]",
+                  "content_sha256": "e270748db8bd579350a92aa2a9dc2ccd3b54f670a834ae58c427b8b9596c1327"
+                },
+                {
+                  "kind": "icon",
+                  "order": 3,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[3]",
+                  "content_sha256": "caab4b6ce64492f938246c7a5a554b4a90ccf49198ea780c1f124de9efdf32c4"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[4]",
+                  "content_sha256": "f41bde995beea82251f066093c2b3d687d72abaab4e86aab6209e511e4298c61"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[2]/token[5]",
+                  "content_sha256": "2d127e1ae7f3b71c18d806dc9e362d2564c567abfce7d6002b3b37fe18172850"
+                }
+              ],
+              "start_token_offset": 38,
+              "end_token_offset": 20
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "condition": {
+              "status": "adjudicated",
+              "value": "When Minalca (Another Style) is at front; only if Outrage is still usable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "anchor_id": "src:d51a1629ddc902362189a8eccc345e76",
+              "block_kind": "list_item",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+              "end_token_offset": 11,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "start_token_offset": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "content_sha256": "d36c90c2991533576fc6c9f12c0b9dafaa6a431b00edb05e5e4a894bcdde041e",
+                  "kind": "text",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[0]",
+                  "order": 0
+                },
+                {
+                  "content_sha256": "0eb19dc02df5b043723fc8933deda730b8f372e02f62ed0df83214887b5fcc5d",
+                  "kind": "reference",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[1]",
+                  "order": 1
+                },
+                {
+                  "content_sha256": "526c30f3127152e63576a20ee53d9d18c7828b371227e7ca1fd958aa7f4c50d3",
+                  "kind": "text",
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[2]",
+                  "order": 2
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+            "quote": "When Minalca (Another Style) is at front"
+          }
+        }
+      ],
+      "cohort_kind": "known_regression",
+      "fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+      "review_reference": "Review 3 — Tetra (Another Style), Ruincarnation",
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "evaluator_status": "taxonomy gap; compare manually",
+          "interpretation": "Explicit sidekick resource cost/availability behavior; no dedicated Charge dependency ID exists in the admitted dependency taxonomy.",
+          "source_quote": "Consumes 8 Charge"
+        },
+        {
+          "evaluator_status": "unsupported named-stack mechanic and recipient gap; retain for manual comparison",
+          "interpretation": "The Stigmata stack application remains an unsupported effect. Its Minalca-at-front prerequisite is scored separately as party_composition; the Outrage-usable condition and named recipient remain unscored because no corresponding dependency or recipient value fits.",
+          "source_quote": "Stack one Stigmata on Minalca (only if Outrage is still usable)"
+        },
+        {
+          "evaluator_status": "outside current scored fields",
+          "interpretation": "Damage formula and cap metadata, not another damage occurrence or dependency.",
+          "source_quote": "Damage = [Restore Stat] x 2000 (Max: RES:500; Damage: 1M)"
+        },
+        {
+          "evaluator_status": "named-recipient gap",
+          "interpretation": "The source names the recipient, but the current scored recipient enum cannot retain this named recipient.",
+          "source_quote": "Stigmata on Minalca (Another Style)"
+        }
+      ],
+      "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+      "source_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+      "source_slice_sha256": "f94d3922f693647629c0db1d52b346e2e2d7236bdb88bcbe37b709133db80bf9",
+      "witness_id": "known-tetra-ruincarnation",
+      "unsupported_gaps": [
+        {
+          "gap_id": "tetra-charge-consumption",
+          "gap_type": "unsupported_resource_operation",
+          "mechanic": "resource_consumption",
+          "reason": "The sidekick action explicitly consumes Charge; the current dependency taxonomy has no resource-consumption value.",
+          "source_text": "Consumes 8 Charge",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+            "quote": "Consumes 8 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0366d13d3da9c4fa9f8372a694f0237a",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]/token[1]",
+                  "content_sha256": "2f5d526c78745115ea7828dfdb4070c7f83c0ae0573dacf6e0c5baf03e7f9b90"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]/token[2]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "source_owner_id": "src:0366d13d3da9c4fa9f8372a694f0237a",
+          "owner_source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+            "quote": "Consumes 8 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0366d13d3da9c4fa9f8372a694f0237a",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]/token[1]",
+                  "content_sha256": "2f5d526c78745115ea7828dfdb4070c7f83c0ae0573dacf6e0c5baf03e7f9b90"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[0]/token[2]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          }
+        },
+        {
+          "gap_id": "tetra-stigmata-stack-application",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "named_stack_application",
+          "reason": "The source applies an unsupported named stack to Minalca. The same action also names Minalca as recipient, which cannot be represented by the current recipient enum; retain that as gap detail rather than a separate duplicate gap.",
+          "source_text": "Stack one Stigmata on Minalca",
+          "source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+            "quote": "Stack one Stigmata on Minalca",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:24f0b8c418bfafc38aa487122fce0cb9",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 3,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[3]",
+                  "content_sha256": "d19b1fd0271c7c837d6b7b3f4d0dff4f3d05757695a1ab92decd476129a791aa"
+                },
+                {
+                  "kind": "icon",
+                  "order": 4,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[4]",
+                  "content_sha256": "52672ca52a13835e48cc467d744e52fda9595eefd0b2d01ff25ae0bb96eb0700"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[5]",
+                  "content_sha256": "889739cd6facbe2be5d29668268e2dbab17c64aec96c0b441ca70859f0d8c310"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[6]",
+                  "content_sha256": "5ebdeb936b41e878629ec648996018393a4bb06f8777f6882a4af069255f62fc"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 10
+            }
+          },
+          "source_owner_id": "src:24f0b8c418bfafc38aa487122fce0cb9",
+          "owner_source_anchor": {
+            "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+            "quote": "Stack one Stigmata on Minalca",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:24f0b8c418bfafc38aa487122fce0cb9",
+              "source_fact_id": "sidekick_skill:f169ab3c49e3780497a8",
+              "source_capture_sha256": "7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d",
+              "block_location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 3,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[3]",
+                  "content_sha256": "d19b1fd0271c7c837d6b7b3f4d0dff4f3d05757695a1ab92decd476129a791aa"
+                },
+                {
+                  "kind": "icon",
+                  "order": 4,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[4]",
+                  "content_sha256": "52672ca52a13835e48cc467d744e52fda9595eefd0b2d01ff25ae0bb96eb0700"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[5]",
+                  "content_sha256": "889739cd6facbe2be5d29668268e2dbab17c64aec96c0b441ca70859f0d8c310"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:7df15e6e8c0d199d5f5a1d084e607fecee900c084bdfef3b3356ebcff461f70d/grid[1]/block[3]/token[6]",
+                  "content_sha256": "5ebdeb936b41e878629ec648996018393a4bb06f8777f6882a4af069255f62fc"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "outgoing_damage_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Hameow"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When enemy receives slash or magic damage"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+10%",
+                "unit": "percent",
+                "value": "10"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "unknown"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_damage"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "anchor_id": "src:fb80d9ead412a76ce4ea7c91b0114c80",
+              "block_kind": "list_item",
+              "block_location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[1]",
+              "end_token_offset": 4,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b",
+              "source_fact_id": "sidekick_aura:29ee16dada2c963d4479",
+              "start_token_offset": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "content_sha256": "e20963bd8eb3ca4742008dfe338f4d78898e3476a420c46adaf3ad928dd32b2e",
+                  "kind": "text",
+                  "location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[1]/token[0]",
+                  "order": 0
+                },
+                {
+                  "content_sha256": "5b34bbf45f402b36240dc0ab0e3d1a1f95f176ebfbe28d05e142f940ece53965",
+                  "kind": "text",
+                  "location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[1]/token[1]",
+                  "order": 1
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[1]",
+            "quote": "Damage dealt by all party members +10%"
+          }
+        }
+      ],
+      "cohort_kind": "development",
+      "fact_id": "sidekick_aura:29ee16dada2c963d4479",
+      "review_reference": "Review 11 — Hameow, Cross Resonance Aura",
+      "reviewed_relationships": [
+        {
+          "condition": "When enemy receives slash or magic damage",
+          "evaluator_status": "not representable by the current source_fact/shared_mechanic relationship target kinds; manual comparison",
+          "operation": "activates",
+          "reviewed_resolution": "source-confirmed activation event",
+          "source_fact_id": "sidekick_aura:29ee16dada2c963d4479",
+          "source_quote": "When enemy receives slash or magic damage",
+          "target_id": "outgoing_damage_up",
+          "target_kind": "activation_condition",
+          "timing": "event-driven"
+        }
+      ],
+      "reviewed_unscored_mechanics": [],
+      "source_capture_sha256": "4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b",
+      "source_location": "sha256:4cd74c10217a043e5ccf3709536f9230d6e40f7ab3f5150098c98498d8dd2f8b/grid[1]/block[0]",
+      "source_slice_sha256": "679db3d633f9705987c4e5674c24725d7994ca27b8aec706b685776536154ce5",
+      "witness_id": "development-hameow-aura"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "Slash attack on all enemies",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:602955220f55ea69c17e33b2fa2e1368",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[0]",
+                  "content_sha256": "4f9a2a77d11008783e8e098797d19203d30e605340e5033d835534153acd9971"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 27
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "quote": "XL",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:38245a21a0a54254e947c907e7dde92f",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 1,
+                "token_end": 1,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 1,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[1]",
+                    "content_sha256": "cc7e4dada97c5cf2e58437da9ea0d610b377b5ea9e5efe931916a415531f7794"
+                  }
+                ],
+                "start_token_offset": 2,
+                "end_token_offset": 4
+              }
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "power_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "2"
+              }
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+50%",
+                "unit": "percent",
+                "value": "50"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "Power",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ded73bcc48bcd08f19bfd56013fab1ec",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[2]",
+                  "content_sha256": "a1162c0a671790df77627ac7afc7d71264be7708b0c2111175e7367e6f26a06b"
+                }
+              ],
+              "start_token_offset": 4,
+              "end_token_offset": 9
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "quote": "+50%",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:db47013a0c80463fc4f0be474d898bd4",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 3,
+                "token_end": 3,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 3,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[3]",
+                    "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 4
+              }
+            },
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "quote": "(2 turns)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:56b4a458d94aa74f1f72d14afcf4f374",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 4,
+                "token_end": 4,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 4,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[4]",
+                    "content_sha256": "1cc3e924a8d475f8566a2c1575f97017caad73e7a22c9962ce9562f6505b71d9"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 9
+              }
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "speed_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "2"
+              }
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+50%",
+                "unit": "percent",
+                "value": "50"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "Speed of user +50%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:4114eef381d8758f4bd6f3e7eea8301e",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[2]",
+                  "content_sha256": "a1162c0a671790df77627ac7afc7d71264be7708b0c2111175e7367e6f26a06b"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[3]",
+                  "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                }
+              ],
+              "start_token_offset": 14,
+              "end_token_offset": 4
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "quote": "(2 turns)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:56b4a458d94aa74f1f72d14afcf4f374",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 4,
+                "token_end": 4,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 4,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[4]",
+                    "content_sha256": "1cc3e924a8d475f8566a2c1575f97017caad73e7a22c9962ce9562f6505b71d9"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 9
+              }
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]"
+              ],
+              "anchor_id": "src:d464b9a6059cdfad0cf8fe36020f7be4",
+              "block_kind": "list_item",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "end_token_offset": 36,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "start_token_offset": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "content_sha256": "fce820bbaad107b4e382065a209029ff2c1bfdc36115dc468c0290effc89c18b",
+                  "kind": "text",
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[0]",
+                  "order": 0
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Slash attack on all enemies (XXL x5)"
+          }
+        },
+        {
+          "atomic_capability_id": "power_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+100%",
+                "unit": "percent",
+                "value": "100"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Power",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:fc6cfd0bb12bc4b4a7065e021e778b30",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[0]",
+                  "content_sha256": "fce820bbaad107b4e382065a209029ff2c1bfdc36115dc468c0290effc89c18b"
+                }
+              ],
+              "start_token_offset": 41,
+              "end_token_offset": 46
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "quote": "+100%",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:e6f8e498e4f92019f4a52667dfd68806",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[0]"
+                ],
+                "token_start": 1,
+                "token_end": 1,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 1,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[1]",
+                    "content_sha256": "bbea8d0a876c5593134f4b1af28a7ddf3e8c98c563d3a6fa835603e193ec8e86"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 5
+              }
+            },
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "quote": "(3 turns)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:17d7c4b57766a877ca0da675199f97de",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[0]"
+                ],
+                "token_start": 2,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[2]",
+                    "content_sha256": "f3553b3d895283d45cd9f1c75ae80963a4344d3ecfc91100bacf8455bd7675e2"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 9
+              }
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "speed_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+100%",
+                "unit": "percent",
+                "value": "100"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Speed of user +100%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:4b1eb85e7866cf5b7829ef4105da8cb1",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[0]",
+                  "content_sha256": "fce820bbaad107b4e382065a209029ff2c1bfdc36115dc468c0290effc89c18b"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[1]",
+                  "content_sha256": "bbea8d0a876c5593134f4b1af28a7ddf3e8c98c563d3a6fa835603e193ec8e86"
+                }
+              ],
+              "start_token_offset": 51,
+              "end_token_offset": 5
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "quote": "(3 turns)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:17d7c4b57766a877ca0da675199f97de",
+                "source_fact_id": "skill:e1e5596f2b79f033909d",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[0]"
+                ],
+                "token_start": 2,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[2]",
+                    "content_sha256": "f3553b3d895283d45cd9f1c75ae80963a4344d3ecfc91100bacf8455bd7675e2"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 9
+              }
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "requires_stellar_awakened",
+          "fields": {
+            "condition": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:035ed61ef29a59db359a057bcd99d7e5",
+              "block_kind": "root",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+              "end_token_offset": 17,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "start_token_offset": 6,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "content_sha256": "8f0a14d8fa4545b55d597cc3c90c702ccd3ef9030b4a4610f90967e123ffec40",
+                  "kind": "text",
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[5]",
+                  "order": 5
+                },
+                {
+                  "content_sha256": "be522da1d99dfa0d834a64bf0f2dd6feec3e75a5d210d90f1b0918a614eb19de",
+                  "kind": "reference",
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]/token[6]",
+                  "order": 6
+                }
+              ],
+              "token_start": 5
+            },
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+            "quote": "requires Stellar Awakening"
+          }
+        },
+        {
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used during Stellar Burst"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 5
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Slash attack on all enemies (XXL x5)"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_stellar_burst"
+            }
+          },
+          "metadata": {
+            "hit_count": 5
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]"
+              ],
+              "anchor_id": "src:d464b9a6059cdfad0cf8fe36020f7be4",
+              "block_kind": "list_item",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+              "end_token_offset": 36,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "source_fact_id": "skill:e1e5596f2b79f033909d",
+              "start_token_offset": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "content_sha256": "fce820bbaad107b4e382065a209029ff2c1bfdc36115dc468c0290effc89c18b",
+                  "kind": "text",
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]/token[0]",
+                  "order": 0
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[4]",
+            "quote": "Slash attack on all enemies (XXL x5)"
+          }
+        }
+      ],
+      "cohort_kind": "development",
+      "fact_id": "skill:e1e5596f2b79f033909d",
+      "review_reference": "Review 17 — Aldo, Starwyrm Slash (Enhanced row)",
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "evaluator_status": "outside current scored fields",
+          "interpretation": "Damage-scaling inputs and formula metadata, not effects or activation dependencies.",
+          "source_quote": "Skill Multiplier increases based on User's Guiding Light; Add User's Light x 8 to base multiplier"
+        },
+        {
+          "evaluator_status": "condition field scored; dependency taxonomy gap reported separately",
+          "interpretation": "Conditional branch trigger. No requires-Stellar-Burst dependency ID exists in the current dependency taxonomy.",
+          "source_quote": "When used during Stellar Burst"
+        },
+        {
+          "evaluator_status": "hit count and target-relative element conversion are outside current scored fields",
+          "interpretation": "Hit count and target-relative element conversion are attack metadata, not extra attack capabilities.",
+          "source_quote": "XXL x5; Element Type changes to target's Elemental Weakness"
+        },
+        {
+          "evaluator_status": "variant identity is outside current scored fields",
+          "interpretation": "Variant identity must remain distinct within one conceptual skill family.",
+          "source_quote": "Normal and Enhanced Starwyrm Slash"
+        }
+      ],
+      "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[19]/block[0]",
+      "source_slice_sha256": "edd67caa2ffc5581036f1465adc1c16d86051ea06891e9219a5e0fd127ec23ab",
+      "source_variant_label": "Enhanced",
+      "witness_id": "development-aldo-starwyrm-slash"
+    },
+    {
+      "atoms": [],
+      "cohort_kind": "development",
+      "fact_id": "skill:42d6ef8f388054c5fcf4",
+      "review_reference": "Review 23 — Claude (Extra Style), Another Zone shared definition",
+      "reviewed_relationships": [],
+      "reviewed_unscored_mechanics": [
+        {
+          "evaluator_status": "definition-level behavior is outside current effect/dependency occurrence scoring",
+          "interpretation": "A shared mechanic definition, not a Claude-owned direct-damage occurrence.",
+          "source_quote": "Awakens any Elemental Type Zones or Damage Type Attack Zones or the named Hybrid Zones"
+        },
+        {
+          "evaluator_status": "definition-level fields and skill-to-definition graph are not fully represented by current evaluator fields",
+          "interpretation": "Keep these as properties of the shared Another Zone mechanic and separate from the skill that activates it.",
+          "source_quote": "Zone multipliers, weakness/resistance effects, overwrite/removal/expiration, Support Effects coexistence, and activation-use rules"
+        }
+      ],
+      "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "source_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[2]/block[0]",
+      "source_slice_sha256": "91e2a0186c937296a78e41b4e9cbd5b2621d94cf0499a6da55d85c5845bf3208",
+      "witness_id": "development-claude-es-another-zone"
+    }
+  ]
+}

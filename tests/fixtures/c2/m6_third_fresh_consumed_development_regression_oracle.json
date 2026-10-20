@@ -1,0 +1,3768 @@
+{
+  "artifact_type": "m6_consumed_fresh_test_3_c2_regression_derivative",
+  "authority": {
+    "classifier_evaluator_taxonomy_modified": false,
+    "classifier_outputs_used_to_create_oracle": false,
+    "source_capture_and_slice_pins_are_authoritative": true,
+    "type": "source_only"
+  },
+  "cohort": "m6_consumed_development_regression",
+  "cohort_name": "m6_fresh_held_out_test_3",
+  "expected_totals": {
+    "relationship_groups": 3,
+    "taxonomy_supported_atoms": 23,
+    "unresolved_source_items": 1,
+    "unsupported_taxonomy_or_condition_gaps": 5
+  },
+  "fidelity_dimensions": [
+    "source_record_selection",
+    "source_identity",
+    "effect_completeness",
+    "effect_order",
+    "parent_child_condition_attachment",
+    "actor",
+    "recipient",
+    "trigger",
+    "result",
+    "magnitude_parameter",
+    "duration_activation",
+    "element",
+    "attack_type",
+    "mechanic_resource_reference",
+    "child_definition_resolution"
+  ],
+  "owner_approval": {
+    "basis": "The user-supplied final Test #3 brief states that all seven witnesses and semantic adjudication were independently reviewed and owner-approved.",
+    "status": "approved"
+  },
+  "promotion": {
+    "derivation": "Copy of the frozen owner-approved Test #3 source-only oracle with canonical source-range identities added. The frozen oracle and official evaluation report remain unchanged.",
+    "embedded_html": false,
+    "owner_corrections": [
+      {
+        "added_capability": "multi_hit_action",
+        "correction_id": "C2.1-FELMINA-X5-MULTI-HIT",
+        "fact_id": "skill:cbc785c922b50ce95379",
+        "frozen_oracle_modified": false,
+        "operation": "damage",
+        "reason": "Owner-approved interpretation: the owned x5 attack also requires exactly one multi_hit_action under the C2.1 owned-attack invariant.",
+        "source_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]",
+        "source_quote": "Wind type slash attack on a single enemy x5 ( XXL )",
+        "witness_id": "fresh3-felmina-enhanced-silent-killer"
+      }
+    ],
+    "source_capture_and_slice_pins_verified": true,
+    "source_evaluation_report_path": "/home/shogunix/c2-private/m6-third-fresh-evaluation-report.json",
+    "source_evaluation_report_sha256": "49055ca03c1db91f9384b159106c5c35e78fd04adadb3ef0f0d4a68cbf0545e2",
+    "source_oracle_path": "/home/shogunix/c2-private/m6-third-fresh-owner-oracle.json",
+    "source_oracle_sha256": "93a2a4d48c8d4a6a85bf30a253bf31afb62a654f37a25eadcef31d24a27b1ae5",
+    "status": "consumed_development_regression"
+  },
+  "schema_version": "c2-atomic-oracle-1",
+  "taxonomy_artifact_version": "3.2.0",
+  "typed_relationship_evaluation": {
+    "reason": "Independent typed relation correctness depends on runtime-generated occurrence IDs. Source-only semantics are recorded with stable witness-local identities; attachment and resolution are reported separately.",
+    "status": "unavailable"
+  },
+  "witnesses": [
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "tier": "M"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fire type slash attack on all enemies (M)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[0]",
+            "quote": "Fire type slash attack on all enemies",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:da1aefcdd607c84002797ef2066ce19c",
+              "source_fact_id": "skill:2b50977667ba773b49cb",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[0]/token[0]",
+                  "content_sha256": "5c4e92ff815547b0f98d1c6387be7b24f5717a26322da5801dea97a43036126f"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 37
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "recover_mp",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aldo"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+30",
+                "unit": "flat_mp",
+                "value": "30"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Restore all party members MP +30"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+            "quote": "Restore all party members MP +30",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3f51bc799926ed3b4b2b1faba44b3c08",
+              "source_fact_id": "skill:2b50977667ba773b49cb",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]/token[0]",
+                  "content_sha256": "f229972d9e8651bf8c19248094007e06ab06fc7e123881e1e12246753b405df7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 32
+            }
+          }
+        }
+      ],
+      "entity_name": "Aldo",
+      "fact_id": "skill:2b50977667ba773b49cb",
+      "fact_name": "Blaze Sword",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "not_applicable"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "not_applicable"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "passed"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 6,
+      "record_type": "active_skill",
+      "semantic_relationships": [],
+      "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_kind": "character",
+      "source_location": "grid[6]/block[0]",
+      "source_metadata": {
+        "mp_cost": 12
+      },
+      "source_path": "data/raw/characters/aldo.html",
+      "source_slice_sha256": "c5222c01cf3e05ea9d77b2360a6005bb3607db5fd5a34750a6f699c3290504a9",
+      "source_variant_label": null,
+      "unsupported_gaps": [
+        {
+          "gap_id": "aldo-mp-consumption-reduction",
+          "gap_type": "unsupported_cost_modifier",
+          "mechanic": "mp_consumption_reduction",
+          "reason": "MP-consumption reduction has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+            "quote": "MP consumption of all party members -35%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6ba2c7c91c617dc8b9addf76d31d59ca",
+              "source_fact_id": "skill:2b50977667ba773b49cb",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]/token[2]",
+                  "content_sha256": "c8cbff140770f4900474a92b71f45163172093318dd76ea2d36baa250304ff70"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]/token[3]",
+                  "content_sha256": "312f041dba95132372c550ccf2be6cd3be1d82690d414484ed7bf9088622e95a"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 4
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+            "quote": "MP consumption of all party members -35%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6ba2c7c91c617dc8b9addf76d31d59ca",
+              "source_fact_id": "skill:2b50977667ba773b49cb",
+              "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+              "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]/token[2]",
+                  "content_sha256": "c8cbff140770f4900474a92b71f45163172093318dd76ea2d36baa250304ff70"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]/token[3]",
+                  "content_sha256": "312f041dba95132372c550ccf2be6cd3be1d82690d414484ed7bf9088622e95a"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 4
+            }
+          },
+          "source_owner_id": "src:6ba2c7c91c617dc8b9addf76d31d59ca",
+          "additional_source_anchors": [
+            {
+              "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+              "quote": "(3 turns)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:aaec7d883e5392a56542c7fc02b6e060",
+                "source_fact_id": "skill:2b50977667ba773b49cb",
+                "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+                "block_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[0]"
+                ],
+                "token_start": 4,
+                "token_end": 4,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 4,
+                    "location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[6]/block[1]/token[4]",
+                    "content_sha256": "f3553b3d895283d45cd9f1c75ae80963a4344d3ecfc91100bacf8455bd7675e2"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 9
+              }
+            }
+          ]
+        }
+      ],
+      "witness_id": "fresh3-aldo-blaze-sword",
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Sesta"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "when user possesses Divine Wolf stack"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "reason": "No duration applies to the replacement prerequisite.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "No numeric stack threshold is stated.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "The source-only parent/child sequence is separately recorded; runtime occurrence IDs are evaluator-owned.",
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Replaces the basic attack when user possesses Divine Wolf stack."
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Divine Wolf"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "reason": "A stack prerequisite is a branch condition, not an action timing trigger.",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "semantic_scope": "basic_attack_replacement_only",
+          "source_anchor": {
+            "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]",
+            "quote": "when user possesses Divine Wolf stack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:64dc5e4c13ff05d3a3e8de0a311e8902",
+              "source_fact_id": "skill:ded9eb3b8e99f8890a37",
+              "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+              "block_location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]/token[0]",
+                  "content_sha256": "8cf44d5813325684e80efd7a5568db636023cbf504d46303a135759a0154b5b8"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]/token[1]",
+                  "content_sha256": "4a7d6d08ecb279625093f8958baf0fdd422999b0b7903d6c47bd923e8c03fbdf"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]/token[2]",
+                  "content_sha256": "e7d9f39e11f622dd085313a7fadd1cc78b580c0c751abf4a05d8b2a1ee39a7ec"
+                }
+              ],
+              "start_token_offset": 26,
+              "end_token_offset": 5
+            }
+          }
+        }
+      ],
+      "entity_name": "Sesta",
+      "fact_id": "skill:ded9eb3b8e99f8890a37",
+      "fact_name": "Twinblade Wolf",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "passed"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "not_applicable"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 0,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "child_effects_inherited": false,
+          "condition": "none",
+          "operation": "executes_sequence",
+          "relationship_id": "sesta-twinblade-sequence",
+          "resolution_expectation": "all five source-captured child facts are independently identified; retain child-owned semantics",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [],
+              "anchor_id": "src:5adb6098aae874d85bac951b2f9c81ca",
+              "block_kind": "root",
+              "block_location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]",
+              "end_token_offset": 44,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+              "source_fact_id": "skill:ded9eb3b8e99f8890a37",
+              "start_token_offset": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "content_sha256": "eab2ef5eb218d2c89e1cb1f7e0bcff7cb390abff7700cd33454991151de6255d",
+                  "kind": "text",
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[3]",
+                  "order": 3
+                }
+              ],
+              "token_start": 3
+            },
+            "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]",
+            "quote": "perform the following moves in succession"
+          },
+          "source_atom_id": "PARENT",
+          "targets": [
+            {
+              "fact_id": "skill:8f19607f29003c5853f9",
+              "name": "Wolf Howl",
+              "source_anchor": {
+                "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[2]/block[0]",
+                "quote": "Power of the user +50%"
+              }
+            },
+            {
+              "fact_id": "skill:b26ca8d92a7d8d186218",
+              "name": "Fa Jin Slash",
+              "source_anchor": {
+                "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[3]/block[0]",
+                "quote": "Slash attack on a single enemy"
+              }
+            },
+            {
+              "fact_id": "skill:dfcef1ecaddb848ba9a6",
+              "name": "Crusher Blow",
+              "source_anchor": {
+                "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[4]/block[0]",
+                "quote": "Wind type slash attack on all enemies"
+              }
+            },
+            {
+              "fact_id": "skill:8d74072b335351fe2c83",
+              "name": "Sky Mirror",
+              "source_anchor": {
+                "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[6]/block[0]",
+                "quote": "Critical Damage of the user +50%"
+              }
+            },
+            {
+              "fact_id": "skill:d0104b04c42ad864acd4",
+              "name": "Starving Wolf",
+              "source_anchor": {
+                "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[8]/block[0]",
+                "quote": "Wind type slash attack on a single enemy"
+              }
+            }
+          ],
+          "trigger": "on_skill_use"
+        }
+      ],
+      "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+      "source_kind": "character",
+      "source_location": "grid[0]/block[0]",
+      "source_metadata": {
+        "mp_cost": 0
+      },
+      "source_path": "data/raw/characters/sesta.html",
+      "source_slice_sha256": "63ec5d977aef043b28ca2108a24f883dec785f8aa814649f25c5b238856911e0",
+      "source_variant_label": "Basic Attack 1",
+      "unsupported_gaps": [
+        {
+          "gap_id": "sesta-divine-wolf-consumption",
+          "gap_type": "unsupported_resource_consumption",
+          "mechanic": "divine_wolf_consumption",
+          "reason": "Divine Wolf consumption has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]",
+            "quote": "Consumes one Divine Wolf",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:fc5136a98c5f23912453d19a0e2ec2e4",
+              "source_fact_id": "skill:ded9eb3b8e99f8890a37",
+              "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+              "block_location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[0]",
+                  "content_sha256": "883acc0145c2c74f0b83ad74493b315c342b4df453a262952fb82742a36bf2c4"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[1]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[2]",
+                  "content_sha256": "4a7d6d08ecb279625093f8958baf0fdd422999b0b7903d6c47bd923e8c03fbdf"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 11
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]",
+            "quote": "Consumes one Divine Wolf",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:fc5136a98c5f23912453d19a0e2ec2e4",
+              "source_fact_id": "skill:ded9eb3b8e99f8890a37",
+              "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+              "block_location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[0]",
+                  "content_sha256": "883acc0145c2c74f0b83ad74493b315c342b4df453a262952fb82742a36bf2c4"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[1]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[0]/token[2]",
+                  "content_sha256": "4a7d6d08ecb279625093f8958baf0fdd422999b0b7903d6c47bd923e8c03fbdf"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 11
+            }
+          },
+          "source_owner_id": "src:fc5136a98c5f23912453d19a0e2ec2e4"
+        },
+        {
+          "gap_id": "sesta-basic-attack-replacement",
+          "gap_type": "unsupported_effect",
+          "mechanic": "basic_attack_replacement",
+          "reason": "Basic-attack replacement has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]",
+            "quote": "Replaces the basic attack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6b4982b2f547bced32c0497426c337f9",
+              "source_fact_id": "skill:ded9eb3b8e99f8890a37",
+              "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+              "block_location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]/token[0]",
+                  "content_sha256": "8cf44d5813325684e80efd7a5568db636023cbf504d46303a135759a0154b5b8"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 25
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]",
+            "quote": "Replaces the basic attack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6b4982b2f547bced32c0497426c337f9",
+              "source_fact_id": "skill:ded9eb3b8e99f8890a37",
+              "source_capture_sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+              "block_location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557/grid[0]/block[3]/token[0]",
+                  "content_sha256": "8cf44d5813325684e80efd7a5568db636023cbf504d46303a135759a0154b5b8"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 25
+            }
+          },
+          "source_owner_id": "src:6b4982b2f547bced32c0497426c337f9",
+          "condition": "when user possesses Divine Wolf stack"
+        }
+      ],
+      "witness_id": "fresh3-sesta-twinblade-wolf",
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Dewey (Another Style)"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Blunt"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Water"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "tier": "XL"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Water type blunt attack on a single enemy (XL)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]",
+            "quote": "Water type blunt attack on a single enemy",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:27bca214437ed218a3678bae397cdbea",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]/token[0]",
+                  "content_sha256": "fcdde18541160ba481bb5accec7fbf46be80b46f04c75baac577e7347d842cc8"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 41
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "power_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Dewey (Another Style)"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Power is unconditional at +50%; when enemy has an active buff, the Power and Speed effect increases (100%)."
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "base_raw": "+50%",
+                "base_value": "50",
+                "conditional_effect_increase": "100%",
+                "unit": "percent"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Power of user +50%"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]",
+            "quote": "Power of user +50%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5df1e1fa167cf8df44a216d0ab69ce47",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]/token[0]",
+                  "content_sha256": "fcdde18541160ba481bb5accec7fbf46be80b46f04c75baac577e7347d842cc8"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]/token[1]",
+                  "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                }
+              ],
+              "start_token_offset": 51,
+              "end_token_offset": 4
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "identity": {
+                "ancestry": [
+                  "unordered_list[0]",
+                  "unordered_list[1]"
+                ],
+                "anchor_id": "src:d96d408bbaf420a90bdbc996ab564710",
+                "block_kind": "list_item",
+                "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]",
+                "end_token_offset": 1,
+                "schema_version": "source-anchor-1",
+                "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+                "source_fact_id": "skill:5fdaabace86137f6201a",
+                "start_token_offset": 0,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "content_sha256": "52916b4284f9c72d8e19fb5de82566810a134aeda41be1749c5fba05798276b0",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]/token[0]",
+                    "order": 0
+                  },
+                  {
+                    "content_sha256": "7e3e5c134471fa198c54de04d48f7aac58d85e77d42275b3c742fc55d7347475",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]/token[1]",
+                    "order": 1
+                  },
+                  {
+                    "content_sha256": "6d954fdb0fffd5311b7a807a11e275c1b452e72ca004360befa183c214064112",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]/token[2]",
+                    "order": 2
+                  }
+                ],
+                "token_start": 0
+              },
+              "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]",
+              "quote": "Power and Speed effect increases ( 100% )"
+            },
+            {
+              "identity": {
+                "ancestry": [
+                  "unordered_list[0]"
+                ],
+                "anchor_id": "src:7dff4f528ac9999763ce1cc09c562028",
+                "block_kind": "list_item",
+                "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[1]",
+                "end_token_offset": 29,
+                "schema_version": "source-anchor-1",
+                "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+                "source_fact_id": "skill:5fdaabace86137f6201a",
+                "start_token_offset": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "content_sha256": "c053b6c84724a7df7506165b656f287bdd0a5ba81be104802aaa9e43c503c1f0",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[1]/token[0]",
+                    "order": 0
+                  }
+                ],
+                "token_start": 0
+              },
+              "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[1]",
+              "quote": "When enemy has an active buff"
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "speed_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Dewey (Another Style)"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Speed is unconditional at +50%; when enemy has an active buff, the Power and Speed effect increases (100%)."
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "base_raw": "+50%",
+                "base_value": "50",
+                "conditional_effect_increase": "100%",
+                "unit": "percent"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Speed of user +50%"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]",
+            "quote": "Speed of user +50%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ce073b2e5e56266efeeae471092a2295",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]/token[2]",
+                  "content_sha256": "72eb2f3ce26925dd3f6029f3c46ad7490c25969b373bb41f03a62ff5de65dc14"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[0]/token[3]",
+                  "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                }
+              ],
+              "start_token_offset": 4,
+              "end_token_offset": 4
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "identity": {
+                "ancestry": [
+                  "unordered_list[0]",
+                  "unordered_list[1]"
+                ],
+                "anchor_id": "src:d96d408bbaf420a90bdbc996ab564710",
+                "block_kind": "list_item",
+                "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]",
+                "end_token_offset": 1,
+                "schema_version": "source-anchor-1",
+                "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+                "source_fact_id": "skill:5fdaabace86137f6201a",
+                "start_token_offset": 0,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "content_sha256": "52916b4284f9c72d8e19fb5de82566810a134aeda41be1749c5fba05798276b0",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]/token[0]",
+                    "order": 0
+                  },
+                  {
+                    "content_sha256": "7e3e5c134471fa198c54de04d48f7aac58d85e77d42275b3c742fc55d7347475",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]/token[1]",
+                    "order": 1
+                  },
+                  {
+                    "content_sha256": "6d954fdb0fffd5311b7a807a11e275c1b452e72ca004360befa183c214064112",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]/token[2]",
+                    "order": 2
+                  }
+                ],
+                "token_start": 0
+              },
+              "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[3]",
+              "quote": "Power and Speed effect increases ( 100% )"
+            },
+            {
+              "identity": {
+                "ancestry": [
+                  "unordered_list[0]"
+                ],
+                "anchor_id": "src:7dff4f528ac9999763ce1cc09c562028",
+                "block_kind": "list_item",
+                "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[1]",
+                "end_token_offset": 29,
+                "schema_version": "source-anchor-1",
+                "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+                "source_fact_id": "skill:5fdaabace86137f6201a",
+                "start_token_offset": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "content_sha256": "c053b6c84724a7df7506165b656f287bdd0a5ba81be104802aaa9e43c503c1f0",
+                    "kind": "text",
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[1]/token[0]",
+                    "order": 0
+                  }
+                ],
+                "token_start": 0
+              },
+              "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[1]",
+              "quote": "When enemy has an active buff"
+            }
+          ]
+        },
+        {
+          "atomic_capability_id": "enemy_buff_dispel",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Dewey (Another Style)"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When enemy has an active buff"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "The source gives no numeric magnitude for this atom.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Removes all buffs from target"
+            },
+            "state_reference": {
+              "reason": "The effect removes buffs; it does not name a state resource.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "remove",
+          "source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[2]",
+            "quote": "Removes all buffs from target",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c91ba66e970ca3fbf8d0f04d307f21d0",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[2]/token[0]",
+                  "content_sha256": "042ac679ec39442a44a391d5a0b5882cc9ed58b2bb55d15c64705525811221e8"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 29
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "apply_kaleido",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Dewey (Another Style)"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration": "permanent"
+              }
+            },
+            "element": {
+              "reason": "The resulting element depends on the selected target weakness.",
+              "status": "unknown"
+            },
+            "magnitude": {
+              "reason": "The source gives no numeric magnitude for this atom.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Grant Kaleido to user; change element of user attacks to target's Weakness element (permanent)"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Kaleido"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[5]",
+            "quote": "Grant Kaleido to user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5c6feb5431680d53c76026a218e17e7d",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[5]/token[0]",
+                  "content_sha256": "9480a850b3280de346a7aa168538f08d8981c57832b9e5d3d6da1dff9d4cf3f6"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[5]/token[1]",
+                  "content_sha256": "afbfbb2fa1eb0e1cf6e907a7cee24481b80f50aadc53c810428edafce403be46"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[5]/token[2]",
+                  "content_sha256": "6340120fe5e5eb7e8ccbf1f656a27a68908b96f7389d34f2f70942043f73efe2"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
+          }
+        }
+      ],
+      "entity_name": "Dewey (Another Style)",
+      "fact_id": "skill:5fdaabace86137f6201a",
+      "fact_name": "Vapeur Hypnotique",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "not_applicable"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "passed"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 9,
+      "record_type": "active_skill",
+      "semantic_relationships": [],
+      "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+      "source_kind": "character",
+      "source_location": "grid[9]/block[0]",
+      "source_metadata": {
+        "mp_cost": 90
+      },
+      "source_path": "data/raw/characters/dewey_another_style.html",
+      "source_slice_sha256": "9f4657bf369af9df495148c59d33fb4d56bc4dd11080f73726ecff7bb25bcfbc",
+      "source_variant_label": null,
+      "unsupported_gaps": [
+        {
+          "gap_id": "dewey-pendulum-creation",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "pendulum_stack_creation",
+          "reason": "Pendulum stack creation has no canonical state-creation capability.",
+          "source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]",
+            "quote": "Stacks 5 Pendulum on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:05b4f4db890c365501bf3217ff81dd2a",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[2]"
+              ],
+              "token_start": 2,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[2]",
+                  "content_sha256": "0077f8cefe246c92096dd48118e588a14bd8acb8cd5a5f66fcf24a2abed9562b"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[3]",
+                  "content_sha256": "f52687c7997428900d53334d44c60ccf7e050fc50630085de9c7d05ec700cb13"
+                },
+                {
+                  "kind": "icon",
+                  "order": 4,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[4]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[5]",
+                  "content_sha256": "8096a2c4f7a5422d80003c36e51cd2066299a672319c995d32dcd7f41280127a"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[6]",
+                  "content_sha256": "a8692d9680f37349d201e9ae7bf21fe26d8f89380178757013f4aff451b701f4"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 7
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]",
+            "quote": "Stacks 5 Pendulum on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:05b4f4db890c365501bf3217ff81dd2a",
+              "source_fact_id": "skill:5fdaabace86137f6201a",
+              "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+              "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[2]"
+              ],
+              "token_start": 2,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[2]",
+                  "content_sha256": "0077f8cefe246c92096dd48118e588a14bd8acb8cd5a5f66fcf24a2abed9562b"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[3]",
+                  "content_sha256": "f52687c7997428900d53334d44c60ccf7e050fc50630085de9c7d05ec700cb13"
+                },
+                {
+                  "kind": "icon",
+                  "order": 4,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[4]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[5]",
+                  "content_sha256": "8096a2c4f7a5422d80003c36e51cd2066299a672319c995d32dcd7f41280127a"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[6]",
+                  "content_sha256": "a8692d9680f37349d201e9ae7bf21fe26d8f89380178757013f4aff451b701f4"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 7
+            }
+          },
+          "source_owner_id": "src:05b4f4db890c365501bf3217ff81dd2a",
+          "condition": "When enemy has an active buff; When not in Clock Burst State; When not in Clock Burst State",
+          "additional_source_anchors": [
+            {
+              "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]",
+              "quote": "When not in Clock Burst State",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:3c28a24fb706b5093ac7832a9267284c",
+                "source_fact_id": "skill:5fdaabace86137f6201a",
+                "source_capture_sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+                "block_location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[0]",
+                  "unordered_list[2]"
+                ],
+                "token_start": 0,
+                "token_end": 1,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[0]",
+                    "content_sha256": "5ca577ce67e083291bfde099fb24c79c799f102853a29c2adf4eb87f87a399a5"
+                  },
+                  {
+                    "kind": "reference",
+                    "order": 1,
+                    "location": "sha256:e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad/grid[9]/block[4]/token[1]",
+                    "content_sha256": "ea99f9f55344d57f806e171dea088c5f4c13bf32cb8fb9854c43e9ae46de3240"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 17
+              }
+            }
+          ]
+        }
+      ],
+      "witness_id": "fresh3-dewey-as-vapeur-hypnotique",
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "attack_type_damage_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Shigure (Another Style)"
+            },
+            "attack_type": {
+              "reason": "The source applies to type attacks generally and names no single Slash/Pierce/Blunt/Magic type.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_moves": "1"
+              }
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "move_count_to_percent": {
+                  "1": "20%",
+                  "2": "30%",
+                  "3": "40%",
+                  "4": "50%",
+                  "5": "60%",
+                  "6": "65%",
+                  "7": "70%"
+                }
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Type attack of all party members +20% \\ +30% \\ +40% \\ +50% \\ +60% \\ +65% \\ +70% (1 move)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "turn_end"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]",
+            "quote": "Type attack of all party members +20% \\ +30% \\ +40% \\ +50% \\ +60% \\ +65% \\ +70% (1 move)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:88620a4cca78f49763a29d1da66e983b",
+              "source_fact_id": "passive:1c92b8be410b404b9f5c",
+              "source_capture_sha256": "d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063",
+              "block_location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[1]",
+                  "content_sha256": "5ba1dfb219d83631795a039b8b3f8792dcdbafe8adcd4d1d74e917c5ce72741c"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[2]",
+                  "content_sha256": "8a7bc927de5e4cfebd61916cd25c97f441065f5ea6d42330041aa84e1fbf8ed5"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[3]",
+                  "content_sha256": "20f23cf6b5daef6fa9af7b7feb5e23a14d347b7702024875967d2006ee547ab5"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
+          },
+          "supporting_source_anchors": [
+            {
+              "identity": {
+                "ancestry": [
+                  "unordered_list[0]"
+                ],
+                "anchor_id": "src:fa8f9c3e8af95439dbaf5d9ad2023157",
+                "block_kind": "list_item",
+                "block_location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[1]",
+                "end_token_offset": 19,
+                "schema_version": "source-anchor-1",
+                "source_capture_sha256": "d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063",
+                "source_fact_id": "passive:1c92b8be410b404b9f5c",
+                "start_token_offset": 0,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "content_sha256": "eba291d45a31ef834e64ffc234ff15ff29555bec131ce7f215be18dc41535d39",
+                    "kind": "text",
+                    "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[1]/token[0]",
+                    "order": 0
+                  },
+                  {
+                    "content_sha256": "3f3b4e9af2a18667634fd72dd391d1f8870fcfd2838b322309cbeb556cdc4958",
+                    "kind": "text",
+                    "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[1]/token[1]",
+                    "order": 1
+                  },
+                  {
+                    "content_sha256": "0614f011eaf4113d60c6dfc8611a05b0491f9e9c97b85533ea3727b3a5486ef7",
+                    "kind": "text",
+                    "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[1]/token[2]",
+                    "order": 2
+                  }
+                ],
+                "token_start": 0
+              },
+              "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[1]",
+              "quote": "effect's power is based on number ( 1 \\ 2 \\ 3 \\ 4 \\ 5 \\ 6 \\ 7 ) of moves in a turn."
+            }
+          ]
+        }
+      ],
+      "entity_name": "Shigure (Another Style)",
+      "fact_id": "passive:1c92b8be410b404b9f5c",
+      "fact_name": "Type Atk Buff - Num. of Moves",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "not_applicable"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "not_applicable"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "passed"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 10,
+      "record_type": "passive_skill",
+      "semantic_relationships": [],
+      "source_capture_sha256": "d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063",
+      "source_kind": "character",
+      "source_location": "grid[10]/block[0]",
+      "source_metadata": {},
+      "source_path": "data/raw/characters/shigure_another_style.html",
+      "source_slice_sha256": "3acbb273f757362eb2bd11434a58331a05a0adce9b1d0a89e51e89bdc783b607",
+      "source_variant_label": null,
+      "unsupported_gaps": [
+        {
+          "gap_id": "shigure-negative-status-condition",
+          "gap_type": "unsupported_condition",
+          "mechanic": "negative_status_absence_condition",
+          "reason": "Negative-status absence has no canonical dependency value.",
+          "source_anchor": {
+            "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]",
+            "quote": "When not in Sleep, Confusion, Stone, Freeze",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:9abd72337007a1ae32cf24326ddf98a1",
+              "source_fact_id": "passive:1c92b8be410b404b9f5c",
+              "source_capture_sha256": "d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063",
+              "block_location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 4,
+              "token_end": 5,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[4]",
+                  "content_sha256": "5ca577ce67e083291bfde099fb24c79c799f102853a29c2adf4eb87f87a399a5"
+                },
+                {
+                  "kind": "reference",
+                  "order": 5,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[5]",
+                  "content_sha256": "b70b38933cd8b97a5c3439b7a3d99868d9282908e2ed8ca35d97e1ee4c40ec0e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 31
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]",
+            "quote": "Type attack of all party members +20% \\ +30% \\ +40% \\ +50% \\ +60% \\ +65% \\ +70% (1 move)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:88620a4cca78f49763a29d1da66e983b",
+              "source_fact_id": "passive:1c92b8be410b404b9f5c",
+              "source_capture_sha256": "d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063",
+              "block_location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[1]",
+                  "content_sha256": "5ba1dfb219d83631795a039b8b3f8792dcdbafe8adcd4d1d74e917c5ce72741c"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[2]",
+                  "content_sha256": "8a7bc927de5e4cfebd61916cd25c97f441065f5ea6d42330041aa84e1fbf8ed5"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063/grid[10]/block[0]/token[3]",
+                  "content_sha256": "20f23cf6b5daef6fa9af7b7feb5e23a14d347b7702024875967d2006ee547ab5"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
+          },
+          "source_owner_id": "src:88620a4cca78f49763a29d1da66e983b",
+          "condition": "When not in Sleep, Confusion, Stone, Freeze"
+        }
+      ],
+      "witness_id": "fresh3-shigure-as-type-atk-buff-moves",
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "inflict_break",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Gunce"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Thunder"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "break_kind": "elemental",
+                "unit": "stacks",
+                "value": "3"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Auto Inflict 3 stacks of Elemental Break (Thunder) on all enemies"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Elemental Break"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "auto"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[0]",
+            "quote": "Inflict 3 stacks of Elemental Break (Thunder) on all enemies",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:775740c25aee95c1e0e933a58ccd3e18",
+              "source_fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+              "source_capture_sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+              "block_location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[0]/token[1]",
+                  "content_sha256": "d80ec14ba624008e27fce69d50134bb1ce85bab182d04c74c86ca70f2cde97bc"
+                },
+                {
+                  "kind": "icon",
+                  "order": 2,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[0]/token[2]",
+                  "content_sha256": "8cb55937d32c9545aedec579c165a000c1a1296297d151017dfc0443ed9f640f"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[0]/token[3]",
+                  "content_sha256": "043a5db436705a7b2aeb9c28b3bd5dd7006da605d9ac1c28002b65d8f70c3897"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[0]/token[4]",
+                  "content_sha256": "b7a65681325ec198d87d97d06a6532ad21362df3531439b90ccbaa589d899d4f"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 14
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "ally_resistance_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Gunce"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "max_stacks": "5",
+                "maximum_total": "45%",
+                "unit": "percent",
+                "value": "15"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Type resistance of all party members +15% (3 turns, Max stack 5: +45%)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "auto"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[1]",
+            "quote": "Type resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ad13c04c01b6823d798083786a148a54",
+              "source_fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+              "source_capture_sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+              "block_location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[1]/token[0]",
+                  "content_sha256": "f579b38d35fdbfab2abdbc8b4e8496e34ac7182b4b58906e370e9c27304bb6a0"
+                }
+              ],
+              "start_token_offset": 4,
+              "end_token_offset": 19
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "requires_zone",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Gunce"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When in Thundering Stance"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "field"
+            },
+            "duration_activation": {
+              "reason": "No duration applies to the stance prerequisite.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "The Charge increment is an unsupported gap, not a supported numeric effect.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "Thundering Stance"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Stack +1 Charge"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Thundering Stance"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "reason": "A stance prerequisite is a branch condition, not a timing trigger.",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "semantic_scope": "charge_increment_gap_only",
+          "source_anchor": {
+            "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]",
+            "quote": "When in Thundering Stance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0a7c088f3bd2fbe4af72ff0cba07abd8",
+              "source_fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+              "source_capture_sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+              "block_location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]/token[0]",
+                  "content_sha256": "eafb68308cf6a0ed459bd4216fb965e7a5a7c305eecc7bace7c641372dc0532e"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]/token[1]",
+                  "content_sha256": "8f1622c8e7a9713854b8d2677f83a339605b131391401c81a65db7775721b672"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 17
+            }
+          }
+        }
+      ],
+      "entity_name": "Gunce",
+      "fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+      "fact_name": "Arkoúda",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "not_applicable"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "unresolved"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "not_applicable"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "passed"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 0,
+      "record_type": "sidekick_auto",
+      "semantic_relationships": [],
+      "source_capture_sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+      "source_kind": "sidekick",
+      "source_location": "grid[0]/block[0]",
+      "source_metadata": {
+        "charge_column_value": {
+          "status": "unresolved",
+          "value": "+1"
+        }
+      },
+      "source_path": "data/raw/sidekicks/gunce.html",
+      "source_slice_sha256": "5b0370d5daba2bb7342998e76f1340a8c1cdc3bac71ca295475b37c3ef6874a5",
+      "source_variant_label": null,
+      "unresolved_source_items": [
+        {
+          "item_id": "gunce-charge-column-value",
+          "name": "Charge 1 table value",
+          "reason": "The separate +1 cell under the Charge column is owner-adjudicated unresolved and must not be inferred as a cost, gain, or starting amount.",
+          "source_anchor": {
+            "context": "Charge +1",
+            "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/column[Charge]/row[Arkoúda]",
+            "quote": "+1"
+          },
+          "status": "unresolved",
+          "value": "+1"
+        }
+      ],
+      "unsupported_gaps": [
+        {
+          "gap_id": "gunce-charge-generation",
+          "gap_type": "unsupported_resource_generation",
+          "mechanic": "charge_generation",
+          "reason": "Charge generation has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]",
+            "quote": "Stack +1 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b50efdccec7d17994cc726459698bd4d",
+              "source_fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+              "source_capture_sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+              "block_location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 3,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]/token[3]",
+                  "content_sha256": "9e6e607ba4c11dd239e5b5fea0072b7507c6985512be94441c70c696cc5ba69a"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]/token[4]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]",
+            "quote": "Stack +1 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b50efdccec7d17994cc726459698bd4d",
+              "source_fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+              "source_capture_sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+              "block_location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 3,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]/token[3]",
+                  "content_sha256": "9e6e607ba4c11dd239e5b5fea0072b7507c6985512be94441c70c696cc5ba69a"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e/grid[0]/block[3]/token[4]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "source_owner_id": "src:b50efdccec7d17994cc726459698bd4d",
+          "condition": "When in Thundering Stance"
+        }
+      ],
+      "witness_id": "fresh3-gunce-arkouda",
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Lloyd"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 2,
+                "tier": "XL"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "The two Resonant Raid child activations are source-only relationship groups; generated occurrence IDs are evaluator-owned.",
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fire type piercing attack on a single enemy x2 (XL)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+            "quote": "Fire type piercing attack on a single enemy x2",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c8760cf470fcc65477eeef0e97cac4ec",
+              "source_fact_id": "skill:fb74f4a6da1f61b852a6",
+              "source_capture_sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+              "block_location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]/token[0]",
+                  "content_sha256": "d9a1e72d0dc87c683553db56912067b473d808e0c671ef068ab54cb7a2c5fe94"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 46
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Lloyd"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 2
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "The two Resonant Raid child activations are source-only relationship groups; generated occurrence IDs are evaluator-owned.",
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fire type piercing attack on a single enemy x2 (XL)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+            "quote": "Fire type piercing attack on a single enemy x2",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c8760cf470fcc65477eeef0e97cac4ec",
+              "source_fact_id": "skill:fb74f4a6da1f61b852a6",
+              "source_capture_sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+              "block_location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]/token[0]",
+                  "content_sha256": "d9a1e72d0dc87c683553db56912067b473d808e0c671ef068ab54cb7a2c5fe94"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 46
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Lloyd"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 2,
+                "tier": "XL"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "The two Resonant Raid child activations are source-only relationship groups; generated occurrence IDs are evaluator-owned.",
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fire type slash attack x2 (XL)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+            "quote": "Fire type slash attack x2",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5b43197fdc5ef1a72b6c8e215e6d9d11",
+              "source_fact_id": "skill:fb74f4a6da1f61b852a6",
+              "source_capture_sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+              "block_location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]/token[0]",
+                  "content_sha256": "d9a1e72d0dc87c683553db56912067b473d808e0c671ef068ab54cb7a2c5fe94"
+                }
+              ],
+              "start_token_offset": 56,
+              "end_token_offset": 81
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Lloyd"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 2
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "The two Resonant Raid child activations are source-only relationship groups; generated occurrence IDs are evaluator-owned.",
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Fire type slash attack x2 (XL)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+            "quote": "Fire type slash attack x2",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5b43197fdc5ef1a72b6c8e215e6d9d11",
+              "source_fact_id": "skill:fb74f4a6da1f61b852a6",
+              "source_capture_sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+              "block_location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[0]/token[0]",
+                  "content_sha256": "d9a1e72d0dc87c683553db56912067b473d808e0c671ef068ab54cb7a2c5fe94"
+                }
+              ],
+              "start_token_offset": 56,
+              "end_token_offset": 81
+            }
+          }
+        }
+      ],
+      "entity_name": "Lloyd",
+      "fact_id": "skill:fb74f4a6da1f61b852a6",
+      "fact_name": "Raining Tiger Blade",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "not_applicable"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "passed"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "passed"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 7,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "child_effects_inherited": false,
+          "operation": "activates",
+          "relationship_id": "lloyd-resonant-raid-activation",
+          "resolution_expectation": "both source-captured Resonant Raid child facts are independently identified",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[3]"
+              ],
+              "anchor_id": "src:730319b84bf0f3df3f725db345f283d8",
+              "block_kind": "list_item",
+              "block_location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[11]",
+              "end_token_offset": 7,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+              "source_fact_id": "skill:fb74f4a6da1f61b852a6",
+              "start_token_offset": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "content_sha256": "28e9754a7ada704765985aca37f08c20ca291f41843dabe4ed458fea8ca55b40",
+                  "kind": "text",
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[11]/token[0]",
+                  "order": 0
+                },
+                {
+                  "content_sha256": "e3d97e37add0e05ca1be306df08ec2e9ef24efcf5d4991b3f6f4ebcc04cb40e5",
+                  "kind": "reference",
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[11]/token[1]",
+                  "order": 1
+                },
+                {
+                  "content_sha256": "7869994fccfeaa04f52040b9e50b0381730a45249e48fd119b274fac0a1117b4",
+                  "kind": "text",
+                  "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[11]/token[2]",
+                  "order": 2
+                }
+              ],
+              "token_start": 0
+            },
+            "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[7]/block[11]",
+            "quote": "Can activate Resonant Raid skills:"
+          },
+          "source_atom_id": "PARENT",
+          "targets": [
+            {
+              "fact_id": "skill:00446251ef3839232fff",
+              "name": "Raining Tiger Claw",
+              "source_anchor": {
+                "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[12]/block[0]",
+                "quote": "Resonant Raid"
+              }
+            },
+            {
+              "fact_id": "skill:f354a325669dbe2160af",
+              "name": "Raining Tiger Fire",
+              "source_anchor": {
+                "location": "sha256:60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c/grid[15]/block[0]",
+                "quote": "Resonant Raid"
+              }
+            }
+          ],
+          "trigger": "on_skill_use"
+        }
+      ],
+      "source_capture_sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+      "source_kind": "character",
+      "source_location": "grid[7]/block[0]",
+      "source_metadata": {
+        "mp_cost": 52
+      },
+      "source_path": "data/raw/characters/lloyd.html",
+      "source_slice_sha256": "53a3e84f8a34ebb670edbb7f1c267eb8ea306db47005c957c1974ae0023cddff",
+      "source_variant_label": null,
+      "unsupported_gaps": [],
+      "witness_id": "fresh3-lloyd-raining-tiger-blade",
+      "reviewed_unscored_mechanics": []
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "barrier_pierce",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "activation_count": "3"
+              }
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "activations": 3
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Give Barrier Pierce to user (3 time)"
+            },
+            "state_reference": {
+              "reason": "The atom has no named state/resource reference.",
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]",
+            "quote": "Give Barrier Pierce to user (3 time)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5a27d072b9726ea757220e040f60d81e",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[0]",
+                  "content_sha256": "d171d2d1e1ef283e8c0cdd19e84bc44a5234857a273c01cef6123cbb1e52ab63"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[1]",
+                  "content_sha256": "7991f785233529d820de4c8230438fea9a3d7b304eb713e4b259649d36442864"
+                },
+                {
+                  "kind": "reference",
+                  "order": 2,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[2]",
+                  "content_sha256": "ccada7ae607fb09454208a5488345095e8fcac3776930698c80c4b612026c2b2"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[3]",
+                  "content_sha256": "2995aebabc017d475b827a0003a57ff0263d4540c30348c3f3c13ecbe8edab71"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 16
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "activate_lunatic",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "1"
+              }
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "No numeric magnitude is stated.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Activate Lunatic with Mind's eye on user (1 turn)"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Lunatic: Mind's Eye"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "activate",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]",
+            "quote": "Activate Lunatic with Status Mind's eye on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:366764dd183d978b01dba243ce62cc56",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 3,
+              "token_end": 8,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[3]",
+                  "content_sha256": "2995aebabc017d475b827a0003a57ff0263d4540c30348c3f3c13ecbe8edab71"
+                },
+                {
+                  "kind": "reference",
+                  "order": 4,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[4]",
+                  "content_sha256": "dd2c3032eda50be27a14c7942417510d397193b374c11cea5cd32faf475f26c2"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[5]",
+                  "content_sha256": "96eb52bc2359ef02b9214f4268e335a988d5341055ad5b8a95c64088a398ff6b"
+                },
+                {
+                  "kind": "icon",
+                  "order": 6,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[6]",
+                  "content_sha256": "3e09a96a48877ea83bdcddb79b98c0c02bbc3a82d06c9f300235046d59f005c4"
+                },
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[7]",
+                  "content_sha256": "1c283ec875d8e2eb8dd46e1074b5c7893f9db582e8c3d1628df1f210911896f5"
+                },
+                {
+                  "kind": "text",
+                  "order": 8,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[8]",
+                  "content_sha256": "67ec1ff9732594a4635beb7b800daa9fcd3f02870acffa2c642b64fc9aaecdb9"
+                }
+              ],
+              "start_token_offset": 21,
+              "end_token_offset": 7
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Wind"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 5,
+                "tier": "XXL"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Wind type slash attack on a single enemy x5 ( XXL )"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Miasmic Corrosion"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]",
+            "quote": "Wind type slash attack on a single enemy x5",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:f628ff4fcef4a1987acdb567ae493a07",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]/token[0]",
+                  "content_sha256": "b85047a13a7d1fad3369fe04f980fe3250b38a396ef64158243d84243e365583"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 43
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stellar_awakened",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "reason": "Prerequisite is not attack-type-qualified.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "reason": "Prerequisite has no duration.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "Prerequisite is not element-qualified.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "Prerequisite has no numeric magnitude.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Stellar Awakening"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "reason": "An action-wide prerequisite is not a timing trigger.",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "semantic_scope": "action_wide",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]",
+            "quote": "requires Stellar Awakening",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1ae105fb0519d71f895c40a0c304354c",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 9,
+              "token_end": 10,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 9,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[9]",
+                  "content_sha256": "8f0a14d8fa4545b55d597cc3c90c702ccd3ef9030b4a4610f90967e123ffec40"
+                },
+                {
+                  "kind": "reference",
+                  "order": 10,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[0]/token[10]",
+                  "content_sha256": "be522da1d99dfa0d834a64bf0f2dd6feec3e75a5d210d90f1b0918a614eb19de"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 17
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "grant_link",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "reason": "The atom has no attack-type-qualified result.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When 20 Miasmic Corrosion are stack on the target"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "The atom has no element-qualified result.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "reason": "The source gives no numeric magnitude for this atom.",
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "reason": "The Stellar Burst child relation is recorded separately; generated occurrence IDs are evaluator-owned.",
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Activate Tri-cataclysm in link"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Tri-cataclysm"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "grant",
+          "semantic_scope": "tri_cataclysm_link_activation_only",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]",
+            "quote": "Activate Tri-cataclysm in link",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:913c5a0bd2eb38dcd0b2a3777ed3f2cf",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]/token[0]",
+                  "content_sha256": "fbb57091a14fa0d62484083c9767098da51e9f20ce32e099faa95581b81f4bd7"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]/token[1]",
+                  "content_sha256": "a7cbaca4c7984e06cd207c0dd361316ad5c8cdae9108ce10c7b12dac499bff17"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]/token[2]",
+                  "content_sha256": "ad395b069032e07cfcd21b1e832e0132875860bd5de3e0ebf6dcd15ca327ea0a"
+                }
+              ],
+              "start_token_offset": 51,
+              "end_token_offset": 7
+            }
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "reason": "Prerequisite is not attack-type-qualified.",
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When 20 Miasmic Corrosion are stack on the target"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "A stack prerequisite has no duration.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "reason": "Prerequisite is not element-qualified.",
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "comparison": ">=",
+                "resource": "Miasmic Corrosion",
+                "unit": "stacks",
+                "value": "20"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "When 20 Miasmic Corrosion are stack on the target"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Miasmic Corrosion"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "reason": "A stack threshold is a branch condition, not a timing trigger.",
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "semantic_scope": "tri_cataclysm_link_activation_only",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]",
+            "quote": "When 20 Miasmic Corrosion are stack on the target",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b3d556bdfa5afe1069b327f45cc996a8",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[3]/token[0]",
+                  "content_sha256": "fbb57091a14fa0d62484083c9767098da51e9f20ce32e099faa95581b81f4bd7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 49
+            }
+          }
+        },
+        {
+          "atom_id": "C2.1-FELMINA-X5-MULTI-HIT",
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Felmina"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "reason": "No branch condition applies to this atom.",
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "reason": "The source gives no duration or activation count for this atom.",
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Wind"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 5
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "reason": "No typed relationship is attached to this atom.",
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Wind type slash attack on a single enemy x5 ( XXL )"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Miasmic Corrosion"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "hit_count": 5
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]",
+            "quote": "Wind type slash attack on a single enemy x5",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:f628ff4fcef4a1987acdb567ae493a07",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[1]/token[0]",
+                  "content_sha256": "b85047a13a7d1fad3369fe04f980fe3250b38a396ef64158243d84243e365583"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 43
+            }
+          }
+        }
+      ],
+      "entity_name": "Felmina",
+      "fact_id": "skill:cbc785c922b50ce95379",
+      "fact_name": "Silent Killer",
+      "fidelity_dimensions": {
+        "actor": {
+          "reason": "The source owner is identified.",
+          "status": "passed"
+        },
+        "attack_type": {
+          "reason": "Attack type interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "Child-definition status is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "duration_activation": {
+          "reason": "Source duration or activation scope is adjudicated.",
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "reason": "The admitted source semantics and explicit unsupported gaps were reviewed against the pinned row.",
+          "status": "passed"
+        },
+        "effect_order": {
+          "reason": "Source ordering was reviewed and is preserved where it carries meaning.",
+          "status": "passed"
+        },
+        "element": {
+          "reason": "Element interpretation is source-grounded or not applicable.",
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "reason": "Source magnitudes, thresholds, or parameter semantics are adjudicated.",
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "reason": "Named state/resource references are source-grounded; unresolved items remain explicit.",
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "reason": "Owner-reviewed relationship and branch attachment state.",
+          "status": "passed"
+        },
+        "recipient": {
+          "reason": "Recipient interpretation is owner-reviewed for this witness.",
+          "status": "passed"
+        },
+        "result": {
+          "reason": "Result wording is anchored to the pinned source text.",
+          "status": "passed"
+        },
+        "source_identity": {
+          "reason": "The capture checksum, source path, fact identity, and source slice are pinned.",
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "reason": "The owner-approved witness selects the stated source row.",
+          "status": "passed"
+        },
+        "trigger": {
+          "reason": "Source activation timing or explicit automatic mode is adjudicated.",
+          "status": "passed"
+        }
+      },
+      "grid_index": 14,
+      "record_type": "active_skill",
+      "semantic_relationships": [
+        {
+          "child_effects_inherited": false,
+          "condition": "When used during Stellar Burst",
+          "operation": "activates_child",
+          "relationship_id": "felmina-stellar-burst-child",
+          "resolution_expectation": "only the matching Stellar Burst child fact is targeted; parent effects remain parent-owned",
+          "source_anchor": {
+            "identity": {
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "anchor_id": "src:c3db56a7bf4d1f92d4bee42aeb127ac1",
+              "block_kind": "list_item",
+              "block_location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[4]",
+              "end_token_offset": 29,
+              "schema_version": "source-anchor-1",
+              "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+              "source_fact_id": "skill:cbc785c922b50ce95379",
+              "start_token_offset": 2,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "content_sha256": "5e555efbae2b4f7931aa5fa9e88562658fb83f85a3e942bc18cd0f7638df17db",
+                  "kind": "text",
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[4]/token[1]",
+                  "order": 1
+                },
+                {
+                  "content_sha256": "f887044c06ea0614d550bd60d805e9cb5311f6c96cd8643ea4132c0b30fedad7",
+                  "kind": "reference",
+                  "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[4]/token[2]",
+                  "order": 2
+                }
+              ],
+              "token_start": 1
+            },
+            "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[14]/block[4]",
+            "quote": "Activate Silent Killer (Stellar Burst)"
+          },
+          "source_atom_id": "PARENT",
+          "targets": [
+            {
+              "fact_id": "skill:0971915052eeb3ef001d",
+              "name": "Silent Killer (Stellar Burst)",
+              "source_anchor": {
+                "location": "sha256:f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a/grid[16]/block[0]",
+                "quote": "Give St ignore barrier.png Barrier Pierce to user"
+              }
+            }
+          ],
+          "trigger": "on_stellar_burst"
+        }
+      ],
+      "source_capture_sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+      "source_kind": "character",
+      "source_location": "grid[14]/block[0]",
+      "source_metadata": {
+        "mp_cost": 82
+      },
+      "source_path": "data/raw/characters/felmina.html",
+      "source_slice_sha256": "28bf000f9b5c6694a48e23e198ae9636bd41cf9b6c481e2e9911120dac8d9b34",
+      "source_variant_label": "Enhanced",
+      "unsupported_gaps": [],
+      "witness_id": "fresh3-felmina-enhanced-silent-killer",
+      "reviewed_unscored_mechanics": []
+    }
+  ]
+}

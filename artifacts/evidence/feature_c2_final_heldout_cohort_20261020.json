@@ -1,0 +1,272 @@
+{
+  "artifact_type": "m6_final_heldout_cohort_manifest",
+  "classifier_snapshot_path": ".sdd/active/milestone-6/C2.1-final-validation/classifier-state-snapshot.json",
+  "classifier_snapshot_sha256": "4ad640a3744d22e36ba1da2e1b0696d2787c990e1bf38a5a742ab5adb3b08889",
+  "cohort_version": "m6-c2-final-heldout-2026-10-20-v1",
+  "exclusion_inventory_path": "artifacts/evidence/feature_c2_final_heldout_exclusions_20261020.json",
+  "exclusion_inventory_sha256": "07b313a093cb398ea488d85ef80e5029becb8590464338ec331335e574ddc225",
+  "selected_at": "2026-10-20T01:28:05+08:00",
+  "selection_policy": {
+    "available_archetype_counts": {
+      "child_reference_or_activation": 2053,
+      "conditional_or_branch_local": 1989,
+      "multi_hit_or_repeated_action": 1407,
+      "other_structural_mechanic": 753,
+      "sidekick_aura": 23,
+      "sidekick_auto": 12,
+      "sidekick_charge": 6,
+      "state_resource_or_dependency": 1724,
+      "straightforward_damage_baseline": 95,
+      "support_buff_debuff_or_recovery": 2751
+    },
+    "character_names_are_not_freshness_exclusions": true,
+    "eligible_candidate_pool_count": 4352,
+    "eligible_kind_counts": {
+      "character": 4311,
+      "sidekick": 41
+    },
+    "eligible_record_type_counts": {
+      "active_skill": 3584,
+      "passive_skill": 727,
+      "sidekick_aura": 23,
+      "sidekick_auto": 12,
+      "sidekick_charge": 6
+    },
+    "input_basis": [
+      "source metadata",
+      "record type",
+      "character/style identity",
+      "structural shape",
+      "broad source-mechanic/archetype labels",
+      "exact freshness exclusions"
+    ],
+    "selection_used_classifier_output": false,
+    "selection_used_oracle_semantics": false,
+    "stratification_targets": [
+      "sidekick_charge",
+      "multi-hit or repeated action",
+      "conditional or branch-local semantics",
+      "support/buff/debuff or recovery",
+      "state/resource/dependency behavior",
+      "source reference or activation relationship",
+      "straightforward damage baseline"
+    ],
+    "tie_break": "source_kind, entity/style name casefold, record_type, fact_id",
+    "within_cohort_diversity": "one source occurrence per distinct entity/style; unique exact fact IDs and source-slice hashes",
+    "witness_count": 7
+  },
+  "source_capture_authority": "current raw capture bytes, matched to canonical catalog fact and structural source unit; source-fidelity validation passed for all seven",
+  "source_fidelity_version": "m6-c1.1-1.2.0",
+  "taxonomy_version": "3.2.0",
+  "witnesses": [
+    {
+      "archetypes": [
+        "sidekick_charge",
+        "multi_hit_or_repeated_action",
+        "conditional_or_branch_local",
+        "state_resource_or_dependency",
+        "child_reference_or_activation"
+      ],
+      "entity_name": "Hazama",
+      "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+      "fact_name": "Fragile Illusion",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 1,
+      "record_type": "sidekick_charge",
+      "reference_count": 4,
+      "selection_archetype": "sidekick_charge",
+      "source_capture_sha256": "7119b8d9fa1f2e8e3648537dd8bf15a3a82c2988fcb8e86aec040dcb87ad25fd",
+      "source_identity_status": "passed",
+      "source_kind": "sidekick",
+      "source_location": "sha256:7119b8d9fa1f2e8e3648537dd8bf15a3a82c2988fcb8e86aec040dcb87ad25fd/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/hazama.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "bba4895dfb10c6f14caa43be28b8f7ab6910ae5ba2220ab0a5b29a8d5b4854d3",
+      "structural_block_count": 3,
+      "structural_token_count": 16
+    },
+    {
+      "archetypes": [
+        "multi_hit_or_repeated_action",
+        "conditional_or_branch_local",
+        "support_buff_debuff_or_recovery",
+        "child_reference_or_activation"
+      ],
+      "entity_name": "Aisha",
+      "fact_id": "skill:86f56e65ad514057dbc9",
+      "fact_name": "Flow Concerto",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 10,
+      "record_type": "active_skill",
+      "reference_count": 0,
+      "selection_archetype": "multi-hit or repeated action",
+      "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_identity_status": "passed",
+      "source_kind": "character",
+      "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[10]/block[0]",
+      "source_path": "data/raw/characters/aisha.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "f6c0b4e946524ee560839b9cdb61db5bb232038c4b6fa267f9328bda1fc0a03d",
+      "structural_block_count": 2,
+      "structural_token_count": 7
+    },
+    {
+      "archetypes": [
+        "conditional_or_branch_local",
+        "support_buff_debuff_or_recovery",
+        "state_resource_or_dependency",
+        "child_reference_or_activation"
+      ],
+      "entity_name": "Akane",
+      "fact_id": "skill:a618ee29cbaf2d711eda",
+      "fact_name": "Blazing Ascent",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 7,
+      "record_type": "active_skill",
+      "reference_count": 1,
+      "selection_archetype": "conditional or branch-local semantics",
+      "source_capture_sha256": "184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a",
+      "source_identity_status": "passed",
+      "source_kind": "character",
+      "source_location": "sha256:184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a/grid[7]/block[0]",
+      "source_path": "data/raw/characters/akane.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "661f569161ea20e33859b998e7628124b8ad763f18eeaf95c0bc586325291a3d",
+      "structural_block_count": 3,
+      "structural_token_count": 15
+    },
+    {
+      "archetypes": [
+        "multi_hit_or_repeated_action",
+        "conditional_or_branch_local",
+        "support_buff_debuff_or_recovery",
+        "state_resource_or_dependency",
+        "child_reference_or_activation"
+      ],
+      "entity_name": "Akane (Alter),Blooming Blade",
+      "fact_id": "skill:680d04634b1fcc73bddb",
+      "fact_name": "Itto-Ryu: Hawk Talon",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 9,
+      "record_type": "active_skill",
+      "reference_count": 2,
+      "selection_archetype": "support/buff/debuff or recovery",
+      "source_capture_sha256": "901299cef6fd1b8803443e46aff870f0732df23aa6d6f611f70d47a5c4e3f659",
+      "source_identity_status": "passed",
+      "source_kind": "character",
+      "source_location": "sha256:901299cef6fd1b8803443e46aff870f0732df23aa6d6f611f70d47a5c4e3f659/grid[9]/block[0]",
+      "source_path": "data/raw/characters/akane_alter_blooming_blade.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "93c53133cba180b54aeaee942c2c832d9b8f503fa6eeaeaf5cd267fda496775d",
+      "structural_block_count": 4,
+      "structural_token_count": 14
+    },
+    {
+      "archetypes": [
+        "multi_hit_or_repeated_action",
+        "conditional_or_branch_local",
+        "support_buff_debuff_or_recovery",
+        "state_resource_or_dependency"
+      ],
+      "entity_name": "Akane (Another Style)",
+      "fact_id": "skill:9c8eceb19ae4a8299e66",
+      "fact_name": "Divine Circle Slash",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 10,
+      "record_type": "active_skill",
+      "reference_count": 0,
+      "selection_archetype": "state/resource/dependency behavior",
+      "source_capture_sha256": "63f15a7fce6d09d8b07500f9f39cb5b6fa23cfd4d6a72bd04faeca6ff1e3de7e",
+      "source_identity_status": "passed",
+      "source_kind": "character",
+      "source_location": "sha256:63f15a7fce6d09d8b07500f9f39cb5b6fa23cfd4d6a72bd04faeca6ff1e3de7e/grid[10]/block[0]",
+      "source_path": "data/raw/characters/akane_another_style.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "93f4630219d7beae963d780eb4eabe2d318f476f4adcba8349d1aefbd9c7bc4d",
+      "structural_block_count": 9,
+      "structural_token_count": 20
+    },
+    {
+      "archetypes": [
+        "multi_hit_or_repeated_action",
+        "support_buff_debuff_or_recovery",
+        "state_resource_or_dependency",
+        "child_reference_or_activation"
+      ],
+      "entity_name": "Aldo",
+      "fact_id": "skill:41bc4674ded91f41fde5",
+      "fact_name": "X Blade",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 14,
+      "record_type": "active_skill",
+      "reference_count": 8,
+      "selection_archetype": "source reference or activation relationship",
+      "source_capture_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_identity_status": "passed",
+      "source_kind": "character",
+      "source_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[14]/block[0]",
+      "source_path": "data/raw/characters/aldo.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "e72848364827784a166700f75e09fa63bb721c16d835c10b9bcbb07ba2feb308",
+      "structural_block_count": 6,
+      "structural_token_count": 24
+    },
+    {
+      "archetypes": [
+        "straightforward_damage_baseline"
+      ],
+      "entity_name": "Aldo (Another Style)",
+      "fact_id": "skill:089a2cd5e8acba9aa282",
+      "fact_name": "Volcano Blade",
+      "genuine_freshness_basis": {
+        "character_name_used_as_exclusion_key": false,
+        "fact_id_absent_from_all_exclusion_records": true,
+        "source_capture_and_location_absent_from_all_exclusion_pins": true,
+        "source_slice_sha256_absent_from_all_exclusion_pins": true
+      },
+      "grid_index": 7,
+      "record_type": "active_skill",
+      "reference_count": 0,
+      "selection_archetype": "straightforward damage baseline",
+      "source_capture_sha256": "156e6adb63c55e219f0ab5eac3bdc32f4b7339be5cb5b52cd8a34b4069999239",
+      "source_identity_status": "passed",
+      "source_kind": "character",
+      "source_location": "sha256:156e6adb63c55e219f0ab5eac3bdc32f4b7339be5cb5b52cd8a34b4069999239/grid[7]/block[0]",
+      "source_path": "data/raw/characters/aldo_another_style.html",
+      "source_pin_validation": "passed",
+      "source_slice_sha256": "e3a67056d45a905bd68a551160acad26f01059f44eb0a23ff65937ced8ef0d74",
+      "structural_block_count": 2,
+      "structural_token_count": 6
+    }
+  ]
+}

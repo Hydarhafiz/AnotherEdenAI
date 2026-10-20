@@ -106,6 +106,37 @@ class StructuralToken:
     icon_identity: str | None = None
 
 
+@dataclass(frozen=True)
+class SourceTokenIdentity:
+    """Stable structural identity for one token in a source anchor."""
+
+    kind: str
+    order: int
+    location: str
+    content_sha256: str
+
+
+@dataclass(frozen=True)
+class SourceAnchor:
+    """Canonical identity of a source range, independent of rendered quote text."""
+
+    schema_version: str
+    anchor_id: str
+    source_fact_id: str
+    source_capture_sha256: str
+    block_location: str
+    block_kind: str
+    ancestry: tuple[str, ...]
+    token_start: int
+    token_end: int
+    token_identities: tuple[SourceTokenIdentity, ...]
+    start_token_offset: int
+    end_token_offset: int
+
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
 @dataclass
 class StructuralBlock:
     kind: str
@@ -137,6 +168,24 @@ class StructuralUnit:
 
     def text(self) -> str:
         return _clean(" ".join(token.text for block in self.blocks for token in block.tokens))
+
+    def source_anchor(
+        self,
+        block: StructuralBlock,
+        positions: Sequence[tuple[StructuralToken, int, int]],
+        start: int,
+        end: int,
+        *,
+        source_fact_id: str | None = None,
+    ) -> SourceAnchor:
+        return source_anchor_from_range(
+            source_fact_id=str(source_fact_id or self.source_fact_id or ""),
+            source_capture_sha256=self.source.capture_sha256,
+            block=block,
+            positions=positions,
+            start=start,
+            end=end,
+        )
 
     def references(self) -> list[StructuralToken]:
         return [
@@ -189,6 +238,274 @@ class TraversalLimits:
     max_depth: int
     max_pages_per_root: int
     max_frontier_per_root: int = MAX_FRONTIER_PER_ROOT
+
+
+def render_structural_tokens(
+    tokens: Sequence[StructuralToken],
+) -> tuple[str, list[tuple[StructuralToken, int, int]]]:
+    """Render text, icons, and links in structural order with token-local ranges."""
+    pieces: list[str] = []
+    positions: list[tuple[StructuralToken, int, int]] = []
+    length = 0
+    for token in tokens:
+        if token.kind == "line_break":
+            continue
+        value = _clean(token.text)
+        if not value:
+            continue
+        if pieces:
+            pieces.append(" ")
+            length += 1
+        start = length
+        pieces.append(value)
+        length += len(value)
+        positions.append((token, start, length))
+    return "".join(pieces), positions
+
+
+def source_anchor_from_range(
+    *,
+    source_fact_id: str,
+    source_capture_sha256: str,
+    block: StructuralBlock,
+    positions: Sequence[tuple[StructuralToken, int, int]],
+    start: int,
+    end: int,
+) -> SourceAnchor:
+    """Build the shared anchor identity used by classification and oracle fixtures."""
+    selected = [
+        (token, token_start, token_end)
+        for token, token_start, token_end in positions
+        if token_start < end and token_end > start
+    ]
+    token_identities = tuple(
+        SourceTokenIdentity(
+            kind=token.kind,
+            order=token.order,
+            location=token.location,
+            content_sha256=_sha256_bytes(
+                json.dumps(
+                    {
+                        "text": token.text,
+                        "href": token.href,
+                        "canonical_page_url": token.canonical_page_url,
+                        "fragment": token.fragment,
+                        "title": token.title,
+                        "icon_identity": token.icon_identity,
+                    },
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ),
+        )
+        for token, _token_start, _token_end in selected
+    )
+    first_start = selected[0][1] if selected else start
+    last_start = selected[-1][1] if selected else end
+    last_end = selected[-1][2] if selected else end
+    start_token_offset = max(0, start - first_start)
+    end_token_offset = max(0, min(end, last_end) - last_start)
+    identity = {
+        "schema_version": "source-anchor-1",
+        "source_fact_id": source_fact_id,
+        "source_capture_sha256": source_capture_sha256,
+        "block_location": block.location,
+        "block_kind": block.kind,
+        "ancestry": tuple(block.ancestry),
+        "token_start": min((token.order for token, _a, _b in selected), default=-1),
+        "token_end": max((token.order for token, _a, _b in selected), default=-1),
+        "token_identities": tuple(asdict(row) for row in token_identities),
+        "start_token_offset": start_token_offset,
+        "end_token_offset": end_token_offset,
+    }
+    anchor_id = f"src:{_sha256_bytes(json.dumps(identity, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8'))[:32]}"
+    return SourceAnchor(
+        schema_version="source-anchor-1",
+        anchor_id=anchor_id,
+        source_fact_id=source_fact_id,
+        source_capture_sha256=source_capture_sha256,
+        block_location=block.location,
+        block_kind=block.kind,
+        ancestry=tuple(block.ancestry),
+        token_start=int(identity["token_start"]),
+        token_end=int(identity["token_end"]),
+        token_identities=token_identities,
+        start_token_offset=start_token_offset,
+        end_token_offset=end_token_offset,
+    )
+
+
+def source_anchor_for_quote(
+    *,
+    source_fact_id: str,
+    source_capture_sha256: str,
+    block: StructuralBlock,
+    quote: str,
+) -> SourceAnchor:
+    """Resolve an adjudicated quote to one exact structural token range."""
+    # Prefer an exact quote in the full rendering. Some adjudications include
+    # icon labels while others omit them, so retry against readable text tokens
+    # and retain any interleaved icon token in the resulting structural range.
+    full_rendered, full_positions = render_structural_tokens(block.tokens)
+    rendered, positions = full_rendered, full_positions
+    normalized_quote = _clean(quote)
+    full_matches = [
+        index
+        for index in range(len(full_rendered))
+        if full_rendered[index:index + len(normalized_quote)].casefold() == normalized_quote.casefold()
+    ]
+    matches = full_matches
+    if len(matches) != 1:
+        rendered, positions = render_structural_tokens(
+            [token for token in block.tokens if token.kind != "icon"]
+        )
+        matches = [
+            index
+            for index in range(len(rendered))
+            if rendered[index:index + len(normalized_quote)].casefold() == normalized_quote.casefold()
+        ]
+    if not normalized_quote or len(matches) != 1:
+        raise ValueError("source quote must identify exactly one structural range")
+    match_start = matches[0]
+    match_end = match_start + len(normalized_quote)
+    selected = [
+        (token, token_start, token_end)
+        for token, token_start, token_end in positions
+        if token_start < match_end and token_end > match_start
+    ]
+    if not selected:
+        raise ValueError("source quote does not overlap a structural text token")
+    full_by_identity = {(token.kind, token.order, token.location): (token_start, token_end)
+                        for token, token_start, token_end in full_positions}
+    first_token, first_start, _first_end = selected[0]
+    last_token, last_start, _last_end = selected[-1]
+    full_first_start, _full_first_end = full_by_identity[
+        (first_token.kind, first_token.order, first_token.location)
+    ]
+    full_last_start, _full_last_end = full_by_identity[
+        (last_token.kind, last_token.order, last_token.location)
+    ]
+    start = full_first_start + (match_start - first_start)
+    end = full_last_start + (match_end - last_start)
+    return source_anchor_from_range(
+        source_fact_id=source_fact_id,
+        source_capture_sha256=source_capture_sha256,
+        block=block,
+        positions=full_positions,
+        start=start,
+        end=end,
+    )
+
+
+def validate_source_anchor_identity(
+    identity: Mapping[str, Any],
+    *,
+    source_fact_id: str,
+    source_capture_sha256: str,
+    block: StructuralBlock,
+    diagnostic_quote: str = "",
+) -> bool:
+    """Validate a persisted source range against its pinned structural block."""
+    if (
+        identity.get("schema_version") != "source-anchor-1"
+        or str(identity.get("source_fact_id") or "") != source_fact_id
+        or str(identity.get("source_capture_sha256") or "") != source_capture_sha256
+        or str(identity.get("block_location") or "") != block.location
+        or str(identity.get("block_kind") or "") != block.kind
+        or tuple(identity.get("ancestry") or ()) != tuple(block.ancestry)
+    ):
+        return False
+
+    rendered, positions = render_structural_tokens(block.tokens)
+    del rendered
+    positions_by_identity = {
+        (token.kind, token.order, token.location): (token, start, end)
+        for token, start, end in positions
+    }
+    raw_token_identities = identity.get("token_identities")
+    if not isinstance(raw_token_identities, list) or not raw_token_identities:
+        return False
+    selected = []
+    for token_identity in raw_token_identities:
+        if not isinstance(token_identity, Mapping):
+            return False
+        key = (
+            str(token_identity.get("kind") or ""),
+            int(token_identity.get("order", -1)),
+            str(token_identity.get("location") or ""),
+        )
+        source_token = positions_by_identity.get(key)
+        if source_token is None:
+            return False
+        token, start, end = source_token
+        current_hash = _sha256_bytes(
+            json.dumps(
+                {
+                    "text": token.text,
+                    "href": token.href,
+                    "canonical_page_url": token.canonical_page_url,
+                    "fragment": token.fragment,
+                    "title": token.title,
+                    "icon_identity": token.icon_identity,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        )
+        if current_hash != str(token_identity.get("content_sha256") or ""):
+            return False
+        selected.append((token, start, end))
+
+    if (
+        int(identity.get("token_start", -1)) != min(token.order for token, _start, _end in selected)
+        or int(identity.get("token_end", -1)) != max(token.order for token, _start, _end in selected)
+    ):
+        return False
+    start = selected[0][1] + int(identity.get("start_token_offset", -1))
+    end = selected[-1][1] + int(identity.get("end_token_offset", -1))
+    if start < selected[0][1] or end > selected[-1][2] or end <= start:
+        return False
+
+    expected = source_anchor_from_range(
+        source_fact_id=source_fact_id,
+        source_capture_sha256=source_capture_sha256,
+        block=block,
+        positions=positions,
+        start=start,
+        end=end,
+    ).as_dict()
+    canonical = lambda value: json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    if canonical(identity) != canonical(expected):
+        return False
+    if diagnostic_quote:
+        normalized_diagnostic_quote = diagnostic_quote.strip(" .;,:\\")
+        if not normalized_diagnostic_quote:
+            return False
+        try:
+            quote_anchor = source_anchor_for_quote(
+                source_fact_id=source_fact_id,
+                source_capture_sha256=source_capture_sha256,
+                block=block,
+                quote=normalized_diagnostic_quote,
+            )
+        except ValueError:
+            return False
+        quote_start = positions_by_identity[
+            (
+                quote_anchor.token_identities[0].kind,
+                quote_anchor.token_identities[0].order,
+                quote_anchor.token_identities[0].location,
+            )
+        ][1] + quote_anchor.start_token_offset
+        quote_last = quote_anchor.token_identities[-1]
+        quote_end = positions_by_identity[
+            (quote_last.kind, quote_last.order, quote_last.location)
+        ][1] + quote_anchor.end_token_offset
+        if quote_start < start or quote_end > end:
+            return False
+    return True
 
 
 def _section_title(container: Tag) -> str:

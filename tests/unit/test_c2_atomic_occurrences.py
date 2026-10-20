@@ -120,13 +120,16 @@ def test_compound_effects_keep_magnitude_duration_probability_and_hits_local():
         [_text_token(text, "sha256:compound/block[0]/text[0])")],
     )
 
-    effects = _effects(_classify(unit))
+    result = _classify(unit)
+    effects = _effects(result)
 
-    assert len(effects) == 3
-    attack, poison, mp_recovery = effects
+    assert len(effects) == 4
+    attack, multi_hit, poison, mp_recovery = effects
     assert attack.capability_value == "direct_damage"
+    assert multi_hit.capability_value == "multi_hit_action"
+    assert multi_hit.hit_count == "5"
     assert attack.hit_count == "5"
-    assert attack.magnitude == {}
+    assert attack.magnitude == {"hit_count": "5", "tier": "XXL"}
     assert attack.recipient == "all_enemies"
     assert attack.condition == "If Another Zone is active"
     assert attack.state_reference == "Another Zone"
@@ -153,6 +156,15 @@ def test_compound_damage_resistance_and_rage_keep_canonical_labels_and_local_tar
             "sha256:resistance/block[0]/text[0]",
         )],
     )
+    coordinated = _unit(
+        "skill:example:coordinated-target-resistance",
+        "Coordinated Target Resistance",
+        "https://example.test/wiki/Coordinated_Target_Resistance",
+        [_text_token(
+            "Piercing attack on a single enemy and Physical resistance -20% for 3 turns.",
+            "sha256:coordinated-resistance/block[0]/text[0]",
+        )],
+    )
     alma = _unit(
         "skill:example:compound-rage",
         "Compound Rage",
@@ -171,6 +183,9 @@ def test_compound_damage_resistance_and_rage_keep_canonical_labels_and_local_tar
     assert resistance.recipient == "single_enemy"
     assert resistance.magnitude == {"value": "20", "unit": "percent", "raw": "20%"}
     assert resistance.duration_activation["duration_turns"] == "3"
+
+    coordinated_effects = _effects(_classify(coordinated))
+    assert [row.recipient for row in coordinated_effects] == ["single_enemy", "single_enemy"]
 
     rage_effects = _effects(_classify(alma))
     damage, rage = rage_effects
@@ -227,8 +242,10 @@ def test_ally_damage_and_unsupported_maximum_stats_never_become_boss_offense():
         [_text_token(text, "sha256:stats/block[0]/text[0]")],
     )
 
-    effects = _effects(_classify(unit))
-    ally_damage, maximum_hp = effects
+    occurrences = _classify(unit).occurrences
+    unsupported = [row for row in occurrences if row.occurrence_kind == "gap"]
+    ally_damage = next(row for row in unsupported if row.semantic_type == "damage_event")
+    maximum_hp = next(row for row in unsupported if row.semantic_type == "stat_increase")
 
     assert ally_damage.semantic_type == "damage_event"
     assert ally_damage.direction == "ally"
@@ -236,10 +253,10 @@ def test_ally_damage_and_unsupported_maximum_stats_never_become_boss_offense():
     assert maximum_hp.semantic_type == "stat_increase"
     assert maximum_hp.semantic_subject == "maximum_hp"
     assert maximum_hp.capability_value == ""
-    assert maximum_hp.capability_gap is True
-    assert all(not _proven_capabilities(row.as_dict()) for row in effects)
-    assert all("placement" not in row.as_dict() for row in effects)
-    assert all("progression_unlock" not in row.as_dict() for row in effects)
+    assert maximum_hp.gap_reason
+    assert all(not _proven_capabilities(row.as_dict()) for row in unsupported)
+    assert all("placement" not in row.as_dict() for row in unsupported)
+    assert all("progression_unlock" not in row.as_dict() for row in unsupported)
 
 
 def test_buffs_recovery_cleansing_resources_and_hit_count_stay_separate():
@@ -256,7 +273,8 @@ def test_buffs_recovery_cleansing_resources_and_hit_count_stay_separate():
         [_text_token(text, "sha256:families/block[0]/text[0]")],
     )
 
-    effects = _effects(_classify(unit))
+    result = _classify(unit)
+    effects = _effects(result)
 
     buffs = [row for row in effects if row.semantic_type == "stat_increase"]
     assert {row.semantic_subject for row in buffs} == {"power", "intelligence"}
@@ -271,10 +289,16 @@ def test_buffs_recovery_cleansing_resources_and_hit_count_stay_separate():
     assert revival.capability_value == "revive" and revival.recipient == "ally"
     assert cleanse.capability_value == "remove_status_ailment" and cleanse.recipient == "party"
 
-    resource_effects = [row for row in effects if row.semantic_type.startswith("resource_")]
+    resource_effects = [
+        row for row in result.occurrences
+        if row.occurrence_kind == "gap" and row.semantic_type.startswith("resource_")
+    ]
     assert {row.semantic_type for row in resource_effects} == {"resource_consumption", "resource_grant"}
     assert not any(row.capability_value for row in resource_effects)
-    hit_count_buff = next(row for row in effects if row.semantic_type == "hit_count_modifier")
+    hit_count_buff = next(
+        row for row in result.occurrences
+        if row.occurrence_kind == "gap" and row.semantic_type == "unsupported_result_modifier"
+    )
     assert hit_count_buff.capability_value == ""
     assert hit_count_buff.hit_count == ""
     assert hit_count_buff.magnitude == {"value": "2", "unit": "count", "raw": "skill hit count by 2"}
@@ -282,7 +306,6 @@ def test_buffs_recovery_cleansing_resources_and_hit_count_stay_separate():
     damage = next(row for row in effects if row.semantic_type == "damage_event")
     assert damage.capability_value == "direct_damage"
     assert damage.formula_metadata == {"raw": "based on own maximum HP to all enemies"}
-    result = _classify(unit)
     assert not any(row.occurrence_kind == "dependency" for row in result.occurrences if "based on" in row.source_text)
 
 
@@ -307,8 +330,11 @@ def test_formula_explanations_and_stack_resource_text_do_not_become_dependencies
     assert not any(row.dependency_value == "requires_stack" for row in dependencies)
     assert any(row.dependency_value == "requires_stellar_awakened" for row in dependencies)
     assert state_references and state_references[0].state_reference == "Stacks"
-    resource_cost = next(row for row in effects if row.semantic_type == "resource_consumption")
-    assert resource_cost.capability_gap is True
+    resource_cost = next(
+        row for row in result.occurrences
+        if row.occurrence_kind == "gap" and row.semantic_type == "resource_consumption"
+    )
+    assert resource_cost.gap_reason
 
 
 def test_review_mapping_requires_recheck_after_atomic_semantics_change_without_fanout():
@@ -446,14 +472,17 @@ def test_counter_stack_edge_keeps_parent_local_condition_and_shared_identity():
 
     result = _classify(parent, registry=_registry(stack))
     edge = next(row for row in result.relationships if row.target_kind == "shared_mechanic")
-    grant = next(row for row in _effects(result) if row.semantic_type == "resource_grant")
+    grant = next(
+        row for row in result.occurrences
+        if row.occurrence_kind == "gap" and row.semantic_type == "resource_grant"
+    )
 
     assert edge.operation == "grants"
     assert edge.target_id == "shared:stack-test"
     assert edge.condition == "When Counter activates"
     assert edge.source_fact_id == parent.source_fact_id
     assert grant.capability_value == ""
-    assert grant.semantic_subject == "stack"
+    assert grant.semantic_subject.casefold() == "stacks"
 
 
 def test_prayer_branch_and_echo_child_chain_preserve_each_relationship():
@@ -533,9 +562,15 @@ def test_prayer_branch_and_echo_child_chain_preserve_each_relationship():
     assert child_echo.operation == "consumes"
     assert child_echo.timing == "turn_end"
     assert child_echo.target_id == "shared:echo-chain"
-    assert not any(row.semantic_type == "resource_consumption" for row in _effects(result))
+    assert not any(
+        row.semantic_type == "resource_consumption" and row.occurrence_kind == "effect"
+        for row in result.occurrences
+    )
     child_result = _classify(child, followup, registry=_registry(echo, prayer, song))
-    assert sum(row.semantic_type == "resource_consumption" for row in _effects(child_result)) == 1
+    assert sum(
+        row.semantic_type == "resource_consumption" and row.occurrence_kind == "gap"
+        for row in child_result.occurrences
+    ) == 1
     assert not any(row.capability_value == "direct_damage" for row in _effects(child_result))
 
 
@@ -598,21 +633,24 @@ def test_classifier_uses_taxonomy_ids_and_marks_unsupported_semantics_as_gaps():
     )
 
     recovery = next(row for row in supported_result.occurrences if row.occurrence_kind == "effect")
-    unsupported_effect = next(row for row in unsupported_result.occurrences if row.occurrence_kind == "effect")
-    unsupported_dependency = next(row for row in unsupported_result.occurrences if row.occurrence_kind == "dependency")
+    unsupported_effect = next(row for row in unsupported_result.occurrences if row.occurrence_kind == "gap")
+    unsupported_condition = next(
+        row for row in unsupported_result.occurrences
+        if row.occurrence_kind == "gap" and row.semantic_type == "condition"
+    )
 
     assert recovery.capability_value == "recover_mp"
     assert recovery.capability_value in capabilities
     assert recovery.operation == "restore"
     assert recovery.source_span is not None
     assert unsupported_effect.capability_value == ""
-    assert unsupported_effect.capability_gap is True
+    assert unsupported_effect.gap_reason
     assert unsupported_effect.operation == "increase"
-    assert unsupported_dependency.dependency_value == ""
-    assert unsupported_dependency.dependency_gap is True
-    assert unsupported_dependency.operation == "conditional"
-    assert unsupported_dependency.dependency_value not in dependencies
-    assert unsupported_dependency.dependency_value not in {
+    assert unsupported_condition.dependency_value == ""
+    assert unsupported_condition.gap_reason
+    assert unsupported_condition.operation == "conditional"
+    assert unsupported_condition.dependency_value not in dependencies
+    assert unsupported_condition.dependency_value not in {
         "scoped_condition",
         "requires_zone_or_stance",
         "requires_resource_state",

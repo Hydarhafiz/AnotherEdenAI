@@ -52,6 +52,7 @@ FIELD_NAMES = (
     "relationships",
 )
 OCCURRENCE_KINDS = ("effect", "dependency")
+PREDICTION_KINDS = (*OCCURRENCE_KINDS, "gap")
 
 _SPACE = re.compile(r"\s+")
 _NUMERIC_TEXT = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)")
@@ -164,10 +165,33 @@ def adapt_c2_report_to_evaluator(
             if witness_id is None:
                 continue
             row = dict(occurrence)
+            legacy_capability_gap = row.pop("capability_gap", False) is True
+            legacy_dependency_gap = row.pop("dependency_gap", False) is True
+            legacy_unmapped_effect = (
+                row.get("occurrence_kind") == "effect"
+                and str(row.get("capability_value") or "") not in _CAPABILITY_IDS
+            )
+            legacy_unmapped_dependency = (
+                row.get("occurrence_kind") == "dependency"
+                and str(row.get("dependency_value") or "") not in _DEPENDENCY_IDS
+            )
+            if (
+                legacy_capability_gap
+                or legacy_dependency_gap
+                or legacy_unmapped_effect
+                or legacy_unmapped_dependency
+            ):
+                row["occurrence_kind"] = "gap"
+                row.setdefault(
+                    "gap_reason",
+                    "historical unsupported capability mapping"
+                    if legacy_capability_gap or legacy_unmapped_effect
+                    else "historical unsupported dependency mapping",
+                )
             row["atomic_capability_id"] = (
                 row.get("dependency_value") if row.get("occurrence_kind") == "dependency"
                 else row.get("capability_value")
-            ) or ""
+            ) if row.get("occurrence_kind") in {"effect", "dependency"} else ""
             row["relationships"] = []
             per_witness[witness_id].append(row)
             occurrence_id = str(row.get("occurrence_id") or "")
@@ -204,22 +228,16 @@ def adapt_c2_report_to_evaluator(
     }
 
 
-def _prediction_anchor(row: Mapping[str, Any]) -> tuple[str, str]:
-    span = row.get("source_span")
-    if isinstance(span, Mapping):
-        location = str(span.get("location") or "")
-        text = str(span.get("text") or row.get("source_text") or "")
-    else:
-        location = str(row.get("source_location") or "")
-        text = str(row.get("source_text") or "")
-    return location, _normal_text(text)
-
-
-def _expected_anchor(atom: Mapping[str, Any]) -> tuple[str, str]:
+def _expected_anchor(atom: Mapping[str, Any]) -> tuple[str, str, Mapping[str, Any]]:
     anchor = atom.get("source_anchor") or {}
     if not isinstance(anchor, Mapping):
-        return "", ""
-    return str(anchor.get("location") or ""), _normal_text(anchor.get("quote"))
+        return "", "", {}
+    identity = anchor.get("identity")
+    return (
+        str(anchor.get("location") or ""),
+        _normal_text(anchor.get("quote")),
+        identity if isinstance(identity, Mapping) else {},
+    )
 
 
 def _identity_matches(prediction: Mapping[str, Any], witness: Mapping[str, Any]) -> bool:
@@ -231,15 +249,257 @@ def _identity_matches(prediction: Mapping[str, Any], witness: Mapping[str, Any])
 
 
 def _anchor_matches(prediction: Mapping[str, Any], atom: Mapping[str, Any]) -> bool:
-    predicted_location, predicted_text = _prediction_anchor(prediction)
-    expected_location, expected_quote = _expected_anchor(atom)
+    span = prediction.get("source_span")
+    if not isinstance(span, Mapping):
+        return False
+    predicted_identity = span.get("source_anchor")
+    _expected_location, _expected_quote, expected_identity = _expected_anchor(atom)
     return bool(
-        predicted_location
-        and expected_location
-        and predicted_location == expected_location
-        and expected_quote
-        and expected_quote in predicted_text
+        isinstance(predicted_identity, Mapping)
+        and expected_identity
+        and _canonical(predicted_identity) == _canonical(expected_identity)
     )
+
+
+def _prediction_anchor_identity(prediction: Mapping[str, Any]) -> Mapping[str, Any]:
+    span = prediction.get("source_span")
+    if not isinstance(span, Mapping):
+        return {}
+    anchor = span.get("source_anchor")
+    if not isinstance(anchor, Mapping):
+        return {}
+    identity = anchor.get("identity")
+    return identity if isinstance(identity, Mapping) else anchor
+
+
+def _gap_anchor_matches(prediction: Mapping[str, Any], gap: Mapping[str, Any]) -> bool:
+    expected = gap.get("source_anchor")
+    if not isinstance(expected, Mapping):
+        return False
+    expected_identity = expected.get("identity")
+    if not isinstance(expected_identity, Mapping):
+        return False
+    predicted_identity = _prediction_anchor_identity(prediction)
+    expected_owner_id = str(gap.get("source_owner_id") or "")
+    predicted_owner_id = str(prediction.get("source_owner_id") or "")
+    return bool(
+        predicted_identity
+        and _canonical(predicted_identity) == _canonical(expected_identity)
+        and (not expected_owner_id or predicted_owner_id == expected_owner_id)
+    )
+
+
+def _relationship_identity(row: Mapping[str, Any]) -> Mapping[str, Any]:
+    anchor = row.get("source_anchor")
+    if isinstance(anchor, Mapping):
+        identity = anchor.get("identity")
+        return identity if isinstance(identity, Mapping) else anchor
+    span = row.get("source_span")
+    if isinstance(span, Mapping):
+        source_anchor = span.get("source_anchor")
+        if isinstance(source_anchor, Mapping):
+            identity = source_anchor.get("identity")
+            return identity if isinstance(identity, Mapping) else source_anchor
+    return {}
+
+
+def _relationship_group_key(row: Mapping[str, Any]) -> tuple[str, str, str, str, str, str]:
+    return (
+        str(row.get("source_fact_id") or ""),
+        str(row.get("source_owner_id") or ""),
+        _relationship_operation(str(row.get("operation") or "")),
+        _canonical(_relationship_identity(row)),
+        _relationship_condition(str(row.get("condition") or "")),
+        _normal_text(str(row.get("timing") or row.get("trigger") or "")),
+    )
+
+
+def _relationship_operation(value: str) -> str:
+    normalized = _normal_text(value)
+    return {
+        "activates_child": "activates",
+        "replaces_child": "replaces",
+    }.get(normalized, normalized)
+
+
+def _relationship_condition(value: str) -> str:
+    normalized = _normal_text(value)
+    if normalized in {"none", "not_applicable", "n/a", "null"}:
+        return ""
+    return normalized.replace("durring", "during")
+
+
+def _relationship_group_metrics(
+    per_witness: Mapping[str, Sequence[Mapping[str, Any]]],
+    oracle_by_id: Mapping[str, Mapping[str, Any]],
+    unresolved_relationships: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    expected_groups: list[Mapping[str, Any]] = [
+        relationship
+        for witness in oracle_by_id.values()
+        for relationship in witness.get("semantic_relationships", [])
+        if isinstance(relationship, Mapping)
+    ]
+    predicted_groups: dict[tuple[str, str, str, str, str, str], dict[str, Any]] = {}
+    for rows in per_witness.values():
+        for prediction in rows:
+            for relationship in prediction.get("relationships", []):
+                if not isinstance(relationship, Mapping):
+                    continue
+                key = _relationship_group_key(relationship)
+                group = predicted_groups.setdefault(key, {"row": relationship, "targets": set()})
+                target_id = str(relationship.get("target_id") or "")
+                if target_id:
+                    group["targets"].add(target_id)
+
+    matched_expected: set[int] = set()
+    matched_predicted: set[tuple[str, str, str, str, str, str]] = set()
+    diagnostic_counts: Counter = Counter()
+    for expected_index, expected in enumerate(expected_groups):
+        expected_targets = {
+            str(target.get("fact_id") or target.get("target_id") or "")
+            for target in expected.get("targets", [])
+            if isinstance(target, Mapping)
+        }
+        expected_identity = _relationship_identity(expected)
+        for key, predicted in predicted_groups.items():
+            relation = predicted["row"]
+            same_anchor = bool(
+                expected_identity
+                and _canonical(expected_identity) == _canonical(_relationship_identity(relation))
+            )
+            same_operation = _relationship_operation(str(expected.get("operation") or "")) == _relationship_operation(str(relation.get("operation") or ""))
+            expected_condition = _relationship_condition(str(expected.get("condition") or ""))
+            predicted_condition = _relationship_condition(str(relation.get("condition") or ""))
+            expected_timing = _normal_text(str(expected.get("trigger") or expected.get("timing") or ""))
+            predicted_timing = _normal_text(str(relation.get("timing") or relation.get("trigger") or ""))
+            if same_anchor:
+                diagnostic_counts["source_anchor_match"] += 1
+                if expected_targets == predicted["targets"]:
+                    diagnostic_counts["target_group_match"] += 1
+                if same_operation:
+                    diagnostic_counts["operation_match"] += 1
+                if expected_condition == predicted_condition:
+                    diagnostic_counts["condition_match"] += 1
+                if expected_timing == predicted_timing:
+                    diagnostic_counts["timing_match"] += 1
+            if (
+                same_anchor
+                and same_operation
+                and expected_condition == predicted_condition
+                and expected_timing == predicted_timing
+                and expected_targets == predicted["targets"]
+            ):
+                matched_expected.add(expected_index)
+                matched_predicted.add(key)
+                break
+
+    unresolved_groups = {
+        _relationship_group_key(row)
+        for row in unresolved_relationships
+        if isinstance(row, Mapping)
+    }
+    unresolved_groups.update(
+        key
+        for key, group in predicted_groups.items()
+        if str(group["row"].get("target_kind") or "") == "unresolved"
+        or str(group["row"].get("attachment_status") or "") == "unresolved"
+    )
+    return {
+        "expected_groups": len(expected_groups),
+        "emitted_groups": len(predicted_groups),
+        "exact_correct_groups": len(matched_expected),
+        "extra_groups": len(set(predicted_groups) - matched_predicted),
+        "unresolved_groups": len(unresolved_groups),
+        "diagnostics": dict(sorted(diagnostic_counts.items())),
+    }
+
+
+def _anchors_overlap(prediction: Mapping[str, Any], atom: Mapping[str, Any]) -> bool:
+    predicted = _prediction_anchor_identity(prediction)
+    _location, _quote, expected = _expected_anchor(atom)
+    if not predicted or not expected:
+        return False
+    if any(
+        _normal_text(predicted.get(key)) != _normal_text(expected.get(key))
+        for key in ("source_fact_id", "source_capture_sha256", "block_location")
+    ):
+        return False
+    predicted_start = predicted.get("start_token_offset", predicted.get("token_start"))
+    predicted_end = predicted.get("end_token_offset", predicted.get("token_end"))
+    expected_start = expected.get("start_token_offset", expected.get("token_start"))
+    expected_end = expected.get("end_token_offset", expected.get("token_end"))
+    try:
+        return int(predicted_start) <= int(expected_end) and int(expected_start) <= int(predicted_end)
+    except (TypeError, ValueError):
+        return False
+
+
+def _same_label(prediction: Mapping[str, Any], atom: Mapping[str, Any]) -> bool:
+    return (
+        str(prediction.get("occurrence_kind") or "") == str(atom.get("occurrence_kind") or "")
+        and _prediction_capability(prediction)
+        == _normal_text(atom.get("atomic_capability_id"))
+    )
+
+
+def _diagnose_occurrences(
+    predictions: Sequence[Mapping[str, Any]],
+    expected_atoms: Sequence[Mapping[str, Any]],
+    witness: Mapping[str, Any],
+) -> Counter:
+    """Classify strict-match misses without changing the official matching graph."""
+    diagnostics: Counter = Counter()
+    exact_edges = [
+        [
+            index
+            for index, atom in enumerate(expected_atoms)
+            if _base_matches(prediction, atom, witness)
+            and _prediction_capability(prediction)
+            == _normal_text(atom.get("atomic_capability_id"))
+        ]
+        for prediction in predictions
+    ]
+    exact_matching = _maximum_one_to_one(exact_edges)
+    diagnostics["exact_semantic_and_anchor_match"] += len(exact_matching)
+    matched_predictions = set(exact_matching)
+    matched_atoms = set(exact_matching.values())
+
+    for prediction_index, prediction in enumerate(predictions):
+        if prediction_index in matched_predictions:
+            continue
+        candidates = [
+            (atom_index, atom)
+            for atom_index, atom in enumerate(expected_atoms)
+            if _anchors_overlap(prediction, atom)
+        ]
+        if not candidates:
+            diagnostics["extra_supported_prediction"] += 1
+            continue
+        same_label = [
+            (atom_index, atom)
+            for atom_index, atom in candidates
+            if _same_label(prediction, atom)
+        ]
+        if any(
+            _normal_text(prediction.get("operation")) != _normal_text(atom.get("operation"))
+            for _index, atom in same_label
+        ):
+            diagnostics["same_label_operation_mismatch"] += 1
+        elif any(
+            _normal_text(prediction.get("operation")) == _normal_text(atom.get("operation"))
+            for _index, atom in same_label
+        ):
+            diagnostics["same_label_operation_source_boundary_mismatch"] += 1
+        else:
+            diagnostics["wrong_label_on_overlapping_source_span"] += 1
+
+    for expected_index, atom in enumerate(expected_atoms):
+        if expected_index in matched_atoms:
+            continue
+        if not any(_anchors_overlap(prediction, atom) for prediction in predictions):
+            diagnostics["missing_supported_occurrence"] += 1
+    return diagnostics
 
 
 def _base_matches(
@@ -365,19 +625,27 @@ def _validate_inputs(
             raise ValueError("semantic oracle source identity does not match the frozen manifest")
         for atom in adjudication.get("atoms", []):
             kind = str(atom.get("occurrence_kind") or "")
-            location, quote = _expected_anchor(atom)
+            location, quote, identity = _expected_anchor(atom)
             if (
                 kind not in OCCURRENCE_KINDS
                 or not str(atom.get("atomic_capability_id") or "").strip()
                 or not str(atom.get("operation") or "").strip()
                 or not location
                 or not quote
+                or identity.get("schema_version") != "source-anchor-1"
+                or not str(identity.get("anchor_id") or "")
+                or str(identity.get("source_fact_id") or "") != str(witness.get("fact_id") or "")
+                or str(identity.get("source_capture_sha256") or "")
+                != str(witness.get("source_capture_sha256") or "")
+                or str(identity.get("block_location") or "") != location
             ):
-                raise ValueError("semantic oracle atom is missing its capability, operation, kind, or source anchor")
+                raise ValueError(
+                    "semantic oracle atom is missing its capability, operation, kind, or canonical source anchor identity"
+                )
     for arm, per_witness in predictions_by_arm.items():
         for rows in per_witness.values():
             if any(
-                str(row.get("occurrence_kind") or "") in OCCURRENCE_KINDS
+                str(row.get("occurrence_kind") or "") in PREDICTION_KINDS
                 and not _normal_text(row.get("operation"))
                 for row in rows
             ):
@@ -393,13 +661,15 @@ def _arm_aggregate(
     per_witness: Mapping[str, Sequence[Mapping[str, Any]]],
     witness_by_id: Mapping[str, Mapping[str, Any]],
     oracle_by_id: Mapping[str, Mapping[str, Any]],
-    unresolved_relationship_count: int,
+    unresolved_relationships: Sequence[Mapping[str, Any]],
 ) -> dict[str, Any]:
     occurrence_counts = {kind: Counter() for kind in OCCURRENCE_KINDS}
     capability_counts = Counter()
     field_totals = {kind: defaultdict(Counter) for kind in OCCURRENCE_KINDS}
     field_correctness: dict[str, Counter] = defaultdict(Counter)
     dimension_counts: dict[str, Counter] = {name: Counter() for name in FIDELITY_DIMENSIONS}
+    gap_counts: Counter = Counter()
+    diagnostic_counts: Counter = Counter()
     witness_denominator = len(witness_by_id)
 
     for witness_id, witness in witness_by_id.items():
@@ -409,6 +679,43 @@ def _arm_aggregate(
             for row in per_witness.get(witness_id, [])
             if str(row.get("occurrence_kind") or "") in OCCURRENCE_KINDS
         ]
+        all_predictions = list(per_witness.get(witness_id, []))
+        predicted_gaps = [
+            row
+            for row in all_predictions
+            if str(row.get("occurrence_kind") or "") == "gap"
+        ]
+        expected_gap_rows = [
+            gap
+            for gap in oracle_by_id[witness_id].get("unsupported_gaps", [])
+            if isinstance(gap, Mapping)
+        ]
+        expected_gaps = [
+            gap
+            for gap in expected_gap_rows
+            if isinstance(gap.get("source_anchor"), Mapping)
+            and isinstance(gap.get("owner_source_anchor"), Mapping)
+            and str(gap.get("source_owner_id") or "")
+        ]
+        gap_edges = [
+            [index for index, gap in enumerate(expected_gaps) if _gap_anchor_matches(prediction, gap)]
+            for prediction in predicted_gaps
+        ]
+        gap_matching = _maximum_one_to_one(gap_edges)
+        gap_counts.update(
+            {
+                "expected_count": len(expected_gaps),
+                "matched_count": len(gap_matching),
+                "unexpected_count": len(predicted_gaps) - len(gap_matching),
+                "unmatched_count": len(expected_gap_rows) - len(gap_matching),
+                "unsupported_outputs_without_gap_anchor_count": sum(
+                    not any(_gap_anchor_matches(prediction, gap) for gap in expected_gaps)
+                    for prediction in predicted_gaps
+                ),
+                "unanchored_expected_count": len(expected_gap_rows) - len(expected_gaps),
+            }
+        )
+        diagnostic_counts.update(_diagnose_occurrences(predictions, expected_atoms, witness))
         base_edges: list[list[int]] = []
         capability_edges: list[list[int]] = []
         for prediction in predictions:
@@ -469,7 +776,7 @@ def _arm_aggregate(
     dependency_counts = occurrence_counts["dependency"]
     return {
         "witness_denominator": witness_denominator,
-        "unresolved_relationship_count": unresolved_relationship_count,
+        "unresolved_relationship_count": len(unresolved_relationships),
         "capability_label_precision_recall": _metrics(
             capability_counts["predicted_count"],
             capability_counts["expected_count"],
@@ -505,6 +812,27 @@ def _arm_aggregate(
                 else None
             ),
         },
+        "explicit_unsupported_gaps": {
+            "expected_count": gap_counts["expected_count"] + gap_counts["unanchored_expected_count"],
+            "matched_count": gap_counts["matched_count"],
+            "unexpected_count": gap_counts["unexpected_count"],
+            "unmatched_expected_count": (
+                gap_counts["expected_count"]
+                - gap_counts["matched_count"]
+                + gap_counts["unanchored_expected_count"]
+            ),
+            "anchored_expected_count": gap_counts["expected_count"],
+            "unanchored_expected_count": gap_counts["unanchored_expected_count"],
+            "unsupported_outputs_without_gap_anchor_count": gap_counts[
+                "unsupported_outputs_without_gap_anchor_count"
+            ],
+        },
+        "diagnostic_only": dict(sorted(diagnostic_counts.items())),
+        "relationship_groups": _relationship_group_metrics(
+            per_witness,
+            oracle_by_id,
+            unresolved_relationships,
+        ),
         "c1_1_fidelity_dimensions": {
             name: {
                 "denominator_count": witness_denominator,
@@ -536,7 +864,7 @@ def evaluate_frozen_cohort(
                 per_witness,
                 witness_by_id,
                 oracle_by_id,
-                len((unresolved_relationships_by_arm or {}).get(str(arm), [])),
+                (unresolved_relationships_by_arm or {}).get(str(arm), []),
             )
             for arm, per_witness in sorted(predictions_by_arm.items())
         },

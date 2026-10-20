@@ -1,0 +1,2531 @@
+{
+  "cohort": "final_milestone_6_held_out",
+  "owner_approval": "approved by evaluation owner after final Nona E4 correction",
+  "schema_version": "c2-atomic-oracle-1",
+  "semantic_basis": "Pinned raw source blocks and current canonical capability/dependency taxonomy only.",
+  "taxonomy_artifact_version": "3.2.0",
+  "witnesses": [
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "deploy_zone",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aisha"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "field"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "zone"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Deploy Sacred Water Stance"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "activate",
+          "source_anchor": {
+            "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
+            "quote": "Deploy Sacred Water Stance"
+          },
+          "witness_identity": {
+            "entity_name": "Aisha",
+            "fact_id": "skill:737079b25061a54f0c84",
+            "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+            "source_location": "grid[7]/block[0]",
+            "source_path": "data/raw/characters/aisha.html",
+            "source_slice_sha256": "32ba8137058aca6cad7e38c49c7c9779168a652ff48007af901744a3ba9f680f",
+            "witness_id": "m6-heldout-aisha-waters-nocturne"
+          }
+        },
+        {
+          "atom_id": "E2",
+          "atomic_capability_id": "element_damage_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Aisha"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "5"
+              }
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Water"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+50%",
+                "unit": "percent",
+                "value": "50"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "water type attack of all party members +50%"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
+            "quote": "water type attack of all party members +50% (5 turns)"
+          },
+          "witness_identity": {
+            "entity_name": "Aisha",
+            "fact_id": "skill:737079b25061a54f0c84",
+            "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+            "source_location": "grid[7]/block[0]",
+            "source_path": "data/raw/characters/aisha.html",
+            "source_slice_sha256": "32ba8137058aca6cad7e38c49c7c9779168a652ff48007af901744a3ba9f680f",
+            "witness_id": "m6-heldout-aisha-waters-nocturne"
+          }
+        }
+      ],
+      "dependency_attachments": [],
+      "entity_name": "Aisha",
+      "fact_id": "skill:737079b25061a54f0c84",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [],
+      "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_location": "grid[7]/block[0]",
+      "source_location_with_capture": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
+      "source_path": "data/raw/characters/aisha.html",
+      "source_slice_sha256": "32ba8137058aca6cad7e38c49c7c9779168a652ff48007af901744a3ba9f680f",
+      "source_variant_label": null,
+      "unsupported_mechanics": [],
+      "witness_id": "m6-heldout-aisha-waters-nocturne"
+    },
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Otoha (Another Style)"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Earth"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Earth type Slash attack on all enemies x2 (XL)"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "metadata": {
+            "formula_metadata": "Action and Catwisp dependent multiplier table retained from pinned source.",
+            "hit_count": 2,
+            "skill_power_size": "XL"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+            "quote": "Earth type Slash attack on all enemies x2 (XL)"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+              "quote": "Skill automatically used for 3 actions (does not consume MP), unless interrupted by status effect."
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Otoha (Another Style)",
+            "fact_id": "skill:0f340a5404f853049fd9",
+            "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+            "source_location": "grid[8]/block[0]",
+            "source_path": "data/raw/characters/otoha_another_style.html",
+            "source_slice_sha256": "7d45cd0ce957cf08826c9c154c614052511a23d733016f1723c398b262ed9660",
+            "witness_id": "m6-heldout-otoha-as-surging-scratch"
+          }
+        },
+        {
+          "atom_id": "E2",
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Otoha (Another Style)"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Earth"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Earth type Slash attack on all enemies x2 (XL)"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "metadata": {
+            "hit_count": 2,
+            "one_action_with_two_hits": true
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+            "quote": "Earth type Slash attack on all enemies x2 (XL)"
+          },
+          "witness_identity": {
+            "entity_name": "Otoha (Another Style)",
+            "fact_id": "skill:0f340a5404f853049fd9",
+            "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+            "source_location": "grid[8]/block[0]",
+            "source_path": "data/raw/characters/otoha_another_style.html",
+            "source_slice_sha256": "7d45cd0ce957cf08826c9c154c614052511a23d733016f1723c398b262ed9660",
+            "witness_id": "m6-heldout-otoha-as-surging-scratch"
+          }
+        },
+        {
+          "atom_id": "E3",
+          "atomic_capability_id": "power_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Otoha (Another Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Catwisp : +20 PWR (max stack 3, +60)"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Catwisp"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "metadata": {
+            "increase_per_stack": 20,
+            "maximum_stacks": 3,
+            "maximum_total_increase": 60,
+            "stat": "PWR"
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+            "quote": "Catwisp : +20 PWR (max stack 3, +60)"
+          },
+          "witness_identity": {
+            "entity_name": "Otoha (Another Style)",
+            "fact_id": "skill:0f340a5404f853049fd9",
+            "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+            "source_location": "grid[8]/block[0]",
+            "source_path": "data/raw/characters/otoha_another_style.html",
+            "source_slice_sha256": "7d45cd0ce957cf08826c9c154c614052511a23d733016f1723c398b262ed9660",
+            "witness_id": "m6-heldout-otoha-as-surging-scratch"
+          }
+        }
+      ],
+      "dependency_attachments": [],
+      "entity_name": "Otoha (Another Style)",
+      "fact_id": "skill:0f340a5404f853049fd9",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [],
+      "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+      "source_location": "grid[8]/block[0]",
+      "source_location_with_capture": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+      "source_path": "data/raw/characters/otoha_another_style.html",
+      "source_slice_sha256": "7d45cd0ce957cf08826c9c154c614052511a23d733016f1723c398b262ed9660",
+      "source_variant_label": null,
+      "unsupported_mechanics": [
+        {
+          "additional_source_anchors": [
+            {
+              "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]",
+              "quote": "After 3rd action: Consume all Catwisps"
+            }
+          ],
+          "attached_to_atom_ids": [
+            "E3"
+          ],
+          "description": "One Catwisp is added each action and all Catwisps are consumed after the third; the taxonomy has no exact label for this grant/consumption sequence.",
+          "gap_id": "gap-otoha-catwisp-resource-operation",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+            "quote": "Stack 1 Catwisp on user"
+          }
+        },
+        {
+          "attached_to_atom_ids": [
+            "E1",
+            "E2",
+            "E3"
+          ],
+          "description": "Automatic three-action sequence, no MP cost, interrupted by status effect; timing metadata, not a prerequisite.",
+          "gap_id": "gap-otoha-auto-sequence-interruption",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+            "quote": "Skill automatically used for 3 actions (does not consume MP), unless interrupted by status effect."
+          }
+        }
+      ],
+      "witness_id": "m6-heldout-otoha-as-surging-scratch"
+    },
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Nona (Another Style)"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Water"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "random_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Water type piercing attack on random enemies x3 (XL)"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "formula_metadata": "200–400% × Mod",
+            "hit_count": 3,
+            "skill_power_size": "XL"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+            "quote": "Water type piercing attack on random enemies x3 (XL)"
+          },
+          "witness_identity": {
+            "entity_name": "Nona (Another Style)",
+            "fact_id": "skill:73b97c55cc4da5f7cc64",
+            "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+            "source_location": "grid[13]/block[0]",
+            "source_path": "data/raw/characters/nona_another_style.html",
+            "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+            "witness_id": "m6-heldout-nona-as-castigo"
+          }
+        },
+        {
+          "atom_id": "E2",
+          "atomic_capability_id": "multi_hit_action",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Nona (Another Style)"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When there is an ally with Devotion stack on the front line"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Water"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "random_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Increase number of attacks by +3"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Devotion"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "base_hit_count": 3,
+            "conditional_increment": 3,
+            "conditional_total_hit_count": 6
+          },
+          "occurrence_kind": "effect",
+          "operation": "modify",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[3]",
+            "quote": "Increase number of attacks by +3"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+              "quote": "Water type piercing attack on random enemies x3 (XL)"
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+              "quote": "When there is an ally with Skill stack power type2.png Devotion stack on the front line"
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Nona (Another Style)",
+            "fact_id": "skill:73b97c55cc4da5f7cc64",
+            "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+            "source_location": "grid[13]/block[0]",
+            "source_path": "data/raw/characters/nona_another_style.html",
+            "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+            "witness_id": "m6-heldout-nona-as-castigo"
+          }
+        },
+        {
+          "atom_id": "E3",
+          "atomic_capability_id": "element_damage_up",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Nona (Another Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Water"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+30%",
+                "unit": "percent",
+                "value": "30"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "water type attack of all party members +30%"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "conditional_modifier": {
+              "condition": "qualifying ally with Devotion on frontline",
+              "quote": "Type attack buff doubled for ally with Devotion",
+              "value": "double +30% to +60% for the Devotion ally"
+            },
+            "unsupported_transformation_gap": "Element of this type-attack buff changes according to the attribute personality of the ally with Devotion; retain as metadata/gap, not apply_kaleido."
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+            "quote": "Water type attack of all party members +30% (3 turns)"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[11]",
+              "quote": "Type attack buff doubled for ally with Devotion"
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]",
+              "quote": "Kaleido; change element of type attack buff according to the attribute personality of the ally with Devotion"
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Nona (Another Style)",
+            "fact_id": "skill:73b97c55cc4da5f7cc64",
+            "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+            "source_location": "grid[13]/block[0]",
+            "source_path": "data/raw/characters/nona_another_style.html",
+            "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+            "witness_id": "m6-heldout-nona-as-castigo"
+          }
+        },
+        {
+          "atom_id": "E5",
+          "atomic_capability_id": "apply_kaleido",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Nona (Another Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When there is an ally with Devotion stack on the front line"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Grant Kaleido to user; Change user's element based on element of the ally with Devotion"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Kaleido"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "element_selection": "based on the ally with Devotion",
+            "fallbacks": [
+              "Water if the ally has no element",
+              "For Aisha or Cyrus Albright, defaults to Water unless in matching Zone",
+              "for multiple elements, select a random element personality"
+            ],
+            "persistence": "Unaffected by further Zone changes"
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[6]",
+            "quote": "Grant Kaleido to user; Change user's element based on element of the ally with Devotion"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+              "quote": "When there is an ally with Skill stack power type2.png Devotion stack on the front line"
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[7]",
+              "quote": "Water If ally has no element"
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[8]",
+              "quote": "For multiple elements, random element personality will be selected"
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]",
+              "quote": "For Aisha or Cyrus Albright , defaults to water unless in matching Zone"
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[10]",
+              "quote": "Unaffected by further Zone changes"
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Nona (Another Style)",
+            "fact_id": "skill:73b97c55cc4da5f7cc64",
+            "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+            "source_location": "grid[13]/block[0]",
+            "source_path": "data/raw/characters/nona_another_style.html",
+            "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+            "witness_id": "m6-heldout-nona-as-castigo"
+          }
+        },
+        {
+          "atom_id": "D1",
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Nona (Another Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When there is an ally with Devotion stack on the front line"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "frontline"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Devotion"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+            "quote": "Devotion stack on the front line"
+          },
+          "witness_identity": {
+            "entity_name": "Nona (Another Style)",
+            "fact_id": "skill:73b97c55cc4da5f7cc64",
+            "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+            "source_location": "grid[13]/block[0]",
+            "source_path": "data/raw/characters/nona_another_style.html",
+            "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+            "witness_id": "m6-heldout-nona-as-castigo"
+          }
+        },
+        {
+          "atom_id": "D2",
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Nona (Another Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When there is an ally with Devotion stack on the front line"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "frontline"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Devotion"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "metadata": {
+            "minimum_stack_count": 1,
+            "stack_owner": "qualifying ally"
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+            "quote": "Devotion stack on the front line"
+          },
+          "witness_identity": {
+            "entity_name": "Nona (Another Style)",
+            "fact_id": "skill:73b97c55cc4da5f7cc64",
+            "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+            "source_location": "grid[13]/block[0]",
+            "source_path": "data/raw/characters/nona_another_style.html",
+            "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+            "witness_id": "m6-heldout-nona-as-castigo"
+          }
+        }
+      ],
+      "dependency_attachments": [
+        {
+          "dependency_atom_id": "D1",
+          "gates": [
+            "E2",
+            "E3:conditional_modifier",
+            "E5"
+          ]
+        },
+        {
+          "dependency_atom_id": "D2",
+          "gates": [
+            "E2",
+            "E3:conditional_modifier",
+            "E5"
+          ]
+        }
+      ],
+      "entity_name": "Nona (Another Style)",
+      "fact_id": "skill:73b97c55cc4da5f7cc64",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [],
+      "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+      "source_location": "grid[13]/block[0]",
+      "source_location_with_capture": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+      "source_path": "data/raw/characters/nona_another_style.html",
+      "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
+      "source_variant_label": null,
+      "unsupported_mechanics": [
+        {
+          "attached_to_atom_ids": [
+            "E3"
+          ],
+          "description": "Change the type-attack buff element according to the Devotion ally attribute personality. Keep as unsupported transformation metadata attached to E3; not apply_kaleido.",
+          "former_atom_id": "E4",
+          "gap_id": "gap-nona-e4-type-attack-buff-element-conversion",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]",
+            "quote": "Kaleido; change element of type attack buff according to the attribute personality of the ally with Devotion"
+          }
+        },
+        {
+          "attached_to_atom_ids": [],
+          "description": "Critical rate +100% for one move for all party members; no generic critical-rate taxonomy label and source does not specify physical or magic.",
+          "gap_id": "gap-nona-generic-critical-rate",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+            "quote": "Critical rate of all party members +100% (1 move)"
+          }
+        },
+        {
+          "attached_to_atom_ids": [],
+          "description": "Grant Flexible permanently based on the weapon type of the Devotion ally; no exact canonical effect label.",
+          "gap_id": "gap-nona-flexible-weapon-type",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]",
+            "quote": "Grants Flexible to user based on the weapon type of the ally with Devotion (permanent)"
+          }
+        }
+      ],
+      "witness_id": "m6-heldout-nona-as-castigo"
+    },
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "heal_hp",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Claude (Extra Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When in Another Zone"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "25%",
+                "unit": "percent",
+                "value": "25"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Restore all party members' HP 25%"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "turn_end"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[1]",
+            "quote": "Restore all party members' HP 25%"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+              "quote": "End of Turn"
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Claude (Extra Style)",
+            "fact_id": "passive:b3dbd52f40920bc0a0cb",
+            "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+            "source_location": "grid[12]/block[0]",
+            "source_path": "data/raw/characters/claude_extra_style.html",
+            "source_slice_sha256": "2d405f5c74dc2b6aecb938ab77dc216adbc42414a4b17ca556eff48314e8d4cb",
+            "witness_id": "m6-heldout-claude-es-another-zone-heal"
+          }
+        },
+        {
+          "atom_id": "E2",
+          "atomic_capability_id": "recover_mp",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Claude (Extra Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When in Another Zone"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "25%",
+                "unit": "percent",
+                "value": "25"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Restore all party members' MP 25%"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "turn_end"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[2]",
+            "quote": "Restore all party members' MP 25%"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+              "quote": "End of Turn"
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Claude (Extra Style)",
+            "fact_id": "passive:b3dbd52f40920bc0a0cb",
+            "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+            "source_location": "grid[12]/block[0]",
+            "source_path": "data/raw/characters/claude_extra_style.html",
+            "source_slice_sha256": "2d405f5c74dc2b6aecb938ab77dc216adbc42414a4b17ca556eff48314e8d4cb",
+            "witness_id": "m6-heldout-claude-es-another-zone-heal"
+          }
+        },
+        {
+          "atom_id": "D1",
+          "atomic_capability_id": "requires_zone",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Claude (Extra Style)"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When in Another Zone"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "field"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "zone"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Another Zone"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+            "quote": "When in Another Zone"
+          },
+          "witness_identity": {
+            "entity_name": "Claude (Extra Style)",
+            "fact_id": "passive:b3dbd52f40920bc0a0cb",
+            "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+            "source_location": "grid[12]/block[0]",
+            "source_path": "data/raw/characters/claude_extra_style.html",
+            "source_slice_sha256": "2d405f5c74dc2b6aecb938ab77dc216adbc42414a4b17ca556eff48314e8d4cb",
+            "witness_id": "m6-heldout-claude-es-another-zone-heal"
+          }
+        }
+      ],
+      "dependency_attachments": [
+        {
+          "dependency_atom_id": "D1",
+          "gates": [
+            "E1",
+            "E2"
+          ]
+        }
+      ],
+      "entity_name": "Claude (Extra Style)",
+      "fact_id": "passive:b3dbd52f40920bc0a0cb",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [],
+      "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "source_location": "grid[12]/block[0]",
+      "source_location_with_capture": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+      "source_path": "data/raw/characters/claude_extra_style.html",
+      "source_slice_sha256": "2d405f5c74dc2b6aecb938ab77dc216adbc42414a4b17ca556eff48314e8d4cb",
+      "source_variant_label": null,
+      "unsupported_mechanics": [
+        {
+          "attached_to_atom_ids": [
+            "E1",
+            "E2"
+          ],
+          "description": "Heal when Claude is not in Sleep, Confusion, Stone, or Freeze; taxonomy has no negative-status-absence prerequisite, and source subject is ambiguous.",
+          "gap_id": "gap-claude-negative-status-gate",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+            "quote": "When not in Sleep, Confusion, Stone, Freeze"
+          }
+        }
+      ],
+      "witness_id": "m6-heldout-claude-es-another-zone-heal"
+    },
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Jilya"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Magic"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Crystal"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Crystal type magic attack on all enemies (XL)"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "metadata": {
+            "skill_power_size": "XL",
+            "source_timing": "Auto",
+            "timing_gap": "No exact Auto trigger value in the current taxonomy."
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+            "quote": "Crystal type magic attack on all enemies (XL)"
+          },
+          "witness_identity": {
+            "entity_name": "Jilya",
+            "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+            "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+            "source_location": "grid[0]/block[0]",
+            "source_path": "data/raw/sidekicks/jilya.html",
+            "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+            "witness_id": "m6-heldout-jilya-invasion-glow"
+          }
+        },
+        {
+          "atom_id": "E2",
+          "atomic_capability_id": "physical_resistance_down",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Jilya"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "-10%",
+                "unit": "percent",
+                "value": "10"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Physical Resistance -10%"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "metadata": {
+            "maximum_stacks": 5,
+            "maximum_total_reduction": "-30%",
+            "source_timing": "Auto",
+            "timing_gap": "No exact Auto trigger value in the current taxonomy."
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+            "quote": "Physical Resistance"
+          },
+          "witness_identity": {
+            "entity_name": "Jilya",
+            "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+            "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+            "source_location": "grid[0]/block[0]",
+            "source_path": "data/raw/sidekicks/jilya.html",
+            "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+            "witness_id": "m6-heldout-jilya-invasion-glow"
+          }
+        },
+        {
+          "atom_id": "E3",
+          "atomic_capability_id": "magic_resistance_down",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Jilya"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "-10%",
+                "unit": "percent",
+                "value": "10"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Magic Resistance -10%"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "metadata": {
+            "maximum_stacks": 5,
+            "maximum_total_reduction": "-30%",
+            "source_timing": "Auto",
+            "timing_gap": "No exact Auto trigger value in the current taxonomy."
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+            "quote": "Magic Resistance -10%"
+          },
+          "witness_identity": {
+            "entity_name": "Jilya",
+            "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+            "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+            "source_location": "grid[0]/block[0]",
+            "source_path": "data/raw/sidekicks/jilya.html",
+            "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+            "witness_id": "m6-heldout-jilya-invasion-glow"
+          }
+        },
+        {
+          "atom_id": "D1",
+          "atomic_capability_id": "requires_zone",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Jilya"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When in Crystalline Stance"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "field"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "zone"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Crystalline Stance"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+            "quote": "When in Crystalline Stance"
+          },
+          "witness_identity": {
+            "entity_name": "Jilya",
+            "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+            "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+            "source_location": "grid[0]/block[0]",
+            "source_path": "data/raw/sidekicks/jilya.html",
+            "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+            "witness_id": "m6-heldout-jilya-invasion-glow"
+          }
+        },
+        {
+          "atom_id": "D2",
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Jilya"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When Charge is 5+"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Charge"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "metadata": {
+            "minimum_stack_count": 5
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+            "quote": "Charge is 5+"
+          },
+          "witness_identity": {
+            "entity_name": "Jilya",
+            "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+            "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+            "source_location": "grid[0]/block[0]",
+            "source_path": "data/raw/sidekicks/jilya.html",
+            "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+            "witness_id": "m6-heldout-jilya-invasion-glow"
+          }
+        },
+        {
+          "atom_id": "D3",
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Jilya"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When Nilya is on the frontline"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "frontline"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "metadata": {
+            "required_recipient_name": "Nilya"
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+            "quote": "Nilya is on the frontline"
+          },
+          "witness_identity": {
+            "entity_name": "Jilya",
+            "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+            "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+            "source_location": "grid[0]/block[0]",
+            "source_path": "data/raw/sidekicks/jilya.html",
+            "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+            "witness_id": "m6-heldout-jilya-invasion-glow"
+          }
+        }
+      ],
+      "dependency_attachments": [
+        {
+          "dependency_atom_id": "D1",
+          "gates": [
+            "gap-jilya-charge-grant"
+          ]
+        },
+        {
+          "dependency_atom_id": "D2",
+          "gates": [
+            "gap-jilya-lunatic-refresh"
+          ]
+        },
+        {
+          "dependency_atom_id": "D3",
+          "gates": [
+            "gap-jilya-lunatic-refresh"
+          ]
+        }
+      ],
+      "entity_name": "Jilya",
+      "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [],
+      "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+      "source_location": "grid[0]/block[0]",
+      "source_location_with_capture": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+      "source_path": "data/raw/sidekicks/jilya.html",
+      "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
+      "source_variant_label": null,
+      "unsupported_mechanics": [
+        {
+          "attached_to_atom_ids": [],
+          "description": "Stack +1 Charge in Crystalline Stance; resource grant is not supported as a canonical capability.",
+          "gap_id": "gap-jilya-charge-grant",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+            "quote": "Stack +1 Charge"
+          }
+        },
+        {
+          "attached_to_atom_ids": [],
+          "description": "At Charge 5+ with Nilya frontline, Lunatic+ can be used again; no exact refresh/re-enable label, do not force activate_lunatic.",
+          "gap_id": "gap-jilya-lunatic-refresh",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+            "quote": "Nilya can use Lunatic+ again"
+          }
+        },
+        {
+          "attached_to_atom_ids": [
+            "E2",
+            "E3"
+          ],
+          "description": "Debuff amount increases from stats; formula is not represented by canonical magnitude.",
+          "gap_id": "gap-jilya-stat-derived-debuff-magnitude",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[3]",
+            "quote": "Debuff amount increases from stats"
+          }
+        },
+        {
+          "attached_to_atom_ids": [
+            "E1",
+            "E2",
+            "E3"
+          ],
+          "description": "Source says Auto; current trigger taxonomy has no exact Auto label.",
+          "gap_id": "gap-jilya-auto-trigger",
+          "metadata_only": true,
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+            "quote": "Auto"
+          }
+        }
+      ],
+      "witness_id": "m6-heldout-jilya-invasion-glow"
+    },
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Harle"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Magic"
+            },
+            "condition": {
+              "status": "not_applicable"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Shade"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Shade type magic attack on all enemies (XL)"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Power Levels"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "formula_metadata": "225–1800% × Mod",
+            "maximum_formula_value": "800% at 12 stacks",
+            "maximum_power_level_stacks": 12,
+            "scaling_state": "Power Levels",
+            "skill_power_size": "XL",
+            "source_multiplier_note": "Source also says 1.5x of the standard 150% skill multiplier; preserve both source statements without reconciliation."
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[0]",
+            "quote": "Shade type magic attack on all enemies"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[1]",
+              "quote": "Multiplier increases based on number of stacked Power Levels (Max 800% at 12 stacks)"
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Harle",
+            "fact_id": "skill:51e029484df8b55b1c92",
+            "source_capture_sha256": "9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2",
+            "source_location": "grid[6]/block[0]",
+            "source_path": "data/raw/characters/harle.html",
+            "source_slice_sha256": "96cf5a009773705f25fbf8286db31271ad496b691ffce5a24ead9212df9202d8",
+            "witness_id": "m6-heldout-harle-lunairetic"
+          }
+        }
+      ],
+      "dependency_attachments": [],
+      "entity_name": "Harle",
+      "fact_id": "skill:51e029484df8b55b1c92",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [],
+      "source_capture_sha256": "9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2",
+      "source_location": "grid[6]/block[0]",
+      "source_location_with_capture": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[0]",
+      "source_path": "data/raw/characters/harle.html",
+      "source_slice_sha256": "96cf5a009773705f25fbf8286db31271ad496b691ffce5a24ead9212df9202d8",
+      "source_variant_label": null,
+      "unsupported_mechanics": [],
+      "witness_id": "m6-heldout-harle-lunairetic"
+    },
+    {
+      "atoms": [
+        {
+          "atom_id": "E1",
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Melissa"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Slash"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Crystal"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Crystal type slash attack on a single enemy (XXL)"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "formula_metadata": "250% × Mod; damage increases based on user SPD",
+            "skill_power_size": "XXL"
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+            "quote": "Crystal type slash attack on a single enemy (XXL)"
+          },
+          "supporting_source_anchors": [
+            {
+              "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[1]",
+              "quote": "Increased damage based on user's speed ."
+            }
+          ],
+          "witness_identity": {
+            "entity_name": "Melissa",
+            "fact_id": "skill:6932bc4961a6857153f3",
+            "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+            "source_location": "grid[14]/block[0]",
+            "source_path": "data/raw/characters/melissa.html",
+            "source_slice_sha256": "84e3fd7b43f166a451b26ad6d5a3e488e2ad8009f70475e3053f4ad8e983ceda",
+            "witness_id": "m6-heldout-melissa-hornet-hail-enhanced"
+          }
+        },
+        {
+          "atom_id": "E2",
+          "atomic_capability_id": "inflict_break",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Melissa"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Crystal"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "single_enemy"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Inflict 3 stacks of Elemental Break (Crystal)"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Elemental Break"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_skill_use"
+            }
+          },
+          "metadata": {
+            "break_kind": "elemental",
+            "stacks": 3
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+            "quote": "Elemental Break (Crystal)"
+          },
+          "witness_identity": {
+            "entity_name": "Melissa",
+            "fact_id": "skill:6932bc4961a6857153f3",
+            "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+            "source_location": "grid[14]/block[0]",
+            "source_path": "data/raw/characters/melissa.html",
+            "source_slice_sha256": "84e3fd7b43f166a451b26ad6d5a3e488e2ad8009f70475e3053f4ad8e983ceda",
+            "witness_id": "m6-heldout-melissa-hornet-hail-enhanced"
+          }
+        },
+        {
+          "atom_id": "E3",
+          "atomic_capability_id": "burst_window",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Melissa"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "When used in Stellar Burst"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "unknown"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Perform Hornet Hail (Stellar Burst) instead"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "on_stellar_burst"
+            }
+          },
+          "metadata": {
+            "parent_child_relationship": {
+              "child_effects_inherited": false,
+              "child_name": "Hornet Hail (Stellar Burst)",
+              "relation": "replaces"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "replace",
+          "source_anchor": {
+            "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]",
+            "quote": "When used in Stellar Burst: Perform Hornet Hail (Stellar Burst) instead"
+          },
+          "witness_identity": {
+            "entity_name": "Melissa",
+            "fact_id": "skill:6932bc4961a6857153f3",
+            "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+            "source_location": "grid[14]/block[0]",
+            "source_path": "data/raw/characters/melissa.html",
+            "source_slice_sha256": "84e3fd7b43f166a451b26ad6d5a3e488e2ad8009f70475e3053f4ad8e983ceda",
+            "witness_id": "m6-heldout-melissa-hornet-hail-enhanced"
+          }
+        },
+        {
+          "atom_id": "D1",
+          "atomic_capability_id": "requires_stellar_awakened",
+          "fields": {
+            "actor": {
+              "status": "adjudicated",
+              "value": "Melissa"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Skill requires Stellar Awakening"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "not_applicable"
+            },
+            "magnitude": {
+              "status": "not_applicable"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "self"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "not_applicable"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Stellar Awakening"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "single"
+            },
+            "trigger": {
+              "status": "not_applicable"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+            "quote": "Skill requires Stellar Awakening"
+          },
+          "witness_identity": {
+            "entity_name": "Melissa",
+            "fact_id": "skill:6932bc4961a6857153f3",
+            "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+            "source_location": "grid[14]/block[0]",
+            "source_path": "data/raw/characters/melissa.html",
+            "source_slice_sha256": "84e3fd7b43f166a451b26ad6d5a3e488e2ad8009f70475e3053f4ad8e983ceda",
+            "witness_id": "m6-heldout-melissa-hornet-hail-enhanced"
+          }
+        }
+      ],
+      "dependency_attachments": [
+        {
+          "dependency_atom_id": "D1",
+          "gates": [
+            "E1",
+            "E2",
+            "E3"
+          ]
+        }
+      ],
+      "entity_name": "Melissa",
+      "fact_id": "skill:6932bc4961a6857153f3",
+      "fidelity_dimensions": {
+        "actor": {
+          "status": "passed"
+        },
+        "attack_type": {
+          "status": "passed"
+        },
+        "child_definition_resolution": {
+          "reason": "No child effects are imported; only the source-stated replacement relation is adjudicated.",
+          "status": "unknown"
+        },
+        "duration_activation": {
+          "status": "passed"
+        },
+        "effect_completeness": {
+          "status": "passed"
+        },
+        "effect_order": {
+          "status": "passed"
+        },
+        "element": {
+          "status": "passed"
+        },
+        "magnitude_parameter": {
+          "status": "passed"
+        },
+        "mechanic_resource_reference": {
+          "status": "passed"
+        },
+        "parent_child_condition_attachment": {
+          "status": "passed"
+        },
+        "recipient": {
+          "status": "passed"
+        },
+        "result": {
+          "status": "passed"
+        },
+        "source_identity": {
+          "status": "passed"
+        },
+        "source_record_selection": {
+          "status": "passed"
+        },
+        "trigger": {
+          "status": "passed"
+        }
+      },
+      "semantic_relationships": [
+        {
+          "child_effects_inherited": false,
+          "condition": "When used in Stellar Burst",
+          "operation": "replaces",
+          "relation": "parent_child",
+          "source_anchor": {
+            "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]",
+            "quote": "When used in Stellar Burst: Perform Hornet Hail (Stellar Burst) instead"
+          },
+          "source_atom_id": "E3",
+          "target_name": "Hornet Hail (Stellar Burst)",
+          "trigger": "on_stellar_burst"
+        }
+      ],
+      "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+      "source_location": "grid[14]/block[0]",
+      "source_location_with_capture": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+      "source_path": "data/raw/characters/melissa.html",
+      "source_slice_sha256": "84e3fd7b43f166a451b26ad6d5a3e488e2ad8009f70475e3053f4ad8e983ceda",
+      "source_variant_label": "Enhanced",
+      "unsupported_mechanics": [],
+      "witness_id": "m6-heldout-melissa-hornet-hail-enhanced"
+    }
+  ]
+}

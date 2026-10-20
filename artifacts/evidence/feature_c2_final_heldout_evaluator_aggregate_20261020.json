@@ -1,0 +1,324 @@
+{
+  "arms": {
+    "fidelity_checked": {
+      "c1_1_fidelity_dimensions": {
+        "actor": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "attack_type": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "child_definition_resolution": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "duration_activation": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_completeness": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_order": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "element": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "magnitude_parameter": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "mechanic_resource_reference": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "parent_child_condition_attachment": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "recipient": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "result": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_identity": {
+          "denominator_count": 7,
+          "known_applicable_count": 7,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "passed": 7
+          },
+          "unknown_or_unresolved_count": 0
+        },
+        "source_record_selection": {
+          "denominator_count": 7,
+          "known_applicable_count": 7,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "passed": 7
+          },
+          "unknown_or_unresolved_count": 0
+        },
+        "trigger": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        }
+      },
+      "capability_label_precision_recall": {
+        "expected_count": 36,
+        "false_negative_count": 29,
+        "false_positive_count": 18,
+        "precision": 0.28,
+        "predicted_count": 25,
+        "recall": 0.19444444444444445,
+        "true_positive_count": 7
+      },
+      "condition_attachment": {
+        "accuracy": 0.0,
+        "adjudicated_count": 18,
+        "denominator_count": 36,
+        "incorrect_count": 18,
+        "not_applicable_count": 18
+      },
+      "dependency_occurrence_precision_recall": {
+        "expected_count": 7,
+        "false_negative_count": 7,
+        "false_positive_count": 1,
+        "precision": 0.0,
+        "predicted_count": 1,
+        "recall": 0.0,
+        "true_positive_count": 0
+      },
+      "diagnostic_only": {
+        "exact_semantic_and_anchor_match": 7,
+        "extra_supported_prediction": 2,
+        "missing_supported_occurrence": 8,
+        "same_label_operation_mismatch": 1,
+        "same_label_operation_source_boundary_mismatch": 13,
+        "wrong_label_on_overlapping_source_span": 2
+      },
+      "effect_occurrence_precision_recall": {
+        "expected_count": 29,
+        "false_negative_count": 21,
+        "false_positive_count": 16,
+        "precision": 0.3333333333333333,
+        "predicted_count": 24,
+        "recall": 0.27586206896551724,
+        "true_positive_count": 8
+      },
+      "explicit_unsupported_gaps": {
+        "anchored_expected_count": 13,
+        "expected_count": 13,
+        "matched_count": 3,
+        "unanchored_expected_count": 0,
+        "unexpected_count": 9,
+        "unmatched_expected_count": 10,
+        "unsupported_outputs_without_gap_anchor_count": 9
+      },
+      "field_correctness": {
+        "actor": {
+          "accuracy": 0.19444444444444445,
+          "adjudicated_count": 36,
+          "correct_count": 7,
+          "denominator_count": 36,
+          "incorrect_count": 29
+        },
+        "attack_type": {
+          "accuracy": 0.2,
+          "adjudicated_count": 15,
+          "correct_count": 3,
+          "denominator_count": 36,
+          "incorrect_count": 12,
+          "not_applicable_count": 19,
+          "unknown_count": 2
+        },
+        "condition": {
+          "accuracy": 0.0,
+          "adjudicated_count": 18,
+          "denominator_count": 36,
+          "incorrect_count": 18,
+          "not_applicable_count": 18
+        },
+        "direction": {
+          "accuracy": 0.17142857142857143,
+          "adjudicated_count": 35,
+          "correct_count": 6,
+          "denominator_count": 36,
+          "incorrect_count": 29,
+          "unknown_count": 1
+        },
+        "duration_activation": {
+          "accuracy": 0.375,
+          "adjudicated_count": 8,
+          "correct_count": 3,
+          "denominator_count": 36,
+          "incorrect_count": 5,
+          "not_applicable_count": 28
+        },
+        "element": {
+          "accuracy": 0.06666666666666667,
+          "adjudicated_count": 15,
+          "correct_count": 1,
+          "denominator_count": 36,
+          "incorrect_count": 14,
+          "not_applicable_count": 19,
+          "unknown_count": 2
+        },
+        "magnitude": {
+          "accuracy": 0.21739130434782608,
+          "adjudicated_count": 23,
+          "correct_count": 5,
+          "denominator_count": 36,
+          "incorrect_count": 18,
+          "not_applicable_count": 12,
+          "unknown_count": 1
+        },
+        "recipient": {
+          "accuracy": 0.2222222222222222,
+          "adjudicated_count": 27,
+          "correct_count": 6,
+          "denominator_count": 36,
+          "incorrect_count": 21,
+          "unknown_count": 9
+        },
+        "relationships": {
+          "accuracy": null,
+          "denominator_count": 36,
+          "not_applicable_count": 36
+        },
+        "result": {
+          "accuracy": 0.05555555555555555,
+          "adjudicated_count": 36,
+          "correct_count": 2,
+          "denominator_count": 36,
+          "incorrect_count": 34
+        },
+        "state_reference": {
+          "accuracy": 0.0,
+          "adjudicated_count": 17,
+          "denominator_count": 36,
+          "incorrect_count": 17,
+          "not_applicable_count": 19
+        },
+        "target_cardinality": {
+          "accuracy": 0.21428571428571427,
+          "adjudicated_count": 28,
+          "correct_count": 6,
+          "denominator_count": 36,
+          "incorrect_count": 22,
+          "unknown_count": 8
+        },
+        "trigger": {
+          "accuracy": 1.0,
+          "adjudicated_count": 2,
+          "correct_count": 2,
+          "denominator_count": 36,
+          "not_applicable_count": 34
+        }
+      },
+      "primary_occurrence_precision_recall": {
+        "expected_count": 36,
+        "false_negative_count": 28,
+        "false_positive_count": 17,
+        "precision": 0.32,
+        "predicted_count": 25,
+        "recall": 0.2222222222222222,
+        "true_positive_count": 8
+      },
+      "relationship_groups": {
+        "diagnostics": {},
+        "emitted_groups": 5,
+        "exact_correct_groups": 0,
+        "expected_groups": 2,
+        "extra_groups": 5,
+        "unresolved_groups": 4
+      },
+      "typed_relationship_correctness": {
+        "accuracy": null,
+        "denominator_count": 36,
+        "not_applicable_count": 36
+      },
+      "unresolved_relationship_count": 0,
+      "witness_denominator": 7
+    }
+  },
+  "cohort": "m6-final-heldout-2026-10-20",
+  "evaluator_version": "c2-atomic-eval-1.2.0",
+  "oracle_answers_returned": false,
+  "per_witness_results_returned": false,
+  "witness_count": 7
+}

@@ -6,6 +6,21 @@ All notable changes to this project are documented here, grouped by development 
 
 ## [Unreleased] Root Pillar Docs
 
+## [Milestone 6 Pilot Reset] - 2026-10-20
+
+- Record unsuccessful C2.1 final validation and stop classifier development; no
+  joint acceptance, Test #5 or original Feature D execution is claimed.
+- Revise M6 in place around reviewed manual knowledge for two candidate bosses and
+  twenty forms, preserving all 367 legal kits and the thirty-boss corpus. Explicitly
+  supersede original D-G gates with independent pilot knowledge/recommendation gates.
+- Preserve frozen reports, independent oracles, source identities/captures and exact
+  evaluated existing source in normal Git history. Add a retention mapping without
+  rewriting immutable evaluation artifacts or copying classifier code to an archive.
+- Keep production recommendation, graph schema/data, review artifacts and provider
+  configuration unchanged. Experimental code retirement and pilot curation remain
+  subsequent features; paid calls, graph mutations and deployment are not authorized.
+
+
 ## [Milestone 5 Closeout / Milestone 6 Plan] - 2026-09-14
 
 ### Closed

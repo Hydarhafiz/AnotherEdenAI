@@ -69,7 +69,34 @@
           "operation": "activate",
           "source_anchor": {
             "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
-            "quote": "Deploy Sacred Water Stance"
+            "quote": "Deploy Sacred Water Stance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:7a8a9e6a41c66ac883543fdfefdf9d91",
+              "source_fact_id": "skill:737079b25061a54f0c84",
+              "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+              "block_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]/token[0]",
+                  "content_sha256": "dfd82d91d93f702dadbceebe560443e972e41847907ccafea301dfde66aa6c85"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]/token[1]",
+                  "content_sha256": "6e54d93c66a7b3f60d14dbc888316bbfd82a23ed5f9dd5daa05e3b5813b87b97"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 19
+            }
           },
           "witness_identity": {
             "entity_name": "Aisha",
@@ -144,7 +171,40 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
-            "quote": "water type attack of all party members +50% (5 turns)"
+            "quote": "water type attack of all party members +50% (5 turns)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c14f29ac87e2c9c68db0d3506da24ab2",
+              "source_fact_id": "skill:737079b25061a54f0c84",
+              "source_capture_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+              "block_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]/token[2]",
+                  "content_sha256": "ad59073d2938df094a71b6c09acaccb2d48e953452e3b771356d7916e1ebbe74"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]/token[3]",
+                  "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[7]/block[0]/token[4]",
+                  "content_sha256": "caf6db559d7e58cc5295bf482dd9084e80f253540f4d079c55260e28434263ec"
+                }
+              ],
+              "start_token_offset": 4,
+              "end_token_offset": 9
+            }
           },
           "witness_identity": {
             "entity_name": "Aisha",
@@ -215,8 +275,9 @@
       "source_path": "data/raw/characters/aisha.html",
       "source_slice_sha256": "32ba8137058aca6cad7e38c49c7c9779168a652ff48007af901744a3ba9f680f",
       "source_variant_label": null,
-      "unsupported_mechanics": [],
-      "witness_id": "m6-heldout-aisha-waters-nocturne"
+      "witness_id": "m6-heldout-aisha-waters-nocturne",
+      "reviewed_unscored_mechanics": [],
+      "unsupported_gaps": []
     },
     {
       "atoms": [
@@ -280,12 +341,57 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
-            "quote": "Earth type Slash attack on all enemies x2 (XL)"
+            "quote": "Earth type Slash attack on all enemies x2",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:01cf259e794d6ab4b052e899d33fbb2c",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 2,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[2]",
+                  "content_sha256": "73e4f1b71199b2a1434324e013e8012a71083aa90cc187c96f26c62989a1871a"
+                }
+              ],
+              "start_token_offset": 13,
+              "end_token_offset": 54
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
-              "quote": "Skill automatically used for 3 actions (does not consume MP), unless interrupted by status effect."
+              "quote": "Skill automatically used for 3 actions (does not consume MP), unless interrupted by status effect.",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:296329730bc91ecdbe9a922b6210bdb9",
+                "source_fact_id": "skill:0f340a5404f853049fd9",
+                "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+                "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]/token[0]",
+                    "content_sha256": "1fc65cc45850e49201e8b376625809959399d44a15f4092721b74e104d2fdf22"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 98
+              }
             }
           ],
           "witness_identity": {
@@ -357,7 +463,31 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
-            "quote": "Earth type Slash attack on all enemies x2 (XL)"
+            "quote": "Earth type Slash attack on all enemies x2",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:01cf259e794d6ab4b052e899d33fbb2c",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 2,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[2]",
+                  "content_sha256": "73e4f1b71199b2a1434324e013e8012a71083aa90cc187c96f26c62989a1871a"
+                }
+              ],
+              "start_token_offset": 13,
+              "end_token_offset": 54
+            }
           },
           "witness_identity": {
             "entity_name": "Otoha (Another Style)",
@@ -429,7 +559,34 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
-            "quote": "Catwisp : +20 PWR (max stack 3, +60)"
+            "quote": "Catwisp : +20 PWR (max stack 3, +60)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0391bd713c699b1b9ca7e2a292fa0de1",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 6,
+              "token_end": 7,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]/token[6]",
+                  "content_sha256": "b17741f88da44ee82ae643d87a2d99ec5045f83ecec3f51ca3464e667279937e"
+                },
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]/token[7]",
+                  "content_sha256": "472b42421e90aefb98db2544f9e6d92dafcb6c7d9004312310f9d1bb2daed02b"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 28
+            }
           },
           "witness_identity": {
             "entity_name": "Otoha (Another Style)",
@@ -493,32 +650,64 @@
           "status": "passed"
         }
       },
-      "semantic_relationships": [],
+      "semantic_relationships": [
+        {
+          "note": "Each action in Surging Scratch's automatic three-action sequence adds one Catwisp; the source states no additional prerequisite condition.",
+          "operation": "applies_state",
+          "recipient": "user",
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+            "quote": "Stack 1 Catwisp on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:fed9f28c11918ea3f4dfdf5963404ac7",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[1]",
+                  "content_sha256": "b17741f88da44ee82ae643d87a2d99ec5045f83ecec3f51ca3464e667279937e"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[2]",
+                  "content_sha256": "73e4f1b71199b2a1434324e013e8012a71083aa90cc187c96f26c62989a1871a"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
+          },
+          "target_kind": "named_state",
+          "target_name": "Catwisp",
+          "trigger": "own_action"
+        }
+      ],
       "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
       "source_location": "grid[8]/block[0]",
       "source_location_with_capture": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
       "source_path": "data/raw/characters/otoha_another_style.html",
       "source_slice_sha256": "7d45cd0ce957cf08826c9c154c614052511a23d733016f1723c398b262ed9660",
       "source_variant_label": null,
-      "unsupported_mechanics": [
-        {
-          "additional_source_anchors": [
-            {
-              "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]",
-              "quote": "After 3rd action: Consume all Catwisps"
-            }
-          ],
-          "attached_to_atom_ids": [
-            "E3"
-          ],
-          "description": "One Catwisp is added each action and all Catwisps are consumed after the third; the taxonomy has no exact label for this grant/consumption sequence.",
-          "gap_id": "gap-otoha-catwisp-resource-operation",
-          "metadata_only": true,
-          "source_anchor": {
-            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
-            "quote": "Stack 1 Catwisp on user"
-          }
-        },
+      "witness_id": "m6-heldout-otoha-as-surging-scratch",
+      "reviewed_unscored_mechanics": [
         {
           "attached_to_atom_ids": [
             "E1",
@@ -530,11 +719,195 @@
           "metadata_only": true,
           "source_anchor": {
             "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
-            "quote": "Skill automatically used for 3 actions (does not consume MP), unless interrupted by status effect."
+            "quote": "Skill automatically used for 3 actions (does not consume MP), unless interrupted by status effect.",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:296329730bc91ecdbe9a922b6210bdb9",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[0]/token[0]",
+                  "content_sha256": "1fc65cc45850e49201e8b376625809959399d44a15f4092721b74e104d2fdf22"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 98
+            }
           }
         }
       ],
-      "witness_id": "m6-heldout-otoha-as-surging-scratch"
+      "unsupported_gaps": [
+        {
+          "gap_id": "gap-otoha-catwisp-state-creation",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "catwisp_stack_creation",
+          "reason": "The source creates Catwisp stacks, which has no canonical state-creation capability.",
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+            "quote": "Stack 1 Catwisp on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:fed9f28c11918ea3f4dfdf5963404ac7",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[1]",
+                  "content_sha256": "b17741f88da44ee82ae643d87a2d99ec5045f83ecec3f51ca3464e667279937e"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[2]",
+                  "content_sha256": "73e4f1b71199b2a1434324e013e8012a71083aa90cc187c96f26c62989a1871a"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+            "quote": "Stack 1 Catwisp on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:fed9f28c11918ea3f4dfdf5963404ac7",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[1]",
+                  "content_sha256": "b17741f88da44ee82ae643d87a2d99ec5045f83ecec3f51ca3464e667279937e"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[2]/token[2]",
+                  "content_sha256": "73e4f1b71199b2a1434324e013e8012a71083aa90cc187c96f26c62989a1871a"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
+          },
+          "source_owner_id": "src:fed9f28c11918ea3f4dfdf5963404ac7",
+          "condition": "If skill is interrupted, follow multipliers in white"
+        },
+        {
+          "gap_id": "gap-otoha-catwisp-consumption",
+          "gap_type": "unsupported_resource_consumption",
+          "mechanic": "catwisp_stack_consumption",
+          "reason": "The source explicitly consumes Catwisps, which has no canonical resource-consumption capability.",
+          "source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]",
+            "quote": "Consume all Catwisps",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:21a258e6717e911f83feee7614591c14",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]/token[0]",
+                  "content_sha256": "b1b4f60e9729b51937c9af94e2503c9118b94f17e6bf82ef788b5e205b4cc740"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]/token[1]",
+                  "content_sha256": "165126c0e808e01d9878a54746867d2c20e72e10f0348746f9a97d132030d530"
+                }
+              ],
+              "start_token_offset": 18,
+              "end_token_offset": 8
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]",
+            "quote": "Consume all Catwisps",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:21a258e6717e911f83feee7614591c14",
+              "source_fact_id": "skill:0f340a5404f853049fd9",
+              "source_capture_sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+              "block_location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]/token[0]",
+                  "content_sha256": "b1b4f60e9729b51937c9af94e2503c9118b94f17e6bf82ef788b5e205b4cc740"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623/grid[8]/block[4]/token[1]",
+                  "content_sha256": "165126c0e808e01d9878a54746867d2c20e72e10f0348746f9a97d132030d530"
+                }
+              ],
+              "start_token_offset": 18,
+              "end_token_offset": 8
+            }
+          },
+          "source_owner_id": "src:21a258e6717e911f83feee7614591c14",
+          "condition": "If skill is interrupted, follow multipliers in white; After 3rd action"
+        }
+      ]
     },
     {
       "atoms": [
@@ -599,7 +972,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
-            "quote": "Water type piercing attack on random enemies x3 (XL)"
+            "quote": "Water type piercing attack on random enemies x3",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:060e63cb57b7618f0f5e0e5e708bd764",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]/token[0]",
+                  "content_sha256": "fe0cf9ca8ddf1eb77eb36475856a0684fb40a2e3c14dd8273f5924ad62c33966"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 47
+            }
           },
           "witness_identity": {
             "entity_name": "Nona (Another Style)",
@@ -671,19 +1065,130 @@
             "conditional_total_hit_count": 6
           },
           "occurrence_kind": "effect",
-          "operation": "modify",
+          "operation": "damage",
           "source_anchor": {
-            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[3]",
-            "quote": "Increase number of attacks by +3"
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+            "quote": "Water type piercing attack on random enemies x3",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:060e63cb57b7618f0f5e0e5e708bd764",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]/token[0]",
+                  "content_sha256": "fe0cf9ca8ddf1eb77eb36475856a0684fb40a2e3c14dd8273f5924ad62c33966"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 47
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
-              "quote": "Water type piercing attack on random enemies x3 (XL)"
+              "quote": "Water type piercing attack on random enemies x3 (XL)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:7f3ad0cbe0f0cce8cf8894a6b8dc2161",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[0]/token[0]",
+                    "content_sha256": "fe0cf9ca8ddf1eb77eb36475856a0684fb40a2e3c14dd8273f5924ad62c33966"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 52
+              }
             },
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
-              "quote": "When there is an ally with Skill stack power type2.png Devotion stack on the front line"
+              "quote": "When there is an ally with Skill stack power type2.png Devotion stack on the front line",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:13b75116d5b14323c1bca359e28d9d0e",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]"
+                ],
+                "token_start": 0,
+                "token_end": 3,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[0]",
+                    "content_sha256": "4f40e2ff91a0cb0e22097a9e12631c7f34c7674f8ed6247e297ad5ef12f5ee67"
+                  },
+                  {
+                    "kind": "icon",
+                    "order": 1,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[1]",
+                    "content_sha256": "279aeb0f28b036ac2f3b599a8c22c36d752d78856f47232eea3f9351bf291ca1"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[2]",
+                    "content_sha256": "64ae0ad51c3295bcc94d2871166d7b4f0847ee01c9a8a0fc159f14dea1ea1e9f"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 3,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[3]",
+                    "content_sha256": "1b9f4a8054bee7d64b816332fdf568d8a253378f2478e922af307b1d2093645e"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 23
+              }
+            },
+            {
+              "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[3]",
+              "quote": "Increase number of attacks by +3",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:77f4de26edb08e0306b8cb13fce3970b",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[3]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[0]"
+                ],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[3]/token[0]",
+                    "content_sha256": "b5e4ec741afea03bc6acac3c7d8a17bb8fb06bab86797b2670b0fe8512777acf"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 32
+              }
             }
           ],
           "witness_identity": {
@@ -767,16 +1272,87 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
-            "quote": "Water type attack of all party members +30% (3 turns)"
+            "quote": "Water type attack of all party members +30% (3 turns)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0b2783a444883f26313b6498b5dde322",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[0]",
+                  "content_sha256": "0d997b940c999d0396443c9b25921cd063750f731acc90c14801e7ee5e671478"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 53
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[11]",
-              "quote": "Type attack buff doubled for ally with Devotion"
+              "quote": "Type attack buff doubled for ally with Devotion",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:4634cb6c13a925358e6d7da8558683ea",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[11]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[4]"
+                ],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[11]/token[0]",
+                    "content_sha256": "5bf10e1489f2c1445eb41e122e4aea84232f63e5b2d76bf97d5ffd652d10b292"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 47
+              }
             },
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]",
-              "quote": "Kaleido; change element of type attack buff according to the attribute personality of the ally with Devotion"
+              "quote": "Kaleido; change element of type attack buff according to the attribute personality of the ally with Devotion",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:198fd0a155380fc97fb1cf8cbed8dd1c",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[1]"
+                ],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]/token[0]",
+                    "content_sha256": "40fa7867585f303b713d3a7cdf7c5913db7c676adaed28f0c6229434d79c0744"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 108
+              }
             }
           ],
           "witness_identity": {
@@ -854,28 +1430,237 @@
           "operation": "apply",
           "source_anchor": {
             "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[6]",
-            "quote": "Grant Kaleido to user; Change user's element based on element of the ally with Devotion"
+            "quote": "Grant Kaleido to user; Change user's element based on element of the ally with Devotion",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3b75297cdcdf6eec744ae55df8d6a79a",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[6]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[3]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[6]/token[0]",
+                  "content_sha256": "9480a850b3280de346a7aa168538f08d8981c57832b9e5d3d6da1dff9d4cf3f6"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[6]/token[1]",
+                  "content_sha256": "afbfbb2fa1eb0e1cf6e907a7cee24481b80f50aadc53c810428edafce403be46"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[6]/token[2]",
+                  "content_sha256": "89797513b0e7f7d6927143848d49a70074080bf1dc4b4f3aa4e15b43c9df865b"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 73
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
-              "quote": "When there is an ally with Skill stack power type2.png Devotion stack on the front line"
+              "quote": "When there is an ally with Skill stack power type2.png Devotion stack on the front line",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:13b75116d5b14323c1bca359e28d9d0e",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]"
+                ],
+                "token_start": 0,
+                "token_end": 3,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[0]",
+                    "content_sha256": "4f40e2ff91a0cb0e22097a9e12631c7f34c7674f8ed6247e297ad5ef12f5ee67"
+                  },
+                  {
+                    "kind": "icon",
+                    "order": 1,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[1]",
+                    "content_sha256": "279aeb0f28b036ac2f3b599a8c22c36d752d78856f47232eea3f9351bf291ca1"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[2]",
+                    "content_sha256": "64ae0ad51c3295bcc94d2871166d7b4f0847ee01c9a8a0fc159f14dea1ea1e9f"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 3,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[3]",
+                    "content_sha256": "1b9f4a8054bee7d64b816332fdf568d8a253378f2478e922af307b1d2093645e"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 23
+              }
             },
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[7]",
-              "quote": "Water If ally has no element"
+              "quote": "Water If ally has no element",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:9cc596f724a22626a5df1ae834c59d9f",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[7]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[3]",
+                  "unordered_list[0]"
+                ],
+                "token_start": 0,
+                "token_end": 1,
+                "token_identities": [
+                  {
+                    "kind": "icon",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[7]/token[0]",
+                    "content_sha256": "119bab0e2d1785c1c9e9c4c4971f2abd6c23e55a21ccca9606c427e0eb9a1401"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 1,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[7]/token[1]",
+                    "content_sha256": "dd721039bd868256f889e4a3e825d262b2e238eb3481ad0e4e34c2a5aab87bbd"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 22
+              }
             },
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[8]",
-              "quote": "For multiple elements, random element personality will be selected"
+              "quote": "For multiple elements, random element personality will be selected",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:838e3e4c0f250e882821aae3b94fd555",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[8]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[3]",
+                  "unordered_list[1]"
+                ],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[8]/token[0]",
+                    "content_sha256": "0d29e2c88bdbf15a45219cd9c8cbece5c79222950c34d2c94f647b660a823f8e"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 66
+              }
             },
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]",
-              "quote": "For Aisha or Cyrus Albright , defaults to water unless in matching Zone"
+              "quote": "For Aisha or Cyrus Albright , defaults to water unless in matching Zone",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:aaf53110760ec5988e8282fb5c45dfe0",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[3]",
+                  "unordered_list[1]",
+                  "unordered_list[0]"
+                ],
+                "token_start": 0,
+                "token_end": 4,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]/token[0]",
+                    "content_sha256": "a88fa40a0dc994fe5cc57d130735742e22323429ae99fcf82f432e7517648c00"
+                  },
+                  {
+                    "kind": "reference",
+                    "order": 1,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]/token[1]",
+                    "content_sha256": "cd6818dc941de2668cdd0a6ece6c0f2abc4f0bcc7cdf6c8c54742eed08c32f04"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]/token[2]",
+                    "content_sha256": "286518b57bf0185c4be9249c45662ecb60a079dff00da4af1fc0df67041e035a"
+                  },
+                  {
+                    "kind": "reference",
+                    "order": 3,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]/token[3]",
+                    "content_sha256": "0088fe56cfb6ab8e5a66bedb3e35959ad31006e87f0d850d9120c445fc18dbbb"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 4,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[9]/token[4]",
+                    "content_sha256": "d4640abd52b1dc968e787b139094396083d2d320ef2549932115c4ccb6cdcf7a"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 43
+              }
             },
             {
               "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[10]",
-              "quote": "Unaffected by further Zone changes"
+              "quote": "Unaffected by further Zone changes",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:9f4320b994ca332c73ff50a927e3bde2",
+                "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+                "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+                "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[10]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[1]",
+                  "unordered_list[3]",
+                  "unordered_list[1]",
+                  "unordered_list[1]"
+                ],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[10]/token[0]",
+                    "content_sha256": "13558530fcf518f0c52ce44e32c862ec67bf8c440fdc69403413894f8ee80860"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 34
+              }
             }
           ],
           "witness_identity": {
@@ -942,7 +1727,48 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
-            "quote": "Devotion stack on the front line"
+            "quote": "When there is an ally with Devotion stack on the front line",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:13b75116d5b14323c1bca359e28d9d0e",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[0]",
+                  "content_sha256": "4f40e2ff91a0cb0e22097a9e12631c7f34c7674f8ed6247e297ad5ef12f5ee67"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[1]",
+                  "content_sha256": "279aeb0f28b036ac2f3b599a8c22c36d752d78856f47232eea3f9351bf291ca1"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[2]",
+                  "content_sha256": "64ae0ad51c3295bcc94d2871166d7b4f0847ee01c9a8a0fc159f14dea1ea1e9f"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[3]",
+                  "content_sha256": "1b9f4a8054bee7d64b816332fdf568d8a253378f2478e922af307b1d2093645e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 23
+            }
           },
           "witness_identity": {
             "entity_name": "Nona (Another Style)",
@@ -1012,7 +1838,48 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
-            "quote": "Devotion stack on the front line"
+            "quote": "When there is an ally with Devotion stack on the front line:",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:94990305a7575f19766b3ee089b2ee8c",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[0]",
+                  "content_sha256": "4f40e2ff91a0cb0e22097a9e12631c7f34c7674f8ed6247e297ad5ef12f5ee67"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[1]",
+                  "content_sha256": "279aeb0f28b036ac2f3b599a8c22c36d752d78856f47232eea3f9351bf291ca1"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[2]",
+                  "content_sha256": "64ae0ad51c3295bcc94d2871166d7b4f0847ee01c9a8a0fc159f14dea1ea1e9f"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[2]/token[3]",
+                  "content_sha256": "1b9f4a8054bee7d64b816332fdf568d8a253378f2478e922af307b1d2093645e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 24
+            }
           },
           "witness_identity": {
             "entity_name": "Nona (Another Style)",
@@ -1100,7 +1967,8 @@
       "source_path": "data/raw/characters/nona_another_style.html",
       "source_slice_sha256": "21e388eb6ee1a7313953e10de2c298af9b028ae7013d8d9d751ce0d2c3a150f0",
       "source_variant_label": null,
-      "unsupported_mechanics": [
+      "witness_id": "m6-heldout-nona-as-castigo",
+      "reviewed_unscored_mechanics": [
         {
           "attached_to_atom_ids": [
             "E3"
@@ -1111,31 +1979,209 @@
           "metadata_only": true,
           "source_anchor": {
             "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]",
-            "quote": "Kaleido; change element of type attack buff according to the attribute personality of the ally with Devotion"
-          }
-        },
-        {
-          "attached_to_atom_ids": [],
-          "description": "Critical rate +100% for one move for all party members; no generic critical-rate taxonomy label and source does not specify physical or magic.",
-          "gap_id": "gap-nona-generic-critical-rate",
-          "metadata_only": true,
-          "source_anchor": {
-            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
-            "quote": "Critical rate of all party members +100% (1 move)"
-          }
-        },
-        {
-          "attached_to_atom_ids": [],
-          "description": "Grant Flexible permanently based on the weapon type of the Devotion ally; no exact canonical effect label.",
-          "gap_id": "gap-nona-flexible-weapon-type",
-          "metadata_only": true,
-          "source_anchor": {
-            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]",
-            "quote": "Grants Flexible to user based on the weapon type of the ally with Devotion (permanent)"
+            "quote": "Kaleido; change element of type attack buff according to the attribute personality of the ally with Devotion",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:198fd0a155380fc97fb1cf8cbed8dd1c",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[4]/token[0]",
+                  "content_sha256": "40fa7867585f303b713d3a7cdf7c5913db7c676adaed28f0c6229434d79c0744"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 108
+            }
           }
         }
       ],
-      "witness_id": "m6-heldout-nona-as-castigo"
+      "unsupported_gaps": [
+        {
+          "gap_id": "gap-nona-generic-critical-rate",
+          "gap_type": "unsupported_effect",
+          "mechanic": "generic_critical_rate_up",
+          "reason": "Generic critical-rate support has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+            "quote": "Critical rate of all party members +100% (1 move)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3337dbc5766199076a47c18c73ce2e57",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[0]",
+                  "content_sha256": "0d997b940c999d0396443c9b25921cd063750f731acc90c14801e7ee5e671478"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[1]",
+                  "content_sha256": "bbea8d0a876c5593134f4b1af28a7ddf3e8c98c563d3a6fa835603e193ec8e86"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[2]",
+                  "content_sha256": "20f23cf6b5daef6fa9af7b7feb5e23a14d347b7702024875967d2006ee547ab5"
+                }
+              ],
+              "start_token_offset": 58,
+              "end_token_offset": 8
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+            "quote": "Critical rate of all party members +100% (1 move)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3337dbc5766199076a47c18c73ce2e57",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[0]",
+                  "content_sha256": "0d997b940c999d0396443c9b25921cd063750f731acc90c14801e7ee5e671478"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[1]",
+                  "content_sha256": "bbea8d0a876c5593134f4b1af28a7ddf3e8c98c563d3a6fa835603e193ec8e86"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[1]/token[2]",
+                  "content_sha256": "20f23cf6b5daef6fa9af7b7feb5e23a14d347b7702024875967d2006ee547ab5"
+                }
+              ],
+              "start_token_offset": 58,
+              "end_token_offset": 8
+            }
+          },
+          "source_owner_id": "src:3337dbc5766199076a47c18c73ce2e57"
+        },
+        {
+          "gap_id": "gap-nona-flexible-weapon-type",
+          "gap_type": "unsupported_effect",
+          "mechanic": "flexible_weapon_type_application",
+          "reason": "Flexible weapon-type application has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]",
+            "quote": "Grants Flexible to user based on the weapon type of the ally with Devotion (permanent)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:077c289916664789147dff7a888ba82b",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]/token[0]",
+                  "content_sha256": "295a9daa6b34e0723a74153993553888cf5871924a8b2abfd9c578150c6ecfe2"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]/token[1]",
+                  "content_sha256": "4f8f78fa9a2e9c2d80642d67ff7855c274d9b7022c1e347a4bae65af189e31d0"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]/token[2]",
+                  "content_sha256": "4fa1c190693bbc566b2b4e6b7a92fb0343f8aea3a5c7e5d8ad4e9583e3b58dfd"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 70
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]",
+            "quote": "Grants Flexible to user based on the weapon type of the ally with Devotion (permanent)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:077c289916664789147dff7a888ba82b",
+              "source_fact_id": "skill:73b97c55cc4da5f7cc64",
+              "source_capture_sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+              "block_location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]/token[0]",
+                  "content_sha256": "295a9daa6b34e0723a74153993553888cf5871924a8b2abfd9c578150c6ecfe2"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]/token[1]",
+                  "content_sha256": "4f8f78fa9a2e9c2d80642d67ff7855c274d9b7022c1e347a4bae65af189e31d0"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755/grid[13]/block[5]/token[2]",
+                  "content_sha256": "4fa1c190693bbc566b2b4e6b7a92fb0343f8aea3a5c7e5d8ad4e9583e3b58dfd"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 70
+            }
+          },
+          "source_owner_id": "src:077c289916664789147dff7a888ba82b",
+          "condition": "When there is an ally with Devotion stack on the front line"
+        }
+      ]
     },
     {
       "atoms": [
@@ -1199,12 +2245,62 @@
           "operation": "restore",
           "source_anchor": {
             "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[1]",
-            "quote": "Restore all party members' HP 25%"
+            "quote": "Restore all party members' HP 25%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a096b8ef799571087523417b2334de6d",
+              "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+              "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+              "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[1]/token[0]",
+                  "content_sha256": "f9592c5a6cec939386c3d8e8b6ff80e63f2af4359a2b7bb94656ac69faa7f33e"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[1]/token[1]",
+                  "content_sha256": "06f918dfbf57594cdbf2d3750825419c1271d1e14440c5dbf0672e46c2432785"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 3
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
-              "quote": "End of Turn"
+              "quote": "End of Turn",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:f0a6618629d65238b4bc6052256661c5",
+                "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+                "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+                "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "reference",
+                    "order": 0,
+                    "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[0]",
+                    "content_sha256": "d9688f9092efef2db3a21ce2481280559f540eefcd975928bf520d2e3d0f66ed"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 11
+              }
             }
           ],
           "witness_identity": {
@@ -1277,12 +2373,62 @@
           "operation": "restore",
           "source_anchor": {
             "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[2]",
-            "quote": "Restore all party members' MP 25%"
+            "quote": "Restore all party members' MP 25%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:e3e25819a4d114d047cf40b767c311c4",
+              "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+              "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+              "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[2]/token[0]",
+                  "content_sha256": "189998299865396793859c8f40b73909bad2dc6ff1a504fbbe2b752c9e241ac0"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[2]/token[1]",
+                  "content_sha256": "06f918dfbf57594cdbf2d3750825419c1271d1e14440c5dbf0672e46c2432785"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 3
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
-              "quote": "End of Turn"
+              "quote": "End of Turn",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:f0a6618629d65238b4bc6052256661c5",
+                "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+                "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+                "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 0,
+                "token_end": 0,
+                "token_identities": [
+                  {
+                    "kind": "reference",
+                    "order": 0,
+                    "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[0]",
+                    "content_sha256": "d9688f9092efef2db3a21ce2481280559f540eefcd975928bf520d2e3d0f66ed"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 11
+              }
             }
           ],
           "witness_identity": {
@@ -1349,7 +2495,34 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
-            "quote": "When in Another Zone"
+            "quote": "When in Another Zone",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:bd3157499c22698ca8f2cac9368905cc",
+              "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+              "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+              "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[1]",
+                  "content_sha256": "eafb68308cf6a0ed459bd4216fb965e7a5a7c305eecc7bace7c641372dc0532e"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[2]",
+                  "content_sha256": "f0f21c5d232c80d94d4af195eabd773fb116b68db184839ea600f410ebc378bc"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 12
+            }
           },
           "witness_identity": {
             "entity_name": "Claude (Extra Style)",
@@ -1428,22 +2601,104 @@
       "source_path": "data/raw/characters/claude_extra_style.html",
       "source_slice_sha256": "2d405f5c74dc2b6aecb938ab77dc216adbc42414a4b17ca556eff48314e8d4cb",
       "source_variant_label": null,
-      "unsupported_mechanics": [
+      "witness_id": "m6-heldout-claude-es-another-zone-heal",
+      "reviewed_unscored_mechanics": [],
+      "unsupported_gaps": [
         {
-          "attached_to_atom_ids": [
-            "E1",
-            "E2"
-          ],
-          "description": "Heal when Claude is not in Sleep, Confusion, Stone, or Freeze; taxonomy has no negative-status-absence prerequisite, and source subject is ambiguous.",
           "gap_id": "gap-claude-negative-status-gate",
-          "metadata_only": true,
+          "gap_type": "unsupported_condition",
+          "mechanic": "negative_status_absence_condition",
+          "reason": "Negative-status absence has no canonical dependency value.",
           "source_anchor": {
             "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
-            "quote": "When not in Sleep, Confusion, Stone, Freeze"
-          }
+            "quote": "When not in Sleep, Confusion, Stone, Freeze",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3b676bfc7edbc034377d499c42260338",
+              "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+              "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+              "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 4,
+              "token_end": 5,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[4]",
+                  "content_sha256": "5ca577ce67e083291bfde099fb24c79c799f102853a29c2adf4eb87f87a399a5"
+                },
+                {
+                  "kind": "reference",
+                  "order": 5,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[5]",
+                  "content_sha256": "b70b38933cd8b97a5c3439b7a3d99868d9282908e2ed8ca35d97e1ee4c40ec0e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 31
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+            "quote": "End of Turn When in Another Zone : When not in Sleep, Confusion, Stone, Freeze",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5a22c57269210d4b0ba754757848001c",
+              "source_fact_id": "passive:b3dbd52f40920bc0a0cb",
+              "source_capture_sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+              "block_location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 5,
+              "token_identities": [
+                {
+                  "kind": "reference",
+                  "order": 0,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[0]",
+                  "content_sha256": "d9688f9092efef2db3a21ce2481280559f540eefcd975928bf520d2e3d0f66ed"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[1]",
+                  "content_sha256": "eafb68308cf6a0ed459bd4216fb965e7a5a7c305eecc7bace7c641372dc0532e"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[2]",
+                  "content_sha256": "f0f21c5d232c80d94d4af195eabd773fb116b68db184839ea600f410ebc378bc"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[3]",
+                  "content_sha256": "da7ad8ffdb358319a93e1c98ec6372c7b161cdca59a43756e9248e700bf57ccd"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[4]",
+                  "content_sha256": "5ca577ce67e083291bfde099fb24c79c799f102853a29c2adf4eb87f87a399a5"
+                },
+                {
+                  "kind": "reference",
+                  "order": 5,
+                  "location": "sha256:0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830/grid[12]/block[0]/token[5]",
+                  "content_sha256": "b70b38933cd8b97a5c3439b7a3d99868d9282908e2ed8ca35d97e1ee4c40ec0e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 31
+            }
+          },
+          "source_owner_id": "src:5a22c57269210d4b0ba754757848001c",
+          "condition": "When not in Sleep, Confusion, Stone, Freeze"
         }
-      ],
-      "witness_id": "m6-heldout-claude-es-another-zone-heal"
+      ]
     },
     {
       "atoms": [
@@ -1507,7 +2762,34 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
-            "quote": "Crystal type magic attack on all enemies (XL)"
+            "quote": "Auto Crystal type magic attack on all enemies",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:4c50f7819c5356d61ce2364530210f5d",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "reference",
+                  "order": 0,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]/token[0]",
+                  "content_sha256": "c65aa0728489a701d08ef26af84a5233c9b9bfdf8568bea0ed33188e9ead4d77"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]/token[1]",
+                  "content_sha256": "f0c354896cdb270cd0670b2129bc0321e0e17f93f2e25c10d32f973803e5a633"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 40
+            }
           },
           "witness_identity": {
             "entity_name": "Jilya",
@@ -1586,7 +2868,28 @@
           "operation": "decrease",
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
-            "quote": "Physical Resistance"
+            "quote": "Physical Resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1c6dc7e3edfad1d99d1f6857a578d1a5",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]/token[1]",
+                  "content_sha256": "f0c354896cdb270cd0670b2129bc0321e0e17f93f2e25c10d32f973803e5a633"
+                }
+              ],
+              "start_token_offset": 50,
+              "end_token_offset": 69
+            }
           },
           "witness_identity": {
             "entity_name": "Jilya",
@@ -1665,7 +2968,28 @@
           "operation": "decrease",
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
-            "quote": "Magic Resistance -10%"
+            "quote": "Magic Resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ee650c0e360e75c27297492650890aae",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]/token[1]",
+                  "content_sha256": "f0c354896cdb270cd0670b2129bc0321e0e17f93f2e25c10d32f973803e5a633"
+                }
+              ],
+              "start_token_offset": 74,
+              "end_token_offset": 90
+            }
           },
           "witness_identity": {
             "entity_name": "Jilya",
@@ -1731,7 +3055,30 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
-            "quote": "When in Crystalline Stance"
+            "quote": "When in Crystalline Stance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:d270d3f08b2ff863af4fc1d4dfb1e1e0",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]/token[0]",
+                  "content_sha256": "2607deb154056bf0920eb48a987ffcadc0ec288ee76106a3b15c623db9892b7b"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 26
+            }
           },
           "witness_identity": {
             "entity_name": "Jilya",
@@ -1800,7 +3147,30 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
-            "quote": "Charge is 5+"
+            "quote": "Charge is 5+",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:bee0b90f915b9040722b2c76521286d7",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]/token[0]",
+                  "content_sha256": "406f95e809bb68b6c52bfe621b6bcb32cfe703f697ce66abfa7702851c00d4e5"
+                }
+              ],
+              "start_token_offset": 5,
+              "end_token_offset": 17
+            }
           },
           "witness_identity": {
             "entity_name": "Jilya",
@@ -1868,7 +3238,30 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
-            "quote": "Nilya is on the frontline"
+            "quote": "Nilya is on the frontline",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0072ddba5cb92c43df74c7db4e2fb083",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]/token[0]",
+                  "content_sha256": "406f95e809bb68b6c52bfe621b6bcb32cfe703f697ce66abfa7702851c00d4e5"
+                }
+              ],
+              "start_token_offset": 22,
+              "end_token_offset": 47
+            }
           },
           "witness_identity": {
             "entity_name": "Jilya",
@@ -1958,27 +3351,8 @@
       "source_path": "data/raw/sidekicks/jilya.html",
       "source_slice_sha256": "51e9a2b91ec3639762654813dde1b37afba89f6d563325b0ac3f08b6e0768483",
       "source_variant_label": null,
-      "unsupported_mechanics": [
-        {
-          "attached_to_atom_ids": [],
-          "description": "Stack +1 Charge in Crystalline Stance; resource grant is not supported as a canonical capability.",
-          "gap_id": "gap-jilya-charge-grant",
-          "metadata_only": true,
-          "source_anchor": {
-            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
-            "quote": "Stack +1 Charge"
-          }
-        },
-        {
-          "attached_to_atom_ids": [],
-          "description": "At Charge 5+ with Nilya frontline, Lunatic+ can be used again; no exact refresh/re-enable label, do not force activate_lunatic.",
-          "gap_id": "gap-jilya-lunatic-refresh",
-          "metadata_only": true,
-          "source_anchor": {
-            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
-            "quote": "Nilya can use Lunatic+ again"
-          }
-        },
+      "witness_id": "m6-heldout-jilya-invasion-glow",
+      "reviewed_unscored_mechanics": [
         {
           "attached_to_atom_ids": [
             "E2",
@@ -1989,7 +3363,30 @@
           "metadata_only": true,
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[3]",
-            "quote": "Debuff amount increases from stats"
+            "quote": "Debuff amount increases from stats",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:2f188109b9003f409f9d3c6a40b25509",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[3]/token[0]",
+                  "content_sha256": "3e9db92fb5fb4dc55c8f6e789d1d5844474baa5a39e1660fba83638e8668b6f8"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 34
+            }
           }
         },
         {
@@ -2003,11 +3400,181 @@
           "metadata_only": true,
           "source_anchor": {
             "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
-            "quote": "Auto"
+            "quote": "Auto",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a43a05f857fc08f5d90eb5a0b2c43f50",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "reference",
+                  "order": 0,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[0]/token[0]",
+                  "content_sha256": "c65aa0728489a701d08ef26af84a5233c9b9bfdf8568bea0ed33188e9ead4d77"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 4
+            }
           }
         }
       ],
-      "witness_id": "m6-heldout-jilya-invasion-glow"
+      "unsupported_gaps": [
+        {
+          "gap_id": "gap-jilya-lunatic-refresh",
+          "gap_type": "unsupported_effect",
+          "mechanic": "restore_lunatic_activation",
+          "reason": "Lunatic activation refresh has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+            "quote": "Nilya can use Lunatic+ again",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ca593d48603f68fadc74cc9cfe9e9f7f",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]/token[1]",
+                  "content_sha256": "089a45ccafe7e2717b77df38a14f54f116bacc7d74bd9904268da3bb6cc5ab11"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]/token[2]",
+                  "content_sha256": "27a0f60929222b0a52fe0fad731951a6fc631b86af87db89a4644c2c07f91842"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 22
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+            "quote": "Nilya can use Lunatic+ again",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ca593d48603f68fadc74cc9cfe9e9f7f",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]/token[1]",
+                  "content_sha256": "089a45ccafe7e2717b77df38a14f54f116bacc7d74bd9904268da3bb6cc5ab11"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[1]/token[2]",
+                  "content_sha256": "27a0f60929222b0a52fe0fad731951a6fc631b86af87db89a4644c2c07f91842"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 22
+            }
+          },
+          "source_owner_id": "src:ca593d48603f68fadc74cc9cfe9e9f7f",
+          "condition": "When Charge is 5+ and Nilya is on the frontline"
+        },
+        {
+          "gap_id": "gap-jilya-charge-grant",
+          "gap_type": "unsupported_resource_generation",
+          "mechanic": "charge_generation",
+          "reason": "Charge generation has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+            "quote": "Stack +1 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:e692c35e150a693816b9a5c4f29079b2",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]/token[2]",
+                  "content_sha256": "9e6e607ba4c11dd239e5b5fea0072b7507c6985512be94441c70c696cc5ba69a"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]/token[3]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+            "quote": "Stack +1 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:e692c35e150a693816b9a5c4f29079b2",
+              "source_fact_id": "sidekick_skill:7327680902f6d3d4597c",
+              "source_capture_sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+              "block_location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]/token[2]",
+                  "content_sha256": "9e6e607ba4c11dd239e5b5fea0072b7507c6985512be94441c70c696cc5ba69a"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd/grid[0]/block[2]/token[3]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "source_owner_id": "src:e692c35e150a693816b9a5c4f29079b2",
+          "condition": "When in Crystalline Stance"
+        }
+      ]
     },
     {
       "atoms": [
@@ -2076,12 +3643,68 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[0]",
-            "quote": "Shade type magic attack on all enemies"
+            "quote": "Shade type magic attack on all enemies",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:38c401ab0fa1c81f072abe01feb58912",
+              "source_fact_id": "skill:51e029484df8b55b1c92",
+              "source_capture_sha256": "9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2",
+              "block_location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[0]/token[0]",
+                  "content_sha256": "61547da37823e3a3a3f0de7885d4efc65eaff9c8221b1a52ebc033769009a1f0"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 38
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[1]",
-              "quote": "Multiplier increases based on number of stacked Power Levels (Max 800% at 12 stacks)"
+              "quote": "Multiplier increases based on number of stacked Power Levels (Max 800% at 12 stacks)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:36c4be52689ff4edcd7e84e4555926f9",
+                "source_fact_id": "skill:51e029484df8b55b1c92",
+                "source_capture_sha256": "9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2",
+                "block_location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[1]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[0]"
+                ],
+                "token_start": 0,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[1]/token[0]",
+                    "content_sha256": "99b90ea5cc975687a4578dcc67ffeea4643d4f518cc04f3da00697676e0bf501"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 1,
+                    "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[1]/token[1]",
+                    "content_sha256": "c77febf2bd23e710d6ed5a42903051b15fe426370fdca3920cd7a71980aa12f1"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2/grid[6]/block[1]/token[2]",
+                    "content_sha256": "3fc28c2684c2f9300f745effa0cdc16a8ed5a2299c41d4b4c3a6e3a90aa2c7eb"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 13
+              }
             }
           ],
           "witness_identity": {
@@ -2153,8 +3776,9 @@
       "source_path": "data/raw/characters/harle.html",
       "source_slice_sha256": "96cf5a009773705f25fbf8286db31271ad496b691ffce5a24ead9212df9202d8",
       "source_variant_label": null,
-      "unsupported_mechanics": [],
-      "witness_id": "m6-heldout-harle-lunairetic"
+      "witness_id": "m6-heldout-harle-lunairetic",
+      "reviewed_unscored_mechanics": [],
+      "unsupported_gaps": []
     },
     {
       "atoms": [
@@ -2219,12 +3843,68 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
-            "quote": "Crystal type slash attack on a single enemy (XXL)"
+            "quote": "Crystal type slash attack on a single enemy",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b78dd39350d139a0967e89e895f9c36b",
+              "source_fact_id": "skill:6932bc4961a6857153f3",
+              "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+              "block_location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]/token[0]",
+                  "content_sha256": "3e51b0532fd83d50cafda12f53fac538e73c70febf21237de9f4b753b476fbcf"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 43
+            }
           },
           "supporting_source_anchors": [
             {
               "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[1]",
-              "quote": "Increased damage based on user's speed ."
+              "quote": "Increased damage based on user's speed .",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:9575231bb635ea326876f98fb5ce5321",
+                "source_fact_id": "skill:6932bc4961a6857153f3",
+                "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+                "block_location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[1]",
+                "block_kind": "list_item",
+                "ancestry": [
+                  "unordered_list[0]"
+                ],
+                "token_start": 0,
+                "token_end": 2,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 0,
+                    "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[1]/token[0]",
+                    "content_sha256": "7cf1a05681d418da3e01345b7c03cfe72a2cbda2b58be6af7e96cdfd400e4d73"
+                  },
+                  {
+                    "kind": "reference",
+                    "order": 1,
+                    "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[1]/token[1]",
+                    "content_sha256": "d4b9055e07d23ed2abd4d188679409ffd2d467d2935d6a3edf6247ae2a75e73d"
+                  },
+                  {
+                    "kind": "text",
+                    "order": 2,
+                    "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[1]/token[2]",
+                    "content_sha256": "6d457f2c91cf0ee92b8fcc44dad5502bb8d6f573f47592c56533c1ab0d540eef"
+                  }
+                ],
+                "start_token_offset": 0,
+                "end_token_offset": 1
+              }
             }
           ],
           "witness_identity": {
@@ -2298,7 +3978,40 @@
           "operation": "apply",
           "source_anchor": {
             "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
-            "quote": "Elemental Break (Crystal)"
+            "quote": "Inflict 3 stacks of Elemental Break (Crystal)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:50de3c5446772c97682a399686967a7e",
+              "source_fact_id": "skill:6932bc4961a6857153f3",
+              "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+              "block_location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]/token[2]",
+                  "content_sha256": "6be0f2ad5ea5355b1d94b91758f9bcc34f2bd62fe017c94f6ea5e9f2098a6739"
+                },
+                {
+                  "kind": "icon",
+                  "order": 3,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]/token[3]",
+                  "content_sha256": "b734affec7304e23484f0a55cff2282a086124442917c371f8512c3757ff35bb"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]/token[4]",
+                  "content_sha256": "1e3fc85e8cdb93302a3d40698c0b2f1e361efb7d21176ef1d4cad1420b7c5169"
+                }
+              ],
+              "start_token_offset": 4,
+              "end_token_offset": 25
+            }
           },
           "witness_identity": {
             "entity_name": "Melissa",
@@ -2372,7 +4085,42 @@
           "operation": "replace",
           "source_anchor": {
             "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]",
-            "quote": "When used in Stellar Burst: Perform Hornet Hail (Stellar Burst) instead"
+            "quote": "When used in Stellar Burst: Perform Hornet Hail (Stellar Burst) instead",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:01cbb424c90f511a4bfd4d3ae5cc4ef0",
+              "source_fact_id": "skill:6932bc4961a6857153f3",
+              "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+              "block_location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]/token[0]",
+                  "content_sha256": "4b38443e72c23d2af54085465899bc72069ac7d9f99b17d979a7a3e908fd6e3d"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]/token[1]",
+                  "content_sha256": "75fc72d679bc28f661cc7af999e24054037c768609e4f34df32c0fcc668174d8"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]/token[2]",
+                  "content_sha256": "a2f7192767a5de06bf70911c4ad57d4d4825112b32b897121209ae56e492ed04"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
           },
           "witness_identity": {
             "entity_name": "Melissa",
@@ -2438,7 +4186,34 @@
           "operation": "require",
           "source_anchor": {
             "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
-            "quote": "Skill requires Stellar Awakening"
+            "quote": "requires Stellar Awakening",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:e5c1744d0b8a707bf09e41312a40ad6b",
+              "source_fact_id": "skill:6932bc4961a6857153f3",
+              "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+              "block_location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 5,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]/token[5]",
+                  "content_sha256": "8f0a14d8fa4545b55d597cc3c90c702ccd3ef9030b4a4610f90967e123ffec40"
+                },
+                {
+                  "kind": "reference",
+                  "order": 6,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[0]/token[6]",
+                  "content_sha256": "be522da1d99dfa0d834a64bf0f2dd6feec3e75a5d210d90f1b0918a614eb19de"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 17
+            }
           },
           "witness_identity": {
             "entity_name": "Melissa",
@@ -2519,11 +4294,52 @@
           "relation": "parent_child",
           "source_anchor": {
             "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]",
-            "quote": "When used in Stellar Burst: Perform Hornet Hail (Stellar Burst) instead"
+            "quote": "When used in Stellar Burst: Perform Hornet Hail (Stellar Burst) instead",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:01cbb424c90f511a4bfd4d3ae5cc4ef0",
+              "source_fact_id": "skill:6932bc4961a6857153f3",
+              "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+              "block_location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]/token[0]",
+                  "content_sha256": "4b38443e72c23d2af54085465899bc72069ac7d9f99b17d979a7a3e908fd6e3d"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]/token[1]",
+                  "content_sha256": "75fc72d679bc28f661cc7af999e24054037c768609e4f34df32c0fcc668174d8"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d/grid[14]/block[2]/token[2]",
+                  "content_sha256": "a2f7192767a5de06bf70911c4ad57d4d4825112b32b897121209ae56e492ed04"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
           },
           "source_atom_id": "E3",
           "target_name": "Hornet Hail (Stellar Burst)",
-          "trigger": "on_stellar_burst"
+          "trigger": "on_stellar_burst",
+          "targets": [
+            {
+              "fact_id": "skill:106444a0b9cd8608139e",
+              "target_name": "Hornet Hail (Stellar Burst)"
+            }
+          ]
         }
       ],
       "source_capture_sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
@@ -2532,8 +4348,9 @@
       "source_path": "data/raw/characters/melissa.html",
       "source_slice_sha256": "84e3fd7b43f166a451b26ad6d5a3e488e2ad8009f70475e3053f4ad8e983ceda",
       "source_variant_label": "Enhanced",
-      "unsupported_mechanics": [],
-      "witness_id": "m6-heldout-melissa-hornet-hail-enhanced"
+      "witness_id": "m6-heldout-melissa-hornet-hail-enhanced",
+      "reviewed_unscored_mechanics": [],
+      "unsupported_gaps": []
     }
   ]
 }

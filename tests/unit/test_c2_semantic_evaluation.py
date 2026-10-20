@@ -19,6 +19,27 @@ from src.etl.c2_semantic_evaluation import (
 CAPTURE = "a" * 64
 FACT_ID = "skill:synthetic"
 LOCATION = f"sha256:{CAPTURE}/grid[0]/block[0]"
+ANCHOR_IDENTITY = {
+    "schema_version": "source-anchor-1",
+    "anchor_id": "src:synthetic-action",
+    "source_fact_id": FACT_ID,
+    "source_capture_sha256": CAPTURE,
+    "block_location": LOCATION,
+    "block_kind": "root",
+    "ancestry": [],
+    "token_start": 0,
+    "token_end": 0,
+    "token_identities": [
+        {
+            "kind": "text",
+            "order": 0,
+            "location": f"{LOCATION}/token[0]",
+            "content_sha256": "b" * 64,
+        }
+    ],
+    "start_token_offset": 0,
+    "end_token_offset": 11,
+}
 
 
 def _witness() -> dict:
@@ -34,7 +55,11 @@ def _atom(capability: str = "direct_damage") -> dict:
         "occurrence_kind": "effect",
         "atomic_capability_id": capability,
         "operation": "damage",
-        "source_anchor": {"location": LOCATION, "quote": "Deal damage"},
+        "source_anchor": {
+            "location": LOCATION,
+            "quote": "Deal damage",
+            "identity": ANCHOR_IDENTITY,
+        },
         "fields": {
             "recipient": {"status": "adjudicated", "value": "single_enemy"},
             "condition": {"status": "unknown"},
@@ -48,7 +73,11 @@ def _prediction(capability: str = "direct_damage") -> dict:
         "occurrence_kind": "effect",
         "source_fact_id": FACT_ID,
         "source_capture_sha256": CAPTURE,
-        "source_span": {"location": LOCATION, "text": "Deal damage to a single enemy."},
+        "source_span": {
+            "location": LOCATION,
+            "text": "Deal damage to a single enemy.",
+            "source_anchor": ANCHOR_IDENTITY,
+        },
         "source_text": "Deal damage to a single enemy.",
         "operation": "damage",
         "capability_value": capability,
@@ -134,6 +163,19 @@ def test_capture_fact_or_anchor_mismatch_cannot_match():
     )
     assert report["arms"]["structural_only"]["effect_occurrence_precision_recall"]["true_positive_count"] == 0
     assert report["arms"]["structural_only"]["capability_label_precision_recall"]["false_negative_count"] == 1
+
+    wrong = _prediction()
+    wrong["source_span"]["source_anchor"] = {
+        **ANCHOR_IDENTITY,
+        "anchor_id": "src:different-action-in-same-block",
+        "start_token_offset": 12,
+    }
+    report = evaluate_frozen_cohort(
+        {"structural_only": {"fresh-test-only": [wrong]}},
+        _oracle(),
+        [_witness()],
+    )
+    assert report["arms"]["structural_only"]["effect_occurrence_precision_recall"]["true_positive_count"] == 0
 
 
 def test_evaluator_requires_classifier_operation_instead_of_guessing_from_prose():
@@ -244,7 +286,11 @@ def test_report_adapter_attaches_typed_edges_and_reports_orphans():
     occurrence = {
         **_prediction(),
         "occurrence_id": "occ:owner",
-        "source_span": {"location": LOCATION, "text": "Deal damage to a single enemy."},
+        "source_span": {
+            "location": LOCATION,
+            "text": "Deal damage to a single enemy.",
+            "source_anchor": ANCHOR_IDENTITY,
+        },
     }
     relationship = {
         "relationship_id": "rel:attached",
@@ -256,6 +302,7 @@ def test_report_adapter_attaches_typed_edges_and_reports_orphans():
         "condition": "when used",
         "timing": "turn_end",
         "resolution_status": "resolved",
+        "source_anchor": {"identity": ANCHOR_IDENTITY},
     }
     orphan = {**relationship, "relationship_id": "rel:orphan", "source_occurrence_id": "occ:missing"}
     comparison = {
@@ -282,19 +329,48 @@ def test_report_adapter_attaches_typed_edges_and_reports_orphans():
     ]
 
     atom = _atom()
-    atom["fields"]["relationships"] = {"status": "adjudicated", "value": [relationship]}
+    oracle = _oracle(atom)
+    oracle["witnesses"][0]["semantic_relationships"] = [
+        {
+            "source_anchor": {"identity": ANCHOR_IDENTITY},
+            "operation": "activates",
+            "condition": "when used",
+            "timing": "turn_end",
+            "targets": [{"fact_id": "skill:child"}],
+        }
+    ]
     report = evaluate_frozen_cohort(
         adapted["predictions_by_arm"],
-        _oracle(atom),
+        oracle,
         [_witness()],
         unresolved_relationships_by_arm=adapted["unresolved_relationships_by_arm"],
     )
     arm = report["arms"]["structural_only"]
-    assert arm["field_correctness"]["relationships"]["correct_count"] == 1
+    assert arm["relationship_groups"]["exact_correct_groups"] == 1
     assert arm["unresolved_relationship_count"] == 1
     serialized = json.dumps(report, ensure_ascii=False)
     assert "rel:orphan" not in serialized
     assert "fresh-test-only" not in serialized
+
+
+def test_report_adapter_normalizes_historical_gap_flags_at_the_boundary():
+    historical = {
+        **_prediction(),
+        "occurrence_id": "occ:historical-gap",
+        "occurrence_kind": "effect",
+        "capability_value": "",
+        "capability_gap": True,
+    }
+    adapted = adapt_c2_report_to_evaluator(
+        {"arms": {"structural_only": {"occurrences": [historical], "relationships": []}}},
+        [_witness()],
+    )
+
+    row = adapted["predictions_by_arm"]["structural_only"]["fresh-test-only"][0]
+    assert row["occurrence_kind"] == "gap"
+    assert row["gap_reason"] == "historical unsupported capability mapping"
+    assert "capability_gap" not in row
+    assert "dependency_gap" not in row
 
 
 def test_source_span_is_required_even_when_capture_and_fact_match():

@@ -1,0 +1,3 @@
+single_pass_completed classifier_calls=7 adapter_calls=1 evaluator_calls=1
+aggregate_report=artifacts/evidence/feature_c2_final_heldout_report_20261020.json
+report_sha256=adb46228292437d455a69c2f3beb1fe998656b7adaa910b2672121aa2f456715

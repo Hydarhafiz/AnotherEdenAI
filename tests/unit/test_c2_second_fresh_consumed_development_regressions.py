@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+import json
 
 import pytest
 
@@ -25,8 +26,9 @@ def _prediction(details: Mapping, witness_id: str, label: str) -> Mapping:
     oracle = details["oracle"]
     witness = next(row for row in oracle["witnesses"] if row["witness_id"] == witness_id)
     atom = _oracle_atom(oracle, witness_id, label)
-    quote = str(atom["source_anchor"]["quote"]).casefold().rstrip(" .;,:\\")
-    location = atom["source_anchor"]["location"]
+    expected_identity = json.dumps(
+        atom["source_anchor"]["identity"], sort_keys=True, separators=(",", ":")
+    )
     rows = details["predictions_by_arm"]["fidelity_checked"][witness_id]
     matches = [
         row
@@ -35,8 +37,11 @@ def _prediction(details: Mapping, witness_id: str, label: str) -> Mapping:
         and row.get("operation") == atom["operation"]
         and row.get("source_fact_id") == witness["fact_id"]
         and row.get("source_capture_sha256") == witness["source_capture_sha256"]
-        and (row.get("source_span") or {}).get("location") == location
-        and quote in str((row.get("source_span") or {}).get("text") or "").casefold()
+        and json.dumps(
+            (row.get("source_span") or {}).get("source_anchor"),
+            sort_keys=True,
+            separators=(",", ":"),
+        ) == expected_identity
         and _prediction_capability(row) == str(atom["atomic_capability_id"])
     ]
     assert len(matches) == 1, f"{witness_id} {label} did not produce one anchored canonical prediction"
@@ -129,20 +134,35 @@ def test_test2_misses_and_decomposition_failures_are_fixed(evaluation_bundle):
     assert not any(row.get("capability_value") == "deploy_zone" for row in iridian_rows)
     philo_rows = details["classifier_rows"]["fresh2-philo-as-store-power"]
     assert not any(row.get("capability_value") == "direct_damage" for row in philo_rows)
-    assert not any(
-        row.get("semantic_type") == "resource_consumption"
-        for row in iridian_rows
-    )
+    consumption = [
+        row for row in iridian_rows
+        if row.get("semantic_role") == "resource_consumption"
+        and row.get("source_text") == "Consumes 5 Charge"
+    ]
+    assert len(consumption) == 1
+    assert consumption[0]["semantic_type"] == "resource_consumption"
+    assert consumption[0]["dependency_value"] == ""
+    assert consumption[0]["occurrence_kind"] == "gap"
+    assert consumption[0]["gap_reason"]
     charge_damage = _prediction(details, "fresh2-iridian-heal-arcus-irus", "direct_damage")
     assert charge_damage["resource_metadata"] == {"charge_cost": "5"}
 
 
-def test_unlabeled_predictions_are_only_the_six_pinned_unsupported_gaps(evaluation_bundle):
+def test_unlabeled_predictions_follow_explicit_source_gaps(evaluation_bundle):
     report, _details = evaluation_bundle
     classification = report["classification"]
     assert classification["unlabeled_outputs_without_an_explicit_gap_anchor"] == []
-    assert len(classification["explicit_unsupported_gap_outputs"]) == 6
+    explicit_gaps = classification["explicit_unsupported_gap_outputs"]
+    assert len(explicit_gaps) == 9
+    assert sum(row["source_text"] == "Consumes 5 Charge" for row in explicit_gaps) == 1
     assert len(classification["unresolved_relationships"]) == 0
+
+    relationship_metrics = report["metrics"]["relationship_groups"]
+    assert relationship_metrics["expected_groups"] == 7
+    assert relationship_metrics["emitted_groups"] == 7
+    assert relationship_metrics["exact_correct_groups"] == 7
+    assert relationship_metrics["extra_groups"] == 0
+    assert relationship_metrics["unresolved_groups"] == 0
 
 
 def test_philo_state_relationships_keep_their_parent_occurrence_owner(evaluation_bundle):
@@ -164,6 +184,25 @@ def test_philo_state_relationships_keep_their_parent_occurrence_owner(evaluation
     assert len(relationships) == 2
     assert all(row["source_occurrence_id"] in occurrence_ids for row in relationships)
     assert all(row["target_id"] for row in relationships)
+
+    witness = next(
+        row for row in details["oracle"]["witnesses"]
+        if row["witness_id"] == witness_id
+    )
+    state_activation = next(
+        row for row in witness["semantic_relationships"]
+        if row.get("operation") == "activates"
+        and row.get("target_name") == "Storing Power State"
+    )
+    assert state_activation["recipient"] == "user"
+    assert "condition" not in state_activation
+    assert "trigger" not in state_activation
+
+    stack_requirement = next(
+        atom for atom in witness["atoms"]
+        if atom["atomic_capability_id"] == "requires_stack"
+    )
+    assert "less than 3" in stack_requirement["fields"]["condition"]
 
 
 def test_stellar_burst_branch_state_overrides_parent_link_context(evaluation_bundle):

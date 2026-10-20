@@ -32,10 +32,11 @@ reports permutation-only/same-set warnings, identical score vectors, archetype
 labels, and pairwise character-set Jaccard values. A zero-candidate result is a
 valid observation; the implementation does not pad it to a target.
 
-The accepted Feature A baseline records current distributions only. Thresholds
-for Features D-G remain unset until the planned human checkpoint. Generated
-reports under `artifacts/generated/` are local inspection material and are not
-committed.
+The accepted Feature A baseline is the immutable before snapshot. Original
+D-G thresholds were approved after Feature A, then explicitly superseded by
+the owner-approved 2026-10-20 pilot reset. Current gates and scenario seeds
+live in docs/core/milestone.md. Generated reports under `artifacts/generated/`
+are local inspection material and are not committed.
 
 ## 1. Prepare the local services
 
@@ -323,9 +324,11 @@ provider calls remain outside this gate.
 Feature H keeps the boss-specific oracle separate from the unchanged
 nine-character stress suite. The request fixture registers twenty feasible
 cases with six-hero witnesses and ten data-complete infeasible cases with
-deterministic impossibility certificates. The register remains pending until
-those witnesses pass Neo4j-backed replay. Unknown characters and incomplete
-kits are request/data regressions, not strategic infeasibility evidence.
+deterministic impossibility certificates. Historical Neo4j-backed replay is recorded in
+artifacts/evidence/feature_h_h03_neo4j_replay.json. This is legality/coverage
+evidence, not independent proof of all four H2 quality gates or current graph
+freshness. Unknown characters and incomplete kits are request/data regressions,
+not strategic infeasibility evidence.
 
 Run the offline contract checks with:
 
@@ -411,3 +414,51 @@ guaranteed clear, exact win probability, turn-by-turn damage result, or actual
 gameplay success. The generated Markdown and any context sidecar are local or
 generated evaluation material and should not be committed as application
 source.
+
+## 13. Reviewed-Knowledge Pilot Acceptance
+
+The owner-approved 2026-10-20 scope reset stops C2.1 after unsuccessful final
+validation. No new classifier run or original M6 D-G contract is required.
+Preserve the existing deterministic runtime and the four H2 gates above.
+
+Evaluate four separate questions:
+
+- A: Does every credited curated fact have independent reviewed source evidence,
+  exact identity and correct material scope? Unknown, rejected, ambiguous and
+  unclassified never become absence or proof.
+- B: Can the deterministic engine produce at least one four-gate-passing candidate
+  in each of four independently feasible scenarios and honest outcomes for two
+  independently inadequate scenarios? All returned candidates must be legal,
+  package-valid and allocation-valid; repeated inputs reproduce output and all
+  six requests emit funnel/diversity/unknown diagnostics with zero analyzer calls.
+- C: If separately authorized, does the bounded analyzer rank/explain only supplied
+  legal candidates with zero invented IDs or unsupported material claims, at most
+  two calls and one authorized swap, and safe invalid-output fallback?
+- D: Does owner review find the selected recommendations useful against affinity,
+  boss counters, coherence and setup executability? Material UNKNOWN/REVIEW does
+  not count as PASS. Report deterministic-only and analyzer-backed findings apart.
+
+Rotte Rivel and Celestial Mushroom are candidate bosses. Freeze source-derived
+expected outcomes, exact forms/upgrades/SA, Light/Shadow, sidekicks and item
+assumptions before observing engine output. All eight automatic F2P additions
+belong in every effective-roster analysis. Proposed negative-roster seeds are
+not infeasibility certificates; if they are feasible, record it and establish a
+replacement inadequate case. Missing curated proof means insufficient knowledge,
+not demonstrated absence. The twenty-form pool does not constrain legal ownership.
+
+For Rotte Rivel, adjudicate combined element/type affinities and marked-slot
+limitations; do not assume mitigation reduces HP-halving damage. For Celestial
+Mushroom, explicitly test the adverse Pain/Poison resistance/healing interaction,
+Pierce/Blunt resistance, ailment handling and AF stopper. Do not infer generic
+synergy from matching tags. Check conditions/targets, prerequisite providers,
+selected skill families, finite items and frontline/reserve responsibilities.
+
+Existing H witnesses and generated candidate scores cannot author these quality
+oracles. Retain source-backed expectations with active automated coverage; keep
+rendered H2 reports and scratch runs generated/ignored. One credible party is
+sufficient when independently justified; measure alternatives without padding.
+
+Record review minutes/person-hours and corrections, deterministic latency and
+candidate/search counts. Authorized analyzer runs additionally record actual
+usage, tokens, latency, served model and cost. No paid run, live scrape or graph
+mutation is authorized by a planning approval or by these instructions alone.

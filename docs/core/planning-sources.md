@@ -867,6 +867,69 @@ Approved order: freeze evidence/oracle contract → source/ETL/variant correctio
 
 Provenance disposition for this approved planning revision: planning intent revised; historical source captures, runtime, catalog, schema, taxonomy/reviews, provider configuration and production state unchanged. Future source-model, registry or evaluation identity changes belong to their respective completed remediation feature commits. Plan approval authorizes the bounded sequence subject to its entry gates; it does not accept either C1.1/C2 checkpoint or authorize Feature D.
 
+### Milestone 6 Manual Pilot Reset — Approved 2026-10-20
+
+Current authority: the owner's explicit decision to stop C2/C2.1 development,
+supersede the original D-G gates and revise M6 in place around a small manually
+curated recommendation pilot. This supersedes the execution directions in the
+2026-09-15 and 2026-10-04 planning entries above, not their source identities or
+historical findings. It does not mark C2.1 successful or jointly accepted.
+
+- Official source: artifacts/evidence/feature_c2_final_heldout_report_20261020.json,
+  SHA-256 671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54.
+  Effects F1 30.2%, dependencies 0%, combined labels 23.0%, anchors 9/36,
+  conditions 0/18; disposition 3. Metadata/marker record seven classifier calls,
+  one adapter call and one evaluator call. Preservation does not rerun them.
+- Durable custody: feature_c2_final_heldout_retention_20261020.json in the same
+  evidence directory maps the original oracle/snapshot paths to byte-identical
+  promoted copies, selected source captures and prior consumed-test originals.
+  Frozen files retain their original paths/hashes; do not rewrite them to point
+  at promoted files. The index states which historical replay inputs remain local.
+- Exact source preservation: the evaluated uncommitted implementation, scripts,
+  fixtures and tests are committed unchanged as failed-experiment provenance.
+  The revised planning documents intentionally differ from the evaluated tree;
+  the old base/diff identities remain frozen, not a claim about the reset tree.
+- Supported path: capability_taxonomy.py proposals/overrides -> constrained review
+  importer -> capability_reviews.json -> materialize_atomic/models/loader -> typed
+  production retrieval. No production C2 caller was found. Older c2_defensive_setup
+  batches serve this supported path and must not be blanket-retired by name.
+- Candidate boss authority: Feature B matrix plus superboss_manifest.json,
+  src/etl/superboss_corpus/{rotte-rivel,celestial-mushroom}.html and independently
+  curated live_expected.json. All thirty capture hashes matched during discovery.
+  Matrix priorities do not automatically become runtime hard requirements.
+- Rotte Rivel: Fire weakness, listed elemental/type resistance, wind damage,
+  ailments, HP-halving and delayed marked-slot attacks. Preserve marked-slot
+  uncertainty; independently adjudicate combined affinities and counter scope.
+- Celestial Mushroom: Pierce/Blunt resistance, ailments/stat debuffs and AF stopper.
+  Pain/Poison on the boss increases resistance and triggers cleansing/healing;
+  generic Pain/Poison enablement must not become an unexamined positive synergy.
+- Candidate forms: twenty normal forms named in milestone.md, including all eight
+  runtime F2P additions. Complete receipts and raw source revisions matched during
+  discovery. This proves available sources/legal kits, not capability correctness,
+  upgrade ownership, suitable parties or inadequacy of the proposed negative rosters.
+- Manual-curation boundary: existing proposals and exact-fact overrides can use
+  current review tooling without C2. Arbitrary new rows cannot be imported. Some
+  material conditions/ownership relations exceed the current fields; notes do not
+  enforce them. Prefer simpler evidence or withhold credit before extending a shared
+  contract. Independent source-only fixtures remain reusable automation benchmarks.
+- Runtime questions for evaluation: role scoring largely consumes capability labels;
+  primary affinity uses element; setup mappings are limited; source scope/target and
+  boss-specific harmful interactions need independent checks. These are inspection
+  findings, not a claim that a measured pilot defect has already occurred.
+- Existing H feasible witnesses certify legal coverage/allocation, not all H2 quality
+  gates. Pilot expectations must be independently source-justified before evaluating
+  outputs. Treat missing proof as knowledge insufficiency; account for F2P before
+  asserting roster infeasibility. Preserve the four H2 gates and honest uncertainty.
+- Reconsider automation only after a trustworthy manual recommendation baseline and
+  measured curation effort/recurring omissions justify it. No new classifier cohort,
+  multi-agent extraction, runtime semantics or broad scoring redesign is admitted.
+
+Provenance dispositions: planning intent revised; C2 experiment retired from active
+development; historical source/result identities unchanged; materialization, taxonomy,
+reviews, legal catalog, schema, runtime/provider configuration and graph state unchanged
+by this feature. Evaluated source is preserved, not promoted to semantic authority.
+M7 frontend and M8 deployment/safeguards/provider qualification remain later obligations.
+
 ## Source Quality Notes
 
 ### Milestone 5 Closure And Milestone 6 Admission — 2026-09-14

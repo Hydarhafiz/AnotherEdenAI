@@ -1,606 +1,174 @@
-# AnotherEdenAI Milestone 6 Plan
+# AnotherEdenAI Milestone 6: Reviewed-Knowledge Recommendation Pilot
 
-## Executive Summary
+## Objective And Approval
 
-Status: Active as of 2026-09-14. Milestone 5 is closed through an approved scope correction that preserves its completed architecture and evaluation evidence while explicitly reassigning its uncompleted paid-provider and portfolio-safeguard work.
+Status: Active; architecture reset approved by the owner on 2026-10-20.
 
-Milestone 6 expands recommendation-ready, high-value strategic evidence across all 367 canonical character forms/styles and improves meaningful candidate diversity. It does not attempt to model every mechanic, prove a globally optimal team, predict a clear, or replace conservative evidence review with inference.
+Prove that the existing recommendation engine can construct and explain useful, boss-aware, legal teams when supplied with trustworthy manually curated game knowledge. Revise M6 in place; do not introduce a recovery milestone or another classifier loop.
 
-The product claim is:
+The product claim remains legal, roster-constrained, evidence-backed candidates that are strategically plausible according to modeled facts. It excludes guaranteed clears, global optimality, exact battle simulation and numeric win probabilities. A pilot demonstrates a bounded recommendation baseline, not full-catalog strategic coverage or measured gameplay success.
 
-> AnotherEdenAI generates legal, boss-aware, evidence-backed lineup candidates from the player's available roster and explains why they are strategically plausible.
+The owner stopped development of C2/C2.1 after its final frozen validation failed. No Test #5, rule-repair cycle, replacement extraction architecture or original Feature D execution is authorized. Paid models, live scraping, graph mutations, deployment and publication require separate authorization. P1 is the completed scope-reset/preservation feature; P2 is the next separately admitted feature.
 
-Candidates remain bounded, auditable recommendations. They are not guaranteed clears, exact simulations, globally optimal parties, or numeric win probabilities.
+## Repository State And Failed Experiment
 
-## Current Milestone 6 State
+- Features A-C and C1 remain completed foundations. C1 proves structure preservation; Feature C proves extraction attempts, not accepted semantic accuracy.
+- C1.1 technical source-fidelity implementation/replay is preserved. Joint C1.1/C2 acceptance was never achieved and is not required to admit the replacement manual-curation pilot.
+- C2/C2.1 semantic generalization failed; C2.1 is unsuccessful and stopped, not completed against its original criteria. Its source remains temporarily present for historical preservation and is not a supported production classifier.
+- Production capability authority remains the reviewed taxonomy/override pipeline through models and loader. C2 predictions do not grant proof.
+- Earlier protected, R5 and Fresh Tests #1/#2/#3 are consumed historical/development evidence. The 2026-10-20 final cohort is exhausted for validation; it must never become fresh evidence again.
 
-- Features A-C and C1 are complete; their accepted contracts and evidence remain historical foundations.
-- C1.1 technical source-fidelity implementation and automatic replay are complete. Joint C1.1/C2 human acceptance remains pending because C2 semantic generalization has not passed.
-- C2's classifier, shared adapter and semantic evaluator are implemented. Historical contract alignment and development recovery remain useful evidence, but Fresh Test #3 exposed a shared occurrence-generation/source-context architecture defect.
-- Fresh Tests #1, #2 and #3 are consumed development/regression evidence and permanently ineligible for final validation. Test #1 and Test #2 have source-pinned repository regression oracles; Test #3's official failed result, cohort and frozen artifact identities are recorded under Feature C2. Its separately traceable regression derivative is required during C2.1.
-- Every earlier protected, held-out, or R5 cohort and every development witness used for review or tuning is consumed and ineligible for final validation.
-- Feature C2.1 is active/planned for execution: the owner-approved bounded role-first occurrence and ownership refactor. Its four-set replay and invariant gate must pass before one genuinely unseen final validation.
-- Feature D remains blocked until final validation supports explicit joint C1.1/C2 owner acceptance and that acceptance is recorded.
+Official final report: artifacts/evidence/feature_c2_final_heldout_report_20261020.json.
 
-## Completed Recovery
+SHA-256: 671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54.
 
-This is historical evidence and does not define additional execution phases:
+| Measure | Frozen result |
+| --- | --- |
+| Supported effects F1 | 30.2% |
+| Dependencies F1 | 0% |
+| Combined canonical labels F1 | 23.0% |
+| Exact source anchors | 9/36 |
+| Material conditions | 0/18 |
+| Unsupported gaps | 3 matched; 10 unmatched |
+| Disposition | 3: stop for owner architecture/scope decision |
 
-- The classifier, shared adapter, and evaluator contracts were aligned (`70fea2b`).
-- Seven reviewed development witnesses were evaluated through the real semantic path (`84e2a40`).
-- Recurring classifier errors were repaired using development evidence only (`ad2d46b`).
-- The Tetra development oracle was reconciled with reviewed evidence (`3af367f`).
-- Supported development labels scored 21/21 at that historical snapshot.
+The run records seven classifier calls, one shared-adapter call and one evaluator call. Preservation checks never rerun that experiment. The retention index maps frozen paths to durable copies without rewriting frozen inputs/results. Committing the evaluated source records a failed experiment; it does not accept its semantics or authorize materialization.
 
-Fresh Test #3 supersedes the previous readiness conclusion, while preserving these completed results. C2.1 addresses the demonstrated occurrence/ownership weakness within Milestone 6; no additional R-numbered phase is planned.
+## Superseded And Preserved Contracts
 
-## Remaining Work
+The 2026-10-20 owner decision explicitly supersedes the original C2.1 continuation/fresh-validation/joint-acceptance sequence and original D-G acceptance obligations. They were not passed and are not silently relaxed. The prior full plan remains in Git history; the exact pre-reset tracked-diff digest remains frozen evaluation provenance.
 
-1. Execute Feature C2.1 through `builder-executor -> tdd-loop`: establish semantic roles and action/branch ownership before taxonomy mapping, add reusable invariants, and promote Test #3 to a source-pinned consumed regression derivative. Preserve its frozen oracle/report unchanged; record the subsequent Felmina multi-hit correction only in the derivative.
-2. Replay original development evidence and consumed Fresh Tests #1, #2 and #3 through the same `classifier → shared adapter → semantic evaluator` path. Pass every C2.1 readiness criterion below before selecting new fresh evidence. Complete C2.1 in one feature commit containing implementation, durable regressions/evidence, necessary documentation and the milestone update.
-3. After readiness passes, select one genuinely unseen final validation cohort of seven witnesses using metadata and freshness checks only. Exclude every exact fact identity or source slice previously reviewed, tuned, protected or evaluated, including all three consumed fresh cohorts.
-4. Give the evaluation owner source-only evidence. Independently adjudicate effects, dependencies, canonical labels, fields and relationship semantics; preserve unsupported gaps and freeze the oracle before classification.
-5. Run the `classifier → shared adapter → semantic evaluator` path once. Do not tune against this final cohort or introduce held-out-only behavior.
-6. If milestone acceptance criteria pass, request explicit joint C1.1/C2 owner acceptance: supported labels are generally correct, unsupported mechanics fail closed, and no recurring decomposition/false-positive family, systematic field/relationship failure or new systematic failure class remains. Isolated edge cases may be judged proportionately against the Milestone 6 MVP goal. Do not claim measured review-time reduction without independent timing evidence.
-7. If final validation exposes another broad/systematic architecture failure, stop and return to an explicit owner architecture decision. Do not automatically begin another consume/patch/fresh-test loop. Begin Feature D only after explicit joint acceptance is recorded.
+| Prior obligation | Approved disposition |
+| --- | --- |
+| D: 367 extraction attempts; proof floors of 96 damage, 48 enablement, 24 zone, 48 mitigation, 24 recovery, 24 status, 24 AF, 24 Pain/Poison and 48 boss-counter identities; eight providers per applicable element/type | Superseded as current completion gates. Historical attempt evidence remains valid; broader proof expansion follows a successful pilot and a new scope decision. |
+| E: complete funnel/diversity/unknown accounting | Preserve the behavior and apply the measurable 100% reporting gate to pilot requests. |
+| F: eight alternative-rich cases, each with six candidates, three character sets, three frontlines, two archetypes and maximum Jaccard 0.714 | Superseded. Measure real alternatives; do not fabricate parties or impose counts unsupported by the roster. |
+| G: 20 feasible, 10 certified-infeasible and eight alternative-rich cases | Superseded by the independently adjudicated pilot scenarios below. Existing H cases remain regressions and historical legality/coverage evidence. |
+| 367 complete legal kits; thirty-boss corpus; conservative proof; bounded runtime and H2 framework | Preserve. A curated subset is neither a supported-character allowlist nor a replacement ownership catalog. |
 
-## Milestone 5 Transition
+Milestone 5 remains closed under its approved scope correction. M7 owns frontend portfolio presentation. M8 owns deployment, registration/accounting, quotas, spend ceiling, kill switch and release-provider qualification. M6 does not discharge these later obligations.
 
-Milestone 5 established the production-safe recommendation boundary: deterministic backend code owns typed legal retrieval, legal-kit materialization, capability-grounded scoring, packages, bounded search, finite allocation, validation, fallback, and cost control; the analyzer may only rank, refine, and explain supplied legal candidates within closed-world constraints.
+## Architecture And Manual Curation
 
-The completed Milestone 5 plan remains recoverable in Git through its final Feature H2 commit. Its concise closure record and explicit scope dispositions live in `docs/core/roadmap.md`, `docs/core/planning-sources.md`, and `CHANGELOG.md`. Ordinary historical Feature A-H identifiers in architecture, schema, tests, guides, sources, and commits remain accurate and are not renumbered.
+Offline flow: pinned source captures -> C1/C1.1 source facts and references -> reviewed manual proposals/overrides -> validated repository artifacts -> existing model/Neo4j materialization.
 
-Milestone 5 did not complete its former Feature I or the former paid OpenRouter H-04/H-05/H-07 multi-model and ordered-fallback gates. On 2026-09-14 the owner approved closing M5 by superseding those exit obligations rather than marking them passed:
+Runtime flow: user roster plus boss -> deterministic typed retrieval/scoring/packages/candidate generation -> legality and feasibility validation -> bounded LLM ranking/explanation -> final deterministic validation. Preserve exploratory GraphRAG as a separate mode.
 
-- high-value capability and untagged-evidence diagnostics move into Milestone 6;
-- frontend presentation work moves to Milestone 7;
-- registration, quota, global-spend safeguards, kill-switch behavior, and release-time paid-provider qualification move to Milestone 8; and
-- guide maintenance remains an acceptance responsibility of every feature that changes the relevant behavior.
+Use the existing taxonomy, review CSV/reference importer, exact-fact overrides, review artifact, gold/negative fixtures and loader. The importer accepts only proposals reproducible from rules or overrides; it does not accept arbitrary new semantic rows. Missing pilot facts should use narrowly authored exact-fact overrides, followed by ordinary review. Do not create a new database, application, ETL framework or graph schema by default.
 
-No production behavior, provider configuration, graph data, schema version, or paid-service state changed during this planning transition.
+Every credited fact must retain stable source fact ID, exact source reference/quote and capture identity, capability or dependency, direction/target, material magnitude/duration/timing, activation/ownership conditions, review decision and provenance. Reuse existing structural anchors and authoritative fixture formats for source-only expected answers. Keep unsupported/unresolved mechanics explicit and separate from runtime proof.
 
-## Purpose And Intended Outcome
+Existing fields cannot express every material branch or arbitrary condition. Reviewer notes are not executable constraints. Prefer simpler independently usable facts, withhold branch credit when material prerequisites cannot be represented/verified, and admit a narrow extension only after demonstrating necessity. Do not erase a condition to fit a schema.
 
-Milestone 6 keeps every data-complete canonical form/style legally selectable when present in the effective user roster while attempting high-value capability extraction across the entire catalog. It should give deterministic search enough proven evidence to produce strong, plausible, auditable, and meaningfully different boss-specific candidates when the roster genuinely supports alternatives.
+Only reviewed approve/correct evidence grants capability credit. Legal untagged skills may fill packages at zero credit. Unknown, ambiguous, rejected and unclassified never become proven absence. Missing relationships, zero scores and failed rule matches do not prove absence. Independently authored pilot expected answers must not be derived from classifier predictions or recommendation output.
 
-The milestone works from boss requirements toward character evidence:
+## Pilot Scope And Authority
 
-```text
-curated boss mechanics
-    -> required and high-value counters
-    -> prioritized capability families
-    -> full-catalog extraction attempts
-    -> proven / ambiguous / unknown evidence
-    -> boss-specific legal filtering and scoring
-    -> diverse legal lineup candidates
-```
+Candidate bosses are Rotte Rivel and Celestial Mushroom, grounded in the existing Feature B matrix, manifest, bounded captures and independent boss fixtures. Retain the entire thirty-boss corpus.
 
-The objective is sufficient high-value evidence for reliable candidate generation, not exhaustive interpretation of every low-impact buff, stack nuance, passive, multiplier, interaction, or turn-order edge case.
+| Boss | Source-backed purpose | Material uncertainty/negative case |
+| --- | --- | --- |
+| Rotte Rivel | Fire weakness, listed elemental/type resistances, wind damage, ailments, marked-slot delayed attacks and HP-halving pressure | Independently adjudicate combined affinity interpretation. Marked-slot targeting remains a matrix gap; ordinary mitigation is not assumed to reduce HP-halving damage. No exact-turn claim. |
+| Celestial Mushroom | Pierce/Blunt resistance, ailments, PWR/INT debuffs and an AF stopper | Pain/Poison on the boss raises resistance and causes end-of-turn cleansing/healing. Do not assume generic Pain/Poison synergy is helpful. |
 
-## Scope
+Use twenty normal forms as a candidate curation pool:
 
-Milestone 6 includes:
+- Automatic F2P: Aldo, Feinne, Cyrus, Deirdre, Azami, Gariyu, Cerrine, Levia.
+- Offensive comparisons: Shion, Toova, Suzette.
+- Defense: Anabel, Radias, Prai.
+- Support/enablers: Aisha, Rosetta, Mariel, Yuna, Mana, Dunarith.
 
-- an authoritative baseline of catalog, capability, search-funnel, and candidate-diversity coverage;
-- boss-driven prioritization from the existing thirty-boss corpus;
-- deterministic high-value capability proposals attempted across all 367 canonical forms/styles;
-- structural evidence plus bounded combat-reference traversal, followed by an explicit source-semantic fidelity gate;
-- scoped classification and a stratified, independently adjudicated comparison of extraction accuracy and review effort;
-- selective human review of ambiguous, high-impact, recurring, and boss-acceptance-relevant facts;
-- conservative materialization of proven evidence with explicit unknown and ambiguous states;
-- request-time pool and candidate-set diagnostics;
-- evidence-driven candidate-generation improvements after diagnostics establish the failure mode;
-- controlled evaluation rosters that can demonstrate when alternatives do and do not exist; and
-- H2's four human-readable modeled-viability gates as the recommendation-quality framework.
+Their legal-kit receipts are complete and local raw captures match receipt revisions. This establishes available source evidence, not approved capability meanings, ownership of every upgrade, or team feasibility. Curate only relevant source facts, not every skill/passive. Freeze exact forms, SA/manifest/progression assumptions, Light/Shadow, sidekicks and item policy with each scenario. Baseline scenarios need no owned sidekicks unless independently justified.
 
-All 367 canonical forms/styles remain in scope. Milestone 6 must not replace them with a fixed supported subset of 50-100 characters.
-
-## Non-Goals
-
-- Exhaustive manual review of every skill and passive.
-- Full strategic interpretation of every character mechanic.
-- A complete combat ontology or exact turn/damage simulator.
-- Global six-character optimization or proof of the best possible party.
-- Guaranteed victory, clear-rate prediction, or numeric win probability.
-- Complete best-in-slot or player-inventory optimization.
-- Automatic classification of unresolved evidence as absence.
-- Expansion beyond the approved thirty-boss corpus unless separately admitted.
-- More than one backend-authorized analyzer hero swap per lineup.
-- Paid analyzer evaluation before deterministic coverage and diversity gates pass.
-- Production provider, reasoning, token, or fallback configuration changes.
-- Frontend implementation, deployment, authentication, quotas, or public beta work.
-
-## Locked Architecture Boundaries
-
-### Legal-Kit Layer
-
-The legal-kit layer remains complete for the current 367-character canonical catalog. It answers whether the exact form/style exists, which active skill families and passives belong to it, whether Stellar Awakening applies, which upgrade families and dependencies exist, and whether IDs and equipability are valid.
-
-A data-complete legal skill remains selectable even when its strategic capability is untagged. Missing capability proof cannot make a legal character or skill illegal.
-
-### Capability-Proof Layer
-
-The capability-proof layer remains conservative and independently versioned. Only reviewed proven facts may contribute contextual scores, mandatory coverage, dependency satisfaction, or boss-counter evidence.
-
-Coverage accounting may expose these semantic states for a `(character, capability)` question:
-
-- `proven_present`: reviewed evidence establishes the capability;
-- `proven_absent`: authoritative evidence explicitly establishes absence under a defined complete scope;
-- `ambiguous`: relevant evidence exists but does not support a safe conclusion; and
-- `unknown`: extraction was not conclusive or no authoritative proof exists.
-
-`proven_absent` must not be inferred from an untagged fact, a rejected classifier proposal, a missing relationship, zero score, or an unsuccessful rule match. Existing proposal/review states such as candidate, rejected, ambiguous, and untagged retain their current meanings; a rejected proposal disproves that proposal, not necessarily the character-level capability.
-
-No schema-version change is authorized by this plan. If implementation later changes persisted graph or artifact shape, that feature must update `docs/core/SCHEMA.md`, migrations, fixtures, and schema assertions together.
-
-## High-Value Capability Scope
-
-Prioritize facts that can materially change lineup selection.
-
-### Primary Offense
-
-- direct damage and primary damage element/type;
-- weakness exploitation and resistance/type-resistance reduction;
-- damage amplification and offensive stat support;
-- critical and magic-critical support;
-- Pain/Poison enabling, Break, and AF contribution; and
-- major conditional damage dependencies.
-
-### Setup And Strategy
-
-- deploy, awaken, counter, or require zone;
-- require Pain, Poison, Lunatic, or Another Force; and
-- meaningful stance, resource, position, or setup requirements.
-
-### Defense And Sustain
-
-- offensive-stat debuffs and physical/type resistance;
-- damage reduction, barriers, guard, tank, and cover behavior;
-- healing, regeneration, MP sustain, and revival where material; and
-- status cleanse, immunity, resistance, and other counterplay.
-
-### Boss-Specific Utility
-
-- dispel or buff removal and debuff cleanse;
-- zone counterplay and elemental conversion/Kaleido;
-- resistance/weakness manipulation; and
-- other evidence-backed mechanics that materially affect one or more bosses in the approved corpus.
-
-Low-value self-buffs, exact multiplier interactions, niche stack behavior, and turn-order details may remain unknown unless evaluation shows that they materially affect candidate quality.
-
-## Boss-Driven Prioritization
-
-The committed thirty-boss corpus is the initial evaluation and priority authority. Work begins with each boss's important threats and requirements, maps them to counter capabilities, then identifies catalog facts that can prove those capabilities. Taxonomy breadth is not an end in itself.
-
-The priority matrix must distinguish:
-
-- required counters whose absence invalidates a candidate;
-- high-value counters that materially improve modeled viability;
-- contextual advantages that affect ranking but are not mandatory; and
-- mechanics that current evidence cannot safely model.
-
-An obscure mechanic may remain deferred when it affects no approved acceptance case and does not represent a recurring high-impact gap.
-
-## Human Review Policy
-
-Milestone 6 reuses the existing taxonomy, deterministic proposal, constrained review, negative-fixture, override, provenance, and replay pipeline:
-
-```text
-parsed skill/passive facts
-    -> deterministic proposal
-    -> high-confidence handling permitted by existing policy
-       or constrained proposal queue
-    -> ambiguous/high-impact review
-    -> approve / correct / reject / ambiguous
-    -> replay and regression verification
-```
-
-Manual attention is limited to ambiguous high-value facts, strategically important exceptions, rule-quality sampling, boss-acceptance facts, and recurring unclassified patterns worth encoding. The owner is not required to inspect thousands of low-value facts or every skill/passive across all 367 forms/styles.
-
-## Coverage Accounting
-
-Feature A must establish exact names and current distributions before numeric milestone thresholds are approved. At minimum the offline catalog report covers:
-
-```text
-catalog_characters
-legal_kit_complete
-high_value_capability_attempted
-characters_with_proven_primary_damage
-characters_with_offensive_enablement
-characters_with_zone_setup
-characters_with_mitigation
-characters_with_recovery
-characters_with_status_counterplay
-characters_with_af_support
-characters_with_pain_poison_setup
-characters_with_boss_counter_evidence
-facts_proven
-facts_unknown
-facts_ambiguous
-facts_rejected
-```
-
-Request-time reporting covers distinct stages rather than conflating catalog size with candidate count:
-
-```text
-user_roster_count
-f2p_augmented_count
-distinct_available_count
-data_complete_count
-boss_eligible_count
-role_pool_union_count
-candidate_count
-unique_character_set_count
-unique_frontline_set_count
-unique_archetype_count
-```
-
-Names may follow established repository conventions, but every metric requires a precise definition, source, denominator, and unknown-data policy.
-
-## Candidate Diversity Contract
-
-Diversity must be meaningful rather than cosmetic. When the effective roster and boss constraints support alternatives, returned candidates should not be permutations of the same six characters, opaque IDs over identical score vectors, or the same team relabeled burst/hybrid/sustain.
-
-Diagnostics should include where practical:
-
-- unique six-character sets;
-- unique frontline sets;
-- unique archetypes with evidence of actual strategic differentiation;
-- permutation-only warnings;
-- identical score-vector warnings; and
-- candidate-set overlap or Jaccard similarity.
-
-The system must not manufacture weaker or incoherent alternatives merely to meet a count. One candidate is acceptable when evidence demonstrates that only one strategically valid team exists. Candidate-generation or scoring changes begin only after the baseline and diagnostics identify the responsible stage.
-
-## Recommendation-Quality Gates
-
-Milestone 6 retains the H2 four-gate framework:
-
-1. **Damage affinity and elemental viability:** primary damage is neutral-or-better, weakness is positive, resistance is penalized, null/absorb is rejected, and explicit boss affinity overrides generic assumptions.
-2. **Boss-mechanic counter coverage:** the lineup has evidence-backed answers to required important threats.
-3. **Team synergy and role coherence:** the lineup has an identifiable win condition; enablers support it; defense and reserves have a purpose; and zone/element/type choices cohere.
-4. **Setup executability:** required zone, Pain, Poison, Lunatic, AF, stance, or analogous dependencies have a provider or valid system action.
-
-There is no fifth guaranteed-clear gate. Allowed conclusions include `high modeled viability`, `well-matched according to modeled evidence`, `plausible boss-aware candidate`, and `strong evidence-backed recommendation`.
-
-## Cost, Analyzer, And Swap Policy
-
-- Deterministic coverage and diversity gates run before any paid analyzer evaluation.
-- DeepSeek `reasoning=none` with a 4,000-token output cap remains the provisional initial evaluation baseline from H1; it is not a production-setting change or a strategic-quality oracle.
-- Paid evaluation requires separate human authorization and is not automatically required to complete Milestone 6.
-- Release-time multi-model and ordered-fallback qualification belongs to Milestone 8.
-- The analyzer remains limited to one initial call plus at most one fragment-only correction.
-- Each lineup remains limited to at most one backend-authorized hero swap.
-- Whether two authorized swaps add value is an evidence-driven future question after Milestone 6 evaluation. Three or four swaps remain out of scope.
-
-## Dependencies
-
-- Completed Milestone 5 deterministic retrieval, legal-kit, capability, package, search, validation, fallback, and evaluation contracts.
-- The authoritative 367-character kit catalog and complete legal-kit receipts.
-- The committed thirty-boss manifest, source captures, parsed replay, and H acceptance fixtures.
-- Existing taxonomy, reviews, gold and negative fixtures, curated overrides, provenance, and replay verification.
-- H1/H2 evaluation tooling and four-gate review language.
-
-## Feature Plan
-
-Features A through C2 below retain accepted contracts and historical evidence; C1.1/C2 joint acceptance remains pending. C2.1 is the current executable feature. Feature D follows C2.1 readiness, one final fresh validation and explicit joint C1.1/C2 acceptance.
-
-### Feature A: Coverage Baseline And Metric Contract
-
-Status: Completed on 2026-09-14; stopped at the planned threshold-setting human checkpoint.
-
-Type and route: `build` via `builder-executor -> tdd-loop`, with a read-only authority audit if metric sources or state mappings are disputed.
-
-Outcome: Produce reproducible offline catalog and request-time coverage reports with explicit denominators and semantic-state handling.
-
-Acceptance:
-
-- **A-01:** The report reconciles exactly 367 canonical catalog identities with 367 complete legal-kit receipts or fails visibly on drift.
-- **A-02:** Every required catalog and request-time metric has a deterministic definition, source, denominator, and unknown-data policy.
-- **A-03:** `unknown`, `ambiguous`, rejected proposals, untagged facts, and proven absence are not collapsed.
-- **A-04:** Current high-value coverage distributions are recorded without inventing a target threshold.
-- **A-05:** Temporary generated reports remain ignored; only reusable tooling, authoritative fixtures, and a concise accepted baseline are retained.
-
-Completion evidence:
-
-- Offline reporting reconciles 367 distinct canonical identities with 367 recomputed complete legal-kit receipts and fails closed on count, identity, duplicate, malformed-record, or receipt drift.
-- The versioned metric contract defines the source, denominator, and unknown-data policy for every catalog and request-time metric. Request diagnostics keep roster, newly added F2P identities, distinct availability, legal-package readiness, boss eligibility, role pools, candidate count, set diversity, archetypes, overlap, and unavailable observations separate.
-- The accepted threshold-free baseline is `artifacts/evidence/feature_a_coverage_baseline.json`: 329/367 identities currently receive a high-value proposal attempt, while reviewed proof covers 10 primary-damage, 21 offensive-enablement, 12 zone, 16 mitigation, 7 recovery, 6 status-counterplay, 6 AF-support, 4 Pain/Poison, and 18 generic boss-counter identities.
-- Proposal-state accounting records 148 proven, 5,103 unknown, 0 ambiguous, and 22 rejected atomic proposal instances alongside 2,208 separately untagged source facts and 0 explicitly proven absences. No unresolved or rejected state becomes character-level absence.
-- Generated reports remain ignored under `artifacts/generated/`; no candidate scoring/search, supported-character subset, persisted schema, paid-provider behavior, production configuration, or Neo4j state changed.
-
-Human checkpoint decision (approved 2026-09-14): the accepted Feature A artifact is the immutable before/baseline snapshot for Milestone 6, not the expected final distribution. Features C/D are expected to increase proven strategic coverage while preserving 367/367 legal-kit completeness and every evidence-state distinction. The initial D-G contract is:
-
-- **D:** preserve 367/367 legal-kit completeness and attempt extraction for 367/367; prove at least 96 primary-damage, 48 offensive-enablement, 24 zone, 48 mitigation, 24 recovery, 24 status-counterplay, 24 AF-support, 24 Pain/Poison, and 48 boss-counter identities; prove at least 8 providers in every applicable element/type stratum; permit zero semantic-state collapses.
-- **E:** 100% of measured requests emit the required funnel, diversity, denominator, and unknown-data diagnostics; identical inputs are deterministic; zero unavailable observations are silently treated as known.
-- **F:** at least 8 independently established alternative-rich cases each retain at least 6 candidates, 3 unique six-character sets, 3 unique frontlines, and 2 materially differentiated archetypes, with maximum pairwise Jaccard similarity 0.714 and zero permutation-only sets, identical component vectors, or false archetype labels. Any constrained-case exemption needs evidence.
-- **G:** 20/20 feasible cases produce at least one candidate passing all four H2 gates, 10/10 certified infeasible cases correctly produce zero, and 8/8 alternative-rich cases meet F, with zero illegal or unsupported output.
-
-Feature B may recommend a numeric adjustment only when the committed boss corpus materially proves that a floor is too high, too low, or aimed at the wrong distribution. Any adjustment must be explicitly justified and documented before D; implementation difficulty is never grounds for relaxation. Unknown and untagged counts need not reach zero.
-
-### Feature B: Boss-To-Capability Priority Matrix
-
-Status: Completed on 2026-09-14.
-
-Type and route: `research` via `contract-auditor -> feature-planner`.
-
-Outcome: Map the approved thirty-boss mechanics to required, high-value, contextual, and unresolved counters, then rank capability families by boss impact and current catalog gaps.
-
-Acceptance:
-
-- **B-01:** Every priority traces to committed boss evidence and a defined capability or explicit gap.
-- **B-02:** Required counters are separated from ranking-only advantages.
-- **B-03:** Unknown boss mechanics remain unresolved rather than becoming inferred requirements.
-- **B-04:** The resulting bounded priority matrix drives Feature C; it is not an exhaustive game-mechanics ontology.
-
-Completion evidence:
-
-- `artifacts/evidence/feature_b_boss_capability_priority_matrix.json` maps exactly 30 manifest identities in three 10-boss cohorts to checksum-resolved bounded sections and separates required, high-value, contextual, and unresolved classifications.
-- Required counters are limited to explicit hard gates: affinity-safe damage affects all 30; seven bosses require multiple damage modes, seven impose prohibited-action/affinity constraints, six require multi-entity handling, four impose burst deadlines, and three impose hit/action thresholds.
-- Ranking priorities are led by status counterplay (25 bosses), mitigation (15 high-value plus 3 contextual), reset resilience (14), fixed/percent-HP response (13 high-value plus 1 contextual), resistance manipulation (10 high-value plus 8 contextual), and enemy-buff control (10). These counts are boss-impact signals, not success probabilities or target coverage counts.
-- Eight bosses retain unknown affinity profiles, and bounded source limitations or complex mechanics remain named unresolved gaps. Feature H fixtures are feasibility context only and do not create mechanic authority.
-- Feature C receives three bounded priority bands tied to existing atomic capability IDs or explicit gaps. No runtime scoring/search, taxonomy, persisted shape, legal-kit receipt, provider, production configuration, or Neo4j state changed.
-- The thirty-boss evidence materially changes extraction order but does not prove a defensible replacement for an approved identity-count floor. The initial D-G numeric contract therefore remains unchanged; AF and Pain/Poison retain deliberately low strategic-breadth floors without becoming boss-mandatory.
-
-### Feature C: Full-Catalog High-Value Extraction
-
-Status: Completed on 2026-09-14. Its accepted extraction baseline is preserved; the approved 2026-09-15 revisions insert C1/C1.1/C2 before the Feature D review handoff.
-
-Type and route: `build` via `builder-executor -> tdd-loop`.
-
-Outcome: Extend deterministic taxonomy/rules and proposal generation for the highest-value gaps, attempt extraction across all 367 forms/styles, and create bounded review queues.
-
-Acceptance:
-
-- **C-01:** Every canonical form/style receives an extraction attempt against the approved high-value family set.
-- **C-02:** New rules have source-backed positive, misleading-negative, and regression evidence.
-- **C-03:** Ambiguous and high-impact facts enter constrained review; low-value facts need not be manually reviewed.
-- **C-04:** Existing reviews, negative fixtures, overrides, provenance, and replay determinism remain intact.
-- **C-05:** No generated proposal becomes scoring or mandatory-coverage authority without the existing approved review path.
-
-Completion evidence:
-
-- `src/etl/capability_taxonomy.json` is versioned at 3.2.0 with 72 deterministic rules and 79 capability values. It retains the original 25 active Milestone 5 offensive families and adds 17 source-backed Feature C rules covering typed/scoped damage, multi-entity and multi-hit actions, enemy buff removal, resistance/stat directions, zone removal, fixed-damage response, burst windows, repeatable setup, and party status/speed support.
-- `artifacts/evidence/feature_c_high_value_extraction.json` attempts the approved priority set across all 367 canonical identities and records 367/367 complete legal-kit receipts. The run covers 5,036 skill/passive facts and produces 8,341 high-value proposal instances: 68 proven from previously reviewed evidence, 8,267 unknown, 6 rejected, 0 ambiguous, 0 proven absent, and 0 untagged within the proposal set; 1,016 source facts remain separately untagged.
-- All 17 new rules have durable source-backed positive, misleading-negative, and regression fixtures: 51 checks against stable catalog fact IDs and canonical source URLs. The report identifies all 17 new rule families as source-provable extraction coverage, while reviewed proof for those new rules remains empty by design until Feature D.
-- P0/P1/P2 ordering comes directly from the accepted Feature B matrix. High-impact, explicit-ambiguous, recurring, and boss-acceptance-relevant queues are deterministic and capped at 45 rows each; no low-value exhaustive manual queue is created.
-- Existing review decisions (323 IDs), gold/negative fixtures (12 IDs), taxonomy overrides (9), the immutable Feature A baseline fingerprint and metrics, proposal IDs, direction/target/availability/qualifier fields, and replay digest are preserved. A second identical pass produces the same proposal digest.
-- Generated proposals are marked non-authoritative. No scoring, mandatory coverage, retrieval, search, packaging/allocation, persisted schema, provider/live refresh, production configuration, Neo4j state, or supported-character subset changed. Feature D must perform the bounded human review and normal approve/correct/reject/ambiguous materialization path.
-
-### Feature C1: Structural Evidence And Bounded References
-
-Status: Completed on 2026-09-15.
-
-Type and route: `build` via `builder-executor -> tdd-loop`; refine the contained parser and traversal contract with `feature-planner` before execution.
-
-Outcome: Preserve the combat-bearing source arrangement and relevant definition links in a separately versioned structural sidecar bound to existing source-fact IDs and pinned captures.
-
-Scope: Character active/passive/SA and sidekick auto/charge/aura adapters share a small ordered block/token representation. Preserve section/tab context, list ancestry, table cells, meaningful line boundaries, inline links and icon identity. Definitions, conditions, results and exceptions are interpretations of source structure, not automatic meanings of HTML nesting. Include bounded mechanics-child resolution and small boss/equipment generalization fixtures.
-
-Non-goals: Broad semantic classification, automatic approval, graph migration, full equipment/badge ingestion, new supported bosses, exhaustive ontology, formula execution, paid providers, frontend or production mutation.
-
-Entry gate: Use the accepted C catalog and A/B/C evidence; reconcile source captures to catalog provenance and inventory relevant link topology before choosing traversal limits.
-
-Acceptance:
-
-- **C1-01:** Structural blocks and inline references retain order, parent context and traceable locations in checksum-identified sources. Unsupported/malformed structures produce explicit diagnostics; simple kits do not require artificial semantic nesting.
-- **C1-02:** Sidecar bindings preserve existing fact and family identities, legacy descriptions, legal-kit output and 367/367 completeness. Structural coverage reports denominators and unresolved mappings by source kind; failed mappings never become absence.
-- **C1-03:** Combat-bearing child references are retained and either resolved to captured definitions or explicitly unresolved. Canonical page deduplication preserves fragments and occurrence context; destination classification uses source content rather than URL spelling alone.
-- **C1-04:** Traversal starts from admitted combat fields and follows only definition/restriction dependencies needed for interpretation. A deterministic frontier, visited set and explicit page/depth budgets bound work; exclusion, access failure and budget exhaustion are distinguishable. Audit actual topology before selecting numeric limits. Lore, galleries, acquisition walkthroughs and unrelated entity lists do not expand the frontier.
-- **C1-05:** Fixtures cover Darunis/Denny, Iphi, Alma AS, Anabel ES, Shigure ES, Tetra AS and Kumos AS; named resource and Lunatic-family definitions require captured evidence. Existing manifest bosses and cached equipment/Grasta rows test shared structural handling. An-ki Dingir and Edaxian Zennon are supplemental witnesses only, pending capture, and do not enter the thirty-boss corpus.
-- **C1-06:** Preserve entity ownership versus mechanic definitions, role/index discovery and strategy authority boundaries. Keep reusable authoritative fixtures and source identities; ignore generated sidecars and crawl/comparison output. No generated definition becomes capability authority.
-
-Exit and human checkpoints: Traceable structural output, legacy-equivalence evidence and a documented traversal boundary are required before C1.1. Ask only for a material source conflict, a required definition that cannot be established, or a reopened architecture boundary. Unresolved lower-value links may remain explicit. One completed-feature commit contains durable implementation, fixtures and necessary documentation.
-
-Completion evidence:
-
-- The versioned `m6-c1-1.0.0` offline sidecar preserves ordered root/list/table blocks, ancestry, sections, line breaks, inline references, fragments, icon identities and checksum-qualified locations without assigning semantic meaning to nesting.
-- The accepted 367-capture replay reconciles 367/367 complete legal-kit receipts and binds 4,863 of 5,036 existing facts without changing their IDs, families or legacy descriptions. The remaining 173 mappings (9 active, 164 passive) are explicit unknown diagnostics and never become absence.
-- The finite captured topology was inventoried before traversal limits were selected: 5,634 structural units, 6,554 reference occurrences, 15,384 locally resolvable edges, observed connected extremes of depth 18 and 49 canonical definition pages, and maximum out-degree 99. Per-root work is therefore capped at depth 3, eight pages and 64 frontier additions; resolution, exclusion, missing capture, visited nodes and each budget exhaustion remain distinct.
-- Permanent source-pinned fixtures cover Darunis, Denny, Iphi, Alma AS, Anabel ES, Shigure ES, Tetra AS and Kumos AS, including captured Blood Contract and Lunatic-family definitions. Shared table-cell handling is covered for an admitted boss witness plus cached equipment and Grasta rows. An-ki Dingir and Edaxian Zennon remain non-admitted pending-capture witnesses.
-- The generated sidecar and crawl/comparison output remain ignored. Only reusable parsing/reporting code, compact fixtures and their source identities, the accepted digest/summary, operator guidance and regressions are retained. No capability approval, graph/schema, legal-kit, discovery/index, boss-strategy, provider, frontend or production behavior changed.
-
-Post-completion audit disposition, approved 2026-09-15: C1 remains completed for ordered structural preservation, character-fact binding, bounded traversal and explicit unresolved states. Its fixture manifest and completion evidence do not establish semantic fidelity: separately authored fixture content was not proven equivalent to the pinned captures, the full sidecar replay contained character units but no production sidekick units, and real replay left required Iphi Lunatic and Anabel ES Prayer links unresolved. C1.1 supersedes the affected fixture-authority and semantic-completeness claims without rewriting the C1 implementation or historical commit.
-
-### Feature C1.1: Source Fidelity And Authoritative Witnesses
-
-Status: Technical implementation and verification are complete. Joint C1.1/C2 human acceptance remains pending under `Remaining Work`.
-
-Type and route: Completed via `builder-executor -> tdd-loop`; the remaining human checkpoint is defined under `Remaining Work`.
-
-Outcome: Establish a reproducible source-semantic record for every occurrence admitted to C2, with complete source identity, structure, effect text, scoped relationships and explicit child-definition status. Structural binding alone is not semantic success.
-
-Scope: Reconcile checksum-pinned captures, selected page/section/record, parsed facts, catalog IDs and structural units across character active/passive/SA records and sidekick auto/charge/aura records. Preserve exact or reproducibly extracted source slices, resolve admitted local child aliases, and report semantic fidelity by dimension. Build a deterministic witness manifest organized by source/mechanic archetype rather than random character percentage.
-
-Non-goals: Capability classification, proposal approval or materialization, broad ontology expansion, scoring/search changes, exact simulation, full equipment/BiS ingestion, new bosses, provider/frontend work, or incidental persisted-schema migration.
-
-Implemented technical contract:
-
-- **C1.1-01:** Every admitted semantic record identifies the correct capture checksum, source page, section, source row/unit and real fact ID. Exact or reproducibly extracted source content is compared to the capture; a checksum attached to separately rewritten fixture prose is insufficient.
-- **C1.1-02:** Fidelity is reported independently for source-record selection, effect completeness and order, parent/child condition attachment, actor, recipient, trigger, result, magnitude/parameter, duration/activation, element, attack type, mechanic/resource references and admitted child-definition resolution. Failed or inapplicable dimensions remain explicit and never count as semantic success.
-- **C1.1-03:** Full automatic replay covers all 367 canonical character identities and separately reports every admitted sidekick record kind. It preserves 367/367 legal-kit completeness and reports structural parse coverage, fact binding, source identity, unresolved mappings, relevant-link and child-definition resolution, failures and deterministic replay. Human sampling never substitutes for this replay.
-- **C1.1-04:** The seven known Iphi, Alma AS, Tetra AS, Darunis, Shigure ES, Kumos AS and Anabel ES failures become permanent development regressions with real source/fact identities. They prove their distinct defects but provide no independent generalization claim. The unsupported Darunis `Hunter's Fangs`/Wind expectation remains an explicit source conflict until an admitted source establishes it.
-- **C1.1-08:** Only fidelity-passed occurrences may enter C2 as fully supported inputs. Unresolved source selection, identity, semantic attachment or required definition remains unknown/non-authoritative. No automatic approval, materialized capability, graph mutation or legal-kit change occurs.
-
-Historical cohort disposition (non-executable):
-
-- **C1.1-05:** The original C1.1 development sampling and the seven reviewed development witnesses are historical, consumed tuning evidence.
-- **C1.1-06:** All former protected and held-out cohorts are consumed and excluded from final validation; any admitted reuse is development/regression evidence only.
-- **C1.1-07:** The prior sample-size and archetype-coverage plan is historical. Final held-out selection and isolation follow `Remaining Work`.
-
-Exit and human checkpoint: Technical completion supplies replay and witness evidence, not acceptance. Every former protected or held-out cohort is consumed and excluded. Remaining joint C1.1/C2 acceptance follows `Remaining Work`; source conflicts, unresolved definitions and failed attachments remain explicit until then.
-
-Historical technical evidence (non-executable):
-
-- `src/etl/source_fidelity_manifest.json` is a deterministic, non-percentage witness manifest with seven named regressions, 26 additional development witnesses, and 21 now-consumed held-out witnesses. All required source/mechanic archetypes present in the accepted corpus are represented in both historical development and held-out strata, including separate sidekick auto, charge, and aura records.
-- `tests/fixtures/source_fidelity/source_slice_manifest.json` binds all 54 historical witnesses to real source/fact IDs, checksum-qualified captures, source grid locations, and reproducible source-slice digests. Rewritten prose is not used as source authority. The separate historical sealed oracle records 40/30 independently adjudicated effect occurrences and 23/16 independently adjudicated dependency occurrences for development/held-out cohorts respectively; it cannot support final acceptance.
-- Full automatic replay covers 367/367 canonical character identities, 4,863 bound facts and 173 explicit unresolved mappings, with 367/367 structural parses and unchanged 367/367 complete legal-kit receipts. The separate sidekick replay covers 25 parsed sidekicks with 28 auto, 18 charge, and 41 aura records. Link, child-definition, source-selection, parse, and budget failures remain explicit.
-- The seven regressions use real Iphi, Alma AS, Tetra AS, Darunis, Shigure ES, Kumos AS, and Anabel ES identities and are excluded from generalization evidence. Iphi Lunatic and Anabel Prayer remain unresolved child-definition states; Alma counter attachment remains a failed legacy regression; Darunis `Hunter's Fangs`/Wind remains an explicit source conflict; Tetra/Kumos sidekick record-kind coverage and the remaining named regressions are independently visible.
-- Fidelity dimensions are reported separately for source-record selection, source identity, effect completeness/order, parent-child condition attachment, actor, recipient, trigger, result, magnitude/parameter, duration/activation, element, attack type, mechanic/resource references, and child-definition resolution. Only fully passed applicable dimensions are admitted as fully supported C2 inputs; no capability approval, materialization, graph/schema, legal-kit, scoring/search, provider, frontend, or production behavior changed.
-- Technical evidence is `artifacts/evidence/feature_c1_1_source_fidelity.json`; generated replay output remains ignored. The full replay is deterministic with digest `8c2a3dbd645a78d084adc282ff9b77497b1eaa79b7a05b78471d0272401de7aa`. C2 subsequently ran; neither technical report resolves the outstanding human acceptance checkpoint.
-
-### Feature C2: Scoped Classification And Review-Reduction Evaluation
-
-Status: Classifier, shared adapter and semantic evaluator implemented; semantic generalization and joint C1.1/C2 human acceptance remain pending. Fresh Test #3 exposed a recurring occurrence/ownership architecture defect. C2 proposals remain non-authoritative; C2.1 is active and Feature D remains blocked.
-
-Historical contract alignment and development recovery are preserved. The pre-Test-#3 shared-path results below are regression baselines, not evidence of current fresh-validation readiness. Counts are TP / FP / FN:
-
-| Evidence | Effects | Dependencies | Canonical labels |
+| Boss | Strong-roster seed | Constrained-roster seed | Inadequacy investigation seed |
 | --- | --- | --- | --- |
-| Original development | 19 / 2 / 0 | 2 / 0 / 0 | 21 / 0 / 0 |
-| Consumed Test #1 | 18 / 5 / 0 | 7 / 0 / 0 | 25 / 0 / 0 |
-| Consumed Test #2 | 23 / 6 / 0 | 7 / 0 / 0 | 30 / 0 / 0 |
+| Rotte Rivel | All twenty forms | F2P eight + Shion, Anabel, Rosetta | F2P-only; test unsuitable offense and unsupported defensive assumptions |
+| Celestial Mushroom | All twenty forms | F2P eight + Toova, Yuna, Mana, Dunarith | F2P eight + Suzette; test resisted offense and harmful Pain/Poison plans |
 
-At that snapshot, all 13 unmatched effect outputs aligned with explicit unsupported gaps, including Tetra's Charge cost. Repairs covered supported labels, local fields/dependencies, formula/sequence metadata and parent/child relationships without taxonomy expansion or character-name rules. Test #2 verification also recorded three pre-existing atomic-occurrence failures; historical baseline status does not waive C2.1's invariant gate. Missing adjudications in older oracles remain unknown and are not silently counted as fidelity or typed-relationship success.
+These are investigation seeds, not acceptance oracles. Account for all eight F2P additions before claiming inadequate rosters. If a proposed negative is feasible, record that and select another source-justified inadequate case. Retain unsuitable lineup/package negatives even when a better team exists. A missing proof is knowledge insufficiency, not authoritative game infeasibility. If the chosen bosses cannot support the required bounded cases, return the material scope decision to the owner rather than invent an oracle or change availability policy.
 
-Durable consumed regressions are `tests/fixtures/c2/m6_consumed_development_regression_oracle.json` and `tests/fixtures/c2/m6_second_fresh_consumed_development_regression_oracle.json`. Test #2's frozen external oracle is `/home/shogunix/c2-private/m6-second-fresh-owner-oracle.json` (SHA-256 `89d932f00c972762668b305ba2f0d61c1851230894d6b377d1d76b5b3c3d2267`); its report is `/home/shogunix/c2-private/m6-second-fresh-evaluation-report.json` (SHA-256 `5a292625654835252f127253b8b2401840c013ae65a1a5a23e1c7771cf98e8b6`). Both remain unchanged.
+## Pilot Acceptance
 
-#### Fresh Test #3 — consumed failed held-out evidence
+Apply the H2 criteria independently: damage affinity/elemental viability, boss-mechanic counter coverage, team synergy/role coherence, and setup executability.
 
-Owner-reported historical cohort: Aldo — `Blaze Sword`; Sesta — `Twinblade Wolf`; Dewey (Another Style) — `Vapeur Hypnotique`; Shigure (Another Style) — `Type Atk Buff - Num. of Moves`; Gunce — `Arkoúda`; Lloyd — `Raining Tiger Blade`; Felmina — Enhanced `Silent Killer`. The independently adjudicated source oracle was frozen before classification and all seven source/capture/slice pins verified.
+| Evaluation | Measurable gate |
+| --- | --- |
+| A: knowledge correctness | 100% of credited pilot facts have reviewed source provenance and correct material scope; independent fixtures replay; zero unknown-to-absence or unreviewed-to-proof conversions. |
+| B: deterministic engine | Four independently established positive scenarios each yield at least one four-gate-passing candidate. Two independently established inadequate cases receive honest insufficiency/infeasibility outcomes. All returned candidates pass legality, skill/package and finite-allocation checks; identical inputs reproduce output; zero analyzer calls. |
+| C: analyzer | Separately authorized run only. Zero out-of-bundle IDs or unsupported material claims; source-grounded explanation; at most two calls and one authorized swap per lineup; safe deterministic fallback. |
+| D: end-to-end usefulness | Owner reviews selected recommendations against all four H2 gates. Material UNKNOWN/REVIEW cannot count as PASS. Distinguish deterministic-only evidence from measured analyzer/end-to-end evidence. |
 
-Official one-shot held-out result:
+Every measured request emits funnel, diversity, denominator and unknown-data diagnostics. No unavailable observation becomes known. Record actual unique character/frontline sets and strategic differences; one credible party is sufficient where alternatives are not independently established.
 
-| Metric | TP | FP | FN | Precision | Recall |
-| --- | --- | --- | --- | --- | --- |
-| Effects | 10 | 31 | 8 | 24.4% | 55.6% |
-| Canonical labels | 13 | 5 | 9 | 72.2% | 59.1% |
-| Dependencies | 3 | 0 | 1 | 100% | 75% |
+Negative cases include wrong element/type, self-only proof credited to party, absent prerequisite, unowned/SA-gated skill, duplicate hero or skill family, finite-item conflict, unsupported counter, harmful boss interaction and insufficient knowledge. Add only cases material to the supported path; do not require a new universal combat ontology.
 
-C1.1 fidelity wiring was complete for all 15 dimensions across all seven witnesses, with no unexpectedly missing/unknown dimensions; wiring completeness does not itself prove semantic correctness. The run exposed a recurring semantic occurrence/ownership problem rather than another isolated missing-rule set: formula/sequence/explanatory prose became effects, compound results were not reliably segmented, branch/field ownership failed, and supported taxonomy concepts were missed or confused. A separate confirmed anchor-representation issue arose where parser icon tokens and rendered classifier spans differed; it affected some official matching but does not explain the broader failure. All three owner-adjudicated relationship groups were unresolved in persisted attribution; typed relationship accuracy was unavailable and no clearly incorrect attachment was proven.
+Record fact/character review counts, corrections/rejections, minutes and total person-hours, deterministic latency and search/candidate counts. If paid evaluation is later authorized, record actual calls, tokens, latency, served model and cost. Do not claim review-time reduction without independent timing evidence.
 
-Frozen historical artifacts (owner-supplied identities; preserve unchanged):
+## Executable Features
 
-- Owner oracle: `/home/shogunix/c2-private/m6-third-fresh-owner-oracle.json`; SHA-256 `93a2a4d48c8d4a6a85bf30a253bf31afb62a654f37a25eadcef31d24a27b1ae5`.
-- Evaluation report: `/home/shogunix/c2-private/m6-third-fresh-evaluation-report.json`; SHA-256 `49055ca03c1db91f9384b159106c5c35e78fd04adadb3ef0f0d4a68cbf0545e2`.
+### P1: Scope Reset And Failed-Experiment Preservation
 
-Test #3 did not support joint C1.1/C2 acceptance; Feature D remained blocked. It is now consumed development/regression evidence and permanently ineligible for final validation. During C2.1, create a separately traceable source-pinned regression derivative recording the subsequent owner adjudication correction: Felmina's `Silent Killer` contains an owned `x5` attack and therefore also expects one `multi_hit_action` under the approved owned-attack invariant below. Do not retroactively alter the frozen oracle or official held-out result.
+Type/route: evidence-remediation via tdd-loop, following approved architect-planner/contract-auditor discovery.
 
-### Feature C2.1: Role-First Occurrence And Ownership Stabilization
+Status: Completed on 2026-10-20 as a failed-experiment preservation/scope-reset deliverable. C2.1 itself remains unsuccessful/stopped.
 
-Status: Active/planned for execution. Owner approved the bounded occurrence-generation/source-context refactor within Milestone 6.
-
-Type and route: `refactor` via `builder-executor -> tdd-loop`.
-
-Outcome: Determine what each source segment is and which action/branch owns it before mapping it to the canonical taxonomy.
-
-```text
-source structure → source segment → semantic role → owner / branch context
-    → local fields and conditions → canonical taxonomy mapping
-    → occurrence / dependency / gap / relationship → shared adapter → semantic evaluator
-```
-
-Scope: A small internal source-segment semantic role model; stable owner and branch identity before occurrence generation; role-first generation; local field scoping; nested branch-condition inheritance; explicit unsupported gaps; parent/child invocation ownership; consistent multi-hit behavior; and canonical source-anchor representation across parser, classifier, oracle handling, adapter and evaluator. Preserve source/token identity and exact evaluator-matchable icon/link anchors without weakening matching or rewriting frozen evidence to improve scores.
-
-Internal roles may include effect result, condition, trigger/timing, formula, resource gain, resource consumption, state creation, sequence, child invocation, relationship metadata, cost/activation metadata and unknown. These roles do not become capability-taxonomy values merely because the intermediate classifier understands them.
-
-Non-goals: Wholesale rewrite, LLM classifier, taxonomy expansion, formula execution, new milestone, persisted-schema migration, automatic approval/materialization, scoring/search changes, provider/frontend/deployment work or Feature D+ implementation. Preserve existing C1.1 source-fidelity/replay guarantees, external report/evaluation contracts, conservative review authority and 367/367 legal-kit completeness. Use existing pytest coverage and repository quality controls; new tooling/dependencies/configuration are outside this feature.
-
-Entry gate: Use the approved C2 contracts, original development evidence, source-pinned consumed Tests #1/#2, and owner-adjudicated consumed Test #3. Pin Test #3's regression derivative to its frozen source/oracle/report identities and record its subsequent correction separately. No new fresh cohort is selected before the exit gate.
-
-Durable semantic contracts:
-
-- **Owned attacks:** Every genuine owned attack explicitly written as `xN` or `N times`, with `N > 1`, produces one `direct_damage` and one `multi_hit_action`. Each separate attack gets its own pair. Conditional hit-count changes modify that multi-hit occurrence rather than creating another. Apply this only after establishing a genuine owned attack; formulas, sequences and child-reference prose do not qualify by containing attack words or numbers.
-- **Dependencies/resources:** Possession of a required stack produces `requires_stack`; a target stack threshold produces branch-local `requires_stack`. Consuming a stack/resource is resource consumption; creating/gaining stacks/resources is state/resource gain. Neither becomes `requires_stack` merely from mentioning stacks. A stance requirement produces `requires_zone` only on the branch it gates. End of Turn remains timing/trigger unless the canonical contract explicitly requires a dependency in that context.
+Scope: converge canonical planning/guidance, preserve immutable failed results/oracle/source identities and evaluated existing source bytes, verify retention and create one detailed feature commit. No source edits, classifier reruns, retirement, pilot implementation, schema change or graph operation.
 
 Acceptance:
 
-- **C2.1-01 — Roles and ownership:** Establish semantic role and stable action/branch ownership before taxonomy mapping. Metadata and child definitions cannot independently become parent effects. Unsupported mechanics follow an explicit gap path rather than receiving neighboring supported labels.
-- **C2.1-02 — Scoped fields:** Fields and conditions belong to their action/branch; nested conditions inherit without gating unconditional siblings, and conditional potency/hit-count changes update the owning effect. Genuine source uncertainty remains explicit.
-- **C2.1-03 — Invariant coverage:** Retain or add reusable synthetic semantic tests plus source-pinned regressions proving: two attacks in one root sentence stay separate; owned xN attacks produce one damage/multi-hit pair each; conditional hit-count changes update one pair; formula text cannot independently become an effect; sequence text cannot become parent damage; resource consumption/creation cannot become `requires_stack`; nested conditions inherit correctly; branch-local conditions do not gate unconditional siblings; conditional potency modifies its owning effect; child invocation does not import child effects; unsupported mechanics do not receive neighboring labels; icon/link anchors remain exactly evaluator-matchable; sibling magnitude/duration values cannot bleed; and End-of-Turn timing remains timing where appropriate.
-- **C2.1-04 — Shared replay:** Replay original development evidence and consumed Fresh Tests #1/#2/#3 through the same `classifier → shared adapter → semantic evaluator`. Recover all adjudicated supported canonical labels and canonical dependencies. No recurring non-gap false-positive family, formula/sequence/resource/child ownership leakage or systematic field-scoping failure may remain. Unsupported gaps remain unsupported; parent/child relationships resolve or remain explicitly unresolved for genuine source reasons; source-anchor representation mismatch is eliminated; the invariant suite passes. A perfect aggregate historical score is not the sole criterion, and missing adjudication remains unknown.
-- **C2.1-05 — Convergence and retention:** Make role-first generation canonical within C2 and remove displaced generation logic in this feature. Keep supported comparison arms for their distinct purposes. Any necessary temporary compatibility needs a proven caller, explicit exit condition and removal owner; do not leave unexplained parallel generators. Retain/consolidate unique capability regressions and authoritative source pins; purge temporary helpers and generated scratch reports. Preserve the frozen Test #3 oracle/report and official scores, with the Felmina correction traceable only in the consumed derivative.
+- P1-01: canonical documents agree on the approved pilot, explicit supersessions and failed C2.1 outcome.
+- P1-02: frozen final report/inputs/outputs remain byte-identical; final oracle/source snapshot leave ignored-only custody; source retention is traceable and its limits are stated.
+- P1-03: evaluated existing implementation, scripts, fixtures and tests are preserved byte-for-byte in Git. Preserve the original frozen base/diff identities separately from revised planning documents; do not claim the new planning tree equals the old evaluated diff.
+- P1-04: evidence identities, recorded run counts and provenance validate without another final classifier/adapter/evaluator execution. Supported source/review behavior receives proportionate offline regression checks.
+- P1-05: retain only authoritative evidence; workflow state stays ignored; one failure-record/scope-reset commit; no C2 semantic acceptance or pilot-success claim.
 
-Exit and commit boundary: Pass C2.1-01 through C2.1-05 before fresh validation. One eventual completed-feature commit contains the refactor, durable regression derivative/tests, useful evidence, affected canonical documentation and milestone update. Reopen owner decisions only for important unresolved source/compatibility authority or a material architecture/scope change. C2.1 completion establishes readiness, not joint acceptance; final validation, the architecture-failure stop rule and explicit owner acceptance follow `Remaining Work` before D.
+Completion evidence:
 
-### Feature D: Selective Review, Materialization, And Coverage Closure
+- The unchanged final report hash, oracle/snapshot mappings, seven final source slices, 36 atoms/13 gaps, recorded 7+1+1 calls and prior original/derivative pins validate without reexecuting the experiment. All 33 distinct final/prior frozen witness captures have durable exact bytes; historical captures use verified lossless gzip. Full historical execution still needs additional local structural/reference/parsed-sidekick inputs, as stated in the retention index.
+- Existing implementation, script, fixture and test bytes match their pre-reset hashes. Source is preserved in the normal Git tree/history, with no copied classifier-code archive. Runtime, legal catalog, review authority and graph schema remain unchanged relative to the evaluated input state.
+- Focused model/review/structural/source/loader regressions: 95 passed, two preexisting failures. Unchanged test_source_fidelity.py hard-codes 64 source witnesses and 57 development witnesses; the unchanged frozen manifest defines seven known plus 59 development, hence 66. A separate manifest-backed check passes the remaining assertions, all 66 bindings with zero failed/unknown fixtures and 367 legal kits. P1 does not alter frozen evidence or weaken tests; P2 owns count-test correction during source-fidelity consolidation.
+- Canonical documents reflect approved scope and explicit supersessions. No new classifier/adapter/semantic-evaluator call, pilot fact approval, graph operation, paid call, live scrape or deployment occurred. No manual product test is required for this preservation deliverable; pilot usefulness remains unproven.
 
-Status: Blocked/unstarted. Feature D may begin only after the explicit joint acceptance defined under `Remaining Work`.
+### P2: Reviewed Pilot Knowledge And Failed-Path Retirement
 
-Type and route: `build` via `builder-executor -> tdd-loop`, with required human review for the bounded strategically material queues produced through C2.
+Type/route: build via contract-auditor -> feature-planner -> builder-executor -> tdd-loop.
 
-Outcome: Resolve the fidelity-passed, structurally grounded material review set, including changed-semantic occurrences, replay authoritative artifacts, and meet the evidence-based coverage thresholds approved after Feature A.
+Status: Planned; next separately admitted feature after P1. The audit/refinement stays within the approved pilot and does not reopen reconstructable workflow metadata.
 
-Acceptance:
+Entry: P1 evidence/source preservation verified. Audit final callers, pytest collection, unique assertions, provenance and persisted contracts before removal. Source-only boss/scenario adjudication must precede implementation-dependent expectations.
 
-- **D-01:** Reviewed proven facts materialize reproducibly with source and artifact-version provenance.
-- **D-02:** Coverage meets the approved thresholds across applicable elements, physical/magic offense, offensive support, zone/setup, mitigation, recovery, status counterplay, AF support, Pain/Poison, and boss-counter evidence.
-- **D-03:** Unknown and ambiguous evidence remains explicit and non-authoritative.
-- **D-04:** All 367 data-complete forms/styles remain legally selectable; no supported-character subset is introduced.
-- **D-05:** Rejected and negative fixtures remain effective against recurring false positives.
-- **D-06:** Materialized evidence traces to the admitted source spans, definition captures and extraction versions. Prior approvals survive only through verified unchanged meaning or explicit re-review; unresolved links or interpretations grant no authority. Persisted-shape changes, if actually necessary, require explicit schema admission rather than an incidental migration.
+Scope: curate pilot facts through existing review/override contracts; freeze independent scenarios; retire obsolete classifier/report runners and predictor-specific tests together; preserve supported source-fidelity, legal-kit, review and runtime functionality. No broad scoring refactor, runtime classification, new graph schema or live/paid operation. Graph replay is a separately authorized operational checkpoint; offline preparation does not imply graph mutation permission.
 
-### Feature E: Search-Funnel And Diversity Diagnostics
+Exit: all credited facts pass A; scenario authority and inadequacy are established; no unexplained parallel classifier remains; no unique source regression is lost; all 367 legal kits remain; one completed-feature commit. If adjudication is missing, stop only that dependent acceptance, not independent source/preparation work.
 
-Status: Planned after Feature D.
+### P3: Deterministic Recommendation Evaluation
 
-Type and route: `build` via `builder-executor -> tdd-loop`.
+Type/route: verification-only via tdd-loop.
 
-Outcome: Make catalog, roster, eligibility, pool, candidate, and uniqueness stages observable and diagnose cosmetic or collapsed candidate sets.
+Status: Planned. Entry: reviewed data and independent scenario oracles; explicitly authorized graph replay if needed.
 
-Acceptance:
+Run the real typed recommendation path with zero paid calls, distinguish A from B, diagnose candidate coverage/packages/allocation/lineup selection, and apply the four H2 gates. Existing H fixtures provide legality/coverage regression context, not substitute quality oracles. A demonstrated runtime defect routes to the smallest contained fix; shared-boundary changes return to architect-planner. Exit: B passes or report a specific evidence-backed failure; never mark a failed gate complete. One completed-feature commit.
 
-- **E-01:** Request diagnostics expose the required funnel counts without equating 367 catalog identities with the effective roster or candidate pool.
-- **E-02:** Candidate diagnostics detect permutation-only sets, identical score vectors, repeated character/frontline sets, and falsely differentiated archetype labels.
-- **E-03:** Diagnostics distinguish a genuinely constrained roster from diversity lost through retrieval, proof coverage, pruning, packaging, allocation, or beam search.
-- **E-04:** Metrics are deterministic for identical inputs and remain bounded in analyzer projections.
+### P4: Bounded Analyzer And End-To-End Evaluation
 
-### Feature F: Evidence-Driven Candidate Diversity
+Type/route: verification-only via tdd-loop.
 
-Status: Planned after Feature E.
+Status: Conditional, not authorized for paid execution. Entry: B passes and owner separately authorizes the exact model/run/cost envelope.
 
-Type and route: `build` via `builder-executor -> tdd-loop`.
+Reuse the compact analyzer/H1/H2 contracts. Apply C and D independently of deterministic scores. Preserve two-call/one-swap limits, invalid-output fallback and measured costs. No provider configuration/deployment change. One completed-feature commit if admitted and completed.
 
-Outcome: Apply the smallest backend search, pruning, package, or scoring changes justified by E so strategically valid alternatives survive when available.
+## Retirement Ownership
 
-Acceptance:
+P2 owns removal of c2_scoped_classification.py, report_feature_c2.py, evaluate_c2_r1_baseline.py and development/consumed-regression runners after preservation and caller checks. Their present responsibility is historical inspection only, not temporary production compatibility. No supported runtime caller requires a permanent compatibility layer.
 
-- **F-01:** Controlled rosters with independently established alternatives produce the approved number or distribution of unique six-character/frontline sets.
-- **F-02:** Archetype differences correspond to different strategic composition, packages, coverage, or win conditions rather than labels alone.
-- **F-03:** A one-valid-team case is not padded with weaker, illegal, or incoherent alternatives.
-- **F-04:** Legality, finite allocation, affinity rejection, dependency execution, closed-world IDs, deterministic ordering, beam bounds, fallback, and one-swap limits do not regress.
-- **F-05:** No analyzer-side search expansion or additional analyzer call is introduced.
+Keep capability_taxonomy.py/JSON/reviews/gold/review_batches, models, loader, kit catalog/readiness, Feature C/coverage reporting, and the production runtime. In particular, older c2_defensive_setup review batches belong to supported capability materialization.
 
-### Feature G: Controlled Quality Evaluation And Milestone Closure
+Keep source_fidelity.py, structural_evidence.py and their source manifests/fixtures. Consolidate unique parser/anchor/variant/child-ownership assertions from C2-named tests into source-fidelity coverage. Keep the independent semantic evaluator and its matching/identity regressions initially; do not build another evaluator. Retire shared_mechanics.py resolver-only behavior after its C2-only callers disappear, while preserving registry/source provenance and any independently supported source assertions.
 
-Status: Planned after Feature F.
+Keep final frozen evidence and consumed original results distinct from regression derivatives, including the derivative-only Felmina correction. Promote unique oracle/provenance information before purging ignored handoffs. Protect historical raw caches until the retention inventory proves which sources have durable copies. Never blanket-delete C2/rule-named files.
 
-Type and route: `verification-only` via `tdd-loop`; use `release-manager-sync` only after implementation and verification evidence proves the milestone complete.
+## Exit And Next Decision
 
-Outcome: Evaluate coverage and diversity across representative bosses and controlled rosters, apply the H2 gates, reconcile durable documentation/evidence, and close M6.
+M6 pilot completion requires P1-P3, reviewed data, independently justified scenario outcomes, A/B and owner-reviewed deterministic usefulness evidence, preserved 367-form legality, honest uncertainty, and reconciled canonical documentation. Paid analyzer/end-to-end C/D evidence is conditional and must remain explicitly unmeasured if not authorized; deterministic-only completion is not a claim that the LLM has passed.
 
-Acceptance:
-
-- **G-01:** Deterministic coverage/diversity gates meet the evidence-based thresholds approved after A.
-- **G-02:** Where controlled rosters support alternatives, candidate output contains meaningfully different legal sets and coherent archetypes; constrained cases explain why fewer candidates exist.
-- **G-03:** H2 review finds plausible, evidence-backed candidates across the selected evaluation set using all four gates.
-- **G-04:** Output contains no illegal or hallucinated IDs, unsupported capability claims, numeric win probability, guaranteed-clear language, or global-optimality claim.
-- **G-05:** No paid call occurs unless deterministic gates pass and the owner separately authorizes the exact run. `reasoning=none`/4k is the initial DeepSeek baseline if such a run is approved.
-- **G-06:** Tests, fixtures, scripts, generated reports, and handoff state pass promote-or-purge review; canonical docs and the living roadmap are accurate in the single completion commit.
-
-## Milestone Exit Criteria
-
-Milestone 6 completes only when:
-
-- all 367 canonical forms/styles remain legal-kit complete and legally eligible when owned and data-complete;
-- high-value capability extraction has been attempted across the full catalog;
-- C1's structural guarantees and C1.1's deterministic source-fidelity replay remain valid, C2.1 passes its four-set replay and invariant readiness gate, and one genuinely unseen final seven-witness evaluation supports explicit joint C1.1/C2 owner acceptance before Feature D begins;
-- unknown, ambiguous, rejected, untagged, and proven-absence semantics remain distinct;
-- evidence-based thresholds approved after Feature A are met across the strategic coverage dimensions relevant to the thirty-boss corpus;
-- boss-eligible pools are large enough to exercise meaningful search where the effective roster and evidence permit;
-- controlled alternative-rich rosters produce meaningfully different six-character/frontline sets and coherent archetypes;
-- constrained cases are allowed to return fewer candidates with stage-accountable diagnostics;
-- the H2 four-gate review supports strong, plausible, auditable recommendations without promising gameplay success;
-- legality, deterministic bounds, closed-world IDs, allocation, fallback, token accounting, and the one-swap limit remain intact;
-- no paid evaluation preceded deterministic readiness or occurred without separate authorization; and
-- durable tests/evidence/documentation are promoted, generated material is purged or ignored, the milestone status is accurate, and each feature owns one focused completion commit.
-
-## Deferred Questions
-
-- Comprehensive equipment/badge effect ingestion, broad boss admission, a globally complete mechanic ontology and exact formula execution remain outside C1.1/C2. Supplemental source witnesses do not expand supported entity scope.
-- Whether any future automatic approval policy is defensible remains outside M6; structure alone never authorizes a proposal.
-
-- Whether up to two backend-authorized swaps materially improves candidate quality without masking weak backend generation. Three or four swaps are not under consideration.
-- Whether paid analyzer evaluation adds enough evidence to belong in M6 after deterministic gates pass; release qualification remains M8-owned.
-- Whether capability families outside the boss-driven high-value set later earn inclusion.
-- How catalog growth beyond the current canonical 367 should be admitted and versioned.
+The owner then chooses a limited MVP, a repair for a demonstrated weakness, or evidence expansion. M7/M8 remain required before a public portfolio deployment. Reconsider rule/LLM-assisted extraction only after the reviewed baseline is trustworthy and measured curation effort or recurring omissions establishes a worthwhile automation experiment. Compare future predictions against independent manual evidence; no runtime semantic classification or automatic proof is admitted.

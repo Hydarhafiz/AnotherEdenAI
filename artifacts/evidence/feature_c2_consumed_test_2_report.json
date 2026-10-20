@@ -1,0 +1,5978 @@
+{
+  "arms": {
+    "fidelity_checked": {
+      "c1_1_fidelity_dimensions": {
+        "actor": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "attack_type": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "child_definition_resolution": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "duration_activation": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_completeness": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_order": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "element": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "magnitude_parameter": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "mechanic_resource_reference": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "parent_child_condition_attachment": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "recipient": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "result": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_identity": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_record_selection": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "trigger": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        }
+      },
+      "capability_label_precision_recall": {
+        "expected_count": 30,
+        "false_negative_count": 15,
+        "false_positive_count": 3,
+        "precision": 0.8333333333333334,
+        "predicted_count": 18,
+        "recall": 0.5,
+        "true_positive_count": 15
+      },
+      "condition_attachment": {
+        "accuracy": 0.0,
+        "adjudicated_count": 14,
+        "denominator_count": 30,
+        "incorrect_count": 14,
+        "not_applicable_count": 16
+      },
+      "dependency_occurrence_precision_recall": {
+        "expected_count": 7,
+        "false_negative_count": 2,
+        "false_positive_count": 0,
+        "precision": 1.0,
+        "predicted_count": 5,
+        "recall": 0.7142857142857143,
+        "true_positive_count": 5
+      },
+      "effect_occurrence_precision_recall": {
+        "expected_count": 23,
+        "false_negative_count": 9,
+        "false_positive_count": 20,
+        "precision": 0.4117647058823529,
+        "predicted_count": 34,
+        "recall": 0.6086956521739131,
+        "true_positive_count": 14
+      },
+      "field_correctness": {
+        "actor": {
+          "accuracy": 0.6333333333333333,
+          "adjudicated_count": 30,
+          "correct_count": 19,
+          "denominator_count": 30,
+          "incorrect_count": 11
+        },
+        "attack_type": {
+          "accuracy": 0.5555555555555556,
+          "adjudicated_count": 9,
+          "correct_count": 5,
+          "denominator_count": 30,
+          "incorrect_count": 4,
+          "not_applicable_count": 21
+        },
+        "condition": {
+          "accuracy": 0.0,
+          "adjudicated_count": 14,
+          "denominator_count": 30,
+          "incorrect_count": 14,
+          "not_applicable_count": 16
+        },
+        "direction": {
+          "accuracy": 0.4666666666666667,
+          "adjudicated_count": 30,
+          "correct_count": 14,
+          "denominator_count": 30,
+          "incorrect_count": 16
+        },
+        "duration_activation": {
+          "accuracy": 0.5,
+          "adjudicated_count": 4,
+          "correct_count": 2,
+          "denominator_count": 30,
+          "incorrect_count": 2,
+          "not_applicable_count": 13,
+          "unknown_count": 13
+        },
+        "element": {
+          "accuracy": 0.625,
+          "adjudicated_count": 8,
+          "correct_count": 5,
+          "denominator_count": 30,
+          "incorrect_count": 3,
+          "not_applicable_count": 22
+        },
+        "magnitude": {
+          "accuracy": 0.14285714285714285,
+          "adjudicated_count": 21,
+          "correct_count": 3,
+          "denominator_count": 30,
+          "incorrect_count": 18,
+          "not_applicable_count": 9
+        },
+        "recipient": {
+          "accuracy": 0.3333333333333333,
+          "adjudicated_count": 30,
+          "correct_count": 10,
+          "denominator_count": 30,
+          "incorrect_count": 20
+        },
+        "relationships": {
+          "accuracy": null,
+          "denominator_count": 30,
+          "unknown_count": 30
+        },
+        "result": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "state_reference": {
+          "accuracy": 0.125,
+          "adjudicated_count": 16,
+          "correct_count": 2,
+          "denominator_count": 30,
+          "incorrect_count": 14,
+          "not_applicable_count": 14
+        },
+        "target_cardinality": {
+          "accuracy": 0.4,
+          "adjudicated_count": 30,
+          "correct_count": 12,
+          "denominator_count": 30,
+          "incorrect_count": 18
+        },
+        "trigger": {
+          "accuracy": 0.0,
+          "adjudicated_count": 23,
+          "denominator_count": 30,
+          "incorrect_count": 23,
+          "not_applicable_count": 7
+        }
+      },
+      "primary_occurrence_precision_recall": {
+        "expected_count": 30,
+        "false_negative_count": 11,
+        "false_positive_count": 20,
+        "precision": 0.48717948717948717,
+        "predicted_count": 39,
+        "recall": 0.6333333333333333,
+        "true_positive_count": 19
+      },
+      "typed_relationship_correctness": {
+        "accuracy": null,
+        "denominator_count": 30,
+        "unknown_count": 30
+      },
+      "unresolved_relationship_count": 3,
+      "witness_denominator": 7
+    },
+    "legacy_flattened": {
+      "c1_1_fidelity_dimensions": {
+        "actor": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "attack_type": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "child_definition_resolution": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "duration_activation": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_completeness": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_order": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "element": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "magnitude_parameter": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "mechanic_resource_reference": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "parent_child_condition_attachment": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "recipient": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "result": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_identity": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_record_selection": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "trigger": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        }
+      },
+      "capability_label_precision_recall": {
+        "expected_count": 30,
+        "false_negative_count": 30,
+        "false_positive_count": 29,
+        "precision": 0.0,
+        "predicted_count": 29,
+        "recall": 0.0,
+        "true_positive_count": 0
+      },
+      "condition_attachment": {
+        "accuracy": 0.0,
+        "adjudicated_count": 14,
+        "denominator_count": 30,
+        "incorrect_count": 14,
+        "not_applicable_count": 16
+      },
+      "dependency_occurrence_precision_recall": {
+        "expected_count": 7,
+        "false_negative_count": 7,
+        "false_positive_count": 5,
+        "precision": 0.0,
+        "predicted_count": 5,
+        "recall": 0.0,
+        "true_positive_count": 0
+      },
+      "effect_occurrence_precision_recall": {
+        "expected_count": 23,
+        "false_negative_count": 23,
+        "false_positive_count": 24,
+        "precision": 0.0,
+        "predicted_count": 24,
+        "recall": 0.0,
+        "true_positive_count": 0
+      },
+      "field_correctness": {
+        "actor": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "attack_type": {
+          "accuracy": 0.0,
+          "adjudicated_count": 9,
+          "denominator_count": 30,
+          "incorrect_count": 9,
+          "not_applicable_count": 21
+        },
+        "condition": {
+          "accuracy": 0.0,
+          "adjudicated_count": 14,
+          "denominator_count": 30,
+          "incorrect_count": 14,
+          "not_applicable_count": 16
+        },
+        "direction": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "duration_activation": {
+          "accuracy": 0.0,
+          "adjudicated_count": 4,
+          "denominator_count": 30,
+          "incorrect_count": 4,
+          "not_applicable_count": 13,
+          "unknown_count": 13
+        },
+        "element": {
+          "accuracy": 0.0,
+          "adjudicated_count": 8,
+          "denominator_count": 30,
+          "incorrect_count": 8,
+          "not_applicable_count": 22
+        },
+        "magnitude": {
+          "accuracy": 0.0,
+          "adjudicated_count": 21,
+          "denominator_count": 30,
+          "incorrect_count": 21,
+          "not_applicable_count": 9
+        },
+        "recipient": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "relationships": {
+          "accuracy": null,
+          "denominator_count": 30,
+          "unknown_count": 30
+        },
+        "result": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "state_reference": {
+          "accuracy": 0.0,
+          "adjudicated_count": 16,
+          "denominator_count": 30,
+          "incorrect_count": 16,
+          "not_applicable_count": 14
+        },
+        "target_cardinality": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "trigger": {
+          "accuracy": 0.0,
+          "adjudicated_count": 23,
+          "denominator_count": 30,
+          "incorrect_count": 23,
+          "not_applicable_count": 7
+        }
+      },
+      "primary_occurrence_precision_recall": {
+        "expected_count": 30,
+        "false_negative_count": 30,
+        "false_positive_count": 29,
+        "precision": 0.0,
+        "predicted_count": 29,
+        "recall": 0.0,
+        "true_positive_count": 0
+      },
+      "typed_relationship_correctness": {
+        "accuracy": null,
+        "denominator_count": 30,
+        "unknown_count": 30
+      },
+      "unresolved_relationship_count": 0,
+      "witness_denominator": 7
+    },
+    "structural_only": {
+      "c1_1_fidelity_dimensions": {
+        "actor": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "attack_type": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "child_definition_resolution": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "duration_activation": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_completeness": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "effect_order": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "element": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "magnitude_parameter": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "mechanic_resource_reference": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "parent_child_condition_attachment": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "recipient": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "result": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_identity": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "source_record_selection": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        },
+        "trigger": {
+          "denominator_count": 7,
+          "known_applicable_count": 0,
+          "not_applicable_count": 0,
+          "status_counts": {
+            "unknown": 7
+          },
+          "unknown_or_unresolved_count": 7
+        }
+      },
+      "capability_label_precision_recall": {
+        "expected_count": 30,
+        "false_negative_count": 15,
+        "false_positive_count": 3,
+        "precision": 0.8333333333333334,
+        "predicted_count": 18,
+        "recall": 0.5,
+        "true_positive_count": 15
+      },
+      "condition_attachment": {
+        "accuracy": 0.0,
+        "adjudicated_count": 14,
+        "denominator_count": 30,
+        "incorrect_count": 14,
+        "not_applicable_count": 16
+      },
+      "dependency_occurrence_precision_recall": {
+        "expected_count": 7,
+        "false_negative_count": 2,
+        "false_positive_count": 0,
+        "precision": 1.0,
+        "predicted_count": 5,
+        "recall": 0.7142857142857143,
+        "true_positive_count": 5
+      },
+      "effect_occurrence_precision_recall": {
+        "expected_count": 23,
+        "false_negative_count": 9,
+        "false_positive_count": 20,
+        "precision": 0.4117647058823529,
+        "predicted_count": 34,
+        "recall": 0.6086956521739131,
+        "true_positive_count": 14
+      },
+      "field_correctness": {
+        "actor": {
+          "accuracy": 0.6333333333333333,
+          "adjudicated_count": 30,
+          "correct_count": 19,
+          "denominator_count": 30,
+          "incorrect_count": 11
+        },
+        "attack_type": {
+          "accuracy": 0.5555555555555556,
+          "adjudicated_count": 9,
+          "correct_count": 5,
+          "denominator_count": 30,
+          "incorrect_count": 4,
+          "not_applicable_count": 21
+        },
+        "condition": {
+          "accuracy": 0.0,
+          "adjudicated_count": 14,
+          "denominator_count": 30,
+          "incorrect_count": 14,
+          "not_applicable_count": 16
+        },
+        "direction": {
+          "accuracy": 0.4666666666666667,
+          "adjudicated_count": 30,
+          "correct_count": 14,
+          "denominator_count": 30,
+          "incorrect_count": 16
+        },
+        "duration_activation": {
+          "accuracy": 0.5,
+          "adjudicated_count": 4,
+          "correct_count": 2,
+          "denominator_count": 30,
+          "incorrect_count": 2,
+          "not_applicable_count": 13,
+          "unknown_count": 13
+        },
+        "element": {
+          "accuracy": 0.625,
+          "adjudicated_count": 8,
+          "correct_count": 5,
+          "denominator_count": 30,
+          "incorrect_count": 3,
+          "not_applicable_count": 22
+        },
+        "magnitude": {
+          "accuracy": 0.14285714285714285,
+          "adjudicated_count": 21,
+          "correct_count": 3,
+          "denominator_count": 30,
+          "incorrect_count": 18,
+          "not_applicable_count": 9
+        },
+        "recipient": {
+          "accuracy": 0.3333333333333333,
+          "adjudicated_count": 30,
+          "correct_count": 10,
+          "denominator_count": 30,
+          "incorrect_count": 20
+        },
+        "relationships": {
+          "accuracy": null,
+          "denominator_count": 30,
+          "unknown_count": 30
+        },
+        "result": {
+          "accuracy": 0.0,
+          "adjudicated_count": 30,
+          "denominator_count": 30,
+          "incorrect_count": 30
+        },
+        "state_reference": {
+          "accuracy": 0.125,
+          "adjudicated_count": 16,
+          "correct_count": 2,
+          "denominator_count": 30,
+          "incorrect_count": 14,
+          "not_applicable_count": 14
+        },
+        "target_cardinality": {
+          "accuracy": 0.4,
+          "adjudicated_count": 30,
+          "correct_count": 12,
+          "denominator_count": 30,
+          "incorrect_count": 18
+        },
+        "trigger": {
+          "accuracy": 0.0,
+          "adjudicated_count": 23,
+          "denominator_count": 30,
+          "incorrect_count": 23,
+          "not_applicable_count": 7
+        }
+      },
+      "primary_occurrence_precision_recall": {
+        "expected_count": 30,
+        "false_negative_count": 11,
+        "false_positive_count": 20,
+        "precision": 0.48717948717948717,
+        "predicted_count": 39,
+        "recall": 0.6333333333333333,
+        "true_positive_count": 19
+      },
+      "typed_relationship_correctness": {
+        "accuracy": null,
+        "denominator_count": 30,
+        "unknown_count": 30
+      },
+      "unresolved_relationship_count": 3,
+      "witness_denominator": 7
+    }
+  },
+  "artifact_type": "m6_second_fresh_held_out_semantic_evaluation",
+  "cohort": "fresh_replacement",
+  "cohort_note": "The repository committed freeze still binds a different cohort. This one-shot run used a temporary metadata-only freeze containing only the seven owner-approved pins; classifier/evaluator source and committed artifacts were not changed.",
+  "failure_patterns": {
+    "aggregate_counts": {
+      "canonical_labels": {
+        "expected_count": 30,
+        "false_negative_count": 15,
+        "false_positive_count": 3,
+        "precision": 0.8333333333333334,
+        "predicted_count": 18,
+        "recall": 0.5,
+        "true_positive_count": 15
+      },
+      "dependencies": {
+        "expected_count": 7,
+        "false_negative_count": 2,
+        "false_positive_count": 0,
+        "precision": 1.0,
+        "predicted_count": 5,
+        "recall": 0.7142857142857143,
+        "true_positive_count": 5
+      },
+      "effects": {
+        "expected_count": 23,
+        "false_negative_count": 9,
+        "false_positive_count": 20,
+        "precision": 0.4117647058823529,
+        "predicted_count": 34,
+        "recall": 0.6086956521739131,
+        "true_positive_count": 14
+      }
+    },
+    "base_unmatched_expected_labels_by_witness": {
+      "fresh2-benedict-large-slash": [
+        "direct_damage"
+      ],
+      "fresh2-ewan-as-roaring-bash": [
+        "magic_critical_rate_up",
+        "element_damage_up"
+      ],
+      "fresh2-ewella-saevus-furorem": [],
+      "fresh2-iridian-heal-arcus-irus": [
+        "direct_damage",
+        "multi_hit_action",
+        "requires_zone"
+      ],
+      "fresh2-philo-as-store-power": [],
+      "fresh2-radias-turn-end-buff": [
+        "equipped_weapon_damage_up",
+        "requires_recipient_eligibility"
+      ],
+      "fresh2-riica-elimination-ray": [
+        "grant_link",
+        "remove_status_ailment",
+        "recover_mp"
+      ]
+    },
+    "canonical_label_error_detail": "The current semantic evaluator returns aggregate TP/FP/FN totals but no per-label confusion matrix. The saved per-witness breakdown preserves TP/FP/FN counts; it does not claim complete label identities for false labels on base-matched occurrences.",
+    "field_mismatch_counts": {
+      "actor": 11,
+      "attack_type": 4,
+      "condition": 14,
+      "direction": 16,
+      "duration_activation": 2,
+      "element": 3,
+      "magnitude": 18,
+      "recipient": 20,
+      "result": 30,
+      "state_reference": 14,
+      "target_cardinality": 18,
+      "trigger": 23
+    },
+    "recurring_patterns": [
+      {
+        "class": "unlabeled_occurrence_false_positives",
+        "count": 18,
+        "witness_count": 6
+      },
+      {
+        "class": "field_mismatch",
+        "count": 11,
+        "field": "actor"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 4,
+        "field": "attack_type"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 14,
+        "field": "condition"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 16,
+        "field": "direction"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 2,
+        "field": "duration_activation"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 3,
+        "field": "element"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 18,
+        "field": "magnitude"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 20,
+        "field": "recipient"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 30,
+        "field": "result"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 14,
+        "field": "state_reference"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 18,
+        "field": "target_cardinality"
+      },
+      {
+        "class": "field_mismatch",
+        "count": 23,
+        "field": "trigger"
+      }
+    ],
+    "selected_arm": "fidelity_checked",
+    "unmatched_occurrence_outputs": {
+      "not_a_canonical_label_confusion_matrix": true,
+      "unlabeled_false_positive_occurrences": 18,
+      "witnesses_affected": [
+        "fresh2-ewan-as-roaring-bash",
+        "fresh2-ewella-saevus-furorem",
+        "fresh2-iridian-heal-arcus-irus",
+        "fresh2-philo-as-store-power",
+        "fresh2-radias-turn-end-buff",
+        "fresh2-riica-elimination-ray"
+      ]
+    }
+  },
+  "headline_metrics": {
+    "canonical_labels": {
+      "expected_count": 30,
+      "false_negative_count": 15,
+      "false_positive_count": 3,
+      "precision": 0.8333333333333334,
+      "predicted_count": 18,
+      "recall": 0.5,
+      "true_positive_count": 15
+    },
+    "dependencies": {
+      "expected_count": 7,
+      "false_negative_count": 2,
+      "false_positive_count": 0,
+      "precision": 1.0,
+      "predicted_count": 5,
+      "recall": 0.7142857142857143,
+      "true_positive_count": 5
+    },
+    "effects": {
+      "expected_count": 23,
+      "false_negative_count": 9,
+      "false_positive_count": 20,
+      "precision": 0.4117647058823529,
+      "predicted_count": 34,
+      "recall": 0.6086956521739131,
+      "true_positive_count": 14
+    },
+    "field_accuracy": {
+      "actor": {
+        "accuracy": 0.6333333333333333,
+        "adjudicated": 30,
+        "correct": 19
+      },
+      "attack_type": {
+        "accuracy": 0.5555555555555556,
+        "adjudicated": 9,
+        "correct": 5
+      },
+      "condition": {
+        "accuracy": 0.0,
+        "adjudicated": 14,
+        "correct": 0
+      },
+      "direction": {
+        "accuracy": 0.4666666666666667,
+        "adjudicated": 30,
+        "correct": 14
+      },
+      "duration_activation": {
+        "accuracy": 0.5,
+        "adjudicated": 4,
+        "correct": 2
+      },
+      "element": {
+        "accuracy": 0.625,
+        "adjudicated": 8,
+        "correct": 5
+      },
+      "magnitude": {
+        "accuracy": 0.14285714285714285,
+        "adjudicated": 21,
+        "correct": 3
+      },
+      "recipient": {
+        "accuracy": 0.3333333333333333,
+        "adjudicated": 30,
+        "correct": 10
+      },
+      "relationships": {
+        "accuracy": null,
+        "adjudicated": 0,
+        "correct": 0
+      },
+      "result": {
+        "accuracy": 0.0,
+        "adjudicated": 30,
+        "correct": 0
+      },
+      "state_reference": {
+        "accuracy": 0.125,
+        "adjudicated": 16,
+        "correct": 2
+      },
+      "target_cardinality": {
+        "accuracy": 0.4,
+        "adjudicated": 30,
+        "correct": 12
+      },
+      "trigger": {
+        "accuracy": 0.0,
+        "adjudicated": 23,
+        "correct": 0
+      }
+    },
+    "relationships": {
+      "evaluator_typed_relationship_correctness": {
+        "accuracy": null,
+        "denominator_count": 30,
+        "unknown_count": 30
+      },
+      "unresolved_relationship_count": 3
+    }
+  },
+  "joint_c1_1_c2_acceptance_assessment": {
+    "feature_d_status": "remains blocked/unstarted; no milestone status was changed",
+    "reasoning": [
+      "The fidelity-checked arm has effects 14 TP / 20 FP / 9 FN, dependencies 5 / 0 / 2, and canonical labels 15 / 3 / 15.",
+      "Field errors recur across the cohort: condition 0/14, trigger 0/23, result 0/30, recipient 10/30, direction 14/30, and magnitude 3/21.",
+      "The evaluator has no adjudicated typed-relationship denominator because the source-only oracle cannot provide generated occurrence/relationship IDs; the arm also reports 3 unresolved relationship attachments.",
+      "C1.1 source capture and slice identity are verified, but the semantic evaluator reports all 15 C1.1 fidelity dimensions as unknown for all seven witnesses; this run therefore does not establish joint C1.1/C2 acceptance.",
+      "Unlabeled outputs on formula, child, resource, and metadata text recur across witnesses; one deploy_zone false positive and one direct_damage false positive show unsupported behavior is not consistently fail-closed."
+    ],
+    "supports_acceptance": false
+  },
+  "oracle_answers_returned": false,
+  "per_witness": {
+    "fresh2-benedict-large-slash": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "field_accuracy": {
+          "actor": 0.5,
+          "attack_type": 0.5,
+          "condition": null,
+          "direction": 0.5,
+          "duration_activation": 1.0,
+          "element": null,
+          "magnitude": 0.5,
+          "recipient": 0.5,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": null,
+          "target_cardinality": 0.5,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "attack_type": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "direction": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "duration_activation": {
+            "accuracy": 1.0,
+            "adjudicated_count": 1,
+            "correct_count": 1,
+            "unknown_count": 1
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "recipient": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 2
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "state_reference": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+              "quote": "Slash attack on a single enemy (L)"
+            }
+          }
+        ],
+        "unmatched_predictions": []
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 2,
+          "predicted": 2,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 2,
+          "predicted": 2,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 2,
+          "predicted": 2,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": 0.0,
+          "condition": null,
+          "direction": 0.0,
+          "duration_activation": 0.0,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": null,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "unknown_count": 1
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 2
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "state_reference": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+              "quote": "Slash attack on a single enemy (L)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "attack_type_resistance_down",
+            "operation": "decrease",
+            "source_anchor": {
+              "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+              "quote": "Slash resistance"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "attack_type_resistance_down",
+            "operation": "decrease",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          }
+        ]
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "field_accuracy": {
+          "actor": 0.5,
+          "attack_type": 0.5,
+          "condition": null,
+          "direction": 0.5,
+          "duration_activation": 1.0,
+          "element": null,
+          "magnitude": 0.5,
+          "recipient": 0.5,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": null,
+          "target_cardinality": 0.5,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "attack_type": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "direction": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "duration_activation": {
+            "accuracy": 1.0,
+            "adjudicated_count": 1,
+            "correct_count": 1,
+            "unknown_count": 1
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "recipient": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 2
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "state_reference": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+              "quote": "Slash attack on a single enemy (L)"
+            }
+          }
+        ],
+        "unmatched_predictions": []
+      }
+    },
+    "fresh2-ewan-as-roaring-bash": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 4,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 2,
+          "tp": 2
+        },
+        "canonical_labels": {
+          "expected": 4,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 2,
+          "tp": 2
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 4,
+          "fn": 2,
+          "fp": 3,
+          "predicted": 5,
+          "tp": 2
+        },
+        "field_accuracy": {
+          "actor": 0.5,
+          "attack_type": 0.0,
+          "condition": null,
+          "direction": 0.5,
+          "duration_activation": null,
+          "element": 0.5,
+          "magnitude": 0.0,
+          "recipient": 0.5,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.5,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 4
+          },
+          "direction": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "unknown_count": 4
+          },
+          "element": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "recipient": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 4
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 1
+          },
+          "target_cardinality": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "magic_critical_rate_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "magic critical rate +10%"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "element_damage_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "fire type attack of user +5%"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]",
+            "source_text": "Critical damage +100% (Multiplier: x2)"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]",
+            "source_text": "Damage increases from number of distinct debuffs on target"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[6]",
+            "source_text": "Changes name to Sign: [Stance Name]"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 4,
+          "fn": 4,
+          "fp": 3,
+          "predicted": 3,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 4,
+          "fn": 4,
+          "fp": 3,
+          "predicted": 3,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 4,
+          "fn": 4,
+          "fp": 3,
+          "predicted": 3,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": 0.0,
+          "condition": null,
+          "direction": 0.0,
+          "duration_activation": null,
+          "element": 0.0,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 4
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "unknown_count": 4
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 4
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 1
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "Fire type slash/pierce/blunt/magic attack on all enemies (XL)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "physical_critical_rate_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "Increase critical rate"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "magic_critical_rate_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "magic critical rate +10%"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "element_damage_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "fire type attack of user +5%"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "unknown",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_entity_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          }
+        ]
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 4,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 2,
+          "tp": 2
+        },
+        "canonical_labels": {
+          "expected": 4,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 2,
+          "tp": 2
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 4,
+          "fn": 2,
+          "fp": 3,
+          "predicted": 5,
+          "tp": 2
+        },
+        "field_accuracy": {
+          "actor": 0.5,
+          "attack_type": 0.0,
+          "condition": null,
+          "direction": 0.5,
+          "duration_activation": null,
+          "element": 0.5,
+          "magnitude": 0.0,
+          "recipient": 0.5,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.5,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 4
+          },
+          "direction": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "unknown_count": 4
+          },
+          "element": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "recipient": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 4
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 1
+          },
+          "target_cardinality": {
+            "accuracy": 0.5,
+            "adjudicated_count": 4,
+            "correct_count": 2,
+            "incorrect_count": 2
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 4,
+            "incorrect_count": 4
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "magic_critical_rate_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "magic critical rate +10%"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "element_damage_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "fire type attack of user +5%"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]",
+            "source_text": "Critical damage +100% (Multiplier: x2)"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]",
+            "source_text": "Damage increases from number of distinct debuffs on target"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[6]",
+            "source_text": "Changes name to Sign: [Stance Name]"
+          }
+        ]
+      }
+    },
+    "fresh2-ewella-saevus-furorem": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 3,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 3,
+          "tp": 3
+        },
+        "canonical_labels": {
+          "expected": 3,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 3,
+          "tp": 3
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 3,
+          "fn": 0,
+          "fp": 3,
+          "predicted": 6,
+          "tp": 3
+        },
+        "field_accuracy": {
+          "actor": 1.0,
+          "attack_type": 1.0,
+          "condition": null,
+          "direction": 1.0,
+          "duration_activation": null,
+          "element": 1.0,
+          "magnitude": 0.0,
+          "recipient": 0.6666666666666666,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.6666666666666666,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 1.0,
+            "adjudicated_count": 3,
+            "correct_count": 3
+          },
+          "attack_type": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 1
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "direction": {
+            "accuracy": 1.0,
+            "adjudicated_count": 3,
+            "correct_count": 3
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "element": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 1
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "recipient": {
+            "accuracy": 0.6666666666666666,
+            "adjudicated_count": 3,
+            "correct_count": 2,
+            "incorrect_count": 1
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.6666666666666666,
+            "adjudicated_count": 3,
+            "correct_count": 2,
+            "incorrect_count": 1
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          }
+        },
+        "unmatched_expected": [],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "source_text": "Stack 1 Insanire on enemy"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]",
+            "source_text": "Damage +50%"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[3]",
+            "source_text": "Skill multiplier increases per Insanire stacked on target"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 3,
+          "fn": 3,
+          "fp": 3,
+          "predicted": 3,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 3,
+          "fn": 3,
+          "fp": 3,
+          "predicted": 3,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 3,
+          "fn": 3,
+          "fp": 3,
+          "predicted": 3,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": 0.0,
+          "condition": null,
+          "direction": 0.0,
+          "duration_activation": null,
+          "element": 0.0,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 1
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 1
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+              "quote": "Water type piercing attack on a single enemy x3 (XL)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+              "quote": "attack on a single enemy x3"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "physical_resistance_down",
+            "operation": "decrease",
+            "source_anchor": {
+              "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[6]",
+              "quote": "Physical resistance -3%"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "physical_resistance_down",
+            "operation": "decrease",
+            "source_location": null,
+            "source_text": null
+          }
+        ]
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 3,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 3,
+          "tp": 3
+        },
+        "canonical_labels": {
+          "expected": 3,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 3,
+          "tp": 3
+        },
+        "dependencies": {
+          "expected": 0,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 3,
+          "fn": 0,
+          "fp": 3,
+          "predicted": 6,
+          "tp": 3
+        },
+        "field_accuracy": {
+          "actor": 1.0,
+          "attack_type": 1.0,
+          "condition": null,
+          "direction": 1.0,
+          "duration_activation": null,
+          "element": 1.0,
+          "magnitude": 0.0,
+          "recipient": 0.6666666666666666,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.6666666666666666,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 1.0,
+            "adjudicated_count": 3,
+            "correct_count": 3
+          },
+          "attack_type": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 1
+          },
+          "condition": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "direction": {
+            "accuracy": 1.0,
+            "adjudicated_count": 3,
+            "correct_count": 3
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "element": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 1
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "recipient": {
+            "accuracy": 0.6666666666666666,
+            "adjudicated_count": 3,
+            "correct_count": 2,
+            "incorrect_count": 1
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.6666666666666666,
+            "adjudicated_count": 3,
+            "correct_count": 2,
+            "incorrect_count": 1
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          }
+        },
+        "unmatched_expected": [],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "source_text": "Stack 1 Insanire on enemy"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]",
+            "source_text": "Damage +50%"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[3]",
+            "source_text": "Skill multiplier increases per Insanire stacked on target"
+          }
+        ]
+      }
+    },
+    "fresh2-iridian-heal-arcus-irus": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 5,
+          "fn": 4,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "canonical_labels": {
+          "expected": 5,
+          "fn": 4,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "effects": {
+          "expected": 3,
+          "fn": 2,
+          "fp": 3,
+          "predicted": 4,
+          "tp": 1
+        },
+        "field_accuracy": {
+          "actor": 0.4,
+          "attack_type": 0.0,
+          "condition": 0.0,
+          "direction": 0.0,
+          "duration_activation": null,
+          "element": 0.0,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.4,
+            "adjudicated_count": 5,
+            "correct_count": 2,
+            "incorrect_count": 3
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 2
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "not_applicable_count": 3,
+            "unknown_count": 2
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 5
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 4
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "quote": "Water type magic attack on all enemies x3 (XL, 2x)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "quote": "attack on all enemies x3"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_zone",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+              "quote": "In Fire/Water/Wind/Earth Stance"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "consume",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+            "source_text": "Consumes 5 Charge to do Water type magic attack on all enemies x3 (XL, 2x)"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "source_text": "Stack 1 Dragonshade on Wryz"
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "deploy_zone",
+            "operation": "activate",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+            "source_text": "In Fire/Water/Wind/Earth Stance: Element type changes to type of deployed zone"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 5,
+          "fn": 5,
+          "fp": 6,
+          "predicted": 6,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 5,
+          "fn": 5,
+          "fp": 6,
+          "predicted": 6,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 2,
+          "predicted": 2,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 3,
+          "fn": 3,
+          "fp": 4,
+          "predicted": 4,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": 0.0,
+          "condition": 0.0,
+          "direction": 0.0,
+          "duration_activation": null,
+          "element": 0.0,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 2
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "not_applicable_count": 3,
+            "unknown_count": 2
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 5
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 4
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "quote": "Water type magic attack on all enemies x3 (XL, 2x)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "quote": "attack on all enemies x3"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "remove_debuff",
+            "operation": "remove",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "quote": "remove debuffs"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "party_composition",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "quote": "When Wryz is at front"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_zone",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+              "quote": "In Fire/Water/Wind/Earth Stance"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_entity_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "remove_debuff",
+            "operation": "remove",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "dependency",
+            "label": "requires_sidekick_activation",
+            "operation": "conditional",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "dependency",
+            "label": "requires_stack",
+            "operation": "conditional",
+            "source_location": null,
+            "source_text": null
+          }
+        ]
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 5,
+          "fn": 4,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "canonical_labels": {
+          "expected": 5,
+          "fn": 4,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "effects": {
+          "expected": 3,
+          "fn": 2,
+          "fp": 3,
+          "predicted": 4,
+          "tp": 1
+        },
+        "field_accuracy": {
+          "actor": 0.4,
+          "attack_type": 0.0,
+          "condition": 0.0,
+          "direction": 0.0,
+          "duration_activation": null,
+          "element": 0.0,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.4,
+            "adjudicated_count": 5,
+            "correct_count": 2,
+            "incorrect_count": 3
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 2
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "not_applicable_count": 3,
+            "unknown_count": 2
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 3
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 5
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 4
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 5,
+            "incorrect_count": 5
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "quote": "Water type magic attack on all enemies x3 (XL, 2x)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "quote": "attack on all enemies x3"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_zone",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+              "quote": "In Fire/Water/Wind/Earth Stance"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "consume",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+            "source_text": "Consumes 5 Charge to do Water type magic attack on all enemies x3 (XL, 2x)"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "source_text": "Stack 1 Dragonshade on Wryz"
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "deploy_zone",
+            "operation": "activate",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+            "source_text": "In Fire/Water/Wind/Earth Stance: Element type changes to type of deployed zone"
+          }
+        ]
+      }
+    },
+    "fresh2-philo-as-store-power": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "canonical_labels": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "dependencies": {
+          "expected": 1,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "effects": {
+          "expected": 1,
+          "fn": 0,
+          "fp": 3,
+          "predicted": 4,
+          "tp": 1
+        },
+        "field_accuracy": {
+          "actor": 1.0,
+          "attack_type": null,
+          "condition": 0.0,
+          "direction": 0.5,
+          "duration_activation": null,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.5,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.5,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2
+          },
+          "attack_type": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          },
+          "direction": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "not_applicable_count": 1,
+            "unknown_count": 1
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 2
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          }
+        },
+        "unmatched_expected": [],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "source_text": "Replaces the basic attack"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "source_text": "Stack 1 World Tree Power"
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+            "source_text": "Hence, they cannot deal with enemies' End-of-Turn attack"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 1,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 1,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 0,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": null,
+          "condition": 0.0,
+          "direction": 0.0,
+          "duration_activation": null,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "attack_type": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "not_applicable_count": 1,
+            "unknown_count": 1
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 2
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "power_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[2]",
+              "quote": "World Tree Power: +25 PWR per stack"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_stack",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+              "quote": "less than 3 World Tree Power stacks"
+            }
+          }
+        ],
+        "unmatched_predictions": []
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "canonical_labels": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 1,
+          "predicted": 2,
+          "tp": 1
+        },
+        "dependencies": {
+          "expected": 1,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "effects": {
+          "expected": 1,
+          "fn": 0,
+          "fp": 3,
+          "predicted": 4,
+          "tp": 1
+        },
+        "field_accuracy": {
+          "actor": 1.0,
+          "attack_type": null,
+          "condition": 0.0,
+          "direction": 0.5,
+          "duration_activation": null,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.5,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.5,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2
+          },
+          "attack_type": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          },
+          "direction": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "duration_activation": {
+            "accuracy": null,
+            "not_applicable_count": 1,
+            "unknown_count": 1
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 2
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 2
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2
+          },
+          "target_cardinality": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          }
+        },
+        "unmatched_expected": [],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "source_text": "Replaces the basic attack"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "source_text": "Stack 1 World Tree Power"
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+            "source_text": "Hence, they cannot deal with enemies' End-of-Turn attack"
+          }
+        ]
+      }
+    },
+    "fresh2-radias-turn-end-buff": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 3,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "canonical_labels": {
+          "expected": 3,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "effects": {
+          "expected": 1,
+          "fn": 1,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.3333333333333333,
+          "attack_type": null,
+          "condition": 0.0,
+          "direction": 0.3333333333333333,
+          "duration_activation": 0.0,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.5,
+          "target_cardinality": 0.3333333333333333,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "incorrect_count": 2
+          },
+          "attack_type": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "direction": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "incorrect_count": 2
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "state_reference": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          },
+          "target_cardinality": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "incorrect_count": 2
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "equipped_weapon_damage_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "equipped characters' damage +15%"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_recipient_eligibility",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "equipped characters' damage"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[2]",
+            "source_text": "Attack again moves are each counted"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 3,
+          "fn": 3,
+          "fp": 4,
+          "predicted": 4,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 3,
+          "fn": 3,
+          "fp": 4,
+          "predicted": 4,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 2,
+          "predicted": 2,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 1,
+          "fn": 1,
+          "fp": 2,
+          "predicted": 2,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": null,
+          "condition": 0.0,
+          "direction": 0.0,
+          "duration_activation": 0.0,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "attack_type": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 1
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "equipped_weapon_damage_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "equipped characters' damage +15%"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_zone",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "Dazzling Slash Stance"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_recipient_eligibility",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "equipped characters' damage"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "attack_again",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "dependency",
+            "label": "end_of_turn",
+            "operation": "unknown",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "dependency",
+            "label": "requires_zone",
+            "operation": "conditional",
+            "source_location": null,
+            "source_text": null
+          }
+        ]
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 3,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "canonical_labels": {
+          "expected": 3,
+          "fn": 2,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 1,
+          "fp": 0,
+          "predicted": 1,
+          "tp": 1
+        },
+        "effects": {
+          "expected": 1,
+          "fn": 1,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.3333333333333333,
+          "attack_type": null,
+          "condition": 0.0,
+          "direction": 0.3333333333333333,
+          "duration_activation": 0.0,
+          "element": null,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.5,
+          "target_cardinality": 0.3333333333333333,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "incorrect_count": 2
+          },
+          "attack_type": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "direction": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "incorrect_count": 2
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "element": {
+            "accuracy": null,
+            "not_applicable_count": 3
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 3
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 3,
+            "incorrect_count": 3
+          },
+          "state_reference": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 1
+          },
+          "target_cardinality": {
+            "accuracy": 0.3333333333333333,
+            "adjudicated_count": 3,
+            "correct_count": 1,
+            "incorrect_count": 2
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "equipped_weapon_damage_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "equipped characters' damage +15%"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_recipient_eligibility",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "quote": "equipped characters' damage"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[2]",
+            "source_text": "Attack again moves are each counted"
+          }
+        ]
+      }
+    },
+    "fresh2-riica-elimination-ray": {
+      "fidelity_checked": {
+        "canonical_label_metrics": {
+          "expected": 11,
+          "fn": 4,
+          "fp": 0,
+          "predicted": 7,
+          "tp": 7
+        },
+        "canonical_labels": {
+          "expected": 11,
+          "fn": 4,
+          "fp": 0,
+          "predicted": 7,
+          "tp": 7
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 2,
+          "tp": 2
+        },
+        "effects": {
+          "expected": 9,
+          "fn": 3,
+          "fp": 7,
+          "predicted": 13,
+          "tp": 6
+        },
+        "field_accuracy": {
+          "actor": 0.7272727272727273,
+          "attack_type": 1.0,
+          "condition": 0.0,
+          "direction": 0.5454545454545454,
+          "duration_activation": 0.5,
+          "element": 1.0,
+          "magnitude": 0.2857142857142857,
+          "recipient": 0.36363636363636365,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.14285714285714285,
+          "target_cardinality": 0.45454545454545453,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.7272727272727273,
+            "adjudicated_count": 11,
+            "correct_count": 8,
+            "incorrect_count": 3
+          },
+          "attack_type": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 9
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "incorrect_count": 7,
+            "not_applicable_count": 4
+          },
+          "direction": {
+            "accuracy": 0.5454545454545454,
+            "adjudicated_count": 11,
+            "correct_count": 6,
+            "incorrect_count": 5
+          },
+          "duration_activation": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 7,
+            "unknown_count": 2
+          },
+          "element": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 9
+          },
+          "magnitude": {
+            "accuracy": 0.2857142857142857,
+            "adjudicated_count": 7,
+            "correct_count": 2,
+            "incorrect_count": 5,
+            "not_applicable_count": 4
+          },
+          "recipient": {
+            "accuracy": 0.36363636363636365,
+            "adjudicated_count": 11,
+            "correct_count": 4,
+            "incorrect_count": 7
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 11
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "state_reference": {
+            "accuracy": 0.14285714285714285,
+            "adjudicated_count": 7,
+            "correct_count": 1,
+            "incorrect_count": 6,
+            "not_applicable_count": 4
+          },
+          "target_cardinality": {
+            "accuracy": 0.45454545454545453,
+            "adjudicated_count": 11,
+            "correct_count": 5,
+            "incorrect_count": 6
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 9,
+            "incorrect_count": 9,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "grant_link",
+            "operation": "grant",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+              "quote": "Give Link [190%] to all party members (3 turns)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "remove_status_ailment",
+            "operation": "remove",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "quote": "restore all statuses"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "recover_mp",
+            "operation": "restore",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "quote": "20% MP to party and reserve members"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "apply",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+            "source_text": "Give Link [190%] to all party members (3 turns)"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+            "source_text": "Link : Blunt add-on attack"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "restore",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+            "source_text": "restore all statuses"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+            "source_text": "Can change element by Kaleido or weapon type by Flexible"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+            "source_text": "AF gauge charge +0.5%, combo charge +2%"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "apply",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[7]",
+            "source_text": "All buffs on character apply to blunt add-on"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "apply",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[9]",
+            "source_text": "Buff and Link apply main and reserve party members"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "canonical_label_metrics": {
+          "expected": 11,
+          "fn": 11,
+          "fp": 11,
+          "predicted": 11,
+          "tp": 0
+        },
+        "canonical_labels": {
+          "expected": 11,
+          "fn": 11,
+          "fp": 11,
+          "predicted": 11,
+          "tp": 0
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 2,
+          "fp": 1,
+          "predicted": 1,
+          "tp": 0
+        },
+        "effects": {
+          "expected": 9,
+          "fn": 9,
+          "fp": 10,
+          "predicted": 10,
+          "tp": 0
+        },
+        "field_accuracy": {
+          "actor": 0.0,
+          "attack_type": 0.0,
+          "condition": 0.0,
+          "direction": 0.0,
+          "duration_activation": 0.0,
+          "element": 0.0,
+          "magnitude": 0.0,
+          "recipient": 0.0,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.0,
+          "target_cardinality": 0.0,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "attack_type": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 9
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "incorrect_count": 7,
+            "not_applicable_count": 4
+          },
+          "direction": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "duration_activation": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 7,
+            "unknown_count": 2
+          },
+          "element": {
+            "accuracy": 0.0,
+            "adjudicated_count": 2,
+            "incorrect_count": 2,
+            "not_applicable_count": 9
+          },
+          "magnitude": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "incorrect_count": 7,
+            "not_applicable_count": 4
+          },
+          "recipient": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 11
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "state_reference": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "incorrect_count": 7,
+            "not_applicable_count": 4
+          },
+          "target_cardinality": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 9,
+            "incorrect_count": 9,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+              "quote": "Earth Blunt attack on all enemies x3 (XXL)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+              "quote": "attack on all enemies x3"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "requires_stellar_awakened",
+            "operation": "require",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+              "quote": "Skill requires Stellar Awakening"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "speed_up",
+            "operation": "increase",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]",
+              "quote": "Speed of all party members +50% (3 turns)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "grant_link",
+            "operation": "grant",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+              "quote": "Give Link [190%] to all party members (3 turns)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "heal_hp",
+            "operation": "restore",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "quote": "Restore HP (L)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "remove_status_ailment",
+            "operation": "remove",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "quote": "restore all statuses"
+            }
+          },
+          {
+            "kind": "dependency",
+            "label": "party_composition",
+            "operation": "conditional",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "quote": "If Riica is in the frontline"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "revive",
+            "operation": "revive",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "quote": "Revive all fallen party members"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "heal_hp",
+            "operation": "restore",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "quote": "Restore 100% HP"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "recover_mp",
+            "operation": "restore",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "quote": "20% MP to party and reserve members"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "attack_again",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "burst_window",
+            "operation": "unknown",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "direct_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "grant_link",
+            "operation": "apply",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "heal_hp",
+            "operation": "restore",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_entity_damage",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "multi_hit_action",
+            "operation": "damage",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "remove_status_ailment",
+            "operation": "restore",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "dependency",
+            "label": "requires_stellar_awakened",
+            "operation": "activate",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "revive",
+            "operation": "unknown",
+            "source_location": null,
+            "source_text": null
+          },
+          {
+            "capability_gap": false,
+            "kind": "effect",
+            "label": "speed_up",
+            "operation": "increase",
+            "source_location": null,
+            "source_text": null
+          }
+        ]
+      },
+      "structural_only": {
+        "canonical_label_metrics": {
+          "expected": 11,
+          "fn": 4,
+          "fp": 0,
+          "predicted": 7,
+          "tp": 7
+        },
+        "canonical_labels": {
+          "expected": 11,
+          "fn": 4,
+          "fp": 0,
+          "predicted": 7,
+          "tp": 7
+        },
+        "dependencies": {
+          "expected": 2,
+          "fn": 0,
+          "fp": 0,
+          "predicted": 2,
+          "tp": 2
+        },
+        "effects": {
+          "expected": 9,
+          "fn": 3,
+          "fp": 7,
+          "predicted": 13,
+          "tp": 6
+        },
+        "field_accuracy": {
+          "actor": 0.7272727272727273,
+          "attack_type": 1.0,
+          "condition": 0.0,
+          "direction": 0.5454545454545454,
+          "duration_activation": 0.5,
+          "element": 1.0,
+          "magnitude": 0.2857142857142857,
+          "recipient": 0.36363636363636365,
+          "relationships": null,
+          "result": 0.0,
+          "state_reference": 0.14285714285714285,
+          "target_cardinality": 0.45454545454545453,
+          "trigger": 0.0
+        },
+        "field_correctness": {
+          "actor": {
+            "accuracy": 0.7272727272727273,
+            "adjudicated_count": 11,
+            "correct_count": 8,
+            "incorrect_count": 3
+          },
+          "attack_type": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 9
+          },
+          "condition": {
+            "accuracy": 0.0,
+            "adjudicated_count": 7,
+            "incorrect_count": 7,
+            "not_applicable_count": 4
+          },
+          "direction": {
+            "accuracy": 0.5454545454545454,
+            "adjudicated_count": 11,
+            "correct_count": 6,
+            "incorrect_count": 5
+          },
+          "duration_activation": {
+            "accuracy": 0.5,
+            "adjudicated_count": 2,
+            "correct_count": 1,
+            "incorrect_count": 1,
+            "not_applicable_count": 7,
+            "unknown_count": 2
+          },
+          "element": {
+            "accuracy": 1.0,
+            "adjudicated_count": 2,
+            "correct_count": 2,
+            "not_applicable_count": 9
+          },
+          "magnitude": {
+            "accuracy": 0.2857142857142857,
+            "adjudicated_count": 7,
+            "correct_count": 2,
+            "incorrect_count": 5,
+            "not_applicable_count": 4
+          },
+          "recipient": {
+            "accuracy": 0.36363636363636365,
+            "adjudicated_count": 11,
+            "correct_count": 4,
+            "incorrect_count": 7
+          },
+          "relationships": {
+            "accuracy": null,
+            "unknown_count": 11
+          },
+          "result": {
+            "accuracy": 0.0,
+            "adjudicated_count": 11,
+            "incorrect_count": 11
+          },
+          "state_reference": {
+            "accuracy": 0.14285714285714285,
+            "adjudicated_count": 7,
+            "correct_count": 1,
+            "incorrect_count": 6,
+            "not_applicable_count": 4
+          },
+          "target_cardinality": {
+            "accuracy": 0.45454545454545453,
+            "adjudicated_count": 11,
+            "correct_count": 5,
+            "incorrect_count": 6
+          },
+          "trigger": {
+            "accuracy": 0.0,
+            "adjudicated_count": 9,
+            "incorrect_count": 9,
+            "not_applicable_count": 2
+          }
+        },
+        "unmatched_expected": [
+          {
+            "kind": "effect",
+            "label": "grant_link",
+            "operation": "grant",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+              "quote": "Give Link [190%] to all party members (3 turns)"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "remove_status_ailment",
+            "operation": "remove",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "quote": "restore all statuses"
+            }
+          },
+          {
+            "kind": "effect",
+            "label": "recover_mp",
+            "operation": "restore",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "quote": "20% MP to party and reserve members"
+            }
+          }
+        ],
+        "unmatched_predictions": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "apply",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+            "source_text": "Give Link [190%] to all party members (3 turns)"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+            "source_text": "Link : Blunt add-on attack"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "restore",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+            "source_text": "restore all statuses"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+            "source_text": "Can change element by Kaleido or weapon type by Flexible"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+            "source_text": "AF gauge charge +0.5%, combo charge +2%"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "apply",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[7]",
+            "source_text": "All buffs on character apply to blunt add-on"
+          },
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "apply",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[9]",
+            "source_text": "Buff and Link apply main and reserve party members"
+          }
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "answers_parsed_after_classification_and_adapter": true,
+    "c2_artifact_version": "m6-c2-scoped-classification-1.5.0",
+    "classifier_comparison_invocations": 1,
+    "oracle_path": "/home/shogunix/c2-private/m6-second-fresh-owner-oracle.json",
+    "oracle_read_only": true,
+    "oracle_sha256": "89d932f00c972762668b305ba2f0d61c1851230894d6b377d1d76b5b3c3d2267",
+    "semantic_evaluator_invocations": 1,
+    "semantic_evaluator_version": "c2-atomic-eval-1.1.0",
+    "shared_adapter_invocations": 1,
+    "temporary_manifest_path": "/tmp/m6-second-fresh-freeze.json",
+    "temporary_manifest_sha256": "818d93c6d0dd3156590fed9e3ce898552099731ccd6263e4f3d92d62f73fb571"
+  },
+  "recurring_systematic_failures": [
+    {
+      "class": "unlabeled_occurrence_false_positives",
+      "count": 18,
+      "witness_count": 6
+    },
+    {
+      "class": "field_mismatch",
+      "count": 11,
+      "field": "actor"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 4,
+      "field": "attack_type"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 14,
+      "field": "condition"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 16,
+      "field": "direction"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 2,
+      "field": "duration_activation"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 3,
+      "field": "element"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 18,
+      "field": "magnitude"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 20,
+      "field": "recipient"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 30,
+      "field": "result"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 14,
+      "field": "state_reference"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 18,
+      "field": "target_cardinality"
+    },
+    {
+      "class": "field_mismatch",
+      "count": 23,
+      "field": "trigger"
+    }
+  ],
+  "relationship_results": {
+    "fresh2-benedict-large-slash": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 2
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [],
+        "unresolved_relationship_rows": []
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 2
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 2
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [],
+        "unresolved_relationship_rows": []
+      }
+    },
+    "fresh2-ewan-as-roaring-bash": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]/token[1]",
+            "source_text": "distinct debuffs",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]/token[1]",
+            "source_text": "Stance",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[7]/token[2]",
+            "source_text": "Stance",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 4
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Mantra state effects are represented as canonical effect atoms with state_reference=Mantra; no requires_status dependency is implied.",
+            "operation": "stacks",
+            "recipient": "self",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "stack Mantra on self"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Mantra"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 4
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Mantra state effects are represented as canonical effect atoms with state_reference=Mantra; no requires_status dependency is implied.",
+            "operation": "stacks",
+            "recipient": "self",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "stack Mantra on self"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Mantra"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]/token[1]",
+            "source_text": "distinct debuffs",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]/token[1]",
+            "source_text": "Stance",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[7]/token[2]",
+            "source_text": "Stance",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 4
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Mantra state effects are represented as canonical effect atoms with state_reference=Mantra; no requires_status dependency is implied.",
+            "operation": "stacks",
+            "recipient": "self",
+            "source_anchor": {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "stack Mantra on self"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Mantra"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      }
+    },
+    "fresh2-ewella-saevus-furorem": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 3
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Insanire resistance definition remains a canonical physical_resistance_down effect; no requires_status dependency.",
+            "operation": "applies_state",
+            "recipient": "enemy",
+            "source_anchor": {
+              "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+              "quote": "Stack 1 Insanire on enemy."
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Insanire"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 3
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Insanire resistance definition remains a canonical physical_resistance_down effect; no requires_status dependency.",
+            "operation": "applies_state",
+            "recipient": "enemy",
+            "source_anchor": {
+              "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+              "quote": "Stack 1 Insanire on enemy."
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Insanire"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 3
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Insanire resistance definition remains a canonical physical_resistance_down effect; no requires_status dependency.",
+            "operation": "applies_state",
+            "recipient": "enemy",
+            "source_anchor": {
+              "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+              "quote": "Stack 1 Insanire on enemy."
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Insanire"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      }
+    },
+    "fresh2-iridian-heal-arcus-irus": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[2]",
+            "source_text": "Charge",
+            "target_id": "shared:sidekick-charge",
+            "target_kind": "shared_mechanic"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[0]",
+            "source_text": "Charged",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[1]",
+            "source_text": "Wryz",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 5
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "Wryz is at front",
+            "note": "",
+            "operation": "applies_state",
+            "recipient": "Wryz",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "quote": "Stack 1 Dragonshade on Wryz"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Dragonshade"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 5
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "Wryz is at front",
+            "note": "",
+            "operation": "applies_state",
+            "recipient": "Wryz",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "quote": "Stack 1 Dragonshade on Wryz"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Dragonshade"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[2]",
+            "source_text": "Charge",
+            "target_id": "shared:sidekick-charge",
+            "target_kind": "shared_mechanic"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[0]",
+            "source_text": "Charged",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[1]",
+            "source_text": "Wryz",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 5
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "Wryz is at front",
+            "note": "",
+            "operation": "applies_state",
+            "recipient": "Wryz",
+            "source_anchor": {
+              "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "quote": "Stack 1 Dragonshade on Wryz"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Dragonshade"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      }
+    },
+    "fresh2-philo-as-store-power": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [
+          {
+            "operation": "activates",
+            "resolution_status": "resolved",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[2]",
+            "source_text": "Store Power - Counter",
+            "target_id": "skill:a023e3bd50e45872b076",
+            "target_kind": "source_fact"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[5]",
+            "source_text": "after pain / poison damage",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[1]",
+            "source_text": "Storing Power State",
+            "target_id": "skill:aed931d6d28bcb7fa25a",
+            "target_kind": "source_fact"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[3]",
+            "source_text": "Store Power - Counter",
+            "target_id": "skill:a023e3bd50e45872b076",
+            "target_kind": "source_fact"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 2
+        },
+        "expected_typed_activations": [
+          {
+            "expected_operation": "activates",
+            "observed": [
+              {
+                "attachment_status": "unresolved",
+                "operation": "activates",
+                "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[2]",
+                "source_text": "Storing Power State",
+                "target_id": "skill:aed931d6d28bcb7fa25a",
+                "target_kind": "source_fact"
+              }
+            ],
+            "status": "unresolved_attachment",
+            "target_name": "Storing Power State"
+          },
+          {
+            "expected_operation": "activates",
+            "observed": [
+              {
+                "operation": "activates",
+                "resolution_status": "resolved",
+                "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[2]",
+                "source_text": "Store Power - Counter",
+                "target_id": "skill:a023e3bd50e45872b076",
+                "target_kind": "source_fact"
+              }
+            ],
+            "status": "attached",
+            "target_name": "Store Power - Counter"
+          }
+        ],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Parent activation only; do not inherit child mechanics.",
+            "operation": "activates",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]",
+              "quote": "Activate Storing Power State on user"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Storing Power State"
+          },
+          {
+            "condition": "Counterattack",
+            "note": "Parent activation only; do not inherit child counter damage/scaling.",
+            "operation": "activates",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]",
+              "quote": "Activate Store Power - Counter on user"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Store Power - Counter"
+          },
+          {
+            "condition": "after pain/poison damage; not after enemy end-of-turn attacks",
+            "note": "Lifecycle metadata for child definitions, not a parent effect/dependency.",
+            "operation": "child_lifecycle",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+              "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Storing Power State; Store Power - Counter"
+          }
+        ],
+        "unresolved_relationship_rows": [
+          {
+            "attachment_status": "unresolved",
+            "operation": "activates",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[2]",
+            "source_text": "Storing Power State",
+            "target_id": "skill:aed931d6d28bcb7fa25a",
+            "target_kind": "source_fact"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 2
+        },
+        "expected_typed_activations": [
+          {
+            "expected_operation": "activates",
+            "observed": [],
+            "status": "missing",
+            "target_name": "Storing Power State"
+          },
+          {
+            "expected_operation": "activates",
+            "observed": [],
+            "status": "missing",
+            "target_name": "Store Power - Counter"
+          }
+        ],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Parent activation only; do not inherit child mechanics.",
+            "operation": "activates",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]",
+              "quote": "Activate Storing Power State on user"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Storing Power State"
+          },
+          {
+            "condition": "Counterattack",
+            "note": "Parent activation only; do not inherit child counter damage/scaling.",
+            "operation": "activates",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]",
+              "quote": "Activate Store Power - Counter on user"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Store Power - Counter"
+          },
+          {
+            "condition": "after pain/poison damage; not after enemy end-of-turn attacks",
+            "note": "Lifecycle metadata for child definitions, not a parent effect/dependency.",
+            "operation": "child_lifecycle",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+              "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Storing Power State; Store Power - Counter"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [
+          {
+            "operation": "activates",
+            "resolution_status": "resolved",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[2]",
+            "source_text": "Store Power - Counter",
+            "target_id": "skill:a023e3bd50e45872b076",
+            "target_kind": "source_fact"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[5]",
+            "source_text": "after pain / poison damage",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[1]",
+            "source_text": "Storing Power State",
+            "target_id": "skill:aed931d6d28bcb7fa25a",
+            "target_kind": "source_fact"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[3]",
+            "source_text": "Store Power - Counter",
+            "target_id": "skill:a023e3bd50e45872b076",
+            "target_kind": "source_fact"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 2
+        },
+        "expected_typed_activations": [
+          {
+            "expected_operation": "activates",
+            "observed": [
+              {
+                "attachment_status": "unresolved",
+                "operation": "activates",
+                "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[2]",
+                "source_text": "Storing Power State",
+                "target_id": "skill:aed931d6d28bcb7fa25a",
+                "target_kind": "source_fact"
+              }
+            ],
+            "status": "unresolved_attachment",
+            "target_name": "Storing Power State"
+          },
+          {
+            "expected_operation": "activates",
+            "observed": [
+              {
+                "operation": "activates",
+                "resolution_status": "resolved",
+                "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[2]",
+                "source_text": "Store Power - Counter",
+                "target_id": "skill:a023e3bd50e45872b076",
+                "target_kind": "source_fact"
+              }
+            ],
+            "status": "attached",
+            "target_name": "Store Power - Counter"
+          }
+        ],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Parent activation only; do not inherit child mechanics.",
+            "operation": "activates",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]",
+              "quote": "Activate Storing Power State on user"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Storing Power State"
+          },
+          {
+            "condition": "Counterattack",
+            "note": "Parent activation only; do not inherit child counter damage/scaling.",
+            "operation": "activates",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]",
+              "quote": "Activate Store Power - Counter on user"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Store Power - Counter"
+          },
+          {
+            "condition": "after pain/poison damage; not after enemy end-of-turn attacks",
+            "note": "Lifecycle metadata for child definitions, not a parent effect/dependency.",
+            "operation": "child_lifecycle",
+            "recipient": "user",
+            "source_anchor": {
+              "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+              "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Storing Power State; Store Power - Counter"
+          }
+        ],
+        "unresolved_relationship_rows": [
+          {
+            "attachment_status": "unresolved",
+            "operation": "activates",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[2]",
+            "source_text": "Storing Power State",
+            "target_id": "skill:aed931d6d28bcb7fa25a",
+            "target_kind": "source_fact"
+          }
+        ]
+      }
+    },
+    "fresh2-radias-turn-end-buff": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[0]",
+            "source_text": "End of Turn",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[2]/token[2]",
+            "source_text": "Copy",
+            "target_id": "shared:copy",
+            "target_kind": "shared_mechanic"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 3
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [],
+        "unresolved_relationship_rows": [
+          {
+            "attachment_status": "unresolved",
+            "operation": "references",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[4]/token[0]",
+            "source_text": "Counting Rules",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "attachment_status": "unresolved",
+            "operation": "references",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[13]",
+            "source_text": "Sleep, Confusion, Stone, Freeze",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ]
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 3
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [
+          {
+            "operation": "references",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[0]",
+            "source_text": "End of Turn",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "operation": "references",
+            "resolution_status": "resolved",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[2]/token[2]",
+            "source_text": "Copy",
+            "target_id": "shared:copy",
+            "target_kind": "shared_mechanic"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 3
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [],
+        "unresolved_relationship_rows": [
+          {
+            "attachment_status": "unresolved",
+            "operation": "references",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[4]/token[0]",
+            "source_text": "Counting Rules",
+            "target_id": "",
+            "target_kind": "unresolved"
+          },
+          {
+            "attachment_status": "unresolved",
+            "operation": "references",
+            "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[13]",
+            "source_text": "Sleep, Confusion, Stone, Freeze",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ]
+      }
+    },
+    "fresh2-riica-elimination-ray": {
+      "fidelity_checked": {
+        "attached_relationship_rows": [
+          {
+            "operation": "requires",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]/token[3]",
+            "source_text": "Stellar Awakening",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 11
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Nested Link text belongs to this pinned Elimination Ray row; fixed AF/combo charges remain Link metadata.",
+            "operation": "defines_embedded_mechanic",
+            "recipient": "all party members",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+              "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Link"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "legacy_flattened": {
+        "attached_relationship_rows": [],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 11
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Nested Link text belongs to this pinned Elimination Ray row; fixed AF/combo charges remain Link metadata.",
+            "operation": "defines_embedded_mechanic",
+            "recipient": "all party members",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+              "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Link"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      },
+      "structural_only": {
+        "attached_relationship_rows": [
+          {
+            "operation": "requires",
+            "resolution_status": "access_failure",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]/token[3]",
+            "source_text": "Stellar Awakening",
+            "target_id": "",
+            "target_kind": "unresolved"
+          }
+        ],
+        "evaluator_typed_relationship_field": {
+          "accuracy": null,
+          "unknown_count": 11
+        },
+        "expected_typed_activations": [],
+        "source_semantic_relationships": [
+          {
+            "condition": "on skill use",
+            "note": "Nested Link text belongs to this pinned Elimination Ray row; fixed AF/combo charges remain Link metadata.",
+            "operation": "defines_embedded_mechanic",
+            "recipient": "all party members",
+            "source_anchor": {
+              "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+              "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+            },
+            "target_kind": "named_source_mechanic",
+            "target_name": "Link"
+          }
+        ],
+        "unresolved_relationship_rows": []
+      }
+    }
+  },
+  "relationship_summary": {
+    "adapter_result": "3 unresolved relationship attachments in the fidelity_checked arm.",
+    "evaluator_result": "typed relationship field not scored: 0 adjudicated of 30 atoms; 30 unknown. This is reported separately from source-semantic relationship review because the evaluator compares generated IDs.",
+    "other_references": "Ewan distinct-debuff/Stance references and Iridian Wryz references were retained as attached unresolved/access-failure references; Radias Copy resolved as a shared mechanic.",
+    "philo_store_power": "Store Power - Counter activation was attached and resolved; Storing Power State activation was emitted as a source_fact relationship but its attachment was unresolved.",
+    "riica_link": "the nested Link definition was present on the pinned row and retained in the oracle grant_link metadata; classifier emitted an additional unlabeled damage occurrence for the Link add-on text while the canonical grant_link label was missed."
+  },
+  "selected_arm": "fidelity_checked",
+  "source_pin_verification": {
+    "capture_and_slice_hashes_verified": true,
+    "fact_ids_and_grid_locations": "the seven owner-approved fact IDs and grid locations are carried verbatim in the oracle and report",
+    "riica_selector": "grid[10]/block[0], Enhanced row, XXL tier, source-slice SHA-256 1ebdb880ed8942468a2b3ad62d3e70d7a3204c962b259dcf4c4fc6937e7af9a5"
+  },
+  "unsupported_gaps": [
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Mantra stack creation (+1 on Ewan)",
+      "reason": "The taxonomy has no state/stack-creation capability; retain as explicit creation semantics, not a prerequisite.",
+      "source_anchor": {
+        "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+        "quote": "stack Mantra on self"
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-ewan-as-roaring-bash"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Mantra maximum HP increase",
+      "reason": "No canonical maximum-HP-up capability exists.",
+      "source_anchor": {
+        "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+        "quote": "Max HP +300 per stack"
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-ewan-as-roaring-bash"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Stance-dependent attack-type selection",
+      "reason": "Attack-type selection/default behavior has no dedicated capability; it is also attached as attack-type metadata to direct_damage.",
+      "source_anchor": {
+        "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]",
+        "quote": "Damage type is according to active Stance"
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-ewan-as-roaring-bash"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Insanire stack creation (+1 on the enemy)",
+      "reason": "No canonical state/stack-creation capability exists; the damage formula reads the state but does not make it a prerequisite.",
+      "source_anchor": {
+        "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+        "quote": "Stack 1 Insanire on enemy."
+      },
+      "unmatched_classifier_occurrences_by_arm": {
+        "fidelity_checked": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "source_text": "Stack 1 Insanire on enemy"
+          }
+        ],
+        "structural_only": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "source_text": "Stack 1 Insanire on enemy"
+          }
+        ]
+      },
+      "witness_id": "fresh2-ewella-saevus-furorem"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Dragonshade stack creation (+1 on Wryz)",
+      "reason": "No canonical state/stack-creation capability exists.",
+      "source_anchor": {
+        "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+        "quote": "Stack 1 Dragonshade on Wryz"
+      },
+      "unmatched_classifier_occurrences_by_arm": {
+        "fidelity_checked": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "source_text": "Stack 1 Dragonshade on Wryz"
+          }
+        ],
+        "structural_only": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "source_text": "Stack 1 Dragonshade on Wryz"
+          }
+        ]
+      },
+      "witness_id": "fresh2-iridian-heal-arcus-irus"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Stance-based element override",
+      "reason": "The branch is represented by requires_zone plus damage metadata; no separate element-conversion capability exists.",
+      "source_anchor": {
+        "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+        "quote": "Element type changes to type of deployed zone."
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-iridian-heal-arcus-irus"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "World Tree Power stack creation (+1)",
+      "reason": "No canonical state/stack-creation capability exists.",
+      "source_anchor": {
+        "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+        "quote": "Stack 1 World Tree Power"
+      },
+      "unmatched_classifier_occurrences_by_arm": {
+        "fidelity_checked": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "source_text": "Stack 1 World Tree Power"
+          }
+        ],
+        "structural_only": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "source_text": "Stack 1 World Tree Power"
+          }
+        ]
+      },
+      "witness_id": "fresh2-philo-as-store-power"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Basic-attack replacement behavior",
+      "reason": "The taxonomy has no action-replacement capability; preserve as parent action/slot metadata and its branch condition.",
+      "source_anchor": {
+        "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+        "quote": "Replaces the basic attack"
+      },
+      "unmatched_classifier_occurrences_by_arm": {
+        "fidelity_checked": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "source_text": "Replaces the basic attack"
+          }
+        ],
+        "structural_only": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "damage",
+            "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "source_text": "Replaces the basic attack"
+          }
+        ]
+      },
+      "witness_id": "fresh2-philo-as-store-power"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Equipment replacement precedence",
+      "reason": "No canonical capability/dependency models this replacement-priority rule.",
+      "source_anchor": {
+        "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]",
+        "quote": "overwritten if user is wearing an equipment that replaces basic attack skill slot"
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-philo-as-store-power"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Child-status lifecycle after pain/poison",
+      "reason": "This lifecycle rule belongs to the child definitions and has no canonical capability/dependency label.",
+      "source_anchor": {
+        "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+        "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-philo-as-store-power"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Negative-status absence guard",
+      "reason": "The dependency taxonomy has no absence-of-status guard; do not convert this into a positive requires_status dependency.",
+      "source_anchor": {
+        "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+        "quote": "When not in Sleep, Confusion, Stone, Freeze"
+      },
+      "unmatched_classifier_occurrences_by_arm": {},
+      "witness_id": "fresh2-radias-turn-end-buff"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Fixed Link AF gauge/combo charge semantics",
+      "reason": "The nested Link adds fixed resource charge, not an increase to AF/combo gain rate. Retain as grant_link metadata; create no af_gauge_gain_up or af_combo_gain_up expected atoms.",
+      "source_anchor": {
+        "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+        "quote": "AF gauge charge +0.5%, combo charge +2%"
+      },
+      "unmatched_classifier_occurrences_by_arm": {
+        "fidelity_checked": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+            "source_text": "AF gauge charge +0.5%, combo charge +2%"
+          }
+        ],
+        "structural_only": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "increase",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+            "source_text": "AF gauge charge +0.5%, combo charge +2%"
+          }
+        ]
+      },
+      "witness_id": "fresh2-riica-elimination-ray"
+    },
+    {
+      "expected_capability_atom": false,
+      "mechanic": "Flexible weapon-type override",
+      "reason": "This row supports a weapon-type override, but the taxonomy has no matching weapon-type-conversion capability; retain as direct-damage metadata.",
+      "source_anchor": {
+        "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+        "quote": "Can change element by Kaleido or weapon type by Flexible"
+      },
+      "unmatched_classifier_occurrences_by_arm": {
+        "fidelity_checked": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+            "source_text": "Can change element by Kaleido or weapon type by Flexible"
+          }
+        ],
+        "structural_only": [
+          {
+            "capability_gap": true,
+            "kind": "effect",
+            "label": null,
+            "operation": "unknown",
+            "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+            "source_text": "Can change element by Kaleido or weapon type by Flexible"
+          }
+        ]
+      },
+      "witness_id": "fresh2-riica-elimination-ray"
+    }
+  ],
+  "witness_count": 7,
+  "witnesses": [
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Benedict",
+      "fact_id": "skill:07dccfa630d27ee7493c",
+      "fact_name": "Large Slash",
+      "record_type": "active_skill",
+      "source_capture_sha256": "a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e",
+      "source_kind": "character",
+      "source_location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+      "source_path": "data/raw/characters/benedict.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "fa251fa2125d8db7a5a6ce251b8c58ed175488e7c4ea548582def51b37b0a0bc",
+      "source_variant_label": null,
+      "witness_id": "fresh2-benedict-large-slash"
+    },
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Ewan (Another Style)",
+      "fact_id": "skill:cc8d8b2407e2328f8c97",
+      "fact_name": "Sign: Roaring Bash",
+      "record_type": "active_skill",
+      "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+      "source_kind": "character",
+      "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+      "source_path": "data/raw/characters/ewan_another_style.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "20355c8e092cbfdef6c0769d06a8fb4c38cdfa5d27115166816cad89be8ce0fd",
+      "source_variant_label": null,
+      "witness_id": "fresh2-ewan-as-roaring-bash"
+    },
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Ewella",
+      "fact_id": "skill:16e0908e04df3e54e305",
+      "fact_name": "Saevus Furorem",
+      "record_type": "active_skill",
+      "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+      "source_kind": "character",
+      "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+      "source_path": "data/raw/characters/ewella.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "9c7bb3be6bed2cc832ae52c8377daba1fbe9defd2bf7f7ec5ad234efb9b7f17c",
+      "source_variant_label": null,
+      "witness_id": "fresh2-ewella-saevus-furorem"
+    },
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Iridian (Heal)",
+      "fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+      "fact_name": "Arcus Irus",
+      "record_type": "sidekick_charge",
+      "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+      "source_kind": "sidekick",
+      "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+      "source_path": "data/raw/sidekicks/iridian_heal.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "9009d6c4631087428210335fdf08279d2709dea6c7407471c37a500c71133cca",
+      "source_variant_label": null,
+      "witness_id": "fresh2-iridian-heal-arcus-irus"
+    },
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Philo (Another Style)",
+      "fact_id": "skill:532c9a8e2a50a9558586",
+      "fact_name": "Store Power",
+      "record_type": "active_skill",
+      "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+      "source_kind": "character",
+      "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+      "source_path": "data/raw/characters/philo_another_style.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "c66382bca5d814a57829da87b8177c96b5949078f81b55680034b1482405902a",
+      "source_variant_label": null,
+      "witness_id": "fresh2-philo-as-store-power"
+    },
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Radias",
+      "fact_id": "passive:d2644ada1792457176a1",
+      "fact_name": "Radias turn end buff",
+      "record_type": "passive_skill",
+      "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+      "source_kind": "character",
+      "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+      "source_path": "data/raw/characters/radias.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "a7e2d7207a8adb17b4f2e672797c5eae9ceb968e15e32fce43ad5c7bb14a4b65",
+      "source_variant_label": null,
+      "witness_id": "fresh2-radias-turn-end-buff"
+    },
+    {
+      "capture_hash_verified_against_raw_source": true,
+      "entity_name": "Riica",
+      "fact_id": "skill:88b9e632fcab5897d21e",
+      "fact_name": "Elimination Ray",
+      "record_type": "active_skill",
+      "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+      "source_kind": "character",
+      "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+      "source_path": "data/raw/characters/riica.html",
+      "source_slice_hash_verified_against_selected_grid": true,
+      "source_slice_sha256": "1ebdb880ed8942468a2b3ad62d3e70d7a3204c962b259dcf4c4fc6937e7af9a5",
+      "source_variant_label": "Enhanced",
+      "witness_id": "fresh2-riica-elimination-ray"
+    }
+  ]
+}

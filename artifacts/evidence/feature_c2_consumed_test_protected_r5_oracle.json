@@ -1,0 +1,942 @@
+{
+  "cohort": "fresh_replacement",
+  "discovered_taxonomy_gaps": [
+    {
+      "fact_id": "passive:ffe6a2a929bd155810ed",
+      "owner_note": "No existing canonical capability represents initializing/granting 3 Koakh stacks. requires_stack would incorrectly require an existing stack; repeatable_setup is not defined as initial stack/resource creation. Do not invent a capability atom.",
+      "source_anchor": {
+        "location": "sha256:dd55fdda8ec401de82174310597b635be772d40d7946291e59338a9394ae9d1e/grid[10]/block[0]",
+        "quote": "user starts with 3 Koakh"
+      },
+      "source_capture_sha256": "dd55fdda8ec401de82174310597b635be772d40d7946291e59338a9394ae9d1e",
+      "source_location": "sha256:dd55fdda8ec401de82174310597b635be772d40d7946291e59338a9394ae9d1e/grid[10]/block[0]",
+      "source_supported_semantics": {
+        "initial_quantity": "3",
+        "recipient": "user",
+        "resource_state": "Koakh",
+        "trigger": "battle_start"
+      },
+      "witness_id": "fresh-thillelille-as-koakh-passive"
+    }
+  ],
+  "schema_version": "c2-atomic-oracle-1",
+  "witnesses": [
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Magic"
+            },
+            "condition": {
+              "status": "unknown"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "enemy"
+            },
+            "duration_activation": {
+              "status": "unknown"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "unknown"
+            },
+            "state_reference": {
+              "status": "unknown"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19/grid[0]/block[0]",
+            "quote": "Auto Fire type magic attack on all enemies (XL) and Wind type resistance of all party members +10% (3 turns: max stack x5, +30% ) Buff amount increases from stats"
+          }
+        },
+        {
+          "atomic_capability_id": "ally_resistance_up",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "not_applicable"
+            },
+            "condition": {
+              "status": "unknown"
+            },
+            "direction": {
+              "status": "adjudicated",
+              "value": "ally"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": {
+                "duration_turns": "3"
+              }
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Wind"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "raw": "+10%",
+                "unit": "percent",
+                "value": "10"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "party"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "unknown"
+            },
+            "state_reference": {
+              "status": "unknown"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "multiple"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "increase",
+          "source_anchor": {
+            "location": "sha256:8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19/grid[0]/block[0]",
+            "quote": "Auto Fire type magic attack on all enemies (XL) and Wind type resistance of all party members +10% (3 turns: max stack x5, +30% ) Buff amount increases from stats"
+          }
+        }
+      ],
+      "fact_id": "sidekick_skill:dba67d8609f89ceac109",
+      "source_capture_sha256": "8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19",
+      "source_location": "sha256:8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19/grid[0]/block[0]",
+      "witness_id": "fresh-minimander-auto"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "fixed_damage",
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "Fixed damage on all enemies"
+          }
+        },
+        {
+          "atomic_capability_id": "ignore_target_defense",
+          "occurrence_kind": "effect",
+          "operation": "unknown",
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "ignores target's defense"
+          }
+        },
+        {
+          "atomic_capability_id": "heal_hp",
+          "occurrence_kind": "effect",
+          "operation": "restore",
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "Restore all party members' HP +100%"
+          }
+        },
+        {
+          "atomic_capability_id": "revive",
+          "occurrence_kind": "effect",
+          "operation": "unknown",
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "Revive all dead party members"
+          }
+        },
+        {
+          "atomic_capability_id": "hold_ground",
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "give Hold Ground to all party members"
+          }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "condition": "Minalca is at front"
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "[When Minalca is at front]"
+          }
+        }
+      ],
+      "fact_id": "sidekick_skill:62088d706220b57f1fa4",
+      "source_capture_sha256": "dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87",
+      "source_location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+      "taxonomy_evaluator_gaps": [
+        {
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "Consumes 8 Charge"
+          }
+        },
+        {
+          "source_anchor": {
+            "location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+            "quote": "Minalca activates Lethal Mode"
+          }
+        }
+      ],
+      "witness_id": "fresh-tetra-charge"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "remove_status_ailment",
+          "fields": {
+            "recipient": "unknown",
+            "target_cardinality": "unknown"
+          },
+          "occurrence_kind": "effect",
+          "operation": "remove",
+          "source_anchor": {
+            "location": "sha256:6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe/grid[2]/block[0]",
+            "quote": "Restore all statuses"
+          }
+        }
+      ],
+      "fact_id": "skill:39f11594959ae5b6d20e",
+      "source_capture_sha256": "6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe",
+      "source_location": "sha256:6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe/grid[2]/block[0]",
+      "witness_id": "fresh-erina-refresh"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "awaken_zone",
+          "fields": {
+            "result": "awaken an applicable Elemental Type Zone into Radical Zone",
+            "state_reference": "Radical Zone"
+          },
+          "occurrence_kind": "effect",
+          "operation": "activate",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Awakens Elemental Type Zones"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_zone",
+          "fields": {
+            "condition": "an applicable Elemental Type Zone must already exist",
+            "state_reference": "Elemental Type Zone"
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Can be awaken if defined zone is Another Zone"
+          }
+        },
+        {
+          "atomic_capability_id": "limited_use",
+          "fields": {
+            "condition": "via active-skill sources",
+            "duration_activation": {
+              "activation": "once_per_character"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Via active skills, can be activated only once per character"
+          }
+        }
+      ],
+      "evaluator_limitations": [
+        "The current atomic evaluator has no separate taxonomy atoms for all Radical Zone mechanic-local multiplier, zone-overwrite, duration, removal, coexistence, Sonority, and non-consumption rules; these approved semantics are retained with pinned source anchors but are not independently scored."
+      ],
+      "fact_id": "passive:9fb47053d32547d0b8de",
+      "owner_context": "Treat this witness primarily as a shared-mechanic-definition test, not as evidence that Myunfa herself directly owns every behavior described by Radical Zone.",
+      "shared_mechanic_semantics": [
+        {
+          "owner_note": "A defined zone that is already Another Zone can still be awakened into Radical Zone.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Can be awaken if defined zone is Another Zone"
+          }
+        },
+        {
+          "owner_note": "Radical Zone changes Zone damage multipliers to the stated +60% / +100% values by zone category.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Doubles damage multiplicators for Zones : to +60% for Attack Zones and Thunder, Crystal, Shade (other elements) Type Zones to +100% for Fire, Water, Wind, Earth and Shade Type Zones"
+          }
+        },
+        {
+          "owner_note": "Crystal/Shade Type Zone weakness/resistance effects are doubled as stated.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Doubles \"damage on weakness/resist\" effects for Crystal/Shade Type Zone respectively"
+          }
+        },
+        {
+          "owner_note": "Radical Zone cannot be overwritten while active.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Zone cannot be overwritten by other zones during the duration"
+          }
+        },
+        {
+          "owner_note": "Its duration cannot be extended by attempting to activate Another Zone or Radical Zone again.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "duration cannot be extended by attempting to activate Another Zone or reactivate R. Zone"
+          }
+        },
+        {
+          "owner_note": "It can still be removed/broken by skills that remove zones.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Zone can still be removed/broken by skills that remove zones"
+          }
+        },
+        {
+          "owner_note": "It is removed after its duration ends.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "After duration ends, zone is removed"
+          }
+        },
+        {
+          "owner_note": "Support Effects can coexist with Radical Zone.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Support Effects can be used at the same time as R. Zone"
+          }
+        },
+        {
+          "owner_note": "Sonority effects are strengthened while Radical Zone is active.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Sonority effects will be strengthen in R. Zone"
+          }
+        },
+        {
+          "owner_note": "When no appropriate zone exists, or the zone is already awakened, an attempted active-skill awakening does not consume the awakening ability.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "When there is no appropriate zone or the zone is already awakened, using a skill that can \"awaken\" R. Zone will not consume awakening ability"
+          }
+        },
+        {
+          "owner_note": "Non-active skill sources may activate it more than once per battle when explicitly stated.",
+          "source_anchor": {
+            "location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+            "quote": "Non-active skill sources may activate it more than once per battle if explicitly stated"
+          }
+        }
+      ],
+      "source_capture_sha256": "72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f",
+      "source_location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+      "witness_id": "fresh-myunfa-alter-radical-zone"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "grant_status_immunity",
+          "fields": {
+            "condition": "When user is in the front line",
+            "duration_activation": {
+              "activation": "2"
+            },
+            "recipient": "party",
+            "result": "Status Immunity for 2 activations/times",
+            "target_cardinality": "multiple",
+            "trigger": "turn_start"
+          },
+          "occurrence_kind": "effect",
+          "operation": "apply",
+          "source_anchor": {
+            "location": "sha256:1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89/grid[13]/block[0]",
+            "quote": "Give Status immunity to all party members (2 times)"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stellar_awakened",
+          "fields": {
+            "state_reference": "Stellar Awakening"
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89/grid[13]/block[0]",
+            "quote": "Skill requires Stellar Awakening"
+          }
+        },
+        {
+          "atomic_capability_id": "party_composition",
+          "fields": {
+            "condition": "When user is in the front line"
+          },
+          "occurrence_kind": "dependency",
+          "operation": "conditional",
+          "source_anchor": {
+            "location": "sha256:1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89/grid[13]/block[0]",
+            "quote": "When user is in the front line"
+          }
+        }
+      ],
+      "fact_id": "passive:32a72284b507f529e807",
+      "source_capture_sha256": "1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89",
+      "source_location": "sha256:1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89/grid[13]/block[0]",
+      "witness_id": "fresh-yuna-turn-start-status-immunity"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "direct_damage",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "adjudicated",
+              "value": "Piercing"
+            },
+            "condition": {
+              "status": "unknown"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "not_applicable"
+            },
+            "element": {
+              "status": "adjudicated",
+              "value": "Fire"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": {
+                "hit_count": 5,
+                "listed_multiplier": "1050%-5250% × Mod",
+                "per_hit_standard_skill_multiplier": "5x of 210%",
+                "stellar_burst_multiplier_change": "+400% (Multiplier x5)"
+              }
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "one five-hit direct attack event"
+            },
+            "state_reference": {
+              "status": "not_applicable"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "Preemptive"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "damage",
+          "source_anchor": {
+            "location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+            "quote": "Fire type piercing attack on all enemies x5"
+          }
+        },
+        {
+          "atomic_capability_id": "power_down",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "8+ Clock Count stacked; Jamming branch activates"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": "Jamming: one stack consumed at end of turn; all consumed on user death"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": "-100%"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Power"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Jamming"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+            "quote": "Power and Intelligence -100%"
+          }
+        },
+        {
+          "atomic_capability_id": "intelligence_down",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "8+ Clock Count stacked; Jamming branch activates"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "adjudicated",
+              "value": "Jamming: one stack consumed at end of turn; all consumed on user death"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": "-100%"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Intelligence"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Jamming"
+            },
+            "target_cardinality": {
+              "status": "adjudicated",
+              "value": "all_enemies"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+            "quote": "Power and Intelligence -100%"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "8+ Retro Count; branch consumes 8"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "unknown"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "adjudicated",
+              "value": [
+                {
+                  "child_fact_name": "Tri-assault",
+                  "condition": "8+ Retro Count",
+                  "edge_type": "activates",
+                  "parent_fact_id": "skill:9c713bcaaf0c7c77829c",
+                  "parent_fact_name": "Holdup"
+                },
+                {
+                  "child_fact_name": "Blaze Impact",
+                  "condition": "8+ Retro Count",
+                  "edge_type": "activates",
+                  "parent_fact_id": "skill:9c713bcaaf0c7c77829c",
+                  "parent_fact_name": "Holdup"
+                },
+                {
+                  "child_fact_name": "Vigilant Lance",
+                  "condition": "8+ Retro Count",
+                  "edge_type": "activates",
+                  "parent_fact_id": "skill:9c713bcaaf0c7c77829c",
+                  "parent_fact_name": "Holdup"
+                }
+              ]
+            },
+            "result": {
+              "status": "unknown"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Retro Count"
+            },
+            "target_cardinality": {
+              "status": "not_applicable"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+            "quote": "When 8+ Retro Count are stacked: Consume 8 Retro Count to Activate Tri-assault, Blaze Impact and Vigilant Lance"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stack",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "8+ Clock Count; branch consumes 8 and applies Jamming"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "unknown"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "unknown"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Clock Count"
+            },
+            "target_cardinality": {
+              "status": "not_applicable"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+            "quote": "When 8+ Clock Count are stacked: Consume 8 Clock Count to stack Jamming on all enemies"
+          }
+        },
+        {
+          "atomic_capability_id": "requires_stellar_awakened",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "adjudicated",
+              "value": "Stellar Awakening"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "unknown"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "unknown"
+            },
+            "recipient": {
+              "status": "not_applicable"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "unknown"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Stellar Awakening"
+            },
+            "target_cardinality": {
+              "status": "not_applicable"
+            },
+            "trigger": {
+              "status": "unknown"
+            }
+          },
+          "occurrence_kind": "dependency",
+          "operation": "require",
+          "source_anchor": {
+            "location": "sha256:8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce/grid[10]/block[0]",
+            "quote": "Skill requires Stellar Awakening"
+          }
+        }
+      ],
+      "fact_id": "skill:9c713bcaaf0c7c77829c",
+      "source_capture_sha256": "8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce",
+      "source_context": {
+        "child_capabilities_inherited_by_parent": false,
+        "local_resource_semantics": [
+          {
+            "consume": "8 Retro Count"
+          },
+          {
+            "consume": "8 Clock Count"
+          },
+          {
+            "rule": "Retro and Clock Count do not stack when using Holdup."
+          },
+          {
+            "Jamming": "one stack consumed at end of turn"
+          },
+          {
+            "on_user_death": "all Jamming stacks consumed"
+          }
+        ],
+        "stellar_burst_taxonomy_gap": {
+          "Retro_or_Clock_consumed": false,
+          "multiplier_change": "+400% (Multiplier x5)",
+          "unavailable_dependency": "requires_stellar_burst"
+        }
+      },
+      "witness_id": "fresh-replacement-cetie-holdup"
+    },
+    {
+      "atoms": [
+        {
+          "atomic_capability_id": "power_down",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "unknown"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "unknown"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": "-25%"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "enemy or ally satisfying Aura activation condition"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Power"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Aura"
+            },
+            "target_cardinality": {
+              "status": "unknown"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "When enemy or ally receives Fire-type damage"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:3ae5125dd04526eb3bd615fed37098a0cad5aed0ba172613320c326605519f76/grid[2]/block[0]",
+            "quote": "Power -25%"
+          }
+        },
+        {
+          "atomic_capability_id": "intelligence_down",
+          "fields": {
+            "actor": {
+              "status": "unknown"
+            },
+            "attack_type": {
+              "status": "unknown"
+            },
+            "condition": {
+              "status": "unknown"
+            },
+            "direction": {
+              "status": "unknown"
+            },
+            "duration_activation": {
+              "status": "unknown"
+            },
+            "element": {
+              "status": "unknown"
+            },
+            "magnitude": {
+              "status": "adjudicated",
+              "value": "-25%"
+            },
+            "recipient": {
+              "status": "adjudicated",
+              "value": "enemy or ally satisfying Aura activation condition"
+            },
+            "relationships": {
+              "status": "not_applicable"
+            },
+            "result": {
+              "status": "adjudicated",
+              "value": "Intelligence"
+            },
+            "state_reference": {
+              "status": "adjudicated",
+              "value": "Aura"
+            },
+            "target_cardinality": {
+              "status": "unknown"
+            },
+            "trigger": {
+              "status": "adjudicated",
+              "value": "When enemy or ally receives Fire-type damage"
+            }
+          },
+          "occurrence_kind": "effect",
+          "operation": "decrease",
+          "source_anchor": {
+            "location": "sha256:3ae5125dd04526eb3bd615fed37098a0cad5aed0ba172613320c326605519f76/grid[2]/block[0]",
+            "quote": "Intelligence -25%"
+          }
+        }
+      ],
+      "fact_id": "sidekick_aura:36fe58e3ce12f71d0b49",
+      "source_capture_sha256": "3ae5125dd04526eb3bd615fed37098a0cad5aed0ba172613320c326605519f76",
+      "source_context": {
+        "dependencies": [],
+        "mechanic_context": "Aura",
+        "record_name": "Flame Jammer"
+      },
+      "witness_id": "fresh-replacement-korobo-flame-jammer"
+    }
+  ]
+}

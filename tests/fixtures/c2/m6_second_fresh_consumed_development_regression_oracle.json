@@ -46,7 +46,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
-            "quote": "Slash attack on a single enemy (L)"
+            "quote": "Slash attack on a single enemy",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6a9cfbdedacead752211d4c18a45ca9d",
+              "source_fact_id": "skill:07dccfa630d27ee7493c",
+              "source_capture_sha256": "a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e",
+              "block_location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]/token[0]",
+                  "content_sha256": "7b09cd810fad5b29a6d14cc9a5561aef0a8e1ae30c8f6437ef0b7b33a90075db"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 30
+            }
           }
         },
         {
@@ -88,7 +109,28 @@
           "operation": "decrease",
           "source_anchor": {
             "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
-            "quote": "Slash resistance"
+            "quote": "Slash resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a6a139c937bd69acdad3fc52e44d9c46",
+              "source_fact_id": "skill:07dccfa630d27ee7493c",
+              "source_capture_sha256": "a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e",
+              "block_location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]/token[0]",
+                  "content_sha256": "7b09cd810fad5b29a6d14cc9a5561aef0a8e1ae30c8f6437ef0b7b33a90075db"
+                }
+              ],
+              "start_token_offset": 39,
+              "end_token_offset": 55
+            }
           }
         }
       ],
@@ -107,7 +149,8 @@
       "source_path": "data/raw/characters/benedict.html",
       "source_slice_sha256": "fa251fa2125d8db7a5a6ce251b8c58ed175488e7c4ea548582def51b37b0a0bc",
       "unsupported_gaps": [],
-      "witness_id": "fresh2-benedict-large-slash"
+      "witness_id": "fresh2-benedict-large-slash",
+      "reviewed_unscored_mechanics": []
     },
     {
       "atoms": [
@@ -146,7 +189,40 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "Fire type slash/pierce/blunt/magic attack on all enemies (XL)"
+            "quote": "Fire type slash/pierce/blunt/magic attack on all enemies",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b433f4231a14535a0bf4767a35bd4daf",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[0]",
+                  "content_sha256": "512d854d780c6a56faafc9f9be3631e8499af5b84d5f7ab80ab08d322c610026"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[1]",
+                  "content_sha256": "72dca90a148d08ad8c2a13bdbc3387bc428b5bb7eb475de6e0c32a81de44f197"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[2]",
+                  "content_sha256": "03c578bb65de61d2705c49f9ecece776bff04e05a16fa2bdc370fd9a2e04900f"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 21
+            }
           }
         },
         {
@@ -193,7 +269,28 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "Increase critical rate"
+            "quote": "Increase critical rate",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:94f83583ed30fe780e784ff7af19c6b3",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 7,
+              "token_end": 7,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[7]",
+                  "content_sha256": "c6f6441d178b0cd359245c84ba11c831b805f64e037f237bb8077e256453e82e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 22
+            }
           }
         },
         {
@@ -240,7 +337,34 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "magic critical rate +10%"
+            "quote": "magic critical rate +10%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:56d97bd209e0c1847fb77f7643f83e72",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 7,
+              "token_end": 8,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[7]",
+                  "content_sha256": "c6f6441d178b0cd359245c84ba11c831b805f64e037f237bb8077e256453e82e"
+                },
+                {
+                  "kind": "text",
+                  "order": 8,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[8]",
+                  "content_sha256": "5b34bbf45f402b36240dc0ab0e3d1a1f95f176ebfbe28d05e142f940ece53965"
+                }
+              ],
+              "start_token_offset": 27,
+              "end_token_offset": 4
+            }
           }
         },
         {
@@ -284,7 +408,34 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "fire type attack of user +5%"
+            "quote": "fire type attack of user +5%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a6bcf9d682bdbd5f45f29b6ddc0cb69f",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 9,
+              "token_end": 10,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 9,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[9]",
+                  "content_sha256": "e4ef4546b4fdc4ff63fe0e3215ef8a612e275f666c8ce1e4f9cdc05e93898a91"
+                },
+                {
+                  "kind": "text",
+                  "order": 10,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[10]",
+                  "content_sha256": "d528d1d5325a905a351ec562e46bedf5811827962704f487978124ef039af6a5"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 3
+            }
           }
         }
       ],
@@ -297,7 +448,36 @@
           "raw": "+100%",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]",
-            "quote": "Critical damage +100%"
+            "quote": "Critical damage +100%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:73a246b55966beab9c0b492b455e2554",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]/token[0]",
+                  "content_sha256": "2d008fea932082285b46252554cd39c79c423890fd522d5fbf3a46eccee9210a"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[1]/token[1]",
+                  "content_sha256": "bbea8d0a876c5593134f4b1af28a7ddf3e8c98c563d3a6fa835603e193ec8e86"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 5
+            }
           }
         },
         "damage_by_distinct_target_debuff_count": {
@@ -317,7 +497,42 @@
           ],
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]",
-            "quote": "Damage increases from number of distinct debuffs on target"
+            "quote": "Damage increases from number of distinct debuffs on target",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:9c832662b4cb2ae0524d810dfffff570",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]/token[0]",
+                  "content_sha256": "020ff67d841e9d9640717e1c4baae43e1025258577d2fec3e40142ab491f179c"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]/token[1]",
+                  "content_sha256": "853974687554819914a68f1cb71e34db0892c7730283c9cc87c8d4f29e5de6d3"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[2]/token[2]",
+                  "content_sha256": "2eab7b58862823641b1ab9682291cdc546343c58a40047a1ef92ef2804a5f1ac"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 9
+            }
           }
         }
       },
@@ -331,7 +546,40 @@
           "recipient": "self",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "stack Mantra on self"
+            "quote": "stack Mantra on self",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1772a5ec0e8d2b87cb20c2c8616c5e2d",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 4,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[2]",
+                  "content_sha256": "03c578bb65de61d2705c49f9ecece776bff04e05a16fa2bdc370fd9a2e04900f"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[3]",
+                  "content_sha256": "4ef858298c5fe63061dce6e94591a2fa5a7d1bd2fa00864edbdbb1355c8df18c"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[4]",
+                  "content_sha256": "4c65588feb08b856c17eed5a71d0d58a6f02e774da02b1f84dfc10249dcc3d1c"
+                }
+              ],
+              "start_token_offset": 31,
+              "end_token_offset": 7
+            }
           },
           "target_kind": "named_source_mechanic",
           "target_name": "Mantra"
@@ -355,34 +603,260 @@
       "source_slice_sha256": "20355c8e092cbfdef6c0769d06a8fb4c38cdfa5d27115166816cad89be8ce0fd",
       "unsupported_gaps": [
         {
-          "expected_capability_atom": false,
-          "mechanic": "Mantra stack creation (+1 on Ewan)",
-          "reason": "The taxonomy has no state/stack-creation capability; retain as explicit creation semantics, not a prerequisite.",
+          "gap_id": "gap-ewan-mantra-state-creation",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "mantra_stack_creation",
+          "reason": "Mantra stack creation has no canonical state-creation capability.",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "stack Mantra on self"
-          }
+            "quote": "stack Mantra on self Mantra:",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:648cbe96cd5fdadccabb6c3ff5b08a2f",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[2]",
+                  "content_sha256": "03c578bb65de61d2705c49f9ecece776bff04e05a16fa2bdc370fd9a2e04900f"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[3]",
+                  "content_sha256": "4ef858298c5fe63061dce6e94591a2fa5a7d1bd2fa00864edbdbb1355c8df18c"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[4]",
+                  "content_sha256": "4c65588feb08b856c17eed5a71d0d58a6f02e774da02b1f84dfc10249dcc3d1c"
+                },
+                {
+                  "kind": "icon",
+                  "order": 5,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[5]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[6]",
+                  "content_sha256": "61e10df696a24848e87bbc5333fdc7447a87ae56c0e3c0231e1d99ffb9837d9b"
+                }
+              ],
+              "start_token_offset": 31,
+              "end_token_offset": 7
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "stack Mantra on self Mantra:",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:648cbe96cd5fdadccabb6c3ff5b08a2f",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 6,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[2]",
+                  "content_sha256": "03c578bb65de61d2705c49f9ecece776bff04e05a16fa2bdc370fd9a2e04900f"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[3]",
+                  "content_sha256": "4ef858298c5fe63061dce6e94591a2fa5a7d1bd2fa00864edbdbb1355c8df18c"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[4]",
+                  "content_sha256": "4c65588feb08b856c17eed5a71d0d58a6f02e774da02b1f84dfc10249dcc3d1c"
+                },
+                {
+                  "kind": "icon",
+                  "order": 5,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[5]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[6]",
+                  "content_sha256": "61e10df696a24848e87bbc5333fdc7447a87ae56c0e3c0231e1d99ffb9837d9b"
+                }
+              ],
+              "start_token_offset": 31,
+              "end_token_offset": 7
+            }
+          },
+          "source_owner_id": "src:648cbe96cd5fdadccabb6c3ff5b08a2f"
         },
         {
-          "expected_capability_atom": false,
-          "mechanic": "Mantra maximum HP increase",
-          "reason": "No canonical maximum-HP-up capability exists.",
+          "gap_id": "gap-ewan-max-hp-per-stack",
+          "gap_type": "unsupported_effect",
+          "mechanic": "maximum_hp_per_stack",
+          "reason": "Maximum HP per stack has no canonical capability value.",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
-            "quote": "Max HP +300 per stack"
-          }
-        },
+            "quote": "Max HP +300 per stack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:14189fa3dfecafdd9c62daf61ab48080",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 11,
+              "token_end": 13,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 11,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[11]",
+                  "content_sha256": "ca484f4f01b5d7804868f3b48caed4a3f4f69cd423621e145ffe973584c4a7ad"
+                },
+                {
+                  "kind": "text",
+                  "order": 12,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[12]",
+                  "content_sha256": "bf48ac6c9e2f467f55cebef7d11dfddc71be88742a98a47ff91159119bbce3f1"
+                },
+                {
+                  "kind": "text",
+                  "order": 13,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[13]",
+                  "content_sha256": "fe008e41ec643ff0745422472ad740782bd84a091364859074caf3fd36477699"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 9
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+            "quote": "Max HP +300 per stack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:14189fa3dfecafdd9c62daf61ab48080",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 11,
+              "token_end": 13,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 11,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[11]",
+                  "content_sha256": "ca484f4f01b5d7804868f3b48caed4a3f4f69cd423621e145ffe973584c4a7ad"
+                },
+                {
+                  "kind": "text",
+                  "order": 12,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[12]",
+                  "content_sha256": "bf48ac6c9e2f467f55cebef7d11dfddc71be88742a98a47ff91159119bbce3f1"
+                },
+                {
+                  "kind": "text",
+                  "order": 13,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[13]",
+                  "content_sha256": "fe008e41ec643ff0745422472ad740782bd84a091364859074caf3fd36477699"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 9
+            }
+          },
+          "source_owner_id": "src:14189fa3dfecafdd9c62daf61ab48080",
+          "additional_source_anchors": [
+            {
+              "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+              "quote": "(max stack: x10)",
+              "identity": {
+                "schema_version": "source-anchor-1",
+                "anchor_id": "src:8e313d25343c9e8e458ae39e5d81d8b9",
+                "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+                "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+                "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+                "block_kind": "root",
+                "ancestry": [],
+                "token_start": 13,
+                "token_end": 13,
+                "token_identities": [
+                  {
+                    "kind": "text",
+                    "order": 13,
+                    "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]/token[13]",
+                    "content_sha256": "fe008e41ec643ff0745422472ad740782bd84a091364859074caf3fd36477699"
+                  }
+                ],
+                "start_token_offset": 10,
+                "end_token_offset": 26
+              }
+            }
+          ]
+        }
+      ],
+      "witness_id": "fresh2-ewan-as-roaring-bash",
+      "reviewed_unscored_mechanics": [
         {
           "expected_capability_atom": false,
           "mechanic": "Stance-dependent attack-type selection",
           "reason": "Attack-type selection/default behavior has no dedicated capability; it is also attached as attack-type metadata to direct_damage.",
           "source_anchor": {
             "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]",
-            "quote": "Damage type is according to active Stance"
+            "quote": "Damage type is according to active Stance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:8027bae39c881d246839b400f3247675",
+              "source_fact_id": "skill:cc8d8b2407e2328f8c97",
+              "source_capture_sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+              "block_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]/token[0]",
+                  "content_sha256": "83d60db56426bcf034e0329aabfc6703cae32039bc6394ab8778b4aa979c94ae"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[5]/token[1]",
+                  "content_sha256": "8bd77c9d17a743d6baee97a3cf3b46f4eb475eaea2414d083689600b38746f79"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
           }
         }
-      ],
-      "witness_id": "fresh2-ewan-as-roaring-bash"
+      ]
     },
     {
       "atoms": [
@@ -424,13 +898,72 @@
               "raw": "+50%",
               "source_anchor": {
                 "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]",
-                "quote": "Damage +50% when critical"
+                "quote": "Damage +50% when critical",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:0563ac102bf010d71f326d7cdbbe32cc",
+                  "source_fact_id": "skill:16e0908e04df3e54e305",
+                  "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+                  "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[1]"
+                  ],
+                  "token_start": 0,
+                  "token_end": 2,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 0,
+                      "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]/token[0]",
+                      "content_sha256": "93e37d7d9d63e17f9904be2202945d03aa9f3ae63ebd178589ed36ea1787d062"
+                    },
+                    {
+                      "kind": "text",
+                      "order": 1,
+                      "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]/token[1]",
+                      "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                    },
+                    {
+                      "kind": "text",
+                      "order": 2,
+                      "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[2]/token[2]",
+                      "content_sha256": "2eaee9cff9d5a8a3162cc999b1ff23d22dfc425388eea3cc2850da82119df605"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 13
+                }
               }
             },
             "skill_multiplier_by_target_insanire_stacks": {
               "source_anchor": {
                 "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[5]",
-                "quote": "210% > 216% > 228% > 246% > 282% > 327% > 381% > 465% > 561% > 696% > 846%"
+                "quote": "210% > 216% > 228% > 246% > 282% > 327% > 381% > 465% > 561% > 696% > 846%",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:244eaef074cbb7da6176175b03fd1297",
+                  "source_fact_id": "skill:16e0908e04df3e54e305",
+                  "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+                  "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[5]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[2]",
+                    "unordered_list[1]"
+                  ],
+                  "token_start": 1,
+                  "token_end": 1,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 1,
+                      "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[5]/token[1]",
+                      "content_sha256": "f1966f0dd2c3d6572c3b7db7be65ca5301ce8c91bca13a60912aa4d471aa6768"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 74
+                }
               },
               "stacks_0_to_10": [
                 210,
@@ -451,7 +984,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
-            "quote": "Water type piercing attack on a single enemy x3 (XL)"
+            "quote": "Water type piercing attack on a single enemy x3",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3c48f831bde73f1925a11921d75ff7e5",
+              "source_fact_id": "skill:16e0908e04df3e54e305",
+              "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+              "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]/token[0]",
+                  "content_sha256": "c1217345f48504df53127df2c334d49f77440b38993a386e87dccac7bf23f08e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 47
+            }
           }
         },
         {
@@ -489,7 +1043,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
-            "quote": "attack on a single enemy x3"
+            "quote": "Water type piercing attack on a single enemy x3",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:3c48f831bde73f1925a11921d75ff7e5",
+              "source_fact_id": "skill:16e0908e04df3e54e305",
+              "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+              "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]/token[0]",
+                  "content_sha256": "c1217345f48504df53127df2c334d49f77440b38993a386e87dccac7bf23f08e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 47
+            }
           }
         },
         {
@@ -538,7 +1113,30 @@
           "operation": "decrease",
           "source_anchor": {
             "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[6]",
-            "quote": "Physical resistance -3%"
+            "quote": "Physical resistance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1b0b749c668fa231aeb91821145cd1e7",
+              "source_fact_id": "skill:16e0908e04df3e54e305",
+              "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+              "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[6]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[3]"
+              ],
+              "token_start": 1,
+              "token_end": 1,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[6]/token[1]",
+                  "content_sha256": "a1d4056581f346fe8ac6eb22dddc9de64e855ecd49b61bcb29bcf64cdd34e6f5"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 19
+            }
           }
         }
       ],
@@ -555,7 +1153,42 @@
           "recipient": "enemy",
           "source_anchor": {
             "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
-            "quote": "Stack 1 Insanire on enemy."
+            "quote": "Stack 1 Insanire on enemy.",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6992c8a1ed6f5504d2aa9af28c120178",
+              "source_fact_id": "skill:16e0908e04df3e54e305",
+              "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+              "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[1]",
+                  "content_sha256": "80392420af31f2c80838f39fe4c050fba516a968b16fd36f40ea8cc20794fbc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[2]",
+                  "content_sha256": "8e0bcce0cbc46cf1c5ed683e1e6ef19b62538da00d3ed1af96eda42671fa4d17"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 9
+            }
           },
           "target_kind": "named_source_mechanic",
           "target_name": "Insanire"
@@ -572,16 +1205,93 @@
       "source_slice_sha256": "9c7bb3be6bed2cc832ae52c8377daba1fbe9defd2bf7f7ec5ad234efb9b7f17c",
       "unsupported_gaps": [
         {
-          "expected_capability_atom": false,
-          "mechanic": "Insanire stack creation (+1 on the enemy)",
-          "reason": "No canonical state/stack-creation capability exists; the damage formula reads the state but does not make it a prerequisite.",
+          "gap_id": "gap-ewella-insanire-state-creation",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "insanire_stack_creation",
+          "reason": "Insanire stack creation has no canonical state-creation capability.",
           "source_anchor": {
             "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
-            "quote": "Stack 1 Insanire on enemy."
-          }
+            "quote": "Stack 1 Insanire on enemy",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:f9decd083ede260adf27d2e9a97932dc",
+              "source_fact_id": "skill:16e0908e04df3e54e305",
+              "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+              "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[1]",
+                  "content_sha256": "80392420af31f2c80838f39fe4c050fba516a968b16fd36f40ea8cc20794fbc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[2]",
+                  "content_sha256": "8e0bcce0cbc46cf1c5ed683e1e6ef19b62538da00d3ed1af96eda42671fa4d17"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+            "quote": "Stack 1 Insanire on enemy",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:f9decd083ede260adf27d2e9a97932dc",
+              "source_fact_id": "skill:16e0908e04df3e54e305",
+              "source_capture_sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+              "block_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[1]",
+                  "content_sha256": "80392420af31f2c80838f39fe4c050fba516a968b16fd36f40ea8cc20794fbc4"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[1]/token[2]",
+                  "content_sha256": "8e0bcce0cbc46cf1c5ed683e1e6ef19b62538da00d3ed1af96eda42671fa4d17"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
+          },
+          "source_owner_id": "src:f9decd083ede260adf27d2e9a97932dc"
         }
       ],
-      "witness_id": "fresh2-ewella-saevus-furorem"
+      "witness_id": "fresh2-ewella-saevus-furorem",
+      "reviewed_unscored_mechanics": []
     },
     {
       "atoms": [
@@ -624,7 +1334,30 @@
               "result": "element type changes to deployed zone type",
               "source_anchor": {
                 "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
-                "quote": "Element type changes to type of deployed zone"
+                "quote": "Element type changes to type of deployed zone",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:f2a40ae0afcd7b97645973fa530120b0",
+                  "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+                  "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+                  "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[1]"
+                  ],
+                  "token_start": 0,
+                  "token_end": 0,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 0,
+                      "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]/token[0]",
+                      "content_sha256": "8be541c9cbf8ce6511de7e2c1502027e9acbc6687172a076a7436afceda8b290"
+                    }
+                  ],
+                  "start_token_offset": 33,
+                  "end_token_offset": 78
+                }
               }
             }
           },
@@ -632,7 +1365,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
-            "quote": "Water type magic attack on all enemies x3 (XL, 2x)"
+            "quote": "Water type magic attack on all enemies x3 (XL, 2x)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c0d13322efa982ed23e8958f205128da",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[3]",
+                  "content_sha256": "2fc7ce94d10a5f2f4d6253434dfe0b94f823691e522bcc76e829014de33743bc"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 56
+            }
           }
         },
         {
@@ -670,7 +1424,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
-            "quote": "attack on all enemies x3"
+            "quote": "Water type magic attack on all enemies x3 (XL, 2x)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c0d13322efa982ed23e8958f205128da",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[3]",
+                  "content_sha256": "2fc7ce94d10a5f2f4d6253434dfe0b94f823691e522bcc76e829014de33743bc"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 56
+            }
           }
         },
         {
@@ -712,7 +1487,30 @@
           "operation": "remove",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
-            "quote": "remove debuffs"
+            "quote": "remove debuffs",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:cbc292c951aebfa9e9d43a7a060ffb31",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[3]",
+                  "content_sha256": "318b4d6c8744b49bba97df383cf201cdadcc349e19522388e0b1847035896b27"
+                }
+              ],
+              "start_token_offset": 34,
+              "end_token_offset": 48
+            }
           }
         },
         {
@@ -757,7 +1555,42 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
-            "quote": "When Wryz is at front"
+            "quote": "When Wryz is at front",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:8bc7c9253005cbaeb90d835663c17d82",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[0]",
+                  "content_sha256": "d36c90c2991533576fc6c9f12c0b9dafaa6a431b00edb05e5e4a894bcdde041e"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[1]",
+                  "content_sha256": "6cd6b19bab69eb1304b4981e274b7e5f6d025103ff197d8e87865a26574c904a"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[2]",
+                  "content_sha256": "526c30f3127152e63576a20ee53d9d18c7828b371227e7ca1fd958aa7f4c50d3"
+                }
+              ],
+              "start_token_offset": 1,
+              "end_token_offset": 11
+            }
           }
         },
         {
@@ -799,7 +1632,30 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
-            "quote": "In Fire/Water/Wind/Earth Stance"
+            "quote": "In Fire/Water/Wind/Earth Stance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1b6582baa5f533d6f5ace6be14d4c3a3",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]/token[0]",
+                  "content_sha256": "8be541c9cbf8ce6511de7e2c1502027e9acbc6687172a076a7436afceda8b290"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 31
+            }
           }
         }
       ],
@@ -816,7 +1672,30 @@
           "recipient": "Wryz",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
-            "quote": "Stack 1 Dragonshade on Wryz"
+            "quote": "Stack 1 Dragonshade on Wryz",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5dba02f97077793f3127afa6e107a346",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[3]",
+                  "content_sha256": "318b4d6c8744b49bba97df383cf201cdadcc349e19522388e0b1847035896b27"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 29
+            }
           },
           "target_kind": "named_source_mechanic",
           "target_name": "Dragonshade"
@@ -836,25 +1715,172 @@
       "source_slice_sha256": "9009d6c4631087428210335fdf08279d2709dea6c7407471c37a500c71133cca",
       "unsupported_gaps": [
         {
-          "expected_capability_atom": false,
-          "mechanic": "Dragonshade stack creation (+1 on Wryz)",
-          "reason": "No canonical state/stack-creation capability exists.",
+          "gap_id": "gap-iridian-charge-consumption",
+          "gap_type": "unsupported_resource_consumption",
+          "mechanic": "charge_consumption",
+          "reason": "Charge consumption has no canonical capability value.",
+          "source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+            "quote": "Consumes 5 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:58c375735c7d81f8138ba29a870b0e81",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[1]",
+                  "content_sha256": "eb086c046522992729e68ffb065bb284fc87de462013d21a7343efe818cf25b4"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[2]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+            "quote": "Consumes 5 Charge",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:58c375735c7d81f8138ba29a870b0e81",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[1]",
+                  "content_sha256": "eb086c046522992729e68ffb065bb284fc87de462013d21a7343efe818cf25b4"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]/token[2]",
+                  "content_sha256": "bea6b06b1f31f10cc321a3ad18e8539921cb590901584348fd0b2be6be3c37d7"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 6
+            }
+          },
+          "source_owner_id": "src:58c375735c7d81f8138ba29a870b0e81"
+        },
+        {
+          "gap_id": "gap-iridian-dragonshade-state-creation",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "dragonshade_stack_creation",
+          "reason": "Dragonshade stack creation has no canonical state-creation capability.",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
-            "quote": "Stack 1 Dragonshade on Wryz"
-          }
-        },
+            "quote": "Stack 1 Dragonshade on Wryz",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5dba02f97077793f3127afa6e107a346",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[3]",
+                  "content_sha256": "318b4d6c8744b49bba97df383cf201cdadcc349e19522388e0b1847035896b27"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 29
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+            "quote": "Stack 1 Dragonshade on Wryz",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5dba02f97077793f3127afa6e107a346",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 3,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[1]/token[3]",
+                  "content_sha256": "318b4d6c8744b49bba97df383cf201cdadcc349e19522388e0b1847035896b27"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 29
+            }
+          },
+          "source_owner_id": "src:5dba02f97077793f3127afa6e107a346",
+          "condition": "When Wryz is at front"
+        }
+      ],
+      "witness_id": "fresh2-iridian-heal-arcus-irus",
+      "reviewed_unscored_mechanics": [
         {
           "expected_capability_atom": false,
           "mechanic": "Stance-based element override",
           "reason": "The branch is represented by requires_zone plus damage metadata; no separate element-conversion capability exists.",
           "source_anchor": {
             "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
-            "quote": "Element type changes to type of deployed zone."
+            "quote": "Element type changes to type of deployed zone.",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:2e7cca66fdbbcbc9b9e54fd28735f57f",
+              "source_fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+              "source_capture_sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+              "block_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[2]/token[0]",
+                  "content_sha256": "8be541c9cbf8ce6511de7e2c1502027e9acbc6687172a076a7436afceda8b290"
+                }
+              ],
+              "start_token_offset": 33,
+              "end_token_offset": 79
+            }
           }
         }
-      ],
-      "witness_id": "fresh2-iridian-heal-arcus-irus"
+      ]
     },
     {
       "atoms": [
@@ -898,7 +1924,31 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[2]",
-            "quote": "World Tree Power: +25 PWR per stack"
+            "quote": "World Tree Power: +25 PWR per stack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6dac8625ab0247a316a24c4074544b28",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[2]/token[0]",
+                  "content_sha256": "ab869510bd30e4cf308bbe9e217d47a236ee677141e4d8f05017cdee471b1e67"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 35
+            }
           }
         },
         {
@@ -941,7 +1991,28 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
-            "quote": "less than 3 World Tree Power stacks"
+            "quote": "when the user has less than 3 World Tree Power stacks",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5bbd3ba3e13a63ae561b9ddf8af08c16",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]/token[0]",
+                  "content_sha256": "ae6c5cb08ebefbd3999fcc176e1497f186a2ec35abf2e348c423d852b2828451"
+                }
+              ],
+              "start_token_offset": 26,
+              "end_token_offset": 79
+            }
           }
         }
       ],
@@ -952,16 +2023,56 @@
       "record_type": "active_skill",
       "semantic_relationships": [
         {
-          "condition": "on skill use",
           "note": "Parent activation only; do not inherit child mechanics.",
           "operation": "activates",
           "recipient": "user",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]",
-            "quote": "Activate Storing Power State on user"
+            "quote": "Activate Storing Power State on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:2134bee05457cf311b3172c8d092a9cd",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 1,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[1]",
+                  "content_sha256": "ee25ec66c03fb42e26b5b372861313bf390791c672e448363c2dc66484b4eb53"
+                },
+                {
+                  "kind": "reference",
+                  "order": 2,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[2]",
+                  "content_sha256": "b399ce87088f4c6beee67adfa141e5c59b67be1d1ec3445bd2e682cdfa28b475"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[3]/token[3]",
+                  "content_sha256": "a8692d9680f37349d201e9ae7bf21fe26d8f89380178757013f4aff451b701f4"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 7
+            }
           },
           "target_kind": "named_source_mechanic",
-          "target_name": "Storing Power State"
+          "target_name": "Storing Power State",
+          "targets": [
+            {
+              "fact_id": "skill:aed931d6d28bcb7fa25a",
+              "target_name": "Storing Power State"
+            }
+          ]
         },
         {
           "condition": "Counterattack",
@@ -970,10 +2081,51 @@
           "recipient": "user",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]",
-            "quote": "Activate Store Power - Counter on user"
+            "quote": "Activate Store Power - Counter on user",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:610df33cc6bef69fbfb17c99b0278c04",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]"
+              ],
+              "token_start": 1,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[1]",
+                  "content_sha256": "f5a1e0f4488c8e41942cc50555c612918b04d46f00c100c10281ba5d830d2e73"
+                },
+                {
+                  "kind": "reference",
+                  "order": 2,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[2]",
+                  "content_sha256": "fc8b03ee5529ded6aa7669ec201a76647364d54cb14f07adb3d9b9253741e8b8"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[4]/token[3]",
+                  "content_sha256": "a8692d9680f37349d201e9ae7bf21fe26d8f89380178757013f4aff451b701f4"
+                }
+              ],
+              "start_token_offset": 15,
+              "end_token_offset": 7
+            }
           },
           "target_kind": "named_source_mechanic",
-          "target_name": "Store Power - Counter"
+          "target_name": "Store Power - Counter",
+          "targets": [
+            {
+              "fact_id": "skill:a023e3bd50e45872b076",
+              "target_name": "Store Power - Counter"
+            }
+          ]
         },
         {
           "condition": "after pain/poison damage; not after enemy end-of-turn attacks",
@@ -982,7 +2134,61 @@
           "recipient": "user",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
-            "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+            "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:df233afb4ea28b98f6f8370c27c58b99",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 5,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[0]",
+                  "content_sha256": "a51a11fa70df3c2ed07de9e46388209a3775632edb32f5958dcb816ab70ee907"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[1]",
+                  "content_sha256": "b399ce87088f4c6beee67adfa141e5c59b67be1d1ec3445bd2e682cdfa28b475"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[2]",
+                  "content_sha256": "03b56093215d66556a8f6770e0c19a722f550bdc654aa31489523639a476e024"
+                },
+                {
+                  "kind": "reference",
+                  "order": 3,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[3]",
+                  "content_sha256": "fc8b03ee5529ded6aa7669ec201a76647364d54cb14f07adb3d9b9253741e8b8"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[4]",
+                  "content_sha256": "074787e473933ae8868bf3f6d63eb6bbd04df84dd90fe20a6994cd25191d83f9"
+                },
+                {
+                  "kind": "reference",
+                  "order": 5,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[5]",
+                  "content_sha256": "2dab25a23cd4ba19211604f5fcbe027270ae68eb372a6a02b5041dde9da67ac9"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 26
+            }
           },
           "target_kind": "named_source_mechanic",
           "target_name": "Storing Power State; Store Power - Counter"
@@ -1000,43 +2206,277 @@
       "source_slice_sha256": "c66382bca5d814a57829da87b8177c96b5949078f81b55680034b1482405902a",
       "unsupported_gaps": [
         {
-          "expected_capability_atom": false,
-          "mechanic": "World Tree Power stack creation (+1)",
-          "reason": "No canonical state/stack-creation capability exists.",
-          "source_anchor": {
-            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
-            "quote": "Stack 1 World Tree Power"
-          }
-        },
-        {
-          "expected_capability_atom": false,
-          "mechanic": "Basic-attack replacement behavior",
-          "reason": "The taxonomy has no action-replacement capability; preserve as parent action/slot metadata and its branch condition.",
+          "gap_id": "gap-philo-basic-attack-replacement",
+          "gap_type": "unsupported_effect",
+          "mechanic": "basic_attack_replacement",
+          "reason": "Basic-attack replacement has no canonical capability value.",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
-            "quote": "Replaces the basic attack"
-          }
+            "quote": "Replaces the basic attack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:273af32f3052490808bd6e9a06733799",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]/token[0]",
+                  "content_sha256": "ae6c5cb08ebefbd3999fcc176e1497f186a2ec35abf2e348c423d852b2828451"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 25
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+            "quote": "Replaces the basic attack",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:273af32f3052490808bd6e9a06733799",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]/token[0]",
+                  "content_sha256": "ae6c5cb08ebefbd3999fcc176e1497f186a2ec35abf2e348c423d852b2828451"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 25
+            }
+          },
+          "source_owner_id": "src:273af32f3052490808bd6e9a06733799",
+          "condition": "when the user has less than 3 World Tree Power stacks"
         },
         {
-          "expected_capability_atom": false,
-          "mechanic": "Equipment replacement precedence",
-          "reason": "No canonical capability/dependency models this replacement-priority rule.",
+          "gap_id": "gap-philo-world-tree-power-state",
+          "gap_type": "unsupported_state_creation",
+          "mechanic": "world_tree_power_stack_creation",
+          "reason": "World Tree Power stack creation has no canonical state-creation capability.",
+          "source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "quote": "Stack 1 World Tree Power",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5d401c0caa2557288b3e4e9b8cf67834",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]/token[1]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]/token[2]",
+                  "content_sha256": "82834c0ae21a366b88454920281896f0a79fb1065f535302594b9fc845b59f43"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 16
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+            "quote": "Stack 1 World Tree Power",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5d401c0caa2557288b3e4e9b8cf67834",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]/token[0]",
+                  "content_sha256": "29d2d714bd091bd6fa8a52782f073b5f25b2de3a10a723b846b6033132353dc4"
+                },
+                {
+                  "kind": "icon",
+                  "order": 1,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]/token[1]",
+                  "content_sha256": "9186386041bac2f8ec53a02eb55daf75eefd1bd99c2ce47ccf351801928dc9ec"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[1]/token[2]",
+                  "content_sha256": "82834c0ae21a366b88454920281896f0a79fb1065f535302594b9fc845b59f43"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 16
+            }
+          },
+          "source_owner_id": "src:5d401c0caa2557288b3e4e9b8cf67834"
+        },
+        {
+          "gap_id": "gap-philo-equipment-replacement-precedence",
+          "gap_type": "unsupported_effect",
+          "mechanic": "equipment_basic_attack_replacement_precedence",
+          "reason": "Equipment replacement precedence has no canonical capability value.",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]",
-            "quote": "overwritten if user is wearing an equipment that replaces basic attack skill slot"
-          }
-        },
+            "quote": "This skill is overwritten if user is wearing an equipment that replaces basic attack skill slot",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1c08c2f6054a14612ed4320143f9a8b8",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[3]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]/token[0]",
+                  "content_sha256": "8a51aa909af08476a92f124a8f3bf772b612b81e46bccfc596fe1dff1528d114"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 95
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]",
+            "quote": "This skill is overwritten if user is wearing an equipment that replaces basic attack skill slot",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:1c08c2f6054a14612ed4320143f9a8b8",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[3]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[6]/token[0]",
+                  "content_sha256": "8a51aa909af08476a92f124a8f3bf772b612b81e46bccfc596fe1dff1528d114"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 95
+            }
+          },
+          "source_owner_id": "src:1c08c2f6054a14612ed4320143f9a8b8",
+          "condition": "if user is wearing an equipment that replaces basic attack skill slot"
+        }
+      ],
+      "witness_id": "fresh2-philo-as-store-power",
+      "reviewed_unscored_mechanics": [
         {
           "expected_capability_atom": false,
           "mechanic": "Child-status lifecycle after pain/poison",
           "reason": "This lifecycle rule belongs to the child definitions and has no canonical capability/dependency label.",
           "source_anchor": {
             "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
-            "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage"
+            "quote": "Both statuses ( Storing Power State and Store Power - Counter ) end after pain / poison damage",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:df233afb4ea28b98f6f8370c27c58b99",
+              "source_fact_id": "skill:532c9a8e2a50a9558586",
+              "source_capture_sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+              "block_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 5,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[0]",
+                  "content_sha256": "a51a11fa70df3c2ed07de9e46388209a3775632edb32f5958dcb816ab70ee907"
+                },
+                {
+                  "kind": "reference",
+                  "order": 1,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[1]",
+                  "content_sha256": "b399ce87088f4c6beee67adfa141e5c59b67be1d1ec3445bd2e682cdfa28b475"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[2]",
+                  "content_sha256": "03b56093215d66556a8f6770e0c19a722f550bdc654aa31489523639a476e024"
+                },
+                {
+                  "kind": "reference",
+                  "order": 3,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[3]",
+                  "content_sha256": "fc8b03ee5529ded6aa7669ec201a76647364d54cb14f07adb3d9b9253741e8b8"
+                },
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[4]",
+                  "content_sha256": "074787e473933ae8868bf3f6d63eb6bbd04df84dd90fe20a6994cd25191d83f9"
+                },
+                {
+                  "kind": "reference",
+                  "order": 5,
+                  "location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[5]/token[5]",
+                  "content_sha256": "2dab25a23cd4ba19211604f5fcbe027270ae68eb372a6a02b5041dde9da67ac9"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 26
+            }
           }
         }
-      ],
-      "witness_id": "fresh2-philo-as-store-power"
+      ]
     },
     {
       "atoms": [
@@ -1095,7 +2535,70 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
-            "quote": "equipped characters' damage +15%"
+            "quote": "equipped characters' damage +15%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a117c864120ba474d056136ab0b2fa43",
+              "source_fact_id": "passive:d2644ada1792457176a1",
+              "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+              "block_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 4,
+              "token_end": 11,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[4]",
+                  "content_sha256": "b56ee734b7b1f8180fdd4582d4607b9c063d44f4a52eec3344ad265f9c398813"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[5]",
+                  "content_sha256": "f626f76e61dd46e51b79d78e0c958942620bd9b10bac229bb2e49f2a67fe8b77"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[6]",
+                  "content_sha256": "063bdc351ff97fbd5c0e85b0ef31b2f151fcee6a34761aa40fb394dcb1111ea2"
+                },
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[7]",
+                  "content_sha256": "f626f76e61dd46e51b79d78e0c958942620bd9b10bac229bb2e49f2a67fe8b77"
+                },
+                {
+                  "kind": "text",
+                  "order": 8,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[8]",
+                  "content_sha256": "6828cea02bd6a968ff0617db883cd40800853f43d1d6ab9487d1ff6515f0beb4"
+                },
+                {
+                  "kind": "text",
+                  "order": 9,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[9]",
+                  "content_sha256": "acf8919319e7e34c4a92a7edbb46d3b8e06c4075b6a9779c1fee7bf710322a10"
+                },
+                {
+                  "kind": "text",
+                  "order": 10,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[10]",
+                  "content_sha256": "7c78cd2f8f1f26292f3c61362121670d4a912af4253d3e84e1a095f2d05541c4"
+                },
+                {
+                  "kind": "text",
+                  "order": 11,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[11]",
+                  "content_sha256": "ce50c1e411c073a2c0273e58c7db18fe186cce0bc14d4693c26ae812021fb001"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
           }
         },
         {
@@ -1137,7 +2640,34 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
-            "quote": "Dazzling Slash Stance"
+            "quote": "When in Dazzling Slash Stance",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:f189e2591aeaec8f4ee429f55dd41b36",
+              "source_fact_id": "passive:d2644ada1792457176a1",
+              "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+              "block_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 1,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[1]",
+                  "content_sha256": "eafb68308cf6a0ed459bd4216fb965e7a5a7c305eecc7bace7c641372dc0532e"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[2]",
+                  "content_sha256": "1abc987457eaaeeef96c881ab301b6aeaa7887ea78ca2eec082c89e952ab292b"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 21
+            }
           }
         },
         {
@@ -1182,7 +2712,70 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
-            "quote": "equipped characters' damage"
+            "quote": "equipped characters' damage",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a117c864120ba474d056136ab0b2fa43",
+              "source_fact_id": "passive:d2644ada1792457176a1",
+              "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+              "block_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 4,
+              "token_end": 11,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[4]",
+                  "content_sha256": "b56ee734b7b1f8180fdd4582d4607b9c063d44f4a52eec3344ad265f9c398813"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[5]",
+                  "content_sha256": "f626f76e61dd46e51b79d78e0c958942620bd9b10bac229bb2e49f2a67fe8b77"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[6]",
+                  "content_sha256": "063bdc351ff97fbd5c0e85b0ef31b2f151fcee6a34761aa40fb394dcb1111ea2"
+                },
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[7]",
+                  "content_sha256": "f626f76e61dd46e51b79d78e0c958942620bd9b10bac229bb2e49f2a67fe8b77"
+                },
+                {
+                  "kind": "text",
+                  "order": 8,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[8]",
+                  "content_sha256": "6828cea02bd6a968ff0617db883cd40800853f43d1d6ab9487d1ff6515f0beb4"
+                },
+                {
+                  "kind": "text",
+                  "order": 9,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[9]",
+                  "content_sha256": "acf8919319e7e34c4a92a7edbb46d3b8e06c4075b6a9779c1fee7bf710322a10"
+                },
+                {
+                  "kind": "text",
+                  "order": 10,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[10]",
+                  "content_sha256": "7c78cd2f8f1f26292f3c61362121670d4a912af4253d3e84e1a095f2d05541c4"
+                },
+                {
+                  "kind": "text",
+                  "order": 11,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[11]",
+                  "content_sha256": "ce50c1e411c073a2c0273e58c7db18fe186cce0bc14d4693c26ae812021fb001"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
           }
         }
       ],
@@ -1210,16 +2803,114 @@
       "source_slice_sha256": "a7e2d7207a8adb17b4f2e672797c5eae9ceb968e15e32fce43ad5c7bb14a4b65",
       "unsupported_gaps": [
         {
-          "expected_capability_atom": false,
-          "mechanic": "Negative-status absence guard",
-          "reason": "The dependency taxonomy has no absence-of-status guard; do not convert this into a positive requires_status dependency.",
+          "gap_id": "gap-radias-negative-status-gate",
+          "gap_type": "unsupported_condition",
+          "mechanic": "negative_status_absence_condition",
+          "reason": "Negative-status absence has no canonical dependency value.",
           "source_anchor": {
             "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
-            "quote": "When not in Sleep, Confusion, Stone, Freeze"
-          }
+            "quote": "When not in Sleep, Confusion, Stone, Freeze",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:8f4fa70badf92b29d6447cafb4935a59",
+              "source_fact_id": "passive:d2644ada1792457176a1",
+              "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+              "block_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 12,
+              "token_end": 13,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 12,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[12]",
+                  "content_sha256": "5ca577ce67e083291bfde099fb24c79c799f102853a29c2adf4eb87f87a399a5"
+                },
+                {
+                  "kind": "reference",
+                  "order": 13,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[13]",
+                  "content_sha256": "b70b38933cd8b97a5c3439b7a3d99868d9282908e2ed8ca35d97e1ee4c40ec0e"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 31
+            }
+          },
+          "owner_source_anchor": {
+            "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+            "quote": "equipped characters' damage +15%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a117c864120ba474d056136ab0b2fa43",
+              "source_fact_id": "passive:d2644ada1792457176a1",
+              "source_capture_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+              "block_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 4,
+              "token_end": 11,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 4,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[4]",
+                  "content_sha256": "b56ee734b7b1f8180fdd4582d4607b9c063d44f4a52eec3344ad265f9c398813"
+                },
+                {
+                  "kind": "text",
+                  "order": 5,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[5]",
+                  "content_sha256": "f626f76e61dd46e51b79d78e0c958942620bd9b10bac229bb2e49f2a67fe8b77"
+                },
+                {
+                  "kind": "text",
+                  "order": 6,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[6]",
+                  "content_sha256": "063bdc351ff97fbd5c0e85b0ef31b2f151fcee6a34761aa40fb394dcb1111ea2"
+                },
+                {
+                  "kind": "text",
+                  "order": 7,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[7]",
+                  "content_sha256": "f626f76e61dd46e51b79d78e0c958942620bd9b10bac229bb2e49f2a67fe8b77"
+                },
+                {
+                  "kind": "text",
+                  "order": 8,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[8]",
+                  "content_sha256": "6828cea02bd6a968ff0617db883cd40800853f43d1d6ab9487d1ff6515f0beb4"
+                },
+                {
+                  "kind": "text",
+                  "order": 9,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[9]",
+                  "content_sha256": "acf8919319e7e34c4a92a7edbb46d3b8e06c4075b6a9779c1fee7bf710322a10"
+                },
+                {
+                  "kind": "text",
+                  "order": 10,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[10]",
+                  "content_sha256": "7c78cd2f8f1f26292f3c61362121670d4a912af4253d3e84e1a095f2d05541c4"
+                },
+                {
+                  "kind": "text",
+                  "order": 11,
+                  "location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]/token[11]",
+                  "content_sha256": "ce50c1e411c073a2c0273e58c7db18fe186cce0bc14d4693c26ae812021fb001"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 8
+            }
+          },
+          "source_owner_id": "src:a117c864120ba474d056136ab0b2fa43",
+          "condition": "When not in Sleep, Confusion, Stone, Freeze"
         }
       ],
-      "witness_id": "fresh2-radias-turn-end-buff"
+      "witness_id": "fresh2-radias-turn-end-buff",
+      "reviewed_unscored_mechanics": []
     },
     {
       "atoms": [
@@ -1260,7 +2951,31 @@
               "element_change": "by Kaleido",
               "source_anchor": {
                 "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
-                "quote": "Can change element by Kaleido or weapon type by Flexible"
+                "quote": "Can change element by Kaleido or weapon type by Flexible",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:81283528c64ec616ef1f6d05233f82ca",
+                  "source_fact_id": "skill:88b9e632fcab5897d21e",
+                  "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+                  "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[1]",
+                    "unordered_list[1]"
+                  ],
+                  "token_start": 0,
+                  "token_end": 0,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 0,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]/token[0]",
+                      "content_sha256": "fe4f97e0d52e7ecfaa52b255950ef66db93768d2b2847874676ea79d922a66f2"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 56
+                }
               },
               "weapon_type_change": "by Flexible"
             },
@@ -1270,7 +2985,42 @@
               "raw": "+1400%",
               "source_anchor": {
                 "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[8]",
-                "quote": "Skill Multiplier +1400% (Multiplier x15)"
+                "quote": "Skill Multiplier +1400% (Multiplier x15)",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:0dd3cde8d9f822a05d4406617e0eba55",
+                  "source_fact_id": "skill:88b9e632fcab5897d21e",
+                  "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+                  "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[8]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[2]"
+                  ],
+                  "token_start": 1,
+                  "token_end": 3,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 1,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[8]/token[1]",
+                      "content_sha256": "1881fd855b94340f06bf2e58a621e8d9a1c797ac75b8fe08ca2342ca1e924765"
+                    },
+                    {
+                      "kind": "text",
+                      "order": 2,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[8]/token[2]",
+                      "content_sha256": "05cc84a2144e6740840938fff1a1853b760e01f20d01f944537dba3822b90775"
+                    },
+                    {
+                      "kind": "text",
+                      "order": 3,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[8]/token[3]",
+                      "content_sha256": "5bc5fe5579a58513694065eafe46bf6627661b75cbbce7e937f0373811bfc5b9"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 16
+                }
               }
             }
           },
@@ -1278,7 +3028,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
-            "quote": "Earth Blunt attack on all enemies x3 (XXL)"
+            "quote": "Earth Blunt attack on all enemies x3",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b22d4abca7cf0b0db547e6608a909e6b",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]/token[0]",
+                  "content_sha256": "6d451b4501f4d8befea156cfb53ae7fdf2a8d4cc0194dc175c84975aaec1fe09"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 36
+            }
           }
         },
         {
@@ -1316,7 +3087,28 @@
           "operation": "damage",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
-            "quote": "attack on all enemies x3"
+            "quote": "Earth Blunt attack on all enemies x3",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:b22d4abca7cf0b0db547e6608a909e6b",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]/token[0]",
+                  "content_sha256": "6d451b4501f4d8befea156cfb53ae7fdf2a8d4cc0194dc175c84975aaec1fe09"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 36
+            }
           }
         },
         {
@@ -1358,7 +3150,34 @@
           "operation": "require",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
-            "quote": "Skill requires Stellar Awakening"
+            "quote": "requires Stellar Awakening",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:c75cea15ae40b60b5aff8090f9506d7e",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+              "block_kind": "root",
+              "ancestry": [],
+              "token_start": 2,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]/token[2]",
+                  "content_sha256": "8f0a14d8fa4545b55d597cc3c90c702ccd3ef9030b4a4610f90967e123ffec40"
+                },
+                {
+                  "kind": "reference",
+                  "order": 3,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]/token[3]",
+                  "content_sha256": "be522da1d99dfa0d834a64bf0f2dd6feec3e75a5d210d90f1b0918a614eb19de"
+                }
+              ],
+              "start_token_offset": 6,
+              "end_token_offset": 17
+            }
           }
         },
         {
@@ -1403,7 +3222,42 @@
           "operation": "increase",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]",
-            "quote": "Speed of all party members +50% (3 turns)"
+            "quote": "Speed of all party members +50% (3 turns)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:6ae77cc9f27ca992e07521d552f33785",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 2,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]/token[0]",
+                  "content_sha256": "7e019ea4f106209dff950c5a856eaf9e85835104d2167ab13f6b066123dade9b"
+                },
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]/token[1]",
+                  "content_sha256": "5b4d59eb1a4ab12cd6f706233e9d70f5050e604c9a558b58758bd92888881aa4"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[1]/token[2]",
+                  "content_sha256": "f3553b3d895283d45cd9f1c75ae80963a4344d3ecfc91100bacf8455bd7675e2"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 9
+            }
           }
         },
         {
@@ -1445,7 +3299,31 @@
             "add_on_inherits_character_buffs": {
               "source_anchor": {
                 "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[7]",
-                "quote": "All buffs on character apply to blunt add-on"
+                "quote": "All buffs on character apply to blunt add-on",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:760712df8829b3043c067edb36446020",
+                  "source_fact_id": "skill:88b9e632fcab5897d21e",
+                  "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+                  "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[7]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[1]",
+                    "unordered_list[3]"
+                  ],
+                  "token_start": 0,
+                  "token_end": 0,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 0,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[7]/token[0]",
+                      "content_sha256": "572ddc97aba15602dfb9fe103e2df8def2017ec400ac14d0e2c9bbf9f666aed1"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 44
+                }
               },
               "value": true
             },
@@ -1459,14 +3337,74 @@
               ],
               "source_anchor": {
                 "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
-                "quote": "AF gauge charge +0.5%, combo charge +2%"
+                "quote": "AF gauge charge +0.5%, combo charge +2%",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:5eae8db7525223caf96780452a26ed7c",
+                  "source_fact_id": "skill:88b9e632fcab5897d21e",
+                  "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+                  "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[1]",
+                    "unordered_list[2]"
+                  ],
+                  "token_start": 0,
+                  "token_end": 0,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 0,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]/token[0]",
+                      "content_sha256": "ae9893af366b7ef106a46f1fc0c3d300fc1f28910f1bb4d883f615e639029fba"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 39
+                }
               }
             },
             "nested_link_definition": {
               "effect": "Blunt add-on attack after each allied attacking move, including Attack Again moves",
               "source_anchor": {
                 "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
-                "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+                "quote": "Blunt add-on attack after each attacking move (including attack again moves)",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:31856672be3bad898cd371d21d237d9d",
+                  "source_fact_id": "skill:88b9e632fcab5897d21e",
+                  "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+                  "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[1]",
+                    "unordered_list[0]"
+                  ],
+                  "token_start": 1,
+                  "token_end": 3,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 1,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]/token[1]",
+                      "content_sha256": "7ac1467a74fcec277fa83139647e3f74ca873548b450bd8cc4de4956b5a790e2"
+                    },
+                    {
+                      "kind": "text",
+                      "order": 2,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]/token[2]",
+                      "content_sha256": "90c0691f6e7c571370c76343d787720b9d67deb7865c287744fff8b59c85e262"
+                    },
+                    {
+                      "kind": "text",
+                      "order": 3,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]/token[3]",
+                      "content_sha256": "304ff0c173d89df649838a180dc6c3ccfe24e73afa7aaed2f763885646d9bce3"
+                    }
+                  ],
+                  "start_token_offset": 2,
+                  "end_token_offset": 6
+                }
               }
             },
             "stellar_burst_party_extension": {
@@ -1474,7 +3412,31 @@
               "recipient_scope": "main and reserve party members",
               "source_anchor": {
                 "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[9]",
-                "quote": "Buff and Link apply main and reserve party members."
+                "quote": "Buff and Link apply main and reserve party members.",
+                "identity": {
+                  "schema_version": "source-anchor-1",
+                  "anchor_id": "src:e495dcac4dc4ae8c790485d8539debae",
+                  "source_fact_id": "skill:88b9e632fcab5897d21e",
+                  "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+                  "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[9]",
+                  "block_kind": "list_item",
+                  "ancestry": [
+                    "unordered_list[2]",
+                    "unordered_list[0]"
+                  ],
+                  "token_start": 0,
+                  "token_end": 0,
+                  "token_identities": [
+                    {
+                      "kind": "text",
+                      "order": 0,
+                      "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[9]/token[0]",
+                      "content_sha256": "cf43fc61361150caf43d06330dd7efdfeed4d85742c28aeefb2e9818362d9f04"
+                    }
+                  ],
+                  "start_token_offset": 0,
+                  "end_token_offset": 51
+                }
               }
             }
           },
@@ -1482,7 +3444,42 @@
           "operation": "grant",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
-            "quote": "Give Link [190%] to all party members (3 turns)"
+            "quote": "Give Link [190%] to all party members (3 turns)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:e1491f7b0f0b1283eee1047c3c83cb4f",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]"
+              ],
+              "token_start": 1,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]/token[1]",
+                  "content_sha256": "d171d2d1e1ef283e8c0cdd19e84bc44a5234857a273c01cef6123cbb1e52ab63"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]/token[2]",
+                  "content_sha256": "85794911b7dd9cbb9cae6e93b8b3c4dafc318fe9a3a4159108b32dc8b174c227"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[2]/token[3]",
+                  "content_sha256": "e0a86bee9e8e1fca436a4cdd2baa2ad29dfb2cf11333561000e07b63a3ba9923"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 37
+            }
           }
         },
         {
@@ -1520,7 +3517,32 @@
           "operation": "restore",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
-            "quote": "Restore HP (L)"
+            "quote": "Restore HP (L)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:f47754953656488a33631f24e01cb0f1",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]/token[0]",
+                  "content_sha256": "289058d52f26383f23d9c898bfac28926dc8cdf9b83802c59142da6552898466"
+                }
+              ],
+              "start_token_offset": 30,
+              "end_token_offset": 44
+            }
           }
         },
         {
@@ -1559,7 +3581,32 @@
           "operation": "remove",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
-            "quote": "restore all statuses"
+            "quote": "restore all statuses",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:bece16435cd8f384a17674bce7b944c8",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]/token[0]",
+                  "content_sha256": "289058d52f26383f23d9c898bfac28926dc8cdf9b83802c59142da6552898466"
+                }
+              ],
+              "start_token_offset": 49,
+              "end_token_offset": 69
+            }
           }
         },
         {
@@ -1604,7 +3651,32 @@
           "operation": "conditional",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
-            "quote": "If Riica is in the frontline"
+            "quote": "If Riica is in the frontline",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:0a0dcb430022a729147c2b3360b0cdf9",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]",
+                "unordered_list[0]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[4]/token[0]",
+                  "content_sha256": "289058d52f26383f23d9c898bfac28926dc8cdf9b83802c59142da6552898466"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 28
+            }
           }
         },
         {
@@ -1643,7 +3715,31 @@
           "operation": "revive",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
-            "quote": "Revive all fallen party members"
+            "quote": "Revive all fallen party members",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:832439addafb0a8517e63cd7b5b05633",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]",
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]/token[0]",
+                  "content_sha256": "98d88f839beca52b572ff7869b1851b2606e6ea6cdc18dfc4b9376bce5da4b9d"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 31
+            }
           }
         },
         {
@@ -1683,7 +3779,31 @@
           "operation": "restore",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
-            "quote": "Restore 100% HP"
+            "quote": "Restore 100% HP",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:ec1206a83369841c771ad20a20f50599",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]",
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]/token[0]",
+                  "content_sha256": "98d88f839beca52b572ff7869b1851b2606e6ea6cdc18dfc4b9376bce5da4b9d"
+                }
+              ],
+              "start_token_offset": 36,
+              "end_token_offset": 51
+            }
           }
         },
         {
@@ -1723,7 +3843,31 @@
           "operation": "restore",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
-            "quote": "20% MP to party and reserve members"
+            "quote": "20% MP to party and reserve members",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:a75f98933ae614bb229d069f2c6f7517",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[2]",
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[10]/token[0]",
+                  "content_sha256": "98d88f839beca52b572ff7869b1851b2606e6ea6cdc18dfc4b9376bce5da4b9d"
+                }
+              ],
+              "start_token_offset": 56,
+              "end_token_offset": 91
+            }
           }
         }
       ],
@@ -1740,7 +3884,43 @@
           "recipient": "all party members",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
-            "quote": "Blunt add-on attack after each attacking move (including attack again moves)"
+            "quote": "Blunt add-on attack after each attacking move (including attack again moves)",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:31856672be3bad898cd371d21d237d9d",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[0]"
+              ],
+              "token_start": 1,
+              "token_end": 3,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 1,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]/token[1]",
+                  "content_sha256": "7ac1467a74fcec277fa83139647e3f74ca873548b450bd8cc4de4956b5a790e2"
+                },
+                {
+                  "kind": "text",
+                  "order": 2,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]/token[2]",
+                  "content_sha256": "90c0691f6e7c571370c76343d787720b9d67deb7865c287744fff8b59c85e262"
+                },
+                {
+                  "kind": "text",
+                  "order": 3,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[3]/token[3]",
+                  "content_sha256": "304ff0c173d89df649838a180dc6c3ccfe24e73afa7aaed2f763885646d9bce3"
+                }
+              ],
+              "start_token_offset": 2,
+              "end_token_offset": 6
+            }
           },
           "target_kind": "named_source_mechanic",
           "target_name": "Link"
@@ -1763,14 +3943,40 @@
       },
       "source_path": "data/raw/characters/riica.html",
       "source_slice_sha256": "1ebdb880ed8942468a2b3ad62d3e70d7a3204c962b259dcf4c4fc6937e7af9a5",
-      "unsupported_gaps": [
+      "unsupported_gaps": [],
+      "witness_id": "fresh2-riica-elimination-ray",
+      "reviewed_unscored_mechanics": [
         {
           "expected_capability_atom": false,
           "mechanic": "Fixed Link AF gauge/combo charge semantics",
           "reason": "The nested Link adds fixed resource charge, not an increase to AF/combo gain rate. Retain as grant_link metadata; create no af_gauge_gain_up or af_combo_gain_up expected atoms.",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
-            "quote": "AF gauge charge +0.5%, combo charge +2%"
+            "quote": "AF gauge charge +0.5%, combo charge +2%",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:5eae8db7525223caf96780452a26ed7c",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[2]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[6]/token[0]",
+                  "content_sha256": "ae9893af366b7ef106a46f1fc0c3d300fc1f28910f1bb4d883f615e639029fba"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 39
+            }
           }
         },
         {
@@ -1779,11 +3985,34 @@
           "reason": "This row supports a weapon-type override, but the taxonomy has no matching weapon-type-conversion capability; retain as direct-damage metadata.",
           "source_anchor": {
             "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
-            "quote": "Can change element by Kaleido or weapon type by Flexible"
+            "quote": "Can change element by Kaleido or weapon type by Flexible",
+            "identity": {
+              "schema_version": "source-anchor-1",
+              "anchor_id": "src:81283528c64ec616ef1f6d05233f82ca",
+              "source_fact_id": "skill:88b9e632fcab5897d21e",
+              "source_capture_sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+              "block_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]",
+              "block_kind": "list_item",
+              "ancestry": [
+                "unordered_list[1]",
+                "unordered_list[1]"
+              ],
+              "token_start": 0,
+              "token_end": 0,
+              "token_identities": [
+                {
+                  "kind": "text",
+                  "order": 0,
+                  "location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[5]/token[0]",
+                  "content_sha256": "fe4f97e0d52e7ecfaa52b255950ef66db93768d2b2847874676ea79d922a66f2"
+                }
+              ],
+              "start_token_offset": 0,
+              "end_token_offset": 56
+            }
           }
         }
-      ],
-      "witness_id": "fresh2-riica-elimination-ray"
+      ]
     }
   ],
   "promotion": {

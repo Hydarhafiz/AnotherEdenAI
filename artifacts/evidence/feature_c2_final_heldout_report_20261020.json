@@ -1,0 +1,4355 @@
+{
+  "artifact_type": "c2_final_heldout_aggregate_report",
+  "c1_1_fidelity_dimensions": {
+    "actor": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "attack_type": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "child_definition_resolution": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "duration_activation": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "effect_completeness": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "effect_order": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "element": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "magnitude_parameter": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "mechanic_resource_reference": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "parent_child_condition_attachment": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "recipient": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "result": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    },
+    "source_identity": {
+      "denominator_count": 7,
+      "known_applicable_count": 7,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "passed": 7
+      },
+      "unknown_or_unresolved_count": 0
+    },
+    "source_record_selection": {
+      "denominator_count": 7,
+      "known_applicable_count": 7,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "passed": 7
+      },
+      "unknown_or_unresolved_count": 0
+    },
+    "trigger": {
+      "denominator_count": 7,
+      "known_applicable_count": 0,
+      "not_applicable_count": 0,
+      "status_counts": {
+        "unknown": 7
+      },
+      "unknown_or_unresolved_count": 7
+    }
+  },
+  "class_a_evaluation": {
+    "exact_source_anchors": {
+      "accuracy": 0.25,
+      "expected_count": 36,
+      "matched_count": 9,
+      "unmatched_count": 27
+    },
+    "field_correctness_by_field": {
+      "actor": {
+        "accuracy": 0.19444444444444445,
+        "adjudicated_count": 36,
+        "correct_count": 7,
+        "denominator_count": 36,
+        "incorrect_count": 29
+      },
+      "attack_type": {
+        "accuracy": 0.2,
+        "adjudicated_count": 15,
+        "correct_count": 3,
+        "denominator_count": 15,
+        "incorrect_count": 12
+      },
+      "condition": {
+        "accuracy": 0.0,
+        "adjudicated_count": 18,
+        "denominator_count": 18,
+        "incorrect_count": 18
+      },
+      "direction": {
+        "accuracy": 0.17142857142857143,
+        "adjudicated_count": 35,
+        "correct_count": 6,
+        "denominator_count": 35,
+        "incorrect_count": 29
+      },
+      "duration_activation": {
+        "accuracy": 0.375,
+        "adjudicated_count": 8,
+        "correct_count": 3,
+        "denominator_count": 8,
+        "incorrect_count": 5
+      },
+      "element": {
+        "accuracy": 0.06666666666666667,
+        "adjudicated_count": 15,
+        "correct_count": 1,
+        "denominator_count": 16,
+        "incorrect_count": 14,
+        "not_applicable_count": 1
+      },
+      "magnitude": {
+        "accuracy": 0.25,
+        "adjudicated_count": 16,
+        "correct_count": 4,
+        "denominator_count": 16,
+        "incorrect_count": 12
+      },
+      "recipient": {
+        "accuracy": 0.2222222222222222,
+        "adjudicated_count": 27,
+        "correct_count": 6,
+        "denominator_count": 35,
+        "incorrect_count": 21,
+        "unknown_count": 8
+      },
+      "state_reference": {
+        "accuracy": 0.0,
+        "adjudicated_count": 17,
+        "denominator_count": 17,
+        "incorrect_count": 17
+      },
+      "target_cardinality": {
+        "accuracy": 0.21428571428571427,
+        "adjudicated_count": 28,
+        "correct_count": 6,
+        "denominator_count": 35,
+        "incorrect_count": 22,
+        "unknown_count": 7
+      },
+      "trigger": {
+        "accuracy": 1.0,
+        "adjudicated_count": 2,
+        "correct_count": 2,
+        "denominator_count": 2
+      }
+    },
+    "material_conditions": {
+      "accuracy": 0.0,
+      "adjudicated_count": 18,
+      "denominator_count": 18,
+      "incorrect_count": 18
+    },
+    "material_magnitude_duration": {
+      "accuracy": 0.2916666666666667,
+      "adjudicated_count": 24,
+      "correct_count": 7,
+      "denominator_count": 24,
+      "incorrect_count": 17
+    },
+    "material_recipient_target": {
+      "accuracy": 0.21818181818181817,
+      "adjudicated_count": 55,
+      "correct_count": 12,
+      "denominator_count": 70,
+      "incorrect_count": 43,
+      "unknown_count": 15
+    },
+    "material_relationships": {
+      "accuracy": 0.0,
+      "correct_count": 0,
+      "expected_count": 2,
+      "extra_count": 5,
+      "incorrect_or_unresolved_count": 2,
+      "unresolved_count": 4
+    },
+    "material_state_resource_reference": {
+      "resource_reference": {
+        "correct_count": null,
+        "denominator_count": 0,
+        "reason": "The frozen oracle has no separate resource_reference field; resource/dependency distinctions are represented through supported labels, dependencies, and explicit gaps.",
+        "status": "unknown",
+        "unknown_count": 0
+      },
+      "state_reference": {
+        "accuracy": 0.0,
+        "adjudicated_count": 17,
+        "denominator_count": 17,
+        "incorrect_count": 17
+      }
+    },
+    "material_trigger_timing": {
+      "action_timing": {
+        "accuracy": null,
+        "adjudicated_count": 0,
+        "correct_count": 0,
+        "denominator_count": 0,
+        "incorrect_count": 0,
+        "not_applicable_count": 0,
+        "status": "unknown_no_independent_adjudication",
+        "unknown_count": 0
+      },
+      "trigger": {
+        "accuracy": 1.0,
+        "adjudicated_count": 2,
+        "correct_count": 2,
+        "denominator_count": 2
+      }
+    },
+    "source_action_branch_ownership": {
+      "correct_count": null,
+      "denominator_count": 0,
+      "reason": "The frozen oracle adjudicates exact source anchors and material relationships but has no independent source_owner_id, action_owner_id, or branch_context field for supported atoms.",
+      "status": "unknown",
+      "unknown_count": 0
+    }
+  },
+  "class_b_diagnostics": {
+    "all_evaluator_raw_field_metrics": {
+      "actor": {
+        "accuracy": 0.19444444444444445,
+        "adjudicated_count": 36,
+        "correct_count": 7,
+        "denominator_count": 36,
+        "incorrect_count": 29
+      },
+      "attack_type": {
+        "accuracy": 0.2,
+        "adjudicated_count": 15,
+        "correct_count": 3,
+        "denominator_count": 36,
+        "incorrect_count": 12,
+        "not_applicable_count": 19,
+        "unknown_count": 2
+      },
+      "condition": {
+        "accuracy": 0.0,
+        "adjudicated_count": 18,
+        "denominator_count": 36,
+        "incorrect_count": 18,
+        "not_applicable_count": 18
+      },
+      "direction": {
+        "accuracy": 0.17142857142857143,
+        "adjudicated_count": 35,
+        "correct_count": 6,
+        "denominator_count": 36,
+        "incorrect_count": 29,
+        "unknown_count": 1
+      },
+      "duration_activation": {
+        "accuracy": 0.375,
+        "adjudicated_count": 8,
+        "correct_count": 3,
+        "denominator_count": 36,
+        "incorrect_count": 5,
+        "not_applicable_count": 28
+      },
+      "element": {
+        "accuracy": 0.06666666666666667,
+        "adjudicated_count": 15,
+        "correct_count": 1,
+        "denominator_count": 36,
+        "incorrect_count": 14,
+        "not_applicable_count": 19,
+        "unknown_count": 2
+      },
+      "magnitude": {
+        "accuracy": 0.21739130434782608,
+        "adjudicated_count": 23,
+        "correct_count": 5,
+        "denominator_count": 36,
+        "incorrect_count": 18,
+        "not_applicable_count": 12,
+        "unknown_count": 1
+      },
+      "recipient": {
+        "accuracy": 0.2222222222222222,
+        "adjudicated_count": 27,
+        "correct_count": 6,
+        "denominator_count": 36,
+        "incorrect_count": 21,
+        "unknown_count": 9
+      },
+      "relationships": {
+        "accuracy": null,
+        "denominator_count": 36,
+        "not_applicable_count": 36
+      },
+      "result": {
+        "accuracy": 0.05555555555555555,
+        "adjudicated_count": 36,
+        "correct_count": 2,
+        "denominator_count": 36,
+        "incorrect_count": 34
+      },
+      "state_reference": {
+        "accuracy": 0.0,
+        "adjudicated_count": 17,
+        "denominator_count": 36,
+        "incorrect_count": 17,
+        "not_applicable_count": 19
+      },
+      "target_cardinality": {
+        "accuracy": 0.21428571428571427,
+        "adjudicated_count": 28,
+        "correct_count": 6,
+        "denominator_count": 36,
+        "incorrect_count": 22,
+        "unknown_count": 8
+      },
+      "trigger": {
+        "accuracy": 1.0,
+        "adjudicated_count": 2,
+        "correct_count": 2,
+        "denominator_count": 36,
+        "not_applicable_count": 34
+      }
+    },
+    "diagnostic_only": {
+      "exact_semantic_and_anchor_match": 7,
+      "extra_supported_prediction": 2,
+      "missing_supported_occurrence": 8,
+      "same_label_operation_mismatch": 1,
+      "same_label_operation_source_boundary_mismatch": 13,
+      "wrong_label_on_overlapping_source_span": 2
+    },
+    "generated_metadata_counts": {
+      "occurrences_with_action_timing": 35,
+      "occurrences_with_formula_metadata": 1,
+      "occurrences_with_resource_metadata": 1,
+      "occurrences_with_result_modifiers": 5,
+      "occurrences_with_sequence_metadata": 0,
+      "predicted_occurrence_count": 66
+    },
+    "note": "Class B results, formula/sequence metadata, and non-material magnitude/duration remain diagnostic and do not alter primary capability metrics.",
+    "owner_adjudicated_diagnostic_fields": {
+      "magnitude": {
+        "accuracy": 0.14285714285714285,
+        "adjudicated_count": 7,
+        "correct_count": 1,
+        "denominator_count": 8,
+        "incorrect_count": 6,
+        "unknown_count": 1
+      },
+      "result": {
+        "accuracy": 0.05555555555555555,
+        "adjudicated_count": 36,
+        "correct_count": 2,
+        "denominator_count": 36,
+        "incorrect_count": 34
+      }
+    }
+  },
+  "cohort": {
+    "cohort_manifest_sha256": "0d904341a18cea8e50f4869415ef8c7b70208180217ae13d23b86a053a9e4eb9",
+    "fact_ids": [
+      "sidekick_skill:0d4d650be5b6ebde031f",
+      "skill:86f56e65ad514057dbc9",
+      "skill:a618ee29cbaf2d711eda",
+      "skill:680d04634b1fcc73bddb",
+      "skill:9c8eceb19ae4a8299e66",
+      "skill:41bc4674ded91f41fde5",
+      "skill:089a2cd5e8acba9aa282"
+    ],
+    "oracle_sha256": "90ad093522e42b4c20e654c1d1da4ca5a990cb80329bfc5edcdfd45c3e00afc9",
+    "witness_count": 7
+  },
+  "created_at_utc": "2026-10-20T02:31:28Z",
+  "error_analysis": {
+    "canonical_occurrence_events": [
+      {
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "predicted_anchor_id": "src:5d9422827125d6e727e2ff3aad391ab7",
+        "predicted_capability": "awaken_zone",
+        "predicted_kind": "effect",
+        "predicted_operation": "activate",
+        "prediction_index": 8,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "expected_capability": "awaken_zone",
+        "expected_kind": "effect",
+        "expected_operation": "activate",
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "expected_capability": "repeatable_setup",
+        "expected_kind": "effect",
+        "expected_operation": "allow",
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "expected_capability": "party_composition",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "predicted_anchor_id": "src:959a1a0649198d288cee205044431214",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "predicted_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "predicted_capability": "requires_zone",
+        "predicted_kind": "dependency",
+        "predicted_operation": "conditional",
+        "prediction_index": 2,
+        "root_cause": "role",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "predicted_anchor_id": "src:3283859b07e976b3442a84756e0012ef",
+        "predicted_capability": "enemy_resistance_down",
+        "predicted_kind": "effect",
+        "predicted_operation": "decrease",
+        "prediction_index": 4,
+        "root_cause": "segmentation",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:02f8c4524473752e9714e440d40dba95",
+        "expected_atom_index": 1,
+        "expected_capability": "regen_hp",
+        "expected_kind": "effect",
+        "expected_operation": "apply",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "expected_capability": "requires_zone",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "expected_capability": "element_resistance_down",
+        "expected_kind": "effect",
+        "expected_operation": "decrease",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "predicted_anchor_id": "src:072520106bc6c0243730ef080ec145d1",
+        "predicted_capability": "speed_up",
+        "predicted_kind": "effect",
+        "predicted_operation": "increase",
+        "prediction_index": 2,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "predicted_anchor_id": "src:78a35e3d7a3373594c4eaf51011ecd01",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 4,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "expected_capability": "speed_up",
+        "expected_kind": "effect",
+        "expected_operation": "increase",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:529d63395c537cd84aa597208ad70400",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:529d63395c537cd84aa597208ad70400",
+        "predicted_capability": "multi_hit_action",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 1,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:f165f75d5797759f3300cb151f5d1cb1",
+        "predicted_capability": "element_damage_up",
+        "predicted_kind": "effect",
+        "predicted_operation": "increase",
+        "prediction_index": 2,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 5,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "expected_capability": "ignore_target_defense",
+        "expected_kind": "effect",
+        "expected_operation": "ignore",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "expected_capability": "element_damage_up",
+        "expected_kind": "effect",
+        "expected_operation": "increase",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "dependency/resource",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "expected_atom_index": 4,
+        "expected_capability": "attack_again",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:83bb7e45c60b1c745ebb788c876c1ada",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:cd2a736f6bd199787cda83a46d04a676",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 5,
+        "root_cause": "dependency/resource",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:b0905456dee9c3281778e2f2c86e6fd8",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 9,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:23ac490045773c55946938087850c179",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 10,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:bdb77a98f6d5053079790aa48fc44e21",
+        "predicted_capability": "speed_up",
+        "predicted_kind": "effect",
+        "predicted_operation": "increase",
+        "prediction_index": 12,
+        "root_cause": "segmentation",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "dependency/resource",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "predicted_anchor_id": "src:86e9599d02625c3b84cc0c591424c482",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "predicted_anchor_id": "src:86e9599d02625c3b84cc0c591424c482",
+        "predicted_capability": "multi_hit_action",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 1,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "predicted_anchor_id": "src:70c63ef2e66eb405dc836bb42942c49c",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "expected_capability": "requires_recipient_eligibility",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      }
+    ],
+    "class_a_events": [
+      {
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "predicted_anchor_id": "src:5d9422827125d6e727e2ff3aad391ab7",
+        "predicted_capability": "awaken_zone",
+        "predicted_kind": "effect",
+        "predicted_operation": "activate",
+        "prediction_index": 8,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "expected_capability": "awaken_zone",
+        "expected_kind": "effect",
+        "expected_operation": "activate",
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "expected_capability": "repeatable_setup",
+        "expected_kind": "effect",
+        "expected_operation": "allow",
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "expected_capability": "party_composition",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:843e09b90326769fb72d31f2971b3267",
+        "expected_atom_index": 2,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "state_reference",
+        "root_cause": "dependency/resource",
+        "type": "field_mismatch",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "recipient",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "target_cardinality",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "state_reference",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:0d3d97096f6205eaa4f7e7f2fb5bec73",
+        "expected_atom_index": 3,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "duration_activation",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "recipient",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:ade033ce75e37cd75c505258b496b375",
+        "expected_atom_index": 4,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "target_cardinality",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "actor",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "direction",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "recipient",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "target_cardinality",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "condition",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_anchor_id": "src:23d7337ed8537dbabd2cfb5469da2a3d",
+        "expected_atom_index": 5,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "field": "state_reference",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "prediction_index": 1,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_gap_index": 1,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "predicted_anchor_id": "src:959a1a0649198d288cee205044431214",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "predicted_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "predicted_capability": "requires_zone",
+        "predicted_kind": "dependency",
+        "predicted_operation": "conditional",
+        "prediction_index": 2,
+        "root_cause": "role",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "predicted_anchor_id": "src:3283859b07e976b3442a84756e0012ef",
+        "predicted_capability": "enemy_resistance_down",
+        "predicted_kind": "effect",
+        "predicted_operation": "decrease",
+        "prediction_index": 4,
+        "root_cause": "segmentation",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:02f8c4524473752e9714e440d40dba95",
+        "expected_atom_index": 1,
+        "expected_capability": "regen_hp",
+        "expected_kind": "effect",
+        "expected_operation": "apply",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:02f8c4524473752e9714e440d40dba95",
+        "expected_atom_index": 1,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "expected_capability": "requires_zone",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "expected_capability": "element_resistance_down",
+        "expected_kind": "effect",
+        "expected_operation": "decrease",
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "recipient",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:d76215f5458e208ee3257401684449da",
+        "expected_atom_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:02f8c4524473752e9714e440d40dba95",
+        "expected_atom_index": 1,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:02f8c4524473752e9714e440d40dba95",
+        "expected_atom_index": 1,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "duration_activation",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "actor",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "direction",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "recipient",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "target_cardinality",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "condition",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:94d1d86e2fd8c6deead158767289f9dd",
+        "expected_atom_index": 2,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "state_reference",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "actor",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "direction",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "recipient",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "target_cardinality",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "condition",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "element",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "magnitude",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_anchor_id": "src:bda947a47751441cdb58d9a706a72cb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "field": "duration_activation",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "prediction_index": 0,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_gap_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "predicted_anchor_id": "src:072520106bc6c0243730ef080ec145d1",
+        "predicted_capability": "speed_up",
+        "predicted_kind": "effect",
+        "predicted_operation": "increase",
+        "prediction_index": 2,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "predicted_anchor_id": "src:78a35e3d7a3373594c4eaf51011ecd01",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 4,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "expected_capability": "speed_up",
+        "expected_kind": "effect",
+        "expected_operation": "increase",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "recipient",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "magnitude",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:737de492f7a7cda1bacfe914ea945790",
+        "expected_atom_index": 1,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "duration_activation",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "condition",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "magnitude",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 2,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "state_reference",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "condition",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "element",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "attack_type",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "magnitude",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:c0c42bc22e7dc31d63c6bc4c9bbe6eb0",
+        "expected_atom_index": 3,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "state_reference",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "actor",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "direction",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "recipient",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "target_cardinality",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "condition",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "expected_anchor_id": "src:ec51fe22f0cdeb32b77a696a3be962a6",
+        "expected_atom_index": 4,
+        "fact_id": "skill:a618ee29cbaf2d711eda",
+        "field": "state_reference",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-a618ee29cbaf2d711eda"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:529d63395c537cd84aa597208ad70400",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:529d63395c537cd84aa597208ad70400",
+        "predicted_capability": "multi_hit_action",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 1,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:f165f75d5797759f3300cb151f5d1cb1",
+        "predicted_capability": "element_damage_up",
+        "predicted_kind": "effect",
+        "predicted_operation": "increase",
+        "prediction_index": 2,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "predicted_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 5,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "expected_capability": "ignore_target_defense",
+        "expected_kind": "effect",
+        "expected_operation": "ignore",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "expected_capability": "element_damage_up",
+        "expected_kind": "effect",
+        "expected_operation": "increase",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "dependency/resource",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "expected_atom_index": 4,
+        "expected_capability": "attack_again",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "segmentation",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "recipient",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "condition",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "magnitude",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "recipient",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "target_cardinality",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "condition",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "element",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "attack_type",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b0fb62457445d9d60def250ca3c07054",
+        "expected_atom_index": 1,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "magnitude",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "actor",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "direction",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "recipient",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:b1b02e2f25637ee328a3a58bd8522082",
+        "expected_atom_index": 2,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "target_cardinality",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "actor",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "direction",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "recipient",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "target_cardinality",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "element",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "magnitude",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:e3466cacf28228f190424de9f2ee6536",
+        "expected_atom_index": 3,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "duration_activation",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "expected_atom_index": 4,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "expected_atom_index": 4,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "expected_atom_index": 4,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "condition",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:c8680ee9086a989acd7d03efac90fca3",
+        "expected_atom_index": 4,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "state_reference",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "actor",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "direction",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "recipient",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "target_cardinality",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "condition",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_anchor_id": "src:07b73b759273b117000a987d8cb1af43",
+        "expected_atom_index": 5,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "field": "state_reference",
+        "root_cause": "segmentation",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "prediction_index": 0,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "prediction_index": 1,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_gap_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:83bb7e45c60b1c745ebb788c876c1ada",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:cd2a736f6bd199787cda83a46d04a676",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 5,
+        "root_cause": "dependency/resource",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:b0905456dee9c3281778e2f2c86e6fd8",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 9,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:23ac490045773c55946938087850c179",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 10,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "predicted_anchor_id": "src:bdb77a98f6d5053079790aa48fc44e21",
+        "predicted_capability": "speed_up",
+        "predicted_kind": "effect",
+        "predicted_operation": "increase",
+        "prediction_index": 12,
+        "root_cause": "segmentation",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "dependency/resource",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "expected_capability": "requires_stack",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "recipient",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:6cf0ebf880dd70eaa40e928a1f88df03",
+        "expected_atom_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "magnitude",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:c2f895c4a897b0fc7df1eb2f2aa4d02a",
+        "expected_atom_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "magnitude",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "recipient",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "target_cardinality",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0417ed0d00970d684856b28e3bdcb997",
+        "expected_atom_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "dependency/resource",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 4,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "magnitude",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "element",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "attack_type",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:2ee5c23fab63340c22afb29b94dd8416",
+        "expected_atom_index": 5,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "magnitude",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:3ff1d63dff1a59b45b8930db9356e019",
+        "expected_atom_index": 6,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "actor",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "direction",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "recipient",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "target_cardinality",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "condition",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_anchor_id": "src:0d7c50aa5a449b7dab3a4287cb131964",
+        "expected_atom_index": 7,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "field": "state_reference",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 0,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 1,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 2,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 3,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 4,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "predicted_anchor_id": "src:86e9599d02625c3b84cc0c591424c482",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "predicted_anchor_id": "src:86e9599d02625c3b84cc0c591424c482",
+        "predicted_capability": "multi_hit_action",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 1,
+        "root_cause": "taxonomy mapping",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "expected_capability": "multi_hit_action",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "taxonomy mapping",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "recipient",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 0,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "actor",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "direction",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "recipient",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "target_cardinality",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "element",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "attack_type",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:6b9c8e6cb530906e039082f5d224d066",
+        "expected_atom_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "magnitude",
+        "root_cause": "taxonomy mapping",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:a7389331c30bb51356b70960e534a47e",
+        "expected_atom_index": 3,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "direction",
+        "root_cause": "role",
+        "type": "field_mismatch",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:a7389331c30bb51356b70960e534a47e",
+        "expected_atom_index": 3,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "recipient",
+        "root_cause": "target/recipient",
+        "type": "field_mismatch",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:a7389331c30bb51356b70960e534a47e",
+        "expected_atom_index": 3,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "field": "target_cardinality",
+        "root_cause": "target/recipient",
+        "type": "field_mismatch",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_gap_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_gap_index": 2,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_gap_index": 3,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "predicted_anchor_id": "src:70c63ef2e66eb405dc836bb42942c49c",
+        "predicted_capability": "direct_damage",
+        "predicted_kind": "effect",
+        "predicted_operation": "damage",
+        "prediction_index": 0,
+        "root_cause": "anchor",
+        "type": "false_positive",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "expected_capability": "direct_damage",
+        "expected_kind": "effect",
+        "expected_operation": "damage",
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "root_cause": "anchor",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "expected_capability": "requires_recipient_eligibility",
+        "expected_kind": "dependency",
+        "expected_operation": "require",
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "root_cause": "unsupported-gap handling",
+        "type": "false_negative",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "root_cause": "anchor",
+        "type": "exact_source_anchor_failure",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "actor",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "direction",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "recipient",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "target_cardinality",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "element",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0a590d31d263d60d3679aabcc46f1844",
+        "expected_atom_index": 0,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "attack_type",
+        "root_cause": "anchor",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "actor",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "direction",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "recipient",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "target_cardinality",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "condition",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:0cfee4d285d2217680e237414e57e458",
+        "expected_atom_index": 1,
+        "fact_id": "skill:089a2cd5e8acba9aa282",
+        "field": "state_reference",
+        "root_cause": "unsupported-gap handling",
+        "type": "missing_occurrence_field",
+        "witness_id": "m6-final-skill-089a2cd5e8acba9aa282"
+      },
+      {
+        "expected_anchor_id": "src:f8f551ed736027c46ac28f79d3ad78ba",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "operation": "requires",
+        "root_cause": "relationship",
+        "type": "missing_or_incorrect_material_relationship",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:90398b6557262defbef30f35e0ab5ab8",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "operation": "replaces",
+        "root_cause": "relationship",
+        "type": "missing_or_incorrect_material_relationship",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "anchor_id": "src:7d5a7b9fbc5b2686524bdbc98c42f676",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "activates",
+        "root_cause": "relationship",
+        "target_ids": [],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      },
+      {
+        "anchor_id": "src:e7fdef220b075853c8321cc26b5ead39",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "activates",
+        "root_cause": "relationship",
+        "target_ids": [
+          "skill:607fb110cee8f3e2df0a"
+        ],
+        "target_kind": "source_fact",
+        "type": "extra_material_relationship",
+        "unresolved": false
+      },
+      {
+        "anchor_id": "src:09af33978b0d0f9480c403242bd20d79",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "activates",
+        "root_cause": "relationship",
+        "target_ids": [],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      },
+      {
+        "anchor_id": "src:4a230c002c0e8dfad820253e09b0d8ac",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 2,
+        "operation": "references",
+        "root_cause": "relationship",
+        "target_ids": [
+          "skill:74b91922c9fb3b7d0e17"
+        ],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      },
+      {
+        "anchor_id": "src:4a230c002c0e8dfad820253e09b0d8ac",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "replaces",
+        "root_cause": "relationship",
+        "target_ids": [],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      }
+    ],
+    "class_a_patterns": [
+      {
+        "distinct_fact_count": 7,
+        "pattern": "broad",
+        "root_cause": "anchor"
+      },
+      {
+        "distinct_fact_count": 3,
+        "pattern": "systematic",
+        "root_cause": "dependency/resource"
+      },
+      {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "relationship"
+      },
+      {
+        "distinct_fact_count": 2,
+        "pattern": "systematic",
+        "root_cause": "role"
+      },
+      {
+        "distinct_fact_count": 4,
+        "pattern": "broad",
+        "root_cause": "segmentation"
+      },
+      {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "target/recipient"
+      },
+      {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "taxonomy mapping"
+      },
+      {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "unsupported-gap handling"
+      }
+    ],
+    "distinct_class_a_failure_fact_count": 7,
+    "material_relationship_events": [
+      {
+        "expected_anchor_id": "src:f8f551ed736027c46ac28f79d3ad78ba",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "operation": "requires",
+        "root_cause": "relationship",
+        "type": "missing_or_incorrect_material_relationship",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_anchor_id": "src:90398b6557262defbef30f35e0ab5ab8",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "operation": "replaces",
+        "root_cause": "relationship",
+        "type": "missing_or_incorrect_material_relationship",
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "anchor_id": "src:7d5a7b9fbc5b2686524bdbc98c42f676",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "activates",
+        "root_cause": "relationship",
+        "target_ids": [],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      },
+      {
+        "anchor_id": "src:e7fdef220b075853c8321cc26b5ead39",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "activates",
+        "root_cause": "relationship",
+        "target_ids": [
+          "skill:607fb110cee8f3e2df0a"
+        ],
+        "target_kind": "source_fact",
+        "type": "extra_material_relationship",
+        "unresolved": false
+      },
+      {
+        "anchor_id": "src:09af33978b0d0f9480c403242bd20d79",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "activates",
+        "root_cause": "relationship",
+        "target_ids": [],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      },
+      {
+        "anchor_id": "src:4a230c002c0e8dfad820253e09b0d8ac",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 2,
+        "operation": "references",
+        "root_cause": "relationship",
+        "target_ids": [
+          "skill:74b91922c9fb3b7d0e17"
+        ],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      },
+      {
+        "anchor_id": "src:4a230c002c0e8dfad820253e09b0d8ac",
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "grouped_classifier_row_count": 1,
+        "operation": "replaces",
+        "root_cause": "relationship",
+        "target_ids": [],
+        "target_kind": "unresolved",
+        "type": "extra_material_relationship",
+        "unresolved": true
+      }
+    ],
+    "root_cause_patterns": {
+      "canonical_fn:anchor": {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "anchor"
+      },
+      "canonical_fn:dependency/resource": {
+        "distinct_fact_count": 2,
+        "pattern": "systematic",
+        "root_cause": "dependency/resource"
+      },
+      "canonical_fn:segmentation": {
+        "distinct_fact_count": 3,
+        "pattern": "systematic",
+        "root_cause": "segmentation"
+      },
+      "canonical_fn:taxonomy mapping": {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "taxonomy mapping"
+      },
+      "canonical_fn:unsupported-gap handling": {
+        "distinct_fact_count": 4,
+        "pattern": "broad",
+        "root_cause": "unsupported-gap handling"
+      },
+      "canonical_fp:anchor": {
+        "distinct_fact_count": 3,
+        "pattern": "systematic",
+        "root_cause": "anchor"
+      },
+      "canonical_fp:dependency/resource": {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "dependency/resource"
+      },
+      "canonical_fp:role": {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "role"
+      },
+      "canonical_fp:segmentation": {
+        "distinct_fact_count": 2,
+        "pattern": "systematic",
+        "root_cause": "segmentation"
+      },
+      "canonical_fp:taxonomy mapping": {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "taxonomy mapping"
+      },
+      "class_a:anchor": {
+        "distinct_fact_count": 7,
+        "pattern": "broad",
+        "root_cause": "anchor"
+      },
+      "class_a:dependency/resource": {
+        "distinct_fact_count": 3,
+        "pattern": "systematic",
+        "root_cause": "dependency/resource"
+      },
+      "class_a:relationship": {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "relationship"
+      },
+      "class_a:role": {
+        "distinct_fact_count": 2,
+        "pattern": "systematic",
+        "root_cause": "role"
+      },
+      "class_a:segmentation": {
+        "distinct_fact_count": 4,
+        "pattern": "broad",
+        "root_cause": "segmentation"
+      },
+      "class_a:target/recipient": {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "target/recipient"
+      },
+      "class_a:taxonomy mapping": {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "taxonomy mapping"
+      },
+      "class_a:unsupported-gap handling": {
+        "distinct_fact_count": 6,
+        "pattern": "broad",
+        "root_cause": "unsupported-gap handling"
+      },
+      "gap_fn:unsupported-gap handling": {
+        "distinct_fact_count": 5,
+        "pattern": "broad",
+        "root_cause": "unsupported-gap handling"
+      },
+      "gap_fp:unsupported-gap handling": {
+        "distinct_fact_count": 4,
+        "pattern": "broad",
+        "root_cause": "unsupported-gap handling"
+      },
+      "relationship_fp:relationship": {
+        "distinct_fact_count": 1,
+        "pattern": "isolated",
+        "root_cause": "relationship"
+      }
+    },
+    "systematic_or_broad_class_a_failure": true,
+    "unsupported_gap_events": [
+      {
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "prediction_index": 1,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "expected_gap_index": 1,
+        "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-sidekick_skill-0d4d650be5b6ebde031f"
+      },
+      {
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "prediction_index": 0,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "expected_gap_index": 0,
+        "fact_id": "skill:86f56e65ad514057dbc9",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-86f56e65ad514057dbc9"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "prediction_index": 0,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "prediction_index": 1,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "expected_gap_index": 0,
+        "fact_id": "skill:680d04634b1fcc73bddb",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-680d04634b1fcc73bddb"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 0,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 1,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 2,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 3,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "prediction_index": 4,
+        "root_cause": "unsupported-gap handling",
+        "type": "unexpected_gap",
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 0,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 1,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 2,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 3,
+        "fact_id": "skill:9c8eceb19ae4a8299e66",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-9c8eceb19ae4a8299e66"
+      },
+      {
+        "expected_gap_index": 1,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_gap_index": 2,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      },
+      {
+        "expected_gap_index": 3,
+        "fact_id": "skill:41bc4674ded91f41fde5",
+        "root_cause": "unsupported-gap handling",
+        "type": "unmatched_expected_gap",
+        "unanchored": false,
+        "witness_id": "m6-final-skill-41bc4674ded91f41fde5"
+      }
+    ]
+  },
+  "evaluator_aggregate": {
+    "c1_1_fidelity_dimensions": {
+      "actor": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "attack_type": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "child_definition_resolution": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "duration_activation": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "effect_completeness": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "effect_order": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "element": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "magnitude_parameter": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "mechanic_resource_reference": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "parent_child_condition_attachment": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "recipient": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "result": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      },
+      "source_identity": {
+        "denominator_count": 7,
+        "known_applicable_count": 7,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "passed": 7
+        },
+        "unknown_or_unresolved_count": 0
+      },
+      "source_record_selection": {
+        "denominator_count": 7,
+        "known_applicable_count": 7,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "passed": 7
+        },
+        "unknown_or_unresolved_count": 0
+      },
+      "trigger": {
+        "denominator_count": 7,
+        "known_applicable_count": 0,
+        "not_applicable_count": 0,
+        "status_counts": {
+          "unknown": 7
+        },
+        "unknown_or_unresolved_count": 7
+      }
+    },
+    "capability_label_precision_recall": {
+      "expected_count": 36,
+      "false_negative_count": 29,
+      "false_positive_count": 18,
+      "precision": 0.28,
+      "predicted_count": 25,
+      "recall": 0.19444444444444445,
+      "true_positive_count": 7
+    },
+    "condition_attachment": {
+      "accuracy": 0.0,
+      "adjudicated_count": 18,
+      "denominator_count": 36,
+      "incorrect_count": 18,
+      "not_applicable_count": 18
+    },
+    "dependency_occurrence_precision_recall": {
+      "expected_count": 7,
+      "false_negative_count": 7,
+      "false_positive_count": 1,
+      "precision": 0.0,
+      "predicted_count": 1,
+      "recall": 0.0,
+      "true_positive_count": 0
+    },
+    "diagnostic_only": {
+      "exact_semantic_and_anchor_match": 7,
+      "extra_supported_prediction": 2,
+      "missing_supported_occurrence": 8,
+      "same_label_operation_mismatch": 1,
+      "same_label_operation_source_boundary_mismatch": 13,
+      "wrong_label_on_overlapping_source_span": 2
+    },
+    "effect_occurrence_precision_recall": {
+      "expected_count": 29,
+      "false_negative_count": 21,
+      "false_positive_count": 16,
+      "precision": 0.3333333333333333,
+      "predicted_count": 24,
+      "recall": 0.27586206896551724,
+      "true_positive_count": 8
+    },
+    "explicit_unsupported_gaps": {
+      "anchored_expected_count": 13,
+      "expected_count": 13,
+      "matched_count": 3,
+      "unanchored_expected_count": 0,
+      "unexpected_count": 9,
+      "unmatched_expected_count": 10,
+      "unsupported_outputs_without_gap_anchor_count": 9
+    },
+    "field_correctness": {
+      "actor": {
+        "accuracy": 0.19444444444444445,
+        "adjudicated_count": 36,
+        "correct_count": 7,
+        "denominator_count": 36,
+        "incorrect_count": 29
+      },
+      "attack_type": {
+        "accuracy": 0.2,
+        "adjudicated_count": 15,
+        "correct_count": 3,
+        "denominator_count": 36,
+        "incorrect_count": 12,
+        "not_applicable_count": 19,
+        "unknown_count": 2
+      },
+      "condition": {
+        "accuracy": 0.0,
+        "adjudicated_count": 18,
+        "denominator_count": 36,
+        "incorrect_count": 18,
+        "not_applicable_count": 18
+      },
+      "direction": {
+        "accuracy": 0.17142857142857143,
+        "adjudicated_count": 35,
+        "correct_count": 6,
+        "denominator_count": 36,
+        "incorrect_count": 29,
+        "unknown_count": 1
+      },
+      "duration_activation": {
+        "accuracy": 0.375,
+        "adjudicated_count": 8,
+        "correct_count": 3,
+        "denominator_count": 36,
+        "incorrect_count": 5,
+        "not_applicable_count": 28
+      },
+      "element": {
+        "accuracy": 0.06666666666666667,
+        "adjudicated_count": 15,
+        "correct_count": 1,
+        "denominator_count": 36,
+        "incorrect_count": 14,
+        "not_applicable_count": 19,
+        "unknown_count": 2
+      },
+      "magnitude": {
+        "accuracy": 0.21739130434782608,
+        "adjudicated_count": 23,
+        "correct_count": 5,
+        "denominator_count": 36,
+        "incorrect_count": 18,
+        "not_applicable_count": 12,
+        "unknown_count": 1
+      },
+      "recipient": {
+        "accuracy": 0.2222222222222222,
+        "adjudicated_count": 27,
+        "correct_count": 6,
+        "denominator_count": 36,
+        "incorrect_count": 21,
+        "unknown_count": 9
+      },
+      "relationships": {
+        "accuracy": null,
+        "denominator_count": 36,
+        "not_applicable_count": 36
+      },
+      "result": {
+        "accuracy": 0.05555555555555555,
+        "adjudicated_count": 36,
+        "correct_count": 2,
+        "denominator_count": 36,
+        "incorrect_count": 34
+      },
+      "state_reference": {
+        "accuracy": 0.0,
+        "adjudicated_count": 17,
+        "denominator_count": 36,
+        "incorrect_count": 17,
+        "not_applicable_count": 19
+      },
+      "target_cardinality": {
+        "accuracy": 0.21428571428571427,
+        "adjudicated_count": 28,
+        "correct_count": 6,
+        "denominator_count": 36,
+        "incorrect_count": 22,
+        "unknown_count": 8
+      },
+      "trigger": {
+        "accuracy": 1.0,
+        "adjudicated_count": 2,
+        "correct_count": 2,
+        "denominator_count": 36,
+        "not_applicable_count": 34
+      }
+    },
+    "primary_occurrence_precision_recall": {
+      "expected_count": 36,
+      "false_negative_count": 28,
+      "false_positive_count": 17,
+      "precision": 0.32,
+      "predicted_count": 25,
+      "recall": 0.2222222222222222,
+      "true_positive_count": 8
+    },
+    "relationship_groups": {
+      "diagnostics": {},
+      "emitted_groups": 5,
+      "exact_correct_groups": 0,
+      "expected_groups": 2,
+      "extra_groups": 5,
+      "unresolved_groups": 4
+    },
+    "typed_relationship_correctness": {
+      "accuracy": null,
+      "denominator_count": 36,
+      "not_applicable_count": 36
+    },
+    "unresolved_relationship_count": 0,
+    "witness_denominator": 7
+  },
+  "experiment_metadata": {
+    "adapter_output_path": "artifacts/evidence/feature_c2_final_heldout_adapter_output_20261020.json",
+    "adapter_output_sha256": "7b35eb4bba6ced38bc8cad86809cd7f4aaa2a15f125b8f96f4ef14656c38153f",
+    "classifier_calls_completed": 7,
+    "classifier_calls_started": 7,
+    "classifier_version": "m6-c2-scoped-classification-1.6.0",
+    "cohort_count": 7,
+    "evaluator_adapter_version": "c2-atomic-eval-1.2.0",
+    "evaluator_aggregate_path": "artifacts/evidence/feature_c2_final_heldout_evaluator_aggregate_20261020.json",
+    "evaluator_aggregate_sha256": "d3f3fe0e53574ab662a2e5061b4f48baaa63a933c3dfda5d42fb2698e9499914",
+    "experiment_id": "milestone-6-c2-final-heldout-20261020",
+    "finished_at_local": "2026-10-20T10:31:28+08:00",
+    "finished_at_utc": "2026-10-20T02:31:28Z",
+    "frozen_inputs": {
+      "classifier_sha256": "7b22703f4bd66c3c4daf82c1a3a527a53f7b2fe6e4af12cbdf56b15e44e64650",
+      "cohort_sha256": "0d904341a18cea8e50f4869415ef8c7b70208180217ae13d23b86a053a9e4eb9",
+      "evaluator_adapter_sha256": "a56677188a09fa7f7714166a9daba5382c45afc6374cf011ab3cb020b775238a",
+      "exclusions_sha256": "07b313a093cb398ea488d85ef80e5029becb8590464338ec331335e574ddc225",
+      "head": "736d97f5cda577ecb7a040122180c4a2ec07fd7c",
+      "oracle_sha256": "90ad093522e42b4c20e654c1d1da4ca5a990cb80329bfc5edcdfd45c3e00afc9",
+      "taxonomy_sha256": "6e88f1b1506b9a3bbdb40374244e977b86dca5672883b03bf6ed8b4e781f0c22",
+      "tracked_working_tree_diff_sha256": "a762f854a0191cd3d81da5e553410fa471c301836d123b14b380409536e2a5c6"
+    },
+    "predictions_path": "artifacts/evidence/feature_c2_final_heldout_predictions_20261020.json",
+    "predictions_sha256": "e71f0850067d83fa71cc1cf2356d446f55de26d9eea99788afd93fb7002c567b",
+    "semantic_evaluator_calls": 1,
+    "shared_adapter_calls": 1,
+    "started_at_local": "2026-10-20T10:31:28+08:00",
+    "started_at_utc": "2026-10-20T02:31:28Z",
+    "state": "completed",
+    "stderr_path": "artifacts/evidence/feature_c2_final_heldout_stderr_20261020.log",
+    "stdout_path": "artifacts/evidence/feature_c2_final_heldout_stdout_20261020.log",
+    "taxonomy_version": "3.2.0"
+  },
+  "final_disposition": {
+    "choice": "3_stop_for_architecture_scope_decision",
+    "rationale": "A material Class A root-cause pattern recurs across multiple independent source facts; the contract requires an owner architecture/scope decision before any new loop."
+  },
+  "milestone_status": {
+    "c2_1_readiness_gate_passed": false,
+    "feature_commit_created": false,
+    "feature_d_started": false,
+    "joint_c1_1_c2_owner_acceptance": false,
+    "test_5_started": false,
+    "this_experiment_is_final_heldout_evidence": true
+  },
+  "official_metrics": {
+    "combined_canonical_labels": {
+      "expected_count": 36,
+      "f1": 0.22950819672131148,
+      "false_negative_count": 29,
+      "false_positive_count": 18,
+      "precision": 0.28,
+      "predicted_count": 25,
+      "recall": 0.19444444444444445,
+      "true_positive_count": 7
+    },
+    "dependencies": {
+      "expected_count": 7,
+      "f1": 0.0,
+      "false_negative_count": 7,
+      "false_positive_count": 1,
+      "precision": 0.0,
+      "predicted_count": 1,
+      "recall": 0.0,
+      "true_positive_count": 0
+    },
+    "evaluator_occurrence_metrics": {
+      "dependency_occurrence": {
+        "expected_count": 7,
+        "false_negative_count": 7,
+        "false_positive_count": 1,
+        "precision": 0.0,
+        "predicted_count": 1,
+        "recall": 0.0,
+        "true_positive_count": 0
+      },
+      "effect_occurrence": {
+        "expected_count": 29,
+        "false_negative_count": 21,
+        "false_positive_count": 16,
+        "precision": 0.3333333333333333,
+        "predicted_count": 24,
+        "recall": 0.27586206896551724,
+        "true_positive_count": 8
+      },
+      "primary_occurrence": {
+        "expected_count": 36,
+        "false_negative_count": 28,
+        "false_positive_count": 17,
+        "precision": 0.32,
+        "predicted_count": 25,
+        "recall": 0.2222222222222222,
+        "true_positive_count": 8
+      }
+    },
+    "supported_effects": {
+      "expected_count": 29,
+      "f1": 0.3018867924528302,
+      "false_negative_count": 21,
+      "false_positive_count": 16,
+      "precision": 0.3333333333333333,
+      "predicted_count": 24,
+      "recall": 0.27586206896551724,
+      "true_positive_count": 8
+    },
+    "unsupported_gaps": {
+      "expected": 13,
+      "matched": 3,
+      "unanchored": 0,
+      "unexpected": 9,
+      "unmatched": 10,
+      "unsupported_outputs_without_gap_anchor": 9
+    }
+  },
+  "post_execution_report_analysis": {
+    "adapter_output_sha256": "7b35eb4bba6ced38bc8cad86809cd7f4aaa2a15f125b8f96f4ef14656c38153f",
+    "classifier_calls": 0,
+    "evaluator_aggregate_sha256": "d3f3fe0e53574ab662a2e5061b4f48baaa63a933c3dfda5d42fb2698e9499914",
+    "purpose": "Group material relationship predictions by the same identity used by the frozen evaluator and add non-scoring Class B metadata counts.",
+    "relationship_event_count": 7,
+    "relationship_groups_reported_by_evaluator": {
+      "diagnostics": {},
+      "emitted_groups": 5,
+      "exact_correct_groups": 0,
+      "expected_groups": 2,
+      "extra_groups": 5,
+      "unresolved_groups": 4
+    },
+    "semantic_evaluator_calls": 0,
+    "shared_adapter_calls": 0,
+    "source_predictions_sha256": "e71f0850067d83fa71cc1cf2356d446f55de26d9eea99788afd93fb7002c567b"
+  },
+  "report_version": "m6-c2-final-heldout-report-1.0.0"
+}

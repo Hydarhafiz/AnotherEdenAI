@@ -1,0 +1,635 @@
+{
+  "artifact_type": "c2_failed_experiment_retention_index",
+  "authority": "Owner-approved M6 architecture reset and failed-experiment preservation; immutable source/result identities are not semantic acceptance.",
+  "evaluated_source": {
+    "original_base_commit": "736d97f5cda577ecb7a040122180c4a2ec07fd7c",
+    "original_tracked_diff_sha256": "a762f854a0191cd3d81da5e553410fa471c301836d123b14b380409536e2a5c6",
+    "planning_tree_limit": "P1 intentionally revises milestone/roadmap; the new tree is not the original evaluated tracked diff. Frozen source-file identities remain exact. The original full diff is not claimed reconstructable from this index.",
+    "preserved_existing_changes": [
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "scripts/evaluate_c2_consumed_development_regressions.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "0a3e153966b8b43229c029e96fd3998b3d8b5e72c050c179bcc13ab61634121d"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "scripts/evaluate_c2_development_reviews.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "951482653b02a84ac9cbfc577e73ef91897f8b97116618ca5f403c44001239e9"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "scripts/evaluate_c2_second_fresh_consumed_development_regressions.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "99ad431f2511857ee9970ba677397a265ed937df93245cc424b27ed623f7a5c6"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "src/etl/c2_scoped_classification.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "7b22703f4bd66c3c4daf82c1a3a527a53f7b2fe6e4af12cbdf56b15e44e64650"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "src/etl/c2_semantic_evaluation.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "a56677188a09fa7f7714166a9daba5382c45afc6374cf011ab3cb020b775238a"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "src/etl/structural_evidence.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "be074079a7f36b0df701db162bf90d02debd3621ae9748c3b3f097d468ac86b8"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/fixtures/c2/m6_consumed_development_regression_oracle.json",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "125ef4d22b15a374a667d233e3f37f4be6febd563d966f82489532522617ff16"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/fixtures/c2/m6_second_fresh_consumed_development_regression_oracle.json",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "48eef9954b5b36c2b9348855f2a2fe710448fe1efd1bd75ef0aebd9a8517a18d"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_c2_atomic_occurrences.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "0da47a219f6544ae1045445ba2f7a36ee5a37af1724389b654254e89c23278ca"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_c2_consumed_development_regressions.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "7c0b38573c1414103ed86a3574d186d567749aa71d06becaf618260ce220da25"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_c2_second_fresh_consumed_development_regressions.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "79b7f212cb78e2b91a8dcbb7bb1755599431b9d443be5362584defaf4c754b5c"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_c2_semantic_evaluation.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "d13cac1cb684fa864fe034d3f50d021d7f1dc840a0e21a45aaa44a851e4ca323"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_feature_c2_scoped_classification.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "36bde47bcc614843f0758be63bb4676cf89cf8db3dbd74024d70e06f588f6b15"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "scripts/evaluate_c2_third_fresh_consumed_development_regressions.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "fddb912b67f126a31422e1acfdfad6c8100e3703c4c0bf68e186e22ab1df633e"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/fixtures/c2/m6_development_regression_oracle.json",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "d9124e400a9e65bbc4cc6958046b0511c0734e0c9436882a57104726f9dd491e"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/fixtures/c2/m6_third_fresh_consumed_development_regression_oracle.json",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "d7bab34561db84a0fb0b4befc3172b2d2eacf7c801082d3970599ff12a629599"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_c2_role_first_invariants.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "1e214eb80fc6335531dd5f5f52c78c6acc0201472e67881259c55a2e2e6ea4b6"
+      },
+      {
+        "disposition": "unchanged_evaluated_source_or_regression_evidence",
+        "path": "tests/unit/test_c2_third_fresh_consumed_development_regressions.py",
+        "recovery": "ordinary Git history of the P1 failed-experiment preservation commit; not accepted classifier behavior",
+        "sha256": "3837d6085894d8983c5fe779f3ce0a93eb9aad2a257e4b2ff20f1395effc5720"
+      }
+    ],
+    "recovery": "Inspect source at the P1 preservation commit before P2 retirement. No permanent copied classifier-code archive is created.",
+    "source_file_sha256": {
+      "src/etl/c2_scoped_classification.py": "7b22703f4bd66c3c4daf82c1a3a527a53f7b2fe6e4af12cbdf56b15e44e64650",
+      "src/etl/c2_semantic_evaluation.py": "a56677188a09fa7f7714166a9daba5382c45afc6374cf011ab3cb020b775238a",
+      "src/etl/capability_taxonomy.py": "f4e72a4340e7d016e19004e8d918cd9f76fc64c70eaf34c89991662b773c9ef2",
+      "src/etl/source_fidelity.py": "835a2ea1e338acb36bbf932a9ff1560c42ea99e91235dafa5f0660e3956f9c14",
+      "src/etl/structural_evidence.py": "be074079a7f36b0df701db162bf90d02debd3621ae9748c3b3f097d468ac86b8"
+    }
+  },
+  "experiment_id": "milestone-6-c2-final-heldout-20261020",
+  "final_source_captures": [
+    {
+      "fact_id": "sidekick_skill:0d4d650be5b6ebde031f",
+      "original_path": "data/raw/sidekicks/hazama.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/hazama.html",
+      "sha256": "7119b8d9fa1f2e8e3648537dd8bf15a3a82c2988fcb8e86aec040dcb87ad25fd",
+      "source_location": "sha256:7119b8d9fa1f2e8e3648537dd8bf15a3a82c2988fcb8e86aec040dcb87ad25fd/grid[1]/block[0]",
+      "source_slice_sha256": "bba4895dfb10c6f14caa43be28b8f7ab6910ae5ba2220ab0a5b29a8d5b4854d3"
+    },
+    {
+      "fact_id": "skill:86f56e65ad514057dbc9",
+      "original_path": "data/raw/characters/aisha.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/aisha.html",
+      "sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_location": "sha256:74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574/grid[10]/block[0]",
+      "source_slice_sha256": "f6c0b4e946524ee560839b9cdb61db5bb232038c4b6fa267f9328bda1fc0a03d"
+    },
+    {
+      "fact_id": "skill:a618ee29cbaf2d711eda",
+      "original_path": "data/raw/characters/akane.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/akane.html",
+      "sha256": "184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a",
+      "source_location": "sha256:184813e8e63ca1ab908ead8f513dbaf6da055fe55a7ad3f84be2fa2b4017004a/grid[7]/block[0]",
+      "source_slice_sha256": "661f569161ea20e33859b998e7628124b8ad763f18eeaf95c0bc586325291a3d"
+    },
+    {
+      "fact_id": "skill:680d04634b1fcc73bddb",
+      "original_path": "data/raw/characters/akane_alter_blooming_blade.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/akane_alter_blooming_blade.html",
+      "sha256": "901299cef6fd1b8803443e46aff870f0732df23aa6d6f611f70d47a5c4e3f659",
+      "source_location": "sha256:901299cef6fd1b8803443e46aff870f0732df23aa6d6f611f70d47a5c4e3f659/grid[9]/block[0]",
+      "source_slice_sha256": "93c53133cba180b54aeaee942c2c832d9b8f503fa6eeaeaf5cd267fda496775d"
+    },
+    {
+      "fact_id": "skill:9c8eceb19ae4a8299e66",
+      "original_path": "data/raw/characters/akane_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/akane_another_style.html",
+      "sha256": "63f15a7fce6d09d8b07500f9f39cb5b6fa23cfd4d6a72bd04faeca6ff1e3de7e",
+      "source_location": "sha256:63f15a7fce6d09d8b07500f9f39cb5b6fa23cfd4d6a72bd04faeca6ff1e3de7e/grid[10]/block[0]",
+      "source_slice_sha256": "93f4630219d7beae963d780eb4eabe2d318f476f4adcba8349d1aefbd9c7bc4d"
+    },
+    {
+      "fact_id": "skill:41bc4674ded91f41fde5",
+      "original_path": "data/raw/characters/aldo.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/aldo.html",
+      "sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_location": "sha256:411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b/grid[14]/block[0]",
+      "source_slice_sha256": "e72848364827784a166700f75e09fa63bb721c16d835c10b9bcbb07ba2feb308"
+    },
+    {
+      "fact_id": "skill:089a2cd5e8acba9aa282",
+      "original_path": "data/raw/characters/aldo_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/aldo_another_style.html",
+      "sha256": "156e6adb63c55e219f0ab5eac3bdc32f4b7339be5cb5b52cd8a34b4069999239",
+      "source_location": "sha256:156e6adb63c55e219f0ab5eac3bdc32f4b7339be5cb5b52cd8a34b4069999239/grid[7]/block[0]",
+      "source_slice_sha256": "e3a67056d45a905bd68a551160acad26f01059f44eb0a23ff65937ced8ef0d74"
+    }
+  ],
+  "frozen_artifacts": [
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_adapter_output_20261020.json",
+      "sha256": "7b35eb4bba6ced38bc8cad86809cd7f4aaa2a15f125b8f96f4ef14656c38153f"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_cohort_20261020.json",
+      "sha256": "0d904341a18cea8e50f4869415ef8c7b70208180217ae13d23b86a053a9e4eb9"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_evaluator_aggregate_20261020.json",
+      "sha256": "d3f3fe0e53574ab662a2e5061b4f48baaa63a933c3dfda5d42fb2698e9499914"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_exclusions_20261020.json",
+      "sha256": "07b313a093cb398ea488d85ef80e5029becb8590464338ec331335e574ddc225"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_metadata_20261020.json",
+      "sha256": "486eabb5787ac83e750f02b15e6885b8fb7e0192902afa0402fc0524e8e55f69"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_predictions_20261020.json",
+      "sha256": "e71f0850067d83fa71cc1cf2356d446f55de26d9eea99788afd93fb7002c567b"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_report_20261020.json",
+      "sha256": "671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_stderr_20261020.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/evidence/feature_c2_final_heldout_stdout_20261020.log",
+      "sha256": "94f7965f45d86da0b8db56c5aebb953567da6fb10b7922f94b505c468fafa492"
+    }
+  ],
+  "historical_originals": [
+    {
+      "cohort": "consumed_test_1",
+      "kind": "oracle",
+      "original_path": "/home/shogunix/c2-private/m6-final-heldout-semantic-oracle-20261012.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_1_oracle.json",
+      "sha256": "3e57be52fd7576fab6d058f263966b851d0779f28b186937e9212f15276b2310",
+      "status": "consumed_historical_not_fresh"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "kind": "report",
+      "original_path": "/home/shogunix/c2-private/m6-final-heldout-evaluation-report-20261012.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_1_report.json",
+      "sha256": "df5527513c381a4f58937767d1325ae2817d654ac555ea0a00c81b1a3ff908a1",
+      "status": "consumed_historical_not_fresh"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "kind": "oracle",
+      "original_path": "/home/shogunix/c2-private/m6-second-fresh-owner-oracle.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_2_oracle.json",
+      "sha256": "89d932f00c972762668b305ba2f0d61c1851230894d6b377d1d76b5b3c3d2267",
+      "status": "consumed_historical_not_fresh"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "kind": "report",
+      "original_path": "/home/shogunix/c2-private/m6-second-fresh-evaluation-report.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_2_report.json",
+      "sha256": "5a292625654835252f127253b8b2401840c013ae65a1a5a23e1c7771cf98e8b6",
+      "status": "consumed_historical_not_fresh"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "kind": "oracle",
+      "original_path": "/home/shogunix/c2-private/m6-third-fresh-owner-oracle.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_3_oracle.json",
+      "sha256": "93a2a4d48c8d4a6a85bf30a253bf31afb62a654f37a25eadcef31d24a27b1ae5",
+      "status": "consumed_historical_not_fresh"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "kind": "report",
+      "original_path": "/home/shogunix/c2-private/m6-third-fresh-evaluation-report.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_3_report.json",
+      "sha256": "49055ca03c1db91f9384b159106c5c35e78fd04adadb3ef0f0d4a68cbf0545e2",
+      "status": "consumed_historical_not_fresh"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "kind": "oracle",
+      "original_path": "/home/shogunix/c2-private/c2-r1-owner-oracle.json",
+      "retained_path": "artifacts/evidence/feature_c2_consumed_test_protected_r5_oracle.json",
+      "sha256": "b52e24aa9737970ac451b9bde622856de05ac63b590cc6d2ff9bf8bc77fd78cd",
+      "status": "consumed_historical_not_fresh"
+    }
+  ],
+  "historical_source_captures": [
+    {
+      "cohort": "consumed_test_1",
+      "compression": "none",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:737079b25061a54f0c84",
+      "original_path": "data/raw/characters/aisha.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/aisha.html",
+      "sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_location": "grid[7]/block[0]",
+      "stored_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:0f340a5404f853049fd9",
+      "original_path": "data/raw/characters/otoha_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/otoha_another_style.html.gz",
+      "sha256": "016ac696c2f13afb7ac63bdaaa9ddaf8e95a090625dd03c0f62ae791ee7b2623",
+      "source_location": "grid[8]/block[0]",
+      "stored_sha256": "8ec36d76767c65574a9f6c8cb9d3b31a0357f4c085c38972909261a516494ac7"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:73b97c55cc4da5f7cc64",
+      "original_path": "data/raw/characters/nona_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/nona_another_style.html.gz",
+      "sha256": "d57a965a4bd6cf5b154a27a2bd1e34b80574b1d6e2ec071c16a3aa0f8de4a755",
+      "source_location": "grid[13]/block[0]",
+      "stored_sha256": "70c9ff0ffb0cb237b3cae411e799b7001e943b879385cd3f308d3b2bb362c3c9"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "passive:b3dbd52f40920bc0a0cb",
+      "original_path": "data/raw/characters/claude_extra_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/claude_extra_style.html.gz",
+      "sha256": "0e4df368358b8854eedc09cdaec082d7318e30c35809d0000865d5eaec1b6830",
+      "source_location": "grid[12]/block[0]",
+      "stored_sha256": "a737d550f08f916ca7a3f5f642d8842df854be67d041bfafefd1afc1dc4960ba"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "sidekick_skill:7327680902f6d3d4597c",
+      "original_path": "data/raw/sidekicks/jilya.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/jilya.html.gz",
+      "sha256": "29036e49068548fbf69d67b09d4ceadb1c3c7aba179c499c1beddc7d645589bd",
+      "source_location": "grid[0]/block[0]",
+      "stored_sha256": "6bcd230bbb12411ad8e852325708f3d44dbddfa191a771255c30226eb9ad1ba2"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:51e029484df8b55b1c92",
+      "original_path": "data/raw/characters/harle.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/harle.html.gz",
+      "sha256": "9a193c66acfd83b5e3a9b7c38cceb1b3a919403031408166b625649be8fc2cb2",
+      "source_location": "grid[6]/block[0]",
+      "stored_sha256": "6182fb3835bd851a47e46d56d4761bc72eaaa34c690465ba49008d38e731c898"
+    },
+    {
+      "cohort": "consumed_test_1",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:6932bc4961a6857153f3",
+      "original_path": "data/raw/characters/melissa.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/melissa.html.gz",
+      "sha256": "807eda6c7369e170454a863bb183ca2b962cc7de11507b5a4fc0e863ccef035d",
+      "source_location": "grid[14]/block[0]",
+      "stored_sha256": "ea711ad13d13e4ea3c8e46dbf407d3c6a46bb08e2429bb8997a2752596819ba8"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:07dccfa630d27ee7493c",
+      "original_path": "data/raw/characters/benedict.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/benedict.html.gz",
+      "sha256": "a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e",
+      "source_location": "sha256:a6a2546b776a7ad018005cf94dce7874a00df84303d80cf77eaa5c2801bcc40e/grid[7]/block[0]",
+      "stored_sha256": "3b7009f1c8eadeb7142da2c4f16aaa02cbd7ce18fa21950182f825894f6d3ec8"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:cc8d8b2407e2328f8c97",
+      "original_path": "data/raw/characters/ewan_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/ewan_another_style.html.gz",
+      "sha256": "9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600",
+      "source_location": "sha256:9676b2f87c3d2bc1d13edc2ee9eab6e76cf06de50f6278cceea3311db7c6c600/grid[7]/block[0]",
+      "stored_sha256": "1512e49ce9087569d7f4dc3ef6cfee9727e58e122be22e26e6b57dc50be38619"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:16e0908e04df3e54e305",
+      "original_path": "data/raw/characters/ewella.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/ewella.html.gz",
+      "sha256": "e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02",
+      "source_location": "sha256:e65467b0e1000d00973d94b71ec561c6a2409ec4d04acecbd6273f4eece17c02/grid[9]/block[0]",
+      "stored_sha256": "33206c67110a8abee1c64ca3a56038c15b4d2018b53e2eb631a80a2fbc389bcb"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "sidekick_skill:885b2a1e38c2add2325d",
+      "original_path": "data/raw/sidekicks/iridian_heal.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/iridian_heal.html.gz",
+      "sha256": "eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d",
+      "source_location": "sha256:eda4989be4a16ed94c3fdc7769ab8010d6c50484a569c0cd983d349a887c028d/grid[1]/block[0]",
+      "stored_sha256": "d03757e07b1a1ece1a4e7db8ba70f3bdaa18653c07b37213fd374a922c426fcb"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:532c9a8e2a50a9558586",
+      "original_path": "data/raw/characters/philo_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/philo_another_style.html.gz",
+      "sha256": "3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1",
+      "source_location": "sha256:3a2d9ae9b795185e0bcda8c0c115db47ab0e024fe19292306c3b8c9cd6afc0d1/grid[0]/block[0]",
+      "stored_sha256": "27cf690148336a93c3a0f381daa7cd7f0c09443d2e7594ee8f19eeab3903e806"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "passive:d2644ada1792457176a1",
+      "original_path": "data/raw/characters/radias.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/radias.html.gz",
+      "sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+      "source_location": "sha256:7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e/grid[10]/block[0]",
+      "stored_sha256": "61067c677767219534cef8a161e5f0509a7bc09943319e0a0e84938d8f55ae99"
+    },
+    {
+      "cohort": "consumed_test_2",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:88b9e632fcab5897d21e",
+      "original_path": "data/raw/characters/riica.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/riica.html.gz",
+      "sha256": "33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09",
+      "source_location": "sha256:33e039898cc83acaa0e684e234cb7d0ab2d9a4a643de529c85697fe8ed496a09/grid[10]/block[0]",
+      "stored_sha256": "ef4e008e1b7a31d5c4515c9307796f505725b3898b4ca7f45c835e85e7ac3af6"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "none",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:2b50977667ba773b49cb",
+      "original_path": "data/raw/characters/aldo.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/aldo.html",
+      "sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_location": "grid[6]/block[0]",
+      "stored_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:ded9eb3b8e99f8890a37",
+      "original_path": "data/raw/characters/sesta.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/sesta.html.gz",
+      "sha256": "e699502f32984348fce3068f19484a1ffe196813ed40e8ea720126ebcdc88557",
+      "source_location": "grid[0]/block[0]",
+      "stored_sha256": "66daf955e293725880c3cc5e96efee632b895126ad267ee1ac7e98a2e3033090"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:5fdaabace86137f6201a",
+      "original_path": "data/raw/characters/dewey_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/dewey_another_style.html.gz",
+      "sha256": "e79513db74e155b87dd8a0c64040c06b8a80384b9e4e1f5eae68228d2b6d94ad",
+      "source_location": "grid[9]/block[0]",
+      "stored_sha256": "b1d92fdb6716642084e5f86dfba0d7098d1c4e8c301a296d5ef7ecd67c491c52"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "passive:1c92b8be410b404b9f5c",
+      "original_path": "data/raw/characters/shigure_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/shigure_another_style.html.gz",
+      "sha256": "d33f5f2eccf8fcaa12c617fbc9f390d98302ac4c96bb28f414cc314138900063",
+      "source_location": "grid[10]/block[0]",
+      "stored_sha256": "9af207c7ce952974749f4640322fd0878de9be13fa65925d0c57151d3ce2437b"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "sidekick_skill:84f0ab63312540daf2f5",
+      "original_path": "data/raw/sidekicks/gunce.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/gunce.html.gz",
+      "sha256": "287826a7ed0c9d36190a23daadd5bbd1894f50954426322943df2825528a4a7e",
+      "source_location": "grid[0]/block[0]",
+      "stored_sha256": "15adb77b94409a81dc4c86090cfe94c44c78b2873f86e82334ef44a078af3855"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:fb74f4a6da1f61b852a6",
+      "original_path": "data/raw/characters/lloyd.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/lloyd.html.gz",
+      "sha256": "60b92649095de2af048379fa9d46f450f10220d5c4f4bc094c2f0f98be38cd9c",
+      "source_location": "grid[7]/block[0]",
+      "stored_sha256": "1542c5b13350d50cb32c3c66cbea8e7eb3a4d1af942c069de8ed309aaa2c4b7c"
+    },
+    {
+      "cohort": "consumed_test_3",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:cbc785c922b50ce95379",
+      "original_path": "data/raw/characters/felmina.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/felmina.html.gz",
+      "sha256": "f8b4adad48efd80e1c4e7d8d22b885f4680a9ce232676fbe5494bd04f7cbc28a",
+      "source_location": "grid[14]/block[0]",
+      "stored_sha256": "be29472ec794cecd9f61b150851d0e6f126d1844cfa0dded87045097cd0e1636"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "sidekick_skill:dba67d8609f89ceac109",
+      "original_path": "data/raw/sidekicks/minimander.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/minimander.html.gz",
+      "sha256": "8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19",
+      "source_location": "sha256:8f4238f34ddfd1e6cfaeab29b4b6ff9afec3d744042482fa940ae5cd26600f19/grid[0]/block[0]",
+      "stored_sha256": "bf595086e6a2b3e2681b79ed7ab4e5fa19004717b2ba6ab286dfa32f40a8d90a"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "sidekick_skill:62088d706220b57f1fa4",
+      "original_path": "data/raw/sidekicks/tetra.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/tetra.html.gz",
+      "sha256": "dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87",
+      "source_location": "sha256:dd9c038e580850ee2dd86551e9d1ae5f90b5c1f0626d4b0710f8740865198e87/grid[1]/block[0]",
+      "stored_sha256": "c0bc156438d094535e335fb04943f8f653e3a2823070583b62e03412ff2ae947"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:39f11594959ae5b6d20e",
+      "original_path": "data/raw/characters/erina.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/erina.html.gz",
+      "sha256": "6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe",
+      "source_location": "sha256:6e04ba053e67c6b916a79363e5506623562b5d6156c3ade8791ee5107045abfe/grid[2]/block[0]",
+      "stored_sha256": "3443e2ea9eaa900f4f7c403bbb1c4d41ee4f90a289b8aee157160990a1e37cda"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "passive:9fb47053d32547d0b8de",
+      "original_path": "data/raw/characters/myunfa_alter_another_style_porcelain_pixie_another_style.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/myunfa_alter_another_style_porcelain_pixie_another_style.html.gz",
+      "sha256": "72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f",
+      "source_location": "sha256:72826f0caea2f281ca1c8ca4f8a3b5bc1cc69cd9b00c2426db2375056a57b85f/grid[14]/block[0]",
+      "stored_sha256": "483ecaf01bba455ec2f3b10a61712d8366e8c9b36ff1239da8c33455ea9a3180"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "passive:32a72284b507f529e807",
+      "original_path": "data/raw/characters/yuna.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/yuna.html.gz",
+      "sha256": "1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89",
+      "source_location": "sha256:1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89/grid[13]/block[0]",
+      "stored_sha256": "87f17da893eb5bf261662c020543eeec0f1bd04e9650344e7e7afdc602418464"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "skill:9c713bcaaf0c7c77829c",
+      "original_path": "data/raw/characters/cetie.html",
+      "retained_path": "artifacts/evidence/c2_sources/characters/cetie.html.gz",
+      "sha256": "8779d410bdcd1eb8da33b74c9e08f9b8fb36ed105df0effc31b50c5fe13c10ce",
+      "source_location": null,
+      "stored_sha256": "710e57c0337850cd87702f1b62721ea384fb06b9a579630cf6dfcddd38a6d828"
+    },
+    {
+      "cohort": "consumed_protected_r5",
+      "compression": "gzip",
+      "custody": "retained_frozen_source",
+      "fact_id": "sidekick_aura:36fe58e3ce12f71d0b49",
+      "original_path": "data/raw/sidekicks/korobo.html",
+      "retained_path": "artifacts/evidence/c2_sources/sidekicks/korobo.html.gz",
+      "sha256": "3ae5125dd04526eb3bd615fed37098a0cad5aed0ba172613320c326605519f76",
+      "source_location": null,
+      "stored_sha256": "dcf0179f90b21e95aaedb84476ccf0b655a86b98d129397188df6737e0b42e27"
+    }
+  ],
+  "interpretation": {
+    "derivatives": "Consumed regression oracles are separate from original frozen oracles/reports. Keep derivative-only corrections, including Felmina multi_hit_action, out of original evidence.",
+    "f1": "2*TP/(2*TP+FP+FN); supported effects and canonical labels are distinct official metrics.",
+    "oracle": "The final frozen source-only oracle has 36 atoms and 13 unsupported gaps. Promotion does not revise adjudications or create production proof.",
+    "strict_matching": "The frozen evaluator matches source identity/anchor and operation; canonical-label metrics additionally require the supported canonical capability/dependency ID with one-to-one assignment."
+  },
+  "official_report": {
+    "path": "artifacts/evidence/feature_c2_final_heldout_report_20261020.json",
+    "sha256": "671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54"
+  },
+  "promoted_path_mappings": [
+    {
+      "original_path": ".sdd/active/milestone-6/C2.1-final-validation/owner_oracle.json",
+      "retained_path": "artifacts/evidence/feature_c2_final_heldout_oracle_20261020.json",
+      "sha256": "90ad093522e42b4c20e654c1d1da4ca5a990cb80329bfc5edcdfd45c3e00afc9"
+    },
+    {
+      "original_path": ".sdd/active/milestone-6/C2.1-final-validation/classifier-state-snapshot.json",
+      "retained_path": "artifacts/evidence/feature_c2_final_heldout_source_snapshot_20261020.json",
+      "sha256": "4ad640a3744d22e36ba1da2e1b0696d2787c990e1bf38a5a742ab5adb3b08889"
+    }
+  ],
+  "recorded_execution_counts": {
+    "classifier": 7,
+    "preservation_reexecutions": 0,
+    "semantic_evaluator": 1,
+    "shared_adapter": 1
+  },
+  "recorded_on": "2026-10-20",
+  "reproducibility_limits": [
+    "The final seven source captures, frozen oracle, predictions, adapter output, aggregate/report and evaluated source identities are retained; no new classifier/evaluator execution occurs.",
+    "Full historical classifier execution also depends on the original complete structural/reference corpus and parsed sidekick metadata in local data caches. This bounded retention is not a portable full-catalog replay bundle.",
+    "All 28 prior frozen witness capture identities have exact retained sources (gzip where marked); additional development/full-catalog inputs remain protected local caches. No blanket raw-cache purge is authorized.",
+    "Recorded call counters and the frozen report document the one-shot execution; they are not an independent external execution attestation."
+  ],
+  "result": {
+    "c2_1": "unsuccessful_stopped",
+    "final_cohort": "exhausted_for_validation",
+    "joint_c1_1_c2_acceptance": false,
+    "new_classifier_runs_authorized": false,
+    "original_feature_d": "unstarted_superseded"
+  },
+  "retirement_owner": "P2; audit callers, test collection, unique regressions and source custody before removal. Preserve source-fidelity, review/materialization, legal kits and recommendation runtime."
+}

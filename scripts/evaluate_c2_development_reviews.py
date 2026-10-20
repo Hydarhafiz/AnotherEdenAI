@@ -18,16 +18,20 @@ from src.etl.c2_semantic_evaluation import (
     evaluate_frozen_cohort,
 )
 import src.etl.source_fidelity as source_fidelity
-from src.etl.structural_evidence import SourceIdentity, parse_grid_document
+from src.etl.structural_evidence import (
+    SourceIdentity,
+    parse_grid_document,
+    validate_source_anchor_identity,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ORACLE_PATH = ROOT / "tests/fixtures/c2/recovery_phase2_development_oracle.json"
+ORACLE_PATH = ROOT / "tests/fixtures/c2/m6_development_regression_oracle.json"
 SOURCE_MANIFEST_PATH = ROOT / "src/etl/source_fidelity_manifest.json"
 SOURCE_SLICE_PATH = ROOT / "tests/fixtures/source_fidelity/source_slice_manifest.json"
 FIDELITY_ORACLE_PATH = ROOT / "tests/fixtures/source_fidelity/c2_development_oracle.json"
 TAXONOMY_PATH = ROOT / "src/etl/capability_taxonomy.json"
-DEFAULT_OUTPUT = ROOT / "artifacts/evidence/feature_c2_recovery_phase2_development_evaluation.json"
+DEFAULT_OUTPUT = ROOT / "artifacts/evidence/feature_c2_1_development_regression_evaluation.json"
 
 EXPECTED_IDS = (
     "known-darunis-hunters-fangs-conflict",
@@ -99,14 +103,43 @@ def _verify_source_anchors(
             raise ValueError(f"reviewed source row is not unique in pinned capture: {witness_id}")
         unit = candidates[0]
         for atom in answer.get("atoms", []):
-            anchor = atom["source_anchor"]
-            quote = _normal_text(str(anchor["quote"]))
-            matching_blocks = [
-                block for block in unit.blocks
-                if quote and quote in _normal_text(" ".join(token.text for token in block.tokens))
-            ]
-            if len(matching_blocks) != 1 or matching_blocks[0].location != anchor["location"]:
-                raise ValueError(f"answer anchor does not uniquely match pinned source for {witness_id}: {anchor}")
+            for anchor in (atom["source_anchor"], *atom.get("supporting_source_anchors", [])):
+                identity = anchor.get("identity")
+                matching_blocks = [block for block in unit.blocks if block.location == anchor["location"]]
+                if (
+                    not isinstance(identity, Mapping)
+                    or len(matching_blocks) != 1
+                    or not validate_source_anchor_identity(
+                        identity,
+                        source_fact_id=str(answer["fact_id"]),
+                        source_capture_sha256=capture_sha256,
+                        block=matching_blocks[0],
+                        diagnostic_quote=str(anchor.get("quote") or ""),
+                    )
+                ):
+                    raise ValueError(f"answer anchor does not uniquely match pinned source for {witness_id}: {anchor}")
+        for gap in answer.get("unsupported_gaps", []):
+            if not all(gap.get(field) for field in ("gap_id", "gap_type", "mechanic", "reason", "source_owner_id")):
+                raise ValueError(f"typed gap is missing its identity or owner for {witness_id}: {gap}")
+            for field in ("source_anchor", "owner_source_anchor"):
+                anchor = gap.get(field)
+                identity = anchor.get("identity") if isinstance(anchor, Mapping) else None
+                matching_blocks = [block for block in unit.blocks if block.location == (anchor or {}).get("location")]
+                quote = str((anchor or {}).get("quote") or "")
+                if (
+                    not isinstance(identity, Mapping)
+                    or len(matching_blocks) != 1
+                    or not validate_source_anchor_identity(
+                        identity,
+                        source_fact_id=str(answer["fact_id"]),
+                        source_capture_sha256=capture_sha256,
+                        block=matching_blocks[0],
+                        diagnostic_quote=quote,
+                    )
+                ):
+                    raise ValueError(f"gap {field} does not uniquely match pinned source for {witness_id}: {gap}")
+            if gap["source_owner_id"] != gap["owner_source_anchor"]["identity"].get("anchor_id"):
+                raise ValueError(f"gap owner id does not match its source owner anchor for {witness_id}: {gap}")
 
 
 def _selected_inputs() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], list[dict[str, Any]]]:
@@ -322,13 +355,14 @@ def run(output_path: Path) -> dict[str, Any]:
                 "source_identity_note": answer.get("source_identity_note"),
                 "expected_scored_atoms": answer["atoms"],
                 "reviewed_relationships": answer.get("reviewed_relationships", []),
+                "unsupported_gaps": answer.get("unsupported_gaps", []),
                 "reviewed_unscored_mechanics": answer.get("reviewed_unscored_mechanics", []),
                 "arms": per_arm,
             }
         )
 
     result = {
-        "artifact_version": "c2-recovery-phase2-development-evaluation-1",
+        "artifact_version": "c2-m6-development-regression-evaluation-1",
         "scope": {
             "kind": "selected_known_regressions_and_development_only",
             "witness_count": len(per_witness),

@@ -166,16 +166,16 @@ def test_development_report_uses_canonical_classifier_to_evaluator_contract(repo
     for arm in comparison["arms"].values():
         for occurrence in arm["occurrences"]:
             assert occurrence["operation"]
-            if occurrence["occurrence_kind"] == "effect":
-                if occurrence["capability_value"]:
-                    assert occurrence["capability_value"] in capability_ids
-                else:
-                    assert occurrence["capability_gap"] is True
+            if occurrence["occurrence_kind"] == "gap":
+                assert occurrence["gap_reason"]
+                assert not occurrence["capability_value"]
+                assert not occurrence["dependency_value"] or occurrence["dependency_value"] not in dependency_ids
+            elif occurrence["occurrence_kind"] == "effect":
+                assert occurrence["capability_value"] in capability_ids
             elif occurrence["occurrence_kind"] == "dependency":
-                if occurrence["dependency_value"]:
-                    assert occurrence["dependency_value"] in dependency_ids
-                else:
-                    assert occurrence["dependency_gap"] is True
+                assert occurrence["dependency_value"] in dependency_ids
+            assert "capability_gap" not in occurrence
+            assert "dependency_gap" not in occurrence
 
     source_capture_by_fact = {
         occurrence["source_fact_id"]: occurrence["source_capture_sha256"]
@@ -251,6 +251,7 @@ def test_development_report_uses_canonical_classifier_to_evaluator_contract(repo
                         "source_anchor": {
                             "location": effect["source_span"]["location"],
                             "quote": "Restore all party members",
+                            "identity": effect["source_span"]["source_anchor"],
                         },
                         "fields": {
                             "recipient": {"status": "adjudicated", "value": "party"},

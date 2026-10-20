@@ -1,0 +1,108 @@
+{
+  "captured_at_client_local": "2026-10-20T01:17:58+08:00",
+  "captured_at_utc": "2026-10-19T17:17:58Z",
+  "classifier": {
+    "path": "src/etl/c2_scoped_classification.py",
+    "sha256": "7b22703f4bd66c3c4daf82c1a3a527a53f7b2fe6e4af12cbdf56b15e44e64650",
+    "version": "m6-c2-scoped-classification-1.6.0"
+  },
+  "evaluator_and_shared_adapter": {
+    "path": "src/etl/c2_semantic_evaluation.py",
+    "sha256": "a56677188a09fa7f7714166a9daba5382c45afc6374cf011ab3cb020b775238a",
+    "version": "c2-atomic-eval-1.2.0"
+  },
+  "git_status_short": [
+    " M docs/core/milestone.md",
+    " M docs/core/roadmap.md",
+    " M scripts/evaluate_c2_consumed_development_regressions.py",
+    " M scripts/evaluate_c2_development_reviews.py",
+    " M scripts/evaluate_c2_second_fresh_consumed_development_regressions.py",
+    " M src/etl/c2_scoped_classification.py",
+    " M src/etl/c2_semantic_evaluation.py",
+    " M src/etl/structural_evidence.py",
+    " M tests/fixtures/c2/m6_consumed_development_regression_oracle.json",
+    " M tests/fixtures/c2/m6_second_fresh_consumed_development_regression_oracle.json",
+    " M tests/unit/test_c2_atomic_occurrences.py",
+    " M tests/unit/test_c2_consumed_development_regressions.py",
+    " M tests/unit/test_c2_second_fresh_consumed_development_regressions.py",
+    " M tests/unit/test_c2_semantic_evaluation.py",
+    " M tests/unit/test_feature_c2_scoped_classification.py",
+    "?? scripts/evaluate_c2_third_fresh_consumed_development_regressions.py",
+    "?? tests/fixtures/c2/m6_development_regression_oracle.json",
+    "?? tests/fixtures/c2/m6_third_fresh_consumed_development_regression_oracle.json",
+    "?? tests/unit/test_c2_role_first_invariants.py",
+    "?? tests/unit/test_c2_third_fresh_consumed_development_regressions.py"
+  ],
+  "head": "736d97f5cda577ecb7a040122180c4a2ec07fd7c",
+  "preexisting_untracked_paths": [
+    {
+      "path": "scripts/evaluate_c2_consumed_development_regressions.py",
+      "sha256": "0a3e153966b8b43229c029e96fd3998b3d8b5e72c050c179bcc13ab61634121d"
+    },
+    {
+      "path": "scripts/evaluate_c2_development_reviews.py",
+      "sha256": "951482653b02a84ac9cbfc577e73ef91897f8b97116618ca5f403c44001239e9"
+    },
+    {
+      "path": "scripts/evaluate_c2_second_fresh_consumed_development_regressions.py",
+      "sha256": "99ad431f2511857ee9970ba677397a265ed937df93245cc424b27ed623f7a5c6"
+    },
+    {
+      "path": "tests/unit/test_c2_atomic_occurrences.py",
+      "sha256": "0da47a219f6544ae1045445ba2f7a36ee5a37af1724389b654254e89c23278ca"
+    },
+    {
+      "path": "tests/unit/test_c2_consumed_development_regressions.py",
+      "sha256": "7c0b38573c1414103ed86a3574d186d567749aa71d06becaf618260ce220da25"
+    },
+    {
+      "path": "tests/unit/test_c2_second_fresh_consumed_development_regressions.py",
+      "sha256": "79b7f212cb78e2b91a8dcbb7bb1755599431b9d443be5362584defaf4c754b5c"
+    },
+    {
+      "path": "tests/unit/test_c2_semantic_evaluation.py",
+      "sha256": "d13cac1cb684fa864fe034d3f50d021d7f1dc840a0e21a45aaa44a851e4ca323"
+    },
+    {
+      "path": "tests/unit/test_feature_c2_scoped_classification.py",
+      "sha256": "36bde47bcc614843f0758be63bb4676cf89cf8db3dbd74024d70e06f588f6b15"
+    },
+    {
+      "path": "scripts/evaluate_c2_third_fresh_consumed_development_regressions.py",
+      "sha256": "fddb912b67f126a31422e1acfdfad6c8100e3703c4c0bf68e186e22ab1df633e"
+    },
+    {
+      "path": "tests/unit/test_c2_role_first_invariants.py",
+      "sha256": "1e214eb80fc6335531dd5f5f52c78c6acc0201472e67881259c55a2e2e6ea4b6"
+    },
+    {
+      "path": "tests/unit/test_c2_third_fresh_consumed_development_regressions.py",
+      "sha256": "3837d6085894d8983c5fe779f3ce0a93eb9aad2a257e4b2ff20f1395effc5720"
+    }
+  ],
+  "production_file_sha256": {
+    "src/etl/c2_scoped_classification.py": "7b22703f4bd66c3c4daf82c1a3a527a53f7b2fe6e4af12cbdf56b15e44e64650",
+    "src/etl/c2_semantic_evaluation.py": "a56677188a09fa7f7714166a9daba5382c45afc6374cf011ab3cb020b775238a",
+    "src/etl/capability_taxonomy.py": "f4e72a4340e7d016e19004e8d918cd9f76fc64c70eaf34c89991662b773c9ef2",
+    "src/etl/source_fidelity.py": "835a2ea1e338acb36bbf932a9ff1560c42ea99e91235dafa5f0660e3956f9c14",
+    "src/etl/structural_evidence.py": "be074079a7f36b0df701db162bf90d02debd3621ae9748c3b3f097d468ac86b8"
+  },
+  "snapshot_scope": "captured before new-cohort selection; classifier under evaluation is the current working tree",
+  "source_fidelity": {
+    "implementation_sha256": "835a2ea1e338acb36bbf932a9ff1560c42ea99e91235dafa5f0660e3956f9c14",
+    "implementation_version": "m6-c1.1-1.2.0",
+    "manifest_path": "src/etl/source_fidelity_manifest.json",
+    "manifest_sha256": "2a2634cf6af173a874e2780dc6b4c4ed977407ba98ba978143c2cd98bf03bfcc",
+    "manifest_version": "m6-c1.1-witnesses-1.0.0",
+    "semantic_oracle_path": "src/etl/source_fidelity_oracle.json",
+    "semantic_oracle_sha256": "3a11fe6fbd19aa141861f6d48b7c7ee9943f2ddee9bdbf2bafa4f4e358150c06",
+    "source_slice_manifest_path": "tests/fixtures/source_fidelity/source_slice_manifest.json",
+    "source_slice_manifest_sha256": "538392b50cc470d84a67755b77615575b4bd204248941ea278c38228dced47df"
+  },
+  "taxonomy": {
+    "path": "src/etl/capability_taxonomy.json",
+    "sha256": "6e88f1b1506b9a3bbdb40374244e977b86dca5672883b03bf6ed8b4e781f0c22",
+    "version": "3.2.0"
+  },
+  "tracked_working_tree_diff_sha256": "a762f854a0191cd3d81da5e553410fa471c301836d123b14b380409536e2a5c6"
+}

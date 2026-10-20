@@ -32,23 +32,13 @@ Program success does not require exhaustive combat modeling, a full simulator, g
 
 ## Current Active Milestone
 
-Milestone 5 closed on 2026-09-14 after Feature H2. Milestone 6, Character Capability Coverage and Candidate Diversity, is active and maps to `docs/core/milestone.md`.
+Milestone 5 closed on 2026-09-14 after Feature H2. Milestone 6, Reviewed-Knowledge Recommendation Pilot, is active in docs/core/milestone.md. The owner approved its architecture reset on 2026-10-20 after C2.1 failed final frozen validation.
 
-Milestone 6 is ordered around:
+The active sequence is scope reset/evidence preservation -> manually reviewed pilot knowledge and failed-path retirement -> deterministic recommendation evaluation -> separately authorized bounded analyzer evaluation -> owner MVP/repair/expansion decision. P1 scope reset/preservation is complete; the following features require their normal admission and any operational authorization.
 
-- measuring current catalog, strategic-evidence, search-funnel, and diversity coverage before choosing thresholds;
-- deriving capability priorities from the committed thirty-boss corpus;
-- attempting high-value extraction across all 367 canonical forms/styles;
-- preserving combat-source structure and resolving bounded relevant child definitions before selective review (C1, approved 2026-09-15);
-- establishing source-semantic fidelity through targeted regressions, stratified development/held-out witnesses and full-catalog automatic replay (C1.1);
-- evaluating scoped classification, review compatibility and measured review effort against independent held-out occurrences (C2);
-- reviewing only ambiguous, high-impact, recurring, or acceptance-relevant facts;
-- preserving proven, ambiguous, unknown, rejected, and untagged meanings;
-- exposing request-time pool and candidate-set diagnostics;
-- changing candidate generation only after diagnostics establish the responsible stage; and
-- evaluating diverse candidates with H2's four modeled-viability gates.
+Use Rotte Rivel and Celestial Mushroom as candidate bosses and twenty normal forms, including all eight automatically added F2P forms, as the curation pool. These are bounded quality-evaluation candidates, not a replacement for the 367-form legal catalog or the thirty-boss corpus. Establish expected outcomes from sources before observing recommendation output. Do not assume the proposed negative rosters are infeasible.
 
-The approved sequence is A → B → C → C1 → C1.1 → C2 → C2.1 → D → E → F → G. A-C and C1 are complete; C1's claim remains structural preservation. C1.1 is technically complete; C2 is implemented but generalization is not accepted. C2.1 is active, followed by one final fresh validation after readiness, then explicit joint C1.1/C2 owner acceptance before D. Existing coverage/diversity floors remain unchanged, and generated structural or semantic evidence does not replace human capability-review authority. Complete equipment ingestion, broad boss expansion and formula simulation remain deferred.
+A-C/C1 remain completed foundations; C1.1 technical source-fidelity work remains supported. C2/C2.1 semantic acceptance failed and development is stopped. Original C2 continuation, joint-acceptance and D-G completion obligations are explicitly superseded, not passed. Preserve their frozen results, source identities and consumed-cohort status. Do not begin another classifier repair or held-out cohort.
 
 ## Research And Planning Sources
 
@@ -149,46 +139,31 @@ Approved incomplete-work disposition:
 
 Historical Features A-H, corrections C6/C6.1/D2/E2/F2/G1.1, and their identifiers remain unchanged in commits, tests, schema, architecture, guides, and planning sources.
 
-### Milestone 6: Character Capability Coverage And Candidate Diversity
+### Milestone 6: Reviewed-Knowledge Recommendation Pilot
 
-Status: Active. A-C/C1 complete → C1.1 technically complete → C2 implemented but generalization not accepted → C2.1 active → one final fresh validation after readiness → explicit joint C1.1/C2 owner acceptance → D. Fresh Tests #1/#2/#3 are consumed and ineligible for final validation. C2 remains non-authoritative and D blocked/unstarted; detailed historical evidence and the executable contract live in `docs/core/milestone.md`.
+Status: Active; owner-approved reset on 2026-10-20. P1 scope reset/evidence preservation is complete; P2 knowledge preparation/retirement is next.
 
-Purpose:
+Purpose: prove whether trustworthy manual knowledge lets the existing deterministic recommendation engine produce useful, explainable, boss-aware legal teams.
 
-- Expand recommendation-ready, high-value strategic evidence across all 367 canonical character forms/styles and produce meaningfully diverse boss-specific candidates when the effective roster supports alternatives.
+Preserved foundations:
 
-Planned feature sequence:
+- A-C coverage/extraction-attempt and boss-priority evidence, C1 structure, and C1.1 technical source fidelity.
+- All 367 canonical legal kits, thirty-boss provenance and conservative reviewed capability materialization.
+- Existing scoring/packages/search, allocation, uncertainty diagnostics, two-call/one-swap analyzer bounds, fallback and H2's four quality criteria.
 
-1. Coverage baseline and metric contract.
-2. Boss-to-capability priority matrix.
-3. Full-catalog high-value extraction.
-4. Structural evidence (C1), source fidelity (C1.1), and initial scoped classification/evaluation (C2); technical work exists, semantic acceptance remains pending.
-5. Role-first occurrence and ownership stabilization (C2.1): pass consumed-evidence replay and semantic invariants, then run one genuinely unseen final validation and request explicit joint C1.1/C2 acceptance. A further broad/systematic architecture failure requires an owner decision rather than an automatic retry loop.
-6. Selective review, materialization, and coverage closure (D), blocked until that acceptance.
-7. Search-funnel and candidate-diversity diagnostics (E).
-8. Evidence-driven candidate-diversity improvements (F).
-9. Controlled four-gate evaluation and milestone closure (G).
+C2.1 failed final validation: effects F1 30.2%, dependencies 0%, combined canonical labels 23.0%, anchors 9/36 and conditions 0/18. The official report and retention mapping live in artifacts/evidence/feature_c2_final_heldout_report_20261020.json and feature_c2_final_heldout_retention_20261020.json. C2.1 is unsuccessful/stopped, not jointly accepted or completed. Earlier validation cohorts are consumed; no Test #5 or new classification architecture is admitted.
 
-Dependencies:
+Feature boundaries:
 
-- Completed M5 deterministic recommendation architecture and evaluation contracts.
-- The 367-character legal-kit catalog and conservative capability-proof pipeline.
-- The committed thirty-boss corpus and H1/H2 tooling.
+1. P1: approved scope reset and immutable failed-experiment/source preservation; one evidence-remediation feature commit.
+2. P2: manually reviewed pilot facts, independent scenarios and audited retirement of obsolete experimental code; preserve supported source/review functionality.
+3. P3: deterministic recommendation evaluation, with contained repairs only for demonstrated defects.
+4. P4: bounded analyzer/end-to-end evaluation only after deterministic gates pass and a separately authorized model/run/cost envelope.
+5. Owner decision: limited MVP, specific repair or evidence expansion.
 
-Exit direction:
+Pilot gates replace the original full-catalog proof counts, eight alternative-rich cases and 20/10 recommendation gates through explicit owner supersession. Four independently feasible positive scenarios must each produce a legal candidate passing affinity, counter coverage, coherence and setup gates; two independently inadequate scenarios need honest outcomes. Every credited fact is source-reviewed, all measured requests emit complete diagnostics, and unknowns never become proof or absence. No multiple-party quota applies without independently established alternatives.
 
-- All 367 remain legal-kit complete and in scope.
-- High-value extraction is attempted across the full catalog.
-- Source-faithful atomic proposals improve precision without losing high-impact recall; frozen semantic/field/relationship evaluation and explicit human acceptance precede D. Historical occurrence-count metrics alone do not prove capability accuracy, role-taxonomy accuracy or reduced review time.
-- Unknown and ambiguous evidence remains explicit and non-authoritative.
-- The D-G thresholds approved after Feature A remain unchanged by C2.1.
-- Coverage spans applicable elements, physical/magic offense, offensive support, zone/setup, mitigation, recovery, status counterplay, AF support, Pain/Poison, and boss counters.
-- Controlled alternative-rich rosters yield multiple meaningfully different legal character/frontline sets and coherent archetypes.
-- Constrained rosters may return fewer candidates with stage-accountable reasons.
-- H2's four gates support plausible evidence-backed candidates with no global-optimality, win-probability, or guaranteed-clear claim.
-- No paid analyzer evaluation occurs before deterministic gates pass or without separate authorization.
-
-The approved C2.1 plan, historical Test #3 evidence, human acceptance checkpoint and approved D-G numeric contracts live in `docs/core/milestone.md`.
+The active milestone holds exact scope, scenario seeds, gate definitions, retirement ownership and conditional completion. Deterministic-only completion must clearly leave paid analyzer quality unmeasured. Preserve the broader MVP work: coverage expansion as evidence warrants, frontend in M7, and safeguarded release in M8. Reconsider extraction automation only after a trustworthy baseline and measured need.
 
 ### Milestone 7: Frontend Portfolio Experience
 
@@ -209,7 +184,7 @@ Expected outcomes:
 Dependencies:
 
 - Stable M5 recommendation architecture.
-- Sufficient M6 capability coverage, search observability, and candidate diversity.
+- An accepted bounded M6 recommendation baseline, explicit evidence coverage and search/diversity diagnostics.
 
 Exit criteria:
 
@@ -236,7 +211,7 @@ Expected outcomes:
 
 Dependencies:
 
-- Stable M5 architecture, completed M6 coverage/diversity work, and completed M7 frontend/stability work.
+- Stable M5 architecture, accepted M6 pilot evidence and declared coverage limits, and completed M7 frontend/stability work.
 
 Exit criteria:
 
@@ -281,7 +256,7 @@ Exit criteria:
 
 ## Open Questions
 
-- What numeric high-value coverage and diversity thresholds are justified by the M6 Feature A baseline?
+- Whether the curated pilot proves useful recommendations and which measured evidence gaps justify expansion.
 - Which additional capability families materially change candidate quality for the thirty-boss corpus?
 - Whether two backend-authorized swaps improve quality without masking weak candidate generation.
 - Which provider/model configuration earns release qualification after deterministic M6 gates and M7 stability work pass.

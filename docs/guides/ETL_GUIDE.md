@@ -220,7 +220,9 @@ canonical identities and one recomputed complete legal-kit receipt for each.
 It records high-value proof only from reviewed capability evidence. Candidate,
 ambiguous, rejected, and untagged states remain separate; no unresolved state
 is interpreted as proven absence. Generated output is ignored. The accepted
-baseline is intentionally threshold-free until the Feature A human checkpoint.
+baseline is an immutable before snapshot. Original D-G thresholds were approved
+after Feature A and explicitly superseded by the owner-approved 2026-10-20
+pilot reset; current gates live in docs/core/milestone.md.
 
 Feature C full-catalog extraction report:
 
@@ -233,7 +235,9 @@ This offline report reads the canonical 367-form kit catalog and the accepted
 Feature B priority matrix. It records source-backed proposals, preserves
 unknown/ambiguous/rejected/untagged distinctions, caps review queues at 45
 rows, and proves replay determinism. Generated proposals remain non-authoritative
-until the normal Feature D review and materialization path.
+until the supported review/materialization path. The original M6 Feature D
+contract is superseded; the manual pilot reuses existing reviewed evidence
+authority and does not depend on C2 acceptance.
 
 Parsed replay requires current schema-versioned index artifacts. For ordinary small or fallback replays, detail artifacts that are absent remain inactive. For the canonical G1.1 full replay, the manifest-owned thirty-boss corpus is authoritative and missing, extra, stale, duplicate, unbounded, empty, or identity-mismatched superboss artifacts fail closed before graph loading.
 
@@ -523,8 +527,9 @@ The durable fixture/source identities live in `src/etl/structural_fixture_manife
 
 ### Milestone 6 Source Fidelity Witnesses
 
-Feature C1.1 adds the source-semantic gate before C2. The normal implementation
-and structural replay command intentionally does not read the semantic oracle:
+C1.1 supplies source identity, structure and explicit fidelity diagnostics for
+the manual pilot. Its original C2-admission fields remain historical technical
+contracts. The normal structural replay does not read the semantic oracle:
 
 ```bash
 .venv/bin/python scripts/report_feature_c1_1_source_fidelity.py \
@@ -603,49 +608,72 @@ effect/dependency occurrence counts. Every fidelity dimension is one of
 `passed`, `failed`, `unknown`, or `not_applicable`; only occurrences with all
 applicable dimensions passed can be fully supported for C2. Unknown or failed
 source selection, semantic attachment, and child-definition resolution never
-become absence or capability authority. Known regressions are reported apart
-from generalization evidence, and held-out labels cannot tune later rules.
+become absence or capability authority. These historical cohorts are consumed;
+replaying them measures technical regressions, not fresh generalization. The
+failed C2 experiment is stopped and joint acceptance was never achieved.
 
-### Milestone 6 C2 Scoped Classification
+### Reviewed Manual Pilot Knowledge
 
-Feature C2 is an offline comparison/evaluation layer over the accepted C1.1
-inputs. It does not modify taxonomy rules, review decisions, model/loader
-fields, graph state, scoring, search, or the legal-kit catalog. Generate the
-durable comparison evidence only with explicit evaluation inputs:
+The owner stopped C2/C2.1 after failed final validation on 2026-10-20. Do not
+run another C2 repair, final cohort, Test #5 or original Feature D. Existing C2
+scripts remain historical until their audited retirement; they are not the
+active preparation workflow. No command in this section authorizes scraping,
+graph writes or paid evaluation.
 
-```bash
-.venv/bin/python scripts/report_feature_c2.py \
-  --fidelity-oracle src/etl/source_fidelity_oracle.json \
-  --occurrence-oracle tests/fixtures/c2/occurrence_oracle.json \
-  --include-held-out \
-  --output artifacts/evidence/feature_c2_scoped_classification.json
-```
+Use pinned source facts from C1/C1.1 and existing taxonomy/review tooling:
 
-The report compares the committed legacy flattened baseline, structural
-parsing without child-definition admission, and fidelity-checked scoped
-occurrences from the same checksum-pinned captures. Occurrences retain the
-real source fact ID, capture SHA, source span, actor, recipient/cardinality,
-condition, trigger, result, magnitude, duration/activation, element, attack
-type, state/reference and definition-support state. Only C1.1-passed records
-are marked `fully_supported_input`; every other state remains
-`unknown_non_authoritative` or another explicit non-authoritative state.
+1. Select source facts needed by the approved two-boss pilot. Record stable
+   fact ID, exact source URL/block/quote, capture checksum and applicable form,
+   upgrade, ownership and activation constraints.
+2. Review an existing rule proposal, or add a narrowly authored exact-fact
+   override when no suitable proposal exists. The importer regenerates proposals
+   and rejects unknown or evidence-edited rows; it is not an arbitrary-row importer.
+3. Use the existing CSV/reference contract, approve/correct/reject/ambiguous
+   states, constrained corrections and reviewer provenance. Canonical decisions
+   live in src/etl/capability_reviews.json; exact-fact overrides live in the
+   existing taxonomy artifact. Choose independent source-based expectations
+   before observing recommendation output.
+4. Verify repository materialization through the current models and loader.
+   Graph replay remains a separate operational authorization checkpoint.
 
-Legacy proposal IDs have an explicit compatibility mapping. A carry-forward
-requires one source- and field-identical destination; splits are
-`split_requires_review`, and no approval fans out silently. A damage event has
-one authoritative `direct_damage` occurrence. `multi_entity_damage` is a
-derived projection recorded from proven target cardinality, not a second
-reviewed fact.
+Only reviewed approve/correct facts grant capabilities or dependencies. Keep
+magnitude, target/direction, placement, duration/timing and material conditions
+attributable to the source effect. Existing fields do not represent every branch
+or prerequisite; a note is not an executable condition. Withhold credit when a
+material condition cannot be represented/verified rather than dropping it.
+Unsupported or unresolved mechanics remain explicit, non-authoritative evidence.
+No new schema, application or ETL framework is implied.
 
-The C2 occurrence oracle is independently authored and sealed. Normal report
-generation never reads it; held-out evaluation is opt-in and rejects an
-unsealed oracle. Known regressions, development witnesses, and held-out
-witnesses have separate denominators and separate effect/dependency counts.
-The accepted repository currently has no authoritative blinded human-review
-timing study, so the evidence reports occurrence metrics and the timing gap
-but makes no review-reduction claim. Stop at the C2 human checkpoint before
-Feature D until that gap and the mixed held-out precision/recall result are
-accepted or the rollout is revised.
+All 367 legal kits remain intact. Untagged legal skills can fill equipped packages
+with zero proof credit. Rejected, ambiguous, unknown and unclassified evidence
+never proves character-level absence. Review only pilot-relevant facts initially;
+this does not restrict legal characters outside the curated set.
+
+### Failed Classification Evidence
+
+The frozen final report is
+artifacts/evidence/feature_c2_final_heldout_report_20261020.json, SHA-256
+671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54.
+It records effects F1 30.2%, dependencies 0%, combined labels 23.0%, anchors
+9/36 and conditions 0/18, with disposition 3: stop for architecture/scope decision.
+Neither joint acceptance nor C2.1 completion was achieved.
+
+The immutable run metadata records seven classifier calls, one adapter call and
+one evaluator call. Keep prior protected/fresh cohorts consumed and the final
+cohort exhausted for validation. Source-fidelity replay over historical witnesses
+is technical regression evidence, not fresh classification acceptance.
+
+artifacts/evidence/feature_c2_final_heldout_retention_20261020.json maps frozen
+oracle/snapshot/source paths to durable copies and states historical replay
+limits. Do not rewrite frozen manifests to replace their original .sdd/ paths;
+use the retention mapping. Earlier frozen results remain distinct from consumed
+regression derivatives and the derivative-only Felmina correction.
+
+The preexisting evaluated classifier/evaluator/source-anchor changes are retained
+byte-for-byte in Git as failed-experiment evidence. They do not add authority to
+the review/materialization path. Do not purge ignored source caches or handoffs
+until every unique source/oracle/provenance dependency has been classified and
+retained. P2 owns the audited retirement of experimental runners and code.
 
 ## Maintenance Rule
 
