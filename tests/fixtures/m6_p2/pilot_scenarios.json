@@ -1,0 +1,868 @@
+{
+  "artifact_version": "m6-p2-reviewed-pilot-1.0",
+  "authority": "Independently reviewed local source fixtures and accepted legal-kit receipts. Scenario inputs and source answers are authored separately from classifier, recommendation and analyzer output.",
+  "bosses": {
+    "celestial-mushroom": {
+      "affinity": {
+        "absorb": [],
+        "null": [],
+        "resist": [
+          "Pierce",
+          "Blunt"
+        ],
+        "weak": []
+      },
+      "affinity_state": {
+        "absorb": "confirmed_empty",
+        "null": "confirmed_empty",
+        "resist": "confirmed_values",
+        "weak": "confirmed_empty"
+      },
+      "capture_path": "src/etl/superboss_corpus/celestial-mushroom.html",
+      "capture_sha256_verified": "086d64111c4eb019641fd3060bb0e07eaceb2134f91568b474c46eda8fb81b44",
+      "expected_fixture_authority": "Manually reviewed expected facts from the explicitly authorized Another Eden Wiki detail-page sections; this file is an oracle, not parser output.",
+      "expected_fixture_path": "tests/fixtures/superbosses/live_expected.json",
+      "expected_fixture_sha256": "1017097d6261b58f68ede59481e31508437194be14ff9563240256f46f8c2da2",
+      "manifest_capture_sha256": "086d64111c4eb019641fd3060bb0e07eaceb2134f91568b474c46eda8fb81b44",
+      "manifest_path": "src/etl/superboss_manifest.json",
+      "mechanic_substrings": [
+        "Hallucinogenic Spores",
+        "Poison"
+      ],
+      "name": "Celestial Mushroom",
+      "source_section": "Rippling Forest [1] [2] [3]",
+      "source_url": "https://anothereden.wiki/w/Celestial_Mushroom"
+    },
+    "rotte-rivel": {
+      "affinity": {
+        "absorb": [],
+        "null": [],
+        "resist": [
+          "Water",
+          "Earth",
+          "Wind",
+          "Blunt",
+          "Magic"
+        ],
+        "weak": [
+          "Fire"
+        ]
+      },
+      "affinity_state": {
+        "absorb": "confirmed_empty",
+        "null": "confirmed_empty",
+        "resist": "confirmed_values",
+        "weak": "confirmed_values"
+      },
+      "capture_path": "src/etl/superboss_corpus/rotte-rivel.html",
+      "capture_sha256_verified": "fd171d6945fc0a8c3799e82f1f20589cfd49d4a340167c7a328051dd9a989e21",
+      "expected_fixture_authority": "Manually reviewed expected facts from the explicitly authorized Another Eden Wiki detail-page sections; this file is an oracle, not parser output.",
+      "expected_fixture_path": "tests/fixtures/superbosses/live_expected.json",
+      "expected_fixture_sha256": "1017097d6261b58f68ede59481e31508437194be14ff9563240256f46f8c2da2",
+      "manifest_capture_sha256": "fd171d6945fc0a8c3799e82f1f20589cfd49d4a340167c7a328051dd9a989e21",
+      "manifest_path": "src/etl/superboss_manifest.json",
+      "mechanic_substrings": [
+        "Divine Tempest",
+        "Marks two random party slots"
+      ],
+      "name": "Rotte Rivel",
+      "source_section": "Moonlight Forest [1] [2] [3]",
+      "source_url": "https://anothereden.wiki/w/Rotte_Rivel"
+    }
+  },
+  "candidate_pool": [
+    {
+      "character_id": "character:7f07fbeae5c5e2c2e097",
+      "exact_form": "Aldo",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 16,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "92305e93e23ca888926dcef38ba5e7f59bb38f7e153b7ad1ccbf436bc9252741",
+        "source_revision_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+        "source_url": "https://anothereden.wiki/w/Aldo"
+      },
+      "light_shadow": "Light",
+      "name": "Aldo"
+    },
+    {
+      "character_id": "character:1322ee5127116cffff83",
+      "exact_form": "Feinne",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 9,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "054a46aa06f69184d309eaa960efa0805b47f386885ef562432f8b447a4a3bcf",
+        "source_revision_sha256": "cbd0c5e95439a2902a127d1f3e03d67eaa2d193a13ccea28cbb11042d79eadee",
+        "source_url": "https://anothereden.wiki/w/Feinne"
+      },
+      "light_shadow": "Shadow",
+      "name": "Feinne"
+    },
+    {
+      "character_id": "character:c5c1a001b6bd6eb13b0f",
+      "exact_form": "Cyrus",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 14,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "12de62437829b8a9d5671c85387cc66a924da3ae1b495dcbe1e8d8cb8db26996",
+        "source_revision_sha256": "4b8818f5f28eb6746b82afc6e7768a54e4c6f33c0bc973cf7a273e574d4e31a6",
+        "source_url": "https://anothereden.wiki/w/Cyrus"
+      },
+      "light_shadow": "Light",
+      "name": "Cyrus"
+    },
+    {
+      "character_id": "character:533ed838c050464bfcb9",
+      "exact_form": "Deirdre",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "1a5606533a68f8958c06e90e531ba0e69ef16f6112e9b72381f17b3974c1261e",
+        "source_revision_sha256": "f98acf1e43cd7fcb1ab29a8fb5a5a057c19fa91616a8f3cec5a8cf2d8ca06232",
+        "source_url": "https://anothereden.wiki/w/Deirdre"
+      },
+      "light_shadow": "Shadow",
+      "name": "Deirdre"
+    },
+    {
+      "character_id": "character:79086a162d31f0d0b3fe",
+      "exact_form": "Azami",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 9,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "ca8d4f83394db96d29a584611984089e779464e3b2eb65868a6072ab5d24fe90",
+        "source_revision_sha256": "f19d1604073c25175cc79c94d54c5eb8355a29eba91669dfaa1be3a78a33bf39",
+        "source_url": "https://anothereden.wiki/w/Azami"
+      },
+      "light_shadow": "Light",
+      "name": "Azami"
+    },
+    {
+      "character_id": "character:148555b5aca73e3a93b2",
+      "exact_form": "Gariyu",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "bbc417b6264bcbf44b9596b0546d984ab1e797e797f503689941c619e885edb7",
+        "source_revision_sha256": "5b6494179e8eeddb38f8390290e0cbd29e51883f319473756b95fdf519d262b8",
+        "source_url": "https://anothereden.wiki/w/Gariyu"
+      },
+      "light_shadow": "Shadow",
+      "name": "Gariyu"
+    },
+    {
+      "character_id": "character:c2abdeabccdbf827464e",
+      "exact_form": "Cerrine",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "df29be8d6ffc6b8abc31c4e07345161ccb6cbe0e43c26739c991b5f79753c1f8",
+        "source_revision_sha256": "612bbd4168013e8da41ff505aeb6e52ccc00a8e23c1d29dfcc7d830fbcb6f84b",
+        "source_url": "https://anothereden.wiki/w/Cerrine"
+      },
+      "light_shadow": "Light",
+      "name": "Cerrine"
+    },
+    {
+      "character_id": "character:0521aa7b1220ae548600",
+      "exact_form": "Levia",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "5c88f1d6ffbbb6135de812ca43831c7ba096aa91ad78bd3175e9f5b8fb008455",
+        "source_revision_sha256": "6ec0f2fbc06439a7dd46ccf800d5dfe29bc513a75ea544a657657a1423d90612",
+        "source_url": "https://anothereden.wiki/w/Levia"
+      },
+      "light_shadow": "Light",
+      "name": "Levia"
+    },
+    {
+      "character_id": "character:eeae307f7fdf7a68514c",
+      "exact_form": "Shion",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 9,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "9e404bab2752947f952aff79e8e8ad4b4600b4819c3f6a3e6e82a33ff5dfb596",
+        "source_revision_sha256": "1912831feeb3b3e653dde87c1267e19daf4eef9f19cf4cf2b436b68fe11e1de7",
+        "source_url": "https://anothereden.wiki/w/Shion"
+      },
+      "light_shadow": "Light",
+      "name": "Shion"
+    },
+    {
+      "character_id": "character:926478c6eafb5d1213bb",
+      "exact_form": "Toova",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 11,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "6afae00f4a8ae891215c33e96d7f6fc462d5e2449520b380791774f15bd3e82c",
+        "source_revision_sha256": "a57956b5c7a51de89d58c7f63c59d2346e29d70b8b3809664a094975dd73f109",
+        "source_url": "https://anothereden.wiki/w/Toova"
+      },
+      "light_shadow": "Shadow",
+      "name": "Toova"
+    },
+    {
+      "character_id": "character:db9e1763b16bf1ef0ff5",
+      "exact_form": "Suzette",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 10,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "08579ab7c628eba4ddba7495c934c16136f6365dd4650288f21d9aee94b3ff02",
+        "source_revision_sha256": "fb3adc3303f467108366fca81678c246d4100b28d84e60e99b0e72ed89f7373b",
+        "source_url": "https://anothereden.wiki/w/Suzette"
+      },
+      "light_shadow": "Light",
+      "name": "Suzette"
+    },
+    {
+      "character_id": "character:660d02bd77aba6f62ade",
+      "exact_form": "Anabel",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 12,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "a72e06f4dae008e5b20f768f3c41443d8c37b9c4d941161f2f6f35ba6a09ab0f",
+        "source_revision_sha256": "675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01",
+        "source_url": "https://anothereden.wiki/w/Anabel"
+      },
+      "light_shadow": "Light",
+      "name": "Anabel"
+    },
+    {
+      "character_id": "character:6600a8f6491cea15eab9",
+      "exact_form": "Radias",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "7b84ce22eb58bb26c3a56f36b24450404bc697024bd4808b6841bb186212f04c",
+        "source_revision_sha256": "7b4758cb7fa636951f4f7e3411e54be66807fec42a52cec1006665bfa1ead41e",
+        "source_url": "https://anothereden.wiki/w/Radias"
+      },
+      "light_shadow": "Light",
+      "name": "Radias"
+    },
+    {
+      "character_id": "character:46f97d1ce53af9ac65da",
+      "exact_form": "Prai",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "4ed711ba7ed9cbd792a18a4a90b790d7c2aacef4ac5a20e42d59b1ab13d89e02",
+        "source_revision_sha256": "1fd31a5c2580cce3712d6e0672d183ff4dbc13016e8b121bdb11ca1eb88876ec",
+        "source_url": "https://anothereden.wiki/w/Prai"
+      },
+      "light_shadow": "Shadow",
+      "name": "Prai"
+    },
+    {
+      "character_id": "character:f0fc3c52900fc4c961bd",
+      "exact_form": "Aisha",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 19,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "859fae342a623e55dec6948e31a592a1825d96e41c090004fa7e480cf5ceb3e2",
+        "source_revision_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+        "source_url": "https://anothereden.wiki/w/Aisha"
+      },
+      "light_shadow": "Light",
+      "name": "Aisha"
+    },
+    {
+      "character_id": "character:f7b3613f87b66d0dc291",
+      "exact_form": "Rosetta",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 15,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "13451826be7e15621b0da3c7445c7f5465637a6fdd27c395c5f56dc11a154ac6",
+        "source_revision_sha256": "94ee2ad01375c9ed4775e0f1ecba97f8f5c09889679a2c21b2bf2b2a535f0b45",
+        "source_url": "https://anothereden.wiki/w/Rosetta"
+      },
+      "light_shadow": "Shadow",
+      "name": "Rosetta"
+    },
+    {
+      "character_id": "character:3fb70063c21032297fe0",
+      "exact_form": "Mariel",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 13,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "6733af56663896079d72d055f24038723819dee09266f2489980d9d977c014d7",
+        "source_revision_sha256": "7d1f70b37aae85ff53c042b24cb104b19b85a4f0df37e7b5d55aa8af9df026d0",
+        "source_url": "https://anothereden.wiki/w/Mariel"
+      },
+      "light_shadow": "Light",
+      "name": "Mariel"
+    },
+    {
+      "character_id": "character:4f7d212d822afd4313cb",
+      "exact_form": "Yuna",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 9,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "complete",
+        "source_artifact_fingerprint": "b370d9f78ac18ea1c522a4f20abe13778703e8ce38ff5a5af645f1938961f5e0",
+        "source_revision_sha256": "1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89",
+        "source_url": "https://anothereden.wiki/w/Yuna"
+      },
+      "light_shadow": "Light",
+      "name": "Yuna"
+    },
+    {
+      "character_id": "character:30baf107d86c27e7261c",
+      "exact_form": "Mana",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 8,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "cf06f86e29a9c21d020e1ff655639be17e7efc2b8b3fd8c98acd327a32d8766d",
+        "source_revision_sha256": "300e9cd8c8e710e6c63458b0efffe1fd2dcfa80b8aa994035109e972372cfaff",
+        "source_url": "https://anothereden.wiki/w/Mana"
+      },
+      "light_shadow": "Light",
+      "name": "Mana"
+    },
+    {
+      "character_id": "character:56228a5e0d4b286ab418",
+      "exact_form": "Dunarith",
+      "is_SA": false,
+      "legal_kit_receipt": {
+        "active_skill_family_count": 9,
+        "active_skill_state": "complete",
+        "dependency_state": "complete",
+        "overall_state": "complete",
+        "passive_state": "verified_absent",
+        "source_artifact_fingerprint": "4f94ad4766c259b3e4776969eb9b853fdd846297e6cf21c107c1cb7fac515966",
+        "source_revision_sha256": "8e48dbd11e8ea27fe96ccfbf778f40d1b477d65ff9e518d0e42abc61c725dcce",
+        "source_url": "https://anothereden.wiki/w/Dunarith"
+      },
+      "light_shadow": "Shadow",
+      "name": "Dunarith"
+    }
+  ],
+  "candidate_pool_count": 20,
+  "candidate_pool_source": "src/etl/kit_catalog.json",
+  "curated_fact_scope": "Only exact source facts listed below were reviewed for pilot use; pool inclusion does not imply every skill or passive is classified.",
+  "curated_facts": [
+    {
+      "character": "Aldo",
+      "fact_name": "Phoenix Slash",
+      "review_basis": "existing reviewed exact-fact override",
+      "scope": "existing reviewed exact override; Fire Slash, single enemy",
+      "source_fact_id": "skill:3bf0d55a753ab920d4c4",
+      "source_quote": "Fire type slash attack on a single enemy x3 (XL)",
+      "source_revision_sha256": "411541a39b1d8675b8f331c9c2af26d3116d52486cea0fa0032e6e7d96db171b",
+      "source_url": "https://anothereden.wiki/w/Aldo"
+    },
+    {
+      "character": "Aisha",
+      "fact_name": "Flame's Serenade",
+      "review_basis": "existing reviewed exact-fact override",
+      "scope": "existing reviewed exact override; deploys Raging Fire Stance",
+      "source_fact_id": "skill:575912d04d8a7232ffd1",
+      "source_quote": "Deploy Raging Fire Stance and fire type attack of all party members +50% (5 turns)",
+      "source_revision_sha256": "74f2302592d0cb6b51db3b964f4729bc78b41baa7c6740edafaf87be27a77574",
+      "source_url": "https://anothereden.wiki/w/Aisha"
+    },
+    {
+      "character": "Rosetta",
+      "fact_name": "Biblia",
+      "review_basis": "P2 curated review batch",
+      "scope": "P2 corrected review: 30% barrier, 3 activations; status immunity 3 times; party HP restoration, with sibling qualifiers removed",
+      "source_fact_id": "skill:f5bb48646f223cc4a933",
+      "source_quote": "Restore all party members' HP ( XL ) and MP 50 and give Status immunity to all party members (3 times) and a Barrier to all party members with 30% damage reduction (3 times)",
+      "source_revision_sha256": "94ee2ad01375c9ed4775e0f1ecba97f8f5c09889679a2c21b2bf2b2a535f0b45",
+      "source_url": "https://anothereden.wiki/w/Rosetta"
+    },
+    {
+      "character": "Yuna",
+      "fact_name": "Maiden's Observance",
+      "review_basis": "P2 curated review batch",
+      "scope": "P2 corrected review: restore statuses; Regen count is not applied to cleanse",
+      "source_fact_id": "skill:51c08cb8679f98867702",
+      "source_quote": "Regen all party members (L) (3 times) and restore all statuses",
+      "source_revision_sha256": "1eaa3b3d990e15963a08c7e197de7be08b50ef4d11009e660fb3511c377b3c89",
+      "source_url": "https://anothereden.wiki/w/Yuna"
+    },
+    {
+      "character": "Toova",
+      "fact_name": "Venom",
+      "review_basis": "P2 curated review batch",
+      "scope": "P2 reviewed: single-target Magic damage and inflicts Pain and Poison",
+      "source_fact_id": "skill:a0bd249d960bbff8471a",
+      "source_quote": "Magic attack on a single enemy (S) and inflict Pain and inflict Poison (Permanent, Ignore Target Resistance)",
+      "source_revision_sha256": "a57956b5c7a51de89d58c7f63c59d2346e29d70b8b3809664a094975dd73f109",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    },
+    {
+      "character": "Toova",
+      "fact_name": "Great Wall",
+      "review_basis": "P2 curated review batch",
+      "scope": "P2 reviewed: Earth Magic damage; no conditional/Resonance effects credited",
+      "source_fact_id": "skill:ceea158929a089cfb655",
+      "source_quote": "Earth type magic attack on all enemies (XL, increase skill damage 10 times 10x of the standard skill multiplier of 200% ) and ignore target's defense (MDef=0 in Damage Formula ) and guaranteed critical Damage +100% when HP is above 50% (Multiplier x2) In Ghost Resonance, stack 4 Ghost Marrow on user and Inflict 3 stacks of Elemental Break (Earth) on all enemies",
+      "source_revision_sha256": "a57956b5c7a51de89d58c7f63c59d2346e29d70b8b3809664a094975dd73f109",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    },
+    {
+      "character": "Suzette",
+      "fact_name": "Dragon Assault",
+      "review_basis": "P2 curated review batch",
+      "scope": "P2 corrected review: Wind Pierce damage; Mushroom resists Pierce; Pain/Poison bonuses are conditional, not action prerequisites",
+      "source_fact_id": "skill:5db06e02b58de90695aa",
+      "source_quote": "Wind type piercing attack on all enemies x2 (XL) and Wind type damage of user +50% (5 turns, max stack: x3, +100% ), guaranteed critical +300% damage if target is afflicted with Pain (Multiplier x4) +300% damage if target is afflicted with Poison (Multiplier x4)",
+      "source_revision_sha256": "fb3adc3303f467108366fca81678c246d4100b28d84e60e99b0e72ed89f7373b",
+      "source_url": "https://anothereden.wiki/w/Suzette"
+    }
+  ],
+  "known_boss_interactions": [
+    {
+      "boss_id": "rotte-rivel",
+      "counter_claimed": false,
+      "ordinary_barrier_claim_for_hp_halving": false,
+      "review_status": "source_fact_with_unmodeled_counter",
+      "source_quotes": [
+        "Marks two random party slots",
+        "Non-type magic attack on marked slots + confuse and bind",
+        "Halves the remaining HP of all enemies"
+      ],
+      "source_text": "Marked-slot delayed coverage includes non-type Magic damage and Confuse/Bind; Divine Curse halves remaining HP."
+    },
+    {
+      "beneficial_pain_poison_synergy_claimed": false,
+      "boss_id": "celestial-mushroom",
+      "exact_turn_claimed": false,
+      "review_status": "source_fact",
+      "source_quotes": [
+        "Raises physical resistance (L) while affected by pain",
+        "Raises type resistance (L) while affected by poison",
+        "If affected, will clear pain/poison and heal itself at end of turn",
+        "AF Stopper"
+      ],
+      "source_text": "Pain/Poison on the boss raises physical/type resistance and causes end-of-turn clearing/healing. The encounter also has an AF stopper at 50% HP."
+    }
+  ],
+  "owner_adjudications": [
+    {
+      "decision": "Fire Magic against listed Fire weakness and Magic resistance remains unresolved; use Fire Slash for positive affinity evidence.",
+      "id": "P2-ROTTE-FIRE-MAGIC",
+      "status": "review_unknown"
+    },
+    {
+      "decision": "Preserve marked-slot non-type Magic, Confuse and Bind behavior; no counter is asserted. This is a material gate gap; Rotte candidates cannot count as four-gate positive scenarios while unresolved.",
+      "id": "P2-ROTTE-MARKED-SLOTS",
+      "material": true,
+      "status": "review_unknown"
+    }
+  ],
+  "roster_policy": {
+    "inadequate_seed_outcomes_are_not_preasserted": true,
+    "known_absence_is_not_inferred_from_missing_capability_records": true,
+    "negative_seed_accounting": "A claimed inadequate result must account for all eight F2P candidate forms and the evaluated legal packages.",
+    "no_owned_sidekick_or_special_item_assumptions": true
+  },
+  "scenarios": [
+    {
+      "boss_id": "rotte-rivel",
+      "candidate_ids": [
+        "character:7f07fbeae5c5e2c2e097",
+        "character:1322ee5127116cffff83",
+        "character:c5c1a001b6bd6eb13b0f",
+        "character:533ed838c050464bfcb9",
+        "character:79086a162d31f0d0b3fe",
+        "character:148555b5aca73e3a93b2",
+        "character:c2abdeabccdbf827464e",
+        "character:0521aa7b1220ae548600",
+        "character:eeae307f7fdf7a68514c",
+        "character:926478c6eafb5d1213bb",
+        "character:db9e1763b16bf1ef0ff5",
+        "character:660d02bd77aba6f62ade",
+        "character:6600a8f6491cea15eab9",
+        "character:46f97d1ce53af9ac65da",
+        "character:f0fc3c52900fc4c961bd",
+        "character:f7b3613f87b66d0dc291",
+        "character:3fb70063c21032297fe0",
+        "character:4f7d212d822afd4313cb",
+        "character:30baf107d86c27e7261c",
+        "character:56228a5e0d4b286ab418"
+      ],
+      "candidate_names": [
+        "Aldo",
+        "Feinne",
+        "Cyrus",
+        "Deirdre",
+        "Azami",
+        "Gariyu",
+        "Cerrine",
+        "Levia",
+        "Shion",
+        "Toova",
+        "Suzette",
+        "Anabel",
+        "Radias",
+        "Prai",
+        "Aisha",
+        "Rosetta",
+        "Mariel",
+        "Yuna",
+        "Mana",
+        "Dunarith"
+      ],
+      "four_gate_positive_eligibility": "blocked_by_material_review_unknown",
+      "investigation": "Use a sourced Fire Slash package for affinity evidence; do not infer a counter for the marked-slot attack.",
+      "loadout_assumptions": {
+        "equipment_and_items": {
+          "consumable_credit": "none",
+          "special_equipment_credit": "none"
+        },
+        "form": "exact normal-form entry in candidate pool",
+        "manifest_and_true_manifest": "excluded from baseline packages",
+        "progression": "no locked upgrade is assumed; each selected skill requires a source/legal-kit check at execution",
+        "selected_skill_package": "not fixed until deterministic scenario execution; no skill availability is inferred from character presence alone",
+        "sidekicks": {
+          "contribution_credit": "none",
+          "owned_or_selected": []
+        },
+        "stellar_awakening": "not credited; pool forms have is_SA=false"
+      },
+      "roster_feasibility": "unknown_not_established",
+      "scenario_id": "rotte-rivel-strong-candidates",
+      "seed_class": "positive_candidate"
+    },
+    {
+      "boss_id": "rotte-rivel",
+      "candidate_ids": [
+        "character:7f07fbeae5c5e2c2e097",
+        "character:1322ee5127116cffff83",
+        "character:c5c1a001b6bd6eb13b0f",
+        "character:533ed838c050464bfcb9",
+        "character:79086a162d31f0d0b3fe",
+        "character:148555b5aca73e3a93b2",
+        "character:c2abdeabccdbf827464e",
+        "character:0521aa7b1220ae548600",
+        "character:eeae307f7fdf7a68514c",
+        "character:660d02bd77aba6f62ade",
+        "character:f7b3613f87b66d0dc291"
+      ],
+      "candidate_names": [
+        "Aldo",
+        "Feinne",
+        "Cyrus",
+        "Deirdre",
+        "Azami",
+        "Gariyu",
+        "Cerrine",
+        "Levia",
+        "Shion",
+        "Anabel",
+        "Rosetta"
+      ],
+      "four_gate_positive_eligibility": "blocked_by_material_review_unknown",
+      "investigation": "Retain the eight F2P additions plus Shion, Anabel and Rosetta; defensive facts are not asserted to counter marked slots or Divine Curse.",
+      "loadout_assumptions": {
+        "equipment_and_items": {
+          "consumable_credit": "none",
+          "special_equipment_credit": "none"
+        },
+        "form": "exact normal-form entry in candidate pool",
+        "manifest_and_true_manifest": "excluded from baseline packages",
+        "progression": "no locked upgrade is assumed; each selected skill requires a source/legal-kit check at execution",
+        "selected_skill_package": "not fixed until deterministic scenario execution; no skill availability is inferred from character presence alone",
+        "sidekicks": {
+          "contribution_credit": "none",
+          "owned_or_selected": []
+        },
+        "stellar_awakening": "not credited; pool forms have is_SA=false"
+      },
+      "roster_feasibility": "unknown_not_established",
+      "scenario_id": "rotte-rivel-constrained-candidates",
+      "seed_class": "positive_candidate"
+    },
+    {
+      "boss_id": "rotte-rivel",
+      "candidate_ids": [
+        "character:7f07fbeae5c5e2c2e097",
+        "character:1322ee5127116cffff83",
+        "character:c5c1a001b6bd6eb13b0f",
+        "character:533ed838c050464bfcb9",
+        "character:79086a162d31f0d0b3fe",
+        "character:148555b5aca73e3a93b2",
+        "character:c2abdeabccdbf827464e",
+        "character:0521aa7b1220ae548600"
+      ],
+      "candidate_names": [
+        "Aldo",
+        "Feinne",
+        "Cyrus",
+        "Deirdre",
+        "Azami",
+        "Gariyu",
+        "Cerrine",
+        "Levia"
+      ],
+      "inadequate_outcome_claimed": false,
+      "investigation": "Test unsuitable offense and unsupported defensive assumptions after accounting for every one of the eight forms.",
+      "loadout_assumptions": {
+        "equipment_and_items": {
+          "consumable_credit": "none",
+          "special_equipment_credit": "none"
+        },
+        "form": "exact normal-form entry in candidate pool",
+        "manifest_and_true_manifest": "excluded from baseline packages",
+        "progression": "no locked upgrade is assumed; each selected skill requires a source/legal-kit check at execution",
+        "selected_skill_package": "not fixed until deterministic scenario execution; no skill availability is inferred from character presence alone",
+        "sidekicks": {
+          "contribution_credit": "none",
+          "owned_or_selected": []
+        },
+        "stellar_awakening": "not credited; pool forms have is_SA=false"
+      },
+      "roster_feasibility": "unknown_not_established",
+      "scenario_id": "rotte-rivel-f2p-inadequacy-investigation",
+      "seed_class": "inadequacy_investigation"
+    },
+    {
+      "boss_id": "celestial-mushroom",
+      "candidate_ids": [
+        "character:7f07fbeae5c5e2c2e097",
+        "character:1322ee5127116cffff83",
+        "character:c5c1a001b6bd6eb13b0f",
+        "character:533ed838c050464bfcb9",
+        "character:79086a162d31f0d0b3fe",
+        "character:148555b5aca73e3a93b2",
+        "character:c2abdeabccdbf827464e",
+        "character:0521aa7b1220ae548600",
+        "character:eeae307f7fdf7a68514c",
+        "character:926478c6eafb5d1213bb",
+        "character:db9e1763b16bf1ef0ff5",
+        "character:660d02bd77aba6f62ade",
+        "character:6600a8f6491cea15eab9",
+        "character:46f97d1ce53af9ac65da",
+        "character:f0fc3c52900fc4c961bd",
+        "character:f7b3613f87b66d0dc291",
+        "character:3fb70063c21032297fe0",
+        "character:4f7d212d822afd4313cb",
+        "character:30baf107d86c27e7261c",
+        "character:56228a5e0d4b286ab418"
+      ],
+      "candidate_names": [
+        "Aldo",
+        "Feinne",
+        "Cyrus",
+        "Deirdre",
+        "Azami",
+        "Gariyu",
+        "Cerrine",
+        "Levia",
+        "Shion",
+        "Toova",
+        "Suzette",
+        "Anabel",
+        "Radias",
+        "Prai",
+        "Aisha",
+        "Rosetta",
+        "Mariel",
+        "Yuna",
+        "Mana",
+        "Dunarith"
+      ],
+      "four_gate_positive_eligibility": "candidate_not_yet_validated",
+      "investigation": "Can consider Earth Magic source evidence; do not credit Pain/Poison as beneficial against the boss without checking its response.",
+      "loadout_assumptions": {
+        "equipment_and_items": {
+          "consumable_credit": "none",
+          "special_equipment_credit": "none"
+        },
+        "form": "exact normal-form entry in candidate pool",
+        "manifest_and_true_manifest": "excluded from baseline packages",
+        "progression": "no locked upgrade is assumed; each selected skill requires a source/legal-kit check at execution",
+        "selected_skill_package": "not fixed until deterministic scenario execution; no skill availability is inferred from character presence alone",
+        "sidekicks": {
+          "contribution_credit": "none",
+          "owned_or_selected": []
+        },
+        "stellar_awakening": "not credited; pool forms have is_SA=false"
+      },
+      "roster_feasibility": "unknown_not_established",
+      "scenario_id": "celestial-mushroom-strong-candidates",
+      "seed_class": "positive_candidate"
+    },
+    {
+      "boss_id": "celestial-mushroom",
+      "candidate_ids": [
+        "character:7f07fbeae5c5e2c2e097",
+        "character:1322ee5127116cffff83",
+        "character:c5c1a001b6bd6eb13b0f",
+        "character:533ed838c050464bfcb9",
+        "character:79086a162d31f0d0b3fe",
+        "character:148555b5aca73e3a93b2",
+        "character:c2abdeabccdbf827464e",
+        "character:0521aa7b1220ae548600",
+        "character:926478c6eafb5d1213bb",
+        "character:4f7d212d822afd4313cb",
+        "character:30baf107d86c27e7261c",
+        "character:56228a5e0d4b286ab418"
+      ],
+      "candidate_names": [
+        "Aldo",
+        "Feinne",
+        "Cyrus",
+        "Deirdre",
+        "Azami",
+        "Gariyu",
+        "Cerrine",
+        "Levia",
+        "Toova",
+        "Yuna",
+        "Mana",
+        "Dunarith"
+      ],
+      "four_gate_positive_eligibility": "candidate_not_yet_validated",
+      "investigation": "Retain all eight F2P additions plus Toova, Yuna, Mana and Dunarith. Toova Venom is a harmful-interaction candidate; use of that skill is not assumed.",
+      "loadout_assumptions": {
+        "equipment_and_items": {
+          "consumable_credit": "none",
+          "special_equipment_credit": "none"
+        },
+        "form": "exact normal-form entry in candidate pool",
+        "manifest_and_true_manifest": "excluded from baseline packages",
+        "progression": "no locked upgrade is assumed; each selected skill requires a source/legal-kit check at execution",
+        "selected_skill_package": "not fixed until deterministic scenario execution; no skill availability is inferred from character presence alone",
+        "sidekicks": {
+          "contribution_credit": "none",
+          "owned_or_selected": []
+        },
+        "stellar_awakening": "not credited; pool forms have is_SA=false"
+      },
+      "roster_feasibility": "unknown_not_established",
+      "scenario_id": "celestial-mushroom-constrained-candidates",
+      "seed_class": "positive_candidate"
+    },
+    {
+      "boss_id": "celestial-mushroom",
+      "candidate_ids": [
+        "character:7f07fbeae5c5e2c2e097",
+        "character:1322ee5127116cffff83",
+        "character:c5c1a001b6bd6eb13b0f",
+        "character:533ed838c050464bfcb9",
+        "character:79086a162d31f0d0b3fe",
+        "character:148555b5aca73e3a93b2",
+        "character:c2abdeabccdbf827464e",
+        "character:0521aa7b1220ae548600",
+        "character:db9e1763b16bf1ef0ff5"
+      ],
+      "candidate_names": [
+        "Aldo",
+        "Feinne",
+        "Cyrus",
+        "Deirdre",
+        "Azami",
+        "Gariyu",
+        "Cerrine",
+        "Levia",
+        "Suzette"
+      ],
+      "inadequate_outcome_claimed": false,
+      "investigation": "Test a Pierce-resisted damage/package and conditional Pain/Poison bonus. Do not infer the lineup is inadequate or that a status source is present until packages are evaluated.",
+      "loadout_assumptions": {
+        "equipment_and_items": {
+          "consumable_credit": "none",
+          "special_equipment_credit": "none"
+        },
+        "form": "exact normal-form entry in candidate pool",
+        "manifest_and_true_manifest": "excluded from baseline packages",
+        "progression": "no locked upgrade is assumed; each selected skill requires a source/legal-kit check at execution",
+        "selected_skill_package": "not fixed until deterministic scenario execution; no skill availability is inferred from character presence alone",
+        "sidekicks": {
+          "contribution_credit": "none",
+          "owned_or_selected": []
+        },
+        "stellar_awakening": "not credited; pool forms have is_SA=false"
+      },
+      "roster_feasibility": "unknown_not_established",
+      "scenario_id": "celestial-mushroom-suzette-inadequacy-investigation",
+      "seed_class": "inadequacy_investigation"
+    }
+  ],
+  "verification_boundary": {
+    "analyzer_calls": 0,
+    "deterministic_recommendation_run_performed": false,
+    "graph_mutation": false,
+    "live_scraping": false,
+    "paid_calls": 0,
+    "production_status": "Source-verified candidate inputs only; P3 must run the typed path and measure H2 gates. Rotte positive-scenario acceptance remains open pending a source-justified boss decision."
+  }
+}

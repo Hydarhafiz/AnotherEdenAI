@@ -421,6 +421,14 @@ The owner-approved 2026-10-20 scope reset stops C2.1 after unsuccessful final
 validation. No new classifier run or original M6 D-G contract is required.
 Preserve the existing deterministic runtime and the four H2 gates above.
 
+P2 retains Rotte Rivel as a source-pinned diagnostic scenario, but its
+marked-slot non-type Magic attack with Confuse/Bind is a material
+REVIEW/UNKNOWN counter gap. Do not count Rotte as a full four-gate positive or
+credit an unverified counter. The current captured alternatives do not yet
+justify a simpler replacement. Consider a Celestial-Mushroom-only positive
+scope only if deterministic evidence supports the required cases; record an
+explicit scope decision rather than changing the acceptance gate in a fixture.
+
 Evaluate four separate questions:
 
 - A: Does every credited curated fact have independent reviewed source evidence,

@@ -1,4 +1,4 @@
-"""Development-source regressions for C2-R2 ETL and variant identity fixes."""
+"""Source-fidelity regressions for structural fields and variant identity."""
 
 from __future__ import annotations
 
@@ -25,6 +25,8 @@ from src.etl.structural_evidence import (
 
 ROOT = Path("tests/fixtures/structural")
 SOURCE_FIXTURE = Path("tests/fixtures/source_fidelity/c2_r2_source_corrections.json")
+HISTORICAL_MECHANICS_FIXTURE = Path("tests/fixtures/source_fidelity/c2_r3_shared_mechanics.json")
+HISTORICAL_MECHANICS_REGISTRY = Path("src/etl/shared_mechanics_registry.json")
 
 
 def _source_cases() -> dict[str, dict]:
@@ -333,3 +335,36 @@ def test_variant_heading_without_selector_stays_unresolved():
     unit = parse_grid_units(html, source=source, entity_kind="character", entity_name="Example")[0]
     assert unit.variant_key == "unresolved"
     assert unit.variant_identity()["basis"] == "unresolved"
+
+
+def test_historical_shared_mechanic_source_anchors_remain_pinned():
+    source_map = json.loads(HISTORICAL_MECHANICS_FIXTURE.read_text(encoding="utf-8"))
+    registry = json.loads(HISTORICAL_MECHANICS_REGISTRY.read_text(encoding="utf-8"))
+    fixture_path = Path(source_map["fixture"])
+    fixture_bytes = fixture_path.read_bytes()
+    assert hashlib.sha256(fixture_bytes).hexdigest() == source_map["fixture_sha256"]
+    source_dom = BeautifulSoup(fixture_bytes, "html.parser")
+    assert all(source_dom.select_one(row["selector"]) is not None for row in source_map["records"])
+    assert all(len(row["capture_sha256"]) == 64 for row in source_map["records"])
+    assert all(len(row["source_slice_sha256"]) == 64 for row in source_map["records"])
+    assert len(registry["entries"]) == 14
+    assert len({entry["mechanic_id"] for entry in registry["entries"]}) == 14
+
+    mapping = {row["witness_id"]: row for row in source_map["records"]}
+    anchored_witnesses = set()
+    for entry in registry["entries"]:
+        for anchor in entry["source_anchors"]:
+            source = mapping.get(anchor.get("witness_id"))
+            if source is None:
+                continue
+            anchored_witnesses.add(source["witness_id"])
+            assert anchor["source_capture_sha256"] == source["capture_sha256"]
+            assert anchor["source_slice_sha256"] == source["source_slice_sha256"]
+            assert anchor["source_fact_id"] == source["record_id"]
+            if anchor["anchor_id"].endswith("-skill-link"):
+                assert anchor["source_location"] == source["skill_name_link_location"]
+    assert {
+        "development-ciel-lunatic-charge",
+        "development-claude-es-another-zone",
+    } <= anchored_witnesses
+    assert anchored_witnesses <= set(mapping)

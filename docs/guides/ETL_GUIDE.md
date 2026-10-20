@@ -543,7 +543,7 @@ deterministic child-definition traversal. Sidekick `auto`, `charge`, and
 `aura` records are reported with separate denominators. Generated replay
 output remains ignored.
 
-### C2-R2 source fields and variant identity
+### Structural source fields and variant identity
 
 The sidekick ETL writes `charge_cost` only for an explicitly stated consumed
 Charge amount. A conditional gain and a `Charged` availability state are
@@ -568,24 +568,23 @@ persisted fact IDs remain unchanged. Development regressions are pinned to
 source capture checksums and existing fact/family IDs; any changed meaning
 requires explicit source re-review rather than review approval fan-out.
 
-### C2-R3 controlled shared mechanics
+### Historical C2-R3 shared-mechanics source anchors
 
-The shared-mechanic registry is a small, versioned offline index. It matches
-exact captured links, whole-token allowlisted unlinked names, and allowlisted
-icons, and records which provenance path resolved each mention. It does not
-search ordinary prose for a name. Context gates keep overloaded labels such
-as `Charge` distinct across character Lunatic and Sidekick resource records.
-Ambiguous, unknown, and insufficient-context mentions stay unresolved. A
-known identity may still have no admitted definition.
+P2 retires the experimental shared-mechanic resolver after its C2-only caller
+audit. The registry and source map remain as historical provenance; the
+domain-neutral structural regression keeps their pinned capture and anchor
+identities. They do not feed the supported review or recommendation runtime.
 
-Each resolution points back to its parent source fact, owner, capture, and
-source location. Local triggers, targets, values, durations, and other payload
-remain on that parent. Shared definitions are deduplicated by mechanic ID and
-cannot grant capabilities or ownership to the character that references them.
-The registry adds no graph labels, automatic approval, broad text matching, or
-whole-rulebook ingestion; only the source-backed Another Zone definition is
-available, while other admitted identities remain identity-only until their
-definitions are separately reviewed.
+The retired resolver formerly used a versioned offline registry to match exact
+captured links, allowlisted names and icons. Its context gates distinguished
+overloaded labels such as `Charge` across character Lunatic and Sidekick
+resource records; ambiguous, unknown and insufficient-context mentions stayed
+unresolved.
+
+Resolver records pointed back to their parent source fact, owner, capture and
+source location. They did not grant capabilities or ownership. No supported
+path loads the registry; it remains with the source map for provenance and the
+structural test that checks retained capture and anchor identities.
 
 The deterministic witness manifest is
 `src/etl/source_fidelity_manifest.json`. It contains seven named regressions
@@ -615,10 +614,11 @@ failed C2 experiment is stopped and joint acceptance was never achieved.
 ### Reviewed Manual Pilot Knowledge
 
 The owner stopped C2/C2.1 after failed final validation on 2026-10-20. Do not
-run another C2 repair, final cohort, Test #5 or original Feature D. Existing C2
-scripts remain historical until their audited retirement; they are not the
-active preparation workflow. No command in this section authorizes scraping,
-graph writes or paid evaluation.
+run another C2 repair, final cohort, Test #5 or original Feature D. P2 retires
+the failed classifier and its dedicated report/evaluation runners. The
+independent semantic evaluator and frozen evidence remain available for
+historical inspection; neither authorizes another classifier run. No command
+in this section authorizes scraping, graph writes or paid evaluation.
 
 Use pinned source facts from C1/C1.1 and existing taxonomy/review tooling:
 
@@ -669,11 +669,10 @@ limits. Do not rewrite frozen manifests to replace their original .sdd/ paths;
 use the retention mapping. Earlier frozen results remain distinct from consumed
 regression derivatives and the derivative-only Felmina correction.
 
-The preexisting evaluated classifier/evaluator/source-anchor changes are retained
-byte-for-byte in Git as failed-experiment evidence. They do not add authority to
-the review/materialization path. Do not purge ignored source caches or handoffs
-until every unique source/oracle/provenance dependency has been classified and
-retained. P2 owns the audited retirement of experimental runners and code.
+The preexisting evaluated classifier/evaluator/source-anchor changes remain in
+Git history as failed-experiment evidence. The P2-retired classifier and
+reporting runners add no authority to the review/materialization path. Frozen
+source, oracle and provenance artifacts remain unchanged.
 
 ## Maintenance Rule
 

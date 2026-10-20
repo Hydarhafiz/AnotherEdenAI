@@ -87,7 +87,10 @@ def test_witnesses_use_real_catalog_fact_and_capture_identities(manifest: dict, 
 def test_source_slice_fixture_is_capture_derived_and_all_witnesses_bind(replay_report: dict):
     fixture = replay_report["witness_replay"]["source_slice_fixture"]
     assert fixture["loaded"] is True
-    assert fixture["passed_count"] == 64
+    assert fixture["passed_count"] == (
+        replay_report["manifest"]["known_regression_count"]
+        + replay_report["manifest"]["development_witness_count"]
+    )
     assert fixture["failed_count"] == 0
     assert fixture["unknown_count"] == 0
     for cohort in ("known_regressions", "development"):
@@ -154,7 +157,7 @@ def test_independent_oracle_reports_separate_counts_and_c2_admission(evaluated_r
     assert evaluated_report["oracle_evaluation"]["known_regressions"]["generalization_evidence"] is False
     development = evaluated_report["oracle_evaluation"]["development"]
     assert "held_out" not in evaluated_report["oracle_evaluation"]
-    assert development["witness_count"] == 57
+    assert development["witness_count"] == evaluated_report["manifest"]["development_witness_count"]
     assert development["independently_adjudicated_effect_occurrence_count"] > 0
     assert development["independently_adjudicated_dependency_occurrence_count"] > 0
     assert all(

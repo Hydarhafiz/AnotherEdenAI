@@ -1,0 +1,48 @@
+{
+  "artifact_type": "curated_pilot_review",
+  "artifact_version": "3.2.0",
+  "decision_counts": {
+    "ambiguous": 0,
+    "approve": 4,
+    "correct": 5,
+    "reject": 2
+  },
+  "elapsed_review_minutes": 1,
+  "human_person_hours": 0.0,
+  "phase": "defensive_setup, offensive_support",
+  "reviewer": "codex-milestone-6-p2",
+  "row_count": 11,
+  "source_facts": [
+    {
+      "character_name": "Yuna",
+      "fact_name": "Maiden's Observance",
+      "source_fact_id": "skill:51c08cb8679f98867702",
+      "source_url": "https://anothereden.wiki/w/Yuna"
+    },
+    {
+      "character_name": "Suzette",
+      "fact_name": "Dragon Assault",
+      "source_fact_id": "skill:5db06e02b58de90695aa",
+      "source_url": "https://anothereden.wiki/w/Suzette"
+    },
+    {
+      "character_name": "Toova",
+      "fact_name": "Venom",
+      "source_fact_id": "skill:a0bd249d960bbff8471a",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    },
+    {
+      "character_name": "Toova",
+      "fact_name": "Great Wall",
+      "source_fact_id": "skill:ceea158929a089cfb655",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    },
+    {
+      "character_name": "Rosetta",
+      "fact_name": "Biblia",
+      "source_fact_id": "skill:f5bb48646f223cc4a933",
+      "source_url": "https://anothereden.wiki/w/Rosetta"
+    }
+  ],
+  "timing_note": "Elapsed UTC from first P2 source review at 2026-10-20 07:09:13 to importer completion at 2026-10-20 07:10:00, rounded to one minute; agent-assisted curation, with no human operator hours attributed."
+}

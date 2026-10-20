@@ -71,6 +71,8 @@ Candidate bosses are Rotte Rivel and Celestial Mushroom, grounded in the existin
 | Rotte Rivel | Fire weakness, listed elemental/type resistances, wind damage, ailments, marked-slot delayed attacks and HP-halving pressure | Independently adjudicate combined affinity interpretation. Marked-slot targeting remains a matrix gap; ordinary mitigation is not assumed to reduce HP-halving damage. No exact-turn claim. |
 | Celestial Mushroom | Pierce/Blunt resistance, ailments, PWR/INT debuffs and an AF stopper | Pain/Poison on the boss raises resistance and causes end-of-turn cleansing/healing. Do not assume generic Pain/Poison synergy is helpful. |
 
+Source adjudication: Fire Magic against Rotte Rivel's listed Fire weakness and Magic resistance remains REVIEW/UNKNOWN because the local sources do not define that combined interaction. Use an unconflicted Fire Slash attack for positive evidence. The proposed negative rosters remain investigation seeds: account for all eight F2P additions and do not call a roster infeasible from one unsuitable lineup or package. Marked-slot coverage and any other mechanic the current gate cannot represent must remain explicit uncertainty rather than a counter claim. The owner approved retaining Rotte as a non-passing diagnostic case: its marked-slot non-type Magic attack and Confuse/Bind effects are material, so a Rotte candidate cannot count as a full four-gate positive while that counter gate remains unresolved. Do not select a replacement or weaken the gate silently. Before full acceptance, report independently justified scenarios and the smallest scope adjustment; consider reducing initial positive scope to Celestial Mushroom only if deterministic evidence supports it.
+
 Use twenty normal forms as a candidate curation pool:
 
 - Automatic F2P: Aldo, Feinne, Cyrus, Deirdre, Azami, Gariyu, Cerrine, Levia.
@@ -133,7 +135,9 @@ Completion evidence:
 
 Type/route: build via contract-auditor -> feature-planner -> builder-executor -> tdd-loop.
 
-Status: Planned; next separately admitted feature after P1. The audit/refinement stays within the approved pilot and does not reopen reconstructable workflow metadata.
+Status: Reviewed evidence, source-pinned candidate inputs, failed-path retirement and manifest-backed count assertions are implemented. Full P2 acceptance is not met: Rotte's two positive candidates are blocked by the material marked-slot REVIEW/UNKNOWN, Celestial Mushroom's two positive candidates still need deterministic validation, and neither proposed inadequacy seed is an outcome oracle. Keep the four-positive/two-inadequate gate unchanged. P3 should validate Mushroom candidates first while retaining Rotte diagnostically. If Mushroom supports the positive pilot, obtain an explicit scope decision and source-justify enough Mushroom scenarios to meet the existing four-positive gate; do not count Rotte or alter the gate silently.
+
+Evidence: the review batch records 11 decisions over five source facts (4 approve, 5 correct, 2 reject) across Rosetta, Yuna, Toova and Suzette; two previously approved exact-fact records are reused. The scenario fixture pins the twenty normal-form legal-kit receipts and all six investigation rosters to local boss captures and expected fixtures. The final focused source/review/runtime regression selection passes 100 tests, including both manifest-backed stale-count checks. No deterministic pilot output, infeasibility claim, analyzer call, graph mutation or live refresh was performed.
 
 Entry: P1 evidence/source preservation verified. Audit final callers, pytest collection, unique assertions, provenance and persisted contracts before removal. Source-only boss/scenario adjudication must precede implementation-dependent expectations.
 
@@ -159,11 +163,11 @@ Reuse the compact analyzer/H1/H2 contracts. Apply C and D independently of deter
 
 ## Retirement Ownership
 
-P2 owns removal of c2_scoped_classification.py, report_feature_c2.py, evaluate_c2_r1_baseline.py and development/consumed-regression runners after preservation and caller checks. Their present responsibility is historical inspection only, not temporary production compatibility. No supported runtime caller requires a permanent compatibility layer.
+P2 removes c2_scoped_classification.py, shared_mechanics.py, report_feature_c2.py, evaluate_c2_r1_baseline.py and the development/consumed-regression runners after preservation and caller checks. Their historical results and exact source remain in frozen evidence and Git history. No supported runtime caller requires a permanent compatibility layer.
 
 Keep capability_taxonomy.py/JSON/reviews/gold/review_batches, models, loader, kit catalog/readiness, Feature C/coverage reporting, and the production runtime. In particular, older c2_defensive_setup review batches belong to supported capability materialization.
 
-Keep source_fidelity.py, structural_evidence.py and their source manifests/fixtures. Consolidate unique parser/anchor/variant/child-ownership assertions from C2-named tests into source-fidelity coverage. Keep the independent semantic evaluator and its matching/identity regressions initially; do not build another evaluator. Retire shared_mechanics.py resolver-only behavior after its C2-only callers disappear, while preserving registry/source provenance and any independently supported source assertions.
+Keep source_fidelity.py, structural_evidence.py and their source manifests/fixtures. Consolidate unique parser/anchor/variant/child-ownership assertions from C2-named tests into source-fidelity coverage. Keep the independent semantic evaluator and its matching/identity regressions initially; do not build another evaluator. Retire shared_mechanics.py resolver-only behavior while preserving registry/source provenance and source-anchor integrity checks.
 
 Keep final frozen evidence and consumed original results distinct from regression derivatives, including the derivative-only Felmina correction. Promote unique oracle/provenance information before purging ignored handoffs. Protect historical raw caches until the retention inventory proves which sources have durable copies. Never blanket-delete C2/rule-named files.
 
