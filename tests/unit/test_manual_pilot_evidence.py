@@ -15,6 +15,7 @@ from src.etl.capability_taxonomy import import_review_batch, materialize_atomic
 SCENARIO_PATH = Path("tests/fixtures/m6_p2/pilot_scenarios.json")
 CATALOG_PATH = Path("src/etl/kit_catalog.json")
 REVIEW_PATH = Path("src/etl/review_batches/m6_p2_pilot_curated.csv")
+GHOSTLY_REVIEW_PATH = Path("src/etl/review_batches/m6_p3_toova_ghostly_curated.csv")
 POOL_NAMES = [
     "Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu", "Cerrine", "Levia",
     "Shion", "Toova", "Suzette", "Anabel", "Radias", "Prai", "Aisha", "Rosetta",
@@ -141,9 +142,11 @@ def test_boss_scenarios_bind_to_independent_fixtures_and_source_capture_bytes():
         if row["boss_id"] == "rotte-rivel" and row["seed_class"] == "positive_candidate"
     )
     assert scenarios["verification_boundary"]["production_status"].startswith(
-        "Source-verified candidate inputs only"
+        "P3 performed a deterministic in-memory 20-form diagnostic"
     )
     assert scenarios["verification_boundary"]["analyzer_calls"] == 0
+    assert scenarios["verification_boundary"]["deterministic_recommendation_run_performed"] is True
+    assert scenarios["verification_boundary"]["graph_mutation"] is False
 
 
 def test_curated_review_batch_replays_and_materializes_only_reviewed_exact_facts(tmp_path: Path):
@@ -214,6 +217,7 @@ def test_curated_fact_receipts_match_the_source_catalog_and_reviewed_decisions()
     assert set(listed) == {
         "skill:3bf0d55a753ab920d4c4",
         "skill:575912d04d8a7232ffd1",
+        "skill:5b877ddd3737743f9006",
         *CURATED_FACT_IDS,
     }
     for fact_id, pin in listed.items():
@@ -240,3 +244,43 @@ def test_curated_fact_receipts_match_the_source_catalog_and_reviewed_decisions()
     assert "direct_damage" in aldo_capabilities
     assert "deploy_zone" in aisha_capabilities
     assert all(row["source"] == "reviewed_override" for row in [aldo_rows[0], aisha_rows[0]])
+
+
+def test_ghostly_whisper_review_preserves_attack_and_withholds_unrepresentable_self_heal(tmp_path: Path):
+    catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    record = _objects_by_fact_id(catalog)["skill:5b877ddd3737743f9006"]
+    imported = import_review_batch(
+        GHOSTLY_REVIEW_PATH,
+        [record],
+        reviews_path=tmp_path / "capability_reviews.json",
+    )
+    with GHOSTLY_REVIEW_PATH.open(encoding="utf-8", newline="") as stream:
+        decisions = list(csv.DictReader(stream))
+
+    assert len(decisions) == 2
+    assert {row["decision"] for row in decisions} == {"approve", "reject"}
+    assert {row["proposal_id"] for row in decisions} <= {
+        row["proposal_id"] for row in imported["decisions"]
+    }
+    attack = next(row for row in decisions if row["proposed_value"] == "direct_damage")
+    heal = next(row for row in decisions if row["proposed_value"] == "heal_hp")
+    assert attack["decision"] == "approve"
+    assert "5%-of-damage-dealt self-heal is not credited" in attack["reviewer_notes"]
+    assert heal["decision"] == "reject"
+    assert "withholds proof" in heal["reviewer_notes"]
+
+    capabilities, dependencies, evidence, _version, diagnostics = materialize_atomic(
+        record,
+        tmp_path / "capability_reviews.json",
+    )
+    assert capabilities == ["direct_damage"]
+    assert dependencies == []
+    assert diagnostics["proven"] == 1
+    assert diagnostics["rejected"] == 1
+    assert len(evidence) == 1
+    assert evidence[0]["direction"] == "enemy"
+    assert evidence[0]["target"] == "single_enemy"
+    assert evidence[0]["qualifiers"]["element"] == ["Earth"]
+    assert evidence[0]["qualifiers"]["attack_type"] == ["Magic"]
+    assert evidence[0]["review_decision"] == "approve"
+    assert evidence[0]["source_fact_id"] == "skill:5b877ddd3737743f9006"

@@ -1,0 +1,21 @@
+{
+  "artifact_type": "curated_pilot_review",
+  "artifact_version": "3.2.0",
+  "decision_counts": {
+    "approve": 1,
+    "correct": 0,
+    "reject": 1
+  },
+  "phase": "defensive_setup, offensive_support",
+  "reviewer": "codex-milestone-6-p3",
+  "row_count": 2,
+  "review_scope": "Approve the source-proven Earth Magic attack. Withhold the self-heal because the current evidence fields cannot encode 5% of damage dealt.",
+  "source_facts": [
+    {
+      "character_name": "Toova",
+      "fact_name": "Ghostly Whisper",
+      "source_fact_id": "skill:5b877ddd3737743f9006",
+      "source_url": "https://anothereden.wiki/w/Toova"
+    }
+  ]
+}
