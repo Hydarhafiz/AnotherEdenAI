@@ -96,7 +96,6 @@ def test_late_game_package_is_compact_labeled_and_source_grounded():
         role_entity=role_entity(),
         grastas=grastas(),
         equipment=equipment(),
-        selected_facts=[{"dependencies": ["requires_zone"]}],
     )
 
     assert package["item_policy"] == "late_game_assumed"
@@ -104,11 +103,46 @@ def test_late_game_package_is_compact_labeled_and_source_grounded():
     assert len(package["grastas"]) == 3
     assert package["weapon"]["id"] == "equipment:sword-unique"
     assert package["armor"]["id"] == "equipment:armor-unique"
-    assert "requires_zone" in package["setup_dependencies"]
+    assert package["setup_dependencies"] == []
     assert package["assumptions"]
     assert package["evidence"]
     assert package["citations"]
     assert validate_build_package(package, character=character(), grastas=grastas(), equipment=equipment()) == []
+
+
+def test_package_preserves_reviewed_zone_dependency():
+    package = build_build_package(
+        character(),
+        role_entity=role_entity(),
+        grastas=grastas(),
+        equipment=equipment(),
+        selected_facts=[{
+            "dependencies": ["requires_zone"],
+            "capability_evidence_json": (
+                '[{"kind":"dependency","value":"requires_zone",'
+                '"review_decision":"correct"}]'
+            ),
+        }],
+    )
+
+    assert package["setup_dependencies"] == ["requires_zone"]
+
+
+def test_package_ignores_zone_mentions_without_reviewed_dependency_evidence():
+    package = build_build_package(
+        character(),
+        role_entity=role_entity(),
+        grastas=grastas(),
+        equipment=equipment(),
+        selected_facts=[{
+            "name": "Zone stance passive",
+            "description": "When a Zone is active, this passive grants a bonus.",
+            "dependencies": ["requires_zone"],
+            "capability_evidence_json": "[]",
+        }],
+    )
+
+    assert "requires_zone" not in package["setup_dependencies"]
 
 
 def test_package_excludes_incompatible_grasta_variants_and_supports_generic_fallback():

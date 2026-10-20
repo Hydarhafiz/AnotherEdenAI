@@ -8,6 +8,7 @@ optimizer and it never treats an unverified item as player-owned.
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 from collections import Counter
 from itertools import combinations_with_replacement, product
@@ -1036,23 +1037,27 @@ def _assumptions(*, item_policy, weapon, armor, grastas, ores, traits):
 
 def _setup_dependencies(grastas, facts, role_entity):
     dependencies = set()
-    raw_values = []
     for fact in [*facts, *[row for row in grastas if isinstance(row, dict)], role_entity]:
-        for key in ("dependencies", "setup_dependencies", "requires", "required_capabilities"):
-            value = fact.get(key) if isinstance(fact, dict) else None
-            if isinstance(value, list):
-                raw_values.extend(value)
-            elif value:
-                raw_values.append(value)
-        text = " ".join(str(fact.get(key) or "") for key in ("name", "effect_text", "description", "stats", "effect_tags"))
-        lowered = text.casefold()
-        for token in ("pain", "poison", "zone", "lunatic", "stellar awakening", "another force"):
-            if token in lowered:
-                dependencies.add("requires_" + token.replace(" ", "_"))
-    for value in raw_values:
-        normalized = _dependency_value(value)
-        if normalized:
-            dependencies.add(normalized)
+        if not isinstance(fact, dict):
+            continue
+        evidence = fact.get("capability_evidence_json", fact.get("capability_evidence", []))
+        if isinstance(evidence, str):
+            try:
+                evidence = json.loads(evidence)
+            except json.JSONDecodeError:
+                continue
+        if not isinstance(evidence, list):
+            continue
+        for row in evidence:
+            if (
+                not isinstance(row, dict)
+                or row.get("kind") != "dependency"
+                or str(row.get("review_decision", "")).casefold() not in {"approve", "correct", "proven"}
+            ):
+                continue
+            normalized = _dependency_value(row.get("value"))
+            if normalized:
+                dependencies.add(normalized)
     return sorted(dependencies)
 
 
