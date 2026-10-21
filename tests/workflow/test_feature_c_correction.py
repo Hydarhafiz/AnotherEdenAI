@@ -49,6 +49,49 @@ def test_fully_valid_first_response_skips_correction_calls():
     assert llm.invoke.call_count == 1
 
 
+def test_one_valid_recommendation_does_not_trigger_missing_archetype_correction():
+    bundle = candidate_bundle()
+    only_burst = candidate_lineup(bundle, archetype="burst")
+    llm = _mock_llm({"recommendations": [only_burst]})
+
+    with patch("src.workflow.nodes.analyze.get_llm", return_value=llm):
+        result = analyze_node(_state(bundle))
+
+    output = json.loads(result["analysis_result"])
+    assert len(output["recommendations"]) == 1
+    assert output["recommendations"][0]["archetype"] == "burst"
+    assert result["analyzer_call_count"] == 1
+    assert result["analyzer_correction_rounds"] == 0
+    assert any("informational" in warning for warning in output["warnings"])
+
+
+def test_correction_can_return_a_second_lineup_with_the_same_archetype():
+    bundle = candidate_bundle()
+    frozen_burst = candidate_lineup(bundle, archetype="burst")
+    invalid_burst = candidate_lineup(bundle, archetype="burst")
+    invalid_burst["frontline"][0]["character_id"] = "character:forged"
+    corrected_burst = candidate_lineup(bundle, archetype="burst")
+    corrected_burst["frontline"][0], corrected_burst["reserve"][0] = (
+        corrected_burst["reserve"][0], corrected_burst["frontline"][0]
+    )
+    corrected_burst["strategy_summary"] = "Use a second legal burst formation."
+    llm = _mock_llm(
+        {"recommendations": [frozen_burst, invalid_burst]},
+        {"recommendations": [corrected_burst]},
+    )
+
+    with patch("src.workflow.nodes.analyze.get_llm", return_value=llm):
+        result = analyze_node(_state(bundle))
+
+    output = json.loads(result["analysis_result"])
+    assert [item["archetype"] for item in output["recommendations"]] == ["burst", "burst"]
+    correction_prompt = llm.invoke.call_args_list[1].args[0][1].content
+    correction_request = json.loads(correction_prompt)
+    assert "required_archetypes" not in correction_request
+    assert "frozen_valid_archetypes" not in correction_request
+    assert "valid recommendations may share an archetype" in correction_request["instruction"]
+
+
 def test_valid_lineup_is_frozen_while_invalid_lineup_is_corrected():
     bundle = candidate_bundle()
     frozen_burst = candidate_lineup(bundle, archetype="burst")
@@ -118,7 +161,7 @@ def test_invalid_after_cap_is_discarded_but_valid_partial_result_survives():
     assert [item["archetype"] for item in output["recommendations"]] == ["burst"]
     assert all("forged" not in json.dumps(item) for item in output["recommendations"])
     assert any("Discarded 1 invalid lineup" in warning for warning in output["warnings"])
-    assert any("Missing valid archetypes" in warning for warning in output["warnings"])
+    assert any("Archetype diversity is incomplete" in warning for warning in output["warnings"])
 
 
 def test_structured_output_failure_is_distinct_from_candidate_validation():

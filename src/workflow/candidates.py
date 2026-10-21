@@ -1022,7 +1022,10 @@ def resolve_candidate_recommendations(proposals: list[dict], bundle: dict, warni
     missing = [archetype for archetype in ARCHETYPES if archetype not in present]
     all_warnings = list(warnings)
     if missing:
-        all_warnings.append("Missing valid archetypes after correction cap: " + ", ".join(missing))
+        all_warnings.append(
+            "Archetype diversity is incomplete (informational; available recommendations remain valid): "
+            + ", ".join(missing)
+        )
     return {
         "recommendations": resolved,
         "boss_affinity": bundle.get("boss", {}).get("affinities", {}),

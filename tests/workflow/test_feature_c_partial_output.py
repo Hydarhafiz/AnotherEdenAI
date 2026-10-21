@@ -28,7 +28,25 @@ def test_format_accepts_one_or_two_valid_lineups_with_missing_archetype_warning(
     )["final_output"]
 
     assert len(result["recommendations"]) == 2
-    assert any("Missing valid archetypes" in warning for warning in result["warnings"])
+    assert any("Archetype diversity is incomplete" in warning for warning in result["warnings"])
+    assert result.get("error") is None
+
+
+def test_partial_output_accepts_multiple_valid_recommendations_with_the_same_archetype():
+    bundle = candidate_bundle()
+    first = candidate_lineup(bundle, archetype="burst")
+    second = candidate_lineup(bundle, archetype="burst")
+    second["frontline"][0], second["reserve"][0] = second["reserve"][0], second["frontline"][0]
+    second["strategy_summary"] = "A second legal burst formation."
+    payload = resolve_candidate_recommendations([first, second], bundle, [])
+
+    result = format_node(
+        {"analysis_result": json.dumps(payload), "db_results": [{"ok": True}], "retry_count": 0}
+    )["final_output"]
+
+    assert len(result["recommendations"]) == 2
+    assert {item["archetype"] for item in result["recommendations"]} == {"burst"}
+    assert any("informational" in warning for warning in result["warnings"])
     assert result.get("error") is None
 
 

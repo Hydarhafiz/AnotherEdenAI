@@ -13,7 +13,7 @@ from json import JSONDecodeError
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from ..candidates import (
-    ARCHETYPES, parse_candidate_response, resolve_candidate_recommendations,
+    parse_candidate_response, resolve_candidate_recommendations,
     validate_candidate_response,
 )
 from ..analyzer import run_bounded_analyzer
@@ -300,7 +300,7 @@ from that combined set and resolve details through the shared catalog. Compact
 effect_tags summarize skill, passive, and sidekick descriptions.
 The schemas object declares the column order for compact catalog rows.
 
-Output JSON with recommendations containing up to three objects, preferably burst, sustain, and hybrid. Each object must contain:
+Output JSON with up to three recommendations. Burst, sustain, and hybrid are useful strategic labels, not required categories: multiple recommendations may share an archetype, and you must not add a lineup only to fill a missing archetype. Each object must contain:
 - archetype, strategy_summary, key_facts, build_notes, boss_counterplay_notes, sustain_mp_notes, risks, fit_label, confidence_label, rubric_summary, synergy_explanation
 - frontline: exactly four hero objects
 - reserve: exactly two hero objects
@@ -602,7 +602,6 @@ def _analyze_candidate_bundle(state: WorkflowState) -> dict:
 
     llm = get_llm(role="analyzer")
     frozen: list[dict] = []
-    frozen_archetypes: set[str] = set()
     frozen_signatures: set[str] = set()
     structured_errors: list[dict] = []
     candidate_errors: list[dict] = []
@@ -655,9 +654,6 @@ def _analyze_candidate_bundle(state: WorkflowState) -> dict:
                     continue
                 frozen.append(proposal)
                 frozen_signatures.add(signature)
-                archetype = str(proposal.get("archetype", "")).casefold()
-                if archetype:
-                    frozen_archetypes.add(archetype)
                 if len(frozen) >= 3:
                     break
         if not pending_invalid or len(frozen) >= 3 or round_index >= 2:
@@ -674,11 +670,8 @@ def _analyze_candidate_bundle(state: WorkflowState) -> dict:
             f"Analyzer correction round {correction_rounds} rejected: "
             + ", ".join(rejected_codes)
         )
-        missing_archetypes = [value for value in ARCHETYPES if value not in frozen_archetypes]
         correction_request = {
-            "instruction": "Correct all invalid lineups together. Do not repeat or modify frozen valid lineups.",
-            "frozen_valid_archetypes": sorted(frozen_archetypes),
-            "required_archetypes": missing_archetypes,
+            "instruction": "Correct all invalid lineups together. Do not repeat or modify frozen valid lineups. Do not add a lineup solely to cover a missing archetype; valid recommendations may share an archetype.",
             "invalid_lineups": pending_invalid,
             "frozen_valid_lineups": [{"archetype": item.get("archetype"), "character_ids": [hero.get("character_id") for hero in item.get("frontline", []) + item.get("reserve", [])]} for item in frozen],
             "candidate_bundle": prompt_bundle,

@@ -18,7 +18,7 @@ from .build_packages import resolve_lineup_allocation
 from .role_scoring import boss_affinity_state
 
 
-LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v2"
+LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v3"
 BEAM_WIDTH = 50
 MAX_CANDIDATES = 10
 MAX_BRANCHING = 12
@@ -27,34 +27,33 @@ RESERVE_SIZE = 2
 LINEUP_SIZE = FRONTLINE_SIZE + RESERVE_SIZE
 
 SURVIVAL_ROLES = ("defense_mitigation", "recovery_protection", "tank_control")
+STRATEGIC_PREFERENCE_ROLES = (
+    "offensive_enablement",
+    "zone_setup",
+    *SURVIVAL_ROLES,
+    "mp_sustain",
+)
 
 CAPABILITY_TEMPLATES: dict[str, dict[str, Any]] = {
     "burst": {
         "mandatory": (
             {"id": "primary_damage", "roles": ("primary_damage",), "label": "credible primary damage"},
-            {"id": "offensive_enablement", "roles": ("offensive_enablement",), "label": "damage enablement"},
-            {"id": "survival", "roles": SURVIVAL_ROLES, "label": "survival or protection"},
         ),
-        "optional": ("af_support", "zone_setup", "boss_counter", "reserve_utility"),
+        "optional": ("af_support", *STRATEGIC_PREFERENCE_ROLES, "boss_counter", "reserve_utility"),
         "slot_roles": ("primary_damage", "offensive_enablement", "zone_setup", "boss_counter", "reserve_utility", "reserve_utility"),
     },
     "sustain": {
         "mandatory": (
             {"id": "primary_damage", "roles": ("primary_damage",), "label": "credible primary damage"},
-            {"id": "offensive_enablement", "roles": ("offensive_enablement",), "label": "damage enablement"},
-            {"id": "stability", "roles": SURVIVAL_ROLES, "label": "defensive or recovery stability"},
         ),
-        "optional": ("mp_sustain", "af_support", "zone_setup", "boss_counter", "reserve_utility"),
+        "optional": ("af_support", *STRATEGIC_PREFERENCE_ROLES, "boss_counter", "reserve_utility"),
         "slot_roles": ("primary_damage", "defense_mitigation", "recovery_protection", "offensive_enablement", "mp_sustain", "reserve_utility"),
     },
     "hybrid": {
         "mandatory": (
             {"id": "primary_damage", "roles": ("primary_damage",), "label": "credible primary damage"},
-            {"id": "setup", "roles": ("zone_setup", "offensive_enablement"), "label": "setup or enablement"},
-            {"id": "offensive_enablement", "roles": ("offensive_enablement",), "label": "support or damage enablement"},
-            {"id": "defensive_reliability", "roles": SURVIVAL_ROLES, "label": "defensive reliability"},
         ),
-        "optional": ("af_support", "mp_sustain", "boss_counter", "reserve_utility"),
+        "optional": ("af_support", *STRATEGIC_PREFERENCE_ROLES, "boss_counter", "reserve_utility"),
         "slot_roles": ("primary_damage", "zone_setup", "offensive_enablement", "defense_mitigation", "recovery_protection", "reserve_utility"),
     },
 }
@@ -293,7 +292,9 @@ def generate_lineup_candidates(
     selected = _select_diverse(deduplicated, max_candidates=max_candidates)
     present_archetypes = {candidate["archetype"] for candidate in selected}
     missing_archetypes = [value for value in CAPABILITY_TEMPLATES if value not in present_archetypes]
-    status = "success" if len(selected) >= 3 and not missing_archetypes else "partial"
+    # Archetype gaps are diagnostic only. A nonempty result is partial only
+    # when the input roster itself was reduced; H2 applies its own strategic gates.
+    status = "partial" if incomplete_exclusions else "success"
     diagnostics["pruning_reasons"] = [
         {"reason": "exact_or_near_duplicate", "count": len(candidates) - len(deduplicated)},
         {"reason": "diversity_cap", "count": max(0, len(deduplicated) - len(selected))},
@@ -1140,6 +1141,8 @@ def _select_diverse(candidates, *, max_candidates):
     ordered = sorted(candidates, key=_candidate_sort_key)
     selected: list[dict[str, Any]] = []
     for archetype in CAPABILITY_TEMPLATES:
+        if len(selected) >= max_candidates:
+            break
         candidate = next((item for item in ordered if item["archetype"] == archetype), None)
         if candidate and candidate not in selected:
             selected.append(candidate)
@@ -1225,11 +1228,9 @@ def _lineup_dependencies(entities):
 
 
 def _requires_mp_sustain(boss, role_scores):
-    tags = {str(value).casefold() for value in _values(boss.get("mechanic_tags"))}
     return bool(
         "recover_mp" in _required_counters(boss, role_scores)
-        or tags & {"mp", "long_fight", "attrition", "sustain"}
-        or boss.get("requires_mp_sustain")
+        or boss.get("requires_mp_sustain") is True
     )
 
 

@@ -99,7 +99,7 @@ def fixture(*, all_dps=False, setup_dependencies=None, unique_items=False, with_
     return characters, entities, role_scores
 
 
-def generate(*, all_dps=False, setup_dependencies=None, unique_items=False, with_sidekick=False):
+def generate(*, all_dps=False, setup_dependencies=None, unique_items=False, with_sidekick=False, max_candidates=10):
     characters, _, role_scores = fixture(
         all_dps=all_dps,
         setup_dependencies=setup_dependencies,
@@ -112,6 +112,7 @@ def generate(*, all_dps=False, setup_dependencies=None, unique_items=False, with
         sidekicks=sidekicks,
         boss={"name": "Mimi", "weak": ["Fire"]},
         role_scores=role_scores,
+        max_candidates=max_candidates,
     )
 
 
@@ -119,7 +120,12 @@ def test_templates_are_explicit_and_multifunction_heroes_can_cover_multiple_requ
     templates = build_capability_templates(boss={"name": "Mimi", "weak": ["Fire"]})
 
     assert set(templates) == {"burst", "sustain", "hybrid"}
-    assert all(template["mandatory"] for template in templates.values())
+    assert all([group["id"] for group in template["mandatory"]] == ["primary_damage"] for template in templates.values())
+    assert all(
+        {"offensive_enablement", "defense_mitigation", "recovery_protection", "tank_control", "zone_setup"}
+        <= set(template["optional"])
+        for template in templates.values()
+    )
     result = generate()
 
     assert result["candidate_count"] >= 1
@@ -171,12 +177,47 @@ def test_beam_search_is_bounded_deterministic_and_preserves_archetype_diversity(
     assert all(candidate["validation"]["valid"] for candidate in first["candidates"])
 
 
-def test_all_damage_lineups_fail_without_mandatory_coverage():
-    result = generate(all_dps=True)
+def test_generic_role_preferences_do_not_reject_legal_damage_lineups_or_require_three_archetypes():
+    result = generate(all_dps=True, max_candidates=1)
 
-    assert result["status"] == "zero"
-    assert result["candidate_count"] == 0
-    assert "missing_mandatory_coverage" in result["diagnostics"]["zero_candidate_causes"]
+    assert result["status"] == "success"
+    assert result["candidate_count"] == 1
+    assert len(result["missing_archetypes"]) == 2
+    assert result["candidates"][0]["coverage"]["mandatory"] == ["primary_damage"]
+    assert result["candidates"][0]["coverage"]["missing"] == []
+
+
+def test_generic_roles_remain_scored_as_preferences_and_explicit_sustain_is_still_required():
+    characters, dps_entities, _ = fixture(all_dps=True)
+    _, supported_entities, _ = fixture()
+    candidate = {
+        "archetype": "burst",
+        "character_ids": [character["id"] for character in characters],
+        "coverage": {"mandatory": ["primary_damage"], "missing": [], "setup_dependencies": []},
+    }
+
+    dps_score = score_lineup_candidate(candidate, entities={row["id"]: row for row in dps_entities})
+    supported_score = score_lineup_candidate(candidate, entities={row["id"]: row for row in supported_entities})
+    generic_sustain = build_capability_templates(boss={"mechanic_tags": ["sustain"]})
+    required_sustain = build_capability_templates(boss={"required_counters": ["recover_mp"]})
+    generic_sustain_result = generate_lineup_candidates(
+        characters=characters,
+        boss={"name": "Long fight", "mechanic_tags": ["sustain"]},
+        role_scores={"entities": dps_entities},
+    )
+    required_mp_result = generate_lineup_candidates(
+        characters=characters,
+        boss={"name": "MP counter", "required_counters": ["recover_mp"]},
+        role_scores={"entities": dps_entities},
+    )
+
+    assert dps_score["component_scores"]["sustain_mitigation"] == 0
+    assert supported_score["component_scores"]["sustain_mitigation"] > 0
+    assert generic_sustain["sustain"]["requires_mp_sustain"] is False
+    assert required_sustain["sustain"]["requires_mp_sustain"] is True
+    assert generic_sustain_result["candidate_count"] > 0
+    assert required_mp_result["candidate_count"] == 0
+    assert required_mp_result["diagnostics"]["rejection_counts"]["mandatory.counter.recover_mp"] > 0
 
 
 def test_required_setup_and_build_allocation_are_hard_candidate_gates():
@@ -187,6 +228,20 @@ def test_required_setup_and_build_allocation_are_hard_candidate_gates():
     allocation_result = generate(unique_items=True)
     assert allocation_result["status"] == "zero"
     assert "build_incompatibility" in allocation_result["diagnostics"]["zero_candidate_causes"]
+
+
+def test_source_established_boss_counter_remains_a_hard_candidate_gate():
+    characters, _, role_scores = fixture(all_dps=True)
+    role_scores["required_boss_counters"] = ["grant_status_immunity"]
+
+    result = generate_lineup_candidates(
+        characters=characters,
+        boss={"name": "Status boss", "weak": ["Fire"]},
+        role_scores=role_scores,
+    )
+
+    assert result["candidate_count"] == 0
+    assert result["diagnostics"]["rejection_counts"]["mandatory.counter.grant_status_immunity"] > 0
 
 
 def test_lineup_generation_selects_package_alternatives_before_rejecting_finite_items():
