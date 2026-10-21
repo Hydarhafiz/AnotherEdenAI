@@ -3,6 +3,7 @@
 from src.workflow.lineup_generation import (
     BEAM_WIDTH,
     build_capability_templates,
+    evaluate_backend_lineup,
     generate_lineup_candidates,
     score_lineup_candidate,
 )
@@ -218,6 +219,123 @@ def test_generic_roles_remain_scored_as_preferences_and_explicit_sustain_is_stil
     assert generic_sustain_result["candidate_count"] > 0
     assert required_mp_result["candidate_count"] == 0
     assert required_mp_result["diagnostics"]["rejection_counts"]["mandatory.counter.recover_mp"] > 0
+
+
+def test_frontline_support_scoring_and_reserve_after_switch_evidence_are_separate():
+    characters, entities, role_scores = fixture()
+    entity_map = {row["id"]: row for row in entities}
+    role_scores["required_boss_counters"] = ["grant_status_immunity"]
+    for row in entities:
+        row["sa_state"] = "not_awakened"
+        package = {
+            "id": f"skill-package:{row['id']}",
+            "skill_ids": [f"skill:{row['id']}:{index}" for index in range(3)],
+            "skill_family_ids": [f"family:{row['id']}:{index}" for index in range(3)],
+            "package_size": 3,
+            "slot_limit": 3,
+            "primary_damage_usable": True,
+            "role_scores": dict(row["role_scores"]),
+            "role_ids": list(row["role_ids"]),
+            "evidence": {
+                role: [
+                    {
+                        **evidence,
+                        "direction": "",
+                        "target": "",
+                        "trigger": "",
+                    }
+                    for evidence in rows
+                ]
+                for role, rows in row["evidence"].items()
+            },
+            "skill_review_evidence": [],
+            "legal": True,
+        }
+        row["default_package"] = package
+
+    frontline_self = entity_map["character:0"]["default_package"]
+    frontline_self["evidence"]["defense_mitigation"] = [{
+        "fact_id": "fact:hero0:self-mitigation",
+        "capability": "damage_reduction",
+        "direction": "self",
+        "target": "self",
+        "trigger": "turn_start",
+    }]
+    frontline_self["skill_review_evidence"] = [
+        {
+            "skill_id": "skill:hero0:reviewed",
+            "skill_name": "Reviewed Attack",
+            "reviewed_capabilities": ["direct_damage"],
+            "proposal_counts": {"proposed": 1, "reviewed": 1, "proven": 1, "unreviewed": 0},
+        },
+        {
+            "skill_id": "skill:hero0:unreviewed",
+            "skill_name": "Unreviewed Support",
+            "reviewed_capabilities": [],
+            "proposal_counts": {"proposed": 1, "reviewed": 0, "proven": 0, "unreviewed": 1},
+        },
+    ]
+    reserve = entity_map["character:4"]["default_package"]
+    reserve["role_scores"].update({"defense_mitigation": 2, "boss_counter": 1})
+    reserve["role_ids"] = sorted(set(reserve["role_ids"]) | {"defense_mitigation", "boss_counter"})
+    reserve["evidence"]["defense_mitigation"] = [{
+        "fact_id": "fact:hero4:self-mitigation",
+        "capability": "damage_reduction",
+        "direction": "self",
+        "target": "self",
+        "trigger": "turn_start",
+    }]
+    reserve["evidence"]["boss_counter"] = [{
+        "fact_id": "fact:hero4:status-immunity",
+        "capability": "grant_status_immunity",
+        "direction": "ally",
+        "target": "party",
+        "trigger": "none",
+    }]
+
+    candidate, reasons = evaluate_backend_lineup(
+        archetype="burst",
+        character_ids=[row["id"] for row in characters],
+        entities=entity_map,
+        role_scores=role_scores,
+        boss={"name": "Placement test"},
+    )
+
+    assert reasons == []
+    assert candidate["validation"]["valid"] is True
+    assert candidate["coverage"]["required_boss_counters"] == ["grant_status_immunity"]
+    assert candidate["coverage"]["roles_by_character_placement"]["reserve_after_switch"] == [
+        "boss_counter", "defense_mitigation", "mp_sustain", "primary_damage", "reserve_utility",
+    ]
+    assert candidate["coverage"]["required_boss_counters_by_placement"] == {
+        "frontline": [],
+        "reserve_after_switch": ["grant_status_immunity"],
+    }
+    assert "requires switching" in candidate["coverage"]["required_boss_counter_scope"]
+    assert candidate["component_scores"]["synergy"] == 8
+    assert candidate["component_scores"]["sustain_mitigation"] == 14
+    assert candidate["component_scores"]["reserve_utility"] == 10
+    assert candidate["placement_role_scores"]["reserve_after_switch"]["defense_mitigation"] == 2
+    assert candidate["placement_role_scores"]["frontline"]["defense_mitigation"] == 7
+    assert candidate["component_score_scope"]["synergy"].startswith("Frontline role breadth only")
+    self_rows = candidate["coverage"]["evidence"]["defense_mitigation"]
+    frontline_self = next(row for row in self_rows if row["fact_id"] == "fact:hero0:self-mitigation")
+    reserve_self = next(row for row in self_rows if row["fact_id"] == "fact:hero4:self-mitigation")
+    reserve_counter = next(row for row in candidate["coverage"]["evidence"]["boss_counter"] if row["fact_id"] == "fact:hero4:status-immunity")
+    assert frontline_self["target"] == "self" and frontline_self["placement"] == "frontline"
+    assert reserve_self["target"] == "self" and reserve_self["placement"] == "reserve_after_switch"
+    assert reserve_counter["target"] == "party" and reserve_counter["placement"] == "reserve_after_switch"
+    assert candidate["evidence_diagnostics"]["scorer_uncertainty_count"] == 0
+    assert candidate["evidence_diagnostics"]["skills_with_reviewed_capabilities"] == 1
+    assert candidate["evidence_diagnostics"]["skills_without_reviewed_capabilities"] == [{
+        "character_id": "character:0",
+        "skill_id": "skill:hero0:unreviewed",
+        "skill_name": "Unreviewed Support",
+        "placement": "frontline",
+    }]
+    assert candidate["evidence_diagnostics"]["unreviewed_proposal_count"] == 1
+    assert candidate["evidence_diagnostics"]["source_effect_coverage"] == "not_established"
+    assert "not proof of no capability" in candidate["evidence_diagnostics"]["absence_interpretation"]
 
 
 def test_required_setup_and_build_allocation_are_hard_candidate_gates():

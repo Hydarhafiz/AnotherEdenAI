@@ -1,0 +1,23 @@
+{
+  "artifact_type": "curated_pilot_review",
+  "artifact_version": "3.3.0",
+  "decision_counts": {
+    "approve": 0,
+    "correct": 1,
+    "reject": 0
+  },
+  "phase": "defensive_setup",
+  "review_schema_version": "3.2.0",
+  "review_scope": "Correct only Holy Mark Stacking damage-reduction direction and target to self/self. Retain the reviewed 50% magnitude and turn-start trigger; do not review Cover or other Anabel facts.",
+  "reviewer": "codex-milestone-6-p3",
+  "row_count": 1,
+  "source_facts": [
+    {
+      "character_name": "Anabel",
+      "fact_name": "Holy Mark Stacking",
+      "source_fact_id": "passive:c3fbe82c9a081c027401",
+      "source_url": "https://anothereden.wiki/w/Anabel",
+      "source_capture_sha256": "675b1de8404d0def0d4851089511cd548b5500a1671c508a4d21c7f579851f01"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ CATALOG_PATH = Path("src/etl/kit_catalog.json")
 REVIEW_PATH = Path("src/etl/review_batches/m6_p2_pilot_curated.csv")
 GHOSTLY_REVIEW_PATH = Path("src/etl/review_batches/m6_p3_toova_ghostly_curated.csv")
 DOUBLE_CRUSH_REVIEW_PATH = Path("src/etl/review_batches/m6_p3_toova_double_crush_curated.csv")
+ANABEL_REVIEW_PATH = Path("src/etl/review_batches/m6_p3_anabel_holy_mark_curated.csv")
 POOL_NAMES = [
     "Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu", "Cerrine", "Levia",
     "Shion", "Toova", "Suzette", "Anabel", "Radias", "Prai", "Aisha", "Rosetta",
@@ -181,8 +182,11 @@ def test_curated_review_batch_replays_and_materializes_only_reviewed_exact_facts
     heal = next(row for row in rosetta_rows if row["value"] == "heal_hp")
     assert barrier["magnitude_value"] == "30" and barrier["activation_count"] == "3"
     assert barrier.get("qualifiers", {}) == {}
+    assert barrier["direction"] == "ally" and barrier["target"] == "main_and_reserve"
     assert immunity["activation_count"] == "3"
+    assert immunity["direction"] == "ally" and immunity["target"] == "party"
     assert immunity["magnitude_value"] == "" and immunity.get("qualifiers", {}) == {}
+    assert heal["direction"] == "ally" and heal["target"] == "main_and_reserve"
     assert heal["magnitude_value"] == "" and heal["activation_count"] == "" and heal.get("qualifiers", {}) == {}
 
     yuna_rows = evidence("skill:51c08cb8679f98867702")
@@ -209,6 +213,40 @@ def test_curated_review_batch_replays_and_materializes_only_reviewed_exact_facts
         row["proposal_id"] == "840b17ea2d70c5bc7b75a1ad" and row["decision"] == "reject"
         for row in batch_rows
     )
+
+
+def test_anabel_holy_mark_review_keeps_damage_reduction_personal_and_conditional(tmp_path: Path):
+    catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    anabel = next(
+        row for row in catalog["characters"]
+        if row["character"]["display_name"] == "Anabel" and not row["character"].get("is_SA")
+    )
+    holy_mark = next(row for row in anabel["passive_skills"] if row["name"] == "Holy Mark Stacking")
+    reviews_path = tmp_path / "capability_reviews.json"
+
+    imported = import_review_batch(ANABEL_REVIEW_PATH, [holy_mark], reviews_path=reviews_path)
+    with ANABEL_REVIEW_PATH.open(encoding="utf-8", newline="") as stream:
+        decisions = list(csv.DictReader(stream))
+
+    assert len(decisions) == 1
+    assert decisions[0]["source_fact_id"] == "passive:c3fbe82c9a081c027401"
+    assert decisions[0]["decision"] == "correct"
+    assert decisions[0]["corrected_direction"] == "self"
+    assert decisions[0]["corrected_target"] == "self"
+    assert decisions[0]["corrected_magnitude_value"] == ""
+    assert decisions[0]["corrected_trigger"] == ""
+    assert any(row["proposal_id"] == decisions[0]["proposal_id"] for row in imported["decisions"])
+
+    capabilities, dependencies, evidence, _version, diagnostics = materialize_atomic(holy_mark, reviews_path)
+    mitigation = next(row for row in evidence if row["value"] == "damage_reduction")
+    assert capabilities == ["damage_reduction"]
+    assert dependencies == []
+    assert mitigation["direction"] == "self" and mitigation["target"] == "self"
+    assert mitigation["magnitude_value"] == "50" and mitigation["magnitude_unit"] == "percent"
+    assert mitigation["trigger"] == "turn_start"
+    assert diagnostics["proven"] == 1 and diagnostics["candidate"] == 1
+    assert not any(row["value"] == "cover" for row in evidence)
+    assert anabel["receipt"]["source_revision"] in decisions[0]["reviewer_notes"]
 
 
 def test_curated_fact_receipts_match_the_source_catalog_and_reviewed_decisions():

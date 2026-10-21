@@ -18,7 +18,7 @@ from .build_packages import resolve_lineup_allocation
 from .role_scoring import boss_affinity_state
 
 
-LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v3"
+LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v4"
 BEAM_WIDTH = 50
 MAX_CANDIDATES = 10
 MAX_BRANCHING = 12
@@ -901,8 +901,19 @@ def _evaluate_candidate(*, archetype, character_ids, skill_packages=None, sideki
         for entity_id in character_ids
     }
     selected_entities = {
-        entity_id: _apply_skill_package(entities[entity_id], selected_skill_packages[entity_id])
-        for entity_id in character_ids
+        entity_id: _apply_skill_package(
+            entities[entity_id],
+            selected_skill_packages[entity_id],
+            placement=("frontline" if index < FRONTLINE_SIZE else "reserve_after_switch"),
+        )
+        for index, entity_id in enumerate(character_ids)
+    }
+    placed_skill_packages = {
+        entity_id: _skill_package_at_placement(
+            selected_skill_packages[entity_id],
+            "frontline" if index < FRONTLINE_SIZE else "reserve_after_switch",
+        )
+        for index, entity_id in enumerate(character_ids)
     }
     candidate = {
         "id": _stable_id(
@@ -930,7 +941,7 @@ def _evaluate_candidate(*, archetype, character_ids, skill_packages=None, sideki
             entity_id: str(selected_skill_packages[entity_id].get("id") or "")
             for entity_id in character_ids
         },
-        "skill_packages": selected_skill_packages,
+        "skill_packages": placed_skill_packages,
         "build_package_ids": package_ids,
         "build_packages": selected_packages,
         "build_allocation": allocation.get("allocation", {"scope": "lineup", "items": []}),
@@ -938,9 +949,16 @@ def _evaluate_candidate(*, archetype, character_ids, skill_packages=None, sideki
         "coverage": coverage,
         "score": score["score"],
         "component_scores": score["component_scores"],
+        "placement_role_scores": score["placement_role_scores"],
+        "component_score_scope": score["component_score_scope"],
         "penalties": score["penalties"],
         "assumptions": score["assumptions"],
         "uncertainty": score["uncertainty"],
+        "evidence_diagnostics": _selected_skill_evidence_diagnostics(
+            character_ids,
+            selected_skill_packages,
+            score["uncertainty"]["count"],
+        ),
         "validation": {
             "valid": True,
             "character_count": LINEUP_SIZE,
@@ -957,8 +975,12 @@ def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entitie
     selected_skill_packages = selected_skill_packages or {}
     selected_packages = selected_packages or {}
     selected = [
-        _apply_skill_package(entities[entity_id], selected_skill_packages.get(entity_id))
-        for entity_id in character_ids
+        _apply_skill_package(
+            entities[entity_id],
+            selected_skill_packages.get(entity_id),
+            placement=("frontline" if index < FRONTLINE_SIZE else "reserve_after_switch"),
+        )
+        for index, entity_id in enumerate(character_ids)
     ]
     selected_sidekicks = [sidekick_entities[entity_id] for entity_id in sidekick_pair if entity_id and entity_id in sidekick_entities]
     all_entities = [*selected, *selected_sidekicks]
@@ -1011,6 +1033,24 @@ def _coverage(character_ids, sidekick_pair, template, entities, sidekick_entitie
         "mandatory": mandatory_ids,
         "optional": optional,
         "covered_roles": sorted(covered_roles),
+        "roles_by_character_placement": {
+            "frontline": sorted({role for entity in selected[:FRONTLINE_SIZE] for role in _role_ids(entity)}),
+            "reserve_after_switch": sorted({role for entity in selected[FRONTLINE_SIZE:] for role in _role_ids(entity)}),
+        },
+        "required_boss_counters_by_placement": {
+            placement: sorted({
+                str(row.get("capability"))
+                for row in evidence_by_role.get("boss_counter", [])
+                if isinstance(row, dict)
+                and row.get("placement") == placement
+                and row.get("capability") in required_counters
+            })
+            for placement in ("frontline", "reserve_after_switch")
+        },
+        "required_boss_counter_scope": (
+            "The lineup legality gate may be met by any selected character; a counter listed under "
+            "reserve_after_switch requires switching and is not immediately active frontline support."
+        ),
         "missing": sorted(set(missing)),
         "required_boss_counters": required_counters,
         "provided_capabilities": sorted(capabilities),
@@ -1027,8 +1067,12 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
     selected_skill_packages = selected_skill_packages or {}
     selected_packages = selected_packages or {}
     selected = [
-        _apply_skill_package(entities[entity_id], selected_skill_packages.get(entity_id))
-        for entity_id in character_ids
+        _apply_skill_package(
+            entities[entity_id],
+            selected_skill_packages.get(entity_id),
+            placement=("frontline" if index < FRONTLINE_SIZE else "reserve_after_switch"),
+        )
+        for index, entity_id in enumerate(character_ids)
     ]
     frontline = selected[:FRONTLINE_SIZE]
     reserve = selected[FRONTLINE_SIZE:]
@@ -1043,8 +1087,8 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
         for entity in selected
     )
     setup = max(0, len(coverage.get("setup_dependencies", [])) - len([item for item in coverage.get("missing", []) if ".setup." in item]))
-    synergy = sum(max(0, len(_role_ids(entity)) - 1) for entity in selected)
-    sustain = sum(_role_score(entity, role) for entity in selected for role in SURVIVAL_ROLES + ("mp_sustain",))
+    synergy = sum(max(0, len(_role_ids(entity)) - 1) for entity in frontline)
+    sustain = sum(_role_score(entity, role) for entity in frontline for role in SURVIVAL_ROLES + ("mp_sustain",))
     package_ready = sum(1 for entity in selected if _package_ready(entity))
     sidekick_score = sum(sum(_role_score(entity, role) for role in _all_roles()) for entity in sidekicks)
     reserve_utility = sum(_role_score(entity, "reserve_utility") + _role_score(entity, "mp_sustain") for entity in reserve)
@@ -1097,12 +1141,75 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
     return {
         "score": round(float(score), 4),
         "component_scores": component_scores,
+        "placement_role_scores": {
+            "frontline": _aggregate_role_scores(frontline),
+            "reserve_after_switch": _aggregate_role_scores(reserve),
+        },
+        "component_score_scope": {
+            "boss_matchup": "All six selected characters; reserve attacks may require switching in.",
+            "synergy": "Frontline role breadth only; it does not measure cross-character effect interactions.",
+            "sustain_mitigation": "Frontline role scores only; self-targeted effects protect their user.",
+            "reserve_utility": "Potential utility assigned to reserve characters; it is not frontline coverage.",
+        },
         "penalties": penalties,
         "assumptions": assumptions,
         "uncertainty": {
             "count": uncertainty_count,
             "boss_affinity_state": role_scores_affinity_state(boss),
         },
+    }
+
+
+def _aggregate_role_scores(entities: list[dict[str, Any]]) -> dict[str, int]:
+    return {
+        role: sum(_role_score(entity, role) for entity in entities)
+        for role in _all_roles()
+        if any(_role_score(entity, role) for entity in entities)
+    }
+
+
+def _selected_skill_evidence_diagnostics(
+    character_ids: list[str],
+    selected_skill_packages: dict[str, dict[str, Any]],
+    scorer_uncertainty_count: int,
+) -> dict[str, Any]:
+    selected_skills = []
+    for index, entity_id in enumerate(character_ids):
+        placement = "frontline" if index < FRONTLINE_SIZE else "reserve_after_switch"
+        package = selected_skill_packages.get(entity_id) or {}
+        character_id = str(package.get("character_id") or entity_id)
+        for skill in package.get("skill_review_evidence") or []:
+            selected_skills.append({
+                "character_id": character_id,
+                "placement": placement,
+                **skill,
+            })
+
+    without_reviewed_capabilities = [
+        skill for skill in selected_skills if not skill.get("reviewed_capabilities")
+    ]
+    unreviewed_counts = [
+        skill.get("proposal_counts", {}).get("unreviewed")
+        for skill in selected_skills
+    ]
+    unreviewed_proposal_count = (
+        sum(unreviewed_counts)
+        if selected_skills and all(value is not None for value in unreviewed_counts)
+        else None
+    )
+    return {
+        "selected_skill_count": len(selected_skills),
+        "skills_with_reviewed_capabilities": len(selected_skills) - len(without_reviewed_capabilities),
+        "skills_without_reviewed_capabilities": [
+            {key: skill.get(key) for key in ("character_id", "skill_id", "skill_name", "placement")}
+            for skill in without_reviewed_capabilities
+        ],
+        "unreviewed_proposal_count": unreviewed_proposal_count,
+        "selected_skills": selected_skills,
+        "source_effect_coverage": "not_established",
+        "scorer_uncertainty_count": scorer_uncertainty_count,
+        "scorer_uncertainty_scope": "Unknown SA states and damage-matchup states represented by the current scorer.",
+        "absence_interpretation": "No reviewed capability evidence is not proof of no capability.",
     }
 
 
@@ -1304,27 +1411,45 @@ def _build_package_options(entity):
     return []
 
 
-def _apply_skill_package(entity, package):
+def _skill_package_at_placement(package: dict[str, Any], placement: str) -> dict[str, Any]:
+    """Copy a package and stamp its evidence with the lineup position."""
+    if not isinstance(package, dict):
+        return {}
+    placed = dict(package)
+    evidence = package.get("evidence")
+    if isinstance(evidence, dict):
+        placed["evidence"] = {
+            str(role): [
+                {**row, "placement": placement} if isinstance(row, dict) else row
+                for row in rows
+            ] if isinstance(rows, list) else []
+            for role, rows in evidence.items()
+        }
+    return placed
+
+
+def _apply_skill_package(entity, package, *, placement=None):
     """Overlay one selected D2 package without mutating the source entity."""
     if not isinstance(package, dict):
         return dict(entity)
+    placed_package = _skill_package_at_placement(package, placement) if placement else package
     selected = dict(entity)
-    selected["default_package"] = package
-    selected["selected_skill_package"] = package
-    if isinstance(package.get("role_scores"), dict):
-        selected["role_scores"] = dict(package["role_scores"])
-    if isinstance(package.get("role_ids"), list):
-        selected["role_ids"] = list(package["role_ids"])
-    if isinstance(package.get("evidence"), dict):
+    selected["default_package"] = placed_package
+    selected["selected_skill_package"] = placed_package
+    if isinstance(placed_package.get("role_scores"), dict):
+        selected["role_scores"] = dict(placed_package["role_scores"])
+    if isinstance(placed_package.get("role_ids"), list):
+        selected["role_ids"] = list(placed_package["role_ids"])
+    if isinstance(placed_package.get("evidence"), dict):
         selected["evidence"] = {
             str(role): list(rows) if isinstance(rows, list) else []
-            for role, rows in package["evidence"].items()
+            for role, rows in placed_package["evidence"].items()
         }
-    if "primary_damage_usable" in package:
-        selected["primary_damage_usable"] = bool(package["primary_damage_usable"])
-    selected["primary_damage_weakness_bonus"] = _numeric(package.get("primary_damage_weakness_bonus"))
-    selected["damage_matchups"] = list(package.get("damage_matchups") or [])
-    selected["package_ready"] = bool(package.get("legal", True))
+    if "primary_damage_usable" in placed_package:
+        selected["primary_damage_usable"] = bool(placed_package["primary_damage_usable"])
+    selected["primary_damage_weakness_bonus"] = _numeric(placed_package.get("primary_damage_weakness_bonus"))
+    selected["damage_matchups"] = list(placed_package.get("damage_matchups") or [])
+    selected["package_ready"] = bool(placed_package.get("legal", True))
     return selected
 
 

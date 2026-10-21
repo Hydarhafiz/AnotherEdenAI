@@ -34,6 +34,16 @@ Readiness signals:
 - Repeated candidate-quality failures are attributable to low-value unreviewed facts rather than missing high-value coverage, search, allocation, or boss evidence.
 - The demonstrated benefit justifies the manual-review cost without weakening conservative proof authority.
 
+## Recommendation-Quality Scoring Follow-Ups
+
+Deferred beyond the bounded Milestone 6 placement correction. Prioritize only where a pinned scenario shows that the missing distinction can change a legal team recommendation.
+
+- Model damage and healing magnitude, including conditional and damage-scaled healing, before comparing those effects quantitatively.
+- Review selected but nonessential skill evidence in bounded batches when tied or top-ranked candidates depend on it; current examples include Levia's selected attacks and Feinne's healing package.
+- Refine Toova's Venom versus Ghostly Whisper ranking, including the harmful Pain/Poison interaction against Celestial Mushroom.
+- Represent conditional-effect activation and reserve-after-switch timing more precisely where it changes available counterplay.
+- Compare competing Zone effects and timing, then evaluate detailed battle execution only when pinned scenarios justify that added model.
+
 ## Battle Mechanics Knowledge Base
 
 Deferred from Milestone 2 because boss and character ETL already expands the data surface significantly.

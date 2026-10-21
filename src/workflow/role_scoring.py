@@ -228,7 +228,7 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
     selected_facts = [fact for fact in executable if _fact_id(fact) in selected_ids]
     score_facts = selected_facts if package_options else executable
     scores, evidence = _scores_and_evidence(
-        [*score_facts, *passive], boss, required_counters, placement="frontline"
+        [*score_facts, *passive], boss, required_counters, placement="unassigned"
     )
     rejection_reasons = []
     if character.get("eligible") is False or character.get("ownership_valid") is False or character.get("item_legal") is False:
@@ -239,7 +239,7 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         "id": entity_id,
         "name": name,
         "entity_type": "character",
-        "placement": "frontline",
+        "placement": "unassigned",
         "sa_state": sa_state,
         "light_shadow_points": light_shadow_points,
         "skill_slot_limit": package_frontier["slot_limit"],
@@ -461,7 +461,7 @@ def _profile_package_score(combo, passives, boss, required_counters, profile):
 def _make_skill_package(*, character, selected, passives, boss, required_counters, slot_limit, profile):
     facts = [fact for _, fact in selected]
     scores, evidence = _scores_and_evidence(
-        [*facts, *passives], boss, required_counters, placement="frontline"
+        [*facts, *passives], boss, required_counters, placement="unassigned"
     )
     skill_ids = [_fact_id(fact) for fact in facts]
     family_ids = [family_id for family_id, _ in selected]
@@ -514,6 +514,7 @@ def _make_skill_package(*, character, selected, passives, boss, required_counter
         "contextual_score": contextual_score,
         "evidence": evidence,
         "proven_capabilities": proven_capabilities,
+        "skill_review_evidence": _skill_review_evidence(facts),
         "untagged_skill_ids": untagged,
         "setup_dependency_ids": dependencies,
         "dependency_ids": dependencies,
@@ -812,10 +813,57 @@ def _evidence(fact: dict[str, Any], capabilities: set[str], placement: str) -> l
         matched = [row for row in raw if isinstance(row, dict) and row.get("kind") == "capability" and row.get("value") == capability]
         if matched:
             for row in matched:
-                entries.append({"fact_id": fact_id, "capability": capability, "evidence_id": str(row.get("source_id") or row.get("source_fact_id") or fact_id), "placement": placement})
+                entries.append({
+                    "fact_id": fact_id,
+                    "capability": capability,
+                    "evidence_id": str(row.get("source_id") or row.get("source_fact_id") or fact_id),
+                    "direction": str(row.get("direction") or ""),
+                    "target": str(row.get("target") or ""),
+                    "trigger": str(row.get("trigger") or ""),
+                    "placement": placement,
+                })
         else:
-            entries.append({"fact_id": fact_id, "capability": capability, "evidence_id": fact_id, "placement": placement})
+            entries.append({
+                "fact_id": fact_id,
+                "capability": capability,
+                "evidence_id": fact_id,
+                "direction": "",
+                "target": "",
+                "trigger": "",
+                "placement": placement,
+            })
     return entries
+
+
+def _skill_review_evidence(facts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    evidence = []
+    for fact in facts:
+        diagnostics = _as_mapping(
+            fact.get("capability_diagnostics_json", fact.get("capability_diagnostics", {}))
+        )
+        proposal_counts = {
+            key: _optional_int(diagnostics.get(source_key))
+            for key, source_key in (
+                ("proposed", "proposed"),
+                ("reviewed", "reviewed"),
+                ("proven", "proven"),
+                ("unreviewed", "candidate"),
+            )
+        }
+        evidence.append({
+            "skill_id": _fact_id(fact),
+            "skill_name": str(fact.get("name") or ""),
+            "reviewed_capabilities": sorted(_proven_capabilities(fact)),
+            "proposal_counts": proposal_counts,
+        })
+    return evidence
+
+
+def _optional_int(value: Any) -> int | None:
+    try:
+        return int(value) if value is not None else None
+    except (TypeError, ValueError):
+        return None
 
 
 def _evidence_ids(fact: dict[str, Any], capabilities: set[str]) -> list[str]:
