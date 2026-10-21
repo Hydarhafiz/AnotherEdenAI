@@ -380,3 +380,11 @@ def test_double_crush_review_materializes_source_facts_and_adds_zone_score(tmp_p
     assert package["role_scores"]["offensive_enablement"] == 0
     assert package["role_scores"]["zone_setup"] == 1
     assert package["contextual_score"] == 48
+    double_crush_matchup = next(
+        row for row in package["damage_matchups"]
+        if row["fact_id"] == "skill:2969aa07d12b8d18a8a4"
+    )
+    assert double_crush_matchup["element"] == ["Earth"]
+    assert double_crush_matchup["attack_type"] == ["Magic"]
+    assert double_crush_matchup["state"] == "neutral"
+    assert package["primary_damage_weakness_bonus"] == 0

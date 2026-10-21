@@ -19,9 +19,10 @@ from .build_packages import (
 )
 
 
-ROLE_SCORE_POLICY_VERSION = "feature-d-role-score-v1"
-SKILL_PACKAGE_POLICY_VERSION = "feature-d2-skill-package-v1"
+ROLE_SCORE_POLICY_VERSION = "feature-d-role-score-v2"
+SKILL_PACKAGE_POLICY_VERSION = "feature-d2-skill-package-v2"
 LIGHT_SHADOW_FOUR_SKILL_THRESHOLD = 80
+PRIMARY_DAMAGE_WEAKNESS_BONUS = 3
 ROLE_DIMENSIONS = (
     "primary_damage",
     "offensive_enablement",
@@ -45,6 +46,10 @@ MAX_PACKAGE_OPTIONS = 3
 _AFFINITY_FIELDS = ("weak", "resist", "null", "absorb")
 _AFFINITY_UNKNOWN_SENTINELS = {"", "unknown"}
 _AFFINITY_UNKNOWN_STATES = {"unknown", "incomplete"}
+_ELEMENT_AFFINITIES = {
+    "fire", "water", "wind", "earth", "thunder", "shade", "crystal", "non-type",
+}
+_ATTACK_TYPE_AFFINITIES = {"slash", "pierce", "blunt", "magic"}
 
 _PACKAGE_PROFILES = {
     "balanced": {
@@ -225,7 +230,7 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
     scores, evidence = _scores_and_evidence(
         [*score_facts, *passive], boss, required_counters, placement="frontline"
     )
-    rejection_reasons = _character_rejections(executable, boss)
+    rejection_reasons = []
     if character.get("eligible") is False or character.get("ownership_valid") is False or character.get("item_legal") is False:
         rejection_reasons = ["character.ownership_or_item_illegal", *rejection_reasons]
     eligible = not rejection_reasons
@@ -250,6 +255,10 @@ def _character_entity(*, entity_id: str, name: str, character: dict[str, Any], f
         "skill_package_frontier": package_frontier,
         "skill_packages": package_options,
         "default_package": package,
+        "damage_matchups": list(package.get("damage_matchups") or []),
+        "primary_damage_weakness_bonus": int(
+            package.get("primary_damage_weakness_bonus") or 0
+        ),
         "artifact_versions": _artifact_versions([*executable, *passive]),
         "policy_version": policy_version,
         "source_character_id": character.get("id"),
@@ -381,6 +390,8 @@ def _skill_package_frontier(
             package["contextual_score"],
             tuple(package["proven_capabilities"]),
             tuple(package["dependency_ids"]),
+            package["primary_damage_weakness_bonus"],
+            tuple(sorted(matchup["state"] for matchup in package["damage_matchups"])),
         )
         current = unique.get(signature)
         if current is None or _package_sort_key(package) < _package_sort_key(current):
@@ -434,7 +445,17 @@ def _profile_package_score(combo, passives, boss, required_counters, profile):
     facts = [fact for _, fact in combo]
     scores, _ = _scores_and_evidence([*facts, *passives], boss, required_counters, placement="frontline")
     weights = _PACKAGE_PROFILES[profile]
-    return sum(scores.get(role, 0) * weight for role, weight in weights.items())
+    weakness_bonus = sum(
+        PRIMARY_DAMAGE_WEAKNESS_BONUS
+        for fact in facts
+        if "direct_damage" in _proven_capabilities(fact)
+        and _damage_matchup_state(
+            _damage_dimension_values(fact, "element"),
+            _damage_dimension_values(fact, "attack_type"),
+            boss,
+        ) == "weak"
+    )
+    return sum(scores.get(role, 0) * weight for role, weight in weights.items()) + weakness_bonus
 
 
 def _make_skill_package(*, character, selected, passives, boss, required_counters, slot_limit, profile):
@@ -462,6 +483,11 @@ def _make_skill_package(*, character, selected, passives, boss, required_counter
         skill_ids,
         slot_limit,
     )
+    damage_matchups = [
+        _damage_matchup(fact, boss)
+        for fact in facts
+        if "direct_damage" in _proven_capabilities(fact)
+    ]
     return {
         "id": package_id,
         "policy_version": SKILL_PACKAGE_POLICY_VERSION,
@@ -476,10 +502,15 @@ def _make_skill_package(*, character, selected, passives, boss, required_counter
         "role_ids": role_ids,
         "role_scores": scores,
         "primary_damage_usable": any(
-            "direct_damage" in _proven_capabilities(fact)
-            and _usable_primary(fact, boss)
-            for fact in facts
+            matchup["state"] in {"neutral", "weak"}
+            for matchup in damage_matchups
         ),
+        "primary_damage_weakness_bonus": sum(
+            PRIMARY_DAMAGE_WEAKNESS_BONUS
+            for matchup in damage_matchups
+            if matchup["state"] == "weak"
+        ),
+        "damage_matchups": damage_matchups,
         "contextual_score": contextual_score,
         "evidence": evidence,
         "proven_capabilities": proven_capabilities,
@@ -493,12 +524,20 @@ def _make_skill_package(*, character, selected, passives, boss, required_counter
 def _package_dominates(left: dict[str, Any], right: dict[str, Any]) -> bool:
     left_scores = left.get("role_scores", {})
     right_scores = right.get("role_scores", {})
+    left_unknown_matchups = _unknown_damage_matchup_count(left)
+    right_unknown_matchups = _unknown_damage_matchup_count(right)
     at_least = all(
         left_scores.get(role, 0) >= right_scores.get(role, 0)
         for role in ROLE_DIMENSIONS
-    ) and left.get("contextual_score", 0) >= right.get("contextual_score", 0)
+    ) and (
+        left.get("contextual_score", 0) >= right.get("contextual_score", 0)
+        and left.get("primary_damage_weakness_bonus", 0) >= right.get("primary_damage_weakness_bonus", 0)
+        and left_unknown_matchups <= right_unknown_matchups
+    )
     strictly = (
         left.get("contextual_score", 0) > right.get("contextual_score", 0)
+        or left.get("primary_damage_weakness_bonus", 0) > right.get("primary_damage_weakness_bonus", 0)
+        or left_unknown_matchups < right_unknown_matchups
         or any(left_scores.get(role, 0) > right_scores.get(role, 0) for role in ROLE_DIMENSIONS)
     )
     return at_least and strictly
@@ -510,9 +549,19 @@ def _package_sort_key(package: dict[str, Any]) -> tuple[Any, ...]:
         -int(package.get("contextual_score", 0)),
         -int(scores.get("boss_counter", 0)),
         -int(scores.get("primary_damage", 0)),
+        -int(package.get("primary_damage_weakness_bonus", 0)),
+        _unknown_damage_matchup_count(package),
         _PROFILE_ORDER.index(package.get("profile")) if package.get("profile") in _PROFILE_ORDER else len(_PROFILE_ORDER),
         tuple(package.get("skill_family_ids", [])),
         str(package.get("id", "")),
+    )
+
+
+def _unknown_damage_matchup_count(package: dict[str, Any]) -> int:
+    return sum(
+        1
+        for matchup in (package.get("damage_matchups") or [])
+        if isinstance(matchup, dict) and matchup.get("state") == "unknown"
     )
 
 
@@ -582,6 +631,8 @@ def _empty_skill_package(*, character: dict[str, Any], light_shadow_points: int 
         "role_ids": [],
         "role_scores": {role: 0 for role in ROLE_DIMENSIONS},
         "primary_damage_usable": False,
+        "primary_damage_weakness_bonus": 0,
+        "damage_matchups": [],
         "contextual_score": 0,
         "evidence": {role: [] for role in ROLE_DIMENSIONS},
         "proven_capabilities": [],
@@ -633,7 +684,7 @@ def _shortlists(skills: list[dict[str, Any]], boss: dict[str, Any], required_cou
         choices = []
         for fact in skills:
             capabilities = _proven_capabilities(fact)
-            role_capabilities = _role_scoring_capabilities(capabilities, role, boss)
+            role_capabilities = _role_scoring_capabilities(capabilities, role, boss, fact)
             score = len(role_capabilities & _ROLE_CAPABILITIES[role])
             if role == "primary_damage" and _usable_primary(fact, boss):
                 score += 2
@@ -670,34 +721,6 @@ def _default_package(shortlists: dict[str, list[dict[str, Any]]]) -> dict[str, A
     return {"skill_ids": selected[:MAX_PACKAGE_SIZE], "package_size": len(selected), "role_id": role_id}
 
 
-def _character_rejections(skills: list[dict[str, Any]], boss: dict[str, Any]) -> list[str]:
-    damaging = [fact for fact in skills if "direct_damage" in _proven_capabilities(fact)]
-    if not damaging:
-        # A pure healer, tank, or enabler is still a viable contextual candidate;
-        # it simply cannot enter the primary-damage pool.
-        return []
-    usable = [fact for fact in damaging if _usable_primary(fact, boss)]
-    if usable:
-        return []
-    # Resistance is a matchup penalty, not a character-legality failure.  A
-    # resisted attacker may still be a legal reserve or cover another role,
-    # while the lineup-level primary-damage gate requires at least one
-    # neutral-or-better usable damage fact.  Null and absorb remain hard
-    # rejection states for a damage-only character when every damaging option
-    # is blocked, but a hero with another proven role must remain selectable.
-    blocked = [fact for fact in damaging if _affinity(fact) in _blocked_affinities(boss)]
-    if blocked and len(blocked) == len(damaging):
-        non_primary = {
-            capability
-            for fact in skills
-            for capability in _proven_capabilities(fact)
-            if capability not in {"direct_damage", "fixed_damage", "attack_again", "chain_attack", "follow_up_attack"}
-        }
-        if not non_primary:
-            return ["primary_damage.null_or_absorb"]
-    return []
-
-
 def _scores_and_evidence(facts: list[dict[str, Any]], boss: dict[str, Any], required_counters: list[str], *, placement: str) -> tuple[dict[str, int], dict[str, list[dict[str, str]]]]:
     scores = {role: 0 for role in ROLE_DIMENSIONS}
     evidence = {role: [] for role in ROLE_DIMENSIONS}
@@ -705,7 +728,7 @@ def _scores_and_evidence(facts: list[dict[str, Any]], boss: dict[str, Any], requ
     for fact in facts:
         capabilities = _proven_capabilities(fact)
         for role, accepted in _ROLE_CAPABILITIES.items():
-            matched = _role_scoring_capabilities(capabilities, role, boss) & accepted
+            matched = _role_scoring_capabilities(capabilities, role, boss, fact) & accepted
             if matched:
                 scores[role] += len(matched)
                 evidence[role].extend(_evidence(fact, matched, placement))
@@ -721,8 +744,10 @@ def _scores_and_evidence(facts: list[dict[str, Any]], boss: dict[str, Any], requ
 
 
 def _role_scoring_capabilities(
-    capabilities: set[str], role: str, boss: dict[str, Any]
+    capabilities: set[str], role: str, boss: dict[str, Any], fact: dict[str, Any]
 ) -> set[str]:
+    if role == "primary_damage" and not _usable_primary(fact, boss):
+        return capabilities - {"direct_damage"}
     if role != "offensive_enablement":
         return capabilities
     harmful = _BOSS_NON_BENEFICIAL_OFFENSIVE_CAPABILITIES.get(
@@ -811,21 +836,90 @@ def _required_boss_counters(boss: dict[str, Any], mechanics: list[dict[str, Any]
 
 
 def _usable_primary(fact: dict[str, Any], boss: dict[str, Any]) -> bool:
-    affinity = _affinity(fact)
-    unfavorable = _blocked_affinities(boss) | _resisted_affinities(boss)
-    return "direct_damage" in _proven_capabilities(fact) and bool(affinity) and affinity not in unfavorable
+    return (
+        "direct_damage" in _proven_capabilities(fact)
+        and _damage_matchup_state(
+            _damage_dimension_values(fact, "element"),
+            _damage_dimension_values(fact, "attack_type"),
+            boss,
+        ) in {"neutral", "weak"}
+    )
 
 
-def _blocked_affinities(boss: dict[str, Any]) -> set[str]:
-    return boss_affinity_values(boss, "null") | boss_affinity_values(boss, "absorb")
+def _damage_matchup(fact: dict[str, Any], boss: dict[str, Any]) -> dict[str, Any]:
+    elements = _damage_dimension_values(fact, "element")
+    attack_types = _damage_dimension_values(fact, "attack_type")
+    return {
+        "fact_id": _fact_id(fact),
+        "element": elements,
+        "attack_type": attack_types,
+        "state": _damage_matchup_state(elements, attack_types, boss),
+        "evidence_ids": _evidence_ids(fact, {"direct_damage"}),
+    }
 
 
-def _resisted_affinities(boss: dict[str, Any]) -> set[str]:
-    return boss_affinity_values(boss, "resist")
+def _damage_dimension_values(fact: dict[str, Any], dimension: str) -> list[str]:
+    raw = _as_list(fact.get("capability_evidence_json", fact.get("capability_evidence", [])))
+    values = []
+    for row in raw:
+        if (
+            not isinstance(row, dict)
+            or row.get("kind") != "capability"
+            or row.get("value") != "direct_damage"
+            or str(row.get("review_decision", "")).casefold() not in {"approve", "correct", "proven"}
+        ):
+            continue
+        qualifiers = _as_mapping(row.get("qualifiers", {}))
+        values.extend(_string_values(qualifiers.get(dimension)))
+    if not values:
+        values = _string_values(fact.get(dimension))
+    return sorted(set(value.strip() for value in values if value.strip()), key=str.casefold)
 
 
-def _affinity(fact: dict[str, Any]) -> str:
-    return _normalize_affinity(fact.get("element") or fact.get("affinity"))
+def _damage_matchup_state(
+    elements: list[str], attack_types: list[str], boss: dict[str, Any]
+) -> str:
+    """Classify source-stated attack properties without resolving conflicts between them."""
+    if (
+        boss_affinity_state(boss) in _AFFINITY_UNKNOWN_STATES
+        or len(elements) > 1
+        or len(attack_types) > 1
+    ):
+        return "unknown"
+
+    boss_affinities = set().union(*(boss_affinity_values(boss, field) for field in _AFFINITY_FIELDS))
+    normalized_elements = {_normalize_affinity(value) for value in elements}
+    normalized_attack_types = {_normalize_affinity(value) for value in attack_types}
+    if not normalized_elements and boss_affinities & _ELEMENT_AFFINITIES:
+        return "unknown"
+    if not normalized_attack_types and boss_affinities & _ATTACK_TYPE_AFFINITIES:
+        return "unknown"
+    if not normalized_elements and not normalized_attack_types:
+        return "unknown"
+
+    attack_values = normalized_elements | normalized_attack_types
+    weakness = attack_values & boss_affinity_values(boss, "weak")
+    resistance = attack_values & boss_affinity_values(boss, "resist")
+    blocked = attack_values & (
+        boss_affinity_values(boss, "null") | boss_affinity_values(boss, "absorb")
+    )
+    if weakness and (resistance or blocked):
+        return "unknown"
+    if blocked:
+        return "blocked"
+    if resistance:
+        return "resisted"
+    if weakness:
+        return "weak"
+    return "neutral"
+
+
+def _string_values(value: Any) -> list[str]:
+    if isinstance(value, str):
+        return [value.strip()] if value.strip() else []
+    if isinstance(value, (list, tuple, set)):
+        return [str(item).strip() for item in value if item is not None and str(item).strip()]
+    return []
 
 
 def _normalize_affinity(value: Any) -> str:
@@ -837,7 +931,7 @@ def _affinity_state(boss: dict[str, Any]) -> str:
 
 
 def boss_affinity_values(boss: dict[str, Any], field: str) -> set[str]:
-    """Return only known elemental values for one explicit affinity field."""
+    """Return only known element or attack-type values for one affinity field."""
     if field not in _AFFINITY_FIELDS:
         return set()
     state = _affinity_field_state(boss, field)

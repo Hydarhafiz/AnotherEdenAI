@@ -4,6 +4,7 @@ from src.workflow.lineup_generation import (
     BEAM_WIDTH,
     build_capability_templates,
     generate_lineup_candidates,
+    score_lineup_candidate,
 )
 from src.workflow.nodes.analyze import _analyze_candidate_bundle
 
@@ -126,6 +127,36 @@ def test_templates_are_explicit_and_multifunction_heroes_can_cover_multiple_requ
     assert "primary_damage" in first["coverage"]["covered_roles"]
     assert "offensive_enablement" in first["coverage"]["covered_roles"]
     assert {"offensive_enablement", "defense_mitigation"}.issubset(first["role_assignments"]["character:0"])
+
+
+def test_boss_weakness_bonus_uses_selected_attack_matchups_not_boss_weakness_presence():
+    characters, entities, _ = fixture()
+    entity_map = {entity["id"]: entity for entity in entities}
+    candidate = {
+        "archetype": "burst",
+        "character_ids": [character["id"] for character in characters],
+        "coverage": {"mandatory": ["primary_damage"], "missing": [], "setup_dependencies": []},
+    }
+
+    no_matched_attack = score_lineup_candidate(
+        candidate,
+        entities=entity_map,
+        boss={"name": "Boss", "weak": ["Fire"]},
+    )
+    candidate["skill_packages"] = {
+        "character:0": {
+            "primary_damage_weakness_bonus": 3,
+            "damage_matchups": [{"fact_id": "skill:fire-slash", "state": "weak"}],
+        }
+    }
+    one_matched_attack = score_lineup_candidate(
+        candidate,
+        entities=entity_map,
+        boss={"name": "Boss", "weak": ["Fire"]},
+    )
+
+    assert no_matched_attack["component_scores"]["boss_matchup"] == 24
+    assert one_matched_attack["component_scores"]["boss_matchup"] == 27
 
 
 def test_beam_search_is_bounded_deterministic_and_preserves_archetype_diversity():

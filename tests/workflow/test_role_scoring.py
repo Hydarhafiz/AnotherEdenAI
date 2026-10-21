@@ -20,7 +20,7 @@ def boss(**overrides):
     return value
 
 
-def fact(owner, name, capabilities, *, element="Neutral", fact_id=None, sa=False, state=None, evidence=True):
+def fact(owner, name, capabilities, *, element="Neutral", attack_type=None, fact_id=None, sa=False, state=None, evidence=True):
     value = {
         "id": fact_id or f"skill:{owner}:{name}",
         "character_name": owner,
@@ -33,10 +33,22 @@ def fact(owner, name, capabilities, *, element="Neutral", fact_id=None, sa=False
     if state:
         value["review_state"] = state
     if evidence:
-        value["capability_evidence_json"] = [
-            {"kind": "capability", "value": capability, "review_decision": "approve", "source_id": f"rule:{capability}"}
-            for capability in capabilities
-        ]
+        evidence_rows = []
+        for capability in capabilities:
+            row = {
+                "kind": "capability",
+                "value": capability,
+                "review_decision": "approve",
+                "source_id": f"rule:{capability}",
+            }
+            if capability == "direct_damage":
+                row["qualifiers"] = {}
+                if element:
+                    row["qualifiers"]["element"] = [element]
+                if attack_type:
+                    row["qualifiers"]["attack_type"] = [attack_type]
+            evidence_rows.append(row)
+        value["capability_evidence_json"] = evidence_rows
     return value
 
 
@@ -48,13 +60,17 @@ def entity(result, name):
     return next(value for value in result["entities"] if value["name"] == name and value["entity_type"] == "character")
 
 
-def test_hard_filters_reject_null_absorb_and_missing_primary_damage_before_role_pools():
+def test_matchup_blocks_primary_credit_without_marking_legal_characters_ineligible():
     result = derive_contextual_role_scores(
         boss=boss(null=["Fire"], absorb=["Water"]),
         characters=[character("NullFire"), character("AbsorbWater"), character("Utility"), character("NoSetup"), {**character("ItemIllegal"), "item_legal": False}, character("Neutral")],
         skills=[
             fact("NullFire", "Flame", ["direct_damage"], element="Fire"),
+            fact("NullFire", "Filler One", []),
+            fact("NullFire", "Filler Two", []),
             fact("AbsorbWater", "Wave", ["direct_damage"], element="Water"),
+            fact("AbsorbWater", "Filler One", []),
+            fact("AbsorbWater", "Filler Two", []),
             fact("Utility", "Heal", ["heal_hp"]),
             {**fact("NoSetup", "Blocked Setup", ["direct_damage"]), "setup_satisfied": False},
             fact("ItemIllegal", "Legal Damage", ["direct_damage"]),
@@ -63,8 +79,13 @@ def test_hard_filters_reject_null_absorb_and_missing_primary_damage_before_role_
         passives=[], sidekicks=[], stellar_awakened={},
     )
 
-    assert entity(result, "NullFire")["rejection_reasons"] == ["primary_damage.null_or_absorb"]
-    assert entity(result, "AbsorbWater")["rejection_reasons"] == ["primary_damage.null_or_absorb"]
+    for name in ("NullFire", "AbsorbWater"):
+        blocked = entity(result, name)
+        assert blocked["eligible"] is True
+        assert blocked["rejection_reasons"] == []
+        assert blocked["primary_damage_usable"] is False
+        assert blocked["role_scores"]["primary_damage"] == 0
+        assert blocked["default_package"]["legal"] is True
     assert entity(result, "Utility")["eligible"] is True
     assert entity(result, "NoSetup")["eligible"] is True
     assert entity(result, "ItemIllegal")["eligible"] is False
@@ -108,8 +129,78 @@ def test_unknown_affinity_sentinels_are_not_scored_as_known_matchups():
 
     fire_damage = entity(result, "FireDamage")
     assert result["affinity_state"] == "unknown"
-    assert fire_damage["primary_damage_usable"] is True
+    assert fire_damage["primary_damage_usable"] is False
+    assert fire_damage["damage_matchups"][0]["state"] == "unknown"
     assert fire_damage["rejection_reasons"] == []
+
+
+def test_attack_element_and_type_require_a_verified_weakness_match_and_preserve_conflicts():
+    result = derive_contextual_role_scores(
+        boss=boss(
+            id="rotte-rivel",
+            name="Rotte Rivel",
+            weak=["Fire"],
+            resist=["Water", "Earth", "Wind", "Blunt", "Magic"],
+        ),
+        characters=[character("FireSlash"), character("WindMagic"), character("FireMagic")],
+        skills=[
+            fact("FireSlash", "Fire Slash", ["direct_damage"], element="Fire", attack_type="Slash"),
+            fact("WindMagic", "Wind Magic", ["direct_damage"], element="Wind", attack_type="Magic"),
+            fact("FireMagic", "Fire Magic", ["direct_damage"], element="Fire", attack_type="Magic"),
+            fact("FireSlash", "Filler One", []),
+            fact("FireSlash", "Filler Two", []),
+            fact("WindMagic", "Filler One", []),
+            fact("WindMagic", "Filler Two", []),
+            fact("FireMagic", "Filler One", []),
+            fact("FireMagic", "Filler Two", []),
+        ],
+        passives=[], sidekicks=[], stellar_awakened={},
+    )
+
+    fire_slash = entity(result, "FireSlash")
+    wind_magic = entity(result, "WindMagic")
+    fire_magic = entity(result, "FireMagic")
+
+    assert fire_slash["damage_matchups"][0]["state"] == "weak"
+    assert fire_slash["role_scores"]["primary_damage"] == 3
+    assert fire_slash["primary_damage_weakness_bonus"] == 3
+    assert wind_magic["damage_matchups"][0]["state"] == "resisted"
+    assert wind_magic["primary_damage_usable"] is False
+    assert wind_magic["eligible"] is True
+    assert wind_magic["role_scores"]["primary_damage"] == 0
+    assert fire_magic["damage_matchups"][0]["state"] == "unknown"
+    assert fire_magic["primary_damage_usable"] is False
+    assert fire_magic["primary_damage_weakness_bonus"] == 0
+    assert fire_magic["eligible"] is True
+
+
+def test_known_attack_type_resistance_blocks_credit_without_rejecting_skill_or_character():
+    result = derive_contextual_role_scores(
+        boss=boss(
+            id="celestial-mushroom",
+            name="Celestial Mushroom",
+            resist=["Pierce", "Blunt"],
+        ),
+        characters=[character("Pierce"), character("Magic")],
+        skills=[
+            fact("Pierce", "Earth Pierce", ["direct_damage"], element="Earth", attack_type="Pierce"),
+            fact("Pierce", "Filler One", []),
+            fact("Pierce", "Filler Two", []),
+            fact("Magic", "Earth Magic", ["direct_damage"], element="Earth", attack_type="Magic"),
+            fact("Magic", "Filler One", []),
+            fact("Magic", "Filler Two", []),
+        ],
+        passives=[], sidekicks=[], stellar_awakened={},
+    )
+
+    pierce = entity(result, "Pierce")
+    magic = entity(result, "Magic")
+    assert pierce["damage_matchups"][0]["state"] == "resisted"
+    assert pierce["primary_damage_usable"] is False
+    assert pierce["eligible"] is True
+    assert pierce["default_package"]["legal"] is True
+    assert magic["damage_matchups"][0]["state"] == "neutral"
+    assert magic["primary_damage_usable"] is True
 
 
 def test_boss_counter_exceptions_preserve_required_counters_beyond_top_eight():
@@ -211,7 +302,7 @@ def test_shortlists_and_default_packages_are_available_bounded_and_reproducible(
 
 def test_celestial_mushroom_does_not_reward_pain_or_poison_but_keeps_venom_damage():
     skills = [
-        fact("Toova", "Venom", ["direct_damage", "inflict_pain", "inflict_poison"]),
+        fact("Toova", "Venom", ["direct_damage", "inflict_pain", "inflict_poison"], element=None, attack_type="Magic"),
         fact("Toova", "Damage Up", ["outgoing_damage_up"]),
         fact("Toova", "Filler", []),
     ]

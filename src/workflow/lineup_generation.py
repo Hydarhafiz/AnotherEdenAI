@@ -18,7 +18,7 @@ from .build_packages import resolve_lineup_allocation
 from .role_scoring import boss_affinity_state
 
 
-LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v1"
+LINEUP_GENERATION_POLICY_VERSION = "feature-f2-package-first-v2"
 BEAM_WIDTH = 50
 MAX_CANDIDATES = 10
 MAX_BRANCHING = 12
@@ -576,10 +576,17 @@ def _skill_package_options(entity):
 
 
 def _skill_package_sort_key(package):
+    unknown_matchups = sum(
+        1
+        for matchup in (package.get("damage_matchups") or [])
+        if isinstance(matchup, dict) and matchup.get("state") == "unknown"
+    )
     return (
         -_coerce_int(package.get("contextual_score"), 0),
         -_coerce_int((package.get("role_scores") or {}).get("boss_counter", 0), 0),
         -_coerce_int((package.get("role_scores") or {}).get("primary_damage", 0), 0),
+        -_coerce_int(package.get("primary_damage_weakness_bonus"), 0),
+        unknown_matchups,
         str(package.get("profile") or ""),
         tuple(str(value) for value in package.get("skill_family_ids", [])),
         str(package.get("id") or ""),
@@ -599,6 +606,10 @@ def _compact_package_frontier(frontier):
                 "role_ids": list(package.get("role_ids") or []),
                 "role_scores": dict(package.get("role_scores") or {}),
                 "primary_damage_usable": bool(package.get("primary_damage_usable", True)),
+                "primary_damage_weakness_bonus": int(
+                    package.get("primary_damage_weakness_bonus") or 0
+                ),
+                "damage_matchups": list(package.get("damage_matchups") or []),
                 "contextual_score": package.get("contextual_score", 0),
                 "proven_capabilities": list(package.get("proven_capabilities") or []),
                 "untagged_skill_ids": list(package.get("untagged_skill_ids") or []),
@@ -1026,7 +1037,10 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
     missing_count = len(coverage.get("missing", []))
     covered_count = mandatory_count - missing_count
     primary = sum(_role_score(entity, "primary_damage") for entity in selected)
-    matchup = primary + (primary if boss_affinity_state(boss) == "weakness_available" else 0)
+    matchup = primary + sum(
+        _numeric(entity.get("primary_damage_weakness_bonus"))
+        for entity in selected
+    )
     setup = max(0, len(coverage.get("setup_dependencies", [])) - len([item for item in coverage.get("missing", []) if ".setup." in item]))
     synergy = sum(max(0, len(_role_ids(entity)) - 1) for entity in selected)
     sustain = sum(_role_score(entity, role) for entity in selected for role in SURVIVAL_ROLES + ("mp_sustain",))
@@ -1042,7 +1056,12 @@ def _score_candidate(character_ids, sidekick_pair, template, entities, sidekick_
     )
     uncertainty_count = sum(
         1 for entity in all_entities
-        if entity.get("sa_state") == "unknown" or not entity.get("evidence")
+        if entity.get("sa_state") == "unknown"
+        or not entity.get("evidence")
+        or any(
+            isinstance(matchup, dict) and matchup.get("state") == "unknown"
+            for matchup in (entity.get("damage_matchups") or [])
+        )
     )
     component_scores = {
         "coverage": max(0, covered_count) / max(1, mandatory_count) * 100,
@@ -1302,6 +1321,8 @@ def _apply_skill_package(entity, package):
         }
     if "primary_damage_usable" in package:
         selected["primary_damage_usable"] = bool(package["primary_damage_usable"])
+    selected["primary_damage_weakness_bonus"] = _numeric(package.get("primary_damage_weakness_bonus"))
+    selected["damage_matchups"] = list(package.get("damage_matchups") or [])
     selected["package_ready"] = bool(package.get("legal", True))
     return selected
 
