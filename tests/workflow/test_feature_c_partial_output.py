@@ -129,7 +129,7 @@ async def test_sse_exposes_candidate_and_analyzer_correction_metrics():
             )
         ]
 
-    node_payloads = [json.loads(event.data) for event in events if event.event == "node_status"]
+    node_payloads = [json.loads(event.raw_data) for event in events if event.event == "node_status"]
     assert node_payloads[0]["node"] == "CANDIDATES"
     analyze = next(payload for payload in node_payloads if payload["node"] == "ANALYZE")
     assert analyze["attempt"] == 3

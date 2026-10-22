@@ -64,7 +64,38 @@ insertion and mode switching. It requires Chromium; `--browser` selects its
 executable. Restricted WSL environments may require running the browser check
 outside the sandbox because Chromium needs local sockets. These checks do not
 establish current Neo4j freshness, analyzer quality, H2 usefulness or release
-readiness. RR-B owns unavailable-analyzer integration and the combined smoke.
+readiness.
+
+Run the combined Stage 1 smoke with:
+
+```bash
+.venv/bin/pytest --confcutdir=tests/web tests/web/unit/test_production_integration.py
+.venv/bin/python -B tests/web/browser_check.py --production-smoke
+```
+
+The smoke captures the real `app.js` request body, POSTs it through the actual
+HTTP/SSE routes, and runs the real production graph, retrieval service, scoring,
+candidate generation, unavailable-analyzer fallback, formatting and final legality
+checks. Its driver returns records materialized from existing reviewed pilot
+sources in temporary storage; it does not execute Cypher or mutate Neo4j. The
+twenty-form Mushroom roster uses no owned sidekicks, no declared SA and the
+existing item-policy default with generic items where named records are absent.
+The browser command renders that verified result in an offline real DOM and
+checks the deterministic-only banner, progress completion and exploratory switch.
+
+Expected result: one to three legal-shape recommendations, `degraded=true`, no
+terminal error, low existing confidence labels and explicit generic build
+assumptions. `analysis_failure` is empty for this usable result. The one recorded
+analyzer attempt is an unconfigured local adapter call, not a network/paid call;
+served-model and provider usage are unavailable. Invalid projections remain
+fatal when none survive, and final graph-legality failures are still rejected.
+
+In the restricted WSL sandbox, real LangGraph worker completion may stall at the
+same local thread bridge as TestClient. Use a bounded run outside the sandbox
+for the fixture-only smoke and Chromium when necessary; do not change production
+concurrency or weaken assertions to hide that environment issue. This is isolated
+application integration evidence, not a live Neo4j retrieval-to-browser claim,
+paid-provider qualification or a passing H2 scenario.
 
 ## 1. Prepare the local services
 

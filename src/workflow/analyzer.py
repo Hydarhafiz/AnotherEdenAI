@@ -710,8 +710,20 @@ def run_bounded_analyzer(
     )
 
 
-def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_count, correction_rounds, usage_rows, structured_errors, candidate_errors, provider_diagnostics, provider, degraded):
-    backend_by_id = {str(candidate.get("id")): candidate for candidate in bundle.get("backend_candidates", [])}
+def _render_result(
+    *, bundle, projection, frozen, ranked_ids, warnings, call_count,
+    correction_rounds, usage_rows, structured_errors, candidate_errors,
+    provider_diagnostics, provider, degraded,
+):
+    # A degraded response has no analyzer authority, including ranking/refinements.
+    if degraded:
+        frozen = {}
+        ranked_ids = []
+        warnings = [*warnings, "Deterministic-only result; analyzer ranking and refinements were not used."]
+    backend_by_id = {
+        str(candidate.get("id")): candidate
+        for candidate in bundle.get("backend_candidates", [])
+    }
     ordered_ids = []
     for candidate_id in ranked_ids:
         if candidate_id in backend_by_id and candidate_id not in ordered_ids:
@@ -722,47 +734,45 @@ def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_cou
     for candidate_id in ordered_ids[:3]:
         candidate = backend_by_id[candidate_id]
         refinement = frozen.get(candidate_id, {})
-        refined_candidate, refinement_warnings = _apply_refinement(candidate, refinement, bundle, projection)
-        warnings.extend(refinement_warnings)
-        proposal = _candidate_proposal(refined_candidate, bundle, refinement, degraded=degraded)
-        valid, invalid = validate_candidate_response({"recommendations": [proposal]}, bundle)
-        if not valid:
-            fallback_proposal = _candidate_proposal(candidate, bundle, {}, degraded=degraded)
-            valid, fallback_invalid = validate_candidate_response({"recommendations": [fallback_proposal]}, bundle)
-            invalid = fallback_invalid
-            if valid:
-                proposal = fallback_proposal
-                warnings.append(f"Analyzer refinement for {candidate_id} was rejected; backend default retained.")
+        try:
+            refined_candidate, refinement_warnings = _apply_refinement(
+                candidate, refinement, bundle, projection
+            )
+            warnings.extend(refinement_warnings)
+            proposal = _candidate_proposal(
+                refined_candidate, bundle, refinement, degraded=degraded
+            )
+            valid, invalid = validate_candidate_response(
+                {"recommendations": [proposal]}, bundle
+            )
+            if not valid:
+                fallback_proposal = _candidate_proposal(
+                    candidate, bundle, {}, degraded=degraded
+                )
+                valid, invalid = validate_candidate_response(
+                    {"recommendations": [fallback_proposal]}, bundle
+                )
+                if valid:
+                    proposal = fallback_proposal
+                    warnings.append(
+                        f"Analyzer refinement for {candidate_id} was rejected; backend default retained."
+                    )
+        except (KeyError, TypeError, ValueError):
+            candidate_errors.append({
+                "code": "backend_projection.invalid",
+                "path": f"backend_candidates.{candidate_id}",
+                "message": "Backend candidate could not be projected into the validated bundle.",
+                "allowed_ids": [],
+            })
+            continue
         if valid:
             proposals.append(proposal)
         else:
-            candidate_errors.extend(error for item in invalid for error in item.get("errors", []))
-    if not proposals and degraded and backend_by_id:
-        # Backend candidates already passed the deterministic generation gates;
-        # preserve them even if the display projection cannot be reassembled.
-        proposals = [
-            _candidate_proposal(backend_by_id[candidate_id], bundle, {}, degraded=True)
-            for candidate_id in ordered_ids[:3]
-        ]
-        warnings.append("Degraded backend candidates were retained without analyzer refinement.")
-    if not proposals:
-        return _degraded_result(
-            bundle,
-            warnings,
-            reason="backend_projection_render_failed",
-            call_count=call_count,
-            correction_rounds=correction_rounds,
-            usage_rows=usage_rows,
-            structured_errors=structured_errors,
-            candidate_errors=candidate_errors,
-            provider_diagnostics=provider_diagnostics,
-            provider=provider,
-            projection=projection,
-        )
-    resolved = resolve_candidate_recommendations(proposals[:3], bundle, warnings)
-    resolved["degraded"] = degraded
-    return {
-        "analysis_result": json.dumps(resolved, ensure_ascii=False),
+            candidate_errors.extend(
+                error for item in invalid for error in item.get("errors", [])
+            )
+
+    result = {
         "cypher_retry_count": 0,
         "analyzer_provider": provider.provider,
         "analyzer_model": provider.resolved_model,
@@ -773,7 +783,26 @@ def _render_result(*, bundle, projection, frozen, ranked_ids, warnings, call_cou
         "provider_diagnostics": provider_diagnostics,
         "structured_output_errors": structured_errors,
         "candidate_validation_errors": candidate_errors,
-        "analysis_failure": {"type": "analyzer_degraded", "message": "Backend candidates were returned without analyzer authority."} if degraded else {},
+    }
+    if not proposals:
+        # Never restore rejected proposals or recurse through degraded rendering.
+        return {
+            **result,
+            "analysis_result": "",
+            "analysis_failure": {
+                "type": "backend_projection_render_failed",
+                "message": "No valid backend recommendation could be prepared for final validation.",
+                "diagnostics": candidate_errors,
+            },
+        }
+    if candidate_errors:
+        warnings.append("Invalid backend recommendation projections were discarded.")
+    resolved = resolve_candidate_recommendations(proposals, bundle, warnings)
+    resolved["degraded"] = degraded
+    return {
+        **result,
+        "analysis_result": json.dumps(resolved, ensure_ascii=False),
+        "analysis_failure": {},
     }
 
 
@@ -1299,10 +1328,17 @@ def _skill_package_score(candidate, selections, bundle):
 def _candidate_proposal(candidate, bundle, refinement, *, degraded=False):
     characters = {str(row.get("id")): row for row in bundle.get("characters", [])}
     selections = refinement.get("skill_selections", {}) if refinement else {}
+    sa_states = bundle.get("stellar_awakened", {})
     proposal = {
         "archetype": candidate.get("archetype", "hybrid"),
-        "frontline": [_hero_proposal(character_id, candidate, characters, selections) for character_id in candidate.get("frontline_character_ids", [])],
-        "reserve": [_hero_proposal(character_id, candidate, characters, selections) for character_id in candidate.get("reserve_character_ids", [])],
+        "frontline": [
+            _hero_proposal(character_id, candidate, characters, selections, sa_states)
+            for character_id in candidate.get("frontline_character_ids", [])
+        ],
+        "reserve": [
+            _hero_proposal(character_id, candidate, characters, selections, sa_states)
+            for character_id in candidate.get("reserve_character_ids", [])
+        ],
         "main_sidekick_id": candidate.get("main_sidekick_id"),
         "sub_sidekick_id": candidate.get("sub_sidekick_id"),
         "strategy_summary": (refinement or {}).get("strategy_summary") or f"Use the deterministic {candidate.get('archetype', 'hybrid')} backend candidate.",
@@ -1321,7 +1357,7 @@ def _candidate_proposal(candidate, bundle, refinement, *, degraded=False):
     return proposal
 
 
-def _hero_proposal(character_id, candidate, characters, selections):
+def _hero_proposal(character_id, candidate, characters, selections, sa_states):
     row = characters[character_id]
     package = row.get("build_package") or {}
     weapon_id = package.get("weapon_id") or _nested_id(package.get("weapon")) or row.get("weapon_options", [{}])[0].get("id")
@@ -1330,8 +1366,21 @@ def _hero_proposal(character_id, candidate, characters, selections):
     if len(grasta_ids) < 3:
         grasta_ids = [item.get("id") for item in row.get("grastas", []) if item.get("id")][:3]
     skill_ids = list(selections.get(character_id) or candidate.get("skill_package_ids", {}).get(character_id) or [item.get("id") for item in row.get("skills", []) if item.get("id")][:3])
-    passive_ids = [item.get("id") for item in row.get("passives", []) if item.get("id")][:1]
+    sa_state = sa_states.get(row.get("name") or row.get("display_name"), "unknown")
+    passive_ids = [
+        item["id"] for item in row.get("passives", [])
+        if item.get("id") and (
+            not item.get("requires_stellar_awakened")
+            or sa_state in (True, "awakened")
+        )
+    ][:1]
     assumptions = list(package.get("assumptions") or [])
+    for grasta in row.get("grastas", []):
+        if grasta.get("id") in grasta_ids and grasta.get("generic"):
+            assumptions.append(
+                f"{grasta['display_name']}: placeholder only; select a compatible item. "
+                "Ownership and compatibility are unverified."
+            )
     for skill in row.get("skills", []):
         if skill.get("id") in skill_ids and skill.get("requires_stellar_awakened"):
             assumptions.append(f"{skill.get('name')} requires Stellar Awakening")

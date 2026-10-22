@@ -2,6 +2,9 @@
 
 import json
 from copy import deepcopy
+from unittest.mock import patch
+
+import pytest
 
 from src.workflow.analyzer import (
     AnalyzerProviderConfig,
@@ -278,10 +281,134 @@ def test_provider_failure_returns_labeled_degraded_backend_candidates_without_re
 
     assert result["analyzer_call_count"] == 1
     assert result["provider_transport_retries"] == 0
-    assert result["analysis_failure"]["type"] == "analyzer_degraded"
+    assert result["analysis_failure"] == {}
     assert output["degraded"] is True
     assert output["recommendations"]
     assert any("degraded" in warning.casefold() for warning in output["warnings"])
+
+    from src.workflow.nodes.format import format_node
+    final = format_node(result)["final_output"]
+    assert final["error"] is None
+    assert final["degraded"] is True
+    assert len(final["recommendations"]) == len(output["recommendations"])
+    for formatted, original in zip(final["recommendations"], output["recommendations"]):
+        for placement in ("frontline", "reserve"):
+            for after, before in zip(formatted[placement], original[placement]):
+                assert after["name"] == before["name"]
+                assert after["recommended_skills"] == before["recommended_skills"]
+        assert formatted["confidence_label"] == "low"
+
+
+@pytest.mark.parametrize("fault,code", [
+    ("skill", "id.skill"),
+    ("package", "shape.skills"),
+    ("grasta", "cardinality.grasta"),
+    ("duplicate", "lineup.duplicate_character"),
+])
+def test_degraded_candidates_must_pass_the_existing_validator(fault, code):
+    from src.workflow.analyzer import _candidate_proposal
+    from src.workflow.nodes.format import format_node
+
+    bundle = _bundle()
+    if fault == "grasta":
+        for character in bundle["characters"]:
+            character["grastas"].append({
+                "id": "grasta:finite", "display_name": "Finite grasta",
+                "max_theoretical_copies": 1,
+            })
+
+    def invalid_proposal(*args, **kwargs):
+        proposal = _candidate_proposal(*args, **kwargs)
+        hero = proposal["frontline"][0]
+        if fault == "skill":
+            hero["skill_ids"][0] = "skill:forged"
+        elif fault == "package":
+            hero["skill_ids"] = []
+        elif fault == "grasta":
+            for entry in proposal["frontline"]:
+                entry["grasta_ids"][0] = "grasta:finite"
+        else:
+            proposal["frontline"][1] = deepcopy(hero)
+        return proposal
+
+    with patch("src.workflow.analyzer._candidate_proposal", side_effect=invalid_proposal):
+        result = run_bounded_analyzer(_state(bundle), bundle)
+    assert result["analysis_result"] == ""
+    assert result["analysis_failure"]["type"] == "backend_projection_render_failed"
+    assert code in {error["code"] for error in result["candidate_validation_errors"]}
+    assert format_node(result)["final_output"]["error_type"] == "backend_projection_render_failed"
+    assert result["analyzer_call_count"] == 1
+
+
+def test_degraded_rendering_discards_invalid_siblings_without_restoring_them():
+    from src.workflow.analyzer import _candidate_proposal
+
+    bundle = _bundle()
+    rejected_id = bundle["backend_candidates"][0]["id"]
+
+    def proposal(candidate, *args, **kwargs):
+        value = _candidate_proposal(candidate, *args, **kwargs)
+        if candidate["id"] == rejected_id:
+            value["frontline"][0]["skill_ids"][0] = "skill:forged"
+        return value
+
+    with patch("src.workflow.analyzer._candidate_proposal", side_effect=proposal):
+        result = run_bounded_analyzer(_state(bundle), bundle)
+    output = json.loads(result["analysis_result"])
+    assert result["analysis_failure"] == {}
+    assert len(output["recommendations"]) == 2
+    assert any("discarded" in warning for warning in output["warnings"])
+
+
+def test_unprojectable_or_empty_backend_candidates_fail_without_recursion():
+    bundle = _bundle()
+    for candidate in bundle["backend_candidates"]:
+        candidate["frontline_character_ids"][0] = "character:unknown"
+    result = run_bounded_analyzer(_state(bundle), bundle)
+    assert result["analysis_failure"]["type"] == "backend_projection_render_failed"
+    assert result["candidate_validation_errors"][0]["code"] == "backend_projection.invalid"
+
+    bundle["backend_candidates"] = []
+    result = run_bounded_analyzer(_state(bundle), bundle)
+    assert result["analysis_result"] == ""
+    assert result["analysis_failure"]["type"] == "backend_projection_render_failed"
+
+
+def test_budget_degradation_cannot_present_analyzer_advice_as_deterministic():
+    bundle = _bundle()
+    last_id = bundle["backend_candidates"][-1]["id"]
+    output = {
+        "ranked_candidate_ids": [last_id],
+        "refinements": [{"candidate_id": last_id, "explanation": "AI-only explanation"}],
+    }
+    response = _provider_output(output)
+    response["usage"]["total_tokens"] = 999999
+    result = run_bounded_analyzer(_state(bundle, transport=lambda request: response), bundle)
+    payload = json.loads(result["analysis_result"])
+    assert payload["degraded"] is True
+    assert "AI-only explanation" not in result["analysis_result"]
+    assert result["analysis_failure"] == {}
+
+
+@pytest.mark.parametrize("sa_state", [None, False, "not_awakened", True, "awakened"])
+def test_fallback_does_not_select_an_unverified_stellar_passive(sa_state):
+    bundle = _bundle()
+    character = bundle["characters"][0]
+    character["passives"] = [
+        {"id": "passive:sa", "name": "SA Passive", "requires_stellar_awakened": True},
+        {"id": "passive:normal", "name": "Normal Passive", "requires_stellar_awakened": False},
+    ]
+    bundle["stellar_awakened"] = {} if sa_state is None else {character["name"]: sa_state}
+    result = run_bounded_analyzer(_state(bundle), bundle)
+    assert result["analysis_failure"] == {}
+    output = json.loads(result["analysis_result"])
+    expected = "SA Passive" if sa_state in (True, "awakened") else "Normal Passive"
+    for recommendation in output["recommendations"]:
+        hero = next(
+            row for row in recommendation["frontline"] + recommendation["reserve"]
+            if row["name"] == character["name"]
+        )
+        assert hero["recommended_passives"] == [expected]
 
 
 def test_lower_scoring_skill_package_restores_backend_default():

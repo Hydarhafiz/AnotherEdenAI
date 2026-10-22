@@ -892,3 +892,55 @@ class TestProductionLegalityGate:
             result = await format_and_validate_node(state, driver)
 
         assert "does not have recommended skill: Imaginary Slash" in result["final_output"]["error"]
+
+
+@pytest.mark.parametrize("fault", [None, "shape", "affinity", "legality", "fatal"])
+async def test_degraded_output_keeps_all_final_validation_gates(fault):
+    payload = _feature_d_payload()
+    payload["degraded"] = True
+    payload["warnings"] = ["Deterministic-only result"]
+    context = TestBossAffinityFidelityGate._context(payload)
+    state = TestBossAffinityFidelityGate._state(payload)
+    if fault == "shape":
+        payload["recommendations"][0]["frontline"] = []
+    elif fault == "affinity":
+        payload["boss_affinity"]["weak"] = ["Invented affinity"]
+    elif fault == "legality":
+        context.known_characters = set()
+    elif fault == "fatal":
+        state["analysis_failure"] = {"type": "no_backend_candidates", "message": "No safe candidates"}
+    state["analysis_result"] = json.dumps(payload)
+    with patch(
+        "src.workflow.nodes.format.collect_legality_context",
+        new_callable=AsyncMock, return_value=context,
+    ) as collect:
+        result = await format_and_validate_node(state, MagicMock())
+    final = result["final_output"]
+    if fault is None:
+        assert final["error"] is None
+        assert final["degraded"] is True
+        assert collect.await_count == 3
+    else:
+        assert final["error"]
+        assert not final.get("recommendations")
+        if fault == "legality":
+            assert final["error_type"] == "final_legality_exhausted"
+            assert collect.await_count == 3
+        else:
+            assert collect.await_count == 0
+
+
+async def test_degraded_output_retains_legal_siblings_after_final_legality():
+    payload = _feature_d_payload()
+    payload["degraded"] = True
+    context = TestBossAffinityFidelityGate._context(payload)
+    payload["recommendations"][0]["frontline"][0]["recommended_skills"] = ["Imaginary Slash"]
+    state = TestBossAffinityFidelityGate._state(payload)
+    with patch(
+        "src.workflow.nodes.format.collect_legality_context",
+        new_callable=AsyncMock, return_value=context,
+    ):
+        result = await format_and_validate_node(state, MagicMock())
+    assert result["final_output"]["degraded"] is True
+    assert len(result["final_output"]["recommendations"]) == 2
+    assert len(result["final_legality_errors"]) == 1

@@ -6,6 +6,9 @@
 {% elif result.get('recommendations') %}
   <article>
     <header><h3>Lineup Recommendations</h3></header>
+    {% if result.get('degraded') %}
+    <p role="status"><strong>Deterministic-only result — analyzer unavailable or unusable.</strong> These backend candidates passed validation; no successful AI analysis is claimed.</p>
+    {% endif %}
     {% if result.warnings %}
     <div class="synergy-box"><strong>Validation warnings:</strong><ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul></div>
     {% endif %}

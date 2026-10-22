@@ -213,7 +213,7 @@ The owner approved this bounded sequencing exception on 2026-10-22. Connect and 
 
 ### RR-A: Production Frontend/API Wiring
 
-Type/route: build via builder-executor -> tdd-loop. Status: Completed on 2026-10-22; RR-B remains pending.
+Type/route: build via builder-executor -> tdd-loop. Status: Completed on 2026-10-22.
 
 Ownership: an early, limited M7 frontend slice executed in the active milestone by explicit exception. Reuse roster/sidekick ownership, the query/job/SSE endpoints and existing result rendering. Add explicit production/exploratory selection and a Celestial Mushroom boss selector. Send the existing lookup identity `Celestial Mushroom` as `boss_id`; the manifest slug is not currently a supported lookup input. Keep API defaults and exploratory GraphRAG compatible. No new profile, inventory, progression, provider or graph schema.
 
@@ -230,7 +230,7 @@ One completed-feature commit includes implementation, permanent capability regre
 
 ### RR-B: Analyzer Fallback-To-Format Contract
 
-Type/route: build via builder-executor -> tdd-loop. Status: Approved; follows RR-A.
+Type/route: build via builder-executor -> tdd-loop. Status: Completed on 2026-10-22 after RR-A.
 
 Ownership: repair of the existing production fallback contract, not P4 paid/analyzer-quality acceptance. Reserve `analysis_failure` for terminal errors. Valid deterministic recommendations retain `degraded=true`, warnings and a visible deterministic-only banner, and pass through candidate ID/package/allocation validation, display resolution, output validation, boss-affinity fidelity and final graph-backed legality. Remove the branch that restores rejected fallback proposals; no valid survivor must terminate with a classified error rather than recurse or create another fallback pipeline.
 
@@ -241,7 +241,13 @@ Acceptance:
 - RR-B-03: one isolated Mushroom smoke runs the frontend request through POST/SSE, real production retrieval/candidate generation, unavailable analyzer, final validation and actual template rendering, using fixture-backed graph records without persistent mutations or paid calls.
 - RR-B-04: browser verification covers production selection, rendered degraded output and exploratory switching. Report isolated integration separately from live Neo4j freshness, gameplay usefulness and paid-provider qualification.
 
-One completed-feature commit owns B and the combined smoke. Retain unique domain regressions and authoritative fixture inputs; keep browser outputs, temporary diagnostics and execution handoffs ignored/local.
+Completion evidence: the actual frontend request for the existing twenty-form Celestial Mushroom roster passed POST/job/SSE routing and the real production graph over isolated reviewed fixture records. Deterministic retrieval, scoring and candidate generation produced backend candidates; the unconfigured local analyzer attempt made zero provider/network calls. Three degraded recommendations passed candidate validation, output shape, affinity fidelity and actual final legality collection/validation, then rendered through the real template. The SSE wire exposes JSON objects after one browser parse. Offline Chromium verified form validation, roster payload, production progress completion, recommendation cards, degraded banner and exploratory switching. This is isolated application integration; Cypher execution and live Neo4j freshness remain unverified.
+
+The combined path exposed contained display-contract mismatches, corrected in this feature: SA-gated passives are not selected without explicit awakening; trusted generic equipment retains a generic display label; generic Grasta placeholders carry exact caveats through existing assumption fields; and already serialized SSE progress JSON is emitted without a second encoding. Candidate/allocation and final legality validators were not relaxed. Terminal exhaustion returns directly, with no restoration of rejected candidates or recursive fallback. Degraded results discard analyzer ranking/refinements rather than claiming successful AI analysis.
+
+Verification: all workflow tests plus affected API, streaming, actual-script, rendering and production-smoke suites passed 363 tests. The combined browser command passed with three degraded recommendations. Python/JavaScript syntax and `git diff --check` passed. Real LangGraph/Chromium checks required sandbox escalation for the local thread/socket bridge; no production concurrency change was made. The existing TestClient import emits a deprecation warning. No human product test is outstanding for these controls because real DOM automation exercised them; H2 usefulness and live operational evidence remain separate gates.
+
+One completed-feature commit owns B and the combined smoke. Retain unique validation/transport/rendering regressions and the fixture adapter, which reuses existing authoritative sources rather than inventing recommendation-quality oracles. Temporary review copies, browser profiles and generated HTML are deleted by their runners; diagnostics and handoffs stay local. Runtime output/fallback semantics are revised, while scoring policies, schema, provider settings and source identities remain unchanged. No new provenance version or release identity is asserted. Both production and exploratory paths remain supported; no parallel fallback pipeline was introduced.
 
 Stage 2 defers detailed evidence coverage; Venom, Zone and reserve-switching warnings; confidence/fit terminology; broader UI/typed-error polish; deployment, spend safeguards and paid-provider qualification. Stage 1 excludes new curation, magnitude scoring, optimization, mechanics, corpus expansion and chatbot work. M7/M8 obligations and all original acceptance gates remain open.
 

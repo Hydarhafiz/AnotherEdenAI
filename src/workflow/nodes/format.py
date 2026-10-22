@@ -123,7 +123,7 @@ class AlternativesOutput(BaseModel):
 class RecommendationSetOutput(BaseModel):
     """Feature D top-three recommendation envelope.
 
-    recommendations: exactly 3 legal-shape lineup plans, usually burst/sustain/hybrid.
+    recommendations: one to three legal-shape lineup plans; archetypes may repeat.
     boss_affinity: graph-derived affinity facts shared across the recommendation set.
     archetype_viability_notes: explains weaker archetypes or variant rationale.
     """

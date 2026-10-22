@@ -99,7 +99,7 @@ class TestSSEEventsSequence:
                 events.append(event)
 
         node_events = [e for e in events if e.event == "node_status"]
-        nodes_seen = [json.loads(e.data)["node"] for e in node_events]
+        nodes_seen = [json.loads(e.raw_data)["node"] for e in node_events]
         assert "PLAN" in nodes_seen
         assert "CYPHER" in nodes_seen
         # Raw node names must not appear
@@ -179,7 +179,7 @@ class TestValidateRetryAttemptNumber:
                 events.append(event)
 
         validate_events = [e for e in events if e.event == "node_status"]
-        validate_data = [json.loads(e.data) for e in validate_events if json.loads(e.data)["node"] == "VALIDATE"]
+        validate_data = [json.loads(e.raw_data) for e in validate_events if json.loads(e.raw_data)["node"] == "VALIDATE"]
         assert len(validate_data) == 1
         assert validate_data[0]["attempt"] == 2   # retry_count=1 -> attempt=2
         assert validate_data[0]["max"] == 3
@@ -251,3 +251,32 @@ async def test_mode_selects_graph_and_preserves_typed_state(mode):
     result = next(event for event in events if event.event == "result")
     assert "Lineup Recommendations" in result.raw_data
     assert "Aldo" in result.raw_data
+
+
+async def test_typed_failure_sse_is_one_json_object_on_the_http_wire(async_client):
+    from src.workflow.production import ProductionRequestError, RetrievalIssue
+    from src.web.app import app
+
+    async def updates(*args, **kwargs):
+        raise ProductionRequestError([RetrievalIssue(
+            code="boss.unsupported", field="boss_id", value="Unknown boss",
+            message="Unsupported boss ID: Unknown boss",
+        )])
+        yield  # The graph interface is an async iterator even on immediate failure.
+
+    graph = MagicMock()
+    graph.astream = updates
+    posted = await async_client.post("/api/query", json={
+        "query": "", "roster": ["Aldo"], "mode": "production", "boss_id": "Unknown boss",
+    })
+    assert posted.status_code == 200
+    job_id = next(iter(app.state.jobs))
+    with patch("src.web.streaming.build_production_graph", return_value=graph):
+        response = await async_client.get(f"/api/stream/{job_id}")
+    block = next(block for block in response.text.split("\n\n") if block.startswith("event: node_status\n"))
+    line = next(line for line in block.splitlines() if line.startswith("data: "))
+    error = json.loads(line.removeprefix("data: "))
+    assert error["node"] == "ERROR"
+    assert error["failure_type"] == "boss.unsupported"
+    assert error["issues"][0]["field"] == "boss_id"
+    assert "event: done" in response.text

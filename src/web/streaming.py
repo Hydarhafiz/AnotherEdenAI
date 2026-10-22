@@ -170,7 +170,8 @@ async def pipeline_sse_generator(
                     "failure_type": state_update.get("analysis_failure", {}).get("type"),
                 })
 
-                yield ServerSentEvent(data=event_data, event="node_status")
+                # Already serialized JSON must not be encoded as a JSON string.
+                yield ServerSentEvent(raw_data=event_data, event="node_status")
                 logger.debug("SSE node_status: node=%s attempt=%d", label, attempt)
 
                 # Capture final_output from format node for result rendering
@@ -182,7 +183,7 @@ async def pipeline_sse_generator(
     except Exception as exc:  # noqa: BLE001
         logger.exception("Pipeline error during SSE stream: %s", exc)
         error_data = json.dumps(pipeline_error_payload(exc))
-        yield ServerSentEvent(data=error_data, event="node_status")
+        yield ServerSentEvent(raw_data=error_data, event="node_status")
 
     finally:
         # Send final HTML result fragment (D-12: Jinja2 renders server-side)

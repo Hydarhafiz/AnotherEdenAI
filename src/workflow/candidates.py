@@ -1042,11 +1042,14 @@ def _resolve_hero(entry: dict, characters: dict[str, dict]) -> dict:
     grastas = {item["id"]: item for item in character.get("grastas", [])}
     weapons = {item["id"]: item for item in character.get("weapon_options", [])}
     armors = {item["id"]: item for item in character.get("armor_options", [])}
+    weapon = weapons[entry["weapon_id"]]
+    armor = armors[entry["armor_id"]]
     resolved = {
         "name": character["display_name"],
         "role": entry.get("role", "unspecified role"),
-        "weapon": weapons[entry["weapon_id"]]["display_name"],
-        "armor": armors[entry["armor_id"]]["display_name"],
+        # Preserve trusted category assumptions across the name-based legality boundary.
+        "weapon": f"Generic {weapon['display_name']}" if weapon.get("generic") else weapon["display_name"],
+        "armor": f"Generic {armor['display_name']}" if armor.get("generic") else armor["display_name"],
         "grastas": [grastas[value]["display_name"] for value in entry["grasta_ids"]],
         "recommended_skills": [skills[value]["name"] for value in entry.get("skill_ids", [])],
         "recommended_passives": [passives[value]["name"] for value in entry.get("passive_ids", [])],

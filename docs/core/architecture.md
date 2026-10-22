@@ -135,6 +135,7 @@ Reviewed-knowledge pilot boundary, owner-approved 2026-10-20:
 - The final failed report/oracle/source retention mapping is artifacts/evidence/feature_c2_final_heldout_retention_20261020.json. Frozen original paths remain unchanged; the mapping records promoted locations and historical replay limits.
 - Static inspection identifies evaluation targets rather than proven new runtime failures: capability labels may lose material scope, primary-affinity checks use element, setup mappings are limited, and boss-priority matrix entries are not automatically runtime requirements. Existing H witnesses prove legality/coverage, not all four H2 quality criteria. Repair only a demonstrated defect.
 - Keep the one-swap/two-call limits and production provider settings. Paid evaluation, graph mutations, live refresh and deployment require separate authorization. M7 frontend and M8 release/safeguards remain later obligations.
+- The owner-approved Stage 1 sequencing exception connects and verifies existing production recommendations before further curation, ranking development or H2 evaluation. Its early M7 input slice and fallback integration do not establish pilot acceptance or release readiness.
 
 Feature B curated superboss graph behavior:
 
@@ -202,6 +203,24 @@ Production uses a separate typed sequence:
 3. `ANALYZE`
 4. `FORMAT`
 
+The bounded analyzer returns usable deterministic recommendations with
+`degraded=true` and warnings when its transport is unavailable or its output is
+unusable. `analysis_failure` is reserved for terminal errors. Degraded output
+uses backend order and packages without analyzer ranking/refinements; unknown
+awakening does not grant access to gated passives. Every displayed proposal must
+pass the existing candidate ID, package and allocation validator; rejected
+proposals are never restored. Zero survivors returns
+`backend_projection_render_failed` directly. Formatting, boss-affinity fidelity
+and final graph-backed legality still apply.
+
+Display conversion labels trusted generic equipment assumptions explicitly and
+carries generic Grasta caveats in the existing assumption fields, so category
+placeholders are not misrepresented as unique owned items. This changes no
+allocation or legality policy. The web result shows a deterministic-only banner.
+The web production bridge currently supplies no analyzer transport, so its local
+adapter attempt makes no provider call and returns this degraded path. Enabling
+or qualifying a paid provider remains separately authorized work.
+
 Production requests carry `boss_id` (currently the exact boss name used by the graph lookup), roster, optional owned sidekicks,
 per-character Stellar Awakening state, optional per-character Light/Shadow points,
 the `late_game_assumed` item policy, and natural-language preferences. Missing
@@ -242,6 +261,7 @@ Responsibilities:
 - Offer Celestial Mushroom in the bounded production boss selector; production preferences are optional, while exploratory mode requires a question
 - POST a job to `/api/query`, then execute it when the browser opens `/api/stream/{job_id}`; the POST response is a progress HTML fragment, not recommendation JSON
 - Stream progress updates over SSE
+- Emit progress JSON once on the SSE wire; the browser uses one `JSON.parse`, while result HTML is inserted directly
 - Render one to three collapsed recommendation summaries with expandable evidence, explicit short-strategy and main-risk labels, and clear fallbacks when skills, passives, or upgrade assumptions are absent
 - Render final result or graceful failure UI
 - Expose admin-triggered ETL refresh

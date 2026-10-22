@@ -203,6 +203,16 @@ def test_feature_e_error_result_uses_graceful_failure_partial():
     assert "recommendation-card" not in html
 
 
+@pytest.mark.parametrize("degraded", [False, True])
+def test_deterministic_only_banner_uses_the_result_contract(degraded):
+    result = _feature_e_result()
+    result["degraded"] = degraded
+    text = _visible_text(_render_result(result))
+    assert ("Deterministic-only result" in text) is degraded
+    if degraded:
+        assert "no successful AI analysis is claimed" in text
+
+
 @pytest.mark.asyncio
 async def test_feature_e_streaming_renders_real_recommendation_template():
     """SSE result event uses the real Feature E result partial shape."""

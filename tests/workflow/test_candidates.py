@@ -136,6 +136,24 @@ def test_valid_candidate_ids_resolve_only_after_validation_and_preserve_alias_na
     assert resolved["boss_affinity"]["weak"] == ["Fire"]
 
 
+def test_resolved_equipment_preserves_generic_assumptions_without_renaming_specific_items():
+    bundle = candidate_bundle()
+    character = bundle["characters"][0]
+    weapon = character["weapon_options"][0]
+    weapon["display_name"] = "Staff weapon (late-game assumption)"
+    proposal = candidate_lineup(bundle)
+    valid, invalid = validate_candidate_response({"recommendations": [proposal]}, bundle)
+    assert not invalid
+    result = resolve_candidate_recommendations(valid, bundle, [])
+    assert result["recommendations"][0]["frontline"][0]["weapon"].startswith("Generic Staff")
+    weapon["generic"] = False
+    weapon["display_name"] = "Named unique weapon"
+    valid, invalid = validate_candidate_response({"recommendations": [proposal]}, bundle)
+    assert not invalid
+    result = resolve_candidate_recommendations(valid, bundle, [])
+    assert result["recommendations"][0]["frontline"][0]["weapon"] == "Named unique weapon"
+
+
 def test_candidate_validation_requires_an_explicit_four_skill_slot_allowance():
     bundle = candidate_bundle()
     character = bundle["characters"][0]

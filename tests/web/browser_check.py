@@ -6,12 +6,14 @@ provider is contacted; external assets are removed from the temporary page.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
 from pathlib import Path
 import re
 import subprocess
 import sys
 import tempfile
+from unittest.mock import patch
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -19,13 +21,16 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--result-json", type=Path)
+    parser.add_argument("--production-smoke", action="store_true")
     parser.add_argument(
         "--browser", default="/snap/chromium/current/usr/lib/chromium-browser/chrome"
     )
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[2]
     sys.path.insert(0, str(repo))
-    if args.result_json:
+    if args.production_smoke:
+        result = asyncio.run(production_result(repo))
+    elif args.result_json:
         result = json.loads(args.result_json.read_text())
     else:
         from tests.web.unit.test_feature_e_result_ui import _recommendation
@@ -52,6 +57,12 @@ window.fetch = async (url, options) => {
 };
 window.EventSource = class {
   addEventListener(name, handler) {
+    if (name === 'node_status') {
+      const nodes = document.getElementById('workflow-mode').value === 'production'
+        ? ['RETRIEVE','CANDIDATES','ANALYZE','FORMAT']
+        : ['PLAN','CYPHER','VALIDATE','CANDIDATES','ANALYZE','FORMAT'];
+      setTimeout(() => nodes.forEach(node => handler({data:JSON.stringify({node,attempt:1,max:1})})), 0);
+    }
     if (name === 'result') setTimeout(() => handler({data:fixture.html}), 0);
   }
   close() {}
@@ -81,6 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     check(sent[0].boss_id === boss.value && sent[0].query === '', 'boss and optional preferences');
     check(sent[0].roster.join(',') === 'Toova,Yuna', 'owned roster payload');
     check(document.querySelectorAll('#result-container .recommendation-card').length > 0, 'SSE result cards');
+    check(document.querySelectorAll('.pipeline-step.done').length === 4, 'production progress completes');
     if (fixture.degraded) check(document.getElementById('result-container').textContent.includes('Deterministic-only result'), 'degraded banner');
     mode.value = 'exploratory';
     mode.dispatchEvent(new Event('change'));
@@ -116,6 +128,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     if completed.returncode or not match or not match[1].startswith("PASS:"):
         raise SystemExit((match[1] if match else "Browser check did not finish") + "\n" + completed.stderr[-2000:])
     print(match[1])
+
+
+async def production_result(repo: Path) -> dict:
+    """Render the real isolated HTTP/production smoke output in the DOM check."""
+    import httpx
+    with patch("dotenv.load_dotenv", return_value=False):
+        from src.web.app import app
+        from tests.web.production_fixture import PilotGraphRecords
+        from tests.web.unit.test_production_integration import production_smoke
+
+    with tempfile.TemporaryDirectory(prefix="anothereden-pilot-") as folder:
+        records = PilotGraphRecords(Path(folder))
+        capture = subprocess.run(
+            ["node", "-e",
+             "const {loadUI}=require('./tests/web/ui_harness.cjs');"
+             "(async()=>{const ui=await loadUI({roster:JSON.parse(process.argv[1])});"
+             "await ui.submit();process.stdout.write(JSON.stringify(ui.requests[0].payload));})()"
+             ".catch(error=>{console.error(error);process.exitCode=1;});",
+             json.dumps(records.roster)],
+            cwd=repo, capture_output=True, text=True, timeout=15,
+        )
+        if capture.returncode:
+            raise SystemExit(capture.stderr)
+        app.state.jobs = {}
+        try:
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app), base_url="http://test"
+            ) as client:
+                observed = await production_smoke(client, records, json.loads(capture.stdout))
+        finally:
+            app.dependency_overrides.clear()
+            app.state.jobs = {}
+    final = observed["final_output"]
+    print(f"PASS: isolated real production smoke, {len(final['recommendations'])} degraded recommendations, final legality and SSE wire contract")
+    return final
 
 
 if __name__ == "__main__":
