@@ -69,6 +69,7 @@ function buildChecklistHTML(names, storageKey, listId, checkboxClass) {
 // ---------------------------------------------------------------------------
 
 const NODE_TO_STEP = {
+  "RETRIEVE": "step-retrieve",
   "PLAN":     "step-plan",
   "CYPHER":   "step-cypher",
   "VALIDATE": "step-validate",
@@ -78,6 +79,7 @@ const NODE_TO_STEP = {
 };
 
 const STEP_LABELS = {
+  "RETRIEVE": "Retrieving boss and roster",
   "PLAN":     "Planning strategy",
   "CYPHER":   "Building database query",
   "VALIDATE": "Validating results",
@@ -86,39 +88,33 @@ const STEP_LABELS = {
   "FORMAT":   "Formatting recommendations",
 };
 
-const STEPS_HTML = `
-<div id="pipeline-steps" aria-live="polite">
-  <div class="pipeline-step" id="step-plan"     data-node="PLAN">
-    <span class="step-icon">⬜</span>
-    <span class="step-label">Planning strategy</span>
-    <span class="step-time"></span>
-  </div>
-  <div class="pipeline-step" id="step-cypher"   data-node="CYPHER">
-    <span class="step-icon">⬜</span>
-    <span class="step-label">Building database query</span>
-    <span class="step-time"></span>
-  </div>
-  <div class="pipeline-step" id="step-validate" data-node="VALIDATE">
-    <span class="step-icon">⬜</span>
-    <span class="step-label">Validating results</span>
-    <span class="step-time"></span>
-  </div>
-  <div class="pipeline-step" id="step-candidates" data-node="CANDIDATES">
-    <span class="step-icon">⬜</span>
-    <span class="step-label">Preparing legal candidates</span>
-    <span class="step-time"></span>
-  </div>
-  <div class="pipeline-step" id="step-analyze"  data-node="ANALYZE">
-    <span class="step-icon">⬜</span>
-    <span class="step-label">Analyzing team composition</span>
-    <span class="step-time"></span>
-  </div>
-  <div class="pipeline-step" id="step-format"   data-node="FORMAT">
-    <span class="step-icon">⬜</span>
-    <span class="step-label">Formatting recommendations</span>
-    <span class="step-time"></span>
-  </div>
-</div>`;
+function pipelineStepsHTML(mode) {
+  const nodes = mode === "production"
+    ? ["RETRIEVE", "CANDIDATES", "ANALYZE", "FORMAT"]
+    : ["PLAN", "CYPHER", "VALIDATE", "CANDIDATES", "ANALYZE", "FORMAT"];
+  return `<div id="pipeline-steps" aria-live="polite">${nodes.map(node => `
+    <div class="pipeline-step" id="${NODE_TO_STEP[node]}" data-node="${node}">
+      <span class="step-icon">⬜</span>
+      <span class="step-label">${STEP_LABELS[node]}</span>
+      <span class="step-time"></span>
+    </div>`).join("")}</div>`;
+}
+
+function updateQueryMode() {
+  const production = document.getElementById("workflow-mode").value === "production";
+  const boss = document.getElementById("boss-id");
+  boss.disabled = !production;
+  boss.required = production;
+  document.getElementById("boss-selection").hidden = !production;
+  const query = document.getElementById("query-input");
+  query.required = !production;
+  query.placeholder = production
+    ? "Optional preferences for the selected boss"
+    : "Ask a question about the graph";
+  document.getElementById("query-label").textContent = production
+    ? "Preferences (optional)"
+    : "Graph question";
+}
 
 let pipelineActiveStepId = null;
 let stepStartTime = null;
@@ -182,7 +178,7 @@ function setSubmitBusy(busy) {
     btn.innerHTML = '<span class="spinner" style="width:0.85rem;height:0.85rem;border-width:2px"></span> Running…';
   } else {
     btn.disabled = false;
-    btn.textContent = btn.dataset.originalText || "Find Best Team";
+    btn.textContent = btn.dataset.originalText || "Find Recommendations";
   }
 }
 
@@ -222,7 +218,7 @@ function handleNodeStatus(payload) {
   let retryText = null;
   if (node === "VALIDATE" && attempt > 1) retryText = "Cypher retry " + attempt + "/" + max;
   if (node === "ANALYZE" && payload.correction_rounds > 0) {
-    retryText = "correction " + payload.correction_rounds + "/2";
+    retryText = "correction " + payload.correction_rounds + "/" + Math.max(0, max - 1);
   }
 
   stepMarkActive(stepId, STEP_LABELS[node] || node, retryText);
@@ -275,6 +271,8 @@ function runPipeline(streamUrl) {
 
 document.addEventListener("DOMContentLoaded", () => {
   updateRosterPayload();
+  updateQueryMode();
+  document.getElementById("workflow-mode").addEventListener("change", updateQueryMode);
 
   fetch("/api/entities")
     .then(r => r.json())
@@ -294,7 +292,9 @@ document.addEventListener("DOMContentLoaded", () => {
       evt.preventDefault();
       updateRosterPayload();
       const query = document.getElementById("query-input").value.trim();
-      if (!query) return;
+      const mode = document.getElementById("workflow-mode").value;
+      const boss_id = document.getElementById("boss-id").value;
+      if (mode === "production" ? !boss_id : !query) return;
       const roster = loadRoster();
       const owned_sidekicks = loadSidekicks();
 
@@ -304,14 +304,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Inject step tracker UI directly — no HTMX fragment needed
       const slot = document.getElementById("progress-slot");
-      slot.innerHTML = STEPS_HTML;
+      slot.innerHTML = pipelineStepsHTML(mode);
       document.getElementById("result-container").innerHTML = "";
 
       try {
         const resp = await fetch("/api/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, roster, owned_sidekicks }),
+          body: JSON.stringify({ query, roster, owned_sidekicks, mode, boss_id: mode === "production" ? boss_id : null }),
         });
         if (!resp.ok) {
           slot.innerHTML = `<p style="color:red">Error ${resp.status}: ${resp.statusText}</p>`;

@@ -7,7 +7,7 @@
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <script src="https://unpkg.com/htmx-ext-sse@2.2.4/sse.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <script src="/static/app.js?v=6" defer></script>
+  <script src="/static/app.js?v=7" defer></script>
   <style>
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
     .tab-btn { cursor: pointer; }
@@ -76,16 +76,27 @@
 
     <!-- Query panel -->
     <section>
-      <h2>Ask a Question</h2>
+      <h2>Recommendations And Graph Questions</h2>
       <form id="query-form">
         <input type="hidden" id="roster-payload" name="roster" value="[]">
-        <label for="query-input">Team building query</label>
+        <label for="workflow-mode">Mode</label>
+        <select id="workflow-mode" name="mode">
+          <option value="production" selected>Boss recommendations</option>
+          <option value="exploratory">Exploratory graph question</option>
+        </select>
+        <div id="boss-selection">
+          <label for="boss-id">Boss</label>
+          <select id="boss-id" name="boss_id" required>
+            <option value="">Select a boss</option>
+            <option value="Celestial Mushroom">Celestial Mushroom</option>
+          </select>
+        </div>
+        <label for="query-input" id="query-label">Preferences (optional)</label>
         <input type="text"
                id="query-input"
                name="query"
-               placeholder="e.g. best blunt-zone team for Water element dungeon"
-               required>
-        <button type="submit">Find Best Team</button>
+               placeholder="Optional preferences for the selected boss">
+        <button type="submit">Find Recommendations</button>
       </form>
 
       <div id="progress-slot" style="margin-top: 1.5rem;">

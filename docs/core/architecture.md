@@ -185,22 +185,24 @@ Feature D equipment graph behavior:
 - Roster utilities: `src/workflow/normalize.py`, `src/workflow/f2p.py`
 - Nodes: `src/workflow/nodes/`
 
-Current workflow sequence:
+Exploratory workflow sequence:
 
 1. `PLAN`
-2. `GENERATE_CYPHER`
-3. `VALIDATE`
-4. `ANALYZE`
-5. `FORMAT`
+2. `SUPERBOSS_CONTEXT`
+3. `GENERATE_CYPHER`
+4. `VALIDATE`
+5. `PREPARE_CANDIDATES`
+6. `ANALYZE`
+7. `FORMAT`
 
-Milestone 5 Feature B adds a separate typed production sequence:
+Production uses a separate typed sequence:
 
 1. `PRODUCTION_RETRIEVE`
 2. `PREPARE_CANDIDATES`
 3. `ANALYZE`
 4. `FORMAT`
 
-Production requests carry a canonical `boss_id`, roster, optional owned sidekicks,
+Production requests carry `boss_id` (currently the exact boss name used by the graph lookup), roster, optional owned sidekicks,
 per-character Stellar Awakening state, optional per-character Light/Shadow points,
 the `late_game_assumed` item policy, and natural-language preferences. Missing
 Light/Shadow values conservatively allow three equipped active skills; a fourth is
@@ -224,7 +226,7 @@ Routing notes:
 - Milestone 4 Feature D uses deterministic broad roster-fact retrieval for boss-aware lineup requests so recommendation prompts are grounded in available characters, skills, passives, Grasta context, and matching `Superboss` facts instead of over-narrow exact-match Cypher filters.
 - Milestone 4 Feature E carries optional owned-sidekick selections from the web request through SSE state and PLAN normalization. Broad lineup retrieval includes ability and aura facts only for normalized selected sidekicks; when none are selected, analysis keeps both sidekick slots empty and surfaces the missing ownership context as a risk.
 - `VALIDATE` and `ANALYZE` compact Neo4j result rows before LLM calls, bounding record count, nested list size, dictionary keys, and long text snippets to keep hosted-model prompt sizes controlled.
-- `FORMAT` validates the final recommendation shape, checks graph-backed boss affinity facts for fidelity against the selected boss context, then checks every single-team, top-three, or alternatives lineup against graph-backed character, sidekick, skill, passive, ownership, and Stellar Awakening facts before rendering. Illegal, unverifiable, or boss-fact-mismatched recommendations fail gracefully before the web layer presents them. Feature D top-three outputs are validated as exactly three recommendation plans with archetypes, strategy summaries, build notes, boss counterplay, sustain/MP notes, risks, fit/confidence labels, and citations.
+- `FORMAT` validates the final recommendation shape, checks graph-backed boss affinity facts for fidelity against the selected boss context, then checks every single-team, recommendation-set, or alternatives lineup against graph-backed character, sidekick, skill, passive, ownership, and Stellar Awakening facts before rendering. Illegal, unverifiable, or boss-fact-mismatched recommendations fail gracefully before the web layer presents them. Recommendation sets contain one to three plans with archetypes, strategy summaries, build notes, boss counterplay, sustain/MP notes, risks, fit/confidence labels, and citations.
 
 ### Web Layer
 
@@ -236,10 +238,11 @@ Routing notes:
 
 Responsibilities:
 
-- Accept character roster, owned-sidekick, and natural-language query input
-- Start background workflow execution
+- Accept character roster and owned-sidekick input, with explicit production recommendation or exploratory question mode
+- Offer Celestial Mushroom in the bounded production boss selector; production preferences are optional, while exploratory mode requires a question
+- POST a job to `/api/query`, then execute it when the browser opens `/api/stream/{job_id}`; the POST response is a progress HTML fragment, not recommendation JSON
 - Stream progress updates over SSE
-- Render three collapsed recommendation summaries with expandable evidence, explicit short-strategy and main-risk labels, and clear fallbacks when skills, passives, or upgrade assumptions are absent
+- Render one to three collapsed recommendation summaries with expandable evidence, explicit short-strategy and main-risk labels, and clear fallbacks when skills, passives, or upgrade assumptions are absent
 - Render final result or graceful failure UI
 - Expose admin-triggered ETL refresh
 

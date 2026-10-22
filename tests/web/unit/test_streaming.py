@@ -215,3 +215,39 @@ class TestDisconnectStopsStream:
         assert node_status_count < 5
         # done event should still be emitted (finally block)
         assert events[-1].event == "done"
+
+
+@pytest.mark.parametrize("mode", ["production", "exploratory"])
+async def test_mode_selects_graph_and_preserves_typed_state(mode):
+    from src.web.streaming import pipeline_sse_generator
+    from tests.web.unit.test_feature_e_result_ui import _recommendation
+    from src.web.routes.api import templates
+
+    captured = {}
+    final_output = {
+        "recommendations": [_recommendation("burst")],
+        "warnings": [], "archetype_viability_notes": [], "error": None,
+    }
+
+    async def updates(state, **kwargs):
+        captured.update(state)
+        yield {"format": {"final_output": final_output}}
+
+    graph = MagicMock()
+    graph.astream = updates
+    with (
+        patch("src.web.streaming.build_production_graph", return_value=graph) as production,
+        patch("src.web.streaming.build_graph", return_value=graph) as exploratory,
+    ):
+        events = [event async for event in pipeline_sse_generator(
+            query="", roster=["Toova"], driver=MagicMock(), templates=templates,
+            request=_make_mock_request(), mode=mode, boss_id="Celestial Mushroom",
+        )]
+    assert production.call_count == (1 if mode == "production" else 0)
+    assert exploratory.call_count == (1 if mode == "exploratory" else 0)
+    assert captured["workflow_mode"] == mode
+    assert captured["boss_id"] == "Celestial Mushroom"
+    assert captured["roster"] == ["Toova"]
+    result = next(event for event in events if event.event == "result")
+    assert "Lineup Recommendations" in result.raw_data
+    assert "Aldo" in result.raw_data

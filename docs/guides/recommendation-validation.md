@@ -38,6 +38,34 @@ the owner-approved 2026-10-20 pilot reset. Current gates and scenario seeds
 live in docs/core/milestone.md. Generated reports under `artifacts/generated/`
 are local inspection material and are not committed.
 
+## Stage 1 production UI integration
+
+Choose Boss recommendations, select Celestial Mushroom and select owned characters.
+Preferences are optional. The browser sends `mode="production"` and
+`boss_id="Celestial Mushroom"` with roster/sidekick names to `/api/query`.
+The current graph lookup accepts the exact boss name, not the manifest slug
+`celestial-mushroom`. The POST returns a progress fragment; its SSE URL executes
+the typed production graph and returns rendered result HTML. Exploratory graph
+question mode requires a question and sends no production boss selection.
+
+Run the isolated web checks without loading credentials or contacting a database:
+
+```bash
+.venv/bin/pytest --confcutdir=tests/web tests/web/unit/test_api.py \
+  tests/web/unit/test_streaming.py tests/web/unit/test_production_ui.py \
+  tests/web/unit/test_feature_e_result_ui.py
+node --check src/web/static/app.js
+.venv/bin/python -B tests/web/browser_check.py
+```
+
+The browser check removes external assets and injects local fetch/SSE fixtures.
+It verifies real DOM controls, native form validation, request fields, result
+insertion and mode switching. It requires Chromium; `--browser` selects its
+executable. Restricted WSL environments may require running the browser check
+outside the sandbox because Chromium needs local sockets. These checks do not
+establish current Neo4j freshness, analyzer quality, H2 usefulness or release
+readiness. RR-B owns unavailable-analyzer integration and the combined smoke.
+
 ## 1. Prepare the local services
 
 Run commands from the repository root. Use the project environment rather than

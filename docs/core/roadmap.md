@@ -34,7 +34,7 @@ Program success does not require exhaustive combat modeling, a full simulator, g
 
 Milestone 5 closed on 2026-09-14 after Feature H2. Milestone 6, Reviewed-Knowledge Recommendation Pilot, is active in docs/core/milestone.md. The owner approved its architecture reset on 2026-10-20 after C2.1 failed final frozen validation.
 
-The active sequence is scope reset/evidence preservation -> manually reviewed pilot knowledge and failed-path retirement -> deterministic recommendation evaluation -> separately authorized bounded analyzer evaluation -> owner MVP/repair/expansion decision. P1 scope reset/preservation is complete; the following features require their normal admission and any operational authorization.
+P1 scope reset/preservation is complete; P2/P3 acceptance remains unmet. On 2026-10-22 the owner approved a limited MVP-readiness sequencing exception: RR-A production frontend/API wiring, then RR-B analyzer fallback-to-format repair and isolated integration verification. Further curation, ranking development and H2 evaluation are paused. RR-A is an early M7 slice; RR-B repairs the existing runtime contract. The active milestone holds both feature contracts. This exception changes no acceptance gate, completes no milestone, and does not admit conditional P4, paid qualification or deployment.
 
 Use Rotte Rivel and Celestial Mushroom as candidate bosses and twenty normal forms, including all eight automatically added F2P forms, as the curation pool. These are bounded quality-evaluation candidates, not a replacement for the 367-form legal catalog or the thirty-boss corpus. Establish expected outcomes from sources before observing recommendation output. Do not assume the proposed negative rosters are infeasible.
 
@@ -141,7 +141,7 @@ Historical Features A-H, corrections C6/C6.1/D2/E2/F2/G1.1, and their identifier
 
 ### Milestone 6: Reviewed-Knowledge Recommendation Pilot
 
-Status: Active; owner-approved reset on 2026-10-20. P1 scope reset/evidence preservation is complete; P2 knowledge preparation/retirement is next.
+Status: Active; owner-approved reset on 2026-10-20. P1 is complete; P2/P3 acceptance remains unmet. The approved RR-A -> RR-B integration exception takes priority over further pilot expansion.
 
 Purpose: prove whether trustworthy manual knowledge lets the existing deterministic recommendation engine produce useful, explainable, boss-aware legal teams.
 
@@ -167,7 +167,7 @@ The active milestone holds exact scope, scenario seeds, gate definitions, retire
 
 ### Milestone 7: Frontend Portfolio Experience
 
-Status: Planned.
+Status: Planned. The owner approved only the RR-A minimal production-input slice ahead of full M7 admission; M7 acceptance and the remaining frontend scope stay open.
 
 Purpose:
 

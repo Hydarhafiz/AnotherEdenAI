@@ -197,7 +197,7 @@ The focused placement/source regressions and relevant workflow suites passed 121
 
 Verification: `.venv/bin/pytest tests/workflow/test_role_scoring.py tests/workflow/test_lineup_generation.py tests/workflow/test_package_first_beam.py tests/workflow/test_feature_c_correction.py tests/workflow/test_feature_c_partial_output.py tests/workflow/test_candidates.py tests/unit/test_manual_pilot_evidence.py` passed 60 tests. `py_compile` and `git diff --check` passed. Unresolved broad-suite verification issue: `timeout 35s .venv/bin/pytest tests/workflow tests/unit/test_manual_pilot_evidence.py tests/unit/test_feature_c6_1_capability_coverage.py` collected 327 tests, reached `tests/workflow/test_graph.py` after the preceding tests reported progress, then stalled until timeout. The blocked graph test produced no assertion result; this is neither a pass nor a failing assertion. No analyzer call, database operation, paid call or live scrape was performed.
 
-Continue deterministic evaluation and report evidence against all four unchanged H2 gates. Preserve P2/P3 acceptance as unmet unless the original requirements are independently demonstrated. Never mark a failed gate complete.
+Further skill curation, ranking development and H2 evaluation are paused under the owner's Stage 1 MVP-readiness decision below. Preserve P2/P3 acceptance as unmet unless the original requirements are independently demonstrated. Never mark a failed gate complete.
 
 ### P4: Bounded Analyzer And End-To-End Evaluation
 
@@ -206,6 +206,44 @@ Type/route: verification-only via tdd-loop.
 Status: Conditional, not authorized for paid execution. Entry: B passes and owner separately authorizes the exact model/run/cost envelope.
 
 Reuse the compact analyzer/H1/H2 contracts. Apply C and D independently of deterministic scores. Preserve two-call/one-swap limits, invalid-output fallback and measured costs. No provider configuration/deployment change. One completed-feature commit if admitted and completed.
+
+## Stage 1: Limited MVP Integration Readiness
+
+The owner approved this bounded sequencing exception on 2026-10-22. Connect and verify the existing recommender before further curation or strategic-scoring development. This does not accept M6, P2, P3, P4, H2, M7 or M8, change their gates, or authorize paid models, live scraping, persistent graph mutations or deployment. P4 remains conditional under its existing entry requirements.
+
+### RR-A: Production Frontend/API Wiring
+
+Type/route: build via builder-executor -> tdd-loop. Status: Completed on 2026-10-22; RR-B remains pending.
+
+Ownership: an early, limited M7 frontend slice executed in the active milestone by explicit exception. Reuse roster/sidekick ownership, the query/job/SSE endpoints and existing result rendering. Add explicit production/exploratory selection and a Celestial Mushroom boss selector. Send the existing lookup identity `Celestial Mushroom` as `boss_id`; the manifest slug is not currently a supported lookup input. Keep API defaults and exploratory GraphRAG compatible. No new profile, inventory, progression, provider or graph schema.
+
+Acceptance:
+
+- RR-A-01: the actual frontend submit handler sends `mode="production"`, the selected `boss_id` and owned roster; production does not require free-text preferences.
+- RR-A-02: exploratory questions retain their own mode and graph without a production boss requirement.
+- RR-A-03: POST job storage and SSE forwarding preserve the request; production selects its typed graph and a valid isolated result renders through the existing template.
+- RR-A-04: mode-specific progress matches production nodes; bounded async HTTP checks avoid the known local TestClient/thread-bridge stall, and a browser check verifies input and rendering behavior.
+
+Evidence: 20 focused web tests passed, including four actual-script Node assertions. The offline Chromium DOM check passed roster selection, missing-boss native validation, optional production preferences, request submission, SSE result insertion and exploratory switching. Node syntax and `git diff --check` passed. HTTP tests use asynchronous driver injection to avoid the local AnyIO/thread bridge. The browser needed sandbox escalation for local socket setup and used no external assets or services. No live Neo4j freshness, analyzer quality or H2 usefulness is established. A alone does not fix analyzer-unavailable results.
+
+One completed-feature commit includes implementation, permanent capability regressions, necessary documentation and this milestone update. Request/response fields, graph schema, scoring policy and authoritative source identities are unchanged. Production UI now explicitly selects an existing backend capability; exploratory mode remains a separate supported path. All new tests/helpers are retained as reusable input/transport/rendering regressions; browser profiles and generated HTML remain temporary.
+
+### RR-B: Analyzer Fallback-To-Format Contract
+
+Type/route: build via builder-executor -> tdd-loop. Status: Approved; follows RR-A.
+
+Ownership: repair of the existing production fallback contract, not P4 paid/analyzer-quality acceptance. Reserve `analysis_failure` for terminal errors. Valid deterministic recommendations retain `degraded=true`, warnings and a visible deterministic-only banner, and pass through candidate ID/package/allocation validation, display resolution, output validation, boss-affinity fidelity and final graph-backed legality. Remove the branch that restores rejected fallback proposals; no valid survivor must terminate with a classified error rather than recurse or create another fallback pipeline.
+
+Acceptance:
+
+- RR-B-01: valid unavailable-analyzer fallback survives final formatting and legality checks; the page identifies deterministic-only output without claiming successful AI analysis.
+- RR-B-02: invalid IDs, packages, finite allocations, output shape, affinities and graph legality remain rejected. Valid siblings may survive; zero valid candidates remains fatal. Preserve existing call/correction limits.
+- RR-B-03: one isolated Mushroom smoke runs the frontend request through POST/SSE, real production retrieval/candidate generation, unavailable analyzer, final validation and actual template rendering, using fixture-backed graph records without persistent mutations or paid calls.
+- RR-B-04: browser verification covers production selection, rendered degraded output and exploratory switching. Report isolated integration separately from live Neo4j freshness, gameplay usefulness and paid-provider qualification.
+
+One completed-feature commit owns B and the combined smoke. Retain unique domain regressions and authoritative fixture inputs; keep browser outputs, temporary diagnostics and execution handoffs ignored/local.
+
+Stage 2 defers detailed evidence coverage; Venom, Zone and reserve-switching warnings; confidence/fit terminology; broader UI/typed-error polish; deployment, spend safeguards and paid-provider qualification. Stage 1 excludes new curation, magnitude scoring, optimization, mechanics, corpus expansion and chatbot work. M7/M8 obligations and all original acceptance gates remain open.
 
 ## Retirement Ownership
 
