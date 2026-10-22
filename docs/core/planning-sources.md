@@ -903,7 +903,7 @@ historical findings. It does not mark C2.1 successful or jointly accepted.
 - Celestial Mushroom: Pierce/Blunt resistance, ailments/stat debuffs and AF stopper.
   Pain/Poison on the boss increases resistance and triggers cleansing/healing;
   generic Pain/Poison enablement must not become an unexamined positive synergy.
-- Candidate forms: twenty normal forms named in milestone.md, including all eight
+- Candidate forms: twenty normal forms pinned in tests/fixtures/m6_p2/pilot_scenarios.json, including all eight
   runtime F2P additions. Complete receipts and raw source revisions matched during
   discovery. This proves available sources/legal kits, not capability correctness,
   upgrade ownership, suitable parties or inadequacy of the proposed negative rosters.
@@ -928,7 +928,50 @@ Provenance dispositions: planning intent revised; C2 experiment retired from act
 development; historical source/result identities unchanged; materialization, taxonomy,
 reviews, legal catalog, schema, runtime/provider configuration and graph state unchanged
 by this feature. Evaluated source is preserved, not promoted to semantic authority.
-M7 frontend and M8 deployment/safeguards/provider qualification remain later obligations.
+This reset did not discharge M7 frontend or M8 deployment/safeguards/provider qualification. The later M7 sequencing decision below governs the current workstream.
+
+### Milestone 7 Frontend Planning And Sequencing — Approved 2026-10-22
+
+- Owner authority: the planning-only brief requested a limited, explainable MVP on
+  the existing engine, canonical document updates, one completed planning commit
+  and a hard stop before implementation. The owner then explicitly approved making
+  M7 active by reusing milestone.md, retaining M6 as paused/incomplete in roadmap.md
+  with its exact unmet P2/P3/H2 gates, evidence references and M8 obligations.
+  This extends RR-A/RR-B sequencing; it is not M6 closure or gate relaxation.
+- Repository baseline: `9f0a33e` and `49a0d62`; prior full M6 plan is recoverable
+  at `git show 49a0d62:docs/core/milestone.md`. P1 preservation and implemented
+  P2/P3 repairs remain recorded; later candidate replays do not establish H2 passes.
+- Inspected sources: web index/result/error/empty templates, app.js, query/entity
+  routes, streaming bridge, production request/retrieval, candidate resolution,
+  analyzer proposal projection, final output models/validation, lineup diagnostics,
+  existing actual-script/browser/integration tests and pilot-source regressions.
+  Result cards already expose members, skills, builds, reasons and citations;
+  fallback explanations are generic, selected evidence is not projected, and
+  browser errors lose safe typed details. Reuse these surfaces rather than rebuild.
+- Identity authority: pilot_scenarios.json, kit_catalog.json, reviewed capability
+  batches/overrides, superboss manifest/bounded captures and independent expected
+  boss fixtures. Twenty exact normal forms have complete legal receipts; this is
+  not twenty completely reviewed kits or a legal-character allowlist. Mushroom is
+  the only production UI option. Rotte remains diagnostic with unresolved counters;
+  neither has an accepted M6/H2 positive. Pinned Venom and Mushroom facts support
+  harmful-interaction warnings; Zone timing/effect superiority and full rotations
+  remain unestablished. Do not import test oracles into runtime presentation.
+- Verification repeated during planning: 363 existing workflow/affected-web tests,
+  seven manual-pilot source tests, and combined offline Chromium smoke passed with
+  three degraded recommendations. Sandbox thread stalls were reproduced; bounded
+  outside-sandbox runs passed. Fixture records do not execute Cypher or establish
+  live freshness, paid quality or strategy. The stripped offline DOM harness does
+  not prove delivered CSS/CDN behavior; M7 includes styled manual usability checks.
+- Admitted sequence: M7-1 candidate evidence/limitations, M7-2 error recovery,
+  M7-3 guided roster/sample and usability. Full contracts live only in milestone.md.
+  Deferred broad input editors and admin/freshness/health/cost dashboards are not
+  essential to this limited frontend MVP; M8 owns necessary release operations.
+  No curation, new boss/form, strategic engine, classifier, simulator, chat,
+  provider or deployment work is admitted.
+
+Provenance: planning intent revised; runtime/scoring, schema, source/review identities,
+graph data, provider configuration and release identity unchanged. Existing evidence
+stays at its authoritative paths; no copied milestone archive or new release artifact.
 
 ## Source Quality Notes
 

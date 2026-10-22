@@ -130,12 +130,12 @@ Reviewed-knowledge pilot boundary, owner-approved 2026-10-20:
 - Keep stable fact IDs, source URL/capture identity and exact locators/quotes with independent expected semantics. Source-only manual answers remain separate from classifier predictions and recommendation outputs, so they can support future backend-rule/LLM comparisons.
 - Keep capability proof separate from legal kits. Unknown, ambiguous, rejected, untagged, missing relationships and zero scores never imply proven absence. Only explicit authoritative complete-scope absence may establish it. Do not auto-approve structural sidecars or generated proposals.
 - Preserve request-funnel/denominator/unknown accounting and measure actual character/frontline sets and coherent alternatives. Never manufacture diversity where the roster supports one credible party.
-- Apply H2 affinity, boss-counter, coherence and setup gates independently. The owner-approved original D-G numeric obligations are superseded by the explicit pilot contract in milestone.md; earlier results remain historical evidence.
+- Apply H2 affinity, boss-counter, coherence and setup gates independently. The owner-approved original D-G numeric obligations were superseded by the pilot contract; its unchanged remaining gates and evidence now live in roadmap.md's M6 section. M6 is paused and incomplete while M7 is the active frontend workstream.
 - Rotte Rivel's marked-slot non-type Magic attack with Confuse/Bind is a material REVIEW/UNKNOWN counter gap. Keep Rotte as a diagnostic case without full H2 positive credit; do not infer that generic barriers or status immunity counter it. A smaller positive-boss scope requires independent evidence and an explicit scope decision.
 - The final failed report/oracle/source retention mapping is artifacts/evidence/feature_c2_final_heldout_retention_20261020.json. Frozen original paths remain unchanged; the mapping records promoted locations and historical replay limits.
-- Static inspection identifies evaluation targets rather than proven new runtime failures: capability labels may lose material scope, primary-affinity checks use element, setup mappings are limited, and boss-priority matrix entries are not automatically runtime requirements. Existing H witnesses prove legality/coverage, not all four H2 quality criteria. Repair only a demonstrated defect.
-- Keep the one-swap/two-call limits and production provider settings. Paid evaluation, graph mutations, live refresh and deployment require separate authorization. M7 frontend and M8 release/safeguards remain later obligations.
-- The owner-approved Stage 1 sequencing exception connects and verifies existing production recommendations before further curation, ranking development or H2 evaluation. Its early M7 input slice and fallback integration do not establish pilot acceptance or release readiness.
+- Current affinity scoring accounts for attack element and type; generic synergy and sustain/mitigation aggregate frontline roles, with reserve-after-switch evidence labeled separately. Selected-skill review diagnostics do not establish source-effect completeness. Setup mappings remain limited, and boss-priority matrix entries are not automatically runtime requirements. Existing H witnesses prove legality/coverage, not all four H2 quality criteria.
+- Keep the one-swap/two-call limits and production provider settings. Paid evaluation, graph mutations, live refresh and deployment require separate authorization. M8 retains release/safeguards/provider qualification.
+- The completed Stage 1 integration connects and verifies existing production recommendations. The owner extended its sequencing exception on 2026-10-22 to admit bounded M7 frontend work before further curation, ranking development or H2 evaluation. Neither Stage 1 nor M7 presentation establishes M6/H2 acceptance or release readiness.
 
 Feature B curated superboss graph behavior:
 
@@ -265,6 +265,12 @@ Responsibilities:
 - Render one to three collapsed recommendation summaries with expandable evidence, explicit short-strategy and main-risk labels, and clear fallbacks when skills, passives, or upgrade assumptions are absent
 - Render final result or graceful failure UI
 - Expose admin-triggered ETL refresh
+
+The current browser exposes neither SA nor Light/Shadow editors; undeclared SA and conservative skill-slot defaults apply. The item-policy default assumes late-game catalog access, not verified ownership. Rotte Rivel is a backend diagnostic case with unresolved strategic evidence and is not offered in the production selector. The twenty normal-form pilot does not limit legal ownership to those forms.
+
+Planned M7 integration, not yet implemented: reuse the existing cards and POST/job/SSE protocol to expose bounded evidence tied to final validated members, skills and placements; explain modeled labels and evidence limitations; display actionable errors; and guide roster/sample selection. Typed retrieval and backend candidates already hold coverage, selected-skill review and placement diagnostics, but the final output models currently omit those summaries. M7 may add optional display fields through candidate resolution/formatting, preserving old/exploratory payload compatibility and every validation gate. Existing warnings, risks, assumptions and citations remain the first presentation contract. Do not copy an original candidate's diagnostics after a refinement changes its selected skills or members.
+
+M7 adds no scoring/search/capability engine, graph schema, provider setting, endpoint family or database. Missing evidence remains unestablished; conditional warnings must be grounded in selected source facts. Public freshness/health/cost dashboards and deployment remain outside this frontend workstream. Exact feature acceptance lives in milestone.md; retained M6 gates live in roadmap.md.
 
 ## Data and Contract Boundaries
 

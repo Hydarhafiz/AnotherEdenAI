@@ -1,268 +1,168 @@
-# AnotherEdenAI Milestone 6: Reviewed-Knowledge Recommendation Pilot
+# AnotherEdenAI Milestone 7: Frontend Portfolio Experience
 
 ## Objective And Approval
 
-Status: Active; architecture reset approved by the owner on 2026-10-20.
+Status: Active implementation workstream; planning approved and the standalone planning deliverable completed on 2026-10-22. Features M7-1 through M7-3 are planned, not implemented.
 
-Prove that the existing recommendation engine can construct and explain useful, boss-aware, legal teams when supplied with trustworthy manually curated game knowledge. Revise M6 in place; do not introduce a recovery milestone or another classifier loop.
+Deliver a limited, explainable portfolio MVP using the existing recommendation engine: select a supported boss and owned character forms, submit, receive up to three legal candidates when available, inspect frontline/reserves and equipped skills, and understand the supporting evidence and limitations. Exploratory GraphRAG remains a separate supported mode.
 
-The product claim remains legal, roster-constrained, evidence-backed candidates that are strategically plausible according to modeled facts. It excludes guaranteed clears, global optimality, exact battle simulation and numeric win probabilities. A pilot demonstrates a bounded recommendation baseline, not full-catalog strategic coverage or measured gameplay success.
+The owner explicitly approved extending the RR-A/RR-B sequencing exception to make M7 active and reuse this document. M6 is **paused and incomplete**, not closed or accepted. Its exact remaining P2/P3/H2 gates, evidence references, conditional P4 and resumption obligations live in [roadmap.md](roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot). The full prior plan remains available as `git show 49a0d62:docs/core/milestone.md`. Moving the workstream does not relax any M6 gate or discharge M8 release obligations.
 
-The owner stopped development of C2/C2.1 after its final frozen validation failed. No Test #5, rule-repair cycle, replacement extraction architecture or original Feature D execution is authorized. Paid models, live scraping, graph mutations, deployment and publication require separate authorization. P1 is the completed scope-reset/preservation feature; P2 is the next separately admitted feature.
+This session completes only the standalone planning deliverable. Stop after documentation checks and one planning commit. A separate chat starts implementation with M7-1; no builder or verification-role transition is authorized in this planning session.
 
-## Repository State And Failed Experiment
+## Verified Starting Point
 
-- Features A-C and C1 remain completed foundations. C1 proves structure preservation; Feature C proves extraction attempts, not accepted semantic accuracy.
-- C1.1 technical source-fidelity implementation/replay is preserved. Joint C1.1/C2 acceptance was never achieved and is not required to admit the replacement manual-curation pilot.
-- C2/C2.1 semantic generalization failed; C2.1 is unsuccessful and stopped, not completed against its original criteria. Its source remains temporarily present for historical preservation and is not a supported production classifier.
-- Production capability authority remains the reviewed taxonomy/override pipeline through models and loader. C2 predictions do not grant proof.
-- Earlier protected, R5 and Fresh Tests #1/#2/#3 are consumed historical/development evidence. The 2026-10-20 final cohort is exhausted for validation; it must never become fresh evidence again.
+- `9f0a33e` connects explicit production mode, Celestial Mushroom selection, optional preferences, roster/sidekick ownership and mode-specific progress; exploratory questions retain their own contract.
+- `49a0d62` carries validated deterministic fallback through final formatting, affinity fidelity and graph-backed legality. Three degraded recommendations render with an explicit deterministic-only banner. Invalid candidates remain rejected; there is no recursive fallback or restoration of rejected proposals.
+- Planning verification on 2026-10-22 repeated the existing 363 workflow/affected-web tests successfully, plus seven manual-pilot source regressions. The combined offline Chromium production smoke passed with three degraded recommendations. The sandbox reproduced the documented thread stall; bounded execution outside the sandbox passed. One existing FastAPI TestClient deprecation warning remains.
+- The smoke uses real request handling, production retrieval/scoring/candidate generation, unavailable-analyzer fallback and final validators over fixture-backed driver records. It does **not** execute Cypher, establish live Neo4j freshness, qualify a paid provider or demonstrate gameplay usefulness. Its one local unconfigured-analyzer attempt makes no provider/network call.
 
-Official final report: artifacts/evidence/feature_c2_final_heldout_report_20261020.json.
+Normal flow: `index.html` and `app.js` load graph entity names and local ownership selections -> `POST /api/query` stores a single-use in-memory job and returns progress HTML -> `GET /api/stream/{job_id}` runs the selected workflow -> deterministic production retrieval/scoring/packages/search -> bounded analyzer or validated deterministic fallback -> final output/affinity/legality checks -> Jinja result HTML over SSE. Progress uses JSON parsed once; result events carry HTML. Exploratory mode uses its existing PLAN/Cypher graph. Keep both paths and the POST/job/SSE contract; no new application layer or database is needed.
 
-SHA-256: 671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54.
+## Supported Presentation And Evidence Limits
 
-| Measure | Frozen result |
-| --- | --- |
-| Supported effects F1 | 30.2% |
-| Dependencies F1 | 0% |
-| Combined canonical labels F1 | 23.0% |
-| Exact source anchors | 9/36 |
-| Material conditions | 0/18 |
-| Unsupported gaps | 3 matched; 10 unmatched |
-| Disposition | 3: stop for owner architecture/scope decision |
-
-The run records seven classifier calls, one shared-adapter call and one evaluator call. Preservation checks never rerun that experiment. The retention index maps frozen paths to durable copies without rewriting frozen inputs/results. Committing the evaluated source records a failed experiment; it does not accept its semantics or authorize materialization.
-
-## Superseded And Preserved Contracts
-
-The 2026-10-20 owner decision explicitly supersedes the original C2.1 continuation/fresh-validation/joint-acceptance sequence and original D-G acceptance obligations. They were not passed and are not silently relaxed. The prior full plan remains in Git history; the exact pre-reset tracked-diff digest remains frozen evaluation provenance.
-
-| Prior obligation | Approved disposition |
-| --- | --- |
-| D: 367 extraction attempts; proof floors of 96 damage, 48 enablement, 24 zone, 48 mitigation, 24 recovery, 24 status, 24 AF, 24 Pain/Poison and 48 boss-counter identities; eight providers per applicable element/type | Superseded as current completion gates. Historical attempt evidence remains valid; broader proof expansion follows a successful pilot and a new scope decision. |
-| E: complete funnel/diversity/unknown accounting | Preserve the behavior and apply the measurable 100% reporting gate to pilot requests. |
-| F: eight alternative-rich cases, each with six candidates, three character sets, three frontlines, two archetypes and maximum Jaccard 0.714 | Superseded. Measure real alternatives; do not fabricate parties or impose counts unsupported by the roster. |
-| G: 20 feasible, 10 certified-infeasible and eight alternative-rich cases | Superseded by the independently adjudicated pilot scenarios below. Existing H cases remain regressions and historical legality/coverage evidence. |
-| 367 complete legal kits; thirty-boss corpus; conservative proof; bounded runtime and H2 framework | Preserve. A curated subset is neither a supported-character allowlist nor a replacement ownership catalog. |
-
-Milestone 5 remains closed under its approved scope correction. M7 owns frontend portfolio presentation. M8 owns deployment, registration/accounting, quotas, spend ceiling, kill switch and release-provider qualification. M6 does not discharge these later obligations.
-
-## Architecture And Manual Curation
-
-Offline flow: pinned source captures -> C1/C1.1 source facts and references -> reviewed manual proposals/overrides -> validated repository artifacts -> existing model/Neo4j materialization.
-
-Runtime flow: user roster plus boss -> deterministic typed retrieval/scoring/packages/candidate generation -> legality and feasibility validation -> bounded LLM ranking/explanation -> final deterministic validation. Preserve exploratory GraphRAG as a separate mode.
-
-Use the existing taxonomy, review CSV/reference importer, exact-fact overrides, review artifact, gold/negative fixtures and loader. The importer accepts only proposals reproducible from rules or overrides; it does not accept arbitrary new semantic rows. Missing pilot facts should use narrowly authored exact-fact overrides, followed by ordinary review. Do not create a new database, application, ETL framework or graph schema by default.
-
-Every credited fact must retain stable source fact ID, exact source reference/quote and capture identity, capability or dependency, direction/target, material magnitude/duration/timing, activation/ownership conditions, review decision and provenance. Reuse existing structural anchors and authoritative fixture formats for source-only expected answers. Keep unsupported/unresolved mechanics explicit and separate from runtime proof.
-
-Existing fields cannot express every material branch or arbitrary condition. Reviewer notes are not executable constraints. Prefer simpler independently usable facts, withhold branch credit when material prerequisites cannot be represented/verified, and admit a narrow extension only after demonstrating necessity. Do not erase a condition to fit a schema.
-
-Only reviewed approve/correct evidence grants capability credit. Legal untagged skills may fill packages at zero credit. Unknown, ambiguous, rejected and unclassified never become proven absence. Missing relationships, zero scores and failed rule matches do not prove absence. Independently authored pilot expected answers must not be derived from classifier predictions or recommendation output.
-
-## Pilot Scope And Authority
-
-Candidate bosses are Rotte Rivel and Celestial Mushroom, grounded in the existing Feature B matrix, manifest, bounded captures and independent boss fixtures. Retain the entire thirty-boss corpus.
-
-| Boss | Source-backed purpose | Material uncertainty/negative case |
+| Identity | Current support | M7 presentation boundary |
 | --- | --- | --- |
-| Rotte Rivel | Fire weakness, listed elemental/type resistances, wind damage, ailments, marked-slot delayed attacks and HP-halving pressure | Independently adjudicate combined affinity interpretation. Marked-slot targeting remains a matrix gap; ordinary mitigation is not assumed to reduce HP-halving damage. No exact-turn claim. |
-| Celestial Mushroom | Pierce/Blunt resistance, ailments, PWR/INT debuffs and an AF stopper | Pain/Poison on the boss raises resistance and causes end-of-turn cleansing/healing. Do not assume generic Pain/Poison synergy is helpful. |
+| `Celestial Mushroom` (request lookup), `celestial-mushroom` (canonical result/manifest ID) | Only current production selector option; strong twenty-form fixture smoke renders legal degraded candidates | Available as a limited candidate demo, explicitly not battle verified. Pierce/Blunt resistance; no listed weakness. Pain raises physical resistance, Poison raises type resistance, and the boss clears them/heals at turn end. AF stopper and other uncovered mechanics remain limitations. |
+| `Rotte Rivel` (lookup), `rotte-rivel` (manifest ID) | Backend/source-pinned diagnostic candidates exist; absent from the UI selector | Keep outside selectable M7 recommendations. Explain its diagnostic-only status in coverage information. Marked-slot non-type Magic with Confuse/Bind is unresolved; Fire Magic versus combined Fire weakness/Magic resistance is REVIEW/UNKNOWN. Ordinary mitigation is not proven to counter HP-halving. No equal-validation claim or new boss admission. |
 
-Source adjudication: Fire Magic against Rotte Rivel's listed Fire weakness and Magic resistance remains REVIEW/UNKNOWN because the local sources do not define that combined interaction. Use an unconflicted Fire Slash attack for positive evidence. The proposed negative rosters remain investigation seeds: account for all eight F2P additions and do not call a roster infeasible from one unsuitable lineup or package. Marked-slot coverage and any other mechanic the current gate cannot represent must remain explicit uncertainty rather than a counter claim. The owner approved retaining Rotte as a non-passing diagnostic case: its marked-slot non-type Magic attack and Confuse/Bind effects are material, so a Rotte candidate cannot count as a full four-gate positive while that counter gate remains unresolved. Do not select a replacement or weaken the gate silently. Before full acceptance, report independently justified scenarios and the smallest scope adjustment; consider reducing initial positive scope to Celestial Mushroom only if deterministic evidence supports it.
+Pinned pool: exactly twenty **normal forms**, with complete legal-kit receipts in `tests/fixtures/m6_p2/pilot_scenarios.json` matching `src/etl/kit_catalog.json`:
 
-Use twenty normal forms as a candidate curation pool:
+- Automatic F2P additions: Aldo, Feinne, Cyrus, Deirdre, Azami, Gariyu, Cerrine, Levia.
+- Other pilot forms: Shion, Toova, Suzette, Anabel, Radias, Prai, Aisha, Rosetta, Mariel, Yuna, Mana, Dunarith.
 
-- Automatic F2P: Aldo, Feinne, Cyrus, Deirdre, Azami, Gariyu, Cerrine, Levia.
-- Offensive comparisons: Shion, Toova, Suzette.
-- Defense: Anabel, Radias, Prai.
-- Support/enablers: Aisha, Rosetta, Mariel, Yuna, Mana, Dunarith.
+Use canonical graph names for requests; the fixture also pins character IDs. Normal-form evidence must not transfer to AS/ES/other forms. All 367 owned, data-complete catalog forms remain legally eligible; the pilot pool is neither a whitelist nor twenty fully reviewed kits. The thirty-boss corpus is preserved. No additional forms or bosses are curated or admitted here.
 
-Their legal-kit receipts are complete and local raw captures match receipt revisions. This establishes available source evidence, not approved capability meanings, ownership of every upgrade, or team feasibility. Curate only relevant source facts, not every skill/passive. Freeze exact forms, SA/manifest/progression assumptions, Light/Shadow, sidekicks and item policy with each scenario. Baseline scenarios need no owned sidekicks unless independently justified.
+The browser currently declares no SA or Light/Shadow values: backend defaults exclude undeclared SA-only choices and use the conservative three-skill limit without known high points. Sidekicks are optional owned entities. The default `late_game_assumed` item policy assumes catalog access, not item ownership, and may supply labeled generic items. These assumptions and automatic F2P augmentation must be visible; M7 does not silently change availability or item policy.
 
-| Boss | Strong-roster seed | Constrained-roster seed | Inadequacy investigation seed |
-| --- | --- | --- | --- |
-| Rotte Rivel | All twenty forms | F2P eight + Shion, Anabel, Rosetta | F2P-only; test unsuitable offense and unsupported defensive assumptions |
-| Celestial Mushroom | All twenty forms | F2P eight + Toova, Yuna, Mana, Dunarith | F2P eight + Suzette; test resisted offense and harmful Pain/Poison plans |
+## Frontend Audit And Scope Disposition
 
-These are investigation seeds, not acceptance oracles. Account for all eight F2P additions before claiming inadequate rosters. If a proposed negative is feasible, record that and select another source-justified inadequate case. Retain unsuitable lineup/package negatives even when a better team exists. A missing proof is knowledge insufficiency, not authoritative game infeasibility. If the chosen bosses cannot support the required bounded cases, return the material scope decision to the owner rather than invent an oracle or change availability policy.
+“Verified” below means current automated contract/rendering checks or the stated offline DOM check, not live-service or strategic acceptance.
 
-## Pilot Acceptance
+| Requirement | Classification and current evidence | M7 disposition |
+| --- | --- | --- |
+| Production/exploratory separation, supported boss, optional preferences | Already implemented and verified: index/app.js, API/SSE tests and offline DOM | Preserve; M7-3 adds explanatory guidance. |
+| Canonical character/sidekick selection, filtering and saved ownership | Implemented but incomplete: entity endpoint, checklists and localStorage work; no clear pilot/F2P/default guidance or storage recovery | M7-2 handles recoverable loading/storage failures; M7-3 guides selection. |
+| SA and Light/Shadow input polish | Deferred: API/workflow accept fields, browser has no controls | Keep defaults visible; no new progression/profile editor. |
+| Up to three legal candidate cards, four frontline/two reserves, equipped skills and builds | Already implemented and verified: `result.html`, rendering regressions and production smoke | Reuse cards/details; no visual redesign or guaranteed count/diversity. |
+| Explanation, counterplay, risks, citations | Implemented but incomplete: output sections exist, deterministic fallback text is generic; boss affinity is validated but not displayed; fact-level evidence is lost before rendering | M7-1 exposes bounded backend evidence and explicit unavailable states. |
+| Fit/confidence and rubric | Implemented but incomplete: labels derive from heuristic score/scorer uncertainty | M7-1 labels their modeled scope; never battle strength, review completeness or success likelihood. |
+| Degraded-result banner and validation rejection | Already implemented and verified | Preserve prominent degraded state and all validators. |
+| Missing reviewed skill evidence, harmful interactions, alternative Zones, switching | Missing reliable result-specific presentation, despite existing source/placement diagnostics | M7-1 adds grounded warnings without new strategic scoring. |
+| Funnel, denominator, unknown and diversity reporting | Implemented internally but incomplete at UI boundary: `request_coverage`, candidate coverage/evidence diagnostics and placement scopes exist | M7-1 presents bounded relevant summaries; unknown stays unknown. |
+| Invalid roster/boss, no candidates and pipeline failures | Implemented but incomplete: typed SSE issues exist; app.js discards details, connection failure can leave no explanation; empty copy invents a Grasta ownership input | M7-2 provides actionable messages and terminal progress behavior. |
+| Sample roster | Missing, supported by existing selection contract and strong twenty-form smoke | M7-3 adds an explicit opt-in sample selection, with honest assumptions. |
+| Mobile, keyboard and novice comprehension | Implemented but incomplete: responsive rules and native details exist; broad usability not verified | M7-3 verifies the supported journey at desktop/mobile sizes and by keyboard. |
+| Data freshness/admin/system health views and public cost dashboard | Deferred beyond this limited MVP; an admin refresh endpoint is not a freshness observation | M8 owns operational visibility needed for safeguarded release. M7 shows unavailable evidence honestly. |
+| Deployment, authentication, quota, spend limit, kill switch and provider qualification | Outside M7; remain M8 obligations | No infrastructure work or release-readiness claim. |
 
-Apply the H2 criteria independently: damage affinity/elemental viability, boss-mechanic counter coverage, team synergy/role coherence, and setup executability.
+## Feature Sequence
 
-| Evaluation | Measurable gate |
-| --- | --- |
-| A: knowledge correctness | 100% of credited pilot facts have reviewed source provenance and correct material scope; independent fixtures replay; zero unknown-to-absence or unreviewed-to-proof conversions. |
-| B: deterministic engine | Four independently established positive scenarios each yield at least one four-gate-passing candidate. Two independently established inadequate cases receive honest insufficiency/infeasibility outcomes. All returned candidates pass legality, skill/package and finite-allocation checks; identical inputs reproduce output; zero analyzer calls. |
-| C: analyzer | Separately authorized run only. Zero out-of-bundle IDs or unsupported material claims; source-grounded explanation; at most two calls and one authorized swap per lineup; safe deterministic fallback. |
-| D: end-to-end usefulness | Owner reviews selected recommendations against all four H2 gates. Material UNKNOWN/REVIEW cannot count as PASS. Distinguish deterministic-only evidence from measured analyzer/end-to-end evidence. |
+Each package is a `build` feature using `builder-executor -> tdd-loop` in the **next chat**. Contained clarification may use `feature-planner`; return to the owner only for a material boundary change. Each completed feature owns one commit containing code, durable regressions, affected canonical documentation and this milestone's status update. No workflow-state commits.
 
-Every measured request emits funnel, diversity, denominator and unknown-data diagnostics. No unavailable observation becomes known. Record actual unique character/frontline sets and strategic differences; one credible party is sufficient where alternatives are not independently established.
+### M7-1: Explain The Candidate And Its Limits
 
-Negative cases include wrong element/type, self-only proof credited to party, absent prerequisite, unowned/SA-gated skill, duplicate hero or skill family, finite-item conflict, unsupported counter, harmful boss interaction and insufficient knowledge. Add only cases material to the supported path; do not require a new universal combat ontology.
+Status: Planned. Outcome: a player sees what the legal candidate actually equips, why modeled facts support it, and what remains unproven, including in deterministic-only output.
 
-Record fact/character review counts, corrections/rejections, minutes and total person-hours, deterministic latency and search/candidate counts. If paid evaluation is later authorized, record actual calls, tokens, latency, served model and cost. Do not claim review-time reduction without independent timing evidence.
+Currently: expandable cards already present members, skills, assumptions, risks and citations. `analyzer._candidate_proposal` mostly emits generic fallback prose and heuristic labels. `RecommendationSetOutput`/`TeamOutput` do not carry request coverage or selected-skill review diagnostics. The browser cannot recover these from formatted HTML.
 
-## Executable Features
+Required changes and reuse:
 
-### P1: Scope Reset And Failed-Experiment Preservation
-
-Type/route: evidence-remediation via tdd-loop, following approved architect-planner/contract-auditor discovery.
-
-Status: Completed on 2026-10-20 as a failed-experiment preservation/scope-reset deliverable. C2.1 itself remains unsuccessful/stopped.
-
-Scope: converge canonical planning/guidance, preserve immutable failed results/oracle/source identities and evaluated existing source bytes, verify retention and create one detailed feature commit. No source edits, classifier reruns, retirement, pilot implementation, schema change or graph operation.
-
-Acceptance:
-
-- P1-01: canonical documents agree on the approved pilot, explicit supersessions and failed C2.1 outcome.
-- P1-02: frozen final report/inputs/outputs remain byte-identical; final oracle/source snapshot leave ignored-only custody; source retention is traceable and its limits are stated.
-- P1-03: evaluated existing implementation, scripts, fixtures and tests are preserved byte-for-byte in Git. Preserve the original frozen base/diff identities separately from revised planning documents; do not claim the new planning tree equals the old evaluated diff.
-- P1-04: evidence identities, recorded run counts and provenance validate without another final classifier/adapter/evaluator execution. Supported source/review behavior receives proportionate offline regression checks.
-- P1-05: retain only authoritative evidence; workflow state stays ignored; one failure-record/scope-reset commit; no C2 semantic acceptance or pilot-success claim.
-
-Completion evidence:
-
-- The unchanged final report hash, oracle/snapshot mappings, seven final source slices, 36 atoms/13 gaps, recorded 7+1+1 calls and prior original/derivative pins validate without reexecuting the experiment. All 33 distinct final/prior frozen witness captures have durable exact bytes; historical captures use verified lossless gzip. Full historical execution still needs additional local structural/reference/parsed-sidekick inputs, as stated in the retention index.
-- Existing implementation, script, fixture and test bytes match their pre-reset hashes. Source is preserved in the normal Git tree/history, with no copied classifier-code archive. Runtime, legal catalog, review authority and graph schema remain unchanged relative to the evaluated input state.
-- Focused model/review/structural/source/loader regressions: 95 passed, two preexisting failures. Unchanged test_source_fidelity.py hard-codes 64 source witnesses and 57 development witnesses; the unchanged frozen manifest defines seven known plus 59 development, hence 66. A separate manifest-backed check passes the remaining assertions, all 66 bindings with zero failed/unknown fixtures and 367 legal kits. P1 does not alter frozen evidence or weaken tests; P2 owns count-test correction during source-fidelity consolidation.
-- Canonical documents reflect approved scope and explicit supersessions. No new classifier/adapter/semantic-evaluator call, pilot fact approval, graph operation, paid call, live scrape or deployment occurred. No manual product test is required for this preservation deliverable; pilot usefulness remains unproven.
-
-### P2: Reviewed Pilot Knowledge And Failed-Path Retirement
-
-Type/route: build via contract-auditor -> feature-planner -> builder-executor -> tdd-loop.
-
-Status: Reviewed evidence, source-pinned candidate inputs, failed-path retirement and manifest-backed count assertions are implemented. Full P2 acceptance is not met: Rotte's two positive candidates are blocked by the material marked-slot REVIEW/UNKNOWN, the Celestial Mushroom constrained-roster replay produced no candidates, and neither proposed inadequacy seed is an outcome oracle. Keep the four-positive/two-inadequate gate unchanged. Retain Rotte diagnostically. If Mushroom supports the positive pilot, obtain an explicit scope decision and source-justify enough Mushroom scenarios to meet the existing four-positive gate; do not count Rotte or alter the gate silently.
-
-Evidence: the review batch records 11 decisions over five source facts (4 approve, 5 correct, 2 reject) across Rosetta, Yuna, Toova and Suzette; two previously approved exact-fact records are reused. The scenario fixture pins the twenty normal-form legal-kit receipts and all six investigation rosters to local boss captures and expected fixtures. At P2 feature completion, the focused source/review/runtime regression selection passed 100 tests, including both manifest-backed stale-count checks. No deterministic pilot output, infeasibility claim, analyzer call, graph mutation or live refresh was performed as part of P2.
-
-Entry: P1 evidence/source preservation verified. Audit final callers, pytest collection, unique assertions, provenance and persisted contracts before removal. Source-only boss/scenario adjudication must precede implementation-dependent expectations.
-
-Scope: curate pilot facts through existing review/override contracts; freeze independent scenarios; retire obsolete classifier/report runners and predictor-specific tests together; preserve supported source-fidelity, legal-kit, review and runtime functionality. No broad scoring refactor, runtime classification, new graph schema or live/paid operation. Graph replay is a separately authorized operational checkpoint; offline preparation does not imply graph mutation permission.
-
-Exit: all credited facts pass A; scenario authority and inadequacy are established; no unexplained parallel classifier remains; no unique source regression is lost; all 367 legal kits remain; one completed-feature commit. If adjudication is missing, stop only that dependent acceptance, not independent source/preparation work.
-
-### P3: Deterministic Recommendation Evaluation
-
-Type/route: deterministic evaluation via tdd-loop. The owner approved two contained scoring follow-ups after the diagnostic replay. Each follows `contract-auditor -> builder-executor -> tdd-loop` and receives its own feature commit.
-
-Status: P3 acceptance remains unmet. The initial replay established no Celestial Mushroom H2 positive; the original H2 gates and the four-positive/two-inadequate pilot gate remain unchanged. Feature 1, boss affinity correction, and Feature 2, flexible recommendation hierarchy, are complete as separate changes. Neither establishes an H2 positive or relaxes P2/P3 acceptance.
-
-Initial diagnostic replay: the Celestial Mushroom constrained roster returned zero candidates. In that pre-Double-Crush replay, all 150 candidate attempts missed mandatory offensive enablement, and the 50 hybrid attempts also missed the template's combined Zone-setup-or-enablement slot. That slot was not a boss-required Zone counter. The replay used reviewed local artifacts in a disposable graph; no paid call or running-graph mutation occurred.
-
-Follow-up bounded experiment: a targeted Toova review approved Ghostly Whisper's Earth Magic single-target damage; its 5%-of-damage self-heal remains uncredited because the current evidence fields cannot represent that scaling basis. The same 20-form scenario generated zero candidates with the existing mandatory templates and ten with the temporary policy requiring only usable primary damage. The top candidate's frontline was Toova, Yuna, Aisha and Rosetta, with Feinne and Anabel in reserve. Before review, Toova's package was Venom, Great Wall and Rock Spread (context score 30); afterward it was Ghostly Whisper, Venom and Great Wall (45). Venom remained because its independently reviewed direct damage earns primary-damage credit; Pain/Poison earn no beneficial synergy against this boss, but package ranking does not penalize their documented harmful effects. The generator scored all 84 legal three-skill combinations and returned one representative; other legal attacks such as Rock Spread remain unreviewed. This was a diagnostic comparison, not an H2 positive or acceptance change. It used in-memory reviewed evidence with three skill slots, SA off, no owned sidekicks and no special-item credit; no graph mutation, analyzer call, paid call or live scrape occurred.
-
-Double Crush review experiment: the pinned Toova normal-form source supports Earth Magic damage to one enemy, a two-hit L action, and deployment of Torn Earth Stance. The review system approves `direct_damage` with Earth/Magic qualifiers, qualitative `multi_hit_action`, and generic `deploy_zone` through one exact-fact override; it does not score the exact hit count or encode Torn Earth's element-specific effects. The taxonomy artifact advanced to 3.3.0 while its review schema stayed at 3.2.0; the two active M6 batches were re-imported with their decisions unchanged. Toova's package moved from Ghostly Whisper, Venom and Great Wall (45 points) to Double Crush, Venom and Great Wall (48). The temporary primary-damage-only replay produced ten candidates; its top frontline was Toova, Azami, Aisha and Rosetta, with Yuna and Anabel in reserve. Aisha's Fire Zone and Toova's Torn Earth Zone address different documented Celestial Mushroom attack elements, but a later Zone overwrites the active one. The scorer counts generic Zone setup without comparing those competing effects or selecting an execution plan, so this lineup is diagnostic only. At that point production scoring and role policy had not changed.
-
-Feature 1 — boss affinity correction: reviewed `direct_damage` element and attack-type qualifiers now determine whether an attack receives primary-damage credit. Matching verified weaknesses receive a fixed categorical bonus; known element or attack-type resistance withholds that credit; conflicting or incomplete affinity interactions remain `unknown`. Matchup quality no longer marks an otherwise legal character or skill package illegal. The existing role, skill-package and lineup policy identifiers advanced to `feature-d-role-score-v2`, `feature-d2-skill-package-v2` and `feature-f2-package-first-v2`. The boss source identity did not change; historical H2 fixtures retain the v1 policy IDs they recorded.
-
-The six pinned scenarios were replayed before and after Feature 1 from the same `pilot_scenarios.json`, reviewed P2/P3 batches, normal-form catalog, SA-off, no-sidekick and generic-only item assumptions. Counts were unchanged:
-
-| Scenario | Before | After |
-| --- | ---: | ---: |
-| Rotte Rivel strong candidates | 10 | 10 |
-| Rotte Rivel constrained candidates | 0 | 0 |
-| Rotte Rivel F2P investigation | 0 | 0 |
-| Celestial Mushroom strong candidates | 0 | 0 |
-| Celestial Mushroom constrained candidates | 0 | 0 |
-| Celestial Mushroom Suzette investigation | 0 | 0 |
-
-The Celestial Mushroom constrained replay still rejects all 150 attempts for missing offensive enablement, so Feature 1 does not resolve the separate mandatory-template issue. The top Rotte Rivel strong-roster diagnostic candidate is Aldo, Yuna, Toova and Anabel frontline, with Rosetta and Radias in reserve. Its fixed skill packages are Aldo: Phoenix Slash, X Judgment, Swift Cut; Yuna: Maiden's Observance, Divine Utterance, Maiden's Flutter; Toova: Double Crush, Venom, Rock Spread; Anabel: Deliverance Sword, Knight's Pride, Deliverance Sword - Counter; Rosetta: Plea of Guilt, Biblia, Prosecute; Radias: Elemental Barrier, Berserker Rush, Spinning Edge. This remains diagnostic only: Rotte's marked-slot non-type Magic attack and Confuse/Bind counter are unresolved, and Fire Magic against Rotte remains `UNKNOWN` while an unconflicted Fire Slash is a verified weakness match. No H2 gate passes as a result of this scoring correction.
-
-Feature 2 — flexible recommendation hierarchy: Burst, Sustain and Hybrid templates now require usable primary damage, while generic offensive enablement, survival coverage and Zone/setup are optional strategy roles. Existing package and beam ordering still uses role evidence, and the lineup score retains its synergy, setup and sustain dimensions. Explicit boss counters, boss- or dependency-required setup, skill/package/build legality and slot limits remain hard constraints. Generic `mp`, `long_fight`, `attrition` and `sustain` tags no longer make MP sustain a hard requirement; explicit MP counters remain lineup-wide hard requirements, while explicit `requires_mp_sustain` applies to the Sustain template. A nonempty candidate set succeeds even when one or more archetypes have no representative, and the candidate cap is respected. Analyzer correction now repairs invalid proposals without requesting missing archetypes; up to three valid lineups may share an archetype. H2 evaluation was not changed.
-
-The same six pinned scenarios were replayed with the same reviewed P2/P3 batches, normal-form catalog, SA-off, no-sidekick, generic-only item and no-required-counter/mechanic-tag assumptions. Candidate counts before Feature 2 are the post-Feature-1 counts; all results are capped at ten:
-
-| Scenario | Before Feature 2 | After Feature 2 |
-| --- | ---: | ---: |
-| Rotte Rivel strong | 10 | 10 |
-| Rotte Rivel constrained | 0 | 10 |
-| Rotte Rivel F2P investigation | 0 | 10 |
-| Celestial Mushroom strong | 0 | 10 |
-| Celestial Mushroom constrained | 0 | 10 |
-| Celestial Mushroom Suzette investigation | 0 | 10 |
-
-The Rotte Rivel strong top lineup did not change: Aldo, Yuna, Toova and Anabel frontline; Rosetta and Radias reserve. The previously empty scenarios now have top backend lineups: Rotte constrained — Levia, Rosetta, Anabel, Aldo; Feinne and Cerrine reserve. Rotte F2P investigation — Levia, Feinne, Aldo, Gariyu; Cerrine and Cyrus reserve. Celestial Mushroom strong — Aisha, Azami, Toova, Rosetta; Yuna and Anabel reserve. Celestial Mushroom constrained — Levia, Yuna, Toova, Aldo; Azami and Feinne reserve. Celestial Mushroom/Suzette investigation — Levia, Gariyu, Azami, Aldo; Deirdre and Suzette reserve. The top three backend rows happen to be burst-labeled; label diversity is not required by candidate generation or analyzer correction. These are legal candidate-generation results, not H2 strategic passes. The F2P and Suzette top candidates show only primary-damage role coverage, which is why their new candidate counts must not be read as evidence of strategic feasibility.
-
-The Celestial Mushroom constrained top candidate's fixed skill packages are Levia: Echo Wave, Aqua Spread, Unlimited Wave; Yuna: Maiden's Observance, Divine Utterance, Maiden's Flutter; Toova: Double Crush, Venom, Great Wall; Aldo: Phoenix Slash, X Judgment, Swift Cut; Azami: Heavenly Dance, Fastening Edge, Culmination Winds; Feinne: Angel's Song: Sin, Maiden Whisper, Fairy Light. The source evidence still does not compare the effects or execution order of Aisha's Fire Zone and Toova's Torn Earth Zone, establish exact damage/healing magnitudes, or resolve Rotte's marked-slot non-type Magic attack and Confuse/Bind counter. No H2 gate passes; the four-positive/two-inadequate pilot gate and P2/P3 acceptance remain unmet.
-
-Feature 3 — placement-aware support and evidence diagnostics: The pinned Holy Mark Stacking review now credits only Anabel's self-targeted damage reduction, retaining its reviewed 50% magnitude and turn-start trigger; it does not infer Cover, party protection, or active reserve protection. Candidate role evidence records frontline versus reserve-after-switch placement. Generic role-breadth synergy and sustain/mitigation contributions now aggregate frontline only; hard legality, required-counter coverage, affinity scoring, and reserve-only utility retain their existing policies. Required-counter coverage identifies whether its evidence is frontline or reserve-after-switch, so a legal reserve counter is not presented as immediately active protection. Selected-skill diagnostics separately report skills with reviewed capabilities, selected skills without reviewed capabilities, unreviewed proposal counts, and that source-effect coverage is not established. These diagnostics do not treat missing review as absent gameplay value and do not alter numeric uncertainty.
-
-The same pinned `celestial-mushroom-strong-candidates` scenario was replayed offline with the existing 20 normal forms, SA off, no sidekicks, generic-only items, and the existing flexible lineup policy. Before this correction the top lineup was Toova, Azami, Aisha and Rosetta frontline, with Yuna and Anabel in reserve, scoring 10,430: coverage 100, boss matchup 18, synergy 8, sustain/mitigation 5, package readiness 6, role overlap 1, item burden 54, and zero for the remaining components. Afterward, the same six-character candidate and selected packages remained legal at rank 4 with score 10,370; only synergy fell to 5 and sustain/mitigation to 3. Eight candidates tie at 10,370; deterministic candidate-ID order chooses the displayed first row, which has Anabel and Levia in reserve, rather than establishing a preferred strategy. The top score is `100×100 + 18×18 + 5×12 + 3×12 + 6×10 − 1×2 − 54×2 = 10,370` under the existing weights. Synergy now means frontline generic role breadth, not measured cross-character interaction. Boss-matchup still evaluates legal selected attacks across all six, so reserve attacks may require switching; reserve evidence is labeled after-switch and does not count as immediately active support. Required-counter legality can still be satisfied from a reserve, but coverage now identifies its after-switch placement. The focus candidate has no required boss counters, and its `coverage=100` is primary-damage coverage, not a boss-counter or H2 pass. The displayed top row selects Toova — Double Crush, Venom, Great Wall; Azami — Heavenly Dance, Fastening Edge, Culmination Winds; Aisha — Jewel Concerto, Flame's Serenade, Bluesky Rhapsody; Rosetta — Plea of Guilt, Biblia, Prosecute; Anabel — Deliverance Sword, Knight's Pride, Deliverance Sword - Counter; Levia — Echo Wave, Aqua Spread, Unlimited Wave. For that top row, 8 of 18 selected skills have at least one reviewed capability, 10 have no reviewed capability, and 35 proposals remain unreviewed. The rank-4 focus lineup instead selects Yuna — Maiden's Observance, Divine Utterance, Maiden's Flutter in place of Levia and has 9 of 18 skills with a reviewed capability, 9 without, and 32 unreviewed proposals. Source-effect coverage remains unestablished for both; missing evidence is not evidence of no gameplay value. Rosetta's reviewed Biblia party barrier, status immunity and healing remain in the frontline evidence. Yuna's reviewed reserve cleanse remains a possible after-switch capability, while her source-listed Regen is not established by the reviewed evidence. No skill rotation, Zone timing, or battle outcome is simulated. The unchanged numeric uncertainty score of zero describes only scorer-modeled unknowns, not the completeness of selected-skill review.
-
-The focused placement/source regressions and relevant workflow suites passed 121 tests; `py_compile` and `git diff --check` passed. No live scrape, graph mutation, paid call, new classifier, or acceptance-gate change was made. No H2 dimension is established by this correction; P3 acceptance remains unmet.
-
-Verification: `.venv/bin/pytest tests/workflow/test_role_scoring.py tests/workflow/test_lineup_generation.py tests/workflow/test_package_first_beam.py tests/workflow/test_feature_c_correction.py tests/workflow/test_feature_c_partial_output.py tests/workflow/test_candidates.py tests/unit/test_manual_pilot_evidence.py` passed 60 tests. `py_compile` and `git diff --check` passed. Unresolved broad-suite verification issue: `timeout 35s .venv/bin/pytest tests/workflow tests/unit/test_manual_pilot_evidence.py tests/unit/test_feature_c6_1_capability_coverage.py` collected 327 tests, reached `tests/workflow/test_graph.py` after the preceding tests reported progress, then stalled until timeout. The blocked graph test produced no assertion result; this is neither a pass nor a failing assertion. No analyzer call, database operation, paid call or live scrape was performed.
-
-Further skill curation, ranking development and H2 evaluation are paused under the owner's Stage 1 MVP-readiness decision below. Preserve P2/P3 acceptance as unmet unless the original requirements are independently demonstrated. Never mark a failed gate complete.
-
-### P4: Bounded Analyzer And End-To-End Evaluation
-
-Type/route: verification-only via tdd-loop.
-
-Status: Conditional, not authorized for paid execution. Entry: B passes and owner separately authorizes the exact model/run/cost envelope.
-
-Reuse the compact analyzer/H1/H2 contracts. Apply C and D independently of deterministic scores. Preserve two-call/one-swap limits, invalid-output fallback and measured costs. No provider configuration/deployment change. One completed-feature commit if admitted and completed.
-
-## Stage 1: Limited MVP Integration Readiness
-
-The owner approved this bounded sequencing exception on 2026-10-22. Connect and verify the existing recommender before further curation or strategic-scoring development. This does not accept M6, P2, P3, P4, H2, M7 or M8, change their gates, or authorize paid models, live scraping, persistent graph mutations or deployment. P4 remains conditional under its existing entry requirements.
-
-### RR-A: Production Frontend/API Wiring
-
-Type/route: build via builder-executor -> tdd-loop. Status: Completed on 2026-10-22.
-
-Ownership: an early, limited M7 frontend slice executed in the active milestone by explicit exception. Reuse roster/sidekick ownership, the query/job/SSE endpoints and existing result rendering. Add explicit production/exploratory selection and a Celestial Mushroom boss selector. Send the existing lookup identity `Celestial Mushroom` as `boss_id`; the manifest slug is not currently a supported lookup input. Keep API defaults and exploratory GraphRAG compatible. No new profile, inventory, progression, provider or graph schema.
+- Retain `result.html` cards and existing `warnings`, `risks`, `key_facts`, counterplay, assumptions and citations. Reuse typed retrieval, backend candidate coverage/evidence, selected-skill diagnostics, placement and component-score scopes, source URLs and reviewed fact identities.
+- Add only the bounded display projection needed to pass those existing facts through candidate resolution/final formatting. Optional additive output fields are admitted where existing fields cannot represent the summary; document them in architecture/validation guidance. No new endpoint, full catalog dump, graph schema or independent explanation engine.
+- Bind explanations and warnings to **final validated members, equipped skills and placements**, including authorized swaps/package choices. Never attach stale original-candidate diagnostics after refinement. Unavailable or unjoinable evidence is explicitly unestablished, not zero or complete. Preserve final legality, affinity fidelity, finite allocations and analyzer bounds.
+- Show boss affinities and useful selected-skill matchups only where inspected evidence supports them. Show source links beside supported claims; distinguish a legal unreviewed skill from reviewed capability proof. Do not fill a missing source with generated mechanics. Explain scope/target, including self-only effects.
+- Surface relevant known harms and setup limits: selected Toova Venom against Mushroom; selected alternative Zone deployments (e.g. Flame's Serenade and Double Crush) cannot be claimed simultaneously active; reserve active-skill support/attacks require switching. Do not generalize this to all reserve passives or invent a rotation, Zone superiority or activation success.
+- Use runtime retrieved facts and committed source authority, not imports from test fixtures. The existing pinned Mushroom interaction and source skill identities support narrowly keyed warning copy if runtime fields lack a structured warning; retain source provenance and tests for that mapping. Unknown Zone details permit only an explicit alternative/setup limitation, never a new capability claim.
+- Keep the deterministic-only banner. Describe fit/rubric as internal ranking signals and confidence as limited scorer uncertainty, never battle confidence. Show reviewed selected-skill counts/denominators separately from source-effect coverage, which remains unestablished. Existing diagnostic uncertainty zero is not complete review. Show same-team/limited-diversity information when established; do not pad alternatives.
 
 Acceptance:
 
-- RR-A-01: the actual frontend submit handler sends `mode="production"`, the selected `boss_id` and owned roster; production does not require free-text preferences.
-- RR-A-02: exploratory questions retain their own mode and graph without a production boss requirement.
-- RR-A-03: POST job storage and SSE forwarding preserve the request; production selects its typed graph and a valid isolated result renders through the existing template.
-- RR-A-04: mode-specific progress matches production nodes; bounded async HTTP checks avoid the known local TestClient/thread-bridge stall, and a browser check verifies input and rendering behavior.
+- **M7-1-01:** One, two or three surviving candidates retain exact final frontline/reserve/skills/builds and validators; no fabricated alternatives or strategic PASS.
+- **M7-1-02:** Reviewed effects show traceable sources and scope. Missing reviewed capability evidence remains explicit; denominators describe the selected skills. Missing diagnostics render as unavailable, including older/exploratory payloads.
+- **M7-1-03:** Venom/Mushroom, alternative-Zone and reserve-switch warnings appear when relevant and do not imply concurrent Zones or active reserve protection. Nonmatching boss/skill/placement cases do not receive a false specific warning.
+- **M7-1-04:** After a permitted refinement/swap, evidence matches final selections or is explicitly unavailable. Heuristic points, primary-damage coverage and labels never imply battle strength, full boss-counter coverage, source completeness or win probability.
+- **M7-1-05:** Degraded status, generic-item/upgrade caveats and evidence limitations remain visible in the normal result view; exploratory single-team/alternatives and legacy optional fields still render.
 
-Evidence: 20 focused web tests passed, including four actual-script Node assertions. The offline Chromium DOM check passed roster selection, missing-boss native validation, optional production preferences, request submission, SSE result insertion and exploratory switching. Node syntax and `git diff --check` passed. HTTP tests use asynchronous driver injection to avoid the local AnyIO/thread bridge. The browser needed sandbox escalation for local socket setup and used no external assets or services. No live Neo4j freshness, analyzer quality or H2 usefulness is established. A alone does not fix analyzer-unavailable results.
+Verification: extend existing workflow candidate/analyzer/format and web rendering suites for final-selection joins, unavailable evidence, warning presence/absence and label meaning; rerun the 363-test baseline selection plus affected regressions. Use the real fixture-backed production smoke rather than only synthetic HTML. Extend offline Chromium coverage to expand cards, inspect skills/affinities/warnings/citations and confirm degraded visibility. Manually inspect one desktop/mobile result for understandable language and readable critical warnings; this is UI acceptance, not H2 gameplay review. Record results during implementation.
 
-One completed-feature commit includes implementation, permanent capability regressions, necessary documentation and this milestone update. Request/response fields, graph schema, scoring policy and authoritative source identities are unchanged. Production UI now explicitly selects an existing backend capability; exploratory mode remains a separate supported path. All new tests/helpers are retained as reusable input/transport/rendering regressions; browser profiles and generated HTML remain temporary.
+Entry/dependency: Stage 1 complete; no dependency on a new M6 positive. Excludes curation, scorer/ranking/search changes, battle validation, new mechanics and paid runs. Commit boundary: complete evidence projection, rendering, regressions and affected docs together.
 
-### RR-B: Analyzer Fallback-To-Format Contract
+### M7-2: Make Failures Understandable And Recoverable
 
-Type/route: build via builder-executor -> tdd-loop. Status: Completed on 2026-10-22 after RR-A.
+Status: Planned; follows M7-1. Outcome: the user knows what failed, what action can help and whether the request has finished, while keeping selected ownership.
 
-Ownership: repair of the existing production fallback contract, not P4 paid/analyzer-quality acceptance. Reserve `analysis_failure` for terminal errors. Valid deterministic recommendations retain `degraded=true`, warnings and a visible deterministic-only banner, and pass through candidate ID/package/allocation validation, display resolution, output validation, boss-affinity fidelity and final graph-backed legality. Remove the branch that restores rejected fallback proposals; no valid survivor must terminate with a classified error rather than recurse or create another fallback pipeline.
+Currently: `ProductionRequestError` supplies safe issue codes/fields/messages through `pipeline_error_payload`; format output has error classes. `app.js` substitutes a generic retry label and silently closes some failures. POST errors report status only; missing/reused jobs return HTTP 404; render failures can end without a result. Empty-state copy refers to a nonexistent Grasta list and can equate unavailable evidence with an unsuitable roster.
+
+Required changes and reuse:
+
+- Reuse typed issue codes, existing format error types, `error.html`/`empty.html`, POST/job/SSE and both mode trackers. Display safe field-specific guidance for missing/unsupported/unready/conflicting boss, invalid/unknown/ambiguous roster or sidekick, malformed input, incomplete data and unavailable legal candidates.
+- Distinguish invalid input, insufficient supported evidence/candidates and operational failure. Empty candidate output does not prove gameplay infeasibility; adding characters is a suggestion only when supported. Remove obsolete Grasta-list advice.
+- Complete the frontend lifecycle for entity-load/storage errors, POST validation/network failures, invalid/reused SSE job, SSE disconnect, render failure and `done` without result. Where needed, pass a safe existing-protocol error event from the bridge; do not expose raw internal exceptions or invent a new transport.
+- Every terminal outcome stops timers, restores submission and leaves an actionable message; preserve selections. Retry explicitly creates a fresh job. No automatic request resubmission, provider retries or alternate fallback pipeline. Unknown failures get safe generic guidance rather than invented diagnostics.
 
 Acceptance:
 
-- RR-B-01: valid unavailable-analyzer fallback survives final formatting and legality checks; the page identifies deterministic-only output without claiming successful AI analysis.
-- RR-B-02: invalid IDs, packages, finite allocations, output shape, affinities and graph legality remain rejected. Valid siblings may survive; zero valid candidates remains fatal. Preserve existing call/correction limits.
-- RR-B-03: one isolated Mushroom smoke runs the frontend request through POST/SSE, real production retrieval/candidate generation, unavailable analyzer, final validation and actual template rendering, using fixture-backed graph records without persistent mutations or paid calls.
-- RR-B-04: browser verification covers production selection, rendered degraded output and exploratory switching. Report isolated integration separately from live Neo4j freshness, gameplay usefulness and paid-provider qualification.
+- **M7-2-01:** Typed input failures identify the affected field and next action; stale roster names can be corrected without erasing valid ownership. Boss conflicts direct the user to reconcile preferences/selection.
+- **M7-2-02:** Zero-candidate, missing-data and final-validation failures remain failures with distinct supported guidance; none bypasses validation, claims game infeasibility or turns into invented teams.
+- **M7-2-03:** Each listed POST/SSE/render/connection failure and no-result completion leaves no spinner or disabled submit control; user retry starts one new job. Invalid/reused job closes cleanly.
+- **M7-2-04:** Entity or malformed localStorage failure leaves usable recovery guidance. Both modes preserve their input requirements and success paths; safe text is rendered without treating diagnostic strings as HTML.
 
-Completion evidence: the actual frontend request for the existing twenty-form Celestial Mushroom roster passed POST/job/SSE routing and the real production graph over isolated reviewed fixture records. Deterministic retrieval, scoring and candidate generation produced backend candidates; the unconfigured local analyzer attempt made zero provider/network calls. Three degraded recommendations passed candidate validation, output shape, affinity fidelity and actual final legality collection/validation, then rendered through the real template. The SSE wire exposes JSON objects after one browser parse. Offline Chromium verified form validation, roster payload, production progress completion, recommendation cards, degraded banner and exploratory switching. This is isolated application integration; Cypher execution and live Neo4j freshness remain unverified.
+Verification: extend actual-script Node, API/SSE and template suites with representative typed, zero-candidate, malformed-storage, invalid-job, interrupted/no-result and render-failure cases; keep unique transport/validation coverage. Offline Chromium must exercise an invalid request, a simulated disconnect/no-result completion and successful explicit retry, in addition to both existing success paths. Manually check keyboard-accessible error guidance and recovery. No live-service failure injection is required.
 
-The combined path exposed contained display-contract mismatches, corrected in this feature: SA-gated passives are not selected without explicit awakening; trusted generic equipment retains a generic display label; generic Grasta placeholders carry exact caveats through existing assumption fields; and already serialized SSE progress JSON is emitted without a second encoding. Candidate/allocation and final legality validators were not relaxed. Terminal exhaustion returns directly, with no restoration of rejected candidates or recursive fallback. Degraded results discard analyzer ranking/refinements rather than claiming successful AI analysis.
+Entry/dependency: M7-1 output compatibility settled. Excludes backend request/schema redesign, graph repair, provider changes, job persistence/multiworker support and quota work. Commit boundary: complete error presentation and terminal lifecycle with regressions/docs together.
 
-Verification: all workflow tests plus affected API, streaming, actual-script, rendering and production-smoke suites passed 363 tests. The combined browser command passed with three degraded recommendations. Python/JavaScript syntax and `git diff --check` passed. Real LangGraph/Chromium checks required sandbox escalation for the local thread/socket bridge; no production concurrency change was made. The existing TestClient import emits a deprecation warning. No human product test is outstanding for these controls because real DOM automation exercised them; H2 usefulness and live operational evidence remain separate gates.
+### M7-3: Guide Roster Selection And The Portfolio Demo
 
-One completed-feature commit owns B and the combined smoke. Retain unique validation/transport/rendering regressions and the fixture adapter, which reuses existing authoritative sources rather than inventing recommendation-quality oracles. Temporary review copies, browser profiles and generated HTML are deleted by their runners; diagnostics and handoffs stay local. Runtime output/fallback semantics are revised, while scoring policies, schema, provider settings and source identities remain unchanged. No new provenance version or release identity is asserted. Both production and exploratory paths remain supported; no parallel fallback pipeline was introduced.
+Status: Planned; follows M7-2. Outcome: someone unfamiliar with the mechanics can select a roster or explicitly try the sample, run the bounded demo and explain what the result establishes.
 
-Stage 2 defers detailed evidence coverage; Venom, Zone and reserve-switching warnings; confidence/fit terminology; broader UI/typed-error polish; deployment, spend safeguards and paid-provider qualification. Stage 1 excludes new curation, magnitude scoring, optimization, mechanics, corpus expansion and chatbot work. M7/M8 obligations and all original acceptance gates remain open.
+Currently: search/checklists/localStorage, optional owned sidekicks, mode selector and responsive result details work. Guidance, selected-count feedback, F2P/default explanations and an opt-in sample are absent.
 
-## Retirement Ownership
+Required changes and reuse:
 
-P2 removes c2_scoped_classification.py, shared_mechanics.py, report_feature_c2.py, evaluate_c2_r1_baseline.py and the development/consumed-regression runners after preservation and caller checks. Their historical results and exact source remain in frozen evidence and Git history. No supported runtime caller requires a permanent compatibility layer.
+- Keep existing form, native controls, responsive layout and card structure. Add concise instructions for forms, frontline/reserves, equipped skills, boss candidate coverage, source limitations, the deterministic backend/LLM division and optional preferences. Avoid a cosmetic redesign.
+- Explain automatic F2P additions, optional sidekicks, no declared SA/Light/Shadow and assumed item access before submission. Do not call a roster under six selected characters invalid solely on count: backend F2P augmentation still applies; existing production input requires at least one user roster entry.
+- Add an explicit “Use sample roster” action for the twenty normal-form Mushroom demo, reusing the canonical names above and current ownership controls. Intersect with loaded entity names, report any missing forms, and require user action before replacing saved selections. Declare no owned sidekicks/SA/high Light/Shadow; show the existing item-policy assumption. Do not auto-submit or claim the sample is H2 accepted. No separate sample API or runtime dependency on test fixtures.
+- Keep Mushroom as the only selectable production boss; explain Rotte's diagnostic-only evidence limit. Preserve full catalog selection and exploratory mode. Add selected-roster feedback and verify labels/focus, keyboard operation and narrow-screen readability.
 
-Keep capability_taxonomy.py/JSON/reviews/gold/review_batches, models, loader, kit catalog/readiness, Feature C/coverage reporting, and the production runtime. In particular, older c2_defensive_setup review batches belong to supported capability materialization.
+Acceptance:
 
-Keep source_fidelity.py, structural_evidence.py and their source manifests/fixtures. Consolidate unique parser/anchor/variant/child-ownership assertions from C2-named tests into source-fidelity coverage. Keep the independent semantic evaluator and its matching/identity regressions initially; do not build another evaluator. Retire shared_mechanics.py resolver-only behavior while preserving registry/source provenance and source-anchor integrity checks.
+- **M7-3-01:** A new user can follow select boss -> owned forms/sample -> submit -> inspect teams/skills -> read reasons/sources/limits without understanding internal workflow names.
+- **M7-3-02:** Explicit sample selection sets the supported canonical forms and declared defaults, preserves existing selections until the action, handles unavailable entities honestly and does not expand curated eligibility. A normal reload restores supported saved ownership.
+- **M7-3-03:** F2P augmentation, form identity, item/upgrade assumptions and legal-versus-battle-verified distinction are visible. Rotte is not promoted to selectable/equally validated support.
+- **M7-3-04:** Desktop and approximately 390px mobile views have readable controls, result details and warnings without horizontal page overflow; the complete supported journey and mode switching work by keyboard with understandable labels/focus/error announcements.
+- **M7-3-05:** All three feature contracts pass, affected canonical docs describe actual behavior, and the final retention/convergence sweep finds no displaced UI path or temporary artifact presented as product authority. M6/M8 gates stay open.
 
-Keep final frozen evidence and consumed original results distinct from regression derivatives, including the derivative-only Felmina correction. Promote unique oracle/provenance information before purging ignored handoffs. Protect historical raw caches until the retention inventory proves which sources have durable copies. Never blanket-delete C2/rule-named files.
+Verification: extend actual-script tests for sample application, saved-roster behavior, missing entities and unchanged payload defaults; retain normal-form/F2P contract checks. Run the combined fixture-backed smoke in offline Chromium with sample selection and expanded evidence at desktop/mobile sizes. Manually walk the journey by keyboard and review novice-facing language, default assumptions and visible failure recovery. This bounded UI check does not require a paid model, live database or battle trial. Run the complete baseline and affected tests at final M7 verification.
 
-## Exit And Next Decision
+Entry/dependency: M7-1 warnings and M7-2 recovery available. Excludes advanced SA/Light/Shadow/item editors, expanded curation, extra bosses/forms, chat, accounts, dashboards and deployment. Commit boundary: complete guidance/sample/usability, durable browser regressions, final milestone update and retention cleanup together.
 
-M6 pilot completion requires P1-P3, reviewed data, independently justified scenario outcomes, A/B and owner-reviewed deterministic usefulness evidence, preserved 367-form legality, honest uncertainty, and reconciled canonical documentation. Paid analyzer/end-to-end C/D evidence is conditional and must remain explicitly unmeasured if not authorized; deterministic-only completion is not a claim that the LLM has passed.
+## Verification, Retention And Exit
 
-The owner then chooses a limited MVP, a repair for a demonstrated weakness, or evidence expansion. M7/M8 remain required before a public portfolio deployment. Reconsider rule/LLM-assisted extraction only after the reviewed baseline is trustworthy and measured curation effort or recurring omissions establishes a worthwhile automation experiment. Compare future predictions against independent manual evidence; no runtime semantic classification or automatic proof is admitted.
+Repository tools: Python/pytest in `.venv`, Node's syntax/test runner and the existing offline Chromium harness. No configured formatter/linter/type-checker is declared in `pyproject.toml`; this plan admits no tool installation, dependency, quality configuration or CI policy change. Use `node --check src/web/static/app.js`, affected Python syntax checks and `git diff --check` alongside behavioral verification.
+
+Reusable baseline (disable dotenv loading; never inspect credentials):
+
+```bash
+timeout 55s .venv/bin/python -B - <<'PY'
+from unittest.mock import patch
+with patch('dotenv.load_dotenv', return_value=False):
+    import pytest
+    raise SystemExit(pytest.main([
+        '--confcutdir=tests/workflow', '-p', 'no:cacheprovider', '-q',
+        'tests/workflow', 'tests/web/unit/test_api.py',
+        'tests/web/unit/test_streaming.py', 'tests/web/unit/test_production_ui.py',
+        'tests/web/unit/test_feature_e_result_ui.py',
+        'tests/web/unit/test_production_integration.py',
+    ]))
+PY
+timeout 45s .venv/bin/python -B tests/web/browser_check.py --production-smoke
+```
+
+Expand the selection with each feature's affected tests. Use bounded execution outside the sandbox when the known local thread/socket bridge stalls; do not alter production concurrency or weaken assertions. Offline DOM checks remove external assets, so they do not prove CDN delivery or live production styling. Manual usability checks must inspect the actual styled page with local/stubbed services; record any asset limitation rather than claiming full visual acceptance from the stripped harness.
+
+Retain capability regressions and source-authoritative fixtures already used by the supported flow; consolidate additions into existing suites. Keep command output, generated pages/reports, browser profiles and `.sdd/` ignored and temporary. Promote durable contracts and evidence limits to canonical docs; purge the completed handoff. Keep production and exploratory paths, their validators and existing cards; adapt their presentation in place, with no parallel UI/fallback implementation or temporary compatibility layer planned.
+
+M7 exits only when M7-1 through M7-3 automated checks and recorded manual UI checks pass and canonical docs agree. M7 completion means frontend readiness for the bounded, honestly labeled candidate demo. It does not complete M6/P2/P3/H2, establish live graph freshness, qualify a provider or authorize public release. M8 retains registration, quotas, RM50 spend ceiling, kill switch, persistent accounting, deployment and paid-provider qualification. If a required warning cannot be grounded in existing evidence, show the limitation and return any proposed evidence/schema/engine expansion to the owner; do not reopen engine development inside M7.
+
+Planning provenance: only planning intent and canonical documentation are revised. Runtime, scores, schemas, source/review identities, graph data, provider settings and release identity are unchanged by the planning deliverable.

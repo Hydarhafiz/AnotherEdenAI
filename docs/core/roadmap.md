@@ -32,13 +32,11 @@ Program success does not require exhaustive combat modeling, a full simulator, g
 
 ## Current Active Milestone
 
-Milestone 5 closed on 2026-09-14 after Feature H2. Milestone 6, Reviewed-Knowledge Recommendation Pilot, is active in docs/core/milestone.md. The owner approved its architecture reset on 2026-10-20 after C2.1 failed final frozen validation.
+Milestone 7, Frontend Portfolio Experience, is the active implementation workstream in [milestone.md](milestone.md). On 2026-10-22 the owner explicitly approved extending the completed RR-A/RR-B integration sequencing exception to bounded M7 frontend work. The plan reuses the existing engine, request/job/SSE contract and result cards; implementation starts in a separate chat with M7-1.
 
-P1 scope reset/preservation is complete; P2/P3 acceptance remains unmet. On 2026-10-22 the owner approved a limited MVP-readiness sequencing exception: RR-A production frontend/API wiring, then RR-B analyzer fallback-to-format repair and isolated integration verification. Further curation, ranking development and H2 evaluation are paused. RR-A is an early M7 slice; RR-B repairs the existing runtime contract. The active milestone holds both feature contracts. This exception changes no acceptance gate, completes no milestone, and does not admit conditional P4, paid qualification or deployment.
+Milestone 6 is paused and incomplete. Its P2/P3/H2 gates remain unmet and unchanged; their exact remaining obligations and evidence are retained in the M6 section below. M7 admission bypasses the accepted-M6-baseline dependency for frontend work only. It does not accept M6, authorize conditional P4, qualify a provider, prove live graph freshness or relax M8 release gates. Further curation, ranking development and H2 evaluation remain paused.
 
-Use Rotte Rivel and Celestial Mushroom as candidate bosses and twenty normal forms, including all eight automatically added F2P forms, as the curation pool. These are bounded quality-evaluation candidates, not a replacement for the 367-form legal catalog or the thirty-boss corpus. Establish expected outcomes from sources before observing recommendation output. Do not assume the proposed negative rosters are infeasible.
-
-A-C/C1 remain completed foundations; C1.1 technical source-fidelity work remains supported. C2/C2.1 semantic acceptance failed and development is stopped. Original C2 continuation, joint-acceptance and D-G completion obligations are explicitly superseded, not passed. Preserve their frozen results, source identities and consumed-cohort status. Do not begin another classifier repair or held-out cohort.
+M5 closed on 2026-09-14 under its approved scope correction. C2/C2.1 failed semantic acceptance and is stopped; no new classifier repair or held-out cohort is admitted. All 367 owned, data-complete legal forms and the thirty-boss corpus remain supported foundations. The twenty normal-form/two-boss pilot bounds evidence, not legal ownership eligibility.
 
 ## Research And Planning Sources
 
@@ -141,56 +139,65 @@ Historical Features A-H, corrections C6/C6.1/D2/E2/F2/G1.1, and their identifier
 
 ### Milestone 6: Reviewed-Knowledge Recommendation Pilot
 
-Status: Active; owner-approved reset on 2026-10-20. P1 is complete; P2/P3 acceptance remains unmet. The approved RR-A -> RR-B integration exception takes priority over further pilot expansion.
+Status: Paused and incomplete under the owner-approved 2026-10-22 M7 sequencing extension. P1 is complete; P2/P3 acceptance and H2 usefulness remain unmet. This is a change of active workstream, not milestone closure or gate supersession.
 
-Purpose: prove whether trustworthy manual knowledge lets the existing deterministic recommendation engine produce useful, explainable, boss-aware legal teams.
+Purpose: prove whether trustworthy manual knowledge lets the existing deterministic engine produce useful, explainable, boss-aware legal teams.
 
-Preserved foundations:
+Preserved foundations and evidence:
 
-- A-C coverage/extraction-attempt and boss-priority evidence, C1 structure, and C1.1 technical source fidelity.
-- All 367 canonical legal kits, thirty-boss provenance and conservative reviewed capability materialization.
-- Existing scoring/packages/search, allocation, uncertainty diagnostics, two-call/one-swap analyzer bounds, fallback and H2's four quality criteria.
+- A-C coverage/extraction-attempt evidence, C1 structure and C1.1 technical source fidelity; 367 legal kits, thirty-boss provenance, reviewed capability materialization and existing scoring/packages/search/allocation/validation/fallback.
+- C2.1 failed final validation: effects F1 30.2%, dependencies 0%, combined labels 23.0%, anchors 9/36 and conditions 0/18. It remains unsuccessful/stopped, not jointly accepted. Original C2 continuation and D-G completion obligations were explicitly superseded by the 2026-10-20 reset, not passed. No Test #5, new classifier architecture or reuse of consumed cohorts as fresh validation.
+- Frozen report: `artifacts/evidence/feature_c2_final_heldout_report_20261020.json`, SHA-256 `671d208ece253f12444c7d2e22cf0f9ff799e305eb6a3b1ebf819ec622223e54`; source/oracle custody and replay limits: `artifacts/evidence/feature_c2_final_heldout_retention_20261020.json`. Preserve exact source identities, consumed-cohort status and recorded 7 classifier + 1 adapter + 1 evaluator calls; never rerun for preservation.
+- `tests/fixtures/m6_p2/pilot_scenarios.json` pins the twenty normal forms, six investigation seeds, boss captures, reviewed source facts and unresolved adjudications. `src/etl/superboss_manifest.json`, the bounded corpus, independent `tests/fixtures/superbosses/live_expected.json`, kit catalog, review batches/overrides and runtime tests remain authority for their respective facts. Scenario seeds are not quality/inadequacy oracles.
+- The complete M6 contract, acceptance, retirement dispositions and diagnostic replay details remain recoverable at `git show 49a0d62:docs/core/milestone.md`; current pilot validation instructions remain in [recommendation-validation.md](../guides/recommendation-validation.md#13-reviewed-knowledge-pilot-acceptance). Resume from these sources plus current implementation; do not invent a second active milestone file.
 
-C2.1 failed final validation: effects F1 30.2%, dependencies 0%, combined canonical labels 23.0%, anchors 9/36 and conditions 0/18. The official report and retention mapping live in artifacts/evidence/feature_c2_final_heldout_report_20261020.json and feature_c2_final_heldout_retention_20261020.json. C2.1 is unsuccessful/stopped, not jointly accepted or completed. Earlier validation cohorts are consumed; no Test #5 or new classification architecture is admitted.
+Current feature dispositions:
 
-Feature boundaries:
+1. P1 scope reset and immutable failed-experiment preservation is complete.
+2. P2 reviewed facts, source-pinned inputs, failed-classifier retirement and manifest-backed source-count assertions are implemented. Full scenario authority and acceptance are not established. Keep source-fidelity/structural evidence, legal kits, taxonomy/reviews/overrides/materialization, independent semantic evaluator and unique source regressions. Do not restore obsolete C2 classifier/report/resolver paths or blanket-delete C2-named supported review artifacts. Historical caches cannot be purged without the source-retention inventory.
+3. P3 diagnostic replays and contained affinity, flexible-role and placement-support corrections are implemented. Later replays produced ten candidates in each of the six investigation seeds; this supersedes earlier zero-candidate observations as current candidate-generation evidence, not as strategic acceptance. Primary-damage coverage, heuristic points and label diversity do not prove H2 success. Selected-skill review diagnostics and frontline/reserve-after-switch scopes remain supported.
+4. P4 bounded analyzer/end-to-end evaluation remains conditional: deterministic gate B must pass and the owner must separately authorize an exact model/run/cost envelope. Existing two-call/one-authorized-swap bounds and safe fallback remain mandatory. No paid execution is admitted by M7 planning.
 
-1. P1: approved scope reset and immutable failed-experiment/source preservation; one evidence-remediation feature commit.
-2. P2: manually reviewed pilot facts, independent scenarios and audited retirement of obsolete experimental code; preserve supported source/review functionality.
-3. P3: deterministic recommendation evaluation, with contained repairs only for demonstrated defects.
-4. P4: bounded analyzer/end-to-end evaluation only after deterministic gates pass and a separately authorized model/run/cost envelope.
-5. Owner decision: limited MVP, specific repair or evidence expansion.
+Unchanged acceptance and resumption gates:
 
-Pilot gates replace the original full-catalog proof counts, eight alternative-rich cases and 20/10 recommendation gates through explicit owner supersession. Four independently feasible positive scenarios must each produce a legal candidate passing affinity, counter coverage, coherence and setup gates; two independently inadequate scenarios need honest outcomes. Every credited fact is source-reviewed, all measured requests emit complete diagnostics, and unknowns never become proof or absence. No multiple-party quota applies without independently established alternatives.
+| Gate | Requirement retained in full |
+| --- | --- |
+| A: reviewed knowledge | 100% of credited pilot facts have reviewed source provenance and correct material scope; independent fixtures replay; zero unknown-to-absence or unreviewed-to-proof conversions. |
+| B: deterministic recommendation | Four independently established positive scenarios each produce at least one candidate passing all four H2 gates. Two independently established inadequate scenarios receive honest insufficiency/infeasibility outcomes. Every returned candidate passes legality, skill/package and finite allocation checks; identical inputs reproduce output; zero analyzer calls. |
+| H2 dimensions | Damage affinity/elemental viability, boss-mechanic counter coverage, team synergy/role coherence and setup executability are evaluated independently. Material UNKNOWN/REVIEW never counts as PASS. No H2 positive has been established by the current candidate replays or Stage 1 smoke. |
+| Reporting | 100% of measured requests emit funnel, diversity, denominator and unknown-data diagnostics. Record actual unique character/frontline sets and strategic differences; never manufacture alternatives or turn missing proof into absence. No multiple-party quota without independently established alternatives. |
+| C: conditional analyzer | Separately authorized only: zero out-of-bundle IDs or unsupported material claims, source-grounded explanations, at most two calls and one authorized swap per lineup, safe deterministic fallback. |
+| D: usefulness | Owner reviews selected recommendations against all four H2 gates. Keep deterministic-only findings distinct from measured analyzer/end-to-end evidence. |
+| Scenario authority | Freeze independently source-justified outcomes, exact forms/SA/upgrades/Light/Shadow/sidekicks/item policy before observing output. Include all eight automatic F2P forms in inadequacy analysis. Missing knowledge is not gameplay infeasibility; proposed negative seeds are not certificates. |
+| Completion | P1-P3, reviewed facts, independently justified scenarios, A/B and owner-reviewed deterministic usefulness, preserved 367-form legality, honest uncertainty and canonical documentation must pass. Conditional paid C/D remain explicitly unmeasured if unauthorized; deterministic-only completion cannot claim LLM quality. |
 
-The active milestone holds exact scope, scenario seeds, gate definitions, retirement ownership and conditional completion. Deterministic-only completion must clearly leave paid analyzer quality unmeasured. Preserve the broader MVP work: coverage expansion as evidence warrants, frontend in M7, and safeguarded release in M8. Reconsider extraction automation only after a trustworthy baseline and measured need.
+Rotte Rivel remains a non-passing diagnostic case: marked-slot non-type Magic plus Confuse/Bind has no established counter, Fire Magic against combined Fire weakness/Magic resistance is REVIEW/UNKNOWN, and ordinary mitigation is not proven against HP-halving. Celestial Mushroom has no established four-gate positive either; Venom's Pain/Poison can increase resistance and trigger cleansing/healing. Do not equate the two bosses' evidence or replace one, reduce positive scope or weaken a gate without an explicit owner decision. A source-justified Mushroom-only proposal must retain the four-positive/two-inadequate gate and obtain explicit owner approval before changing the positive-boss scope.
+
+On resumption, first establish source-only scenario authority and report the smallest remaining product decision. Preserve meaningful negative cases: wrong element/type, self-only effect credited to party, absent prerequisites, unowned/SA-gated skill, duplicate hero/skill family, finite-item conflict, unsupported counter, harmful boss interaction and knowledge insufficiency. Record reviewed fact/character counts, corrections/rejections, minutes/person-hours, deterministic latency and candidate/search counts. Authorized paid runs additionally record calls/tokens/latency/served model/cost. Do not claim review-time reduction without independent timing evidence.
+
+Stage 1 integration is complete: `9f0a33e` wires production/exploratory input and `49a0d62` preserves validated fallback-to-format. Planning-time reruns passed 363 workflow/affected-web tests, seven pilot-source tests and the offline Chromium smoke with three degraded recommendations. Fixture-backed records do not prove live Cypher execution, Neo4j freshness, strategic usefulness or paid-provider qualification.
+
+After the retained M6 gates are actually met, the owner chooses a limited MVP, a demonstrated-defect repair or evidence expansion. Reconsider extraction automation only after a trustworthy baseline and measured need. M7 frontend completion and M8 safeguards/provider/release obligations remain independent requirements.
 
 ### Milestone 7: Frontend Portfolio Experience
 
-Status: Planned. The owner approved only the RR-A minimal production-input slice ahead of full M7 admission; M7 acceptance and the remaining frontend scope stay open.
+Status: Active workstream; planning approved on 2026-10-22. M7-1 through M7-3 are planned. RR-A/RR-B foundations are complete; remaining frontend acceptance is open.
 
-Purpose:
+Purpose: deliver a limited, explainable portfolio MVP on the existing engine: boss and owned forms -> up to three legal candidates when supported -> inspect placement/skills -> understand source-backed reasons, warnings and limitations. Exploratory GraphRAG remains supported.
 
-- Make deterministic recommendation evidence and the exploratory graph experience impressive and legible to recruiters and players.
+Implementation order and one completed-feature commit each:
 
-Expected outcomes:
+1. M7-1: explain candidates and evidence limits. Reuse cards/skills/builds/citations; expose bounded final-selection evidence, affinities, missing review, harmful Venom/Mushroom interaction, alternative Zone and reserve-switch limitations. Clarify heuristic fit/confidence and deterministic-only status.
+2. M7-2: actionable input/result errors and terminal request recovery. Reuse typed issues and POST/job/SSE; handle unavailable candidates, invalid jobs, disconnects and no-result completion without stuck controls or false infeasibility claims.
+3. M7-3: guided roster and portfolio demo usability. Explain forms/F2P/default assumptions, add an explicit supported sample roster, and verify mobile/keyboard/readability without redesigning working areas.
 
-- Polished roster, boss, sidekick, Stellar Awakening, Light/Shadow, and preference input.
-- Clear separation between production recommendation and exploratory GraphRAG.
-- Candidate evidence, assumptions, risks, sources, degradation, coverage, and diversity diagnostics.
-- Product language that presents plausible evidence-backed candidates rather than a promised best team.
-- Admin/status views for data freshness and system health.
+Exact feature contracts, exclusions and automated/manual browser acceptance live in [milestone.md](milestone.md). Production selection remains Celestial Mushroom only; Rotte stays diagnostic and unavailable in the selector. The twenty normal forms are a source-pinned demo pool, not a restriction on the 367-form legal catalog.
 
-Dependencies:
+Dependency disposition: stable M5 architecture and completed Stage 1 integration admit frontend work by explicit owner exception despite the unmet M6 baseline. No positive strategic acceptance is implied. M8 still depends on accepted M6 evidence and completed M7 stability.
 
-- Stable M5 recommendation architecture.
-- An accepted bounded M6 recommendation baseline, explicit evidence coverage and search/diversity diagnostics.
+Deferred from the earlier broad M7 outline: advanced SA/Light/Shadow/preference editors and inventory work; admin freshness/health dashboards and public provider-cost views. Display current assumptions and missing observations instead. M8 owns the operational visibility necessary for its safeguarded release; no extra infrastructure is introduced here.
 
-Exit criteria:
-
-- A recruiter can understand the deterministic backend/LLM boundary quickly.
-- A player can distinguish legal recommendations, modeled evidence, assumptions, and incomplete data.
-- A senior engineer can inspect constraints, evidence, failure handling, diversity, and cost controls.
+Exit: all three features and their recorded UI checks pass; a player can distinguish legal candidates, modeled evidence, assumptions and unknowns, and a recruiter can explain deterministic backend versus bounded LLM responsibilities. Candidate generation, curation, magnitude scoring, H2 strategy validation, optimization, simulation, classifier architecture, chat and deployment are outside M7. No guaranteed clear, battle-strength score, win probability, equal boss-validation claim or release-readiness assertion.
 
 ### Milestone 8: Cost-Controlled Deployment
 

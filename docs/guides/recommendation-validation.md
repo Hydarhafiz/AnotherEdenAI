@@ -35,7 +35,7 @@ valid observation; the implementation does not pad it to a target.
 The accepted Feature A baseline is the immutable before snapshot. Original
 D-G thresholds were approved after Feature A, then explicitly superseded by
 the owner-approved 2026-10-20 pilot reset. Current gates and scenario seeds
-live in docs/core/milestone.md. Generated reports under `artifacts/generated/`
+remain unchanged in the M6 section of [roadmap.md](../core/roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot), while [milestone.md](../core/milestone.md) holds active M7 frontend work. Generated reports under `artifacts/generated/`
 are local inspection material and are not committed.
 
 ## Stage 1 production UI integration
@@ -96,6 +96,36 @@ for the fixture-only smoke and Chromium when necessary; do not change production
 concurrency or weaken assertions to hide that environment issue. This is isolated
 application integration evidence, not a live Neo4j retrieval-to-browser claim,
 paid-provider qualification or a passing H2 scenario.
+
+## M7 frontend acceptance boundary
+
+The owner approved bounded M7 frontend planning on 2026-10-22 while M6 remains
+paused and incomplete. Implement evidence/limitation presentation first, actionable
+errors and terminal request recovery second, then guided roster/sample usability.
+The executable acceptance criteria and per-feature automated/manual browser checks
+are in [milestone.md](../core/milestone.md). Those changes are planned; the Stage 1
+checks above establish only existing behavior.
+
+Planning reran the recorded 363 workflow/affected-web tests, seven pilot-source
+regressions and combined offline Chromium smoke successfully. It returned three
+degraded recommendations. Restricted sandbox runs reproduced the known local
+thread stall; bounded runs outside the sandbox passed. No live graph freshness,
+paid-provider quality, battle usefulness or M6/H2 positive was established.
+
+Future M7 verification must inspect final equipped skills and placement, reviewed
+versus unreviewed evidence, sources, meaningful warnings and degraded status. Include
+the selected Venom/Mushroom harm, alternative Zone and reserve-switch cases and
+nonmatching cases; verify final-selection evidence after authorized refinement.
+Exercise typed invalid-input errors, unavailable candidates, invalid/reused jobs,
+disconnect/no-result completion and explicit retry in addition to both modes'
+success paths. Do not derive a strategic oracle from candidate output or a UI test.
+
+The offline harness removes external CSS/scripts. Extend its DOM checks, but also
+record a manual inspection of the actual styled page at desktop/mobile sizes and
+by keyboard, using local/stubbed services. This checks readability, visible warnings,
+focus and recovery; it does not satisfy H2 strategy acceptance. Keep generated pages,
+screenshots, profiles and command output local unless uniquely needed as durable
+evidence. Do not contact a paid provider or mutate a persistent graph for UI checks.
 
 ## 1. Prepare the local services
 
