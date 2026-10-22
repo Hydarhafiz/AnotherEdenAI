@@ -99,33 +99,35 @@ paid-provider qualification or a passing H2 scenario.
 
 ## M7 frontend acceptance boundary
 
-The owner approved bounded M7 frontend planning on 2026-10-22 while M6 remains
-paused and incomplete. Implement evidence/limitation presentation first, actionable
-errors and terminal request recovery second, then guided roster/sample usability.
-The executable acceptance criteria and per-feature automated/manual browser checks
-are in [milestone.md](../core/milestone.md). Those changes are planned; the Stage 1
-checks above establish only existing behavior.
+The owner approved bounded M7 frontend work on 2026-10-22 while M6 remains paused
+and incomplete. M7-1 is complete; M7-2 error/recovery and M7-3 roster/sample
+usability remain planned. Acceptance criteria and per-feature checks are in
+[milestone.md](../core/milestone.md).
 
-Planning reran the recorded 363 workflow/affected-web tests, seven pilot-source
-regressions and combined offline Chromium smoke successfully. It returned three
-degraded recommendations. Restricted sandbox runs reproduced the known local
-thread stall; bounded runs outside the sandbox passed. No live graph freshness,
-paid-provider quality, battle usefulness or M6/H2 positive was established.
+M7-1 verification passed 368 workflow/affected-web tests with one existing
+FastAPI TestClient deprecation warning. The fixture-backed production smoke and
+offline Chromium DOM check passed with three degraded recommendations. Desktop
+(1440x1200) and mobile (390x844) result views were manually inspected using the
+application's inline responsive CSS and a local CSS-variable shim. CDN Pico assets
+were removed, so the visual check covers result copy and inline layout, not CDN
+styling or keyboard usability. No live graph freshness, paid-provider quality,
+battle usefulness or M6/H2 positive was established. Restricted sandbox runs
+reproduced the known local thread stall; bounded runs outside the sandbox passed.
 
-Future M7 verification must inspect final equipped skills and placement, reviewed
-versus unreviewed evidence, sources, meaningful warnings and degraded status. Include
-the selected Venom/Mushroom harm, alternative Zone and reserve-switch cases and
-nonmatching cases; verify final-selection evidence after authorized refinement.
-Exercise typed invalid-input errors, unavailable candidates, invalid/reused jobs,
-disconnect/no-result completion and explicit retry in addition to both modes'
-success paths. Do not derive a strategic oracle from candidate output or a UI test.
+The final display projection carries stable character and selected-skill IDs
+through final formatting. Reviewed skill facts join to the final selected IDs;
+candidate ranking/matchup diagnostics are shown only for an exact final lineup and
+skill-package match. Authorized swaps that no longer match make those candidate
+diagnostics unavailable rather than reusing stale evidence. The verified cases
+cover selected Venom/Mushroom harm, multiple reviewed Zone options, reserve
+switching and nonmatching selections. Missing evidence stays unavailable and
+source-effect coverage stays unestablished. No strategic oracle was added.
 
-The offline harness removes external CSS/scripts. Extend its DOM checks, but also
-record a manual inspection of the actual styled page at desktop/mobile sizes and
-by keyboard, using local/stubbed services. This checks readability, visible warnings,
-focus and recovery; it does not satisfy H2 strategy acceptance. Keep generated pages,
-screenshots, profiles and command output local unless uniquely needed as durable
-evidence. Do not contact a paid provider or mutate a persistent graph for UI checks.
+M7-2 and M7-3 verification still needs typed input errors, invalid/reused jobs,
+disconnect/no-result completion, explicit retry, roster/sample behavior and
+keyboard checks. Keep generated pages, screenshots, profiles and command output
+local unless uniquely needed as durable evidence. Do not contact a paid provider or
+mutate a persistent graph for UI checks.
 
 ## 1. Prepare the local services
 

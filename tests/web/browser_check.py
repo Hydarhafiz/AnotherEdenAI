@@ -93,6 +93,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     check(sent[0].roster.join(',') === 'Toova,Yuna', 'owned roster payload');
     check(document.querySelectorAll('#result-container .recommendation-card').length > 0, 'SSE result cards');
     check(document.querySelectorAll('.pipeline-step.done').length === 4, 'production progress completes');
+    const firstCard = document.querySelector('#result-container .recommendation-card');
+    firstCard.open = true;
+    const resultText = document.getElementById('result-container').textContent;
+    check(resultText.includes('Boss facts and search limits'), 'boss affinity evidence panel');
+    check(resultText.includes('Celestial Mushroom'), 'selected production boss');
+    check(resultText.includes('Selected skill evidence'), 'final selected-skill evidence panel');
+    check(resultText.includes('Source-effect coverage is not established'), 'review limitation');
+    check(resultText.includes('Modeled fit'), 'heuristic fit label scope');
+    check(document.querySelectorAll('#result-container a[href]').length > 0, 'source citations');
+    check(resultText.includes('Reserve skills require switching'), 'reserve switch limitation');
     if (fixture.degraded) check(document.getElementById('result-container').textContent.includes('Deterministic-only result'), 'degraded banner');
     mode.value = 'exploratory';
     mode.dispatchEvent(new Event('change'));
@@ -107,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     mode.value = 'production';
     mode.dispatchEvent(new Event('change'));
     check(!boss.disabled && !query.required, 'return to production');
-    status.textContent = 'PASS: roster, boss validation, production request, SSE rendering, exploratory switching' + (fixture.degraded ? ', degraded banner' : '');
+    status.textContent = 'PASS: roster, boss validation, production request, final evidence, citations, SSE rendering, exploratory switching' + (fixture.degraded ? ', degraded banner' : '');
   } catch (error) { status.textContent = 'FAIL: ' + error.message; }
 });
 """

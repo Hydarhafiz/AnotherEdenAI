@@ -133,6 +133,10 @@ def test_valid_candidate_ids_resolve_only_after_validation_and_preserve_alias_na
     assert resolved["recommendations"][0]["frontline"][0]["recommended_skills"] == [
         "Pain Setter", "Skill 0-1", "Skill 0-2"
     ]
+    assert resolved["recommendations"][0]["frontline"][0]["character_id"] == "character:0"
+    assert resolved["recommendations"][0]["frontline"][0]["selected_skill_ids"] == [
+        "skill:0:0", "skill:0:1", "skill:0:2"
+    ]
     assert resolved["boss_affinity"]["weak"] == ["Fire"]
 
 

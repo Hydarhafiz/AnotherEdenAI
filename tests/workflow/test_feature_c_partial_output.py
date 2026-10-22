@@ -71,14 +71,47 @@ def test_zero_valid_lineups_returns_classified_graceful_failure():
 @pytest.mark.asyncio
 async def test_final_legality_discards_only_invalid_lineup():
     payload = _resolved_set(count=2)
+    first = payload["recommendations"][0]
+    heroes = first["frontline"] + first["reserve"]
+    candidate = {
+        "id": "lineup:final",
+        "character_ids": [hero["character_id"] for hero in heroes],
+        "skill_package_ids": {hero["character_id"]: hero["selected_skill_ids"] for hero in heroes},
+        "skill_packages": {},
+        "coverage": {"roles_by_character_placement": {"frontline": ["primary_damage"], "reserve_after_switch": []}},
+        "component_scores": {"boss_matchup": 1},
+        "component_score_scope": {"boss_matchup": "Final lineup evidence."},
+        "uncertainty": {"count": 0},
+        "evidence_diagnostics": {"scorer_uncertainty_count": 0},
+    }
+    skills = [
+        {
+            "id": skill_id,
+            "character_id": hero["character_id"],
+            "character_name": hero["name"],
+            "name": name,
+            "capabilities": [],
+            "capability_evidence_json": "[]",
+            "capability_diagnostics_json": json.dumps({"proposed": 0, "reviewed": 0, "proven": 0, "candidate": 0}),
+        }
+        for hero in heroes
+        for skill_id, name in zip(hero["selected_skill_ids"], hero["recommended_skills"])
+    ]
     state = {
         "analysis_result": json.dumps(payload),
         "db_results": [{"ok": True}],
         "retry_count": 0,
+        "workflow_mode": "production",
         "roster": ["Akane (Alter),Blooming Blade", *[f"Hero {index}" for index in range(1, 6)]],
         "owned_sidekicks": ["Tetra"],
         "stellar_awakened": {},
         "boss_context": "",
+        "candidate_bundle": {"backend_candidates": [candidate]},
+        "typed_retrieval": {
+            "boss": {"id": "mimi", "name": "Mimi", "weak": ["Fire"], "weak_state": "confirmed_values"},
+            "request_coverage": {"report_type": "feature_a_request_coverage", "metrics": {"candidate_count": 1}, "unknown_data": {}},
+            "skills": skills,
+        },
     }
 
     with patch("src.workflow.nodes.format.collect_legality_context", new_callable=AsyncMock, return_value=MagicMock()), \
@@ -88,6 +121,9 @@ async def test_final_legality_discards_only_invalid_lineup():
     assert [item["archetype"] for item in result["final_output"]["recommendations"]] == ["burst"]
     assert result["final_legality_errors"][0]["path"] == "recommendations.1"
     assert any("Discarded 1 lineup" in warning for warning in result["final_output"]["warnings"])
+    assert result["final_output"]["result_presentation"]["mode"] == "production"
+    assert result["final_output"]["result_presentation"]["request_coverage"]["status"] == "available"
+    assert result["final_output"]["recommendations"][0]["presentation"]["candidate"]["status"] == "available"
 
 
 def test_validate_routing_separates_retry_success_and_exhaustion():

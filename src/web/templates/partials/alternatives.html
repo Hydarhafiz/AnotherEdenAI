@@ -5,6 +5,15 @@
 {% else %}
 <article>
   <header><h3>No exact match found — Top 3 Alternatives</h3></header>
+  {% set result_evidence = result.get('result_presentation') %}
+  {% if result_evidence %}
+  {% if result_evidence.boss_name %}
+  <p>Boss facts for {{ result_evidence.boss_name }} are shown only where inspected state is available.</p>
+  {% endif %}
+  {% if result_evidence.request_coverage.status == 'unavailable' %}
+  <p>Request coverage and search-pool diversity diagnostics are unavailable for this result.</p>
+  {% endif %}
+  {% endif %}
   {% if result.reason %}
   <p><small>{{ result.reason }}</small></p>
   {% endif %}
@@ -23,6 +32,8 @@
         <div class="grastas">
           <small>Grasta: {{ char.grastas | join(', ') }}</small>
         </div>
+        {% if char.recommended_skills %}<div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>{% endif %}
+        {% if char.upgrade_assumptions %}<div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>{% endif %}
       </div>
       {% endfor %}
     </div>
@@ -38,6 +49,8 @@
         <div class="grastas">
           <small>Grasta: {{ char.grastas | join(', ') }}</small>
         </div>
+        {% if char.recommended_skills %}<div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>{% endif %}
+        {% if char.upgrade_assumptions %}<div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>{% endif %}
       </div>
       {% endfor %}
     </div>
@@ -45,8 +58,46 @@
 
     {% if alt.synergy_explanation %}
     <div class="synergy-box">
-      <strong>Synergy:</strong> {{ alt.synergy_explanation }}
+      <strong>Analyzer explanation (advisory):</strong> {{ alt.synergy_explanation }}
     </div>
+    {% endif %}
+    {% set candidate_evidence = alt.get('presentation') %}
+    {% if candidate_evidence %}
+    <section class="detail-section">
+      <h5>Evidence and limits</h5>
+      {% if candidate_evidence.selected_skill_evidence_status == 'unavailable' %}
+      <p>Selected-skill review diagnostics are unavailable for this alternative.</p>
+      {% else %}
+      <p>Source-effect coverage is not established. No reviewed capability evidence is not proof that a skill has no other effect.</p>
+      <ul>
+        {% for skill in candidate_evidence.selected_skills %}
+        <li><strong>{{ skill.character_name }} — {{ skill.skill_name }}</strong> ({{ 'frontline' if skill.placement == 'frontline' else 'reserve after switching' }})
+          {% if skill.source and skill.source.source_url %} · <a href="{{ skill.source.source_url }}" target="_blank" rel="noopener noreferrer">skill source</a>{% endif %}
+          {% if skill.review_status == 'reviewed' %}
+          <ul>{% for effect in skill.reviewed_effects %}<li>{{ effect.capability | replace('_', ' ') }}; {{ effect.direction or 'direction unavailable' }}; target {{ effect.target or 'unavailable' }}{% if effect.matched_phrase %}; reviewed phrase: “{{ effect.matched_phrase }}”{% endif %}</li>{% endfor %}</ul>
+          {% elif skill.review_status == 'no_reviewed_capability_evidence' %}<small>No reviewed capability evidence is attached to this skill.</small>
+          {% else %}<small>Review evidence unavailable.</small>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if candidate_evidence.candidate.status == 'available' %}
+      <p>{{ candidate_evidence.candidate.note }}</p>
+      {% else %}<p>{{ candidate_evidence.candidate.note }}</p>{% endif %}
+      {% for warning in candidate_evidence.warnings %}
+      <p><strong>{{ warning.title }}:</strong> {{ warning.message }}
+        {% for source in warning.sources %}{% if source.source_url %} · <a href="{{ source.source_url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% endif %}{% endfor %}
+      </p>
+      {% endfor %}
+    </section>
+    {% else %}
+    <p>Evidence diagnostics are unavailable for this legacy or exploratory alternative.</p>
+    {% endif %}
+    {% if alt.risks %}
+    <section class="detail-section"><h5>Assumptions and uncertainty</h5><ul>{% for risk in alt.risks %}<li>{{ risk }}</li>{% endfor %}</ul></section>
+    {% endif %}
+    {% if alt.citations %}
+    <section class="detail-section"><h5>Citations</h5><ul>{% for citation in alt.citations %}<li><a href="{{ citation.source_url }}" target="_blank" rel="noopener noreferrer">{{ citation.label }}</a></li>{% endfor %}</ul></section>
     {% endif %}
   </details>
   {% endfor %}

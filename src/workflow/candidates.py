@@ -1046,12 +1046,17 @@ def _resolve_hero(entry: dict, characters: dict[str, dict]) -> dict:
     armor = armors[entry["armor_id"]]
     resolved = {
         "name": character["display_name"],
+        # Keep the stable identity and final equipped skill IDs through the
+        # formatting/legality boundary so display evidence can be rejoined to
+        # the exact validated lineup after analyzer refinement.
+        "character_id": entry["character_id"],
         "role": entry.get("role", "unspecified role"),
         # Preserve trusted category assumptions across the name-based legality boundary.
         "weapon": f"Generic {weapon['display_name']}" if weapon.get("generic") else weapon["display_name"],
         "armor": f"Generic {armor['display_name']}" if armor.get("generic") else armor["display_name"],
         "grastas": [grastas[value]["display_name"] for value in entry["grasta_ids"]],
         "recommended_skills": [skills[value]["name"] for value in entry.get("skill_ids", [])],
+        "selected_skill_ids": list(entry.get("skill_ids", [])),
         "recommended_passives": [passives[value]["name"] for value in entry.get("passive_ids", [])],
         "upgrade_assumptions": entry.get("upgrade_assumptions", []),
     }

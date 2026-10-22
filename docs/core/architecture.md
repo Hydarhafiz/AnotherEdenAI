@@ -221,6 +221,19 @@ The web production bridge currently supplies no analyzer transport, so its local
 adapter attempt makes no provider call and returns this degraded path. Enabling
 or qualifying a paid provider remains separately authorized work.
 
+After the existing final legality filter succeeds, `FORMAT` carries stable
+character and selected-skill IDs into the displayed proposal and builds a
+bounded presentation projection from typed retrieval and candidate diagnostics.
+Reviewed skill facts join on character and skill identity. Candidate ranking,
+coverage and matchup diagnostics are reused only when the final six-character
+order and equipped skill IDs exactly match the backend candidate; otherwise
+those diagnostics are unavailable, while source facts for the displayed skills
+can still be joined. Specific setup warnings are limited to the selected skills,
+their reviewed facts and the selected boss. Missing evidence remains unavailable,
+and source-effect coverage remains unestablished. Production templates render
+these structured facts and limits rather than analyzer-authored strategy prose.
+No candidate generation, scoring or legality rule changes.
+
 Production requests carry `boss_id` (currently the exact boss name used by the graph lookup), roster, optional owned sidekicks,
 per-character Stellar Awakening state, optional per-character Light/Shadow points,
 the `late_game_assumed` item policy, and natural-language preferences. Missing

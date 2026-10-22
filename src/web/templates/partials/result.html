@@ -13,7 +13,61 @@
     <div class="synergy-box"><strong>Validation warnings:</strong><ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul></div>
     {% endif %}
 
-    {% if result.archetype_viability_notes %}
+    {% set result_evidence = result.get('result_presentation') %}
+    {% if result_evidence %}
+    <details class="detail-section" open>
+      <summary><strong>Boss facts and search limits</strong></summary>
+      {% if result_evidence.boss_name %}
+      <p>Boss: <strong>{{ result_evidence.boss_name }}</strong>
+        {% if result_evidence.boss_source and result_evidence.boss_source.source_url %}
+        · <a href="{{ result_evidence.boss_source.source_url }}" target="_blank" rel="noopener noreferrer">source</a>
+        {% endif %}
+      </p>
+      <ul>
+        {% for affinity in result_evidence.boss_affinities %}
+        <li><strong>{{ affinity.dimension | title }}:</strong>
+          {% if affinity.state == 'confirmed_values' and affinity['values'] %}{{ affinity['values'] | join(', ') }}
+          {% elif affinity.state == 'confirmed_empty' %}none listed in the inspected source
+          {% else %}unknown or incomplete ({{ affinity.state }})
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Boss affinity evidence is unavailable for this result.</p>
+      {% endif %}
+
+      {% if result_evidence.request_coverage.status == 'available' %}
+      {% set coverage = result_evidence.request_coverage %}
+      <details>
+        <summary>Request coverage and deterministic search pool</summary>
+        <ul>
+          {% if coverage.metrics.get('user_roster_count') is not none %}<li>Owned forms entered: {{ coverage.metrics.user_roster_count }}</li>{% endif %}
+          {% if coverage.metrics.get('f2p_augmented_count') is not none %}<li>Automatic F2P additions: {{ coverage.metrics.f2p_augmented_count }}</li>{% endif %}
+          {% if coverage.metrics.get('distinct_available_count') is not none %}<li>Available forms retrieved: {{ coverage.metrics.distinct_available_count }}</li>{% endif %}
+          {% if coverage.metrics.get('data_complete_count') is not none %}<li>Forms with complete candidate data: {{ coverage.metrics.data_complete_count }}</li>{% endif %}
+          {% if coverage.metrics.get('candidate_count') is not none %}<li>Backend search candidates before final filtering: {{ coverage.metrics.candidate_count }}</li>{% endif %}
+          {% if coverage.metrics.get('unique_character_set_count') is not none %}<li>Distinct six-character sets in that search pool: {{ coverage.metrics.unique_character_set_count }}</li>{% endif %}
+          {% if coverage.metrics.get('unique_frontline_set_count') is not none %}<li>Distinct frontline sets in that search pool: {{ coverage.metrics.unique_frontline_set_count }}</li>{% endif %}
+        </ul>
+        {% if coverage.unknown_data %}
+        <p><strong>Unknown-data counters:</strong></p>
+        <ul>{% for name, value in coverage.unknown_data.items() %}<li>{{ name | replace('_', ' ') }}: {{ value }}</li>{% endfor %}</ul>
+        {% else %}
+        <p>Unknown-data counters are unavailable.</p>
+        {% endif %}
+        <p>{{ coverage.note }}</p>
+      </details>
+      {% else %}
+      <p>Request coverage and search-pool diversity diagnostics are unavailable for this result.</p>
+      {% endif %}
+      <p>{{ result_evidence.explanation_limit }}</p>
+    </details>
+    {% else %}
+    <p role="note">Boss affinity and request coverage diagnostics are unavailable for this result.</p>
+    {% endif %}
+
+    {% if result.archetype_viability_notes and result_evidence.mode != 'production' %}
     <div class="synergy-box">
       <strong>Archetype notes:</strong> {{ result.archetype_viability_notes | join(' ') }}
     </div>
@@ -26,8 +80,8 @@
         <div class="recommendation-summary">
           <div class="recommendation-title">
             <h4>{{ rec.archetype | title }}</h4>
-            {% if rec.fit_label %}<span class="label-pill">Fit: {{ rec.fit_label }}</span>{% endif %}
-            {% if rec.confidence_label %}<span class="label-pill">Confidence: {{ rec.confidence_label }}</span>{% endif %}
+            {% if rec.fit_label %}<span class="label-pill">{% if result_evidence.mode == 'production' %}Modeled fit{% else %}Fit{% endif %}: {{ rec.fit_label }}</span>{% endif %}
+            {% if rec.confidence_label %}<span class="label-pill">{% if result_evidence.mode == 'production' %}Scorer confidence{% else %}Confidence{% endif %}: {{ rec.confidence_label }}</span>{% endif %}
           </div>
 
           <div class="lineup-compact">
@@ -38,12 +92,15 @@
             {% endif %}
           </div>
 
-          {% if rec.strategy_summary %}
+          {% if result_evidence.mode == 'production' %}
+          <strong>Validated backend candidate</strong>
+          <p>This legal lineup passed the final graph-backed checks. The evidence below is joined to its final selected characters and skills; it does not establish battle performance.</p>
+          {% elif rec.strategy_summary %}
           <strong>Short strategy</strong>
           <p>{{ rec.strategy_summary }}</p>
           {% endif %}
 
-          {% if rec.risks %}
+          {% if rec.risks and result_evidence.mode != 'production' %}
           <strong>Main risks</strong>
           <ul class="compact-risks">
             {% for risk in rec.risks[:2] %}
@@ -55,6 +112,126 @@
       </summary>
 
       <div class="detail-grid">
+        {% set candidate_evidence = rec.get('presentation') %}
+        {% if candidate_evidence %}
+        <section class="detail-section full-width">
+          <h5>Final candidate evidence</h5>
+          {% if candidate_evidence.candidate.status == 'available' %}
+          <p>{{ candidate_evidence.candidate.note }}</p>
+          <p><strong>Modeled roles credited:</strong></p>
+          <ul>
+            <li>Frontline: {{ candidate_evidence.candidate.modeled_roles.frontline | join(', ') if candidate_evidence.candidate.modeled_roles.frontline else 'not recorded' }}</li>
+            <li>Reserve after switching: {{ candidate_evidence.candidate.modeled_roles.reserve_after_switch | join(', ') if candidate_evidence.candidate.modeled_roles.reserve_after_switch else 'not recorded' }}</li>
+          </ul>
+          {% if candidate_evidence.candidate.modeled_coverage_gaps %}
+          <p><strong>Not credited by this candidate's modeled coverage:</strong> {{ candidate_evidence.candidate.modeled_coverage_gaps | join(', ') }}</p>
+          {% endif %}
+          {% if candidate_evidence.candidate.component_scores %}
+          <p><strong>Component ranking signals:</strong></p>
+          <ul>
+            {% for name, value in candidate_evidence.candidate.component_scores.items() %}
+            <li><strong>{{ name | replace('_', ' ') | title }}:</strong> {{ rec.rubric_summary.get(name, 'available') }}
+              {% if candidate_evidence.candidate.component_score_scope.get(name) %} — {{ candidate_evidence.candidate.component_score_scope.get(name) }}{% else %} — scope unavailable{% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>Component scores and their scopes are unavailable for the exact final lineup.</p>
+          {% endif %}
+          {% if candidate_evidence.candidate.scorer_uncertainty_count is not none %}
+          <p>Scorer-represented uncertainty: {{ candidate_evidence.candidate.scorer_uncertainty_count }}. This is not a measure of source-review completeness.{% if candidate_evidence.candidate.scorer_uncertainty_scope %} Scope: {{ candidate_evidence.candidate.scorer_uncertainty_scope }}{% endif %}</p>
+          {% else %}
+          <p>Scorer uncertainty diagnostics are unavailable.</p>
+          {% endif %}
+          {% else %}
+          <p>{{ candidate_evidence.candidate.note }}</p>
+          {% endif %}
+
+          <h5>Selected skill evidence</h5>
+          {% if candidate_evidence.selected_skill_evidence_status == 'unavailable' %}
+          <p>Selected-skill review diagnostics are unavailable for this result.</p>
+          {% else %}
+          {% if candidate_evidence.selected_skill_count is not none %}
+          <p>{{ candidate_evidence.skills_with_reviewed_capabilities }} of {{ candidate_evidence.selected_skill_count }} selected skills have reviewed capability evidence in the joined source records.{% if candidate_evidence.joined_skill_count < candidate_evidence.selected_skill_count %} Evidence records for some selected skills are unavailable.{% endif %}</p>
+          {% else %}
+          <p>The full selected-skill denominator is unavailable; only joined skill records are shown.</p>
+          {% endif %}
+          <p>Source-effect coverage is not established. A selected skill without reviewed capability evidence is not proof that the skill has no other effect.</p>
+          {% if candidate_evidence.selected_skills %}
+          <ul>
+            {% for skill in candidate_evidence.selected_skills %}
+            <li>
+              <strong>{{ skill.character_name }} — {{ skill.skill_name }}</strong>
+              <small>({{ 'frontline' if skill.placement == 'frontline' else 'reserve; requires switching' }})</small>
+              {% if skill.source and skill.source.source_url %} · <a href="{{ skill.source.source_url }}" target="_blank" rel="noopener noreferrer">skill source</a>{% endif %}
+              {% if skill.review_status == 'reviewed' %}
+              <ul>
+                {% for effect in skill.reviewed_effects %}
+                <li>
+                  {{ effect.capability | replace('_', ' ') }}
+                  {% if effect.direction or effect.target %} — {{ effect.direction or 'direction not recorded' }}; target {{ effect.target or 'not recorded' }}{% endif %}
+                  {% if effect.trigger %}; trigger: {{ effect.trigger }}{% endif %}
+                  {% if effect.matched_phrase %}; reviewed phrase: “{{ effect.matched_phrase }}”{% endif %}
+                  <small>[{{ effect.source_fact_id }} · {{ effect.source_id }} · {{ effect.review_decision }}]</small>
+                </li>
+                {% endfor %}
+              </ul>
+              {% elif skill.review_status == 'no_reviewed_capability_evidence' %}
+              <small>No reviewed capability evidence is attached to this selected skill.</small>
+              {% else %}
+              <small>Review evidence for this selected skill is unavailable.</small>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% if candidate_evidence.unreviewed_proposal_count is not none %}
+          <p>Unreviewed proposals among these selected skills: {{ candidate_evidence.unreviewed_proposal_count }}.</p>
+          {% else %}
+          <p>Unreviewed proposal counts are unavailable.</p>
+          {% endif %}
+          {% endif %}
+
+          {% if candidate_evidence.candidate.selected_skill_matchups %}
+          <h5>Selected skill affinity evidence</h5>
+          <p>These classifications use recorded skill elements or attack types and the inspected boss affinities. They are not damage calculations.</p>
+          <ul>
+            {% for matchup in candidate_evidence.candidate.selected_skill_matchups %}
+            <li><strong>{{ matchup.character_name }} — {{ matchup.skill_name }}</strong> ({{ 'frontline' if matchup.placement == 'frontline' else 'reserve after switching' }}):
+              {% if matchup.elements %}{{ matchup.elements | join(', ') }}{% endif %}
+              {% if matchup.elements and matchup.attack_types %} / {% endif %}
+              {% if matchup.attack_types %}{{ matchup.attack_types | join(', ') }}{% endif %}
+              — {{ matchup.state }} under the recorded affinity mapping.
+              <small>[{{ matchup.evidence_ids | join(', ') }}]</small>
+            </li>
+            {% endfor %}
+          </ul>
+          {% elif candidate_evidence.candidate.selected_skill_matchups_unavailable %}
+          <p>Selected-skill affinity matchups are unavailable for the exact final selection.</p>
+          {% endif %}
+
+          {% if candidate_evidence.warnings %}
+          <h5>Relevant setup and matchup limits</h5>
+          <ul>
+            {% for warning in candidate_evidence.warnings %}
+            <li><strong>{{ warning.title }}:</strong> {{ warning.message }}
+              {% if warning.sources %}
+              <ul>{% for source in warning.sources %}
+                <li>{% if source.source_url %}<a href="{{ source.source_url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}{{ source.label }} — source link unavailable{% endif %}</li>
+              {% endfor %}</ul>
+              {% else %}<small>Source links are unavailable for this warning.</small>{% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </section>
+        {% else %}
+        <section class="detail-section full-width">
+          <h5>Final candidate evidence</h5>
+          <p>Candidate and selected-skill diagnostics are unavailable for this legacy or exploratory result.</p>
+        </section>
+        {% endif %}
+
         <section class="detail-section full-width">
           <h5>Character Roles And Placement</h5>
           <div class="frontline-grid">
@@ -78,7 +255,7 @@
               {% if char.upgrade_assumptions %}
               <div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>
               {% else %}
-              <div><small>Assumes: no upgrade assumptions listed</small></div>
+              <div><small>Assumes: {% if result_evidence.mode == 'production' %}no upgrade assumptions are recorded; item ownership remains unverified.{% else %}no upgrade assumptions listed{% endif %}</small></div>
               {% endif %}
             </div>
             {% endfor %}
@@ -106,7 +283,7 @@
               {% if char.upgrade_assumptions %}
               <div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>
               {% else %}
-              <div><small>Assumes: no upgrade assumptions listed</small></div>
+              <div><small>Assumes: {% if result_evidence.mode == 'production' %}no upgrade assumptions are recorded; item ownership remains unverified.{% else %}no upgrade assumptions listed{% endif %}</small></div>
               {% endif %}
             </div>
             {% endfor %}
@@ -129,7 +306,7 @@
         </section>
         {% endif %}
 
-        {% if rec.key_facts or rec.main_sidekick or rec.sub_sidekick %}
+        {% if result_evidence.mode != 'production' and (rec.key_facts or rec.main_sidekick or rec.sub_sidekick) %}
         <section class="detail-section">
           <h5>Sidekick And Key Facts</h5>
           {% if rec.main_sidekick or rec.sub_sidekick %}
@@ -145,7 +322,7 @@
         </section>
         {% endif %}
 
-        {% if rec.boss_counterplay_notes %}
+        {% if result_evidence.mode != 'production' and rec.boss_counterplay_notes %}
         <section class="detail-section">
           <h5>Boss Counterplay</h5>
           <ul>
@@ -156,7 +333,7 @@
         </section>
         {% endif %}
 
-        {% if rec.sustain_mp_notes %}
+        {% if result_evidence.mode != 'production' and rec.sustain_mp_notes %}
         <section class="detail-section">
           <h5>Sustain And MP</h5>
           <ul>
@@ -167,7 +344,7 @@
         </section>
         {% endif %}
 
-        {% if rec.risks %}
+        {% if result_evidence.mode != 'production' and rec.risks %}
         <section class="detail-section">
           <h5>Assumptions And Uncertainty</h5>
           <ul>
@@ -200,7 +377,7 @@
         </section>
         {% endif %}
 
-        {% if rec.synergy_explanation %}
+        {% if result_evidence.mode != 'production' and rec.synergy_explanation %}
         <section class="detail-section full-width">
           <h5>Synergy</h5>
           <p>{{ rec.synergy_explanation }}</p>

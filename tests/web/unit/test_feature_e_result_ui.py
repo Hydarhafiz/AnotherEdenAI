@@ -213,6 +213,148 @@ def test_deterministic_only_banner_uses_the_result_contract(degraded):
         assert "no successful AI analysis is claimed" in text
 
 
+def test_production_view_uses_final_evidence_and_hides_unverified_analyzer_prose():
+    result = _feature_e_result()
+    result["result_presentation"] = {
+        "mode": "production",
+        "boss_name": "Celestial Mushroom",
+        "boss_source": {"label": "Celestial Mushroom source", "source_url": "https://example.test/mushroom"},
+        "boss_affinities": [
+            {"dimension": "weak", "values": [], "state": "confirmed_empty"},
+            {"dimension": "resist", "values": ["Pierce", "Blunt"], "state": "confirmed_values"},
+            {"dimension": "null", "values": [], "state": "unknown"},
+            {"dimension": "absorb", "values": [], "state": "unknown"},
+        ],
+        "request_coverage": {
+            "status": "available",
+            "metrics": {"user_roster_count": 6, "candidate_count": 4, "unique_character_set_count": 2},
+            "unknown_data": {"character_sets_unknown": 0},
+            "note": "Counts describe search, not final quality.",
+        },
+        "explanation_limit": "Fit is a heuristic; confidence is represented scorer uncertainty only.",
+    }
+    rec = result["recommendations"][0]
+    rec["strategy_summary"] = "STALE analyzer text about a different lineup."
+    rec["synergy_explanation"] = "STALE synergy claim."
+    rec["risks"] = ["STALE analyzer risk."]
+    rec["presentation"] = {
+        "selected_skill_evidence_status": "available",
+        "selected_skill_count": 2,
+        "joined_skill_count": 2,
+        "skills_with_reviewed_capabilities": 1,
+        "unreviewed_proposal_count": 3,
+        "skills_without_reviewed_capabilities": [],
+        "selected_skills": [{
+            "character_id": "character:Toova",
+            "character_name": "Toova",
+            "skill_id": "skill:toova:venom",
+            "skill_name": "Venom",
+            "placement": "frontline",
+            "review_status": "reviewed",
+            "source": {"label": "Venom source", "source_url": "https://example.test/toova#Venom"},
+            "reviewed_effects": [{
+                "capability": "inflict_poison",
+                "direction": "enemy",
+                "target": "single_enemy",
+                "trigger": "",
+                "matched_phrase": "Inflicts Poison",
+                "source_id": "rule:poison",
+                "source_fact_id": "skill:toova:venom",
+                "review_decision": "approve",
+                "artifact_version": "tax-1",
+                "review_artifact_version": "review-1",
+            }],
+        }],
+        "source_effect_coverage": "not_established",
+        "candidate": {
+            "status": "available",
+            "note": "Matches final character and skill IDs.",
+            "modeled_roles": {"frontline": ["primary_damage"], "reserve_after_switch": ["reserve_utility"]},
+            "modeled_coverage_gaps": ["mandatory.counter.grant_status_immunity"],
+            "component_scores": {"boss_matchup": 9},
+            "component_score_scope": {"boss_matchup": "Recorded attacks for all selected characters."},
+            "scorer_uncertainty_count": 0,
+            "scorer_uncertainty_scope": "Affinity states only.",
+            "selected_skill_matchups": [{
+                "character_name": "Aldo", "skill_id": "skill:aldo:fire", "skill_name": "Fire Slash",
+                "placement": "frontline", "elements": ["Fire"], "attack_types": ["Slash"],
+                "state": "weak", "evidence_ids": ["skill:aldo:fire"],
+            }],
+            "selected_skill_matchups_unavailable": False,
+        },
+        "warnings": [{
+            "code": "venom_mushroom_harm",
+            "title": "Known harmful interaction",
+            "message": "Toova's Venom applies Poison; Celestial Mushroom gains resistance and heals after clearing it.",
+            "sources": [
+                {"label": "Venom source", "source_url": "https://example.test/toova#Venom"},
+                {"label": "Celestial Mushroom source", "source_url": "https://example.test/mushroom"},
+            ],
+        }],
+    }
+
+    html = _render_result(result)
+    text = _visible_text(html)
+
+    assert "Validated backend candidate" in text
+    assert "Final candidate evidence" in text
+    assert "Selected skill evidence" in text
+    assert "Toova — Venom" in text
+    assert "inflict poison" in text
+    assert "Source-effect coverage is not established" in text
+    assert "Known harmful interaction" in text
+    assert "Alternative Zone options" not in text
+    assert "Selected skill affinity evidence" in text
+    assert "none listed in the inspected source" in text
+    assert "unknown or incomplete (unknown)" in text
+    assert "Modeled fit: high" in text
+    assert "Scorer confidence: medium" in text
+    assert "STALE" not in text
+    assert "https://example.test/toova#Venom" in html
+    assert "https://example.test/mushroom" in html
+
+
+def test_production_view_reports_missing_diagnostics_without_zero_or_false_affinity():
+    result = _feature_e_result()
+    result["result_presentation"] = {
+        "mode": "production",
+        "boss_name": None,
+        "boss_source": None,
+        "boss_affinities": [],
+        "request_coverage": {"status": "unavailable", "metrics": {}, "unknown_data": {}, "note": "unavailable"},
+        "explanation_limit": "Fit is heuristic.",
+    }
+    for recommendation in result["recommendations"]:
+        recommendation.pop("strategy_summary", None)
+        recommendation["presentation"] = {
+            "selected_skill_evidence_status": "unavailable",
+            "selected_skill_count": None,
+            "joined_skill_count": 0,
+            "skills_with_reviewed_capabilities": None,
+            "unreviewed_proposal_count": None,
+            "skills_without_reviewed_capabilities": [],
+            "selected_skills": [],
+            "source_effect_coverage": "not_established",
+            "candidate": {
+                "status": "unavailable",
+                "note": "No exact final backend diagnostic was available.",
+                "modeled_roles": {}, "modeled_coverage_gaps": [], "component_scores": {},
+                "component_score_scope": {}, "scorer_uncertainty_count": None,
+                "scorer_uncertainty_scope": None, "selected_skill_matchups": [],
+                "selected_skill_matchups_unavailable": True,
+            },
+            "warnings": [],
+        }
+
+    text = _visible_text(_render_result(result))
+
+    assert "Boss affinity evidence is unavailable" in text
+    assert "Request coverage and search-pool diversity diagnostics are unavailable" in text
+    assert "Selected-skill review diagnostics are unavailable" in text
+    assert "No exact final backend diagnostic was available" in text
+    assert "0 of" not in text
+
+
 @pytest.mark.asyncio
 async def test_feature_e_streaming_renders_real_recommendation_template():
     """SSE result event uses the real Feature E result partial shape."""

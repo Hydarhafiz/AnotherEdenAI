@@ -25,13 +25,20 @@ from ..legality import (
     validate_lineup_legality,
 )
 from ..state import WorkflowState
+from ..presentation import (
+    build_recommendation_presentation,
+    build_result_presentation,
+)
 
 
 logger = logging.getLogger(__name__)
 
 
 class CharacterSlot(CharacterBuild):
-    """A single character slot in the team recommendation."""
+    """A displayed slot that retains IDs for post-validation evidence joins."""
+
+    character_id: str | None = None
+    selected_skill_ids: list[str] = Field(default_factory=list)
 
 
 class Citation(BaseModel):
@@ -447,6 +454,19 @@ async def format_and_validate_node(state: WorkflowState, driver) -> dict:
             },
             "final_legality_errors": failures,
         }
+    for envelope_key in ("recommendations", "alternatives"):
+        recommendations = final_output.get(envelope_key)
+        if isinstance(recommendations, list):
+            for recommendation in recommendations:
+                if isinstance(recommendation, dict):
+                    recommendation["presentation"] = build_recommendation_presentation(
+                        recommendation, state
+                    )
+    if final_output.get("frontline"):
+        final_output["presentation"] = build_recommendation_presentation(
+            final_output, state
+        )
+    final_output["result_presentation"] = build_result_presentation(state)
     return {"final_output": final_output, "final_legality_errors": failures}
 
 

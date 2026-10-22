@@ -2,13 +2,13 @@
 
 ## Objective And Approval
 
-Status: Active implementation workstream; planning approved and the standalone planning deliverable completed on 2026-10-22. Features M7-1 through M7-3 are planned, not implemented.
+Status: Active implementation workstream; planning approved and M7-1 implemented and verified on 2026-10-22. M7-2 and M7-3 remain planned.
 
 Deliver a limited, explainable portfolio MVP using the existing recommendation engine: select a supported boss and owned character forms, submit, receive up to three legal candidates when available, inspect frontline/reserves and equipped skills, and understand the supporting evidence and limitations. Exploratory GraphRAG remains a separate supported mode.
 
 The owner explicitly approved extending the RR-A/RR-B sequencing exception to make M7 active and reuse this document. M6 is **paused and incomplete**, not closed or accepted. Its exact remaining P2/P3/H2 gates, evidence references, conditional P4 and resumption obligations live in [roadmap.md](roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot). The full prior plan remains available as `git show 49a0d62:docs/core/milestone.md`. Moving the workstream does not relax any M6 gate or discharge M8 release obligations.
 
-This session completes only the standalone planning deliverable. Stop after documentation checks and one planning commit. A separate chat starts implementation with M7-1; no builder or verification-role transition is authorized in this planning session.
+The standalone planning deliverable is complete. M7-1 implementation and verification are recorded below; its builder-to-verification workflow ended with one feature commit. M7-2 remains the next planned feature.
 
 ## Verified Starting Point
 
@@ -62,7 +62,7 @@ Each package is a `build` feature using `builder-executor -> tdd-loop` in the **
 
 ### M7-1: Explain The Candidate And Its Limits
 
-Status: Planned. Outcome: a player sees what the legal candidate actually equips, why modeled facts support it, and what remains unproven, including in deterministic-only output.
+Status: Complete (2026-10-22). Outcome: a player sees what the legal candidate actually equips, which modeled facts support it, and what remains unproven, including in deterministic-only output.
 
 Currently: expandable cards already present members, skills, assumptions, risks and citations. `analyzer._candidate_proposal` mostly emits generic fallback prose and heuristic labels. `RecommendationSetOutput`/`TeamOutput` do not carry request coverage or selected-skill review diagnostics. The browser cannot recover these from formatted HTML.
 
@@ -84,7 +84,7 @@ Acceptance:
 - **M7-1-04:** After a permitted refinement/swap, evidence matches final selections or is explicitly unavailable. Heuristic points, primary-damage coverage and labels never imply battle strength, full boss-counter coverage, source completeness or win probability.
 - **M7-1-05:** Degraded status, generic-item/upgrade caveats and evidence limitations remain visible in the normal result view; exploratory single-team/alternatives and legacy optional fields still render.
 
-Verification: extend existing workflow candidate/analyzer/format and web rendering suites for final-selection joins, unavailable evidence, warning presence/absence and label meaning; rerun the 363-test baseline selection plus affected regressions. Use the real fixture-backed production smoke rather than only synthetic HTML. Extend offline Chromium coverage to expand cards, inspect skills/affinities/warnings/citations and confirm degraded visibility. Manually inspect one desktop/mobile result for understandable language and readable critical warnings; this is UI acceptance, not H2 gameplay review. Record results during implementation.
+Verification completed: 368 workflow/affected-web tests passed with one existing FastAPI TestClient deprecation warning. The fixture-backed real production smoke passed with three degraded recommendations, final legality and SSE contracts; the offline Chromium harness confirmed the rendered production evidence and degraded banner. A result produced by that smoke was visually inspected at 1440x1200 and 390x844 using the application's inline responsive CSS. The inspection page omitted CDN Pico assets and used a local variable shim, so it establishes result-copy readability and responsive layout only; CDN styling, keyboard usability and H2 gameplay were not assessed.
 
 Entry/dependency: Stage 1 complete; no dependency on a new M6 positive. Excludes curation, scorer/ranking/search changes, battle validation, new mechanics and paid runs. Commit boundary: complete evidence projection, rendering, regressions and affected docs together.
 
