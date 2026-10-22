@@ -58,6 +58,13 @@ class TestGetEntities:
 
 
 class TestPostQuery:
+    async def test_malformed_query_request_returns_validation_details(self, async_client):
+        response = await async_client.post("/api/query", json={
+            "query": 42, "roster": ["Aldo"], "mode": "exploratory",
+        })
+        assert response.status_code == 422
+        assert response.json()["detail"][0]["loc"] == ["body", "query"]
+
     async def test_post_query_returns_sse_fragment(self, async_client):
         """POST /api/query returns HTML fragment containing sse-connect URL (WEB-02, two-phase pattern)."""
         response = await async_client.post(
@@ -107,4 +114,32 @@ class TestPostQuery:
         assert "event: done" in response.text
         for key, value in payload.items():
             assert captured[key] == value
+
+    async def test_invalid_and_reused_stream_jobs_return_not_found(self, async_client):
+        from fastapi import HTTPException
+        from src.web.app import app as web_app
+        from src.web.routes.api import stream_job
+
+        posted = await async_client.post("/api/query", json={
+            "query": "Graph question", "roster": ["Aldo"], "mode": "exploratory",
+        })
+        assert posted.status_code == 200
+        stream_url = posted.text.split('sse-connect="', 1)[1].split('"', 1)[0]
+        job_id = stream_url.rsplit("/", 1)[-1]
+
+        async def stream(**kwargs):
+            yield ServerSentEvent(data="", event="done")
+
+        with patch("src.web.routes.api.pipeline_sse_generator", stream):
+            first = await async_client.get(stream_url)
+        assert first.status_code == 200
+        assert "event: done" in first.text
+        assert job_id not in web_app.state.jobs
+
+        request = MagicMock()
+        request.app.state.jobs = web_app.state.jobs
+        for missing_id in (job_id, "not-a-job"):
+            with pytest.raises(HTTPException) as error:
+                [event async for event in stream_job(missing_id, request, driver=MagicMock())]
+            assert error.value.status_code == 404
         assert job_id not in web_app.state.jobs

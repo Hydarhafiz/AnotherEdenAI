@@ -279,4 +279,35 @@ async def test_typed_failure_sse_is_one_json_object_on_the_http_wire(async_clien
     assert error["node"] == "ERROR"
     assert error["failure_type"] == "boss.unsupported"
     assert error["issues"][0]["field"] == "boss_id"
+    assert "value" not in error["issues"][0]
+    assert "message" not in error["issues"][0]
+    assert "Unknown boss" not in response.text
     assert "event: done" in response.text
+
+
+@pytest.mark.asyncio
+async def test_result_template_failure_emits_safe_typed_error_then_done():
+    from src.web.streaming import pipeline_sse_generator
+
+    graph = _make_mock_graph_astream(("format", {
+        "final_output": {
+            "frontline": [], "reserve": [], "synergy_explanation": "",
+            "error": None,
+        },
+    }))
+    templates = _make_mock_templates()
+    templates.env.get_template.return_value.render.side_effect = RuntimeError(
+        "PRIVATE TEMPLATE STACK DETAIL"
+    )
+
+    with patch("src.web.streaming.build_graph", return_value=graph):
+        events = [event async for event in pipeline_sse_generator(
+            query="q", roster=[], driver=MagicMock(), templates=templates,
+            request=_make_mock_request(),
+        )]
+
+    error_event = next(event for event in events if event.event == "node_status" and json.loads(event.raw_data).get("node") == "ERROR")
+    error = json.loads(error_event.raw_data)
+    assert error["failure_type"] == "result.render"
+    assert "PRIVATE TEMPLATE STACK DETAIL" not in error_event.raw_data
+    assert events[-1].event == "done"

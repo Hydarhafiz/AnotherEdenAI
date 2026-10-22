@@ -1,14 +1,26 @@
-<!-- partials/error.html — uses result dict passed from result.html include -->
-<!-- Rendered when result.error is set (retry cap exhausted or pipeline failure). -->
-<article role="alert" style="border-left: 4px solid #e74c3c; padding: 1rem;">
-  <header><strong>No recommendation found</strong></header>
-  <p>The recommendation pipeline could not produce a valid result.</p>
-  {% if result.error_type %}<p><small>Failure class: {{ result.error_type }}</small></p>{% endif %}
-  {% if result.error %}
-  <details>
-    <summary>Error details</summary>
-    <pre style="font-size: 0.8rem; white-space: pre-wrap;">{{ result.error }}</pre>
-  </details>
+<!-- Safe user guidance for a completed request that produced no usable result. -->
+<article role="alert" class="user-feedback">
+  <header><strong>Request finished without a result</strong></header>
+  {% if result.get('error_type') == 'final_legality_exhausted' %}
+  <p>The available candidate output did not pass the final legality checks, so no recommendation was shown. This does not establish whether your roster can complete the encounter.</p>
+  {% elif result.get('error_type') == 'cypher_retrieval_exhausted' %}
+  <p>The graph search did not return usable data for this request, so no answer was produced. This does not establish whether your roster can complete the encounter or whether a suitable answer exists.</p>
+  {% elif result.get('error_type') == 'analysis_failure' %}
+  <p>Recommendation analysis could not complete this request. No recommendation was produced.</p>
+  {% elif result.get('error_type') == 'no_backend_candidates' %}
+  <p>No supported candidate met the current data and coverage requirements, so no recommendation was produced. This does not establish whether your roster can complete the encounter.</p>
+  {% elif result.get('error_type') == 'candidate_coverage_failure' %}
+  <p>The available character data did not meet the coverage requirements for this request, so no recommendation was produced. This is a data limitation, not a verdict about your roster.</p>
+  {% elif result.get('error_type') == 'insufficient_candidate_roster' %}
+  <p>Fewer than six characters had enough supported data for the lineup search. No recommendation was produced. This does not establish whether your roster can complete the encounter.</p>
+  {% elif result.get('error_type') == 'candidate_payload_too_large' %}
+  <p>The request exceeded the analysis input limit, so no recommendation was produced. Shorten optional preferences and submit again.</p>
+  {% elif result.get('error_type') == 'analyzer_correction_exhausted' %}
+  <p>The proposed lineups did not pass candidate validation, so none was shown. This does not establish whether your roster can complete the encounter. Review the boss, preferences, and saved selections, then submit again.</p>
+  {% elif result.get('error_type') == 'boss_affinity_fidelity_failure' %}
+  <p>The candidate did not pass the boss-fact consistency check, so it was not shown.</p>
+  {% else %}
+  <p>The request could not produce a usable result. No recommendation or graph answer was shown.</p>
   {% endif %}
-  <p><small>Review the error details, then retry. Rephrase the query only when the details point to retrieval.</small></p>
+  <p>Your form selections are still available. Review the boss, question, and saved selections, then submit again to start a new request.</p>
 </article>

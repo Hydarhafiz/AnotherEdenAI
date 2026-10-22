@@ -7,7 +7,7 @@
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   <script src="https://unpkg.com/htmx-ext-sse@2.2.4/sse.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <script src="/static/app.js?v=7" defer></script>
+  <script src="/static/app.js?v=8" defer></script>
   <style>
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
     .tab-btn { cursor: pointer; }
@@ -37,6 +37,9 @@
     .detail-section h5 { margin-bottom: 0.4rem; }
     .detail-section ul { margin-bottom: 0; }
     .detail-section.full-width { grid-column: 1 / -1; }
+    .user-feedback { margin: 0.75rem 0; padding: 0.6rem 0.9rem; border-left: 4px solid var(--pico-del-color, #b42318); background: var(--pico-card-background-color); }
+    .user-feedback p:last-child { margin-bottom: 0; }
+    .stale-selection { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0.5rem 0; padding: 0.5rem; border-left: 3px solid var(--pico-del-color, #b42318); }
     @media (max-width: 900px) {
       main.container > div { grid-template-columns: 1fr !important; }
       .frontline-grid { grid-template-columns: repeat(2, 1fr); }
@@ -47,6 +50,7 @@
 <body>
 <main class="container">
   <h1>AnotherEden AI — Team Builder</h1>
+  <div id="selection-status" aria-live="polite"></div>
 
   <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
 

@@ -54,8 +54,14 @@ def pipeline_error_payload(exc: Exception) -> dict:
     }
     if isinstance(exc, ProductionRequestError):
         payload["failure_type"] = exc.issues[0].code if exc.issues else "request.invalid"
-        payload["message"] = str(exc)
-        payload["issues"] = [issue.model_dump() for issue in exc.issues]
+        safe_fields = {"boss_id", "preferences", "roster", "owned_sidekicks", "query"}
+        payload["issues"] = [
+            {
+                "code": issue.code,
+                "field": issue.field if issue.field in safe_fields else "request",
+            }
+            for issue in exc.issues
+        ]
     return payload
 
 
@@ -200,6 +206,14 @@ async def pipeline_sse_generator(
                 logger.debug("SSE result event emitted (%d chars)", len(html))
             except Exception as render_exc:  # noqa: BLE001
                 logger.exception("Failed to render result template: %s", render_exc)
+                error_data = json.dumps({
+                    "event": "node_status",
+                    "node": "ERROR",
+                    "attempt": 1,
+                    "max": 1,
+                    "failure_type": "result.render",
+                })
+                yield ServerSentEvent(raw_data=error_data, event="node_status")
 
         # Always send done event — HTMX sse-close="done" closes the connection
         yield ServerSentEvent(data="", event="done")

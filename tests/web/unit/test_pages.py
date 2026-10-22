@@ -28,4 +28,4 @@ class TestIndexPage:
         """GET / references the app.js version without stale Grasta ownership code."""
         response = test_client.get("/")
         assert response.status_code == 200
-        assert "/static/app.js?v=6" in response.text
+        assert "/static/app.js?v=8" in response.text

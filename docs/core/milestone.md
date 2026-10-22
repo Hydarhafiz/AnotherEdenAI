@@ -2,13 +2,13 @@
 
 ## Objective And Approval
 
-Status: Active implementation workstream; planning approved and M7-1 implemented and verified on 2026-10-22. M7-2 and M7-3 remain planned.
+Status: Active implementation workstream; planning approved. M7-1 and M7-2 implemented and verified on 2026-10-22; M7-3 remains planned.
 
 Deliver a limited, explainable portfolio MVP using the existing recommendation engine: select a supported boss and owned character forms, submit, receive up to three legal candidates when available, inspect frontline/reserves and equipped skills, and understand the supporting evidence and limitations. Exploratory GraphRAG remains a separate supported mode.
 
 The owner explicitly approved extending the RR-A/RR-B sequencing exception to make M7 active and reuse this document. M6 is **paused and incomplete**, not closed or accepted. Its exact remaining P2/P3/H2 gates, evidence references, conditional P4 and resumption obligations live in [roadmap.md](roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot). The full prior plan remains available as `git show 49a0d62:docs/core/milestone.md`. Moving the workstream does not relax any M6 gate or discharge M8 release obligations.
 
-The standalone planning deliverable is complete. M7-1 implementation and verification are recorded below; its builder-to-verification workflow ended with one feature commit. M7-2 remains the next planned feature.
+The standalone planning deliverable is complete. M7-1 and M7-2 implementation and verification are recorded below; each builder-to-verification workflow ended with one feature commit. M7-3 is the next planned feature.
 
 ## Verified Starting Point
 
@@ -90,9 +90,9 @@ Entry/dependency: Stage 1 complete; no dependency on a new M6 positive. Excludes
 
 ### M7-2: Make Failures Understandable And Recoverable
 
-Status: Planned; follows M7-1. Outcome: the user knows what failed, what action can help and whether the request has finished, while keeping selected ownership.
+Status: Complete; implemented and verified on 2026-10-22. Outcome: the user knows what failed, what action can help and whether the request has finished, while keeping selected ownership.
 
-Currently: `ProductionRequestError` supplies safe issue codes/fields/messages through `pipeline_error_payload`; format output has error classes. `app.js` substitutes a generic retry label and silently closes some failures. POST errors report status only; missing/reused jobs return HTTP 404; render failures can end without a result. Empty-state copy refers to a nonexistent Grasta list and can equate unavailable evidence with an unsuitable roster.
+Before M7-2: `ProductionRequestError` supplied safe issue codes/fields/messages through `pipeline_error_payload`; format output had error classes. `app.js` substituted a generic retry label and silently closed some failures. POST errors reported status only; missing/reused jobs returned HTTP 404; render failures could end without a result. Empty-state copy referred to a nonexistent Grasta list and could equate unavailable evidence with an unsuitable roster.
 
 Required changes and reuse:
 
@@ -109,6 +109,8 @@ Acceptance:
 - **M7-2-04:** Entity or malformed localStorage failure leaves usable recovery guidance. Both modes preserve their input requirements and success paths; safe text is rendered without treating diagnostic strings as HTML.
 
 Verification: extend actual-script Node, API/SSE and template suites with representative typed, zero-candidate, malformed-storage, invalid-job, interrupted/no-result and render-failure cases; keep unique transport/validation coverage. Offline Chromium must exercise an invalid request, a simulated disconnect/no-result completion and successful explicit retry, in addition to both existing success paths. Manually check keyboard-accessible error guidance and recovery. No live-service failure injection is required.
+
+Verification result (2026-10-22): 13 actual-script Node cases passed, including all existing typed issue codes, POST 422/404/5xx/network failures, missing and unavailable stream connections, stale selections, malformed/unavailable storage, terminal cleanup, no-result, render failure, and explicit fresh-job retry. All 45 web-unit tests passed with one existing Starlette/httpx deprecation warning. Offline Chromium passed both workflow success paths plus invalid POST, no-result, simulated disconnect, focused alert guidance, keyboard-reachable stale-selection removal, and explicit unique-job retries. The fixture-backed production smoke returned three degraded candidates that passed final legality and SSE checks. The browser used only a temporary HTML page and fixture graph; no Neo4j service, paid provider, live graph claim, or gameplay result was involved.
 
 Entry/dependency: M7-1 output compatibility settled. Excludes backend request/schema redesign, graph repair, provider changes, job persistence/multiworker support and quota work. Commit boundary: complete error presentation and terminal lifecycle with regressions/docs together.
 

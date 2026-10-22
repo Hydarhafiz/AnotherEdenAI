@@ -41,31 +41,44 @@ def main() -> None:
         autoescape=select_autoescape(["html"]),
     )
     rendered = templates.get_template("partials/result.html").render(result=result)
-    fixture = json.dumps({"html": rendered, "degraded": result.get("degraded", False)}).replace("<", "\\u003c")
+    fixture = json.dumps({
+        "html": rendered,
+        "degraded": result.get("degraded", False),
+        "detailed_evidence": "Boss facts and search limits" in rendered,
+    }).replace("<", "\\u003c")
     page = templates.get_template("index.html").render()
     page = re.sub(r'<script\b[^>]*src="[^"]+"[^>]*></script>', "", page)
     page = re.sub(r'<link\b[^>]*>', "", page)
     setup = """
 const fixture = FIXTURE;
 const sent = [];
-localStorage.setItem('anothereden_roster', JSON.stringify(['Toova', 'Yuna']));
+const streamUrls = [];
+let postAttempt = 0;
+let streamAttempt = 0;
+localStorage.setItem('anothereden_roster', JSON.stringify(['Toova', 'Yuna', 'Unavailable Form']));
 localStorage.setItem('anothereden_sidekicks', '[]');
 window.fetch = async (url, options) => {
-  if (url === '/api/entities') return {json: async () => ({characters:['Toova','Yuna'],sidekicks:[]})};
+  if (url === '/api/entities') return {ok:true,json: async () => ({characters:['Toova','Yuna'],sidekicks:[]})};
   sent.push(JSON.parse(options.body));
-  return {ok:true,text:async () => '<div sse-connect="/api/stream/local-job"></div>'};
+  postAttempt += 1;
+  if (postAttempt === 3) return {ok:false,status:422,json:async () => ({detail:[{loc:['body','roster',0]}]})};
+  return {ok:true,text:async () => `<div sse-connect="/api/stream/local-job-${postAttempt}"></div>`};
 };
 window.EventSource = class {
+  constructor(url) { this.url = url; streamUrls.push(url); this.scenario = ['success','success','done','disconnect','success'][streamAttempt++]; }
   addEventListener(name, handler) {
-    if (name === 'node_status') {
+    if (this.scenario === 'success' && name === 'node_status') {
       const nodes = document.getElementById('workflow-mode').value === 'production'
         ? ['RETRIEVE','CANDIDATES','ANALYZE','FORMAT']
         : ['PLAN','CYPHER','VALIDATE','CANDIDATES','ANALYZE','FORMAT'];
       setTimeout(() => nodes.forEach(node => handler({data:JSON.stringify({node,attempt:1,max:1})})), 0);
     }
-    if (name === 'result') setTimeout(() => handler({data:fixture.html}), 0);
+    if (this.scenario === 'success' && name === 'result') setTimeout(() => handler({data:fixture.html}), 0);
+    if (this.scenario === 'done' && name === 'done') setTimeout(() => handler({data:''}), 0);
   }
-  close() {}
+  close() { this.closed = true; }
+  set onerror(handler) { this._onerror = handler; if (this.scenario === 'disconnect') setTimeout(() => handler(), 0); }
+  get onerror() { return this._onerror; }
 };
 """.replace("FIXTURE", fixture)
     checks = """
@@ -82,6 +95,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mode = document.getElementById('workflow-mode');
     const query = document.getElementById('query-input');
     check(document.querySelectorAll('.char-checkbox:checked').length === 2, 'roster selection');
+    const staleRemoval = document.querySelector('.remove-stale-selection');
+    check(staleRemoval && staleRemoval.tabIndex === 0, 'stale selection has a keyboard-reachable remove button');
+    staleRemoval.focus();
+    check(document.activeElement === staleRemoval, 'stale selection remove button receives keyboard focus');
+    staleRemoval.click();
+    check(!document.querySelector('.remove-stale-selection'), 'stale selection removed');
+    check(document.querySelectorAll('.char-checkbox:checked').length === 2, 'valid saved roster preserved');
     form.requestSubmit();
     await tick();
     check(sent.length === 0, 'missing boss must prevent submission');
@@ -96,13 +116,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const firstCard = document.querySelector('#result-container .recommendation-card');
     firstCard.open = true;
     const resultText = document.getElementById('result-container').textContent;
-    check(resultText.includes('Boss facts and search limits'), 'boss affinity evidence panel');
-    check(resultText.includes('Celestial Mushroom'), 'selected production boss');
-    check(resultText.includes('Selected skill evidence'), 'final selected-skill evidence panel');
-    check(resultText.includes('Source-effect coverage is not established'), 'review limitation');
-    check(resultText.includes('Modeled fit'), 'heuristic fit label scope');
-    check(document.querySelectorAll('#result-container a[href]').length > 0, 'source citations');
-    check(resultText.includes('Reserve skills require switching'), 'reserve switch limitation');
+    if (fixture.detailed_evidence) {
+      check(resultText.includes('Boss facts and search limits'), 'boss affinity evidence panel');
+      check(resultText.includes('Celestial Mushroom'), 'selected production boss');
+      check(resultText.includes('Selected skill evidence'), 'final selected-skill evidence panel');
+      check(resultText.includes('Source-effect coverage is not established'), 'review limitation');
+      check(resultText.includes('Modeled fit'), 'heuristic fit label scope');
+      check(document.querySelectorAll('#result-container a[href]').length > 0, 'source citations');
+      check(resultText.includes('Reserve skills require switching'), 'reserve switch limitation');
+    }
     if (fixture.degraded) check(document.getElementById('result-container').textContent.includes('Deterministic-only result'), 'degraded banner');
     mode.value = 'exploratory';
     mode.dispatchEvent(new Event('change'));
@@ -117,7 +139,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     mode.value = 'production';
     mode.dispatchEvent(new Event('change'));
     check(!boss.disabled && !query.required, 'return to production');
-    status.textContent = 'PASS: roster, boss validation, production request, final evidence, citations, SSE rendering, exploratory switching' + (fixture.degraded ? ', degraded banner' : '');
+
+    query.value = 'retain this preference';
+    form.requestSubmit();
+    await tick();
+    const invalidAlert = document.querySelector('#progress-slot .user-feedback[role="alert"]');
+    check(sent.length === 3 && invalidAlert && invalidAlert.textContent.includes('saved characters are unavailable'), 'POST validation gets safe field guidance');
+    check(invalidAlert.tabIndex === -1 && document.activeElement === invalidAlert, 'POST error guidance is announced and focusable');
+    check(!document.querySelector('#query-form button[type=submit]').disabled, 'invalid POST restores submit');
+    check(sent[2].query === 'retain this preference' && sent[2].roster.join(',') === 'Toova,Yuna', 'POST error preserves current inputs');
+
+    form.requestSubmit();
+    await tick();
+    check(sent.length === 4 && streamUrls.length === 3, 'explicit retry opens a new job after validation error');
+    let terminal = document.querySelector('#progress-slot .user-feedback[role="alert"]');
+    check(terminal && terminal.textContent.includes('ended without returning a result'), 'done without result is explained');
+    check(!document.querySelector('#query-form button[type=submit]').disabled, 'no-result completion restores submit');
+
+    form.requestSubmit();
+    await tick();
+    terminal = document.querySelector('#progress-slot .user-feedback[role="alert"]');
+    check(sent.length === 5 && terminal && terminal.textContent.includes('job may be unavailable or expired'), 'reused or disconnected job gets recovery guidance');
+    check(!document.querySelector('#query-form button[type=submit]').disabled, 'disconnect restores submit');
+
+    form.requestSubmit();
+    await tick();
+    check(sent.length === 6 && streamUrls.length === 5, 'explicit recovery retry starts one fresh stream');
+    check(new Set(streamUrls).size === streamUrls.length, 'every explicit retry uses a fresh job URL');
+    check(document.querySelectorAll('#result-container .recommendation-card').length > 0, 'explicit retry returns to successful result');
+    check(!document.querySelector('#query-form button[type=submit]').disabled, 'successful retry restores submit');
+    status.textContent = 'PASS: both mode success paths, stale roster keyboard recovery, invalid POST, no-result, disconnect, focused guidance and explicit fresh-job retry' + (fixture.degraded ? ', degraded banner' : '');
   } catch (error) { status.textContent = 'FAIL: ' + error.message; }
 });
 """
@@ -136,7 +187,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         )
     match = re.search(r'<pre id="browser-check">([^<]*)</pre>', completed.stdout)
     if completed.returncode or not match or not match[1].startswith("PASS:"):
-        raise SystemExit((match[1] if match else "Browser check did not finish") + "\n" + completed.stderr[-2000:])
+        raise SystemExit(
+            (match[1] if match else "Browser check did not finish")
+            + "\nBROWSER STDOUT:\n" + completed.stdout[-4000:]
+            + "\nBROWSER STDERR:\n" + completed.stderr[-2000:]
+        )
     print(match[1])
 
 

@@ -100,8 +100,8 @@ paid-provider qualification or a passing H2 scenario.
 ## M7 frontend acceptance boundary
 
 The owner approved bounded M7 frontend work on 2026-10-22 while M6 remains paused
-and incomplete. M7-1 is complete; M7-2 error/recovery and M7-3 roster/sample
-usability remain planned. Acceptance criteria and per-feature checks are in
+and incomplete. M7-1 and M7-2 are complete; M7-3 roster/sample usability remains
+planned. Acceptance criteria and per-feature checks are in
 [milestone.md](../core/milestone.md).
 
 M7-1 verification passed 368 workflow/affected-web tests with one existing
@@ -123,11 +123,18 @@ cover selected Venom/Mushroom harm, multiple reviewed Zone options, reserve
 switching and nonmatching selections. Missing evidence stays unavailable and
 source-effect coverage stays unestablished. No strategic oracle was added.
 
-M7-2 and M7-3 verification still needs typed input errors, invalid/reused jobs,
-disconnect/no-result completion, explicit retry, roster/sample behavior and
-keyboard checks. Keep generated pages, screenshots, profiles and command output
-local unless uniquely needed as durable evidence. Do not contact a paid provider or
-mutate a persistent graph for UI checks.
+M7-2 verification passed 13 actual-script Node cases and all 45 web-unit tests
+(one existing Starlette/httpx deprecation warning). Offline Chromium
+passed production and exploratory success, invalid POST, no-result completion,
+simulated disconnect, focused error guidance, keyboard-reachable stale-selection
+removal, and explicit retries using fresh job URLs. Its fixture-backed production
+smoke returned three degraded recommendations that passed final legality and SSE
+checks. No Neo4j service, paid provider, or persistent graph was used.
+
+M7-3 verification still needs sample selection, saved-roster behavior, the full
+novice journey, desktop/mobile layout, and keyboard checks. Keep generated pages,
+screenshots, profiles and command output local unless uniquely needed as durable
+evidence. Do not contact a paid provider or mutate a persistent graph for UI checks.
 
 ## 1. Prepare the local services
 

@@ -184,23 +184,61 @@ def test_feature_e_recommendations_render_expandable_evidence_sections():
 
 
 def test_feature_e_error_result_uses_graceful_failure_partial():
-    """Failed legality/factuality formatting still renders a clear error."""
+    """Known result failures get bounded guidance without exposing diagnostics."""
     html = _render_result(
         {
             "frontline": [],
             "reserve": [],
             "synergy_explanation": "",
-            "error": "LLM returned malformed team structure",
+            "error": "INTERNAL ERROR MUST STAY PRIVATE",
+            "diagnostics": [{"message": "RAW VALIDATION DETAIL MUST STAY PRIVATE"}],
+            "error_type": "final_legality_exhausted",
         }
     )
     text = _visible_text(html)
 
-    assert "No recommendation found" in text
-    assert "The recommendation pipeline could not produce a valid result." in text
-    assert "valid Cypher query after 3 attempts" not in text
-    assert "Error details" in text
-    assert "LLM returned malformed team structure" in text
+    assert "Request finished without a result" in text
+    assert "final legality checks" in text
+    assert "does not establish whether your roster can complete the encounter" in text
+    assert "INTERNAL ERROR MUST STAY PRIVATE" not in html
+    assert "RAW VALIDATION DETAIL MUST STAY PRIVATE" not in html
     assert "recommendation-card" not in html
+
+
+@pytest.mark.parametrize(
+    ("error_type", "guidance"),
+    [
+        ("no_backend_candidates", "No supported candidate met the current data and coverage requirements"),
+        ("candidate_coverage_failure", "did not meet the coverage requirements"),
+        ("insufficient_candidate_roster", "Fewer than six characters had enough supported data"),
+        ("cypher_retrieval_exhausted", "The graph search did not return usable data"),
+        ("analyzer_correction_exhausted", "did not pass candidate validation"),
+    ],
+)
+def test_feature_e_candidate_failures_distinguish_data_limits_without_claiming_infeasibility(
+    error_type: str, guidance: str
+):
+    html = _render_result({
+        "frontline": [], "reserve": [], "synergy_explanation": "",
+        "error": "PRIVATE DIAGNOSTIC", "error_type": error_type,
+    })
+    text = _visible_text(html)
+    assert guidance in text
+    assert "PRIVATE DIAGNOSTIC" not in html
+    assert (
+        "This does not establish whether your roster can complete the encounter." in text
+        or "This does not establish whether your roster can complete the encounter or whether a suitable answer exists." in text
+        or "This is a data limitation, not a verdict about your roster." in text
+    )
+
+
+def test_feature_e_empty_result_removes_grasta_advice_and_does_not_claim_infeasibility():
+    text = _visible_text(_render_result({"frontline": [], "reserve": [], "error": None}))
+    assert "No result was produced from the available data" in text
+    assert "not a verdict that your roster cannot complete" in text
+    assert "Grasta list" not in text
+    assert "Add the Grasta" not in text
+    assert "adding another supported character" not in text
 
 
 @pytest.mark.parametrize("degraded", [False, True])
