@@ -224,7 +224,7 @@ baseline is an immutable before snapshot. Original D-G thresholds were approved
 after Feature A and explicitly superseded by the owner-approved 2026-10-20
 pilot reset; retained M6 gates live in the M6 section of
 [roadmap.md](../core/roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot).
-M6 is paused and incomplete while milestone.md holds the active M7 frontend plan.
+M6 remains paused and incomplete; milestone.md retains the completed M7 frontend plan.
 
 Feature C full-catalog extraction report:
 

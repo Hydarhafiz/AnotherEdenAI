@@ -50,8 +50,8 @@ async def production_smoke(client, records, payload):
     assert records.legality_reads == len(final["recommendations"])
     assert observed["final_legality_errors"] == []
     assert final["boss_affinity"] == {key: records.boss[key] for key in ("weak", "resist", "null", "absorb")}
-    assert "Deterministic-only result" in response.text
-    assert "Lineup Recommendations" in response.text
+    assert "Deterministic-only result." in response.text
+    assert "Candidate recommendations" in response.text
     for recommendation in final["recommendations"]:
         assert len(recommendation["frontline"]) == 4
         assert len(recommendation["reserve"]) == 2

@@ -94,7 +94,9 @@ class TestPostQuery:
         from src.web.app import app as web_app
 
         payload = frontend_payload(
-            mode=mode, query="Prefer sustain" if mode == "production" else "Graph question",
+            mode=mode,
+            query="Prefer sustain" if mode == "production" else "",
+            graphQuery="Graph question" if mode == "exploratory" else "",
             roster=["Toova", "Yuna"], sidekicks=["Tetra"],
         )
         response = await async_client.post("/api/query", json=payload)

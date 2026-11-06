@@ -32,7 +32,7 @@ Program success does not require exhaustive combat modeling, a full simulator, g
 
 ## Current Active Milestone
 
-Milestone 7, Frontend Portfolio Experience, is the active implementation workstream in [milestone.md](milestone.md). On 2026-10-22 the owner explicitly approved extending the completed RR-A/RR-B integration sequencing exception to bounded M7 frontend work. The plan reuses the existing engine, request/job/SSE contract and result cards; implementation starts in a separate chat with M7-1.
+No implementation milestone is currently active. Milestone 7, Frontend Portfolio Experience, completed on 2026-11-06 after owner acceptance of M7-3 and the full milestone. Its full plan and verification record remain in [milestone.md](milestone.md). Do not infer M8 admission from M7 completion: M6 remains paused and incomplete, and M8 still depends on accepted M6 evidence.
 
 Milestone 6 is paused and incomplete. Its P2/P3/H2 gates remain unmet and unchanged; their exact remaining obligations and evidence are retained in the M6 section below. M7 admission bypasses the accepted-M6-baseline dependency for frontend work only. It does not accept M6, authorize conditional P4, qualify a provider, prove live graph freshness or relax M8 release gates. Further curation, ranking development and H2 evaluation remain paused.
 
@@ -181,23 +181,11 @@ After the retained M6 gates are actually met, the owner chooses a limited MVP, a
 
 ### Milestone 7: Frontend Portfolio Experience
 
-Status: Active workstream; planning approved on 2026-10-22. M7-1 through M7-3 are planned. RR-A/RR-B foundations are complete; remaining frontend acceptance is open.
+Status: Complete on 2026-11-06. M7-1 explains candidate evidence and limitations; M7-2 makes input and request failures actionable; M7-3 delivers the owner-approved responsive roster, recommendation and result experience. Each feature has its own commit, and the detailed contracts and verification record remain in [milestone.md](milestone.md).
 
-Purpose: deliver a limited, explainable portfolio MVP on the existing engine: boss and owned forms -> up to three legal candidates when supported -> inspect placement/skills -> understand source-backed reasons, warnings and limitations. Exploratory GraphRAG remains supported.
+The interface supports the existing Celestial Mushroom recommendation demo and separate Graph Q&A mode, preserving candidate legality, order, API/SSE behavior and evidence semantics. It distinguishes modeled evidence, assumptions and unknowns without claiming a successful battle or strategic validation. Rotte remains diagnostic-only; the twenty normal forms are a demo sample, not a restriction on the 367-form legal catalog.
 
-Implementation order and one completed-feature commit each:
-
-1. M7-1: explain candidates and evidence limits. Reuse cards/skills/builds/citations; expose bounded final-selection evidence, affinities, missing review, harmful Venom/Mushroom interaction, alternative Zone and reserve-switch limitations. Clarify heuristic fit/confidence and deterministic-only status.
-2. M7-2: actionable input/result errors and terminal request recovery. Reuse typed issues and POST/job/SSE; handle unavailable candidates, invalid jobs, disconnects and no-result completion without stuck controls or false infeasibility claims.
-3. M7-3: guided roster and portfolio demo usability. Explain forms/F2P/default assumptions, add an explicit supported sample roster, and verify mobile/keyboard/readability without redesigning working areas.
-
-Exact feature contracts, exclusions and automated/manual browser acceptance live in [milestone.md](milestone.md). Production selection remains Celestial Mushroom only; Rotte stays diagnostic and unavailable in the selector. The twenty normal forms are a source-pinned demo pool, not a restriction on the 367-form legal catalog.
-
-Dependency disposition: stable M5 architecture and completed Stage 1 integration admit frontend work by explicit owner exception despite the unmet M6 baseline. No positive strategic acceptance is implied. M8 still depends on accepted M6 evidence and completed M7 stability.
-
-Deferred from the earlier broad M7 outline: advanced SA/Light/Shadow/preference editors and inventory work; admin freshness/health dashboards and public provider-cost views. Display current assumptions and missing observations instead. M8 owns the operational visibility necessary for its safeguarded release; no extra infrastructure is introduced here.
-
-Exit: all three features and their recorded UI checks pass; a player can distinguish legal candidates, modeled evidence, assumptions and unknowns, and a recruiter can explain deterministic backend versus bounded LLM responsibilities. Candidate generation, curation, magnitude scoring, H2 strategy validation, optimization, simulation, classifier architecture, chat and deployment are outside M7. No guaranteed clear, battle-strength score, win probability, equal boss-validation claim or release-readiness assertion.
+M7 establishes frontend readiness only. M6/P2/P3/H2 remain paused and incomplete; M7 does not establish live graph freshness, qualify a paid provider or authorize public release. M8 still owns deployment and release safeguards, including provider qualification. Candidate generation, scoring, H2 strategy validation, optimization, simulation, chat and deployment remain outside M7.
 
 ### Milestone 8: Cost-Controlled Deployment
 

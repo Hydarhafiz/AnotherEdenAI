@@ -35,7 +35,7 @@ valid observation; the implementation does not pad it to a target.
 The accepted Feature A baseline is the immutable before snapshot. Original
 D-G thresholds were approved after Feature A, then explicitly superseded by
 the owner-approved 2026-10-20 pilot reset. Current gates and scenario seeds
-remain unchanged in the M6 section of [roadmap.md](../core/roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot), while [milestone.md](../core/milestone.md) holds active M7 frontend work. Generated reports under `artifacts/generated/`
+remain unchanged in the M6 section of [roadmap.md](../core/roadmap.md#milestone-6-reviewed-knowledge-recommendation-pilot), while [milestone.md](../core/milestone.md) retains the completed M7 frontend plan. Generated reports under `artifacts/generated/`
 are local inspection material and are not committed.
 
 ## Stage 1 production UI integration
@@ -100,8 +100,9 @@ paid-provider qualification or a passing H2 scenario.
 ## M7 frontend acceptance boundary
 
 The owner approved bounded M7 frontend work on 2026-10-22 while M6 remains paused
-and incomplete. M7-1 and M7-2 are complete; M7-3 roster/sample usability remains
-planned. Acceptance criteria and per-feature checks are in
+and incomplete. M7-1, M7-2 and M7-3 are complete; the owner accepted the final
+styled M7-3 interface and Milestone 7 on 2026-11-06. Acceptance criteria and
+per-feature checks are in
 [milestone.md](../core/milestone.md).
 
 M7-1 verification passed 368 workflow/affected-web tests with one existing
@@ -131,10 +132,19 @@ removal, and explicit retries using fresh job URLs. Its fixture-backed productio
 smoke returned three degraded recommendations that passed final legality and SSE
 checks. No Neo4j service, paid provider, or persistent graph was used.
 
-M7-3 verification still needs sample selection, saved-roster behavior, the full
-novice journey, desktop/mobile layout, and keyboard checks. Keep generated pages,
+Final M7-3 verification passed all 47 tests in `tests/web` (one existing
+Starlette/httpx deprecation warning). Fixture-backed production smoke returned
+three deterministic-only candidates that passed final legality and SSE checks.
+Styled Chromium checks at 1440x900 and 390x844 found no horizontal overflow and
+kept the boss, roster search, selected count and primary action in the first
+viewport. A 45-pair contrast audit measured at least 5.01:1; the disabled primary
+action measured 7.66:1. Chromium accessibility-tree and keyboard checks covered
+mode switching, selection, sample application, submission, result disclosures
+and request recovery. The owner accepted the styled UI and keyboard journey.
+A separate screen-reader spot-check was not recorded. The local fixture preview
+requires no Neo4j service, paid provider or battle trial. Keep generated pages,
 screenshots, profiles and command output local unless uniquely needed as durable
-evidence. Do not contact a paid provider or mutate a persistent graph for UI checks.
+evidence; do not mutate a persistent graph for UI checks.
 
 ## 1. Prepare the local services
 

@@ -3,10 +3,17 @@
  */
 const STORAGE_KEY = "anothereden_roster";
 const SIDEKICK_STORAGE_KEY = "anothereden_sidekicks";
+const SAMPLE_ROSTER_NAMES = [
+  "Aldo", "Feinne", "Cyrus", "Deirdre", "Azami", "Gariyu", "Cerrine", "Levia",
+  "Shion", "Toova", "Suzette", "Anabel", "Radias", "Prai", "Aisha", "Rosetta",
+  "Mariel", "Yuna", "Mana", "Dunarith",
+];
 let rosterSelection = [];
 let sidekickSelection = [];
 let selectionMessages = [];
 let activeEventSource = null;
+let availableCharacterNames = null;
+let availableSidekickNames = null;
 
 function normalizeSelection(value) {
   if (!Array.isArray(value) || value.some(item => typeof item !== "string")) return null;
@@ -30,6 +37,37 @@ function readSelections() {
   selectionMessages = [];
   rosterSelection = readStoredSelection(STORAGE_KEY, "character");
   sidekickSelection = readStoredSelection(SIDEKICK_STORAGE_KEY, "sidekick");
+}
+
+function renderRosterSummary() {
+  const target = document.getElementById("roster-summary");
+  const countBadge = document.getElementById("roster-count-badge");
+  const preview = document.getElementById("selected-forms-preview");
+
+  const unavailableCount = availableCharacterNames
+    ? rosterSelection.filter(selected => !availableCharacterNames.some(name => name.toLocaleLowerCase() === selected.toLocaleLowerCase())).length
+    : 0;
+  const selectedCount = rosterSelection.length - unavailableCount;
+  if (target) {
+    const countLabel = `${selectedCount} character form${selectedCount === 1 ? "" : "s"} selected`;
+    if (selectedCount === 0) {
+      target.textContent = "Select at least one available form.";
+    } else if (unavailableCount) {
+      target.textContent = `${countLabel}; review unavailable saved choices below.`;
+    } else {
+      target.textContent = `${countLabel}; fewer than six is okay.`;
+    }
+  }
+
+  if (countBadge) countBadge.textContent = `${selectedCount} selected`;
+  if (preview) {
+    const visible = availableCharacterNames
+      ? rosterSelection.filter(selected => availableCharacterNames.some(name => name.toLocaleLowerCase() === selected.toLocaleLowerCase()))
+      : rosterSelection;
+    const chips = visible.slice(0, 5).map(name => `<span class="selected-chip">${escapeHTML(name)}</span>`);
+    if (visible.length > 5) chips.push(`<span class="selected-chip selected-chip--more">+${visible.length - 5} more</span>`);
+    preview.innerHTML = chips.join("");
+  }
 }
 
 function selectionForKey(key) {
@@ -74,6 +112,7 @@ function saveSelection(key, values, label) {
 function saveRoster(roster) {
   saveSelection(STORAGE_KEY, roster, "character");
   updateRosterPayload();
+  renderRosterSummary();
 }
 
 function saveSidekicks(sidekicks) {
@@ -86,8 +125,61 @@ function updateRosterPayload() {
 }
 
 function switchTab(tab) {
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  document.getElementById("panel-" + tab).classList.add("active");
+  for (const name of ["characters", "sidekicks"]) {
+    const selected = name === tab;
+    const panel = document.getElementById("panel-" + name);
+    const button = document.getElementById("tab-" + name);
+    if (panel) {
+      panel.hidden = !selected;
+      if (selected) panel.classList.add("active");
+      else panel.classList.remove("active");
+    }
+    if (button) button.setAttribute("aria-pressed", String(selected));
+  }
+}
+
+function selectWorkflowMode(mode) {
+  const control = document.getElementById("workflow-mode");
+  if (!control || !["production", "exploratory"].includes(mode)) return;
+  control.value = mode;
+  updateQueryMode();
+}
+
+function applySampleRoster() {
+  if (!availableCharacterNames || !Array.isArray(availableSidekickNames)) {
+    selectionMessages.push("The sample roster is unavailable until the character and sidekick lists load. Your saved selections were kept.");
+    renderSelectionMessages("alert");
+    return false;
+  }
+
+  const availableByKey = new Map(availableCharacterNames.map(name => [name.toLocaleLowerCase(), name]));
+  const selectedSample = SAMPLE_ROSTER_NAMES
+    .map(name => availableByKey.get(name.toLocaleLowerCase()))
+    .filter(Boolean);
+  const missingSample = SAMPLE_ROSTER_NAMES.filter(name => !availableByKey.has(name.toLocaleLowerCase()));
+  if (selectedSample.length === 0) {
+    selectionMessages = ["None of the sample forms are present in the loaded character list. Your saved selections were kept."];
+    renderSelectionMessages("alert");
+    return false;
+  }
+
+  selectionMessages = [];
+  saveRoster(selectedSample);
+  saveSidekicks([]);
+  buildChecklistHTML(availableCharacterNames, STORAGE_KEY, "character-list", "char-checkbox");
+  buildChecklistHTML(availableSidekickNames, SIDEKICK_STORAGE_KEY, "sidekick-list", "sidekick-checkbox");
+
+  const characterSearch = document.getElementById("character-search");
+  if (characterSearch) characterSearch.value = "";
+  filterList("characters");
+
+  if (missingSample.length) {
+    selectionMessages.push(`Sample roster applied with ${selectedSample.length} of ${SAMPLE_ROSTER_NAMES.length} forms. These normal forms were not in the loaded character list and were not selected: ${missingSample.join(", ")}. Existing character selections were replaced and selected sidekicks were cleared.`);
+  } else {
+    selectionMessages.push(`Sample roster applied: ${selectedSample.length} normal forms selected. Existing character selections were replaced and selected sidekicks were cleared. No request was submitted.`);
+  }
+  renderSelectionMessages("status");
+  return true;
 }
 
 function filterList(type) {
@@ -107,10 +199,11 @@ function buildChecklistHTML(names, storageKey, listId, checkboxClass) {
   const stale = saved.filter(name => !known.has(name.toLocaleLowerCase()));
   const listHTML = names.map(name => `
     <div class="roster-item" data-name="${escapeHTML(name)}">
-      <label>
+      <label class="roster-choice${saved.some(item => item.toLocaleLowerCase() === name.toLocaleLowerCase()) ? " is-selected" : ""}">
         <input type="checkbox" class="${checkboxClass}" value="${escapeHTML(name)}"
                ${saved.some(item => item.toLocaleLowerCase() === name.toLocaleLowerCase()) ? "checked" : ""}>
-        ${escapeHTML(name)}
+        <span class="roster-avatar" aria-hidden="true">${escapeHTML(name.trim().slice(0, 1).toLocaleUpperCase())}</span>
+        <span class="roster-choice-name">${escapeHTML(name)}</span>
       </label>
     </div>
   `).join("");
@@ -124,6 +217,7 @@ function buildChecklistHTML(names, storageKey, listId, checkboxClass) {
 
   ul.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
     cb.addEventListener("change", () => {
+      cb.closest(".roster-choice")?.classList.toggle("is-selected", cb.checked);
       const kind = checkboxClass === "char-checkbox" ? "character" : "sidekick";
       const current = kind === "character" ? loadRoster() : loadSidekicks();
       const updated = cb.checked
@@ -146,6 +240,7 @@ function buildChecklistHTML(names, storageKey, listId, checkboxClass) {
       selectionMessages.push(`Removed unavailable saved ${label} “${staleName}”. Other saved selections were kept.`);
       renderSelectionMessages("status");
       updateRosterPayload();
+      renderRosterSummary();
     });
   });
 }
@@ -165,13 +260,13 @@ const NODE_TO_STEP = {
 };
 
 const STEP_LABELS = {
-  "RETRIEVE": "Retrieving boss and roster",
-  "PLAN":     "Planning strategy",
-  "CYPHER":   "Building database query",
-  "VALIDATE": "Validating results",
-  "CANDIDATES": "Preparing legal candidates",
-  "ANALYZE":  "Analyzing team composition",
-  "FORMAT":   "Formatting recommendations",
+  "RETRIEVE": "Checking boss and roster",
+  "PLAN":     "Preparing your question",
+  "CYPHER":   "Searching game records",
+  "VALIDATE": "Checking the answer",
+  "CANDIDATES": "Checking candidate legality",
+  "ANALYZE":  "Reviewing team options",
+  "FORMAT":   "Preparing your result",
 };
 
 function pipelineStepsHTML(mode) {
@@ -187,19 +282,99 @@ function pipelineStepsHTML(mode) {
 }
 
 function updateQueryMode() {
-  const production = document.getElementById("workflow-mode").value === "production";
+  const control = document.getElementById("workflow-mode");
+  if (!control) return;
+  const production = control.value === "production";
   const boss = document.getElementById("boss-id");
-  boss.disabled = !production;
-  boss.required = production;
-  document.getElementById("boss-selection").hidden = !production;
-  const query = document.getElementById("query-input");
-  query.required = !production;
-  query.placeholder = production
-    ? "Optional preferences for the selected boss"
-    : "Ask a question about the graph";
-  document.getElementById("query-label").textContent = production
-    ? "Preferences (optional)"
-    : "Graph question";
+  const recommendationPanel = document.getElementById("recommendation-panel");
+  const graphPanel = document.getElementById("graph-panel");
+  const preferences = document.getElementById("query-input");
+  const graphQuestion = document.getElementById("graph-query-input");
+  const recommendationMode = document.getElementById("mode-boss");
+  const graphMode = document.getElementById("mode-graph");
+  if (boss) {
+    boss.disabled = !production;
+    boss.required = production;
+  }
+  if (recommendationPanel) recommendationPanel.hidden = !production;
+  if (graphPanel) graphPanel.hidden = production;
+  if (preferences) {
+    preferences.disabled = !production;
+    preferences.required = false;
+  }
+  if (graphQuestion) {
+    graphQuestion.disabled = production;
+    graphQuestion.required = !production;
+  }
+  if (recommendationMode) recommendationMode.setAttribute("aria-pressed", String(production));
+  if (graphMode) graphMode.setAttribute("aria-pressed", String(!production));
+  updateActionDock();
+
+  const results = document.getElementById("result-container");
+  if (results && !results.innerHTML.trim()) {
+    const context = document.getElementById("results-context");
+    const heading = document.getElementById("results-region-title");
+    const description = document.getElementById("results-description");
+    if (context) context.textContent = production ? "Candidate results" : "Graph Q&A";
+    if (heading) heading.textContent = production
+      ? "Your recommendations will appear here"
+      : "Your graph answer will appear here";
+    if (description) description.textContent = production
+      ? "Inspect each formation, equipped skills and the evidence available for it."
+      : "Read the graph answer and inspect the indexed facts behind it.";
+  }
+}
+
+function updateActionDock(busy = false) {
+  const submit = document.getElementById("query-submit");
+  const title = document.getElementById("action-context-title");
+  const note = document.getElementById("action-context-note");
+  const production = document.getElementById("workflow-mode")?.value !== "exploratory";
+  const result = document.getElementById("result-container");
+  const hasCurrentResult = Boolean(result?.innerHTML.trim())
+    && result.dataset.workflowMode === (production ? "production" : "exploratory");
+
+  if (busy) {
+    if (title) title.textContent = "Preparing your result…";
+    if (note) note.textContent = "Keep this page open while the request runs.";
+    if (submit) submit.innerHTML = '<span class="spinner" style="width:0.85rem;height:0.85rem;border-width:2px"></span> Working…';
+    return;
+  }
+
+  if (production && hasCurrentResult) {
+    if (title) title.textContent = "Your candidates are ready.";
+    if (note) note.textContent = "Change your boss, roster or preferences to run another search.";
+    if (submit) submit.textContent = "Run another search";
+  } else if (!production && hasCurrentResult) {
+    if (title) title.textContent = "Your answer is ready.";
+    if (note) note.textContent = "Ask another question about indexed game facts.";
+    if (submit) submit.textContent = "Ask another question";
+  } else if (production) {
+    if (title) title.textContent = "Ready to find candidates?";
+    if (note) note.textContent = "Choose a boss and at least one available form.";
+    if (submit) submit.textContent = "Find recommendations";
+  } else {
+    if (title) title.textContent = "Have a graph question?";
+    if (note) note.textContent = "Ask about indexed facts; this does not build a boss team.";
+    if (submit) submit.textContent = "Ask the graph";
+  }
+}
+
+function clearFieldValidation(fieldId, messageId) {
+  const field = document.getElementById(fieldId);
+  const message = document.getElementById(messageId);
+  if (field) field.removeAttribute("aria-invalid");
+  if (message) message.hidden = true;
+}
+
+function showFieldValidation(fieldId, messageId) {
+  const field = document.getElementById(fieldId);
+  const message = document.getElementById(messageId);
+  if (field) {
+    field.setAttribute("aria-invalid", "true");
+    field.focus();
+  }
+  if (message) message.hidden = false;
 }
 
 let pipelineActiveStepId = null;
@@ -265,15 +440,12 @@ function completeActivePipelineStep() {
 }
 
 function setSubmitBusy(busy) {
-  const btn = document.querySelector("#query-form button[type=submit]");
+  const btn = document.getElementById("query-submit");
   if (!btn) return;
-  if (busy) {
-    btn.disabled = true;
-    if (!btn.dataset.originalText) btn.dataset.originalText = btn.textContent;
-    btn.innerHTML = '<span class="spinner" style="width:0.85rem;height:0.85rem;border-width:2px"></span> Running…';
-  } else {
-    btn.disabled = false;
-    btn.textContent = btn.dataset.originalText || "Find Recommendations";
+  btn.disabled = busy;
+  updateActionDock(busy);
+  for (const modeButton of [document.getElementById("mode-boss"), document.getElementById("mode-graph")]) {
+    if (modeButton) modeButton.disabled = busy;
   }
 }
 
@@ -391,26 +563,32 @@ async function loadEntityLists() {
     const data = await response.json();
     const characters = validateEntityNames(data && data.characters);
     const sidekicks = validateEntityNames(data && data.sidekicks);
+    availableCharacterNames = characters;
+    availableSidekickNames = sidekicks;
     buildChecklistHTML(characters, STORAGE_KEY, "character-list", "char-checkbox");
     buildChecklistHTML(sidekicks, SIDEKICK_STORAGE_KEY, "sidekick-list", "sidekick-checkbox");
+    const sampleButton = document.getElementById("use-sample-roster");
+    if (sampleButton) sampleButton.disabled = false;
 
     const staleCharacters = rosterSelection.filter(name => !characters.some(item => item.toLocaleLowerCase() === name.toLocaleLowerCase()));
     const staleSidekicks = sidekickSelection.filter(name => !sidekicks.some(item => item.toLocaleLowerCase() === name.toLocaleLowerCase()));
     if (staleCharacters.length || staleSidekicks.length) {
       selectionMessages.push("Some saved selections are unavailable in the loaded lists. Remove only those entries below; other saved selections will be kept.");
     }
+    renderRosterSummary();
     renderSelectionMessages(selectionMessages.length ? "alert" : "status");
   } catch {
     const characterList = document.getElementById("character-list");
     const sidekickList = document.getElementById("sidekick-list");
     if (characterList) characterList.innerHTML = "<p role=\"alert\">Character choices could not be loaded. Reload the page and try again.</p>";
     if (sidekickList) sidekickList.innerHTML = "<p role=\"alert\">Sidekick choices could not be loaded. Reload the page and try again.</p>";
+    renderRosterSummary();
     selectionMessages.push("Character and sidekick lists could not be loaded. Reload the page to try again; saved selections have been kept.");
     renderSelectionMessages("alert");
   }
 }
 
-function runPipeline(streamUrl) {
+function runPipeline(streamUrl, mode) {
   let es;
   try {
     es = new EventSource(streamUrl);
@@ -438,9 +616,21 @@ function runPipeline(streamUrl) {
       const result = document.getElementById("result-container");
       if (!result) throw new Error("Missing result target");
       result.innerHTML = e.data;
+      result.dataset.workflowMode = mode;
       receivedResult = true;
+      const resultHeading = document.getElementById("results-region-title");
+      const resultDescription = document.getElementById("results-description");
+      if (resultHeading) resultHeading.textContent = mode === "production" ? "Candidate results ready" : "Graph answer ready";
+      if (resultDescription) resultDescription.textContent = mode === "production"
+        ? "See the formation, equipped skills, cautions and available evidence below."
+        : "Read the answer and its indexed sources below.";
       completeActivePipelineStep();
       settlePipeline(es);
+      const heading = result.querySelector("h2, h3");
+      if (heading) {
+        heading.setAttribute("tabindex", "-1");
+        heading.focus();
+      }
     } catch {
       failPipeline(["The request finished, but its result could not be displayed. Your selections are unchanged; submit again to start a new request."], es);
     }
@@ -468,9 +658,19 @@ function runPipeline(streamUrl) {
 document.addEventListener("DOMContentLoaded", () => {
   readSelections();
   renderSelectionMessages("alert");
+  renderRosterSummary();
   updateRosterPayload();
   updateQueryMode();
   document.getElementById("workflow-mode").addEventListener("change", updateQueryMode);
+  document.getElementById("mode-boss")?.addEventListener("click", () => selectWorkflowMode("production"));
+  document.getElementById("mode-graph")?.addEventListener("click", () => selectWorkflowMode("exploratory"));
+  document.getElementById("boss-id")?.addEventListener("change", () => clearFieldValidation("boss-id", "boss-validation"));
+  document.getElementById("graph-query-input")?.addEventListener("input", () => clearFieldValidation("graph-query-input", "graph-question-validation"));
+  document.getElementById("tab-characters")?.addEventListener("click", () => switchTab("characters"));
+  document.getElementById("tab-sidekicks")?.addEventListener("click", () => switchTab("sidekicks"));
+  document.getElementById("character-search")?.addEventListener("input", () => filterList("characters"));
+  document.getElementById("sidekick-search")?.addEventListener("input", () => filterList("sidekicks"));
+  document.getElementById("use-sample-roster")?.addEventListener("click", applySampleRoster);
   loadEntityLists();
 
   const form = document.getElementById("query-form");
@@ -478,10 +678,20 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (evt) => {
       evt.preventDefault();
       updateRosterPayload();
-      const query = document.getElementById("query-input").value.trim();
+      const production = document.getElementById("workflow-mode").value === "production";
+      const query = document.getElementById(production ? "query-input" : "graph-query-input").value.trim();
       const mode = document.getElementById("workflow-mode").value;
       const boss_id = document.getElementById("boss-id").value;
-      if (mode === "production" ? !boss_id : !query) return;
+      clearFieldValidation("boss-id", "boss-validation");
+      clearFieldValidation("graph-query-input", "graph-question-validation");
+      if (mode === "production" && !boss_id) {
+        showFieldValidation("boss-id", "boss-validation");
+        return;
+      }
+      if (mode !== "production" && !query) {
+        showFieldValidation("graph-query-input", "graph-question-validation");
+        return;
+      }
       const roster = loadRoster();
       const owned_sidekicks = loadSidekicks();
 
@@ -494,6 +704,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const slot = document.getElementById("progress-slot");
       slot.innerHTML = pipelineStepsHTML(mode);
       document.getElementById("result-container").innerHTML = "";
+      const resultContext = document.getElementById("results-context");
+      const resultHeading = document.getElementById("results-region-title");
+      const resultDescription = document.getElementById("results-description");
+      if (resultContext) resultContext.textContent = production ? "Candidate results" : "Graph Q&A";
+      if (resultHeading) resultHeading.textContent = production
+        ? "Preparing your candidate results"
+        : "Preparing your graph answer";
+      if (resultDescription) resultDescription.textContent = production
+        ? "Inspect each formation, equipped skills and the evidence available for it."
+        : "Read the graph answer and inspect the indexed facts behind it.";
 
       try {
         const response = await fetch("/api/query", {
@@ -511,7 +731,7 @@ document.addEventListener("DOMContentLoaded", () => {
           failPipeline(["The server accepted the request but did not provide its progress connection. Your selections are unchanged; submit again to start a new request."], null);
           return;
         }
-        runPipeline(match[1]);
+        runPipeline(match[1], mode);
       } catch {
         failPipeline(["The request could not be sent or its response could not be read. Check your connection, then submit again to start a new request."], null);
       }

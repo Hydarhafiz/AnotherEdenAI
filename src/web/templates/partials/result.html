@@ -1,435 +1,273 @@
-<!-- Team result card — rendered by streaming.py, sent as final SSE event data. -->
-<!-- result dict has: frontline, reserve, synergy_explanation, error (None on success) -->
+{# Result presentation uses final candidate payloads as supplied by the existing API. #}
+{% macro formation_slot(char, placement) %}
+  <div class="formation-slot">
+    <span class="member-avatar" aria-hidden="true">{{ (char.get('name') or '?')[:1] | upper }}</span>
+    <span class="formation-slot__copy">
+      <strong>{{ char.get('name', 'Unknown form') }}</strong>
+      <small>{{ placement }}{% if char.get('role') %} · {{ char.role | replace('_', ' ') | title }}{% endif %}</small>
+    </span>
+  </div>
+{% endmacro %}
+
+{% macro equipment_assumption(char, placement, production) %}
+  <li>
+    <strong>{{ char.get('name', 'Unknown form') }} · {{ placement }}</strong>
+    <ul>
+      <li>Weapon: {{ char.get('weapon') or 'not supplied' }}</li>
+      <li>Armor: {{ char.get('armor') or 'not supplied' }}</li>
+      <li>Grasta: {{ char.get('grastas', []) | join(', ') if char.get('grastas') else 'not supplied' }}</li>
+      {% if char.get('upgrade_assumptions') %}<li>Assumes: {{ char.upgrade_assumptions | join(', ') }}</li>
+      {% elif production %}<li>No upgrade assumptions are recorded; item ownership is unverified.</li>
+      {% else %}<li>No upgrade assumptions listed.</li>{% endif %}
+    </ul>
+  </li>
+{% endmacro %}
+
+{% macro member_detail(char, placement, production) %}
+  <article class="member-detail">
+    <header class="member-detail__header">
+      <span class="member-avatar" aria-hidden="true">{{ (char.get('name') or '?')[:1] | upper }}</span>
+      <div><h5>{{ char.get('name', 'Unknown form') }}</h5><p>{{ placement }}{% if char.get('role') %} · {{ char.role | replace('_', ' ') | title }}{% endif %}</p></div>
+    </header>
+    <section class="equip-list" aria-label="Skills to equip for {{ char.get('name', 'this form') }}">
+      <h6>Skills to equip</h6>
+      {% if char.get('recommended_skills') %}
+      <ul>{% for skill in char.recommended_skills %}<li>{{ skill }}</li>{% endfor %}</ul>
+      {% else %}<p>No skills supplied for this form.</p>{% endif %}
+    </section>
+    {% if char.get('recommended_passives') %}
+    <p class="member-passives"><strong>Passives:</strong> {{ char.recommended_passives | join(', ') }}</p>
+    {% endif %}
+  </article>
+{% endmacro %}
+
 {% if result.get('error') %}
-  <!-- Error path: retry cap exhausted -->
   {% include "partials/error.html" with context %}
 {% elif result.get('recommendations') %}
-  <article>
-    <header><h3>Lineup Recommendations</h3></header>
+  {% set result_evidence = result.get('result_presentation') %}
+  {% set mode = result_evidence.get('mode') if result_evidence else 'exploratory' %}
+  {% set production = mode == 'production' %}
+  <article class="result-collection">
+    <header class="result-collection__header">
+      <div>
+        <p class="section-kicker">{{ result_evidence.boss_name if result_evidence and result_evidence.get('boss_name') else 'Candidate results' }}</p>
+        <h2 tabindex="-1">Candidate recommendations</h2>
+        <p>See each formation, its equipped skills and what the available evidence does and does not show.</p>
+      </div>
+      {% if result_evidence and result_evidence.get('boss_source') and result_evidence.boss_source.get('source_url') %}
+      <a class="source-link" href="{{ result_evidence.boss_source.source_url }}" target="_blank" rel="noopener noreferrer">Boss source</a>
+      {% endif %}
+    </header>
+
     {% if result.get('degraded') %}
-    <p role="status"><strong>Deterministic-only result — analyzer unavailable or unusable.</strong> These backend candidates passed validation; no successful AI analysis is claimed.</p>
-    {% endif %}
-    {% if result.warnings %}
-    <div class="synergy-box"><strong>Validation warnings:</strong><ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul></div>
+    <p class="result-status" role="status"><strong>Deterministic-only result.</strong> No successful AI analysis is claimed.</p>
     {% endif %}
 
-    {% set result_evidence = result.get('result_presentation') %}
-    {% if result_evidence %}
-    <details class="detail-section" open>
-      <summary><strong>Boss facts and search limits</strong></summary>
-      {% if result_evidence.boss_name %}
-      <p>Boss: <strong>{{ result_evidence.boss_name }}</strong>
-        {% if result_evidence.boss_source and result_evidence.boss_source.source_url %}
-        · <a href="{{ result_evidence.boss_source.source_url }}" target="_blank" rel="noopener noreferrer">source</a>
-        {% endif %}
-      </p>
-      <ul>
+    {% if production %}
+    <aside class="evidence-boundary" aria-label="Recommendation evidence boundary">
+      <strong>What this result establishes</strong>
+      <p>These lineups passed final legality checks. That does not show battle performance or predict wins. Evidence covers inspected sources; unrecorded mechanics remain unknown.</p>
+    </aside>
+    {% elif result_evidence %}
+    <aside class="evidence-boundary" aria-label="Result evidence boundary"><p>Graph answers use the indexed sources available to this query. Missing or unreviewed facts remain unknown.</p></aside>
+    {% endif %}
+
+          {% if result_evidence and result_evidence.get('boss_affinities') %}
+    <details class="context-details">
+      <summary>Boss facts and evidence coverage</summary>
+      <ul class="boss-facts">
         {% for affinity in result_evidence.boss_affinities %}
-        <li><strong>{{ affinity.dimension | title }}:</strong>
-          {% if affinity.state == 'confirmed_values' and affinity['values'] %}{{ affinity['values'] | join(', ') }}
+        <li><strong>{{ affinity.dimension | replace('_', ' ') | title }}:</strong>
+          {% if affinity.state == 'confirmed_values' and affinity.get('values') %}{{ affinity['values'] | join(', ') }}
           {% elif affinity.state == 'confirmed_empty' %}none listed in the inspected source
-          {% else %}unknown or incomplete ({{ affinity.state }})
-          {% endif %}
+          {% else %}unknown or incomplete{% endif %}
         </li>
         {% endfor %}
       </ul>
-      {% else %}
-      <p>Boss affinity evidence is unavailable for this result.</p>
-      {% endif %}
-
-      {% if result_evidence.request_coverage.status == 'available' %}
-      {% set coverage = result_evidence.request_coverage %}
-      <details>
-        <summary>Request coverage and deterministic search pool</summary>
-        <ul>
-          {% if coverage.metrics.get('user_roster_count') is not none %}<li>Owned forms entered: {{ coverage.metrics.user_roster_count }}</li>{% endif %}
-          {% if coverage.metrics.get('f2p_augmented_count') is not none %}<li>Automatic F2P additions: {{ coverage.metrics.f2p_augmented_count }}</li>{% endif %}
-          {% if coverage.metrics.get('distinct_available_count') is not none %}<li>Available forms retrieved: {{ coverage.metrics.distinct_available_count }}</li>{% endif %}
-          {% if coverage.metrics.get('data_complete_count') is not none %}<li>Forms with complete candidate data: {{ coverage.metrics.data_complete_count }}</li>{% endif %}
-          {% if coverage.metrics.get('candidate_count') is not none %}<li>Backend search candidates before final filtering: {{ coverage.metrics.candidate_count }}</li>{% endif %}
-          {% if coverage.metrics.get('unique_character_set_count') is not none %}<li>Distinct six-character sets in that search pool: {{ coverage.metrics.unique_character_set_count }}</li>{% endif %}
-          {% if coverage.metrics.get('unique_frontline_set_count') is not none %}<li>Distinct frontline sets in that search pool: {{ coverage.metrics.unique_frontline_set_count }}</li>{% endif %}
-        </ul>
-        {% if coverage.unknown_data %}
-        <p><strong>Unknown-data counters:</strong></p>
-        <ul>{% for name, value in coverage.unknown_data.items() %}<li>{{ name | replace('_', ' ') }}: {{ value }}</li>{% endfor %}</ul>
-        {% else %}
-        <p>Unknown-data counters are unavailable.</p>
-        {% endif %}
-        <p>{{ coverage.note }}</p>
-      </details>
-      {% else %}
-      <p>Request coverage and search-pool diversity diagnostics are unavailable for this result.</p>
-      {% endif %}
-      <p>{{ result_evidence.explanation_limit }}</p>
+      {% set coverage = result_evidence.get('request_coverage') %}
+      {% if coverage and coverage.get('status') == 'available' %}
+      <p>{{ coverage.get('note', 'Search coverage describes the input pool, not candidate quality.') }}</p>
+      {% else %}<p>Request coverage and search-pool diagnostics are unavailable for this result.</p>{% endif %}
     </details>
-    {% else %}
-    <p role="note">Boss affinity and request coverage diagnostics are unavailable for this result.</p>
-    {% endif %}
-
-    {% if result.archetype_viability_notes and result_evidence.mode != 'production' %}
-    <div class="synergy-box">
-      <strong>Archetype notes:</strong> {{ result.archetype_viability_notes | join(' ') }}
-    </div>
     {% endif %}
 
     <div class="recommendation-list">
     {% for rec in result.recommendations %}
-    <details class="recommendation-card">
-      <summary>
-        <div class="recommendation-summary">
-          <div class="recommendation-title">
-            <h4>{{ rec.archetype | title }}</h4>
-            {% if rec.fit_label %}<span class="label-pill">{% if result_evidence.mode == 'production' %}Modeled fit{% else %}Fit{% endif %}: {{ rec.fit_label }}</span>{% endif %}
-            {% if rec.confidence_label %}<span class="label-pill">{% if result_evidence.mode == 'production' %}Scorer confidence{% else %}Confidence{% endif %}: {{ rec.confidence_label }}</span>{% endif %}
+      {% set candidate_evidence = rec.get('presentation') %}
+      <details class="recommendation-card"{% if loop.first %} open{% endif %}>
+        <summary class="recommendation-card__summary">
+          <div class="candidate-heading">
+            <span class="candidate-number">{{ loop.index }}</span>
+            <div class="candidate-heading__copy">
+              <p class="section-kicker">Candidate {{ loop.index }}</p>
+              <h3>{{ rec.get('archetype', 'Team') | replace('_', ' ') | title }}</h3>
+            </div>
+            <span class="candidate-badge">{{ 'Legality checked' if production else 'Graph result' }}</span>
+            {% if candidate_evidence and candidate_evidence.get('warnings') %}<span class="warning-count">Cautions</span>{% endif %}
           </div>
 
-          <div class="lineup-compact">
-            <div><span>Frontline:</span> {{ rec.frontline | map(attribute='name') | join(', ') }}</div>
-            <div><span>Reserve:</span> {{ rec.reserve | map(attribute='name') | join(', ') }}</div>
-            {% if rec.main_sidekick or rec.sub_sidekick %}
-            <div><span>Sidekicks:</span> main {{ rec.main_sidekick or 'none' }}, sub {{ rec.sub_sidekick or 'none' }}</div>
+          <div class="formation-preview">
+            <section class="formation-lane formation-lane--frontline" aria-label="Frontline, {{ rec.frontline | length }} forms">
+              <h4><span>Frontline</span><small>{{ rec.frontline | length }} forms</small></h4>
+              <div class="formation-slots formation-slots--frontline">
+                {% for char in rec.frontline %}{{ formation_slot(char, 'Frontline') }}{% endfor %}
+              </div>
+            </section>
+            <section class="formation-lane formation-lane--reserve" aria-label="Reserve, {{ rec.reserve | length }} forms">
+              <h4><span>Reserve</span><small>{{ rec.reserve | length }} forms · switch in</small></h4>
+              <div class="formation-slots formation-slots--reserve">
+                {% for char in rec.reserve %}{{ formation_slot(char, 'Reserve') }}{% endfor %}
+              </div>
+            </section>
+          </div>
+          {% if rec.get('main_sidekick') or rec.get('sub_sidekick') %}
+          <p class="sidekick-line"><strong>Sidekicks</strong> · Main {{ rec.get('main_sidekick') or 'none' }} · Sub {{ rec.get('sub_sidekick') or 'none' }}</p>
+          {% endif %}
+          <span class="expand-hint">{{ 'Candidate details expanded' if loop.first else 'Open candidate details' }}</span>
+        </summary>
+
+        <div class="candidate-details">
+          <section class="equipped-team" aria-label="Equipped skills and team members">
+            <div class="equipped-team__heading"><div><p class="section-kicker">Team setup</p><h4>Equipped skills</h4></div><p>Skills supplied for this candidate.</p></div>
+            <div class="member-grid member-grid--frontline">
+              {% for char in rec.frontline %}{{ member_detail(char, 'Frontline', production) }}{% endfor %}
+            </div>
+            {% if rec.reserve %}
+            <h5 class="reserve-heading">Reserve · switch in when needed</h5>
+            <div class="member-grid member-grid--reserve">
+              {% for char in rec.reserve %}{{ member_detail(char, 'Reserve', production) }}{% endfor %}
+            </div>
             {% endif %}
-          </div>
+          </section>
 
-          {% if result_evidence.mode == 'production' %}
-          <strong>Validated backend candidate</strong>
-          <p>This legal lineup passed the final graph-backed checks. The evidence below is joined to its final selected characters and skills; it does not establish battle performance.</p>
-          {% elif rec.strategy_summary %}
-          <strong>Short strategy</strong>
-          <p>{{ rec.strategy_summary }}</p>
-          {% endif %}
+          {% if candidate_evidence and candidate_evidence.get('candidate') %}
+          <section class="candidate-explanation" aria-labelledby="candidate-explanation-{{ loop.index }}">
+            <h4 id="candidate-explanation-{{ loop.index }}">What the candidate evidence says</h4>
+            {% if candidate_evidence.candidate.get('note') %}<p>{{ candidate_evidence.candidate.note }}</p>
+            {% else %}<p>Exact final-candidate explanation is unavailable.</p>{% endif %}
+            {% if production %}<p class="boundary-inline">This is evidence context, not a prediction of battle success.</p>{% elif rec.get('strategy_summary') %}<p>{{ rec.strategy_summary }}</p>{% endif %}
+          </section>
+          {% elif not production and rec.get('strategy_summary') %}
+          <section class="candidate-explanation"><h4>What the candidate evidence says</h4><p>{{ rec.strategy_summary }}</p></section>
+          {% else %}<section class="candidate-explanation"><h4>What the candidate evidence says</h4><p>Candidate evidence is unavailable for this result.</p></section>{% endif %}
 
-          {% if rec.risks and result_evidence.mode != 'production' %}
-          <strong>Main risks</strong>
-          <ul class="compact-risks">
-            {% for risk in rec.risks[:2] %}
-            <li>{{ risk }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </div>
-      </summary>
-
-      <div class="detail-grid">
-        {% set candidate_evidence = rec.get('presentation') %}
-        {% if candidate_evidence %}
-        <section class="detail-section full-width">
-          <h5>Final candidate evidence</h5>
-          {% if candidate_evidence.candidate.status == 'available' %}
-          <p>{{ candidate_evidence.candidate.note }}</p>
-          <p><strong>Modeled roles credited:</strong></p>
-          <ul>
-            <li>Frontline: {{ candidate_evidence.candidate.modeled_roles.frontline | join(', ') if candidate_evidence.candidate.modeled_roles.frontline else 'not recorded' }}</li>
-            <li>Reserve after switching: {{ candidate_evidence.candidate.modeled_roles.reserve_after_switch | join(', ') if candidate_evidence.candidate.modeled_roles.reserve_after_switch else 'not recorded' }}</li>
-          </ul>
-          {% if candidate_evidence.candidate.modeled_coverage_gaps %}
-          <p><strong>Not credited by this candidate's modeled coverage:</strong> {{ candidate_evidence.candidate.modeled_coverage_gaps | join(', ') }}</p>
-          {% endif %}
-          {% if candidate_evidence.candidate.component_scores %}
-          <p><strong>Component ranking signals:</strong></p>
-          <ul>
-            {% for name, value in candidate_evidence.candidate.component_scores.items() %}
-            <li><strong>{{ name | replace('_', ' ') | title }}:</strong> {{ rec.rubric_summary.get(name, 'available') }}
-              {% if candidate_evidence.candidate.component_score_scope.get(name) %} — {{ candidate_evidence.candidate.component_score_scope.get(name) }}{% else %} — scope unavailable{% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p>Component scores and their scopes are unavailable for the exact final lineup.</p>
-          {% endif %}
-          {% if candidate_evidence.candidate.scorer_uncertainty_count is not none %}
-          <p>Scorer-represented uncertainty: {{ candidate_evidence.candidate.scorer_uncertainty_count }}. This is not a measure of source-review completeness.{% if candidate_evidence.candidate.scorer_uncertainty_scope %} Scope: {{ candidate_evidence.candidate.scorer_uncertainty_scope }}{% endif %}</p>
-          {% else %}
-          <p>Scorer uncertainty diagnostics are unavailable.</p>
-          {% endif %}
-          {% else %}
-          <p>{{ candidate_evidence.candidate.note }}</p>
-          {% endif %}
-
-          <h5>Selected skill evidence</h5>
-          {% if candidate_evidence.selected_skill_evidence_status == 'unavailable' %}
-          <p>Selected-skill review diagnostics are unavailable for this result.</p>
-          {% else %}
-          {% if candidate_evidence.selected_skill_count is not none %}
-          <p>{{ candidate_evidence.skills_with_reviewed_capabilities }} of {{ candidate_evidence.selected_skill_count }} selected skills have reviewed capability evidence in the joined source records.{% if candidate_evidence.joined_skill_count < candidate_evidence.selected_skill_count %} Evidence records for some selected skills are unavailable.{% endif %}</p>
-          {% else %}
-          <p>The full selected-skill denominator is unavailable; only joined skill records are shown.</p>
-          {% endif %}
-          <p>Source-effect coverage is not established. A selected skill without reviewed capability evidence is not proof that the skill has no other effect.</p>
-          {% if candidate_evidence.selected_skills %}
-          <ul>
-            {% for skill in candidate_evidence.selected_skills %}
-            <li>
-              <strong>{{ skill.character_name }} — {{ skill.skill_name }}</strong>
-              <small>({{ 'frontline' if skill.placement == 'frontline' else 'reserve; requires switching' }})</small>
-              {% if skill.source and skill.source.source_url %} · <a href="{{ skill.source.source_url }}" target="_blank" rel="noopener noreferrer">skill source</a>{% endif %}
-              {% if skill.review_status == 'reviewed' %}
-              <ul>
-                {% for effect in skill.reviewed_effects %}
+          {% if candidate_evidence %}
+          <section class="selected-skill-evidence" aria-label="Selected skill evidence">
+            <h4>Evidence for selected skills</h4>
+            {% if candidate_evidence.get('selected_skill_evidence_status') == 'unavailable' %}
+            <p>Selected-skill review diagnostics are unavailable for this result.</p>
+            {% else %}
+              {% if candidate_evidence.get('selected_skill_count') is not none %}
+              {% if candidate_evidence.get('skills_with_reviewed_capabilities') is not none %}
+              <p>Reviewed capability evidence is available for {{ candidate_evidence.skills_with_reviewed_capabilities }} of {{ candidate_evidence.selected_skill_count }} selected skills in the joined source records.</p>
+              {% if candidate_evidence.get('joined_skill_count', 0) < candidate_evidence.selected_skill_count %}<p>Some selected-skill evidence records are unavailable.</p>{% endif %}
+              {% else %}<p>The number of selected skills with reviewed capability evidence is unknown out of {{ candidate_evidence.selected_skill_count }} selected skills.</p>{% endif %}
+              {% else %}<p>The full selected-skill denominator is unavailable; only joined skill records are shown.</p>{% endif %}
+              <p class="boundary-inline">This does not cover every effect a skill may have. Missing review evidence does not mean a skill has no other effects.</p>
+              {% if candidate_evidence.get('selected_skills') %}
+              <details class="reviewed-source-details">
+                <summary>Reviewed skill details and sources</summary>
+              <ul class="reviewed-skill-list">
+                {% for skill in candidate_evidence.selected_skills %}
                 <li>
-                  {{ effect.capability | replace('_', ' ') }}
-                  {% if effect.direction or effect.target %} — {{ effect.direction or 'direction not recorded' }}; target {{ effect.target or 'not recorded' }}{% endif %}
-                  {% if effect.trigger %}; trigger: {{ effect.trigger }}{% endif %}
-                  {% if effect.matched_phrase %}; reviewed phrase: “{{ effect.matched_phrase }}”{% endif %}
-                  <small>[{{ effect.source_fact_id }} · {{ effect.source_id }} · {{ effect.review_decision }}]</small>
+                  <strong>{{ skill.character_name }} · {{ skill.skill_name }}</strong>
+                  <small>{{ 'Frontline' if skill.placement == 'frontline' else 'Reserve; requires switching' }} · {{ 'Reviewed' if skill.review_status == 'reviewed' else 'No reviewed capability evidence' if skill.review_status == 'no_reviewed_capability_evidence' else 'Review unavailable' }}</small>
+                  {% if skill.source and skill.source.get('source_url') %}<a href="{{ skill.source.source_url }}" target="_blank" rel="noopener noreferrer">Skill source</a>{% endif %}
+                  {% if skill.review_status == 'reviewed' and skill.get('reviewed_effects') %}
+                  <ul>{% for effect in skill.reviewed_effects %}<li>{{ effect.capability | replace('_', ' ') | title }}{% if effect.direction or effect.target %} · {{ effect.direction or 'Direction not recorded' }}{% if effect.target %} · {{ effect.target | replace('_', ' ') | title }}{% endif %}{% endif %}{% if effect.trigger %} · Trigger: {{ effect.trigger }}{% endif %}</li>{% endfor %}</ul>
+                  {% endif %}
                 </li>
                 {% endfor %}
               </ul>
-              {% elif skill.review_status == 'no_reviewed_capability_evidence' %}
-              <small>No reviewed capability evidence is attached to this selected skill.</small>
-              {% else %}
-              <small>Review evidence for this selected skill is unavailable.</small>
+              </details>
               {% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {% if candidate_evidence.unreviewed_proposal_count is not none %}
-          <p>Unreviewed proposals among these selected skills: {{ candidate_evidence.unreviewed_proposal_count }}.</p>
+            {% endif %}
+          </section>
           {% else %}
-          <p>Unreviewed proposal counts are unavailable.</p>
-          {% endif %}
-          {% endif %}
-
-          {% if candidate_evidence.candidate.selected_skill_matchups %}
-          <h5>Selected skill affinity evidence</h5>
-          <p>These classifications use recorded skill elements or attack types and the inspected boss affinities. They are not damage calculations.</p>
-          <ul>
-            {% for matchup in candidate_evidence.candidate.selected_skill_matchups %}
-            <li><strong>{{ matchup.character_name }} — {{ matchup.skill_name }}</strong> ({{ 'frontline' if matchup.placement == 'frontline' else 'reserve after switching' }}):
-              {% if matchup.elements %}{{ matchup.elements | join(', ') }}{% endif %}
-              {% if matchup.elements and matchup.attack_types %} / {% endif %}
-              {% if matchup.attack_types %}{{ matchup.attack_types | join(', ') }}{% endif %}
-              — {{ matchup.state }} under the recorded affinity mapping.
-              <small>[{{ matchup.evidence_ids | join(', ') }}]</small>
-            </li>
-            {% endfor %}
-          </ul>
-          {% elif candidate_evidence.candidate.selected_skill_matchups_unavailable %}
-          <p>Selected-skill affinity matchups are unavailable for the exact final selection.</p>
+          <section class="selected-skill-evidence"><h4>Evidence for selected skills</h4><p>Selected-skill review evidence is unavailable for this legacy or exploratory result.</p></section>
           {% endif %}
 
-          {% if candidate_evidence.warnings %}
-          <h5>Relevant setup and matchup limits</h5>
-          <ul>
-            {% for warning in candidate_evidence.warnings %}
-            <li><strong>{{ warning.title }}:</strong> {{ warning.message }}
-              {% if warning.sources %}
-              <ul>{% for source in warning.sources %}
-                <li>{% if source.source_url %}<a href="{{ source.source_url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}{{ source.label }} — source link unavailable{% endif %}</li>
-              {% endfor %}</ul>
-              {% else %}<small>Source links are unavailable for this warning.</small>{% endif %}
-            </li>
-            {% endfor %}
-          </ul>
+          {% if not production and rec.get('risks') %}
+          <aside class="candidate-warnings"><h4>Assumptions and uncertainty</h4><ul>{% for risk in rec.risks %}<li>{{ risk }}</li>{% endfor %}</ul></aside>
           {% endif %}
-        </section>
-        {% else %}
-        <section class="detail-section full-width">
-          <h5>Final candidate evidence</h5>
-          <p>Candidate and selected-skill diagnostics are unavailable for this legacy or exploratory result.</p>
-        </section>
-        {% endif %}
 
-        <section class="detail-section full-width">
-          <h5>Character Roles And Placement</h5>
-          <div class="frontline-grid">
-            {% for char in rec.frontline %}
-            <div class="char-card">
-              <strong>{{ char.name }}</strong>
-              <div class="role">Frontline - {{ char.role }}</div>
-              <div><small>Weapon: {{ char.weapon }}</small></div>
-              <div><small>Armor: {{ char.armor }}</small></div>
-              <div><small>Grasta: {{ char.grastas | join(', ') }}</small></div>
-              {% if char.recommended_skills %}
-              <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
-              {% else %}
-              <div><small>Skills: none supplied</small></div>
-              {% endif %}
-              {% if char.recommended_passives %}
-              <div><small>Passives: {{ char.recommended_passives | join(', ') }}</small></div>
-              {% else %}
-              <div><small>Passives: none supplied</small></div>
-              {% endif %}
-              {% if char.upgrade_assumptions %}
-              <div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>
-              {% else %}
-              <div><small>Assumes: {% if result_evidence.mode == 'production' %}no upgrade assumptions are recorded; item ownership remains unverified.{% else %}no upgrade assumptions listed{% endif %}</small></div>
-              {% endif %}
-            </div>
-            {% endfor %}
           </div>
-
-          {% if rec.reserve %}
-          <div class="reserve-grid">
-            {% for char in rec.reserve %}
-            <div class="char-card">
-              <strong>{{ char.name }}</strong>
-              <div class="role">Reserve - {{ char.role }}</div>
-              <div><small>Weapon: {{ char.weapon }}</small></div>
-              <div><small>Armor: {{ char.armor }}</small></div>
-              <div><small>Grasta: {{ char.grastas | join(', ') }}</small></div>
-              {% if char.recommended_skills %}
-              <div><small>Skills: {{ char.recommended_skills | join(', ') }}</small></div>
-              {% else %}
-              <div><small>Skills: none supplied</small></div>
-              {% endif %}
-              {% if char.recommended_passives %}
-              <div><small>Passives: {{ char.recommended_passives | join(', ') }}</small></div>
-              {% else %}
-              <div><small>Passives: none supplied</small></div>
-              {% endif %}
-              {% if char.upgrade_assumptions %}
-              <div><small>Assumes: {{ char.upgrade_assumptions | join(', ') }}</small></div>
-              {% else %}
-              <div><small>Assumes: {% if result_evidence.mode == 'production' %}no upgrade assumptions are recorded; item ownership remains unverified.{% else %}no upgrade assumptions listed{% endif %}</small></div>
-              {% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </section>
-
-        {% set build = namespace(notes=rec.build_notes or []) %}
-        {% for char in rec.frontline + rec.reserve %}
-          {% set build.notes = build.notes + [char.name ~ ': weapon ' ~ char.weapon ~ '; armor ' ~ char.armor ~ '; Grasta ' ~ (char.grastas | join(', '))] %}
-        {% endfor %}
-        {% if build.notes %}
-        <section class="detail-section">
-          <h5>Build Notes</h5>
-          <ul>
-            {% for note in build.notes %}
-            <li>{{ note }}</li>
-            {% endfor %}
+        </details>
+        {% if candidate_evidence and candidate_evidence.get('warnings') %}
+        <aside class="candidate-warning-band" aria-label="Cautions for candidate {{ loop.index }}">
+          <strong>Candidate {{ loop.index }} · Check these cautions</strong>
+          {% for warning in candidate_evidence.warnings %}
+          <section class="candidate-warning">
+            <strong>{{ warning.title }}</strong><p>{{ warning.message }}</p>
+            {% if warning.sources %}<ul>{% for source in warning.sources %}<li>{% if source.get('source_url') %}<a href="{{ source.source_url }}" target="_blank" rel="noopener noreferrer">{{ source.label }}</a>{% else %}{{ source.label }} · source link unavailable{% endif %}</li>{% endfor %}</ul>
+            {% else %}<small>Source links are unavailable for this warning.</small>{% endif %}
+          </section>
+          {% endfor %}
+        </aside>
+        {% endif %}
+        <details class="team-assumptions">
+          <summary>Equipment and item assumptions</summary>
+          <ul class="team-assumptions__list">
+            {% for char in rec.frontline %}{{ equipment_assumption(char, 'Frontline', production) }}{% endfor %}
+            {% for char in rec.reserve %}{{ equipment_assumption(char, 'Reserve', production) }}{% endfor %}
           </ul>
-        </section>
-        {% endif %}
+        </details>
+        <details class="technical-diagnostics">
+          <summary>Technical details for candidate {{ loop.index }}</summary>
+            {% if candidate_evidence and candidate_evidence.get('candidate') %}
+            {% set exact_candidate = candidate_evidence.candidate %}
+            <section><h5>Final candidate record</h5>
+              {% if exact_candidate.get('status') == 'available' %}
+              {% if exact_candidate.get('modeled_roles') %}<p><strong>Modeled roles credited:</strong></p><ul><li>Frontline: {{ exact_candidate.modeled_roles.get('frontline', []) | join(', ') or 'not recorded' }}</li><li>Reserve after switching: {{ exact_candidate.modeled_roles.get('reserve_after_switch', []) | join(', ') or 'not recorded' }}</li></ul>{% endif %}
+              {% if exact_candidate.get('modeled_coverage_gaps') %}<p><strong>Not credited by modeled coverage:</strong> {{ exact_candidate.modeled_coverage_gaps | join(', ') }}</p>{% endif %}
+              {% if exact_candidate.get('component_scores') %}<h6>Component ranking signals</h6><ul>{% for name, value in exact_candidate.component_scores.items() %}<li><strong>{{ name | replace('_', ' ') | title }}:</strong> {{ rec.get('rubric_summary', {}).get(name, 'available') }} · {{ exact_candidate.get('component_score_scope', {}).get(name, 'scope unavailable') }}</li>{% endfor %}</ul>{% else %}<p>Component scores and scopes are unavailable for the exact final lineup.</p>{% endif %}
+              {% if exact_candidate.get('scorer_uncertainty_count') is not none %}<p>Scorer-represented uncertainty: {{ exact_candidate.scorer_uncertainty_count }}. This is not a measure of source-review completeness.{% if exact_candidate.get('scorer_uncertainty_scope') %} Scope: {{ exact_candidate.scorer_uncertainty_scope }}{% endif %}</p>{% else %}<p>Scorer uncertainty diagnostics are unavailable.</p>{% endif %}
+              {% else %}<p>{{ exact_candidate.get('note', 'Exact final backend diagnostics are unavailable.') }}</p>{% endif %}
+            </section>
+            {% endif %}
 
-        {% if result_evidence.mode != 'production' and (rec.key_facts or rec.main_sidekick or rec.sub_sidekick) %}
-        <section class="detail-section">
-          <h5>Sidekick And Key Facts</h5>
-          {% if rec.main_sidekick or rec.sub_sidekick %}
-          <p><small>Main {{ rec.main_sidekick or 'none' }}, sub {{ rec.sub_sidekick or 'none' }}</small></p>
-          {% endif %}
-          {% if rec.key_facts %}
-          <ul>
-            {% for fact in rec.key_facts %}
-            <li>{{ fact }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </section>
-        {% endif %}
+            {% if candidate_evidence and candidate_evidence.get('selected_skills') %}
+            <section><h5>Skill evidence records</h5>
+              {% for skill in candidate_evidence.selected_skills %}
+              {% if skill.get('reviewed_effects') %}<h6>{{ skill.character_name }} · {{ skill.skill_name }}</h6><ul>{% for effect in skill.reviewed_effects %}<li>{{ effect.capability | replace('_', ' ') }}{% if effect.direction or effect.target %} · {{ effect.direction or 'direction not recorded' }}; target {{ effect.target or 'not recorded' }}{% endif %}{% if effect.trigger %}; trigger: {{ effect.trigger }}{% endif %}{% if effect.matched_phrase %}; reviewed phrase: “{{ effect.matched_phrase }}”{% endif %}<small>[{{ effect.get('source_fact_id', 'source fact unavailable') }} · {{ effect.get('source_id', 'source unavailable') }} · {{ effect.get('review_decision', 'decision unavailable') }}]</small></li>{% endfor %}</ul>{% endif %}
+              {% endfor %}
+              {% if candidate_evidence.get('unreviewed_proposal_count') is not none %}<p>Unreviewed proposals among selected skills: {{ candidate_evidence.unreviewed_proposal_count }}.</p>{% else %}<p>Unreviewed proposal counts are unavailable.</p>{% endif %}
+            </section>
+            {% endif %}
 
-        {% if result_evidence.mode != 'production' and rec.boss_counterplay_notes %}
-        <section class="detail-section">
-          <h5>Boss Counterplay</h5>
-          <ul>
-            {% for note in rec.boss_counterplay_notes %}
-            <li>{{ note }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
+            {% if candidate_evidence and candidate_evidence.get('candidate', {}).get('selected_skill_matchups') %}
+            <section><h5>Selected-skill affinity records</h5><p>These classifications use recorded skill elements or attack types and inspected boss affinities. They are not damage calculations.</p><ul>{% for matchup in candidate_evidence.candidate.selected_skill_matchups %}<li><strong>{{ matchup.character_name }} · {{ matchup.skill_name }}</strong> ({{ 'Frontline' if matchup.placement == 'frontline' else 'Reserve after switching' }}): {{ matchup.get('elements', []) | join(', ') }}{% if matchup.get('elements') and matchup.get('attack_types') %} / {% endif %}{{ matchup.get('attack_types', []) | join(', ') }} — {{ matchup.state }} under the recorded affinity mapping.<small>[{{ matchup.get('evidence_ids', []) | join(', ') }}]</small></li>{% endfor %}</ul></section>
+            {% elif candidate_evidence and candidate_evidence.get('candidate', {}).get('selected_skill_matchups_unavailable') %}<p>Selected-skill affinity matchups are unavailable for the exact final selection.</p>{% endif %}
 
-        {% if result_evidence.mode != 'production' and rec.sustain_mp_notes %}
-        <section class="detail-section">
-          <h5>Sustain And MP</h5>
-          <ul>
-            {% for note in rec.sustain_mp_notes %}
-            <li>{{ note }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
+            {% if result_evidence %}
+            {% if result_evidence.get('explanation_limit') %}<section><h5>Ranking label limits</h5><p>{{ result_evidence.explanation_limit }}</p></section>{% endif %}
+            <section><h5>Boss affinity evidence</h5>
+              {% if result_evidence.get('boss_affinities') %}<ul>{% for affinity in result_evidence.boss_affinities %}<li><strong>{{ affinity.dimension | replace('_', ' ') | title }}:</strong> {% if affinity.state == 'confirmed_values' and affinity.get('values') %}{{ affinity['values'] | join(', ') }}{% elif affinity.state == 'confirmed_empty' %}none listed in the inspected source{% else %}unknown or incomplete ({{ affinity.state }}){% endif %}</li>{% endfor %}</ul>{% else %}<p>Boss affinity evidence is unavailable for this result.</p>{% endif %}
+            </section>
+            {% set coverage = result_evidence.get('request_coverage') %}
+            {% if coverage %}<section><h5>Request coverage and search pool</h5>{% if coverage.get('status') == 'available' %}<ul>{% for name, value in coverage.get('metrics', {}).items() %}<li>{{ name | replace('_', ' ') | title }}: {{ value }}</li>{% endfor %}</ul>{% if coverage.get('unknown_data') %}<p><strong>Unknown-data counters</strong></p><ul>{% for name, value in coverage.unknown_data.items() %}<li>{{ name | replace('_', ' ') | title }}: {{ value }}</li>{% endfor %}</ul>{% endif %}<p>{{ coverage.get('note', '') }}</p>{% else %}<p>Request coverage and search-pool diversity diagnostics are unavailable for this result.</p>{% endif %}</section>{% endif %}
+            {% endif %}
 
-        {% if result_evidence.mode != 'production' and rec.risks %}
-        <section class="detail-section">
-          <h5>Assumptions And Uncertainty</h5>
-          <ul>
-            {% for risk in rec.risks %}
-            <li>{{ risk }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
-
-        {% if rec.rubric_summary %}
-        <section class="detail-section">
-          <h5>Fit Rubric</h5>
-          <ul>
-            {% for label, value in rec.rubric_summary.items() %}
-            <li><strong>{{ label | replace('_', ' ') | title }}:</strong> {{ value }}</li>
-            {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
-
-        {% if rec.citations %}
-        <section class="detail-section">
-          <h5>Citations</h5>
-          <ul>
-            {% for citation in rec.citations %}
-            <li><a href="{{ citation.source_url }}" target="_blank" rel="noopener noreferrer">{{ citation.label }}</a></li>
-            {% endfor %}
-          </ul>
-        </section>
-        {% endif %}
-
-        {% if result_evidence.mode != 'production' and rec.synergy_explanation %}
-        <section class="detail-section full-width">
-          <h5>Synergy</h5>
-          <p>{{ rec.synergy_explanation }}</p>
-        </section>
-        {% endif %}
-      </div>
-    </details>
+            {% if rec.get('rubric_summary') %}<section><h5>Fit rubric</h5><ul>{% for label, value in rec.rubric_summary.items() %}<li><strong>{{ label | replace('_', ' ') | title }}:</strong> {{ value }}</li>{% endfor %}</ul></section>{% endif %}
+            {% if rec.get('citations') %}<section><h5>Additional sources</h5><ul>{% for citation in rec.citations %}<li>{% if citation.get('source_url') %}<a href="{{ citation.source_url }}" target="_blank" rel="noopener noreferrer">{{ citation.label }}</a>{% else %}{{ citation.label }} · source link unavailable{% endif %}</li>{% endfor %}</ul></section>{% endif %}
+            {% if not production and rec.get('key_facts') %}<section><h5>Graph facts and strategy notes</h5><ul>{% for fact in rec.key_facts %}<li>{{ fact }}</li>{% endfor %}</ul>{% if rec.get('boss_counterplay_notes') %}<h6>Boss counterplay</h6><ul>{% for note in rec.boss_counterplay_notes %}<li>{{ note }}</li>{% endfor %}</ul>{% endif %}{% if rec.get('sustain_mp_notes') %}<h6>Sustain and MP</h6><ul>{% for note in rec.sustain_mp_notes %}<li>{{ note }}</li>{% endfor %}</ul>{% endif %}{% if rec.get('build_notes') %}<h6>Build notes</h6><ul>{% for note in rec.build_notes %}<li>{{ note }}</li>{% endfor %}</ul>{% endif %}{% if rec.get('synergy_explanation') %}<h6>Synergy</h6><p>{{ rec.synergy_explanation }}</p>{% endif %}</section>{% endif %}
+        </details>
     {% endfor %}
     </div>
+    {% if result.get('warnings') %}
+    <details class="technical-diagnostics pipeline-notes">
+      <summary>Technical run details · {{ result.warnings | length }}</summary>
+      <ul>{% for warning in result.warnings %}<li>{{ warning }}</li>{% endfor %}</ul>
+    </details>
+    {% endif %}
   </article>
 {% elif not result.get('frontline') %}
-  <!-- Empty path: pipeline ran but returned no team -->
   {% include "partials/empty.html" with context %}
 {% else %}
-  <!-- Happy path: render 4-frontline / 2-reserve grid (D-16, D-17, D-18) -->
-  <article>
-    <header><h3>Recommended Team</h3></header>
-
-    <div class="frontline-grid">
-      {% for char in result.frontline %}
-      <div class="char-card">
-        <strong>{{ char.name }}</strong>
-        <div class="role">{{ char.role }}</div>
-        <div><small>Weapon: {{ char.weapon }}</small></div>
-        <div><small>Armor: {{ char.armor }}</small></div>
-        <div class="grastas">
-          <small>Grasta: {{ char.grastas | join(', ') }}</small>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    {% if result.reserve %}
-    <div class="reserve-grid">
-      {% for char in result.reserve %}
-      <div class="char-card">
-        <strong>{{ char.name }}</strong>
-        <div class="role">{{ char.role }}</div>
-        <div><small>Weapon: {{ char.weapon }}</small></div>
-        <div><small>Armor: {{ char.armor }}</small></div>
-        <div class="grastas">
-          <small>Grasta: {{ char.grastas | join(', ') }}</small>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-
-    {% if result.synergy_explanation %}
-    <div class="synergy-box">
-      <strong>Synergy:</strong> {{ result.synergy_explanation }}
-    </div>
-    {% endif %}
+  <article class="legacy-result">
+    <header><h2 tabindex="-1">Recommended team</h2><p>Legacy team result. Formation legality and battle outcome are not established here.</p></header>
+    <section class="formation-lane formation-lane--frontline" aria-label="Frontline, {{ result.frontline | length }} forms"><h3>Frontline</h3><div class="formation-slots formation-slots--frontline">{% for char in result.frontline %}{{ formation_slot(char, 'Frontline') }}{% endfor %}</div></section>
+    {% if result.get('reserve') %}<section class="formation-lane formation-lane--reserve" aria-label="Reserve, {{ result.reserve | length }} forms"><h3>Reserve</h3><div class="formation-slots formation-slots--reserve">{% for char in result.reserve %}{{ formation_slot(char, 'Reserve') }}{% endfor %}</div></section>{% endif %}
+    {% if result.get('synergy_explanation') %}<p>{{ result.synergy_explanation }}</p>{% endif %}
   </article>
 {% endif %}

@@ -4,7 +4,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 async function loadUI({
-  mode = "production", boss = "Celestial Mushroom", query = "", roster = ["Aldo"], sidekicks = [],
+  mode = "production", boss = "Celestial Mushroom", query = "", graphQuery = "", roster = ["Aldo"], sidekicks = [],
   entityResponse, entityFailure = false, storageValues = {}, storageReadFails = false,
   storageWriteFails = false, postResponses = [], streamConstructionFails = false,
 } = {}) {
@@ -18,10 +18,20 @@ async function loadUI({
       const node = {
         id, value: "", textContent: "Find Recommendations", dataset: {}, listeners: {},
         disabled: false, hidden: false, required: false, placeholder: "", staleControls: [],
+        attributes: {},
+        setAttribute(name, value) { this.attributes[name] = value; },
+        removeAttribute(name) { delete this.attributes[name]; },
+        focus() { document.activeElement = this; },
         classList: {
           values: new Set(),
           add(value) { this.values.add(value); },
           remove(value) { this.values.delete(value); },
+          toggle(value, force) {
+            const next = force === undefined ? !this.values.has(value) : force;
+            if (next) this.values.add(value);
+            else this.values.delete(value);
+            return next;
+          },
         },
         get innerHTML() { return html; },
         set innerHTML(value) {
@@ -57,6 +67,7 @@ async function loadUI({
   element("workflow-mode").value = mode;
   element("boss-id").value = boss;
   element("query-input").value = query;
+  element("graph-query-input").value = graphQuery;
   const storage = new Map([
     ["anothereden_roster", storageValues.roster ?? JSON.stringify(roster)],
     ["anothereden_sidekicks", storageValues.sidekicks ?? JSON.stringify(sidekicks)],
@@ -67,7 +78,8 @@ async function loadUI({
   let postIndex = 0;
   const document = {
     getElementById: element,
-    querySelector: () => element("submit"),
+    querySelector: () => element("query-submit"),
+    querySelectorAll: () => [],
     createElement: () => ({ className: "", textContent: "", dataset: {}, remove() {} }),
     addEventListener(event, handler) { this.ready = handler; },
   };
@@ -120,11 +132,17 @@ async function loadUI({
   await new Promise(resolve => setImmediate(resolve));
   return {
     element, requests, streams, storage, intervals,
+    get activeElement() { return document.activeElement; },
     submit: () => element("query-form").listeners.submit({ preventDefault() {} }),
     switchMode(value) {
       element("workflow-mode").value = value;
       element("workflow-mode").listeners.change();
     },
+    chooseMode(value) {
+      element(value === "production" ? "mode-boss" : "mode-graph").listeners.click();
+    },
+    applySampleRoster: () => sandbox.applySampleRoster(),
+    switchTab: value => sandbox.switchTab(value),
     saveRoster: values => sandbox.saveRoster(values),
     roster: () => Array.from(sandbox.loadRoster()),
     sidekicks: () => Array.from(sandbox.loadSidekicks()),

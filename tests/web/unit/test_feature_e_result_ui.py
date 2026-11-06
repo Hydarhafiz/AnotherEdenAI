@@ -137,23 +137,24 @@ def _make_mock_graph_astream(final_output: dict, captured_state: dict | None = N
     return mock_graph
 
 
-def test_feature_e_recommendations_render_as_three_compact_cards():
-    """Default result view is scannable and shows all three archetypes."""
+def test_feature_e_recommendations_render_in_order_with_scannable_formations():
+    """Every candidate exposes its six-member formation and the first opens by default."""
     html = _render_result(_feature_e_result())
     text = _visible_text(html)
 
     assert html.count('class="recommendation-card"') == 3
-    assert "Lineup Recommendations" in text
+    assert "Candidate recommendations" in text
     assert "Burst" in text
     assert "Sustain" in text
     assert "Hybrid" in text
-    assert "Frontline: Aldo, Ciel, Riica, Shion" in text
-    assert "Reserve: Miyu, Feinne" in text
-    assert "Sidekicks: main Korobo, sub Tetra" in text
-    assert "Fit: high" in text
-    assert "Confidence: medium" in text
-    assert "Short strategy" in text
-    assert "Main risks" in text
+    assert "Frontline · Damage Anchor" in text
+    assert "Reserve · switch in" in text
+    assert "Sidekicks · Main Korobo · Sub Tetra" in text
+    assert 'class="recommendation-card" open' in html
+    assert html.count('class="technical-diagnostics"') == 3
+    summary = html.split('class="recommendation-card__summary"')[1].split("</summary>")[0]
+    assert "Fit: high" not in summary
+    assert "Confidence: medium" not in summary
     assert "Risk one is visible in compact view." in text
 
 
@@ -162,25 +163,27 @@ def test_feature_e_recommendations_render_expandable_evidence_sections():
     html = _render_result(_feature_e_result())
     text = _visible_text(html)
 
-    assert "<details class=\"recommendation-card\">" in html
-    assert "Character Roles And Placement" in text
-    assert "Skills: Aldo Skill" in text
-    assert "Skills: none supplied" in text
-    assert "Passives: Aldo Passive" in text
-    assert "Passives: none supplied" in text
-    assert "Assumes: no upgrade assumptions listed" in text
-    assert "Build Notes" in text
+    assert '<details class="recommendation-card" open>' in html
+    assert "Equipped skills" in text
+    assert "Skills to equip" in text
+    assert "Aldo Skill" in text
+    assert "No skills supplied for this form." in text
+    assert "Aldo Passive" in text
+    assert "Equipment and item assumptions" in text
     assert "Assumes common late-game grasta access." in text
-    assert "Aldo: weapon available weapon; armor available armor; Grasta Fire T3" in text
-    assert "Sidekick And Key Facts" in text
-    assert "Boss Counterplay" in text
-    assert "Sustain And MP" in text
-    assert "Assumptions And Uncertainty" in text
+    assert "Technical details for candidate 1" in text
+    assert '<details class="technical-diagnostics">' in html
+    assert "Graph facts and strategy notes" in text
+    assert "Boss counterplay" in text
+    assert "Sustain and MP" in text
+    assert "Assumptions and uncertainty" in text
     assert "Risk three stays in expanded uncertainty details." in text
-    assert "Fit Rubric" in text
-    assert "Citations" in text
+    assert "Fit rubric" in text
+    assert "Additional sources" in text
     assert "Flame Eater affinity" in text
     assert "Synergy" in text
+    assert html.index('class="equipped-team"') < html.index('class="candidate-explanation"')
+    assert html.index('class="candidate-explanation"') < html.index('class="selected-skill-evidence"')
 
 
 def test_feature_e_error_result_uses_graceful_failure_partial():
@@ -246,9 +249,9 @@ def test_deterministic_only_banner_uses_the_result_contract(degraded):
     result = _feature_e_result()
     result["degraded"] = degraded
     text = _visible_text(_render_result(result))
-    assert ("Deterministic-only result" in text) is degraded
+    assert ("Deterministic-only result." in text) is degraded
     if degraded:
-        assert "no successful AI analysis is claimed" in text
+        assert "No successful AI analysis is claimed." in text
 
 
 def test_production_view_uses_final_evidence_and_hides_unverified_analyzer_prose():
@@ -334,19 +337,23 @@ def test_production_view_uses_final_evidence_and_hides_unverified_analyzer_prose
     html = _render_result(result)
     text = _visible_text(html)
 
-    assert "Validated backend candidate" in text
-    assert "Final candidate evidence" in text
-    assert "Selected skill evidence" in text
-    assert "Toova — Venom" in text
-    assert "inflict poison" in text
-    assert "Source-effect coverage is not established" in text
+    assert "Matches final character and skill IDs." in text
+    assert "Evidence for selected skills" in text
+    assert "Toova · Venom" in text
+    assert "Inflict Poison" in text
+    assert "This does not cover every effect a skill may have" in text
+    assert "Missing review evidence does not mean a skill has no other effects" in text
     assert "Known harmful interaction" in text
     assert "Alternative Zone options" not in text
-    assert "Selected skill affinity evidence" in text
+    assert "Selected-skill affinity records" in text
     assert "none listed in the inspected source" in text
     assert "unknown or incomplete (unknown)" in text
-    assert "Modeled fit: high" in text
-    assert "Scorer confidence: medium" in text
+    assert "Fit is a heuristic; confidence is represented scorer uncertainty only." in text
+    assert '<details class="technical-diagnostics">' in html
+    assert '<aside class="candidate-warning-band"' in html
+    assert html.index('<aside class="candidate-warning-band"') < html.index('<details class="technical-diagnostics">')
+    assert html.index('<aside class="candidate-warning-band"') < html.index('<details class="team-assumptions">')
+    assert html.index('<details class="team-assumptions">') < html.index('<details class="technical-diagnostics">')
     assert "STALE" not in text
     assert "https://example.test/toova#Venom" in html
     assert "https://example.test/mushroom" in html
@@ -418,7 +425,7 @@ async def test_feature_e_streaming_renders_real_recommendation_template():
     assert len(result_events) == 1
     rendered = result_events[0].raw_data
     assert rendered is not None
-    assert "Lineup Recommendations" in rendered
+    assert "Candidate recommendations" in rendered
     assert rendered.count('class="recommendation-card"') == 3
-    assert "Boss Counterplay" in rendered
+    assert "Boss counterplay" in rendered
     assert captured_state["owned_sidekicks"] == ["Korobo", "Tetra"]

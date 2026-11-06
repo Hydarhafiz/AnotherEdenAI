@@ -249,7 +249,7 @@ async def test_mode_selects_graph_and_preserves_typed_state(mode):
     assert captured["boss_id"] == "Celestial Mushroom"
     assert captured["roster"] == ["Toova"]
     result = next(event for event in events if event.event == "result")
-    assert "Lineup Recommendations" in result.raw_data
+    assert "Candidate recommendations" in result.raw_data
     assert "Aldo" in result.raw_data
 
 
